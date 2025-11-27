@@ -1,0 +1,7 @@
+﻿rollforever/.idea
+rollforever/Library
+rollforever/Logs
+rollforever/obj
+rollforever/Temp
+rollforever/UserSettings
+*.csproj
