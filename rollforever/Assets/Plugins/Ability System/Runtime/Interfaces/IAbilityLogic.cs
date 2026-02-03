@@ -12,16 +12,16 @@ namespace AbilitySystem.Runtime.Interfaces
         /// Initializes the ability using the provided data.
         /// </summary>
         /// <param name="abilityData">The data used to initialize the ability.</param>
-        public void Initialize(TAbilityData abilityData);
+        void Initialize(TAbilityData abilityData);
         
         /// <summary>
         /// Executes the ability logic.
         /// </summary>
-        public void Execute();
+        void Execute();
         
         /// <summary>
         /// Cancels the ability logic.
         /// </summary>
-        public void Cancel();
+        void Cancel();
     }
 }

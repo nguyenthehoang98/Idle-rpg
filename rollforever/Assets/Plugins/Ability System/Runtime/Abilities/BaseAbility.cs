@@ -23,23 +23,41 @@ namespace AbilitySystem.Runtime.Abilities
         public virtual void Initialize(TAbilityData abilityData)
         {
             AbilityData = abilityData;
-            
-            LogMessage($"Ability: {AbilityData.AbilityName} Initialized");
+
+#if DEBUG
+            LogMessage($"Ability: {AbilityData.AbilityName} Initialized");   
+#endif
         }
-        
+
         /// <summary>
         /// Executes the ability logic.
         /// </summary>
-        public virtual void Execute() => LogMessage($"Ability: {AbilityData.AbilityName} Executed");
-        
+        public virtual void Execute()
+        {
+#if DEBUG
+            LogMessage($"Ability: {AbilityData.AbilityName} Executed");   
+#endif
+        }
+
         /// <summary>
         /// Cancels the ability.
         /// </summary>
-        public virtual void Cancel() => LogMessage($"Ability: {AbilityData.AbilityName} Canceled");
+        public virtual void Cancel()
+        {
+#if DEBUG
+            LogMessage($"Ability: {AbilityData.AbilityName} Canceled");   
+#endif
+        }
         #endregion
 
         #region Executes
-        private static void LogMessage(string message) => Debug.Log(message);
+
+        private static void LogMessage(string message)
+        {
+#if DEBUG
+            Debug.Log(message);    
+#endif
+        }
         #endregion
     }
 }

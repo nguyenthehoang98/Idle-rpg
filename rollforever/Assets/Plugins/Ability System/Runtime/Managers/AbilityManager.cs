@@ -25,9 +25,9 @@ namespace AbilitySystem.Runtime.Managers
         #endregion
         
         #region Data Maps
-        private static readonly Dictionary<string, AbilityData> DataMap = new();
-        private static readonly Dictionary<string, Stack<object>> DeActiveAbilityInstanceMap = new();
-        private static readonly Dictionary<string, HashSet<object>> ActiveAbilityInstanceMap = new();
+        private static readonly Dictionary<string, AbilityData> DataMap = new Dictionary<string, AbilityData>();
+        private static readonly Dictionary<string, Stack<object>> DeActiveAbilityInstanceMap = new Dictionary<string, Stack<object>>();
+        private static readonly Dictionary<string, HashSet<object>> ActiveAbilityInstanceMap = new Dictionary<string, HashSet<object>>();
         #endregion
         
         #region Executes
