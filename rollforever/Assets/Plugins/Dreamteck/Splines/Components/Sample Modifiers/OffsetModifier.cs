@@ -17,7 +17,6 @@
             }
         }
 
-        public override bool hasKeys => keys.Length > 0;
         public OffsetKey[] keys = new OffsetKey[0];
 
         public OffsetModifier()
@@ -53,7 +52,7 @@
             result.position += result.right * offset.x + result.up * offset.y;
         }
 
-        public Vector2 Evaluate(double time)
+        Vector2 Evaluate(double time)
         {
             if (keys.Length == 0) return Vector2.zero;
             Vector2 offset = Vector2.zero;

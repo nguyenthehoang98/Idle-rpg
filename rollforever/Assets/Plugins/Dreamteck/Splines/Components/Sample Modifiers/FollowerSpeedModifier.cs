@@ -18,8 +18,6 @@
             {
             }
         }
-
-        public override bool hasKeys => keys.Count > 0;
         public List<SpeedKey> keys = new List<SpeedKey>();
 
         public FollowerSpeedModifier()

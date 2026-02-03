@@ -1,7 +1,8 @@
 namespace Dreamteck.Splines.Editor
 {
-    using UnityEditor;
     using UnityEngine;
+    using System.Collections;
+    using UnityEditor;
 
     public static class SplineEditorHandles
     {
@@ -67,26 +68,6 @@ namespace Dreamteck.Splines.Editor
 #else
             return Handles.FreeMoveHandle(position, Quaternion.identity, size, snap, capFunction);
 #endif
-        }
-
-        public static void DrawPoint(Vector3 position, bool selected)
-        {
-            DrawPoint(position, selected, Color.white);
-        }
-
-        public static void DrawPoint(Vector3 position, bool selected, Color tintColor)
-        {
-            if (selected)
-            {
-                Handles.color = SplinePrefs.highlightColor * tintColor;
-                Handles.DrawSolidDisc(position, -SceneView.currentDrawingSceneView.camera.transform.forward, HandleUtility.GetHandleSize(position) * 0.16f);
-            }
-
-            Handles.color = SplinePrefs.outlineColor * tintColor;
-            Handles.DrawSolidDisc(position, -SceneView.currentDrawingSceneView.camera.transform.forward, HandleUtility.GetHandleSize(position) * 0.12f);
-            Handles.color = SplinePrefs.defaultColor * tintColor;
-            Handles.DrawSolidDisc(position, -SceneView.currentDrawingSceneView.camera.transform.forward, HandleUtility.GetHandleSize(position) * 0.09f);
-            Handles.color = Color.white;
         }
 
         public static void DrawSolidSphere(Vector3 position, float radius)

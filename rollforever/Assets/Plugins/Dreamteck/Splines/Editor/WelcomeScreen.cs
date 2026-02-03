@@ -10,7 +10,7 @@ namespace Dreamteck.Splines.Editor
     [InitializeOnLoad]
     public static class PluginInfo
     {
-        public static string version = "3.0.6";
+        public static string version = "3.0.5";
         private static bool open = false;
 
         static PluginInfo()
@@ -107,7 +107,7 @@ namespace Dreamteck.Splines.Editor
             panels[0].elements.Add(new WindowPanel.Space(400, 10));
             panels[0].elements.Add(new WindowPanel.Thumbnail("Utilities/Editor/Images", "changelog", "What's new?", "See all new features, important changes and bugfixes in " + PluginInfo.version, new ActionLink(panels[1], panels[0])));
             panels[0].elements.Add(new WindowPanel.Thumbnail("Utilities/Editor/Images", "get_started", "Get Started + Packages", "Learn how to use Dreamteck Splines and install core packages", new ActionLink(panels[2], panels[0])));
-            panels[0].elements.Add(new WindowPanel.Thumbnail("Utilities/Editor/Images", "support", "Community", "Got a problem or a feature request? Join the community!", new ActionLink(panels[3], panels[0])));
+            panels[0].elements.Add(new WindowPanel.Thumbnail("Utilities/Editor/Images", "support", "Community & Support", "Got a problem or a feature request? Our support is here to help!", new ActionLink(panels[3], panels[0])));
 
             _bannerData = LoadBannersData("https://dreamteck.io/plugins/splines/welcome.json", "Dreamteck.Splines.welcomeScreenVersion");
 
@@ -161,6 +161,7 @@ namespace Dreamteck.Splines.Editor
 
             panels[3].elements.Add(new WindowPanel.Space(400, 10));
             panels[3].elements.Add(new WindowPanel.Thumbnail("Utilities/Editor/Images", "discord", "Discord Server", "Join our Discord community and chat with other developers who use Splines.", new ActionLink("https://discord.gg/bkYDq8v")));
+            panels[3].elements.Add(new WindowPanel.Button(400, 30, "Contact Support", new ActionLink("https://dreamteck.io/dreamteck-splines-faq/")));
 
             panels[4].elements.Add(new WindowPanel.Space(400, 10));
             panels[4].elements.Add(new WindowPanel.Button(400, 30, "Install Examples", new ActionLink(InstallExamples)));

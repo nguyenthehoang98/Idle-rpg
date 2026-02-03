@@ -74,7 +74,6 @@ namespace Dreamteck.Splines.Editor
                         targetTransform.position = Handles.PositionHandle(targetTransform.position, Quaternion.identity);
                         if (lastPos != targetTransform.position)
                         {
-                            MainPointModule.HoldInteraction();
                             EditorUtility.SetDirty(targetTransform);
                             changed = true;
                         }
@@ -95,7 +94,6 @@ namespace Dreamteck.Splines.Editor
                     rotation.vector3Value = rot.eulerAngles;
                     if (rot.eulerAngles != lastEuler)
                     {
-                        MainPointModule.HoldInteraction();
                         changed = true;
                     }
                 }

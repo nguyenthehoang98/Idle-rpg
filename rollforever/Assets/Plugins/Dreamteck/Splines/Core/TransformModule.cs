@@ -194,14 +194,7 @@ namespace Dreamteck.Splines
 #endif
             input.transform.localScale = GetScale(input.transform.localScale);
             input.MovePosition(GetPosition(input.position));
-            if (!input.isKinematic)
-            {
-#if UNITY_6000_0_OR_NEWER
-                input.linearVelocity = HandleVelocity(input.linearVelocity);
-#else
-                input.velocity = HandleVelocity(input.velocity);
-#endif
-            }
+            input.linearVelocity = HandleVelocity(input.linearVelocity);
             input.MoveRotation(GetRotation(input.rotation));
             Vector3 angularVelocity = input.angularVelocity;
             if (applyRotationX)
@@ -231,14 +224,7 @@ namespace Dreamteck.Splines
 #endif
             input.transform.localScale = GetScale(input.transform.localScale);
             input.position = GetPosition(input.position);
-            if (!input.isKinematic)
-            {
-#if UNITY_6000_OR_NEWER
             input.linearVelocity = HandleVelocity(input.linearVelocity);
-#else
-                input.linearVelocity = HandleVelocity(input.linearVelocity);
-#endif
-            }
             input.rotation = GetRotation(Quaternion.Euler(0f, 0f, input.rotation)).eulerAngles.z;
             if (applyRotationX)
             {

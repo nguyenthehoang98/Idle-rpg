@@ -104,7 +104,7 @@ namespace Dreamteck.Splines.Editor
                 positionProperty.floatValue = (float)projectSample.percent;
                 index++;
             });
-            _serializedObject.ApplyModifiedProperties();
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void OnBeforeDeleteSelectedPoints()
@@ -292,7 +292,7 @@ namespace Dreamteck.Splines.Editor
                     nodes.Add(node.Key - 1, node.Value);
                 }
             }
-            var nodesProperty = _serializedObject.FindProperty("_nodes");
+            var nodesProperty = serializedObject.FindProperty("_nodes");
             for (int i = 0; i < nodesProperty.arraySize; i++)
             {
                 var indexProperty = nodesProperty.GetArrayElementAtIndex(i).FindPropertyRelative("pointIndex");
@@ -316,7 +316,7 @@ namespace Dreamteck.Splines.Editor
                 lastIndexProperty.intValue = node.Key;
             }
 
-            _serializedObject.ApplyModifiedProperties();
+            serializedObject.ApplyModifiedProperties();
             GetPointsFromSpline();
             spline.Rebuild(true);
             WriteTriggerPositions();
@@ -326,7 +326,7 @@ namespace Dreamteck.Splines.Editor
         {
             base.GetPointsFromSpline();
 
-            if (_serializedObject.FindProperty("_space").enumValueIndex == (int)SplineComputer.Space.Local)
+            if (serializedObject.FindProperty("_space").enumValueIndex == (int)SplineComputer.Space.Local)
             {
                 TransformPoints();
             }
@@ -334,7 +334,7 @@ namespace Dreamteck.Splines.Editor
 
         public override void ApplyModifiedProperties(bool forceAllUpdate = false)
         {
-            if (_serializedObject.FindProperty("_space").enumValueIndex == (int)SplineComputer.Space.Local)
+            if (serializedObject.FindProperty("_space").enumValueIndex == (int)SplineComputer.Space.Local)
             {
                 InverseTransformPoints();
             }
@@ -354,13 +354,13 @@ namespace Dreamteck.Splines.Editor
                 SetSplineClosed(false);
             }
 
-            _serializedObject.FindProperty("_is2D").boolValue = is2D;
+            serializedObject.FindProperty("_is2D").boolValue = is2D;
 
             base.ApplyModifiedProperties(forceAllUpdate);
 
             spline.EditorUpdateConnectedNodes();
 
-            if (_serializedObject.FindProperty("editorUpdateMode").enumValueIndex == (int)SplineComputer.EditorUpdateMode.Default)
+            if (serializedObject.FindProperty("editorUpdateMode").enumValueIndex == (int)SplineComputer.EditorUpdateMode.Default)
             {
                 spline.RebuildImmediate(true, forceAllUpdate);
             }

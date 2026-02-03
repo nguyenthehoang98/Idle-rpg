@@ -5,10 +5,3 @@ AssemblyDefinitionImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 61926
-  packageName: Dreamteck Splines
-  packageVersion: 3.0.6
-  assetPath: Assets/Plugins/Dreamteck/Splines/Dreamteck.Splines.asmdef
-  uploadId: 697417

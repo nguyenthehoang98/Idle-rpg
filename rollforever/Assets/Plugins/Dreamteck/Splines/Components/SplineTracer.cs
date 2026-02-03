@@ -1,5 +1,8 @@
+using System.Collections;
+using UnityEngine.Events;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Dreamteck.Splines
 {
@@ -43,6 +46,17 @@ namespace Dreamteck.Splines
         public SplineSample result
         {
             get { return _result; }
+        }
+
+        /// <summary>
+        /// Returns the offsetted evaluation result from the current follow position
+        /// </summary>
+        public SplineSample modifiedResult
+        {
+            get
+            {
+                return _finalResult;
+            }
         }
 
         public bool dontLerpDirection
@@ -105,6 +119,9 @@ namespace Dreamteck.Splines
         [SerializeField]
         [HideInInspector]
         protected SplineSample _result = new SplineSample();
+        [SerializeField]
+        [HideInInspector]
+        protected SplineSample _finalResult = new SplineSample();
 
         public delegate void JunctionHandler(List<NodeConnection> passed);
 
@@ -193,18 +210,19 @@ namespace Dreamteck.Splines
         protected void ApplyMotion()
         {
             if (sampleCount == 0) return;
+            ModifySample(ref _result, ref _finalResult);
             if (_dontLerpDirection)
             {
                 double unclippedPercent = UnclipPercent(_result.percent);
                 int index;
                 double lerp;
                 spline.GetSamplingValues(unclippedPercent, out index, out lerp);
-                _result.forward = spline[index].forward;
-                _result.up = spline[index].up;
+                _finalResult.forward = spline[index].forward;
+                _finalResult.up = spline[index].up;
             }
 
             motion.targetUser = this;
-            motion.splineResult = _result;
+            motion.splineResult = _finalResult;
             if (applyDirectionRotation) motion.direction = _direction;
             else motion.direction = Spline.Direction.Forward;
 

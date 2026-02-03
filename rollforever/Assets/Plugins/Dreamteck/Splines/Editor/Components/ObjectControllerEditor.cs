@@ -17,7 +17,6 @@ namespace Dreamteck.Splines.Editor
             serializedObject.Update();
             SerializedProperty objectMethod = serializedObject.FindProperty("_objectMethod");
             SerializedProperty retainPrefabInstancesInEditor = serializedObject.FindProperty("_retainPrefabInstancesInEditor");
-            SerializedProperty spawnMethod = serializedObject.FindProperty("_spawnMethod");
             SerializedProperty spawnCount = serializedObject.FindProperty("_spawnCount");
             SerializedProperty delayedSpawn = serializedObject.FindProperty("delayedSpawn");
             SerializedProperty spawnDelay = serializedObject.FindProperty("spawnDelay");
@@ -121,21 +120,10 @@ namespace Dreamteck.Splines.Editor
                         }
                     }
                 }
-                
-                int lastSpawnMethod = spawnMethod.intValue;
-                EditorGUILayout.PropertyField(spawnMethod, new GUIContent("Spawn Method"));
-                if (lastSpawnMethod != spawnMethod.intValue)
-                {
-                    objectsChanged = true;
-                }
-
-                if (spawnMethod.intValue == (int)ObjectController.SpawnMethod.Count)
-                {
-                    int lastSpawnCount = spawnCount.intValue;
-                    if (hasObj) EditorGUILayout.PropertyField(spawnCount, new GUIContent("Spawn Count"));
-                    else spawnCount.intValue = 0;
-                    if (lastSpawnCount != spawnCount.intValue) objectsChanged = true;
-                }
+                int lastSpawnCount = spawnCount.intValue;
+                if (hasObj) EditorGUILayout.PropertyField(spawnCount, new GUIContent("Spawn Count"));
+                else spawnCount.intValue = 0;
+                if (lastSpawnCount != spawnCount.intValue) objectsChanged = true;
                 EditorGUILayout.PropertyField(delayedSpawn, new GUIContent("Delayed Spawn"));
                 if (delayedSpawn.boolValue)
                 {

@@ -30,8 +30,6 @@
                 }
             }
         }
-
-        public override bool hasKeys => keys.Length > 0;
         public ColorKey[] keys = new ColorKey[0];
 
         public ColorModifier()

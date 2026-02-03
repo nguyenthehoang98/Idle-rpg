@@ -10,10 +10,3 @@ MonoImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 61926
-  packageName: Dreamteck Splines
-  packageVersion: 3.0.6
-  assetPath: Assets/Plugins/Dreamteck/Splines/Editor/Primitives/StarEditor.cs
-  uploadId: 697417

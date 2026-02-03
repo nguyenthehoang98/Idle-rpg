@@ -63,15 +63,6 @@ namespace Dreamteck
             }
         }
 
-        public static void DestroyChildren(this Transform src)
-        {
-            int count = src.childCount;
-            for (int i = 0; i < count; i++)
-            {
-                UnityEngine.Object.Destroy(src.GetChild(i).gameObject);
-            }
-        }
-
         public static bool IsParent(Transform child, Transform parent)
         {
             Transform current = child;

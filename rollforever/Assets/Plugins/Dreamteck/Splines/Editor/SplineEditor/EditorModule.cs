@@ -13,9 +13,6 @@
 
         public bool hasChanged { get { return _changed; } }
 
-        protected SceneView _currentSceneView;
-
-
         protected void RegisterChange()
         {
             _changed = true;
@@ -33,7 +30,6 @@
 
         public virtual void BeforeSceneDraw(SceneView current)
         {
-            _currentSceneView = current;
         }
 
         public void DrawScene()

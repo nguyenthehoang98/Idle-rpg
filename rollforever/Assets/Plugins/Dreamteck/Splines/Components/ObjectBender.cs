@@ -371,6 +371,7 @@ namespace Dreamteck.Splines
                 case NormalMode.Custom: evalResult.up = _customNormal; break;
             }
             if (_forwardMode == ForwardMode.Custom) evalResult.forward = customForward;
+            ModifySample(ref evalResult);
             Vector3 right = evalResult.right;
 
             Quaternion axisRotation = Quaternion.identity;
