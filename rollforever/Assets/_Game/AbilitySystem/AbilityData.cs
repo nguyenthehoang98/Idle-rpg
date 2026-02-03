@@ -8,5 +8,6 @@ namespace _Game.AbilitySystem
         public CoreAbilityArg arg;
         public ShapeData shape;
         public TrajectoryArg trajectory;
+        public ModifierArg modifier;
     }
 }

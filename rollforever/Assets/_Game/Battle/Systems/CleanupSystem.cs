@@ -1,12 +1,16 @@
 using _Game.Battle.Data;
+using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace _Game.Battle.Systems
 {
     public class CleanupSystem : IEcsInitSystem, IEcsPostRunSystem
     {
-        private BattleStartupShareData shareData;
+        [EcsInject] private readonly BattleStartupShareData shareData;
+        [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
+        
         private EcsPool<UnitPos> unitPosPool;
         private EcsPool<Unit> unitPool;
         private EcsFilter ecsFilter;
@@ -20,7 +24,6 @@ namespace _Game.Battle.Systems
                 .End();
             unitPool = world.GetPool<Unit>();
             unitPosPool = world.GetPool<UnitPos>();
-            shareData = systems.GetShared<BattleStartupShareData>();
         }
 
         public void PostRun(IEcsSystems systems)
@@ -41,6 +44,10 @@ namespace _Game.Battle.Systems
             shareData.Simulator.RemoveAgent(unit.agentId);
             shareData.Grid.Remove(unit.cellId);
             ShapeInstance.Remove(unit.shapeId);
+
+            runtimeData.TryGet(e, out var unitView);
+            runtimeData.Remove(e);
+            Object.Destroy(unitView.gameObject);
         }
     }
 }

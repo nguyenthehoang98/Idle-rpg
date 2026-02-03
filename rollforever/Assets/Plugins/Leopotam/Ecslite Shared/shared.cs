@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using _KIT.Utils;
 using Leopotam.EcsLite;
+using UnityEngine;
 
 namespace GoodCat.EcsLite.Shared 
 {
@@ -11,16 +13,18 @@ namespace GoodCat.EcsLite.Shared
         private const string SharedFieldNameInEcsSystems = "_shared";
         private static readonly Type SharedAttrType = typeof(EcsInjectAttribute);
 
-        public static EcsSystems InjectShared<T>(this EcsSystems systems,  T instance)
+        public static void InjectShared<T>(this EcsSystems systems, T instance)
         {
-            var sharedObject = systems.GetShared<object>();
+            object sharedObject = systems.GetShared<object>();
             Shared shared = null;
             if (sharedObject == null)
             {
-                var fieldShared = systems.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
+                Type type = systems.GetType();
+                if (type.BaseType != null) type = type.BaseType;
+                
+                var fieldShared = type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
                     .FirstOrDefault(fieldInfo => fieldInfo.Name == SharedFieldNameInEcsSystems);
                 shared = new Shared();
-                // ReSharper disable once PossibleNullReferenceException
                 fieldShared.SetValue(systems, shared);
             }
             else if (sharedObject is Shared == false)
@@ -33,10 +37,8 @@ namespace GoodCat.EcsLite.Shared
             {
                 shared = (Shared)sharedObject;
             }
-
-            // ReSharper disable once PossibleNullReferenceException
+            
             shared.Set(instance);
-            return systems;
         }
 
         public static EcsSystems InitShared(this EcsSystems systems)

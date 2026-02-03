@@ -1,5 +1,6 @@
 using _Game.Battle.Data;
 using Geometry;
+using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 using Unity.Mathematics;
 
@@ -7,7 +8,9 @@ namespace _Game.Battle.Systems
 {
     public class MonsterMoveSystem : IEcsInitSystem, IEcsRunSystem
     {
-        private BattleStartupShareData shareData;
+        [EcsInject] private readonly BattleStartupShareData shareData;
+        [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
+        
         private EcsPool<UnitPos> unitPosPool;
         private EcsPool<Unit> unitPool;
         private EcsFilter ecsFilter;
@@ -20,7 +23,6 @@ namespace _Game.Battle.Systems
                 .End();
             unitPool = world.GetPool<Unit>();
             unitPosPool = world.GetPool<UnitPos>();
-            shareData = systems.GetShared<BattleStartupShareData>();
         }
 
         public void Run(IEcsSystems systems)
@@ -44,6 +46,11 @@ namespace _Game.Battle.Systems
                 shareData.Grid.InsertOrUpdate(
                     new GridObject(unit.cellId, pos, new float2(1, 1) * shapeInstance.Radius * 0.5f)
                 );
+
+                if (runtimeData.TryGet(e, out var unitView))
+                {
+                    unitView.UpdatePosition(pos);
+                }
             }
             
             shareData.Simulator.DoStep();

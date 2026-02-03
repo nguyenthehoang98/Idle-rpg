@@ -1,29 +1,56 @@
 using System.Collections.Generic;
 using _Game.AbilitySystem;
+using _Game.Battle.Events;
+using _KIT.Event;
+using _KIT.Resource;
 using _KIT.Utils;
+using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
+using Unity.Mathematics;
 
 namespace _Game.Battle.Systems
 {
-    public class AbilitySystem : IEcsInitSystem, IEcsRunSystem
+    public class AbilitySystem : IEcsInitSystem, IEcsRunSystem, IEcsDestroySystem
     {
-        private Dictionary<int, List<IAbilityLogic>> skillContainer;
-        private List<IAbilityLogic> abilities;
-        private Queue<IAbilityLogic> completes;
+        private Dictionary<int, AbilityLogic> skillSource;
         
-        private BattleStartupShareData shareData;
+        [EcsInject] private readonly BattleStartupShareData shareData;
         
-        public void Init(IEcsSystems systems)
+        private List<AbilityLogic> abilities;
+        private Queue<AbilityLogic> additions;
+        private Queue<AbilityLogic> completes;
+        
+        public async void Init(IEcsSystems systems)
         {
-            completes = new Queue<IAbilityLogic>();
-            abilities = new List<IAbilityLogic>();
-            skillContainer = new Dictionary<int, List<IAbilityLogic>>();
+            additions = new Queue<AbilityLogic>();
+            completes = new Queue<AbilityLogic>();
+            abilities = new List<AbilityLogic>();
+            skillSource = new Dictionary<int, AbilityLogic>();
+
+            AbilityData abilityData = await KitLoaded.LoadAsync<AbilityData>("AbilityData");
+            skillSource[0] = new AbilityLogic(abilityData);
             
-            shareData = systems.GetShared<BattleStartupShareData>();
+            EventBus.Instance.Subscribe<CastSkillEvent>(OnCastSkillArg);
+        }
+
+        private void OnCastSkillArg(CastSkillEvent e)
+        {
+            if (skillSource.TryGetValue(e.SkillId, out var abilityLogic))
+            {
+                var item = abilityLogic.CreateInstance();
+                item.Startup(e.StartPosition, e.Target);
+                additions.Enqueue(item);
+            }
         }
 
         public void Run(IEcsSystems systems)
         {
+            while (additions.Count > 0)
+            {
+                var item = additions.Dequeue();
+                abilities.Add(item);
+            }
+            
             float dt = shareData.TimeDelta;
             foreach (var ability in abilities)
             {
@@ -41,6 +68,11 @@ namespace _Game.Battle.Systems
                 item.Shutdown();
                 CollectionUtils.RemoveFast(abilities, item);
             }
+        }
+
+        public void Destroy(IEcsSystems systems)
+        {
+            EventBus.Instance.Unsubscribe<CastSkillEvent>(OnCastSkillArg);
         }
     }
 }

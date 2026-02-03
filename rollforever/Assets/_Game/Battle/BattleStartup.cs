@@ -1,7 +1,10 @@
 using _Game.Battle.Data;
+using _Game.Battle.Events;
 using _Game.Battle.Systems;
+using _KIT.Event;
 using _KIT.Schedule;
 using Geometry;
+using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 using RVO;
 using Unity.Mathematics;
@@ -17,13 +20,17 @@ namespace _Game.Battle
     public class BattleStartup : MonoBehaviour
     {
         private EcsWorld world;
-        private IEcsSystems systems;
+        private EcsSystems systems;
         private EcsPool<Unit> unitPool;
         private EcsFilter unitFilter;
-        private BattleStartupShareData shareData;
         private Grid<IGridObject> grid; 
         private Simulator simulator;
         private GameLoop gameLoop;
+
+        private void Awake()
+        {
+            Application.targetFrameRate = 30; // 60
+        }
 
         private void Start()
         {
@@ -35,12 +42,13 @@ namespace _Game.Battle
             world = new EcsWorld();
             simulator = new Simulator();
             grid = new Grid<IGridObject>(new float2(20, 30), 1, 16);
-            shareData = new BattleStartupShareData(
+            BattleStartupShareData shareData = new BattleStartupShareData(
                 simulator, grid, gameLoop.FrameDeltaTime
             );
+            BattleStartupRuntimeData runtimeData = new BattleStartupRuntimeData();
             
             // todo: battle systems
-            BattleEcsSystems ecsSystems = new BattleEcsSystems(world, shareData);
+            BattleEcsSystems ecsSystems = new BattleEcsSystems(world);
             unitPool = world.GetPool<Unit>();
             unitFilter = world.Filter<Unit>()
                 .Inc<UnitPos>()
@@ -58,8 +66,12 @@ namespace _Game.Battle
                 .Add(new SpawnMonsterSystem())
                 .Add(new MonsterMoveSystem())
                 .Add(new Systems.AbilitySystem())
-                .Add(new CleanupSystem())
-                .Init();
+                .Add(new CleanupSystem());
+
+            systems.InjectShared(shareData);
+            systems.InjectShared(runtimeData);
+            systems.InitShared();
+            systems.Init();
             
             Startup();
         }
@@ -89,6 +101,14 @@ namespace _Game.Battle
             }
         }
 #endif
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                EventBus.Instance.Publish(new CastSkillEvent(0, 0, float2.zero, 0));
+            }
+        }
 
         public void Startup()
         {
