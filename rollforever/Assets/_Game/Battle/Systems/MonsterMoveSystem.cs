@@ -28,11 +28,8 @@ namespace _Game.Battle.Systems
                 var goal = unit.goal;
                 var pos = shareData.Simulator.GetAgentPosition(unit.agentId);
                 var velocity = math.normalize(goal - pos);
-#if UNITY_EDITOR
-                unit.velocity = shareData.Simulator.GetAgentVelocity(unit.agentId);
-#endif
-                shareData.Simulator.SetAgentPrefVelocity(unit.agentId, velocity);
                 
+                shareData.Simulator.SetAgentPrefVelocity(unit.agentId, velocity);
                 shareData.Grid.InsertOrUpdate(new BoxData2D(unit.agentId, pos, new float2(0.5f, 0.5f)));
             }
             

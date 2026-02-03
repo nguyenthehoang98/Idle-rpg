@@ -6,6 +6,5 @@ namespace _Game.Battle.Data
     {
         public int agentId;
         public float2 goal;
-        public float2 velocity;
     }
 }

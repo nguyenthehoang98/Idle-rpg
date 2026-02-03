@@ -25,10 +25,9 @@ namespace Geometry
 
         public Grid(float2 worldSize, float cellSize, int capacity)
         {
+            this.cellSize = cellSize;
             invCellSize = 1f / cellSize;
-            var cellCapacity =
-                (int)(worldSize.x / cellSize) *
-                (int)(worldSize.y / cellSize);
+            int cellCapacity = (int)(worldSize.x / cellSize) * (int)(worldSize.y / cellSize);
 
             objectCells = new Dictionary<int, CellBound>(capacity);
             grid = new Dictionary<long, List<int>>(cellCapacity);
@@ -203,7 +202,7 @@ namespace Geometry
             return QueryAny(CalculateCellBound(closest, size / 2, invCellSize));
         }
         
-        public void Draw(Color color, float duration)
+        public void Draw(Color color)
         {
 #if UNITY_EDITOR
             foreach (var kv in colliders)
@@ -219,13 +218,9 @@ namespace Geometry
                 var br = new Vector3(xmax, ymin);
                 var tr = new Vector3(xmax, ymax);
                 var tl = new Vector3(xmin, ymax);
-                
-                UnityEditor.Handles.DrawPolyLine(new Vector3[]
-                {
-                    bl, br, tr, tl
-                });
-                
-                Debug.Log($"{bl}, {br}, {tr}, {tl}");
+
+                UnityEditor.Handles.color = color;
+                UnityEditor.Handles.DrawPolyLine(bl, br, tr, tl, bl);
             }
 #endif
         }
@@ -240,7 +235,6 @@ namespace Geometry
             var maxX = Mathf.FloorToInt((position.x + halfSize.x) * invCellSize);
             var minY = Mathf.FloorToInt((position.y - halfSize.y) * invCellSize);
             var maxY = Mathf.FloorToInt((position.y + halfSize.y) * invCellSize);
-
             return new CellBound(minX, maxX, minY, maxY);
         }
     }

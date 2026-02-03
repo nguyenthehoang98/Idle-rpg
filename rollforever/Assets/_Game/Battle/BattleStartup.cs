@@ -77,7 +77,7 @@ namespace _Game.Battle
 
             if (grid != null)
             {
-                grid.Draw(Color.green, gameLoop.FrameDeltaTime);
+                grid.Draw(Color.green);
             }
         }
 #endif
