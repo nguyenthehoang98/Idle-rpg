@@ -62,6 +62,7 @@ namespace _Game.Battle
             if (simulator != null)
             {
                 simulator.EnsureCompleted();
+                
                 foreach (var e in unitFilter)
                 {
                     UnitPos unit = unitPosPool.Get(e);

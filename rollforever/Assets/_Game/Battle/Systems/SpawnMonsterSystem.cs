@@ -17,7 +17,8 @@ namespace _Game.Battle.Systems
             world = systems.GetWorld();
             unitPosPool = world.GetPool<UnitPos>();
             shareData = systems.GetShared<BattleStartupShareData>();
-            shareData.Simulator.SetAgentDefaults(7f, 10, 10f, 10f, 1.5f, 2f, new float2(0f, 0f));
+            shareData.Simulator.SetTimeStep(shareData.TimeDelta);
+            shareData.Simulator.SetAgentDefaults(7f, 10, 10f, 10f, 1.5f, 4f, new float2(0f, 0f));
         }
 
         public void Run(IEcsSystems systems)
@@ -25,23 +26,26 @@ namespace _Game.Battle.Systems
             tick += shareData.TimeDelta;
             if (tick >= 1.0f)
             {
-                for (int i = 0; i < 10; i++)
+                for (var i = 0; i < 1; i++)
                 {
-                    Vector2 position = RandomPointOnCircle(Vector2.zero, UnityEngine.Random.Range(10, 15));
-                    Vector2 velocity = -position.normalized;
-                    int agentId = shareData.Simulator.AddAgent(position);
-                    shareData.Simulator.SetAgentVelocity(agentId, velocity);
+                    var goal = float2.zero;
+                    var pos = RandomPointOnCircle(float2.zero, UnityEngine.Random.Range(20, 30));
+                    var velocity = math.normalize(goal - pos);
+                    var agentId = shareData.Simulator.AddAgent(pos);
+                    shareData.Simulator.SetAgentPrefVelocity(agentId, velocity);
 
-                    int entity = world.NewEntity();
-                    unitPosPool.Add(entity) = new UnitPos {agentId = agentId, goal = float2.zero};
+                    var entity = world.NewEntity();
+                    unitPosPool.Add(entity) = new UnitPos {agentId = agentId, goal = goal, velocity = float2.zero};
                 }
+
+                tick = 0;
             }
         }
 
-        private static Vector2 RandomPointOnCircle(Vector2 center, float radius)
+        private static float2 RandomPointOnCircle(float2 center, float radius)
         {
-            float angle = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
-            return center + new Vector2(
+            var angle = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
+            return center + new float2(
                        Mathf.Cos(angle),
                        Mathf.Sin(angle)
                    ) * radius;

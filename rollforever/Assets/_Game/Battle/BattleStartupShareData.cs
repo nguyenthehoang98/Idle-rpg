@@ -8,7 +8,6 @@ namespace _Game.Battle
         {
             TimeDelta = timeDelta;
             Simulator = simulator;
-            Simulator.SetTimeStep(timeDelta);
         }
 
         public Simulator Simulator { get; }
