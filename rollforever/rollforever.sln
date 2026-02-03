@@ -1,15 +1,39 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{f843849f-3bf0-b1f5-f2cb-4259d6cbbcf4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dreamteck.Splines", "Dreamteck.Splines.csproj", "{98663b9d-b1e4-fdfc-c627-fea1c4a7146f}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dreamteck.Splines.Editor", "Dreamteck.Splines.Editor.csproj", "{0b5280ec-096e-dbbb-698a-ff81f8081e16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-firstpass", "Assembly-CSharp-firstpass.csproj", "{ac306202-579e-69e1-d3b1-f44b2a471d44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dreamteck.Utilities", "Dreamteck.Utilities.csproj", "{68a932c7-04be-5164-7fe1-9cc4bcb021f4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dreamteck.Utilities.Editor", "Dreamteck.Utilities.Editor.csproj", "{1fe7747c-d677-29db-4779-ad6867778af6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RVO2", "RVO2.csproj", "{b3760940-8676-d54d-8caf-381d98a673af}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor-firstpass", "Assembly-CSharp-Editor-firstpass.csproj", "{832f47cb-ba05-d6c5-ba9f-47a71211890b}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{f843849f-3bf0-b1f5-f2cb-4259d6cbbcf4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{f843849f-3bf0-b1f5-f2cb-4259d6cbbcf4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98663b9d-b1e4-fdfc-c627-fea1c4a7146f}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98663b9d-b1e4-fdfc-c627-fea1c4a7146f}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0b5280ec-096e-dbbb-698a-ff81f8081e16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0b5280ec-096e-dbbb-698a-ff81f8081e16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ac306202-579e-69e1-d3b1-f44b2a471d44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ac306202-579e-69e1-d3b1-f44b2a471d44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68a932c7-04be-5164-7fe1-9cc4bcb021f4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68a932c7-04be-5164-7fe1-9cc4bcb021f4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1fe7747c-d677-29db-4779-ad6867778af6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1fe7747c-d677-29db-4779-ad6867778af6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{b3760940-8676-d54d-8caf-381d98a673af}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{b3760940-8676-d54d-8caf-381d98a673af}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{832f47cb-ba05-d6c5-ba9f-47a71211890b}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{832f47cb-ba05-d6c5-ba9f-47a71211890b}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
