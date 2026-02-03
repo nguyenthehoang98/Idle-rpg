@@ -1,8 +1,10 @@
 using _Game.Battle.Data;
 using _Game.Battle.Systems;
 using _KIT.Schedule;
+using Geometry;
 using Leopotam.EcsLite;
 using RVO;
+using Unity.Mathematics;
 using UnityEngine;
 #if UNITY_EDITOR
 using Leopotam.EcsLite.UnityEditor;
@@ -19,6 +21,7 @@ namespace _Game.Battle
         private EcsPool<UnitPos> unitPosPool;
         private EcsFilter unitFilter;
         private BattleStartupShareData shareData;
+        private Grid<IShapeData> grid; 
         private Simulator simulator;
         private GameLoop gameLoop;
 
@@ -31,8 +34,9 @@ namespace _Game.Battle
             // todo: battle world
             world = new EcsWorld();
             simulator = new Simulator();
+            grid = new Grid<IShapeData>(new float2(20, 30), 1, 16);
             shareData = new BattleStartupShareData(
-                simulator, gameLoop.FrameDeltaTime
+                simulator, grid, gameLoop.FrameDeltaTime
             );
             
             // todo: battle systems
@@ -69,6 +73,11 @@ namespace _Game.Battle
                     Vector2 position = simulator.GetAgentPosition(unit.agentId);
                     Handles.DrawWireDisc(position, Vector3.forward, 1f);
                 }
+            }
+
+            if (grid != null)
+            {
+                grid.Draw(Color.green, gameLoop.FrameDeltaTime);
             }
         }
 #endif

@@ -30,21 +30,21 @@ public class IntersectionController : MonoBehaviour
 
     void OnDrawGizmos() 
 	{
-        //PointPolygon();
+        PointPolygon();
 
-        //TriangleTriangle();
+        TriangleTriangle();
 
-        //PointCircle();
+        PointCircle();
 
-        //LineLine();
+        LineLine();
 
-        //AABB_AABB();
+        AABB_AABB();
 
-        //PointTriangle();
+        PointTriangle();
 
-        //PlanePlane();
+        PlanePlane();
 
-        //RayPlane();
+        RayPlane();
 
         LinePlane();
     }

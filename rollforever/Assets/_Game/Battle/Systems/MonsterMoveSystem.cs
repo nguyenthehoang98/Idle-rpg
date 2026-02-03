@@ -1,4 +1,5 @@
 using _Game.Battle.Data;
+using Geometry;
 using Leopotam.EcsLite;
 using Unity.Mathematics;
 
@@ -31,6 +32,8 @@ namespace _Game.Battle.Systems
                 unit.velocity = shareData.Simulator.GetAgentVelocity(unit.agentId);
 #endif
                 shareData.Simulator.SetAgentPrefVelocity(unit.agentId, velocity);
+                
+                shareData.Grid.InsertOrUpdate(new BoxData2D(unit.agentId, pos, new float2(0.5f, 0.5f)));
             }
             
             shareData.Simulator.DoStep();

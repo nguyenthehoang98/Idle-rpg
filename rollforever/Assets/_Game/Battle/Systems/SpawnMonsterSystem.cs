@@ -1,4 +1,5 @@
 using _Game.Battle.Data;
+using Geometry;
 using Leopotam.EcsLite;
 using Unity.Mathematics;
 using UnityEngine;
@@ -35,7 +36,13 @@ namespace _Game.Battle.Systems
                     shareData.Simulator.SetAgentPrefVelocity(agentId, velocity);
 
                     var entity = world.NewEntity();
-                    unitPosPool.Add(entity) = new UnitPos {agentId = agentId, goal = goal, velocity = float2.zero};
+                    unitPosPool.Add(entity) = new UnitPos
+                    {
+                        agentId = agentId, goal = goal, 
+                        velocity = float2.zero, 
+                    };
+                    
+                    shareData.Grid.InsertOrUpdate(new BoxData2D(agentId, pos, new float2(0.5f, 0.5f)));
                 }
 
                 tick = 0;
