@@ -1,6 +1,6 @@
 {
-    "name": "SkillSystem.Editor",
-    "rootNamespace": "SkillSystem.Editor",
+    "name": "AbilitySystem.Editor",
+    "rootNamespace": "AbilitySystem.Editor",
     "references": [
         "GUID:041b19db3e061a8428b32b4169b71274"
     ],

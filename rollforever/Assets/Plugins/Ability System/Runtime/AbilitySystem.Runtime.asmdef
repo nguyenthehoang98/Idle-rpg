@@ -1,6 +1,6 @@
 {
-    "name": "SkillSystem.Runtime",
-    "rootNamespace": "SkillSystem.Runtime",
+    "name": "AbilitySystem.Runtime",
+    "rootNamespace": "AbilitySystem.Runtime",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
