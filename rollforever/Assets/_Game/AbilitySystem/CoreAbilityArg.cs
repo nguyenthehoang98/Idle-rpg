@@ -1,0 +1,15 @@
+using System;
+using UnityEngine;
+
+namespace _Game.AbilitySystem
+{
+    [Serializable]
+    public struct CoreAbilityArg
+    {
+        public float lifeTime;
+        public GameObject bulletPrefab;
+        public Vector2 muzzleOffsetPosition;
+        public AnimationName animationName;
+        public int maxCollision;
+    }
+}

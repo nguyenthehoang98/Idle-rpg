@@ -1,8 +1,12 @@
 using UnityEngine;
 
-namespace _KIT.AbilitySystem
+namespace _Game.AbilitySystem
 {
-    public abstract class AbilityData : ScriptableObject
+    [CreateAssetMenu(menuName = "Ability data")]
+    public class AbilityData : ScriptableObject
     {
+        public CoreAbilityArg arg;
+        public ShapeData shape;
+        public TrajectoryArg trajectory;
     }
 }

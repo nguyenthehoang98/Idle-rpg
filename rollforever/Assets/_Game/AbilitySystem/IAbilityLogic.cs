@@ -1,5 +1,4 @@
-﻿using _KIT.AbilitySystem;
-using Unity.Mathematics;
+﻿using Unity.Mathematics;
 
 namespace _Game.AbilitySystem
 {

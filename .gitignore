@@ -5,3 +5,5 @@ rollforever/obj
 rollforever/Temp
 rollforever/UserSettings
 *.csproj
+rollforever/.utmp
+*.apk
