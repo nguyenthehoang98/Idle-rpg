@@ -18,10 +18,10 @@ namespace _Game.Battle
     {
         private EcsWorld world;
         private IEcsSystems systems;
-        private EcsPool<UnitPos> unitPosPool;
+        private EcsPool<Unit> unitPool;
         private EcsFilter unitFilter;
         private BattleStartupShareData shareData;
-        private Grid<IShapeData> grid; 
+        private Grid<IGridObject> grid; 
         private Simulator simulator;
         private GameLoop gameLoop;
 
@@ -34,15 +34,17 @@ namespace _Game.Battle
             // todo: battle world
             world = new EcsWorld();
             simulator = new Simulator();
-            grid = new Grid<IShapeData>(new float2(20, 30), 1, 16);
+            grid = new Grid<IGridObject>(new float2(20, 30), 1, 16);
             shareData = new BattleStartupShareData(
                 simulator, grid, gameLoop.FrameDeltaTime
             );
             
             // todo: battle systems
             BattleEcsSystems ecsSystems = new BattleEcsSystems(world, shareData);
-            unitPosPool = world.GetPool<UnitPos>();
-            unitFilter = world.Filter<UnitPos>().End();
+            unitPool = world.GetPool<Unit>();
+            unitFilter = world.Filter<Unit>()
+                .Inc<UnitPos>()
+                .End();
             
             gameLoop.Register(ecsSystems);
             
@@ -55,6 +57,7 @@ namespace _Game.Battle
                 // add other
                 .Add(new SpawnMonsterSystem())
                 .Add(new MonsterMoveSystem())
+                .Add(new CleanupSystem())
                 .Init();
             
             Startup();
@@ -69,9 +72,13 @@ namespace _Game.Battle
                 
                 foreach (var e in unitFilter)
                 {
-                    UnitPos unit = unitPosPool.Get(e);
+                    Unit unit = unitPool.Get(e);
                     Vector2 position = simulator.GetAgentPosition(unit.agentId);
-                    Handles.DrawWireDisc(position, Vector3.forward, 1f);
+
+                    ShapeInstance.TryGet(unit.shapeId, out var shapeInstance);
+                    
+                    Handles.color = Color.grey;
+                    Handles.DrawWireDisc(position, Vector3.forward, shapeInstance.Radius);
                 }
             }
 

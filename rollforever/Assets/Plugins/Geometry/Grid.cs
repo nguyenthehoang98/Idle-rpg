@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Geometry
 {
-    public sealed class Grid<T> : IDisposable where T : IShapeData
+    public sealed class Grid<T> : IDisposable where T : IGridObject
     {
         readonly float cellSize;
         readonly float invCellSize;
@@ -34,6 +34,13 @@ namespace Geometry
             colliders = new Dictionary<int, T>(capacity);
             list = new List<T>();
             visited = new HashSet<int>(capacity);
+        }
+
+        int globalId;
+        
+        public int NewCellId()
+        {
+            return globalId++;
         }
 
         // ================================

@@ -2,16 +2,16 @@ using Unity.Mathematics;
 
 namespace Geometry
 {
-    public interface IShapeData
+    public interface IGridObject
     {
         int Id { get; }
         float2 Position { get; }
         float2 HalfSizeBound { get; }
     }
     
-    public struct BoxData2D : IShapeData
+    public struct GridObject : IGridObject
     {
-        public BoxData2D(int id, float2 position, float2 size)
+        public GridObject(int id, float2 position, float2 size)
         {
             Id = id;
             Position = position;

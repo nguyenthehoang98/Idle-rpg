@@ -709,7 +709,7 @@ namespace RVO
             float maxSpeed,
             float2 velocity)
         {
-            this.defaultAgent = new Agent
+            defaultAgent = new Agent
             {
                 maxNeighbors = maxNeighbors,
                 maxSpeed = maxSpeed,

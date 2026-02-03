@@ -5,7 +5,7 @@ namespace _Game.Battle
 {
     public class BattleStartupShareData
     {
-        public BattleStartupShareData(Simulator simulator, Grid<IShapeData> grid, float timeDelta)
+        public BattleStartupShareData(Simulator simulator, Grid<IGridObject> grid, float timeDelta)
         {
             TimeDelta = timeDelta;
             Grid = grid;
@@ -13,7 +13,7 @@ namespace _Game.Battle
         }
 
         public Simulator Simulator { get; }
-        public Grid<IShapeData> Grid { get; }
+        public Grid<IGridObject> Grid { get; }
         public float TimeDelta { get; }
     }
 }
