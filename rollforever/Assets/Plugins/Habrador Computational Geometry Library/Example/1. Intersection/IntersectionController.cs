@@ -30,26 +30,24 @@ public class IntersectionController : MonoBehaviour
 
     void OnDrawGizmos() 
 	{
-        PointPolygon();
+        //PointPolygon();
 
-        TriangleTriangle();
+        //TriangleTriangle();
 
         PointCircle();
 
-        LineLine();
+        //LineLine();
 
-        AABB_AABB();
+        //AABB_AABB();
 
-        PointTriangle();
+        //PointTriangle();
 
-        PlanePlane();
+        //PlanePlane();
 
-        RayPlane();
+        //RayPlane();
 
-        LinePlane();
+        //LinePlane();
     }
-
-
 
     //Is a plane intersecting with a plane
     private void PlanePlane()

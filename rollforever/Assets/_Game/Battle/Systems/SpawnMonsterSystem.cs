@@ -18,7 +18,8 @@ namespace _Game.Battle.Systems
         [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
         
         private EcsWorld world;
-        private EcsPool<Unit> unitPool;
+        private EcsPool<UnitData> unitPool;
+        private EcsPool<UnitPosData> unitPosPool;
         private float tick;
         
         public async void Init(IEcsSystems systems)
@@ -28,7 +29,8 @@ namespace _Game.Battle.Systems
             unitSource[0] = go.GetComponent<UnitView>();
             
             world = systems.GetWorld();
-            unitPool = world.GetPool<Unit>();
+            unitPool = world.GetPool<UnitData>();
+            unitPosPool = world.GetPool<UnitPosData>();
                 
             shareData.Simulator.SetTimeStep(shareData.TimeDelta);
             shareData.Simulator.SetAgentDefaults(1f, 10, 10f, 10f, 1.5f, 5f, float2.zero);
@@ -40,28 +42,45 @@ namespace _Game.Battle.Systems
             if (tick >= 1.0f)
             {
                 shareData.Simulator.EnsureCompleted();
+
+                float halfSize = 2;
+                float radius = 0.5f;
+                float2 center = float2.zero;
+                
                 for (var i = 0; i < 20; i++)
                 {
-                    var pos = RandomPointOnCircle(float2.zero, Random.Range(20, 30));
+                    var pos = RandomPointOnCircle(center, Random.Range(20, 30));
                     float2 goal;
-                    if (RaycastToSquareBorder(pos, float2.zero, 2, out var hitPoint))
+                    if (RaycastToSquareBorder(pos, center, halfSize, out var hitPoint))
                     {
                         goal = hitPoint;
                     }
                     else
                     {
-                        goal = ProjectPointToSquareBorder(pos, 2);
+                        goal = ProjectPointToSquareBorder(pos, halfSize);
                     }
                     var velocity = math.normalize(goal - pos);
                     var agentId = shareData.Simulator.AddAgent(pos);
+                    
+                    Shape shape = Shape.Insert(ShapeType.Circle, radius);
 
                     var entity = world.NewEntity();
-                    unitPool.Add(entity) = new Unit
+                    unitPool.Add(entity) = new UnitData
                     {
                         agentId = agentId,
+                        shapeId = shape.Id,
+#if UNITY_EDITOR
+                        color = Color.gray,
+#endif
+                    };
+                    
+                    unitPosPool.Add(entity) = new UnitPosData
+                    {
+                        prevPos = pos,
+                        currentPos = pos,
                     };
 
-                    shareData.Simulator.SetAgentRadius(agentId, 0.5f);
+                    shareData.Simulator.SetAgentRadius(agentId, radius);
                     shareData.Simulator.SetAgentGoal(agentId, goal);
                     shareData.Simulator.SetAgentPrefVelocity(agentId, velocity);
                 }
@@ -70,9 +89,9 @@ namespace _Game.Battle.Systems
             }
         }
 
-        private static float2 RandomPointOnCircle(float2 center, float radius)
+        static float2 RandomPointOnCircle(float2 center, float radius)
         {
-            var angle = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
+            var angle = Random.Range(0f, Mathf.PI * 2f);
             return center + new float2(
                        Mathf.Cos(angle),
                        Mathf.Sin(angle)

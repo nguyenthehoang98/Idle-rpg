@@ -3,23 +3,23 @@ using Unity.Mathematics;
 
 namespace _Game.Battle.Data
 {
-    public class ShapeInstance
+    public class Shape
     {
-        static Dictionary<int, ShapeInstance> dict = new Dictionary<int, ShapeInstance>();
+        static Dictionary<int, Shape> dict = new Dictionary<int, Shape>();
         private static int globalId;
 
-        public static ShapeInstance Insert(ShapeType shape, float radius)
+        public static Shape Insert(ShapeType shape, float radius)
         {
             globalId++;
-            ShapeInstance instance = new ShapeInstance(globalId, shape, radius);
+            Shape instance = new Shape(globalId, shape, radius);
             dict[globalId] = instance;
             return instance;
         }
 
-        public static ShapeInstance Insert(ShapeType shape, float2 size)
+        public static Shape Insert(ShapeType shape, float2 size)
         {
             globalId++;
-            ShapeInstance instance = new ShapeInstance(globalId, shape, size);
+            Shape instance = new Shape(globalId, shape, size);
             dict[globalId] = instance;
             return instance;
         }
@@ -29,30 +29,30 @@ namespace _Game.Battle.Data
             dict.Remove(id);
         }
 
-        public static bool TryGet(int id, out ShapeInstance instance)
+        public static bool TryGet(int id, out Shape instance)
         {
             return dict.TryGetValue(id, out instance);
         }
         
-        private ShapeInstance(int id, ShapeType shape, float radius)
+        private Shape(int id, ShapeType type, float radius)
         {
             Id = id;
-            Shape = shape;
+            Type = type;
             Radius = radius;
         }
-        private ShapeInstance(int id, ShapeType shape, float2 size)
+        private Shape(int id, ShapeType type, float2 size)
         {
             Id = id;
-            Shape = shape;
+            Type = type;
             HalfSize = size / 2;
         }
 
         public int Id { get; }
-        public ShapeType Shape { get; }
+        public ShapeType Type { get; }
         public float Radius { get; }
         public float2 HalfSize { get; }
         public float2 PrevPosition { get; set; }
-        public float2 CurrPosition { get; set; }
+        public float2 CurrentPosition { get; set; }
     }
 
     public enum ShapeType

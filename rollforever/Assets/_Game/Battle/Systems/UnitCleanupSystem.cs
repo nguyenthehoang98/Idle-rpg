@@ -1,4 +1,4 @@
-/*using _Game.Battle.Data;
+using _Game.Battle.Data;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 using Unity.Mathematics;
@@ -11,19 +11,8 @@ namespace _Game.Battle.Systems
         [EcsInject] private readonly BattleStartupShareData shareData;
         [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
         
-        private EcsPool<UnitPos> unitPosPool;
-        private EcsPool<Unit> unitPool;
-        private EcsFilter ecsFilter;
-        private EcsWorld world;
-        
         public void Init(IEcsSystems systems)
         {
-            world = systems.GetWorld();
-            ecsFilter = world.Filter<UnitPos>()
-                .Inc<Unit>()
-                .End();
-            unitPool = world.GetPool<Unit>();
-            unitPosPool = world.GetPool<UnitPos>();
         }
 
         public void PostRun(IEcsSystems systems)
@@ -35,19 +24,20 @@ namespace _Game.Battle.Systems
                 {
                     DisposeUnit(e, unitPool.Get(e));
                 }
-            }#1#
+            }*/
         }
 
-        void DisposeUnit(int e, Unit unit)
+        void DisposeUnit(int e, UnitData unitData)
         {
-            world.DelEntity(e);
+
+            /*world.DelEntity(e);
             shareData.Simulator.RemoveAgent(unit.agentId);
             shareData.Grid.Remove(unit.cellId);
             ShapeInstance.Remove(unit.shapeId);
 
             runtimeData.TryGet(e, out var unitView);
             runtimeData.Remove(e);
-            Object.Destroy(unitView.gameObject);
+            Object.Destroy(unitView.gameObject);*/
         }
     }
-}*/
+}

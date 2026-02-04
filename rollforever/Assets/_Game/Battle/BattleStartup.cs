@@ -1,4 +1,4 @@
-using _Game.Battle.Data;
+using System;
 using _Game.Battle.Events;
 using _Game.Battle.Systems;
 using _KIT.Event;
@@ -9,6 +9,7 @@ using RVO;
 using Unity.Mathematics;
 using UnityEngine;
 #if UNITY_EDITOR
+using _Game.Battle.Data;
 using Leopotam.EcsLite.UnityEditor;
 #endif
 
@@ -17,6 +18,9 @@ namespace _Game.Battle
     [RequireComponent(typeof(GameLoop))]
     public class BattleStartup : MonoBehaviour
     {
+        [SerializeField] private float circleRadius = 2f;
+        [SerializeField] private float2 circleCenter;
+        
         private EcsWorld world;
         private EcsSystems systems;
         private GameLoop gameLoop;
@@ -49,12 +53,12 @@ namespace _Game.Battle
 #if UNITY_EDITOR
                 .Add(new EcsSystemsDebugSystem())
                 .Add(new EcsWorldDebugSystem())
+                .Add(new DrawSystem())
 #endif
-                // add other
                 .Add(new SpawnMonsterSystem())
                 .Add(new MonsterMoveSystem())
-                .Add(new Systems.AbilitySystem());
-                //.Add(new UnitCleanupSystem());
+                .Add(new Systems.AbilitySystem())
+                .Add(new UnitCleanupSystem());
 
             systems.InjectShared(shareData);
             systems.InjectShared(runtimeData);
@@ -63,6 +67,26 @@ namespace _Game.Battle
             
             Startup();
         }
+
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            UnityEditor.Handles.DrawWireDisc((Vector2) circleCenter, Vector3.forward, circleRadius);
+
+            var unitPool = world.GetPool<UnitData>();
+            var filter = world.Filter<UnitData>()
+                .Inc<UnitPosData>()
+                .End();
+            foreach (var entity in filter)
+            {
+                var unit = unitPool.Get(entity);
+                if (Shape.TryGet(unit.shapeId, out var shape))
+                {
+                    
+                }
+            }
+        }
+#endif
 
         private void Update()
         {
