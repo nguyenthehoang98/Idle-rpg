@@ -1,4 +1,4 @@
-using _Game.Battle.Data;
+/*using _Game.Battle.Data;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 using Unity.Mathematics;
@@ -35,7 +35,7 @@ namespace _Game.Battle.Systems
                 {
                     DisposeUnit(e, unitPool.Get(e));
                 }
-            }*/
+            }#1#
         }
 
         void DisposeUnit(int e, Unit unit)
@@ -50,4 +50,4 @@ namespace _Game.Battle.Systems
             Object.Destroy(unitView.gameObject);
         }
     }
-}
+}*/

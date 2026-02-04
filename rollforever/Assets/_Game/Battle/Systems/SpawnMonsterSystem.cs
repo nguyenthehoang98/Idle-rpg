@@ -20,7 +20,6 @@ namespace _Game.Battle.Systems
         [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
         
         private EcsWorld world;
-        private EcsPool<UnitPos> unitPosPool;
         private EcsPool<Unit> unitPool;
         private float tick;
         
@@ -32,7 +31,6 @@ namespace _Game.Battle.Systems
             
             world = systems.GetWorld();
             unitPool = world.GetPool<Unit>();
-            unitPosPool = world.GetPool<UnitPos>();
                 
             shareData.Simulator.SetTimeStep(shareData.TimeDelta);
             shareData.Simulator.SetAgentDefaults(1f, 10, 10f, 10f, 1.5f, 5f, float2.zero);
@@ -49,31 +47,16 @@ namespace _Game.Battle.Systems
                     var pos = RandomPointOnCircle(float2.zero, Random.Range(20, 30));
                     var velocity = math.normalize(goal - pos);
                     var agentId = shareData.Simulator.AddAgent(pos);
-                    shareData.Simulator.SetAgentPrefVelocity(agentId, velocity);
 
-                    ShapeInstance shape = ShapeInstance.Insert(ShapeType.Circle, Random.value);
-                    
                     var entity = world.NewEntity();
-                    unitPosPool.Add(entity) = new UnitPos
-                    {
-                        goal = goal, 
-                    };
                     unitPool.Add(entity) = new Unit
                     {
                         agentId = agentId,
-                        shapeId = shape.Id,
-                        cellId = shareData.Grid.NewCellId()
                     };
 
-                    shareData.Grid.InsertOrUpdate(new GridObject(agentId, pos, new float2(1,1) * shape.Radius * 0.5f));
-                    shareData.Simulator.SetAgentRadius(agentId, shape.Radius);
+                    shareData.Simulator.SetAgentRadius(agentId, 0.5f);
                     shareData.Simulator.SetAgentGoal(agentId, goal);
-
-                    GameObject instance = KitPool.Instantiate(unitSource[0].gameObject);
-                    instance.transform.position = new Vector3(pos.x, pos.y);
-                    UnitView view = instance.GetComponent<UnitView>();
-                    view.Init(shareData);
-                    runtimeData.Insert(entity, view);
+                    shareData.Simulator.SetAgentPrefVelocity(agentId, velocity);
                 }
 
                 tick = 0;

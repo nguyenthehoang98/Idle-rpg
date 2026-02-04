@@ -51,7 +51,6 @@ namespace _Game.Battle
             BattleEcsSystems ecsSystems = new BattleEcsSystems(world);
             unitPool = world.GetPool<Unit>();
             unitFilter = world.Filter<Unit>()
-                .Inc<UnitPos>()
                 .End();
             
             gameLoop.Register(ecsSystems);
@@ -65,8 +64,8 @@ namespace _Game.Battle
                 // add other
                 .Add(new SpawnMonsterSystem())
                 .Add(new MonsterMoveSystem())
-                .Add(new Systems.AbilitySystem())
-                .Add(new UnitCleanupSystem());
+                .Add(new Systems.AbilitySystem());
+                //.Add(new UnitCleanupSystem());
 
             systems.InjectShared(shareData);
             systems.InjectShared(runtimeData);
@@ -87,11 +86,15 @@ namespace _Game.Battle
                 {
                     Unit unit = unitPool.Get(e);
                     Vector2 position = simulator.GetAgentPosition(unit.agentId);
-
-                    ShapeInstance.TryGet(unit.shapeId, out var shapeInstance);
-                    
+                    float radius = simulator.GetAgentRadius(unit.agentId);
+                    float2 velocity = simulator.GetAgentVelocity(unit.agentId);
+                    float neighborDist = simulator.GetAgentNeighborDist(unit.agentId);
                     Handles.color = Color.grey;
-                    Handles.DrawWireDisc(position, Vector3.forward, shapeInstance.Radius);
+                    Handles.DrawWireDisc(position, Vector3.forward, radius);
+                    Handles.color = Color.cyan;
+                    Handles.DrawWireDisc(position, Vector3.forward, neighborDist);
+                    Gizmos.color = Color.green;
+                    Gizmos.DrawRay(position, ((Vector2)velocity).normalized * radius);
                 }
             }
 
