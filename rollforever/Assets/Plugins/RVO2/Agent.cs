@@ -53,7 +53,7 @@ namespace RVO
     internal struct Agent
     {
         internal readonly int id;
-
+        internal bool paused;
         internal float2 position;
         internal float2 prefVelocity;
         internal float2 velocity;
@@ -86,6 +86,8 @@ namespace RVO
             ref UnsafeList<Pair> agentNeighbors,
             ref UnsafeList<Pair> obstacleNeighbors)
         {
+            if (paused) return;
+            
             var rangeSq = RVOMath.Square((this.timeHorizonObst * this.maxSpeed) + this.radius);
             fixed (Agent* thisPtr = &this)
             {
@@ -124,6 +126,8 @@ namespace RVO
             ref UnsafeList<Pair> agentNeighbors,
             ref UnsafeList<Pair> obstacleNeighbors)
         {
+            if (paused) return;
+            
             var orcaLines = new UnsafeList<Line>(8, Allocator.Temp);
 
             var invTimeHorizonObst = 1f / this.timeHorizonObst;
@@ -603,6 +607,7 @@ namespace RVO
         /// </summary>
         internal void Update(float timeStep)
         {
+            if (paused) return;
             this.velocity = this.newVelocity;
             this.position += this.velocity * timeStep;
         }

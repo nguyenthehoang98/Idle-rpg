@@ -479,6 +479,12 @@ namespace RVO
             var index = this.agentIndexLookup[agentId];
             return this.agents[index].position;
         }
+     
+        public float2 GetAgentGoal(int agentId)
+        {
+            var index = this.agentIndexLookup[agentId];
+            return this.agents[index].goal;
+        }
 
         /// <summary>
         /// Returns the two-dimensional preferred velocity of a specified agent.
@@ -809,14 +815,6 @@ namespace RVO
             this.agents[index] = agent;
         }
 
-        public void SetAgentGoal(int agentId, float2 goal)
-        {
-            var index = this.agentIndexLookup[agentId];
-            Agent agent = this.agents[index];
-            agent.goal = goal;
-            this.agents[index] = agent;
-        }
-
         /// <summary>
         /// Sets the time horizon of a specified agent with respect to other agentIds.
         /// </summary>
@@ -860,7 +858,33 @@ namespace RVO
             this.agents[index] = agent;
         }
 
-        public void SyncAgentVelocity(int agentId)
+        public void SetAgentGoal(int agentId, float2 goal)
+        {
+            var index = this.agentIndexLookup[agentId];
+            Agent agent = this.agents[index];
+            float2 direction = goal - agent.position;
+            if (math.abs(direction.x) <= 0 && math.abs(direction.y) <= 0)
+            {
+                
+            }
+            else
+            {
+                agent.prefVelocity = math.normalize(direction) * agent.maxSpeed;                
+            }
+
+            agent.goal = goal;
+            this.agents[index] = agent;
+        }
+
+        public void PauseAgent(int agentId, bool pause)
+        {
+            var index = this.agentIndexLookup[agentId];
+            Agent agent = this.agents[index];
+            agent.paused = pause;
+            this.agents[index] = agent;
+        }
+
+        public void SetAgentGoal(int agentId)
         {
             var index = this.agentIndexLookup[agentId];
             Agent agent = this.agents[index];
