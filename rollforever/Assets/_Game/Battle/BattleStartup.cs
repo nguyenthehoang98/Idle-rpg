@@ -3,7 +3,6 @@ using _Game.Battle.Events;
 using _Game.Battle.Systems;
 using _KIT.Event;
 using _KIT.Schedule;
-using Geometry;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 using RVO;
@@ -11,7 +10,6 @@ using Unity.Mathematics;
 using UnityEngine;
 #if UNITY_EDITOR
 using Leopotam.EcsLite.UnityEditor;
-using UnityEditor;
 #endif
 
 namespace _Game.Battle
@@ -21,10 +19,6 @@ namespace _Game.Battle
     {
         private EcsWorld world;
         private EcsSystems systems;
-        private EcsPool<Unit> unitPool;
-        private EcsFilter unitFilter;
-        private Grid<IGridObject> grid; 
-        private Simulator simulator;
         private GameLoop gameLoop;
 
         private void Awake()
@@ -40,18 +34,13 @@ namespace _Game.Battle
             
             // todo: battle world
             world = new EcsWorld();
-            simulator = new Simulator();
-            grid = new Grid<IGridObject>(new float2(20, 30), 1, 16);
             BattleStartupShareData shareData = new BattleStartupShareData(
-                simulator, grid, gameLoop.FrameDeltaTime
+                new Simulator(), gameLoop.FrameDeltaTime
             );
             BattleStartupRuntimeData runtimeData = new BattleStartupRuntimeData();
             
             // todo: battle systems
             BattleEcsSystems ecsSystems = new BattleEcsSystems(world);
-            unitPool = world.GetPool<Unit>();
-            unitFilter = world.Filter<Unit>()
-                .End();
             
             gameLoop.Register(ecsSystems);
             
@@ -74,33 +63,6 @@ namespace _Game.Battle
             
             Startup();
         }
-
-#if UNITY_EDITOR
-        private void OnDrawGizmos()
-        {
-            if (simulator != null)
-            {
-                simulator.EnsureCompleted();
-                
-                foreach (var e in unitFilter)
-                {
-                    Unit unit = unitPool.Get(e);
-                    Vector2 position = simulator.GetAgentPosition(unit.agentId);
-                    float radius = simulator.GetAgentRadius(unit.agentId);
-                    float2 velocity = simulator.GetAgentVelocity(unit.agentId);
-                    float neighborDist = simulator.GetAgentNeighborDist(unit.agentId);
-                    Handles.color = Color.grey;
-                    Handles.DrawWireDisc(position, Vector3.forward, radius);
-                    Handles.color = Color.cyan;
-                    Handles.DrawWireDisc(position, Vector3.forward, neighborDist);
-                    Gizmos.color = Color.green;
-                    Gizmos.DrawRay(position, ((Vector2)velocity).normalized * radius);
-                }
-            }
-
-            //if (grid != null) grid.Draw(Color.green);
-        }
-#endif
 
         private void Update()
         {

@@ -1,21 +1,18 @@
 using System.Collections.Generic;
 using _Game.Battle.View;
-using Geometry;
 using RVO;
 
 namespace _Game.Battle
 {
     public class BattleStartupShareData
     {
-        public BattleStartupShareData(Simulator simulator, Grid<IGridObject> grid, float timeDelta)
+        public BattleStartupShareData(Simulator simulator, float timeDelta)
         {
             TimeDelta = timeDelta;
-            Grid = grid;
             Simulator = simulator;
         }
 
         public Simulator Simulator { get; }
-        public Grid<IGridObject> Grid { get; }
         public float TimeDelta { get; }
     }
 

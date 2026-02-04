@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using _Game.Battle.Data;
 using _Game.Battle.View;
-using _KIT.Pool;
 using _KIT.Resource;
-using Geometry;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 using Unity.Mathematics;
@@ -41,6 +39,7 @@ namespace _Game.Battle.Systems
             tick += shareData.TimeDelta;
             if (tick >= 1.0f)
             {
+                shareData.Simulator.EnsureCompleted();
                 for (var i = 0; i < 1; i++)
                 {
                     var goal = float2.zero;
