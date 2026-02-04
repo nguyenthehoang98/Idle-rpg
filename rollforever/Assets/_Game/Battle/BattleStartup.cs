@@ -73,6 +73,7 @@ namespace _Game.Battle
         {
             UnityEditor.Handles.DrawWireDisc((Vector2) circleCenter, Vector3.forward, circleRadius);
 
+            if (world == null) return;
             var unitPool = world.GetPool<UnitData>();
             var filter = world.Filter<UnitData>()
                 .Inc<UnitPosData>()
