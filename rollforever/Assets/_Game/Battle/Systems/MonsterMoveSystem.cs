@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace _Game.Battle.Systems
 {
-    public class MonsterMoveSystem : IEcsInitSystem, IEcsRunSystem
+    public class MonsterMoveSystem : IEcsInitSystem, IEcsRunSystem, IEcsPostRunSystem
     {
         struct MatrixData
         {
@@ -18,6 +18,8 @@ namespace _Game.Battle.Systems
         [EcsInject] private readonly BattleStartupShareData shareData;
         [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
 
+        private const float THREASHOLD_VELOCITYSQ = 2f; 
+        
         private int width = 40;
         private int height = 60;
         private MatrixData[,] matrix;
@@ -44,9 +46,7 @@ namespace _Game.Battle.Systems
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
-                {
                     matrix[i, j].trigger = false;
-                }
             }
 
             foreach (var e in ecsFilter)
@@ -69,24 +69,28 @@ namespace _Game.Battle.Systems
                 float2 velocity = shareData.Simulator.GetAgentVelocity(unit.agentId);
                 float neighborDist = shareData.Simulator.GetAgentNeighborDist(unit.agentId);
                 Circle2D(position, radius, Color.gray, 12, shareData.TimeDelta);
-                //Circle2D(position, neighborDist, new Color(0,1,1, 0.2f), 12, shareData.TimeDelta);
-                //Debug.DrawRay((Vector2)position, ((Vector2)velocity).normalized * radius);
+                Circle2D(position, neighborDist, new Color(0, 1, 1, 0.2f), 12, shareData.TimeDelta);
+                Debug.DrawRay((Vector2)position, ((Vector2)velocity).normalized * radius);
 #endif
-                if (ShouldPause(position, shareData.Simulator.GetAgentGoal(unit.agentId)))
+                bool paused = shareData.Simulator.IsAgentPaused(unit.agentId);
+                if (paused)
+                    continue;
+                
+                float2 goal = shareData.Simulator.GetAgentGoal(unit.agentId);
+                if (ShouldPause(position, goal))
                 {
-                    var cell = WorldToCell(position);
-                    if (cell.x >= 0 && cell.y >= 0 && cell.x < width && cell.y < height)
-                    {
-                        matrix[cell.x, cell.y].occupied = true;
-                    }
-                    shareData.Simulator.PauseAgent(unit.agentId, true);
+                    Pause(unit.agentId, position);
                 }
                 else
                 {
-                    var found = TryFindCellExpandFromCenter(new int2(width / 2, height / 2), position, out var goal);
+                    var found = TryFindCellExpandFromCenter(WorldToCell(goal), position, out var cell);
                     if (found)
                     {
-                        shareData.Simulator.SetAgentGoal(unit.agentId, CellToWorld(goal));    
+                        var cellToWorld = CellToWorld(cell);
+                        shareData.Simulator.SetAgentGoal(unit.agentId, cellToWorld);
+#if UNITY_EDITOR
+                        //Debug.DrawLine((Vector2)position, (Vector2)cellToWorld, Color.red, shareData.TimeDelta);        
+#endif
                     }
                     else
                     {
@@ -96,7 +100,7 @@ namespace _Game.Battle.Systems
             }
 
 #if UNITY_EDITOR
-            for (int i = 0; i < width; i++)
+            /*for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
                 {
@@ -118,10 +122,40 @@ namespace _Game.Battle.Systems
                     
                     if (selected) Box2dSelected(world, cellSize, color, shareData.TimeDelta);
                 }
-            }
+            }*/
 #endif
-            
             shareData.Simulator.DoStep();
+        }
+
+        public void PostRun(IEcsSystems systems)
+        {
+            shareData.Simulator.EnsureCompleted();
+            
+            foreach (var e in ecsFilter)
+            {
+                var unit = unitPool.Get(e);
+                
+                bool paused = shareData.Simulator.IsAgentPaused(unit.agentId);
+                if (paused)
+                    continue;
+                
+                float2 velocity = shareData.Simulator.GetAgentVelocity(unit.agentId);
+                if (math.lengthsq(velocity) < THREASHOLD_VELOCITYSQ)
+                {
+                    float2 position = shareData.Simulator.GetAgentPosition(unit.agentId);
+                    Pause(unit.agentId, position);
+                }
+            }
+        }
+
+        void Pause(int agentId, float2 position)
+        {
+            var cell = WorldToCell(position);
+            if (cell.x >= 0 && cell.y >= 0 && cell.x < width && cell.y < height)
+            {
+                matrix[cell.x, cell.y].occupied = true;
+            }
+            shareData.Simulator.PauseAgent(agentId, true);
         }
 
         bool ShouldPause(float2 pos, float2 goal)
@@ -132,23 +166,18 @@ namespace _Game.Battle.Systems
         bool TryFindCellExpandFromCenter(
             int2 centerCell,
             float2 point,
-            out int2 resultCell
-        )
+            out int2 resultCell)
         {
             resultCell = new int2(-1, -1);
 
             float bestDistToPoint = float.MaxValue;
-            bool foundAtThisDistance = false;
-
             int maxDist = math.max(width, height);
 
-            // lan từ center ra
             for (int dist = 0; dist <= maxDist; dist++)
             {
-                foundAtThisDistance = false;
+                bool foundAtThisDist = false;
                 bestDistToPoint = float.MaxValue;
 
-                // duyệt toàn bộ cell có Chebyshev distance = dist
                 for (int dx = -dist; dx <= dist; dx++)
                 for (int dy = -dist; dy <= dist; dy++)
                 {
@@ -157,32 +186,50 @@ namespace _Game.Battle.Systems
 
                     int2 c = new int2(centerCell.x + dx, centerCell.y + dy);
 
-                    // (1) ngoài grid → bỏ
                     if (!IsInsideGrid(c))
                         continue;
 
-                    // chỉ slot trống
                     if (!IsEmpty(c))
                         continue;
 
-                    // ---- đã tìm thấy cell trống ở dist này ----
-                    float2 cellWorld = CellToWorld(c);
-                    float dToPoint = math.lengthsq(cellWorld - point);
+                    if (!HasAnyFreeNeighbor8(c))
+                        continue;
 
-                    if (!foundAtThisDistance || dToPoint < bestDistToPoint)
+                    float2 wp = CellToWorld(c);
+                    float dToPoint = math.lengthsq(wp - point);
+
+                    if (!foundAtThisDist || dToPoint < bestDistToPoint)
                     {
-                        foundAtThisDistance = true;
+                        foundAtThisDist = true;
                         bestDistToPoint = dToPoint;
                         resultCell = c;
                     }
                 }
 
-                // (2) nếu dist này có slot → chọn xong, dừng
-                if (foundAtThisDistance)
+                if (foundAtThisDist)
                     return true;
             }
 
             return false;
+        }
+        
+        bool HasAnyFreeNeighbor8(int2 cell)
+        {
+            for (int dx = -1; dx <= 1; dx++)
+            for (int dy = -1; dy <= 1; dy++)
+            {
+                if (dx == 0 && dy == 0)
+                    continue;
+
+                int2 n = new int2(cell.x + dx, cell.y + dy);
+
+                if (!IsInsideGrid(n))
+                    continue;
+
+                if (IsEmpty(n)) return true;
+            }
+
+            return false; // bị bao vây hoàn toàn
         }
         
         bool IsInsideGrid(int2 c)

@@ -479,6 +479,12 @@ namespace RVO
             var index = this.agentIndexLookup[agentId];
             return this.agents[index].position;
         }
+        
+        public bool IsAgentPaused(int agentId)
+        {
+            var index = this.agentIndexLookup[agentId];
+            return this.agents[index].paused;
+        }
      
         public float2 GetAgentGoal(int agentId)
         {

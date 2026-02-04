@@ -40,10 +40,18 @@ namespace _Game.Battle.Systems
             if (tick >= 1.0f)
             {
                 shareData.Simulator.EnsureCompleted();
-                for (var i = 0; i < 1; i++)
+                for (var i = 0; i < 10; i++)
                 {
-                    var goal = float2.zero;
                     var pos = RandomPointOnCircle(float2.zero, Random.Range(20, 30));
+                    float2 goal;
+                    if (RaycastToSquareBorder(pos, float2.zero, 2, out var hitPoint))
+                    {
+                        goal = hitPoint;
+                    }
+                    else
+                    {
+                        goal = ProjectPointToSquareBorder(pos, 2);
+                    }
                     var velocity = math.normalize(goal - pos);
                     var agentId = shareData.Simulator.AddAgent(pos);
 
@@ -69,6 +77,65 @@ namespace _Game.Battle.Systems
                        Mathf.Cos(angle),
                        Mathf.Sin(angle)
                    ) * radius;
+        }
+        
+        static float2 ProjectPointToSquareBorder(float2 pos, float halfSize)
+        {
+            float2 p = pos;
+
+            float absX = math.abs(p.x);
+            float absY = math.abs(p.y);
+
+            if (absX > absY)
+            {
+                // chạm cạnh trái / phải
+                p.x = math.sign(p.x) * halfSize;
+                p.y = math.clamp(p.y, -halfSize, halfSize);
+            }
+            else
+            {
+                // chạm cạnh trên / dưới
+                p.y = math.sign(p.y) * halfSize;
+                p.x = math.clamp(p.x, -halfSize, halfSize);
+            }
+
+            return p;
+        }
+        
+        static bool RaycastToSquareBorder(
+            float2 pos,
+            float2 center,
+            float halfSize,
+            out float2 hitPoint
+        )
+        {
+            hitPoint = float2.zero;
+
+            float2 dir = math.normalize(center - pos);
+
+            float2 min = center - halfSize;
+            float2 max = center + halfSize;
+
+            float2 invDir = 1.0f / dir;
+
+            float2 t1 = (min - pos) * invDir;
+            float2 t2 = (max - pos) * invDir;
+
+            float2 tMin = math.min(t1, t2);
+            float2 tMax = math.max(t1, t2);
+
+            float tEnter = math.cmax(tMin);
+            float tExit  = math.cmin(tMax);
+
+            // không hit
+            if (tExit < 0 || tEnter > tExit)
+                return false;
+
+            // hit đầu tiên khi ray đi vào hình vuông
+            float t = tEnter >= 0 ? tEnter : tExit;
+
+            hitPoint = pos + dir * t;
+            return true;
         }
     }
 }
