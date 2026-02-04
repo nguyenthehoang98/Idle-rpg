@@ -7,7 +7,7 @@ namespace _KIT.Schedule
     {
         readonly TickSystem tickSystem = new TickSystem();
 
-        [Range(5, 60), SerializeField] private int fps;
+        [Range(2, 60), SerializeField] private int fps;
 
         public void Pause() => IsPaused = true;
 

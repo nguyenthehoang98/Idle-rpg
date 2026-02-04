@@ -57,6 +57,7 @@ namespace RVO
         internal float2 position;
         internal float2 prefVelocity;
         internal float2 velocity;
+        internal float2 goal;
         internal int maxNeighbors;
         internal float maxSpeed;
         internal float neighborDist;

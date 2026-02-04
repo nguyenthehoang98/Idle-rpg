@@ -35,7 +35,7 @@ namespace _Game.Battle.Systems
             unitPosPool = world.GetPool<UnitPos>();
                 
             shareData.Simulator.SetTimeStep(shareData.TimeDelta);
-            shareData.Simulator.SetAgentDefaults(7f, 10, 10f, 10f, 1.5f, 10f, new float2(0f, 0f));
+            shareData.Simulator.SetAgentDefaults(1f, 10, 10f, 10f, 1.5f, 5f, float2.zero);
         }
 
         public void Run(IEcsSystems systems)
@@ -67,6 +67,7 @@ namespace _Game.Battle.Systems
 
                     shareData.Grid.InsertOrUpdate(new GridObject(agentId, pos, new float2(1,1) * shape.Radius * 0.5f));
                     shareData.Simulator.SetAgentRadius(agentId, shape.Radius);
+                    shareData.Simulator.SetAgentGoal(agentId, goal);
 
                     GameObject instance = KitPool.Instantiate(unitSource[0].gameObject);
                     instance.transform.position = new Vector3(pos.x, pos.y);

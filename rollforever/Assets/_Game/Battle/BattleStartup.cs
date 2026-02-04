@@ -29,7 +29,7 @@ namespace _Game.Battle
 
         private void Awake()
         {
-            Application.targetFrameRate = 30; // 60
+            Application.targetFrameRate = 60;
         }
 
         private void Start()
@@ -66,7 +66,7 @@ namespace _Game.Battle
                 .Add(new SpawnMonsterSystem())
                 .Add(new MonsterMoveSystem())
                 .Add(new Systems.AbilitySystem())
-                .Add(new CleanupSystem());
+                .Add(new UnitCleanupSystem());
 
             systems.InjectShared(shareData);
             systems.InjectShared(runtimeData);
@@ -95,10 +95,7 @@ namespace _Game.Battle
                 }
             }
 
-            if (grid != null)
-            {
-                grid.Draw(Color.green);
-            }
+            //if (grid != null) grid.Draw(Color.green);
         }
 #endif
 

@@ -809,6 +809,14 @@ namespace RVO
             this.agents[index] = agent;
         }
 
+        public void SetAgentGoal(int agentId, float2 goal)
+        {
+            var index = this.agentIndexLookup[agentId];
+            Agent agent = this.agents[index];
+            agent.goal = goal;
+            this.agents[index] = agent;
+        }
+
         /// <summary>
         /// Sets the time horizon of a specified agent with respect to other agentIds.
         /// </summary>
@@ -849,6 +857,23 @@ namespace RVO
             var index = this.agentIndexLookup[agentId];
             Agent agent = this.agents[index];
             agent.velocity = velocity;
+            this.agents[index] = agent;
+        }
+
+        public void SyncAgentVelocity(int agentId)
+        {
+            var index = this.agentIndexLookup[agentId];
+            Agent agent = this.agents[index];
+            float2 direction = agent.goal - agent.position;
+            if (math.abs(direction.x) <= 0 && math.abs(direction.y) <= 0)
+            {
+                
+            }
+            else
+            {
+                agent.prefVelocity = math.normalize(direction) * agent.maxSpeed;                
+            }
+
             this.agents[index] = agent;
         }
 
@@ -1523,6 +1548,7 @@ namespace RVO
                     obstaclesLength,
                     ref agentNeighbors,
                     ref obstacleNeighbors);
+                
                 this.agentResult[index] = agent->newVelocity;
 
                 agentNeighbors.Dispose();

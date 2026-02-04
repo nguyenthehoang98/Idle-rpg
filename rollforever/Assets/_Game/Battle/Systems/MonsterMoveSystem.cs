@@ -3,6 +3,7 @@ using Geometry;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace _Game.Battle.Systems
 {
@@ -30,9 +31,8 @@ namespace _Game.Battle.Systems
             foreach (var e in ecsFilter)
             {
                 var unit = unitPool.Get(e);
-                ref var unitPos = ref unitPosPool.Get(e);
-                var goal = unitPos.goal;
                 var pos = shareData.Simulator.GetAgentPosition(unit.agentId);
+                ref var unitPos = ref unitPosPool.Get(e);
                 unitPos.prevPos = unitPos.curPos;
                 unitPos.curPos = pos;
 
@@ -42,7 +42,6 @@ namespace _Game.Battle.Systems
                     shapeInstance.CurrPosition = unitPos.curPos;
                 }
 
-                shareData.Simulator.SetAgentPrefVelocity(unit.agentId, math.normalize(goal - pos));
                 shareData.Grid.InsertOrUpdate(
                     new GridObject(unit.cellId, pos, new float2(1, 1) * shapeInstance.Radius * 0.5f)
                 );
@@ -51,6 +50,8 @@ namespace _Game.Battle.Systems
                 {
                     unitView.UpdatePosition(pos);
                 }
+                
+                shareData.Simulator.SyncAgentVelocity(unit.agentId);
             }
             
             shareData.Simulator.DoStep();
