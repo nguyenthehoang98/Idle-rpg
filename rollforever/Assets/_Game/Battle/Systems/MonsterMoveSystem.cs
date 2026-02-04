@@ -18,7 +18,7 @@ namespace _Game.Battle.Systems
         [EcsInject] private readonly BattleStartupShareData shareData;
         [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
 
-        private const float THREASHOLD_VELOCITYSQ = 2f; 
+        private const float THREASHOLD_VELOCITYSQ = 0.3f; 
         
         private int width = 40;
         private int height = 60;
@@ -234,9 +234,7 @@ namespace _Game.Battle.Systems
         
         bool IsInsideGrid(int2 c)
         {
-            return c.x >= 0 && c.y >= 0 &&
-                   c.x < matrix.GetLength(0) &&
-                   c.y < matrix.GetLength(1);
+            return c.x >= 0 && c.y >= 0 && c.x < width && c.y < height;
         }
 
         bool IsEmpty(int2 c)

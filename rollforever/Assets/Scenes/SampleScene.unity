@@ -253,7 +253,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60e522e3b4fccd34b9ff1ce5161512a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fps: 60
+  fps: 30
 --- !u!4 &739745918
 Transform:
   m_ObjectHideFlags: 0

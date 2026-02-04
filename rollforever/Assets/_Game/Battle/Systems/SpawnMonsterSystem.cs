@@ -40,7 +40,7 @@ namespace _Game.Battle.Systems
             if (tick >= 1.0f)
             {
                 shareData.Simulator.EnsureCompleted();
-                for (var i = 0; i < 10; i++)
+                for (var i = 0; i < 20; i++)
                 {
                     var pos = RandomPointOnCircle(float2.zero, Random.Range(20, 30));
                     float2 goal;
