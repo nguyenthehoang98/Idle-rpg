@@ -33,7 +33,7 @@ namespace _Game.Battle.Systems
             unitPosPool = world.GetPool<UnitPosData>();
                 
             shareData.Simulator.SetTimeStep(shareData.TimeDelta);
-            shareData.Simulator.SetAgentDefaults(1f, 10, 10f, 10f, 1.5f, 5f, float2.zero);
+            shareData.Simulator.SetAgentDefaults(1f, 10, 20f, 20f, 1.5f, 5f, float2.zero);
         }
 
         public void Run(IEcsSystems systems)
@@ -44,10 +44,10 @@ namespace _Game.Battle.Systems
                 shareData.Simulator.EnsureCompleted();
 
                 float halfSize = 2;
-                float radius = 0.5f;
+                float radius = Random.Range(0.5f, 1.5f);
                 float2 center = float2.zero;
                 
-                for (var i = 0; i < 20; i++)
+                for (var i = 0; i < 1; i++)
                 {
                     var pos = RandomPointOnCircle(center, Random.Range(20, 30));
                     float2 goal;
@@ -70,7 +70,7 @@ namespace _Game.Battle.Systems
                         agentId = agentId,
                         shapeId = shape.Id,
 #if UNITY_EDITOR
-                        color = Color.gray,
+                        color = Random.ColorHSV(0, 1, 0.5f, 1, 0.5f, 1),
 #endif
                     };
                     
@@ -81,6 +81,7 @@ namespace _Game.Battle.Systems
                     };
 
                     shareData.Simulator.SetAgentRadius(agentId, radius);
+                    shareData.Simulator.SetAgentNeighborDist(agentId, radius * 3f);
                     shareData.Simulator.SetAgentGoal(agentId, goal);
                     shareData.Simulator.SetAgentPrefVelocity(agentId, velocity);
                 }

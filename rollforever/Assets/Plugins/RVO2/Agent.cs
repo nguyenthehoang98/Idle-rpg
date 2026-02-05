@@ -64,7 +64,6 @@ namespace RVO
         internal float radius;
         internal float timeHorizon;
         internal float timeHorizonObst;
-
         internal float2 newVelocity;
 
         internal Agent(int id)

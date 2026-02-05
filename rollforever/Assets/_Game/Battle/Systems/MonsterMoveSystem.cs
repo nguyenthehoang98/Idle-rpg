@@ -1,4 +1,3 @@
-using System;
 using _Game.Battle.Data;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
@@ -20,10 +19,10 @@ namespace _Game.Battle.Systems
 
         private const float THREASHOLD_VELOCITYSQ = 0.3f;
 
-        private int width = 40;
-        private int height = 60;
+        private int width = 100;
+        private int height = 120;
         private MatrixData[,] matrix;
-        private float2 cellSize;
+        private float cellSize;
 
         private EcsPool<UnitData> unitPool;
         private EcsPool<UnitPosData> unitPosPool;
@@ -39,7 +38,7 @@ namespace _Game.Battle.Systems
             unitPosPool = world.GetPool<UnitPosData>();
 
             matrix = new MatrixData[width, height];
-            cellSize = new float2(1.25f, 1.25f);
+            cellSize = 0.5f;
         }
 
         public void Run(IEcsSystems systems)
@@ -55,11 +54,49 @@ namespace _Game.Battle.Systems
             foreach (var e in ecsFilter)
             {
                 var unit = unitPool.Get(e);
-                var position = shareData.Simulator.GetAgentPosition(unit.agentId);
-                var cell = WorldToCell(position);
-                if (cell.x >= 0 && cell.y >= 0 && cell.x < width && cell.y < height)
+
+                if (Shape.TryGet(unit.shapeId, out var shape))
                 {
-                    matrix[cell.x, cell.y].trigger = true;
+                    var position = shareData.Simulator.GetAgentPosition(unit.agentId);
+                    var cell = WorldToCell(position);
+
+                    if (cell.x >= 0 && cell.y >= 0 && cell.x < width && cell.y < height)
+                    {
+                        matrix[cell.x, cell.y].trigger = true;
+                    }
+
+                    if (shape.Type == ShapeType.Circle)
+                    {
+                        var radius = shape.Radius;
+                        var centerCell = WorldToCell(position);
+                        int rangeX = (int)(radius / cellSize);
+                        int rangeY = (int)(radius / cellSize);
+
+                        for (int dx = -rangeX; dx <= rangeX; dx++)
+                        {
+                            for (int dy = -rangeY; dy <= rangeY; dy++)
+                            {
+                                int x = centerCell.x + dx;
+                                int y = centerCell.y + dy;
+
+                                if (x < 0 || y < 0 || x >= width || y >= height)
+                                    continue;
+
+                                float2 cellWorldPos = CellToWorldCenter(x, y);
+                                if (math.distancesq(cellWorldPos, position) <= radius * radius)
+                                {
+                                    matrix[x, y].trigger = true;
+#if UNITY_EDITOR
+                                    Box2dSelected((Vector2) cellWorldPos, new float2(cellSize, cellSize), unit.color, shareData.TimeDelta);
+#endif
+                                }
+                            }
+                        }
+                    }
+                    else if (shape.Type == ShapeType.Box)
+                    {
+                        
+                    }
                 }
             }
 
@@ -82,7 +119,8 @@ namespace _Game.Battle.Systems
                 }
 
                 var goal = shareData.Simulator.GetAgentGoal(unit.agentId);
-                if (ShouldPause(position, goal))
+                var radius = shareData.Simulator.GetAgentRadius(unit.agentId);
+                if (ShouldPause(position, goal, radius))
                 {
                     Pause(unit.agentId, position);
                 }
@@ -93,6 +131,10 @@ namespace _Game.Battle.Systems
                     {
                         var cellToWorld = CellToWorld(cell);
                         shareData.Simulator.SetAgentGoal(unit.agentId, cellToWorld);
+#if UNITY_EDITOR
+                        Debug.DrawLine((Vector2) position, (Vector2) cellToWorld, Color.red, shareData.TimeDelta);
+                        Box2dSelected((Vector2) cellToWorld, new float2(cellSize, cellSize), Color.red, shareData.TimeDelta);
+#endif
                     }
                     else
                     {
@@ -136,9 +178,9 @@ namespace _Game.Battle.Systems
             shareData.Simulator.PauseAgent(agentId, true);
         }
 
-        bool ShouldPause(float2 pos, float2 goal)
+        bool ShouldPause(float2 pos, float2 goal, float radius)
         {
-            return math.distancesq(goal, pos) < math.max(cellSize.x, cellSize.y);
+            return math.distancesq(goal, pos) < (radius + cellSize) * (radius + cellSize);
         }
 
         bool TryFindCellExpandFromCenter(int2 centerCell, float2 point, out int2 resultCell)
@@ -222,12 +264,23 @@ namespace _Game.Battle.Systems
 
         int2 WorldToCell(float2 worldPos) => WorldToCell(worldPos, float2.zero);
 
+        float2 CellToWorldCenter(int x, int y) => CellToWorldCenter(x, y, float2.zero);
+        
+        float2 CellToWorldCenter(int x, int y, float2 gridCenter)
+        {
+            var halfGrid = HalfGridSize();
+            return new float2(
+                gridCenter.x - halfGrid.x + (x + 0.5f) * cellSize,
+                gridCenter.y - halfGrid.y + (y + 0.5f) * cellSize
+            );
+        }
+
         float2 CellToWorld(int2 cell, float2 gridCenter)
         {
             var halfGrid = HalfGridSize();
             return new float2(
-                gridCenter.x - halfGrid.x + (cell.x + 0.5f) * cellSize.x,
-                gridCenter.y - halfGrid.y + (cell.y + 0.5f) * cellSize.y
+                gridCenter.x - halfGrid.x + (cell.x + 0.5f) * cellSize,
+                gridCenter.y - halfGrid.y + (cell.y + 0.5f) * cellSize
             );
         }
 
@@ -235,20 +288,27 @@ namespace _Game.Battle.Systems
         {
             var halfGrid = HalfGridSize();
             var x = (int) math.floor(
-                (worldPos.x - (gridCenter.x - halfGrid.x)) / cellSize.x
+                (worldPos.x - (gridCenter.x - halfGrid.x)) / cellSize
             );
             var y = (int) math.floor(
-                (worldPos.y - (gridCenter.y - halfGrid.y)) / cellSize.y
+                (worldPos.y - (gridCenter.y - halfGrid.y)) / cellSize
             );
             return new int2(x, y);
         }
 
-        float2 HalfGridSize()
+        float2 HalfGridSize() => new float2(width * cellSize * 0.5f, height * cellSize * 0.5f);
+        
+        static void Box2dSelected(float2 center, float2 size, Color color, float deltaTime)
         {
-            return new float2(
-                width * cellSize.x * 0.5f,
-                height * cellSize.y * 0.5f
-            );
+            float2 half = size * 0.5f;
+
+            Vector3 p1 = new Vector3(center.x - half.x, center.y - half.y, 0);
+            Vector3 p2 = new Vector3(center.x + half.x, center.y - half.y, 0);
+            Vector3 p3 = new Vector3(center.x + half.x, center.y + half.y, 0);
+            Vector3 p4 = new Vector3(center.x - half.x, center.y + half.y, 0);
+
+            Debug.DrawLine(p1, p3, color, deltaTime);
+            Debug.DrawLine(p2, p4, color, deltaTime);
         }
     }
 }

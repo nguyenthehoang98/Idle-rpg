@@ -170,7 +170,7 @@ MonoBehaviour:
   boxCenter: {x: 2, y: 2}
   boxSize: {x: 2, y: 2}
   segA: {x: 0, y: 0}
-  segB: {x: 3, y: 3}
+  segB: {x: 2, y: 0}
   drawClosestPoint: 1
 --- !u!1 &2003699158
 GameObject:
