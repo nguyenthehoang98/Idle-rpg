@@ -19,7 +19,6 @@ namespace _Game.Battle.Systems
         
         private EcsWorld world;
         private EcsPool<UnitData> unitPool;
-        private EcsPool<UnitPosData> unitPosPool;
         private float tick;
         
         public async void Init(IEcsSystems systems)
@@ -30,7 +29,6 @@ namespace _Game.Battle.Systems
             
             world = systems.GetWorld();
             unitPool = world.GetPool<UnitData>();
-            unitPosPool = world.GetPool<UnitPosData>();
                 
             shareData.Simulator.SetTimeStep(shareData.TimeDelta);
             shareData.Simulator.SetAgentDefaults(1f, 10, 20f, 20f, 1.5f, 5f, float2.zero);
@@ -72,12 +70,6 @@ namespace _Game.Battle.Systems
 #if UNITY_EDITOR
                         color = Random.ColorHSV(0, 1, 0.5f, 1, 0.5f, 1),
 #endif
-                    };
-                    
-                    unitPosPool.Add(entity) = new UnitPosData
-                    {
-                        prevPos = pos,
-                        currentPos = pos,
                     };
 
                     shareData.Simulator.SetAgentRadius(agentId, radius);

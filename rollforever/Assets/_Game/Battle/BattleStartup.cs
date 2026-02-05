@@ -1,4 +1,3 @@
-using System;
 using _Game.Battle.Events;
 using _Game.Battle.Systems;
 using _KIT.Event;
@@ -10,6 +9,7 @@ using Unity.Mathematics;
 using UnityEngine;
 #if UNITY_EDITOR
 using _Game.Battle.Data;
+using Geometry;
 using Leopotam.EcsLite.UnityEditor;
 #endif
 
@@ -76,14 +76,22 @@ namespace _Game.Battle
             if (world == null) return;
             var unitPool = world.GetPool<UnitData>();
             var filter = world.Filter<UnitData>()
-                .Inc<UnitPosData>()
                 .End();
             foreach (var entity in filter)
             {
-                var unit = unitPool.Get(entity);
+                ref var unit = ref unitPool.Get(entity);
                 if (Shape.TryGet(unit.shapeId, out var shape))
                 {
-                    
+                    if (shape.Type == ShapeType.Circle)
+                    {
+                        Circle c1 = new Circle(new Vec2(circleCenter.x, circleCenter.y), circleRadius);
+                        Circle c2 = new Circle(new Vec2(shape.CurrentPosition.x, shape.CurrentPosition.y),
+                            shape.Radius);
+                        if (GeometryCircle.Intersect(c1, c2))
+                        {
+                            unit.color = Color.red;
+                        }
+                    }
                 }
             }
         }

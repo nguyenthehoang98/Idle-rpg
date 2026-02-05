@@ -25,17 +25,14 @@ namespace _Game.Battle.Systems
         private float cellSize;
 
         private EcsPool<UnitData> unitPool;
-        private EcsPool<UnitPosData> unitPosPool;
         private EcsFilter ecsFilter;
 
         public void Init(IEcsSystems systems)
         {
             var world = systems.GetWorld();
             ecsFilter = world.Filter<UnitData>()
-                .Inc<UnitPosData>()
                 .End();
             unitPool = world.GetPool<UnitData>();
-            unitPosPool = world.GetPool<UnitPosData>();
 
             matrix = new MatrixData[width, height];
             cellSize = 0.5f;
@@ -103,23 +100,21 @@ namespace _Game.Battle.Systems
             foreach (var e in ecsFilter)
             {
                 var unit = unitPool.Get(e);
-                var position = shareData.Simulator.GetAgentPosition(unit.agentId);
                 var paused = shareData.Simulator.IsAgentPaused(unit.agentId);
                 if (paused)
                     continue;
 
-                ref var unitPos = ref unitPosPool.Get(e);
-                unitPos.prevPos = unitPos.currentPos;
-                unitPos.currentPos = position;
-
-                if (Shape.TryGet(unit.shapeId, out var shape))
-                {
-                    shape.PrevPosition = unitPos.prevPos;
-                    shape.CurrentPosition = unitPos.currentPos;
-                }
-
                 var goal = shareData.Simulator.GetAgentGoal(unit.agentId);
                 var radius = shareData.Simulator.GetAgentRadius(unit.agentId);
+                var position = shareData.Simulator.GetAgentPosition(unit.agentId);
+                var prefPosition = shareData.Simulator.GetAgentPrefPosition(unit.agentId);
+                
+                if (Shape.TryGet(unit.shapeId, out var shape))
+                {
+                    shape.PrefPosition = prefPosition;
+                    shape.CurrentPosition = position;
+                }
+
                 if (ShouldPause(position, goal, radius))
                 {
                     Pause(unit.agentId, position);

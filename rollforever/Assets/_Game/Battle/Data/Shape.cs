@@ -51,7 +51,7 @@ namespace _Game.Battle.Data
         public ShapeType Type { get; }
         public float Radius { get; }
         public float2 HalfSize { get; }
-        public float2 PrevPosition { get; set; }
+        public float2 PrefPosition { get; set; }
         public float2 CurrentPosition { get; set; }
     }
 
