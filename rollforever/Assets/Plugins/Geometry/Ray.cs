@@ -1,17 +1,19 @@
+using Unity.Mathematics;
+
 namespace Geometry
 {
     /// <summary>
     /// Ray là vô hạn một phía
     /// </summary>
-    public struct Ray
+    public readonly struct Ray
     {
-        public Vec2 origin;
-        public Vec2 dir; // normalized
+        public readonly float2 origin;
+        public readonly float2 dir;
 
-        public Ray(Vec2 origin, Vec2 dir)
+        public Ray(float2 origin, float2 dir)
         {
             this.origin = origin;
-            this.dir = dir;
+            this.dir = math.normalize(dir);
         }
     }
     
@@ -19,7 +21,7 @@ namespace Geometry
     {
         public bool hit;
         public float t;        // distance along ray
-        public Vec2 point;     // hit position
-        public Vec2 normal;    // surface normal
+        public float2 point;     // hit position
+        public float2 normal;    // surface normal
     }
 }

@@ -84,9 +84,8 @@ namespace _Game.Battle
                 {
                     if (shape.Type == ShapeType.Circle)
                     {
-                        Circle c1 = new Circle(new Vec2(circleCenter.x, circleCenter.y), circleRadius);
-                        Circle c2 = new Circle(new Vec2(shape.CurrentPosition.x, shape.CurrentPosition.y),
-                            shape.Radius);
+                        Circle c1 = new Circle(circleCenter, circleRadius);
+                        Circle c2 = new Circle(shape.CurrentPosition, shape.Radius);
                         if (GeometryCircle.Intersect(c1, c2))
                         {
                             unit.color = Color.red;
@@ -118,9 +117,8 @@ namespace _Game.Battle
                     {
                         if (shape.Type == ShapeType.Circle)
                         {
-                            Circle c1 = new Circle(new Vec2(circleCenter.x, circleCenter.y), circleRadius);
-                            Circle c2 = new Circle(new Vec2(shape.CurrentPosition.x, shape.CurrentPosition.y),
-                                shape.Radius);
+                            Circle c1 = new Circle(circleCenter, circleRadius);
+                            Circle c2 = new Circle(shape.CurrentPosition, shape.Radius);
                             if (GeometryCircle.Intersect(c1, c2))
                             {
                                 dealPool.Add(entity);

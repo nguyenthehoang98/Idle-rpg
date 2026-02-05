@@ -1,16 +1,16 @@
+using Unity.Mathematics;
+
 namespace Geometry
 {
-    public struct Circle
+    public readonly struct Circle
     {
-        public Vec2 center;
-        public float radius;
+        public readonly float2 center;
+        public readonly float radius;
 
-        public Circle(Vec2 center, float radius)
+        public Circle(float2 center, float radius)
         {
             this.center = center;
             this.radius = radius;
         }
-
-        public float RadiusSqr => radius * radius;
     }
 }

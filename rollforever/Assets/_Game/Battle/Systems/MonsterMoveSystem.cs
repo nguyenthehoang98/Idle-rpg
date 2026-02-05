@@ -172,7 +172,7 @@ namespace _Game.Battle.Systems
 
         bool ShouldPause(float2 pos, float2 goal, float radius)
         {
-            return math.distancesq(goal, pos) < (radius + cellSize) * (radius + cellSize);
+            return math.distancesq(goal, pos) <= (radius + cellSize) * (radius + cellSize);
         }
 
         bool TryFindCellExpandFromCenter(int2 centerCell, float2 point, out int2 resultCell)

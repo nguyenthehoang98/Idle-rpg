@@ -1,61 +1,38 @@
-using UnityEngine;
+using Unity.Mathematics;
 
 namespace Geometry
 {
     public static class GeometryCircle
     {
-        public static bool Contains(Circle c, Vec2 p)
+        public static bool Overlaps(Circle a, Circle b)
         {
-            return (p - c.center).SqrMagnitude <= c.RadiusSqr;
+            return math.lengthsq(a.center - b.center) <= (a.radius + b.radius) * (a.radius + b.radius);
         }
         
-        public static Vec2 ClosestPoint(Circle c, Vec2 p)
+        public static float2 ClosestPoint(Circle c, float2 p)
         {
-            Vec2 d = p - c.center;
-            float len = d.Magnitude;
+            float2 d = p - c.center;
+            float lenSq = math.lengthsq(d);
+            float r = c.radius;
 
-            if (len < Epsilon.Value)
-                return c.center + new Vec2(c.radius, 0);
+            if (lenSq <= float.Epsilon) return c.center + new float2(r, 0f);
 
-            return c.center + d * (c.radius / len);
+            float invLen = math.rsqrt(lenSq);  
+            return c.center + d * (r * invLen);
         }
         
         public static bool Intersect(Circle a, Circle b)
         {
             float r = a.radius + b.radius;
-            return (a.center - b.center).SqrMagnitude <= r * r;
+            
+            return math.lengthsq(a.center - b.center) <= r * r;
         }
         
         public static bool Intersect(Circle c, AABB box)
         {
-            Vec2 closest = GeometryAABB.ClosestPoint(box, c.center);
-            return (closest - c.center).SqrMagnitude <= c.RadiusSqr;
-        }
-        
-        public static bool Intersect(Circle c, Segment seg)
-        {
-            Vec2 closest;
-            GeometrySegment.PointSegment(c.center, seg, out closest);
-            return (closest - c.center).SqrMagnitude <= c.RadiusSqr;
-        }
-        
-        public static void DrawGizmos(Circle c, Color color, float dt, int segments = 24)
-        {
-            float step = Mathf.PI * 2f / segments;
-            Vector3 prev = Vector3.zero;
+            float2 closest = GeometryAABB.ClosestPoint(box, c.center);
 
-            for (int i = 0; i <= segments; i++)
-            {
-                float a = step * i;
-                Vector3 p = new Vector3(
-                    c.center.x + Mathf.Cos(a) * c.radius,
-                    c.center.y + Mathf.Sin(a) * c.radius
-                );
-
-                if (i > 0) Debug.DrawLine(prev, p, color, dt);
-
-                prev = p;
-            }
+            return math.lengthsq(closest - c.center) <= c.radius * c.radius;
         }
     }
 }
