@@ -13,6 +13,7 @@ namespace _Game.Battle
         }
 
         public Simulator Simulator { get; }
+        
         public float TimeDelta { get; }
     }
 

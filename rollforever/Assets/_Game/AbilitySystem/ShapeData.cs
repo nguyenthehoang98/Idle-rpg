@@ -1,13 +1,14 @@
 using System;
 using _Game.Battle.Data;
+using Unity.Mathematics;
 
 namespace _Game.AbilitySystem
 {
     [Serializable]
     public struct ShapeData
     {
-        public ShapeType shape;
+        public ShapeType type;
         public float radius;
-        public float size;
+        public float2 size;
     }
 }

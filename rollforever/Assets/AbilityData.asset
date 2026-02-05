@@ -19,7 +19,7 @@ MonoBehaviour:
     animationName: 0
     maxCollision: 0
   shape:
-    shape: 0
+    type: 0
     radius: 0
     size: 0
   trajectory:

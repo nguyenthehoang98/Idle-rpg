@@ -24,6 +24,11 @@ namespace _Game.Battle.Data
             return instance;
         }
 
+        public static void Remove(Shape shape)
+        {
+            dict.Remove(shape.Id);
+        }
+
         public static void Remove(int id)
         {
             dict.Remove(id);

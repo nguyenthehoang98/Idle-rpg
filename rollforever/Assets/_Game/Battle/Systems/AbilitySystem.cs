@@ -18,7 +18,7 @@ namespace _Game.Battle.Systems
         private List<AbilityLogic> abilities;
         private Queue<AbilityLogic> additions;
         private Queue<AbilityLogic> completes;
-        
+
         public async void Init(IEcsSystems systems)
         {
             additions = new Queue<AbilityLogic>();
@@ -27,7 +27,7 @@ namespace _Game.Battle.Systems
             skillSource = new Dictionary<int, AbilityLogic>();
 
             AbilityData abilityData = await KitLoaded.LoadAsync<AbilityData>("AbilityData");
-            skillSource[0] = new AbilityLogic(abilityData);
+            skillSource[0] = new AbilityLogic(abilityData, 0);
             
             EventBus.Instance.Subscribe<CastSkillEvent>(OnCastSkillArg);
         }
@@ -36,7 +36,7 @@ namespace _Game.Battle.Systems
         {
             if (skillSource.TryGetValue(e.SkillId, out var abilityLogic))
             {
-                var item = abilityLogic.CreateInstance();
+                var item = abilityLogic.CreateInstance(e.Source);
                 item.Startup(e.StartPosition, e.Target);
                 additions.Enqueue(item);
             }
@@ -65,6 +65,7 @@ namespace _Game.Battle.Systems
             {
                 var item = completes.Dequeue();
                 item.Shutdown();
+                item.Dispose();
                 CollectionUtils.RemoveFast(abilities, item);
             }
         }

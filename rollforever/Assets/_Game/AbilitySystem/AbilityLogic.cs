@@ -1,18 +1,23 @@
-﻿using Unity.Mathematics;
+﻿using System;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _Game.AbilitySystem
 {
-    public sealed class AbilityLogic
+    public sealed class AbilityLogic : IDisposable
     {
-        private AbilityData Data { get; }
-
+        private readonly AbilityData data;
+        private readonly int unitId;
+        private readonly ShapeLogic shapeLogic;
+        
         private float elapsed;
         private float lifeTime;
 
-        public AbilityLogic(AbilityData data)
+        public AbilityLogic(AbilityData data, int unitId)
         {
-            Data = data;
+            this.unitId = unitId;
+            this.data = data;
+            shapeLogic = new ShapeLogic(data.shape);
             lifeTime = data.arg.lifeTime;
         }
 
@@ -31,11 +36,16 @@ namespace _Game.AbilitySystem
             Debug.Log($"shutdown [{GetHashCode()}]: {Time.time}");
         }
 
+        public void Dispose()
+        {
+            shapeLogic.Dispose();
+        }
+
         public bool IsCompleted => elapsed >= lifeTime;
 
-        public AbilityLogic CreateInstance()
+        public AbilityLogic CreateInstance(int sourceId)
         {
-            return new AbilityLogic(Data);
+            return new AbilityLogic(data, sourceId);
         }
     }
 }
