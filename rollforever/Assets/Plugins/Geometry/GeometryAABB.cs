@@ -3,28 +3,35 @@ using Unity.Mathematics;
 
 namespace Geometry
 {
-    public class GeometryAABB
+    /*
+     * Overlaps: là check đè lên nhau
+     * Intersect: kiểm tra giao nhau -> cần trả lại điểm giao nhao
+     */
+    public static class GeometryAABB
     {
         public static bool Overlaps(AABB a, AABB b)
         {
-            return a.min.x <= b.max.x && a.max.x >= b.min.x && a.min.y <= b.max.y && a.max.y >= b.min.y;
+            return a.min.x <= b.max.x &&
+                   a.max.x >= b.min.x &&
+                   a.min.y <= b.max.y &&
+                   a.max.y >= b.min.y;
         }
         
-        public static float2 ClosestPoint(AABB aabb, float2 p)
+        public static bool Overlaps(AABB a, Circle b)
+        {
+            float x = math.max(a.min.x, math.min(b.center.x, a.max.x));
+            float y = math.max(a.min.y, math.min(b.center.y, a.max.y));
+            float dx = x - b.center.x;
+            float dy = y - b.center.y;
+            return dx * dx + dy * dy <= b.radius * b.radius;
+        }
+        
+        public static float2 ClosestPoint(AABB a, float2 p)
         {
             return new float2(
-                math.clamp(p.x, aabb.min.x, aabb.max.x),
-                math.clamp(p.y, aabb.min.y, aabb.max.y)
+                math.clamp(p.x, a.min.x, a.max.x),
+                math.clamp(p.y, a.min.y, a.max.y)
             );
-        }
-        
-        public static bool Intersect(AABB box, Circle c)
-        {
-            float x = math.max(box.min.x, math.min(c.center.x, box.max.x));
-            float y = math.max(box.min.y, math.min(c.center.y, box.max.y));
-            float dx = x - c.center.x;
-            float dy = y - c.center.y;
-            return dx * dx + dy * dy <= c.radius * c.radius;
         }
 
         public static float2 ComputeAABBNormal(float2 hitPoint, AABB box)

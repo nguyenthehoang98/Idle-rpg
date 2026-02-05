@@ -13,15 +13,16 @@ namespace Geometry
         public Ray(float2 origin, float2 dir)
         {
             this.origin = origin;
-            this.dir = math.normalize(dir);
+            float lenSq = math.lengthsq(dir);
+            this.dir = lenSq > 1e-6f ? dir * math.rsqrt(lenSq) : float2.zero;
         }
     }
-    
+
     public struct RayHit2D
     {
         public bool hit;
-        public float t;        // distance along ray
-        public float2 point;     // hit position
-        public float2 normal;    // surface normal
+        public float t; // distance along ray
+        public float2 point; // hit position
+        public float2 normal; // surface normal
     }
 }

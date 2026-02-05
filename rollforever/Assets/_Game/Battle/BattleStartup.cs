@@ -1,15 +1,13 @@
-using _Game.Battle.Events;
 using _Game.Battle.Systems;
-using _KIT.Event;
 using _KIT.Schedule;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
-using RVO;
-using Unity.Mathematics;
-using UnityEngine;
-#if UNITY_EDITOR
-using _Game.Battle.Data;
 using Geometry;
+using RVO;
+using UnityEngine;
+using _Game.Battle.Data;
+using Unity.Mathematics;
+#if UNITY_EDITOR
 using Leopotam.EcsLite.UnityEditor;
 #endif
 
@@ -18,8 +16,8 @@ namespace _Game.Battle
     [RequireComponent(typeof(GameLoop))]
     public class BattleStartup : MonoBehaviour
     {
-        [SerializeField] private float circleRadius = 2f;
-        [SerializeField] private float2 circleCenter;
+        public float2 center;
+        public float2 size;
         
         private EcsWorld world;
         private EcsSystems systems;
@@ -71,9 +69,10 @@ namespace _Game.Battle
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            UnityEditor.Handles.DrawWireDisc((Vector2) circleCenter, Vector3.forward, circleRadius);
-
             if (world == null) return;
+            
+            GeometryGizmos.DrawAABB(AABB.FromCenter(center, size), Color.green, Time.deltaTime);
+            
             var unitPool = world.GetPool<UnitData>();
             var filter = world.Filter<UnitData>()
                 .End();
@@ -84,9 +83,8 @@ namespace _Game.Battle
                 {
                     if (shape.Type == ShapeType.Circle)
                     {
-                        Circle c1 = new Circle(circleCenter, circleRadius);
-                        Circle c2 = new Circle(shape.CurrentPosition, shape.Radius);
-                        if (GeometryCircle.Intersect(c1, c2))
+                        Circle c1 = new Circle(shape.CurrentPosition, shape.Radius);
+                        if (GeometryCircle.Overlaps(c1, AABB.FromCenter(center, size)))
                         {
                             unit.color = Color.red;
                         }
@@ -103,7 +101,6 @@ namespace _Game.Battle
             {
                 EventBus.Instance.Publish(new CastSkillEvent(0, 0, float2.zero, 0));
             }*/
-            
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 var dealPool = world.GetPool<DeadFlag>();
@@ -112,18 +109,9 @@ namespace _Game.Battle
                     .End();
                 foreach (var entity in filter)
                 {
-                    var unit = unitPool.Get(entity);
-                    if (Shape.TryGet(unit.shapeId, out var shape))
+                    if (unitPool.Get(entity).color == Color.red)
                     {
-                        if (shape.Type == ShapeType.Circle)
-                        {
-                            Circle c1 = new Circle(circleCenter, circleRadius);
-                            Circle c2 = new Circle(shape.CurrentPosition, shape.Radius);
-                            if (GeometryCircle.Intersect(c1, c2))
-                            {
-                                dealPool.Add(entity);
-                            }
-                        }
+                        dealPool.Add(entity);
                     }
                 }
             }

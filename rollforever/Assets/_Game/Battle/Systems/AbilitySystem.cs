@@ -6,7 +6,6 @@ using _KIT.Resource;
 using _KIT.Utils;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
-using Unity.Mathematics;
 
 namespace _Game.Battle.Systems
 {
