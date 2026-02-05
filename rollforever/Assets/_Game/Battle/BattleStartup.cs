@@ -17,8 +17,7 @@ namespace _Game.Battle
     [RequireComponent(typeof(GameLoop))]
     public class BattleStartup : MonoBehaviour
     {
-        public float2 center;
-        public float2 size;
+        public float2[] points;
         public float angle;
         
         private EcsWorld world;
@@ -73,8 +72,8 @@ namespace _Game.Battle
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            OBB obb = new OBB(center, size / 2, Mathf.Deg2Rad * angle);
-            GeometryGizmos.DrawOBB(obb, Color.green, Time.deltaTime);
+            Polygon polygon = new Polygon(float2.zero, points, Mathf.Deg2Rad * angle);
+            GeometryGizmos.DrawPolygon(polygon, Color.green, Time.deltaTime);
 
             if (world == null) return;
             
@@ -100,7 +99,7 @@ namespace _Game.Battle
                     if (shape.Type == ShapeType.Circle)
                     {
                         Circle c1 = new Circle(shape.CurrentPosition, shape.Radius);
-                        if (GeometryOBB.Overlaps(obb, c1))
+                        if (GeometryPolygon.Overlaps(polygon, c1))
                         {
                             unit.color = Color.red;
                         }

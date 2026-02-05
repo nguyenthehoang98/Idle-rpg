@@ -11,6 +11,18 @@ namespace Geometry
             Debug.DrawLine(ToV3(ray.origin), ToV3(ray.origin + ray.dir * length), color, dt);
         }
         
+        
+        // ===================== OBB =====================
+        public static void DrawPolygon(in Polygon poly, Color color, float dt)
+        {
+            for (int i = 0; i < poly.count; i++)
+            {
+                float2 a = poly.GetWorldPoint(i);
+                float2 b = poly.GetWorldPoint((i + 1) % poly.count);
+                Debug.DrawLine((Vector2)a, (Vector2)b, color, dt);
+            }
+        }
+        
         // ===================== OBB =====================
         public static void DrawOBB(in OBB obb, Color color, float dt)
         {
