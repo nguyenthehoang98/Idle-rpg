@@ -10,6 +10,17 @@ namespace Geometry
         {
             Debug.DrawLine(ToV3(ray.origin), ToV3(ray.origin + ray.dir * length), color, dt);
         }
+        
+        // ===================== OBB =====================
+        public static void DrawOBB(in OBB obb, Color color, float dt)
+        {
+            GeometryOBB.GetCorners(obb, out var c0, out var c1, out var c2, out var c3);
+
+            Debug.DrawLine((Vector2)c0, (Vector2)c1, color, dt);
+            Debug.DrawLine((Vector2)c1, (Vector2)c2, color, dt);
+            Debug.DrawLine((Vector2)c2, (Vector2)c3, color, dt);
+            Debug.DrawLine((Vector2)c3, (Vector2)c0, color, dt);
+        }
 
         // ===================== AABB =====================
         public static void DrawAABB(AABB box, Color color, float dt)

@@ -8,6 +8,7 @@ using UnityEngine;
 using _Game.Battle.Data;
 using Unity.Mathematics;
 #if UNITY_EDITOR
+using _KIT.Utils;
 using Leopotam.EcsLite.UnityEditor;
 #endif
 
@@ -18,11 +19,14 @@ namespace _Game.Battle
     {
         public float2 center;
         public float2 size;
+        public float angle;
         
         private EcsWorld world;
         private EcsSystems systems;
         private GameLoop gameLoop;
 
+        private float elapsed;
+        
         private void Awake()
         {
             Application.targetFrameRate = 60;
@@ -69,9 +73,21 @@ namespace _Game.Battle
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
+            OBB obb = new OBB(center, size / 2, Mathf.Deg2Rad * angle);
+            GeometryGizmos.DrawOBB(obb, Color.green, Time.deltaTime);
+
             if (world == null) return;
             
-            GeometryGizmos.DrawAABB(AABB.FromCenter(center, size), Color.green, Time.deltaTime);
+            elapsed += Time.deltaTime;
+            if (elapsed >= 0.3f)
+            {
+                elapsed = 0;
+                angle = RandomUtils.Range(0, 360);
+            }
+            else
+            {
+                return;
+            }
             
             var unitPool = world.GetPool<UnitData>();
             var filter = world.Filter<UnitData>()
@@ -84,7 +100,7 @@ namespace _Game.Battle
                     if (shape.Type == ShapeType.Circle)
                     {
                         Circle c1 = new Circle(shape.CurrentPosition, shape.Radius);
-                        if (GeometryCircle.Overlaps(c1, AABB.FromCenter(center, size)))
+                        if (GeometryOBB.Overlaps(obb, c1))
                         {
                             unit.color = Color.red;
                         }
