@@ -1,8 +1,6 @@
 using _Game.Battle.Data;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
-using Unity.Mathematics;
-using UnityEngine;
 
 namespace _Game.Battle.Systems
 {
@@ -10,34 +8,47 @@ namespace _Game.Battle.Systems
     {
         [EcsInject] private readonly BattleStartupShareData shareData;
         [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
+
+        private EcsPool<UnitData> unitPool;
+        private EcsFilter aliveFilter;
+        private EcsFilter deadFilter;
+        private EcsWorld world;
         
         public void Init(IEcsSystems systems)
         {
+            world = systems.GetWorld();
+            deadFilter = world.Filter<UnitData>()
+                .Inc<DeadFlag>()
+                .End();
+            aliveFilter = world.Filter<UnitData>()
+                .Exc<DeadFlag>()
+                .End();
+            unitPool = world.GetPool<UnitData>();
         }
 
         public void PostRun(IEcsSystems systems)
         {
-            /*foreach (var e in ecsFilter)
+            int deadCount = deadFilter.GetEntitiesCount();
+            foreach (var entity in deadFilter)
             {
-                var unitPos = unitPosPool.Get(e);
-                if (math.distance(unitPos.goal, unitPos.curPos) < 1)
+                Dispose(entity, unitPool.Get(entity));
+            }
+
+            if (deadCount > 0)
+            {
+                foreach (var entity in aliveFilter)
                 {
-                    DisposeUnit(e, unitPool.Get(e));
+                    var unit = unitPool.Get(entity);
+                    shareData.Simulator.PauseAgent(unit.agentId, false);
                 }
-            }*/
+            }
         }
 
-        void DisposeUnit(int e, UnitData unitData)
+        void Dispose(int e, UnitData unit)
         {
-
-            /*world.DelEntity(e);
+            world.DelEntity(e);
             shareData.Simulator.RemoveAgent(unit.agentId);
-            shareData.Grid.Remove(unit.cellId);
-            ShapeInstance.Remove(unit.shapeId);
-
-            runtimeData.TryGet(e, out var unitView);
-            runtimeData.Remove(e);
-            Object.Destroy(unitView.gameObject);*/
+            Shape.Remove(unit.shapeId);
         }
     }
 }

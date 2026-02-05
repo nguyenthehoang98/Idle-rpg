@@ -31,6 +31,7 @@ namespace _Game.Battle.Systems
         {
             var world = systems.GetWorld();
             ecsFilter = world.Filter<UnitData>()
+                .Exc<DeadFlag>()
                 .End();
             unitPool = world.GetPool<UnitData>();
 
@@ -126,10 +127,6 @@ namespace _Game.Battle.Systems
                     {
                         var cellToWorld = CellToWorld(cell);
                         shareData.Simulator.SetAgentGoal(unit.agentId, cellToWorld);
-#if UNITY_EDITOR
-                        Debug.DrawLine((Vector2) position, (Vector2) cellToWorld, Color.red, shareData.TimeDelta);
-                        Box2dSelected((Vector2) cellToWorld, new float2(cellSize, cellSize), Color.red, shareData.TimeDelta);
-#endif
                     }
                     else
                     {

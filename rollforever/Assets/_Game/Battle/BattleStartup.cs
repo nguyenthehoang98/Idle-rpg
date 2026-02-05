@@ -97,13 +97,40 @@ namespace _Game.Battle
         }
 #endif
 
+#if UNITY_EDITOR
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            /*if (Input.GetKeyDown(KeyCode.Space))
             {
                 EventBus.Instance.Publish(new CastSkillEvent(0, 0, float2.zero, 0));
+            }*/
+            
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                var dealPool = world.GetPool<DeadFlag>();
+                var unitPool = world.GetPool<UnitData>();
+                var filter = world.Filter<UnitData>()
+                    .End();
+                foreach (var entity in filter)
+                {
+                    var unit = unitPool.Get(entity);
+                    if (Shape.TryGet(unit.shapeId, out var shape))
+                    {
+                        if (shape.Type == ShapeType.Circle)
+                        {
+                            Circle c1 = new Circle(new Vec2(circleCenter.x, circleCenter.y), circleRadius);
+                            Circle c2 = new Circle(new Vec2(shape.CurrentPosition.x, shape.CurrentPosition.y),
+                                shape.Radius);
+                            if (GeometryCircle.Intersect(c1, c2))
+                            {
+                                dealPool.Add(entity);
+                            }
+                        }
+                    }
+                }
             }
         }
+#endif
 
         public void Startup()
         {
