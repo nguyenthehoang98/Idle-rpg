@@ -8,20 +8,11 @@ namespace _Game.Battle.Systems
 {
     public class MonsterMoveSystem : IEcsInitSystem, IEcsRunSystem, IEcsPostRunSystem
     {
-        struct MatrixData
-        {
-            public bool occupied;
-            public bool trigger;
-        }
-
         [EcsInject] private readonly BattleStartupShareData shareData;
         [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
 
         private const float THREASHOLD_VELOCITYSQ = 0.3f;
 
-        private int width = 100;
-        private int height = 120;
-        private MatrixData[,] matrix;
         private float cellSize;
 
         private EcsPool<UnitData> unitPool;
@@ -36,19 +27,12 @@ namespace _Game.Battle.Systems
                 .End();
             unitPool = world.GetPool<UnitData>();
 
-            matrix = new MatrixData[width, height];
             cellSize = 0.5f;
         }
 
         public void Run(IEcsSystems systems)
         {
             shareData.Simulator.EnsureCompleted();
-
-            for (var i = 0; i < width; i++)
-            {
-                for (var j = 0; j < height; j++)
-                    matrix[i, j].trigger = false;
-            }
 
             foreach (var e in ecsFilter)
             {
