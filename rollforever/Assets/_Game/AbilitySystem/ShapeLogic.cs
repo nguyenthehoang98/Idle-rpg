@@ -25,27 +25,37 @@ namespace _Game.AbilitySystem
             }
         }
 
-        public void Execute(Vector2 center, Shape other, float deltaTime)
+        public void Execute(Vector2 center, Shape other, float deltaTime, out RayHit2D hit2D)
         {
+            hit2D = new RayHit2D();
             if (shape.Type == ShapeType.Box && other.Type == ShapeType.Box)
             {
-                
+                hit2D.hit = GeometryAABB.Overlaps(
+                    AABB.FromCenter(center, shape.Size),
+                    AABB.FromCenter(other.CurrentPosition, other.Size)
+                );
             }
             else if (shape.Type == ShapeType.Circle && other.Type == ShapeType.Circle)
             {
-                
+                hit2D.hit = GeometryCircle.Overlaps(
+                    new Circle(center, shape.Radius),
+                    new Circle(other.CurrentPosition, other.Radius)
+                );
             }
             else if (shape.Type == ShapeType.Box && other.Type == ShapeType.Circle)
             {
-                
+                hit2D.hit = GeometryAABB.Overlaps(
+                    AABB.FromCenter(center, shape.Size),
+                    new Circle(other.CurrentPosition, other.Radius)
+                );
             }
             else if (shape.Type == ShapeType.Circle && other.Type == ShapeType.Box)
             {
-                
+                hit2D.hit = GeometryCircle.Overlaps(
+                    new Circle(center, shape.Radius),
+                    AABB.FromCenter(other.CurrentPosition, other.Size)
+                );
             }
-
-
-            
         }
 
         public void Dispose()

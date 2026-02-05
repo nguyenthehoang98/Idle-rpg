@@ -14,6 +14,7 @@ namespace _Game.AbilitySystem
         private readonly EcsWorld world;
         private readonly EcsFilter filter;
         private readonly EcsPool<UnitData> unitPool;
+        private readonly EcsPool<DeadFlag> deadPool;
         private readonly BattleStartupRuntimeData runtimeData;
         private readonly BattleStartupShareData shareData;
         private readonly ShapeLogic shapeLogic;
@@ -39,12 +40,12 @@ namespace _Game.AbilitySystem
             filter = world.Filter<UnitData>()
                 .Exc<DeadFlag>()
                 .End();
+            deadPool = world.GetPool<DeadFlag>();
             unitPool = world.GetPool<UnitData>();
         }
 
         public void Startup(float2 startPos, int target)
         {
-            Debug.Log($"startup [{GetHashCode()}]: {Time.time}");
             var unit = unitPool.Get(target);
             var targetPos = shareData.Simulator.GetAgentPosition(unit.agentId);
             trajectoryLogic.Startup(startPos, targetPos);
@@ -54,18 +55,37 @@ namespace _Game.AbilitySystem
         {
             elapsed += deltaTime;
             float2 center = trajectoryLogic.Update(deltaTime);
-            //shapeLogic.Execute();
+
 #if UNITY_EDITOR
+            bool hit = false;
+#endif
+            // todo: xử dụng grid để giảm lượng call.
+            foreach (var entity in filter)
+            {
+                ref var unit = ref unitPool.Get(entity);
+                Shape.TryGet(unit.shapeId, out var shape);
+                shapeLogic.Execute(center, shape, deltaTime, out var hit2D);
+                if (hit2D.hit)
+                {
+#if UNITY_EDITOR
+                    hit = true;
+#endif
+                    deadPool.Add(entity);
+                }
+            }
+            
+#if UNITY_EDITOR
+            Color color = hit ? Color.red : Color.green;
             if (data.shape.type == ShapeType.Circle)
             {
                 GeometryGizmos.DrawCircle(
-                    new Circle(center, data.shape.radius), Color.green, deltaTime
+                    new Circle(center, data.shape.radius), color, deltaTime
                 );
             }
             else if (data.shape.type == ShapeType.Box)
             {
                 GeometryGizmos.DrawAABB(
-                    AABB.FromCenter(center, data.shape.size), Color.green, deltaTime
+                    AABB.FromCenter(center, data.shape.size), color, deltaTime
                 );
             }
 #endif
@@ -74,7 +94,6 @@ namespace _Game.AbilitySystem
         public void Shutdown()
         {
             trajectoryLogic.Shutdown();
-            Debug.Log($"shutdown [{GetHashCode()}]: {Time.time}");
         }
 
         public void Dispose()

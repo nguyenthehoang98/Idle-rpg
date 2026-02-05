@@ -49,13 +49,13 @@ namespace _Game.Battle.Data
         {
             Id = id;
             Type = type;
-            HalfSize = size / 2;
+            Size = size;
         }
 
         public int Id { get; }
         public ShapeType Type { get; }
         public float Radius { get; }
-        public float2 HalfSize { get; }
+        public float2 Size { get; }
         public float2 PrefPosition { get; set; }
         public float2 CurrentPosition { get; set; }
     }
