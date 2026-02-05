@@ -20,13 +20,15 @@ MonoBehaviour:
     maxCollision: 0
   shape:
     type: 0
-    radius: 0
-    size: 0
+    radius: 2
+    size:
+      x: 0
+      y: 0
   trajectory:
     type: 0
     path: {fileID: 0}
     velocity:
       acceleration: 0
-      speed: 0
+      speed: 15
   modifier:
     type: 0

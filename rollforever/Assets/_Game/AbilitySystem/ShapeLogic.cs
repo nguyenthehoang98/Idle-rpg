@@ -1,5 +1,6 @@
 using System;
 using _Game.Battle.Data;
+using Geometry;
 using UnityEngine;
 
 namespace _Game.AbilitySystem
@@ -22,6 +23,29 @@ namespace _Game.AbilitySystem
                     Debug.LogError("Chưa định nghĩa");
                     break;
             }
+        }
+
+        public void Execute(Vector2 center, Shape other, float deltaTime)
+        {
+            if (shape.Type == ShapeType.Box && other.Type == ShapeType.Box)
+            {
+                
+            }
+            else if (shape.Type == ShapeType.Circle && other.Type == ShapeType.Circle)
+            {
+                
+            }
+            else if (shape.Type == ShapeType.Box && other.Type == ShapeType.Circle)
+            {
+                
+            }
+            else if (shape.Type == ShapeType.Circle && other.Type == ShapeType.Box)
+            {
+                
+            }
+
+
+            
         }
 
         public void Dispose()

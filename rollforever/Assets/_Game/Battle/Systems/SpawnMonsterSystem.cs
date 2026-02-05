@@ -19,6 +19,7 @@ namespace _Game.Battle.Systems
         
         private EcsWorld world;
         private EcsPool<UnitData> unitPool;
+        private EcsPool<MonsterFlag> monsterFlagPool;
         private float tick;
         
         public async void Init(IEcsSystems systems)
@@ -29,6 +30,7 @@ namespace _Game.Battle.Systems
             
             world = systems.GetWorld();
             unitPool = world.GetPool<UnitData>();
+            monsterFlagPool = world.GetPool<MonsterFlag>();
                 
             shareData.Simulator.SetTimeStep(shareData.TimeDelta);
             shareData.Simulator.SetAgentDefaults(1f, 10, 20f, 20f, 1.5f, 5f, float2.zero);
@@ -37,7 +39,7 @@ namespace _Game.Battle.Systems
         public void Run(IEcsSystems systems)
         {
             tick += shareData.TimeDelta;
-            if (tick >= 1.0f)
+            if (tick >= 2.0f)
             {
                 shareData.Simulator.EnsureCompleted();
 
@@ -45,7 +47,7 @@ namespace _Game.Battle.Systems
                 float radius = Random.Range(0.5f, 1.5f);
                 float2 center = float2.zero;
                 
-                for (var i = 0; i < 10; i++)
+                for (var i = 0; i < 1; i++)
                 {
                     var pos = RandomPointOnCircle(center, Random.Range(20, 30));
                     float2 goal;
@@ -71,6 +73,8 @@ namespace _Game.Battle.Systems
                         color = Random.ColorHSV(0, 1, 0.5f, 1, 0.5f, 1),
 #endif
                     };
+
+                    monsterFlagPool.Add(entity);
 
                     shareData.Simulator.SetAgentRadius(agentId, radius);
                     shareData.Simulator.SetAgentNeighborDist(agentId, radius * 3f);

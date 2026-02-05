@@ -14,6 +14,7 @@ namespace _Game.Battle.Systems
         private Dictionary<int, AbilityLogic> skillSource;
         
         [EcsInject] private readonly BattleStartupShareData shareData;
+        [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
         
         private List<AbilityLogic> abilities;
         private Queue<AbilityLogic> additions;
@@ -26,8 +27,10 @@ namespace _Game.Battle.Systems
             abilities = new List<AbilityLogic>();
             skillSource = new Dictionary<int, AbilityLogic>();
 
+            EcsWorld world = systems.GetWorld();
+
             AbilityData abilityData = await KitLoaded.LoadAsync<AbilityData>("AbilityData");
-            skillSource[0] = new AbilityLogic(abilityData, 0);
+            skillSource[0] = new AbilityLogic(abilityData, world, shareData, runtimeData, 0);
             
             EventBus.Instance.Subscribe<CastSkillEvent>(OnCastSkillArg);
         }

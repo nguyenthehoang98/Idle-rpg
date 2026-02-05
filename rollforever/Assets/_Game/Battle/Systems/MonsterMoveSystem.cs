@@ -31,6 +31,7 @@ namespace _Game.Battle.Systems
         {
             var world = systems.GetWorld();
             ecsFilter = world.Filter<UnitData>()
+                .Inc<MonsterFlag>()
                 .Exc<DeadFlag>()
                 .End();
             unitPool = world.GetPool<UnitData>();

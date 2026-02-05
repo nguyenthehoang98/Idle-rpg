@@ -1,3 +1,4 @@
+using _Game.Battle.Data;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,7 +10,20 @@ namespace _Game.AbilitySystem.Editor
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUILayout.LabelField("SHAPE");
-            EditorGUILayout.PropertyField(property);
+            
+            SerializedProperty typeProp = property.FindPropertyRelative("type");
+            EditorGUILayout.PropertyField(typeProp);
+        
+            ShapeType type = (ShapeType) typeProp.enumValueIndex;
+            switch (type)
+            {
+                case ShapeType.Box:
+                    EditorGUILayout.PropertyField(property.FindPropertyRelative("size"));
+                    break;
+                case ShapeType.Circle:
+                    EditorGUILayout.PropertyField(property.FindPropertyRelative("radius"));
+                    break;
+            }
         }
     }
 }
