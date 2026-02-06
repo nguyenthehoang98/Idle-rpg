@@ -144,27 +144,54 @@ namespace Geometry
         public static void SweepAABBCircle(float2 prevCenter, float2 currCenter, float2 halfSize, Circle targetCircle, out RayHit2D hit)
         {
             hit = default;
-
             float2 delta = currCenter - prevCenter;
             float dist = math.length(delta);
-
             if (dist <= float.Epsilon) return;
 
             float2 dir = delta / dist;
-
-            // 1. Tạo một AABB ảo bao quanh Circle, được mở rộng bởi halfSize của AABB di động
-            // Đây là vùng "tiềm năng" va chạm.
-            AABB expandedBox = new AABB(
-                targetCircle.center - (targetCircle.radius + halfSize),
-                targetCircle.center + (targetCircle.radius + halfSize)
-            );
-
-            // 2. Raycast với AABB mở rộng này để tìm khoảng thời gian t sơ bộ
             Ray ray = new Ray(prevCenter, dir);
-            GeometryRaycast.Raycast(ray, dist, expandedBox, out hit);
+
+            // 1. Tạo AABB trung tâm (vùng va chạm cạnh)
+            // Mở rộng targetCircle theo trục X bởi halfSize.x và trục Y bởi halfSize.y
+            AABB boxX = new AABB(targetCircle.center - new float2(targetCircle.radius + halfSize.x, halfSize.y), 
+                                 targetCircle.center + new float2(targetCircle.radius + halfSize.x, halfSize.y));
             
-            GeometryGizmos.DrawRay(ray, Color.white, Time.deltaTime, dist);
-            GeometryGizmos.DrawAABB(expandedBox, Color.white, Time.deltaTime);
+            AABB boxY = new AABB(targetCircle.center - new float2(halfSize.x, targetCircle.radius + halfSize.y), 
+                                 targetCircle.center + new float2(halfSize.x, targetCircle.radius + halfSize.y));
+
+            /*GeometryGizmos.DrawRay(ray, Color.white, Time.deltaTime, dist);
+            GeometryGizmos.DrawAABB(boxX, Color.white, Time.deltaTime);
+            GeometryGizmos.DrawAABB(boxY, Color.blue, Time.deltaTime);*/
+            
+            // 2. Kiểm tra va chạm với các vùng cạnh thẳng
+            RayHit2D hitX, hitY;
+            GeometryRaycast.Raycast(ray, dist, boxX, out hitX);
+            GeometryRaycast.Raycast(ray, dist, boxY, out hitY);
+
+            // Chọn va chạm gần nhất từ 2 box
+            hit = hitX.hit ? hitX : hit;
+            if (hitY.hit && (!hit.hit || hitY.length < hit.length)) hit = hitY;
+
+            // 3. Kiểm tra va chạm với 4 góc (mỗi góc là một Circle bán kính targetCircle.radius)
+            // Tâm của 4 góc này chính là 4 góc của một AABB có kích thước halfSize
+            float2[] corners = new float2[] {
+                targetCircle.center + new float2(halfSize.x, halfSize.y),
+                targetCircle.center + new float2(-halfSize.x, halfSize.y),
+                targetCircle.center + new float2(halfSize.x, -halfSize.y),
+                targetCircle.center + new float2(-halfSize.x, -halfSize.y)
+            };
+
+            foreach (var cornerPos in corners)
+            {
+                RayHit2D hitCorner;
+                Circle cornerCircle = new Circle(cornerPos, targetCircle.radius);
+                GeometryRaycast.Raycast(ray, dist, cornerCircle, out hitCorner);
+                
+                if (hitCorner.hit && (!hit.hit || hitCorner.length < hit.length))
+                {
+                    hit = hitCorner;
+                }
+            }
         }
 
         static float2 WorldToOBBLocal(float2 p, OBB obb)
