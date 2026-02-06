@@ -39,7 +39,7 @@ namespace _Game.Battle
             // todo: battle world
             world = new EcsWorld();
             BattleStartupShareData shareData = new BattleStartupShareData(
-                new Simulator(), gameLoop.FrameDeltaTime
+                new Simulator(), new Matrix(100, 120, 0.5f),  gameLoop.FrameDeltaTime
             );
             BattleStartupRuntimeData runtimeData = new BattleStartupRuntimeData();
             

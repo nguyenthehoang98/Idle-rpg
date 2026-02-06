@@ -88,6 +88,8 @@ namespace _Game.AbilitySystem
                     AABB.FromCenter(center, data.shape.size), color, deltaTime
                 );
             }
+
+            if (hit) Debug.Break();
 #endif
         }
 
