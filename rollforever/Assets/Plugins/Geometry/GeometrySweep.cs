@@ -1,5 +1,4 @@
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace Geometry
 {
@@ -107,6 +106,84 @@ namespace Geometry
             hit.normal = DirFromOBBLocal(hit.normal, obb);
         }
 
+        public static void SweepAABBAABB(float2 prevCenter, float2 currCenter, float2 halfSize, AABB target, out RayHit2D hit)
+        {
+            hit = default;
+
+            float2 delta = currCenter - prevCenter;
+            float dist = math.length(delta);
+
+            if (dist <= float.Epsilon)
+                return;
+
+            float2 dir = delta / dist;
+
+            // Expand target by halfSize của moving box
+            float2 expand = halfSize;
+
+            AABB expanded = new AABB(
+                target.min - expand,
+                target.max + expand
+            );
+
+            // Initial overlap
+            if (GeometryAABB.Contains(expanded, prevCenter))
+            {
+                hit.hit = true;
+                hit.length = 0f;
+                hit.point = prevCenter;
+
+                float2 cp = GeometryAABB.ClosestPoint(target, prevCenter);
+                hit.normal = math.normalizesafe(prevCenter - cp);
+                return;
+            }
+
+            Ray ray = new Ray(prevCenter, dir);
+            GeometryRaycast.Raycast(ray, dist, expanded, out hit);
+        }
+        
+        public static void SweepAABBCircle(float2 prevCenter, float2 currCenter, float2 halfSize, Circle b, out RayHit2D hit)
+        {
+            hit = default;
+
+            float2 delta = currCenter - prevCenter;
+            float dist = math.length(delta);
+
+            if (dist <= float.Epsilon)
+                return;
+
+            float2 dir = delta / dist;
+
+            // AABB tại vị trí prev
+            AABB moving = new AABB(
+                prevCenter - halfSize,
+                prevCenter + halfSize
+            );
+
+            // Expand AABB bởi bán kính circle
+            AABB expanded = new AABB(
+                moving.min - b.radius,
+                moving.max + b.radius
+            );
+
+            // Initial overlap: tâm circle nằm trong expanded AABB
+            if (GeometryAABB.Contains(expanded, b.center))
+            {
+                hit.hit = true;
+                hit.length = 0f;
+                hit.point = b.center;
+
+                float2 cp = GeometryAABB.ClosestPoint(moving, b.center);
+                hit.normal = math.normalizesafe(b.center - cp);
+                return;
+            }
+
+            // Ray từ circle center, ngược hướng chuyển động AABB
+            Ray ray = new Ray(b.center, -dir);
+
+            GeometryRaycast.Raycast(ray, dist, expanded, out hit);
+        }
+        
         static float2 WorldToOBBLocal(float2 p, OBB obb)
         {
             float2 d = p - obb.center;

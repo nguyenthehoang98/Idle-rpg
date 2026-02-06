@@ -42,7 +42,10 @@ namespace Geometry
             hit2D = new RayHit2D();
             if (source.Type == ShapeType.Box && target.Type == ShapeType.Box)
             {
-               
+                GeometrySweep.SweepAABBAABB(
+                    source.PrefPosition, source.CurrentPosition, source.Size * 0.5f,
+                    AABB.FromCenter(target.CurrentPosition, target.Size), out hit2D
+                );
             }
             else if (source.Type == ShapeType.Circle && target.Type == ShapeType.Circle)
             {
@@ -53,11 +56,17 @@ namespace Geometry
             }
             else if (source.Type == ShapeType.Box && target.Type == ShapeType.Circle)
             {
-              
+                GeometrySweep.SweepAABBCircle(
+                    source.PrefPosition, source.CurrentPosition, source.Size * 0.5f,
+                    new Circle(target.CurrentPosition, target.Radius), out hit2D 
+                );
             }
             else if (source.Type == ShapeType.Circle && target.Type == ShapeType.Box)
             {
-               
+                GeometrySweep.SweepCircleAABB(
+                    source.PrefPosition, source.CurrentPosition, source.Radius,
+                    AABB.FromCenter(target.CurrentPosition, target.Size), out hit2D
+                );
             }
         }
     }

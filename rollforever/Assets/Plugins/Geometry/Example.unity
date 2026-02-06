@@ -164,27 +164,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   a:
-    type: 0
+    type: 1
     radius: 0.25
     size:
-      x: 0
-      y: 0
+      x: 0.5
+      y: 0.5
   aPrefPos:
-    x: 1.22
+    x: 1
     y: 5
   aPos:
     x: 0
     y: 0
   aAngle: 0
   b:
-    type: 1
-    radius: 1
+    type: 0
+    radius: 0.19
     size:
       x: 1
       y: 1
   bPos:
     x: 0
-    y: 3
+    y: 2
   bAngle: 0
   enableRay: 0
   cPos:

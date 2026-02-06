@@ -63,6 +63,8 @@ namespace Geometry
         public ShapeType Type { get; }
         public float Radius { get; }
         public float2 Size { get; }
+        public float2 AxisX { get; } // Áp dụng cho OBB
+        public float2 AxisY { get; } // Áp dụng cho OBB
         public float2 PrefPosition { get; set; }
         public float2 CurrentPosition { get; set; }
     }

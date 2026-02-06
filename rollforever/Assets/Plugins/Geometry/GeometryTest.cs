@@ -30,11 +30,11 @@ public class GeometryTest : MonoBehaviour
                 if (math.abs(aAngle) <= 0)
                 {
                     GeometryGizmos.DrawAABB(
-                        AABB.FromCenter(aPrefPos, a.size / 2),
+                        AABB.FromCenter(aPrefPos, a.size),
                         new Color(1, 1, 0, 0.05f), Time.deltaTime
                     );
                     GeometryGizmos.DrawAABB(
-                        AABB.FromCenter(aPos, a.size / 2),
+                        AABB.FromCenter(aPos, a.size),
                         new Color(1, 1, 0, 0.5f), Time.deltaTime
                     );
                 }
@@ -155,7 +155,71 @@ public class GeometryTest : MonoBehaviour
                 );
             }
         }
-
+        else if (a.type == ShapeType.Box && b.type == ShapeType.Circle)
+        {
+            RayHit2D hit2D;
+            if (math.abs(bAngle) <= 0)
+            {
+                GeometrySweep.SweepAABBCircle(aPrefPos, aPos, a.size * 0.5f,
+                    new Circle(bPos, b.radius), out hit2D
+                );
+            }
+            else
+            {
+                GeometrySweep.SweepAABBCircle(aPrefPos, aPos, a.size * 0.5f,
+                    new Circle(bPos, b.radius), out hit2D
+                );
+            }
+            
+            if (hit2D.hit)
+            {
+                GeometryGizmos.DrawAABB(AABB.FromCenter(hit2D.point, a.size), 
+                    new Color(1, 0, 0, 1), Time.deltaTime
+                );
+                Debug.DrawLine((Vector2)aPrefPos, (Vector2)aPos,
+                    new Color(1, 0, 0, 1), Time.deltaTime
+                );
+            }
+            else
+            {
+                Debug.DrawLine((Vector2) aPrefPos, (Vector2) aPos,
+                    new Color(1, 1, 0, 1), Time.deltaTime
+                );
+            }
+        }
+        else if(a.type == ShapeType.Box && b.type == ShapeType.Box)
+        {
+            RayHit2D hit2D;
+            if (math.abs(bAngle) <= 0)
+            {
+                GeometrySweep.SweepAABBAABB(aPrefPos, aPos, a.size * 0.5f,
+                    AABB.FromCenter(bPos, b.size), out hit2D
+                );
+            }
+            else
+            {
+                GeometrySweep.SweepAABBAABB(aPrefPos, aPos, a.size * 0.5f,
+                    AABB.FromCenter(bPos, b.size), out hit2D
+                );
+            }
+            
+            if (hit2D.hit)
+            {
+                GeometryGizmos.DrawAABB(AABB.FromCenter(hit2D.point, a.size), 
+                    new Color(1, 0, 0, 1), Time.deltaTime
+                );
+                Debug.DrawLine((Vector2)aPrefPos, (Vector2)aPos,
+                    new Color(1, 0, 0, 1), Time.deltaTime
+                );
+            }
+            else
+            {
+                Debug.DrawLine((Vector2) aPrefPos, (Vector2) aPos,
+                    new Color(1, 1, 0, 1), Time.deltaTime
+                );
+            }
+        }
+        
         if (enableRay)
         {
             if (b.type == ShapeType.Circle)
