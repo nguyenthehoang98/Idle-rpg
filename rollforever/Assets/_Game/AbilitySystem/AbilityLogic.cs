@@ -76,22 +76,21 @@ namespace _Game.AbilitySystem
 
 #if UNITY_EDITOR
             Color color = hit ? Color.red : Color.green;
+            int scale = hit ? 2 : 1;
             if (data.shape.type == ShapeType.Circle)
             {
                 GeometryGizmos.DrawCircle(
                     new Circle(center, data.shape.radius),
-                    color, deltaTime
+                    color, deltaTime * scale
                 );
             }
             else if (data.shape.type == ShapeType.Box)
             {
                 GeometryGizmos.DrawAABB(
                     AABB.FromCenter(center, data.shape.size),
-                    color, deltaTime
+                    color, deltaTime * scale
                 );
             }
-
-            if (hit) Debug.Break();
 #endif
         }
 

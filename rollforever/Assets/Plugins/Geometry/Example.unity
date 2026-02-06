@@ -163,22 +163,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f213badbdb05edb4fa5af3981c63ece5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableShape: 1
   a:
-    type: 1
+    type: 0
     radius: 0.25
     size:
       x: 0.5
       y: 0.5
   aPrefPos:
-    x: 1
-    y: 5
+    x: 0.07
+    y: 1.76
   aPos:
     x: 0
     y: 0
   aAngle: 0
   b:
     type: 0
-    radius: 0.19
+    radius: 0.5
     size:
       x: 1
       y: 1

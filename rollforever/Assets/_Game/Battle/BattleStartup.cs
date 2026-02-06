@@ -5,12 +5,10 @@ using Leopotam.EcsLite;
 using Geometry;
 using RVO;
 using UnityEngine;
-using _Game.Battle.Data;
 using _Game.Battle.Events;
 using _KIT.Event;
 using Unity.Mathematics;
 #if UNITY_EDITOR
-using _KIT.Utils;
 using Leopotam.EcsLite.UnityEditor;
 #endif
 
@@ -71,9 +69,12 @@ namespace _Game.Battle
 #if UNITY_EDITOR
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) && world.GetEntitiesCount() > 0)
             {
-                EventBus.Instance.Publish(new CastSkillEvent(0, 0, float2.zero, 0));
+                int[] entities = null;
+                int count = world.GetAllEntities(ref entities);
+                if (count > 0)
+                    EventBus.Instance.Publish(new CastSkillEvent(0, 0, float2.zero, entities[0]));
             }
         }
 #endif

@@ -33,21 +33,41 @@ namespace _Game.AbilitySystem
         {
             shapeInstance.PrefPosition = shapeInstance.CurrentPosition;
             shapeInstance.CurrentPosition = center;
-           
-            GeometryUtils.Sweep(shapeInstance, other, out hit2D);
+
+            bool overlaps = GeometryUtils.Overlaps(shapeInstance, other, out hit2D);
+            if (!overlaps)
+            {
+                GeometryUtils.Sweep(shapeInstance, other, out hit2D);                
+            }
             
 #if UNITY_EDITOR
             if (hit2D.hit)
             {
-                GeometryGizmos.DrawAABB(
-                    AABB.FromCenter(hit2D.point, new float2(0.5f, 0.5f)),
-                    new Color(1, 0, 0, 1), deltaTime
-                );
-                Box2dSelected(hit2D.point, new float2(0.5f, 0.5f),
-                    new Color(1, 0, 0, 1), deltaTime
-                );
+                if (overlaps)
+                {
+                    GeometryGizmos.DrawAABB(
+                        AABB.FromCenter(hit2D.point, new float2(0.5f, 0.5f)),
+                        new Color(1, 0, 0, 1), deltaTime
+                    );
+                    Box2dSelected(hit2D.point, new float2(0.5f, 0.5f),
+                        new Color(1, 0, 0, 1), deltaTime
+                    );
+                }
                 Debug.DrawLine((Vector2) shapeInstance.PrefPosition, (Vector2) shapeInstance.CurrentPosition,
                     new Color(1, 0, 0, 1), deltaTime
+                );
+            }
+            else
+            {
+                GeometryGizmos.DrawCircle(
+                    new Circle(other.CurrentPosition, other.Radius), Color.cyan, deltaTime * 2
+                );
+                GeometryGizmos.DrawAABB(
+                    AABB.FromCenter(shapeInstance.PrefPosition, new float2(0.35f, 0.35f)),
+                    new Color(0.5f, 0, 1f, 0.5f), deltaTime * 2
+                );
+                Debug.DrawLine((Vector2) shapeInstance.PrefPosition, (Vector2) shapeInstance.CurrentPosition,
+                    new Color(0.5f, 0, 1f, 0.5f), deltaTime * 2
                 );
             }
 #endif
