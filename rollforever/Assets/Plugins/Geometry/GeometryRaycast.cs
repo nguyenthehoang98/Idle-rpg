@@ -1,4 +1,5 @@
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace Geometry
 {
@@ -53,13 +54,20 @@ namespace Geometry
 
         private static bool Slab(float ro, float rd, float min, float max, ref float tMin, ref float tMax)
         {
-            if (math.abs(rd) < float.Epsilon) return ro >= min && ro <= max;
+            const float EPS = 1e-6f;
+
+            if (math.abs(rd) < EPS)
+            {
+                // Ray song song slab
+                return ro >= min && ro <= max;
+            }
 
             float ood = 1f / rd;
             float t1 = (min - ro) * ood;
             float t2 = (max - ro) * ood;
 
-            if (t1 > t2) (t1, t2) = (t2, t1);
+            if (t1 > t2)
+                (t1, t2) = (t2, t1);
 
             tMin = math.max(tMin, t1);
             tMax = math.min(tMax, t2);

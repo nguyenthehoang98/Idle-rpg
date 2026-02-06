@@ -1,4 +1,5 @@
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace Geometry
 {
@@ -40,7 +41,8 @@ namespace Geometry
                 box.max + radius
             );
 
-            if (GeometryAABB.Contains(expanded, prevCenter))
+            bool contains = GeometryAABB.Contains(expanded, prevCenter);
+            if (contains)
             {
                 hit.hit = true;
                 hit.length = 0f;

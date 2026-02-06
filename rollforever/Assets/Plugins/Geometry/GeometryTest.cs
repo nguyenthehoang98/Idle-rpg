@@ -1,6 +1,7 @@
 using Geometry;
 using Unity.Mathematics;
 using UnityEngine;
+using Ray = Geometry.Ray;
 
 public class GeometryTest : MonoBehaviour
 {
@@ -13,8 +14,16 @@ public class GeometryTest : MonoBehaviour
     public float2 bPos;
     public float bAngle;
 
+    [Header("RAY")] 
+    public bool enableRay;
+    public float2 cPos;
+    public float2 cDir;
+    public float cLength;
+
     private void OnDrawGizmos()
     {
+        // ========================== GIZMOS ========================== //
+        
         switch (a.type)
         {
             case ShapeType.Box:
@@ -80,6 +89,21 @@ public class GeometryTest : MonoBehaviour
                 break;
         }
 
+        if (enableRay)
+        {
+            GeometryGizmos.DrawAABB(
+                AABB.FromCenter(cPos, new float2(0.5f, 0.5f)),
+                new Color(0, 1, 0, 1), Time.deltaTime
+            );
+            GeometryGizmos.DrawRay(
+                new Ray(cPos, cDir),
+                new Color(0, 1, 0, 1), Time.deltaTime,
+                cLength
+            );
+        }
+        
+        // ========================== SWEEP ========================== //
+
         if (a.type == ShapeType.Circle && b.type == ShapeType.Circle)
         {
             GeometrySweep.SweepCircleCircle(
@@ -88,7 +112,7 @@ public class GeometryTest : MonoBehaviour
             );
             if (hit2D.hit)
             {
-                GeometryGizmos.DrawCircle(new Circle(hit2D.point, b.radius),
+                GeometryGizmos.DrawCircle(new Circle(hit2D.point, a.radius),
                     new Color(1, 0, 0, 1), Time.deltaTime
                 );
             }
@@ -117,7 +141,10 @@ public class GeometryTest : MonoBehaviour
             
             if (hit2D.hit)
             {
-                GeometryGizmos.DrawCircle(new Circle(hit2D.point, b.radius),
+                GeometryGizmos.DrawCircle(new Circle(hit2D.point, a.radius),
+                    new Color(1, 0, 0, 1), Time.deltaTime
+                );
+                Debug.DrawLine((Vector2)aPrefPos, (Vector2)aPos,
                     new Color(1, 0, 0, 1), Time.deltaTime
                 );
             }
@@ -126,6 +153,55 @@ public class GeometryTest : MonoBehaviour
                 Debug.DrawLine((Vector2) aPrefPos, (Vector2) aPos,
                     new Color(1, 1, 0, 1), Time.deltaTime
                 );
+            }
+        }
+
+        if (enableRay)
+        {
+            if (b.type == ShapeType.Circle)
+            {
+                GeometryRaycast.Raycast(
+                    new Ray(cPos, cDir), cLength,
+                    new Circle(bPos, b.radius), 
+                    out var hit2D
+                );
+            
+                if (hit2D.hit)
+                {
+                    GeometryGizmos.DrawAABB(
+                        AABB.FromCenter(hit2D.point, new float2(0.5f, 0.5f)), 
+                        new Color(1, 0, 0, 1), Time.deltaTime
+                    );
+                }
+                else
+                {
+                    Debug.DrawLine((Vector2) aPrefPos, (Vector2) aPos,
+                        new Color(1, 1, 0, 1), Time.deltaTime
+                    );
+                }
+            }
+            else if (b.type == ShapeType.Box)
+            {
+                RayHit2D hit2D;
+                GeometryRaycast.Raycast(
+                    new Ray(cPos, cDir), cLength,
+                    AABB.FromCenter(bPos, b.size),
+                    out hit2D
+                );
+            
+                if (hit2D.hit)
+                {
+                    GeometryGizmos.DrawAABB(
+                        AABB.FromCenter(hit2D.point, new float2(0.5f, 0.5f)), 
+                        new Color(1, 0, 0, 1), Time.deltaTime
+                    );
+                }
+                else
+                {
+                    Debug.DrawLine((Vector2) aPrefPos, (Vector2) aPos,
+                        new Color(1, 1, 0, 1), Time.deltaTime
+                    );
+                }
             }
         }
     }

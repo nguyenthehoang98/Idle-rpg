@@ -165,27 +165,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   a:
     type: 0
-    radius: 1
+    radius: 0.25
     size:
       x: 0
       y: 0
   aPrefPos:
-    x: 0
+    x: 1.22
     y: 5
   aPos:
-    x: 3
-    y: -5
+    x: 0
+    y: 0
   aAngle: 0
   b:
     type: 1
     radius: 1
     size:
-      x: 3
-      y: 3
+      x: 1
+      y: 1
   bPos:
-    x: -2
-    y: 0
+    x: 0
+    y: 3
   bAngle: 0
+  enableRay: 0
+  cPos:
+    x: 0
+    y: 0
+  cDir:
+    x: 0.2
+    y: 1
+  cLength: 10
 --- !u!1 &2003699158
 GameObject:
   m_ObjectHideFlags: 0
