@@ -73,59 +73,7 @@ namespace Geometry
                 }
             }
         }
-
-        public static void SweepCircleOBB(float2 prevCenter, float2 currCenter, float radius, OBB obb, out RayHit2D hit)
-        {
-            hit = default;
-
-            // Transform centers to OBB local space
-            float2 localPrev = WorldToOBBLocal(prevCenter, obb);
-            float2 localCurr = WorldToOBBLocal(currCenter, obb);
-
-            float2 delta = localCurr - localPrev;
-            float dist = math.length(delta);
-
-            if (dist <= float.Epsilon)
-                return;
-
-            float2 dir = delta / dist;
-
-            // Local AABB of OBB
-            AABB localAABB = OBBToLocalAABB(obb);
-
-            // Expand AABB by circle radius
-            AABB expanded = new AABB(
-                localAABB.min - radius,
-                localAABB.max + radius
-            );
-
-            // Initial overlap
-            if (GeometryAABB.Contains(expanded, localPrev))
-            {
-                hit.hit = true;
-                hit.length = 0f;
-
-                float2 cp = GeometryAABB.ClosestPoint(localAABB, localPrev);
-                float2 localNormal = math.normalize(localPrev - cp);
-
-                // Transform normal back to world
-                hit.normal = DirFromOBBLocal(localNormal, obb);
-                hit.point = prevCenter;
-                return;
-            }
-
-            Ray ray = new Ray(localPrev, dir);
-
-            GeometryRaycast.Raycast(ray, dist, expanded, out hit);
-
-            if (!hit.hit)
-                return;
-
-            // Convert hit back to world space
-            hit.point = OBBLocalToWorld(hit.point, obb);
-            hit.normal = DirFromOBBLocal(hit.normal, obb);
-        }
-
+        
         public static void SweepAABBAABB(float2 prevCenter, float2 currCenter, float2 halfSize, AABB target, out RayHit2D hit)
         {
             hit = default;
@@ -213,16 +161,66 @@ namespace Geometry
             }
         }
 
-        static float2 WorldToOBBLocal(float2 p, OBB obb)
+        public static void SweepCircleOBB(float2 prevCenter, float2 currCenter, float radius, OBB obb, out RayHit2D hit)
         {
-            float2 d = p - obb.center;
-            return new float2(math.dot(d, obb.axisX), math.dot(d, obb.axisY));
+            hit = default;
+
+            // 1. Chuyển đổi vị trí từ World Space sang Local Space của OBB
+            // Vector từ tâm OBB tới điểm cần chuyển
+            float2 relPrev = prevCenter - obb.center;
+            float2 relCurr = currCenter - obb.center;
+
+            // Chiếu lên các trục của OBB để tìm tọa độ Local
+            float2 localPrev = new float2(math.dot(relPrev, obb.axisX), math.dot(relPrev, obb.axisY));
+            float2 localCurr = new float2(math.dot(relCurr, obb.axisX), math.dot(relCurr, obb.axisY));
+
+            // 2. Tạo AABB đại diện cho OBB trong Local Space (nằm tại gốc tọa độ)
+            AABB localAABB = new AABB(-obb.halfSize, obb.halfSize);
+
+            // 3. Gọi hàm Sweep với logic xử lý góc bo tròn
+            if (SweepCircleAABB_Internal(localPrev, localCurr, radius, localAABB, out hit))
+            {
+                hit.normal = hit.normal.x * obb.axisX + hit.normal.y * obb.axisY;
+                hit.point = (hit.point.x * obb.axisX + hit.point.y * obb.axisY) + obb.center;
+            }
         }
         
-        static AABB OBBToLocalAABB(OBB obb) => new AABB(-obb.halfSize, obb.halfSize);
-        
-        static float2 OBBLocalToWorld(float2 p, OBB obb) => obb.center + p.x * obb.axisX + p.y * obb.axisY;
+        private static bool SweepCircleAABB_Internal(float2 prev, float2 curr, float radius, AABB box, out RayHit2D hit)
+        {
+            hit = default;
+            float2 delta = curr - prev;
+            float dist = math.length(delta);
+            if (dist <= float.Epsilon) return false;
 
-        static float2 DirFromOBBLocal(float2 d, OBB obb) => d.x * obb.axisX + d.y * obb.axisY;
+            float2 dir = delta / dist;
+            Ray ray = new Ray(prev, dir);
+
+            // Vùng 1: Các cạnh (Mở rộng AABB theo hình chữ thập)
+            AABB expandX = new AABB(new float2(box.min.x - radius, box.min.y), new float2(box.max.x + radius, box.max.y));
+            AABB expandY = new AABB(new float2(box.min.x, box.min.y - radius), new float2(box.max.x, box.max.y + radius));
+
+            /*GeometryGizmos.DrawRay(ray, Color.white, Time.deltaTime, dist);
+            GeometryGizmos.DrawAABB(expandX, Color.white, Time.deltaTime);
+            GeometryGizmos.DrawAABB(expandY, Color.blue, Time.deltaTime);*/
+            
+            RayHit2D hX, hY;
+            GeometryRaycast.Raycast(ray, dist, expandX, out hX);
+            GeometryRaycast.Raycast(ray, dist, expandY, out hY);
+
+            hit = hX.hit ? hX : hit;
+            if (hY.hit && (!hit.hit || hY.length < hit.length)) hit = hY;
+
+            // Vùng 2: 4 góc bo tròn (Mỗi góc là 1 Circle bán kính 'radius')
+            float2[] corners = { box.min, new float2(box.max.x, box.min.y), new float2(box.min.x, box.max.y), box.max };
+            foreach (float2 corner in corners)
+            {
+                RayHit2D hC;
+                Circle c = new Circle(corner, radius);
+                GeometryRaycast.Raycast(ray, dist, c, out hC);
+                if (hC.hit && (!hit.hit || hC.length < hit.length)) hit = hC;
+            }
+
+            return hit.hit;
+        }
     }
 }
