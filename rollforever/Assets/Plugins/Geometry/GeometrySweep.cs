@@ -222,5 +222,89 @@ namespace Geometry
 
             return hit.hit;
         }
+        
+        public static void SweepAABBOBB(float2 prevCenter, float2 currCenter, float2 aabbHalfSize, OBB target, out RayHit2D hit)
+        {
+            hit = default;
+
+            // 1. Tính toán vector di chuyển (Ray)
+            float2 delta = currCenter - prevCenter;
+            float dist = math.length(delta);
+            if (dist <= float.Epsilon) return;
+            float2 dir = delta / dist;
+
+            // 2. Chuyển bài toán về Local Space của OBB
+            // Vector từ tâm OBB tới điểm bắt đầu
+            float2 localOrigin = new float2(
+                math.dot(prevCenter - target.center, target.axisX),
+                math.dot(prevCenter - target.center, target.axisY)
+            );
+
+            // Hướng di chuyển trong Local Space
+            float2 localDir = new float2(
+                math.dot(dir, target.axisX),
+                math.dot(dir, target.axisY)
+            );
+
+            // 3. Tính toán độ mở rộng (Minkowski Sum)
+            // Chiếu các trục của AABB di động lên các trục của OBB mục tiêu
+            float extX = math.abs(aabbHalfSize.x * target.axisX.x) + math.abs(aabbHalfSize.y * target.axisX.y);
+            float extY = math.abs(aabbHalfSize.x * target.axisY.x) + math.abs(aabbHalfSize.y * target.axisY.y);
+            float2 expandedHalfSize = target.halfSize + new float2(extX, extY);
+
+            // 4. Thực hiện Slab Method (Raycast AABB) trong Local Space
+            float tMin = 0f;
+            float tMax = dist;
+
+            // Slab trục X
+            if (!Slab(localOrigin.x, localDir.x, -expandedHalfSize.x, expandedHalfSize.x, ref tMin, ref tMax)) return;
+            // Slab trục Y
+            if (!Slab(localOrigin.y, localDir.y, -expandedHalfSize.y, expandedHalfSize.y, ref tMin, ref tMax)) return;
+
+            // 5. Tổng hợp kết quả
+            hit.hit = true;
+            hit.length = tMin;
+            hit.point = prevCenter + dir * tMin; // Tâm của AABB tại thời điểm va chạm
+
+            // 6. Tính toán Normal trong World Space
+            // Xác định mặt nào của OBB bị chạm dựa trên vị trí va chạm local
+            float2 localHitPos = localOrigin + localDir * tMin;
+            float2 localNormal = float2.zero;
+
+            // Tìm cạnh gần nhất để xác định Normal
+            float minDiff = float.MaxValue;
+
+            float dL = math.abs(localHitPos.x - (-expandedHalfSize.x));
+            if (dL < minDiff) { minDiff = dL; localNormal = -target.axisX; }
+            
+            float dR = math.abs(localHitPos.x - expandedHalfSize.x);
+            if (dR < minDiff) { minDiff = dR; localNormal = target.axisX; }
+            
+            float dB = math.abs(localHitPos.y - (-expandedHalfSize.y));
+            if (dB < minDiff) { minDiff = dB; localNormal = -target.axisY; }
+            
+            float dT = math.abs(localHitPos.y - expandedHalfSize.y);
+            if (dT < minDiff) { localNormal = target.axisY; }
+
+            hit.normal = localNormal;
+            
+            // 7. (Tùy chọn) Điều chỉnh hit.point về điểm tiếp xúc thực tế trên bề mặt OBB
+            // hit.point = hit.point - (hit.normal * (giá trị hình chiếu halfSize lên normal))
+        }
+
+        // Hàm hỗ trợ Slab tĩnh (Internal)
+        private static bool Slab(float start, float dir, float min, float max, ref float tMin, ref float tMax)
+        {
+            if (math.abs(dir) < 1e-7f)
+            {
+                return start >= min && start <= max;
+            }
+            float t1 = (min - start) / dir;
+            float t2 = (max - start) / dir;
+            if (t1 > t2) { float tmp = t1; t1 = t2; t2 = tmp; }
+            tMin = math.max(tMin, t1);
+            tMax = math.min(tMax, t2);
+            return tMin <= tMax;
+        }
     }
 }
