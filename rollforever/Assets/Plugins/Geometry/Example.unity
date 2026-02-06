@@ -160,18 +160,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 1776322601}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96cda8e0b7e540e2ae236db4cf28f217, type: 3}
+  m_Script: {fileID: 11500000, guid: f213badbdb05edb4fa5af3981c63ece5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rayOrigin: {x: 0, y: 0}
-  rayDir: {x: 1, y: 1}
-  circleCenter: {x: -2, y: 0}
-  circleRadius: 1
-  boxCenter: {x: 2, y: 2}
-  boxSize: {x: 2, y: 2}
-  segA: {x: 0, y: 0}
-  segB: {x: 2, y: 0}
-  drawClosestPoint: 1
+  a:
+    type: 0
+    radius: 1
+    size:
+      x: 0
+      y: 0
+  aPrefPos:
+    x: 0
+    y: 5
+  aPos:
+    x: 3
+    y: -5
+  aAngle: 0
+  b:
+    type: 1
+    radius: 1
+    size:
+      x: 3
+      y: 3
+  bPos:
+    x: -2
+    y: 0
+  bAngle: 0
 --- !u!1 &2003699158
 GameObject:
   m_ObjectHideFlags: 0

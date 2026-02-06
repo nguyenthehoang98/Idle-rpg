@@ -63,7 +63,7 @@ namespace _Game.AbilitySystem
             foreach (var entity in filter)
             {
                 ref var unit = ref unitPool.Get(entity);
-                Shape.TryGet(unit.shapeId, out var shape);
+                ShapeInstance.TryGet(unit.shapeId, out var shape);
                 shapeLogic.Execute(center, shape, deltaTime, out var hit2D);
                 if (hit2D.hit)
                 {
@@ -73,19 +73,21 @@ namespace _Game.AbilitySystem
                     deadPool.Add(entity);
                 }
             }
-            
+
 #if UNITY_EDITOR
             Color color = hit ? Color.red : Color.green;
             if (data.shape.type == ShapeType.Circle)
             {
                 GeometryGizmos.DrawCircle(
-                    new Circle(center, data.shape.radius), color, deltaTime
+                    new Circle(center, data.shape.radius),
+                    color, deltaTime
                 );
             }
             else if (data.shape.type == ShapeType.Box)
             {
                 GeometryGizmos.DrawAABB(
-                    AABB.FromCenter(center, data.shape.size), color, deltaTime
+                    AABB.FromCenter(center, data.shape.size),
+                    color, deltaTime
                 );
             }
 

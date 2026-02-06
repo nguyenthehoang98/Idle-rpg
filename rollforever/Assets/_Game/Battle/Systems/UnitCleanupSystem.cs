@@ -49,7 +49,7 @@ namespace _Game.Battle.Systems
         {
             world.DelEntity(e);
             shareData.Simulator.RemoveAgent(unit.agentId);
-            Shape.Remove(unit.shapeId);
+            ShapeInstance.Remove(unit.shapeId);
         }
     }
 }

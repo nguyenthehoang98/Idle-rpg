@@ -29,7 +29,7 @@ namespace PathCreation.Examples
             }
         }
 
-        // If the path changes during the game, update the distance travelled so that the follower's position on the new path
+        // If the path changes during the game, update the length travelled so that the follower's position on the new path
         // is as close as possible to its position on the old path
         void OnPathChanged() {
             distanceTravelled = pathCreator.path.GetClosestDistanceAlongPath(transform.position);

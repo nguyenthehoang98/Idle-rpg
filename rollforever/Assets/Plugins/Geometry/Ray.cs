@@ -21,7 +21,7 @@ namespace Geometry
     public struct RayHit2D
     {
         public bool hit;
-        public float t; // distance along ray
+        public float length; // length along ray
         public float2 point; // hit position
         public float2 normal; // surface normal
     }

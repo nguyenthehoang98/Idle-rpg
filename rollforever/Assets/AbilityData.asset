@@ -20,7 +20,7 @@ MonoBehaviour:
     maxCollision: 0
   shape:
     type: 0
-    radius: 2
+    radius: 0.5
     size:
       x: 0
       y: 0
@@ -29,6 +29,6 @@ MonoBehaviour:
     path: {fileID: 0}
     velocity:
       acceleration: 0
-      speed: 50
+      speed: 100
   modifier:
     type: 0

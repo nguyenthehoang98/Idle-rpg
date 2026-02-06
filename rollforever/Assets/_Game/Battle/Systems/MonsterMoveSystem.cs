@@ -36,7 +36,7 @@ namespace _Game.Battle.Systems
             {
                 var unit = unitPool.Get(e);
 
-                if (Shape.TryGet(unit.shapeId, out var shape))
+                if (ShapeInstance.TryGet(unit.shapeId, out var shape))
                 {
                     var position = shareData.Simulator.GetAgentPosition(unit.agentId);
 
@@ -65,7 +65,7 @@ namespace _Game.Battle.Systems
                 var position = shareData.Simulator.GetAgentPosition(unit.agentId);
                 var prefPosition = shareData.Simulator.GetAgentPrefPosition(unit.agentId);
                 
-                if (Shape.TryGet(unit.shapeId, out var shape))
+                if (ShapeInstance.TryGet(unit.shapeId, out var shape))
                 {
                     shape.PrefPosition = prefPosition;
                     shape.CurrentPosition = position;

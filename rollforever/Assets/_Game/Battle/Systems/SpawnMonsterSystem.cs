@@ -63,13 +63,13 @@ namespace _Game.Battle.Systems
                     var velocity = math.normalize(goal - pos);
                     var agentId = shareData.Simulator.AddAgent(pos);
                     
-                    Shape shape = Shape.Insert(ShapeType.Circle, radius);
+                    ShapeInstance shapeInstance = ShapeInstance.Insert(ShapeType.Circle, radius);
 
                     var entity = world.NewEntity();
                     unitPool.Add(entity) = new UnitData
                     {
                         agentId = agentId,
-                        shapeId = shape.Id,
+                        shapeId = shapeInstance.Id,
 #if UNITY_EDITOR
                         color = Random.ColorHSV(0, 1, 0.5f, 1, 0.5f, 1),
 #endif

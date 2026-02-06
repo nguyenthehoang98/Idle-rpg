@@ -9,6 +9,14 @@ namespace Geometry
      */
     public static class GeometryAABB
     {
+        public static bool Contains(AABB box, float2 p)
+        {
+            return p.x >= box.min.x 
+                   && p.x <= box.max.x
+                   && p.y >= box.min.y 
+                   && p.y <= box.max.y;
+        }
+        
         public static bool Overlaps(AABB a, AABB b)
         {
             return a.min.x <= b.max.x &&
