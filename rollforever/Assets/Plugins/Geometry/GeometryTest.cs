@@ -14,8 +14,7 @@ public class GeometryTest : MonoBehaviour
     public float2 bPos;
     public float bAngle;
 
-    [Header("RAY")] 
-    public bool enableRay;
+    [Header("RAY")] public bool enableRay;
     public float2 cPos;
     public float2 cDir;
     public float cLength;
@@ -23,43 +22,63 @@ public class GeometryTest : MonoBehaviour
     private void OnDrawGizmos()
     {
         // ========================== GIZMOS ========================== //
-        
+
         switch (a.type)
         {
             case ShapeType.Box:
                 if (math.abs(aAngle) <= 0)
                 {
                     GeometryGizmos.DrawAABB(
+                        AABB.FromCenter(aPrefPos, new float2(0.15f, 0.15f)),
+                        new Color(1, 1, 0, 0.15f), Time.deltaTime
+                    );
+                    GeometryGizmos.DrawAABB(
                         AABB.FromCenter(aPrefPos, a.size),
-                        new Color(1, 1, 0, 0.05f), Time.deltaTime
+                        new Color(1, 1, 0, 0.15f), Time.deltaTime
                     );
                     GeometryGizmos.DrawAABB(
                         AABB.FromCenter(aPos, a.size),
-                        new Color(1, 1, 0, 0.5f), Time.deltaTime
+                        new Color(1, 1, 0, 0.35f), Time.deltaTime
+                    );
+                    Debug.DrawLine((Vector2) aPrefPos, (Vector2) aPos,
+                        new Color(1, 1, 0, 0.35f), Time.deltaTime
                     );
                 }
                 else
                 {
+                    GeometryGizmos.DrawAABB(
+                        AABB.FromCenter(aPrefPos, new float2(0.15f, 0.15f)),
+                        new Color(1, 1, 0, 0.15f), Time.deltaTime
+                    );
                     GeometryGizmos.DrawOBB(
                         new OBB(aPrefPos, a.size / 2, Mathf.Deg2Rad * aAngle),
-                        new Color(1, 1, 0, 0.05f), Time.deltaTime
+                        new Color(1, 1, 0, 0.15f), Time.deltaTime
                     );
                     GeometryGizmos.DrawOBB(
                         new OBB(aPos, a.size / 2, Mathf.Deg2Rad * aAngle),
-                        new Color(1, 1, 0, 0.5f), Time.deltaTime
+                        new Color(1, 1, 0, 0.35f), Time.deltaTime
+                    );
+                    Debug.DrawLine((Vector2) aPrefPos, (Vector2) aPos,
+                        new Color(1, 1, 0, 0.35f), Time.deltaTime
                     );
                 }
 
-                Debug.DrawLine((Vector2) aPrefPos, (Vector2) aPos, Color.yellow, Time.deltaTime);
                 break;
             case ShapeType.Circle:
+                GeometryGizmos.DrawAABB(
+                    AABB.FromCenter(aPrefPos, new float2(0.15f, 0.15f)),
+                    new Color(1, 1, 0, 0.15f), Time.deltaTime
+                );
                 GeometryGizmos.DrawCircle(
                     new Circle(aPrefPos, a.radius),
-                    new Color(1, 1, 0, 0.05f), Time.deltaTime
+                    new Color(1, 1, 0, 0.15f), Time.deltaTime
                 );
                 GeometryGizmos.DrawCircle(
                     new Circle(aPos, a.radius),
-                    new Color(1, 1, 0, 0.5f), Time.deltaTime
+                    new Color(1, 1, 0, 0.35f), Time.deltaTime
+                );
+                Debug.DrawLine((Vector2) aPrefPos, (Vector2) aPos,
+                    new Color(1, 1, 0, 0.35f), Time.deltaTime
                 );
                 break;
         }
@@ -69,22 +88,21 @@ public class GeometryTest : MonoBehaviour
             case ShapeType.Box:
                 if (math.abs(bAngle) <= 0)
                 {
-                    GeometryGizmos.DrawAABB(
-                        AABB.FromCenter(bPos, b.size),
-                        new Color(0, 1, 1, 0.5f), Time.deltaTime
+                    GeometryGizmos.DrawAABB(AABB.FromCenter(bPos, b.size),
+                        new Color(0, 1, 1, 0.35f), Time.deltaTime
                     );
                 }
                 else
                 {
-                    GeometryGizmos.DrawOBB(
-                        new OBB(bPos, b.size * 0.5f, Mathf.Deg2Rad * bAngle),
-                        new Color(0, 1, 1, 0.5f), Time.deltaTime
-                    );                    
+                    GeometryGizmos.DrawOBB(new OBB(bPos, b.size * 0.5f, Mathf.Deg2Rad * bAngle),
+                        new Color(0, 1, 1, 0.35f), Time.deltaTime
+                    );
                 }
+
                 break;
             case ShapeType.Circle:
-                GeometryGizmos.DrawCircle(
-                    new Circle(bPos, b.radius), new Color(0, 1, 1, 0.5f), Time.deltaTime
+                GeometryGizmos.DrawCircle(new Circle(bPos, b.radius),
+                    new Color(0, 1, 1, 0.35f), Time.deltaTime
                 );
                 break;
         }
@@ -93,15 +111,15 @@ public class GeometryTest : MonoBehaviour
         {
             GeometryGizmos.DrawAABB(
                 AABB.FromCenter(cPos, new float2(0.5f, 0.5f)),
-                new Color(0, 1, 0, 1), Time.deltaTime
+                new Color(0, 1, 0, 0.35f), Time.deltaTime
             );
             GeometryGizmos.DrawRay(
                 new Ray(cPos, cDir),
-                new Color(0, 1, 0, 1), Time.deltaTime,
+                new Color(0, 1, 0, 0.35f), Time.deltaTime,
                 cLength
             );
         }
-        
+
         // ========================== SWEEP ========================== //
 
         if (a.type == ShapeType.Circle && b.type == ShapeType.Circle)
@@ -113,13 +131,16 @@ public class GeometryTest : MonoBehaviour
             if (hit2D.hit)
             {
                 GeometryGizmos.DrawCircle(new Circle(hit2D.point, a.radius),
-                    new Color(1, 0, 0, 1), Time.deltaTime
+                    new Color(1, 0, 0, 0.35f), Time.deltaTime
+                );
+                GeometryGizmos.DrawAABB(AABB.FromCenter(hit2D.point, new float2(0.15f, 0.15f)),
+                    new Color(1, 0, 0, 0.35f), Time.deltaTime
                 );
             }
             else
             {
                 Debug.DrawLine((Vector2) aPrefPos, (Vector2) aPos,
-                    new Color(1, 1, 0, 1), Time.deltaTime
+                    new Color(1, 0, 1, 0.35f), Time.deltaTime
                 );
             }
         }
@@ -138,20 +159,20 @@ public class GeometryTest : MonoBehaviour
                     new OBB(bPos, b.size * 0.5f, Mathf.Deg2Rad * bAngle), out hit2D
                 );
             }
-            
+
             if (hit2D.hit)
             {
                 GeometryGizmos.DrawCircle(new Circle(hit2D.point, a.radius),
-                    new Color(1, 0, 0, 1), Time.deltaTime
+                    new Color(1, 0, 0, 0.35f), Time.deltaTime
                 );
-                Debug.DrawLine((Vector2)aPrefPos, (Vector2)aPos,
-                    new Color(1, 0, 0, 1), Time.deltaTime
+                GeometryGizmos.DrawAABB(AABB.FromCenter(hit2D.point, new float2(0.15f, 0.15f)),
+                    new Color(1, 0, 0, 0.35f), Time.deltaTime
                 );
             }
             else
             {
                 Debug.DrawLine((Vector2) aPrefPos, (Vector2) aPos,
-                    new Color(1, 1, 0, 1), Time.deltaTime
+                    new Color(1, 0, 1, 0.35f), Time.deltaTime
                 );
             }
         }
@@ -170,24 +191,24 @@ public class GeometryTest : MonoBehaviour
                     new Circle(bPos, b.radius), out hit2D
                 );
             }
-            
+
             if (hit2D.hit)
             {
-                GeometryGizmos.DrawAABB(AABB.FromCenter(hit2D.point, a.size), 
-                    new Color(1, 0, 0, 1), Time.deltaTime
+                GeometryGizmos.DrawAABB(AABB.FromCenter(hit2D.point, a.size),
+                    new Color(1, 0, 0, 0.35f), Time.deltaTime
                 );
-                Debug.DrawLine((Vector2)aPrefPos, (Vector2)aPos,
-                    new Color(1, 0, 0, 1), Time.deltaTime
+                GeometryGizmos.DrawAABB(AABB.FromCenter(hit2D.point, new float2(0.15f, 0.15f)),
+                    new Color(1, 0, 0, 0.35f), Time.deltaTime
                 );
             }
             else
             {
                 Debug.DrawLine((Vector2) aPrefPos, (Vector2) aPos,
-                    new Color(1, 1, 0, 1), Time.deltaTime
+                    new Color(1, 0, 1, 0.35f), Time.deltaTime
                 );
             }
         }
-        else if(a.type == ShapeType.Box && b.type == ShapeType.Box)
+        else if (a.type == ShapeType.Box && b.type == ShapeType.Box)
         {
             RayHit2D hit2D;
             if (math.abs(bAngle) <= 0)
@@ -202,45 +223,45 @@ public class GeometryTest : MonoBehaviour
                     AABB.FromCenter(bPos, b.size), out hit2D
                 );
             }
-            
+
             if (hit2D.hit)
             {
-                GeometryGizmos.DrawAABB(AABB.FromCenter(hit2D.point, a.size), 
-                    new Color(1, 0, 0, 1), Time.deltaTime
+                GeometryGizmos.DrawAABB(AABB.FromCenter(hit2D.point, a.size),
+                    new Color(1, 0, 0, 0.35f), Time.deltaTime
                 );
-                Debug.DrawLine((Vector2)aPrefPos, (Vector2)aPos,
-                    new Color(1, 0, 0, 1), Time.deltaTime
+                GeometryGizmos.DrawAABB(AABB.FromCenter(hit2D.point, new float2(0.15f, 0.15f)),
+                    new Color(1, 0, 0, 0.35f), Time.deltaTime
                 );
             }
             else
             {
                 Debug.DrawLine((Vector2) aPrefPos, (Vector2) aPos,
-                    new Color(1, 1, 0, 1), Time.deltaTime
+                    new Color(1, 0, 1, 0.35f), Time.deltaTime
                 );
             }
         }
-        
+
         if (enableRay)
         {
             if (b.type == ShapeType.Circle)
             {
                 GeometryRaycast.Raycast(
                     new Ray(cPos, cDir), cLength,
-                    new Circle(bPos, b.radius), 
+                    new Circle(bPos, b.radius),
                     out var hit2D
                 );
-            
+
                 if (hit2D.hit)
                 {
                     GeometryGizmos.DrawAABB(
-                        AABB.FromCenter(hit2D.point, new float2(0.5f, 0.5f)), 
-                        new Color(1, 0, 0, 1), Time.deltaTime
+                        AABB.FromCenter(hit2D.point, new float2(0.5f, 0.5f)),
+                        new Color(1, 0, 0, 0.35f), Time.deltaTime
                     );
                 }
                 else
                 {
                     Debug.DrawLine((Vector2) aPrefPos, (Vector2) aPos,
-                        new Color(1, 1, 0, 1), Time.deltaTime
+                        new Color(1, 0, 1, 0.35f), Time.deltaTime
                     );
                 }
             }
@@ -252,18 +273,18 @@ public class GeometryTest : MonoBehaviour
                     AABB.FromCenter(bPos, b.size),
                     out hit2D
                 );
-            
+
                 if (hit2D.hit)
                 {
                     GeometryGizmos.DrawAABB(
-                        AABB.FromCenter(hit2D.point, new float2(0.5f, 0.5f)), 
-                        new Color(1, 0, 0, 1), Time.deltaTime
+                        AABB.FromCenter(hit2D.point, new float2(0.5f, 0.5f)),
+                        new Color(1, 0, 0, 0.35f), Time.deltaTime
                     );
                 }
                 else
                 {
                     Debug.DrawLine((Vector2) aPrefPos, (Vector2) aPos,
-                        new Color(1, 1, 0, 1), Time.deltaTime
+                        new Color(1, 0, 1, 0.35f), Time.deltaTime
                     );
                 }
             }

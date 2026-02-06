@@ -1,4 +1,5 @@
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace Geometry
 {
@@ -132,9 +133,7 @@ namespace Geometry
                 hit.hit = true;
                 hit.length = 0f;
                 hit.point = prevCenter;
-
-                float2 cp = GeometryAABB.ClosestPoint(target, prevCenter);
-                hit.normal = math.normalizesafe(prevCenter - cp);
+                hit.normal = GeometryAABB.ComputeAABBNormal(prevCenter, expanded);
                 return;
             }
 
@@ -142,48 +141,32 @@ namespace Geometry
             GeometryRaycast.Raycast(ray, dist, expanded, out hit);
         }
         
-        public static void SweepAABBCircle(float2 prevCenter, float2 currCenter, float2 halfSize, Circle b, out RayHit2D hit)
+        public static void SweepAABBCircle(float2 prevCenter, float2 currCenter, float2 halfSize, Circle targetCircle, out RayHit2D hit)
         {
             hit = default;
 
             float2 delta = currCenter - prevCenter;
             float dist = math.length(delta);
 
-            if (dist <= float.Epsilon)
-                return;
+            if (dist <= float.Epsilon) return;
 
             float2 dir = delta / dist;
 
-            // AABB tại vị trí prev
-            AABB moving = new AABB(
-                prevCenter - halfSize,
-                prevCenter + halfSize
+            // 1. Tạo một AABB ảo bao quanh Circle, được mở rộng bởi halfSize của AABB di động
+            // Đây là vùng "tiềm năng" va chạm.
+            AABB expandedBox = new AABB(
+                targetCircle.center - (targetCircle.radius + halfSize),
+                targetCircle.center + (targetCircle.radius + halfSize)
             );
 
-            // Expand AABB bởi bán kính circle
-            AABB expanded = new AABB(
-                moving.min - b.radius,
-                moving.max + b.radius
-            );
-
-            // Initial overlap: tâm circle nằm trong expanded AABB
-            if (GeometryAABB.Contains(expanded, b.center))
-            {
-                hit.hit = true;
-                hit.length = 0f;
-                hit.point = b.center;
-
-                float2 cp = GeometryAABB.ClosestPoint(moving, b.center);
-                hit.normal = math.normalizesafe(b.center - cp);
-                return;
-            }
-
-            // Ray từ circle center, ngược hướng chuyển động AABB
-            Ray ray = new Ray(b.center, -dir);
-
-            GeometryRaycast.Raycast(ray, dist, expanded, out hit);
+            // 2. Raycast với AABB mở rộng này để tìm khoảng thời gian t sơ bộ
+            Ray ray = new Ray(prevCenter, dir);
+            GeometryRaycast.Raycast(ray, dist, expandedBox, out hit);
+            
+            GeometryGizmos.DrawRay(ray, Color.white, Time.deltaTime, dist);
+            GeometryGizmos.DrawAABB(expandedBox, Color.white, Time.deltaTime);
         }
-        
+
         static float2 WorldToOBBLocal(float2 p, OBB obb)
         {
             float2 d = p - obb.center;

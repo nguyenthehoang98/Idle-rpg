@@ -73,5 +73,62 @@ namespace Geometry
 
             return tMin <= tMax;
         }
+        
+        public static bool Raycast(Ray ray, AABB box, out float t, out float2 normal)
+        {
+            t = 0;
+            normal = float2.zero;
+
+            float2 invDir = 1.0f / ray.dir;
+
+            float2 t1 = (box.min - ray.origin) * invDir;
+            float2 t2 = (box.max - ray.origin) * invDir;
+
+            float2 tmin = math.min(t1, t2);
+            float2 tmax = math.max(t1, t2);
+
+            float entry = math.max(tmin.x, tmin.y);
+            float exit  = math.min(tmax.x, tmax.y);
+
+            if (exit < 0 || entry > exit || entry > 1)
+                return false;
+
+            t = math.max(entry, 0);
+
+            // normal
+            if (math.abs(t - tmin.x) <= 0)
+                normal = new float2(-math.sign(ray.dir.x), 0);
+            else
+                normal = new float2(0, -math.sign(ray.dir.y));
+
+            return true;
+        }
+        
+        public static bool Raycast(Ray ray, Circle circle, out float t, out float2 normal)
+        {
+            t = 0;
+            normal = float2.zero;
+
+            float2 m = ray.origin - circle.center;
+            float b = math.dot(m, ray.dir);
+            float c = math.dot(m, m) - circle.radius * circle.radius;
+
+            // ray đang hướng ra xa
+            if (c > 0 && b > 0)
+                return false;
+
+            float discr = b * b - c * math.dot(ray.dir, ray.dir);
+            if (discr < 0)
+                return false;
+
+            t = (-b - math.sqrt(discr)) / math.dot(ray.dir, ray.dir);
+            if (t < 0 || t > 1)
+                return false;
+
+            float2 hitPoint = ray.origin + ray.dir * t;
+            normal = math.normalize(hitPoint - circle.center);
+            return true;
+        }
+
     }
 }
