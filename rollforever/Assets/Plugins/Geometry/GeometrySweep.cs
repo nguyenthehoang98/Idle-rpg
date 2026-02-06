@@ -27,34 +27,53 @@ namespace Geometry
         public static void SweepCircleAABB(float2 prevCenter, float2 currCenter, float radius, AABB box, out RayHit2D hit)
         {
             hit = default;
-
             float2 delta = currCenter - prevCenter;
             float dist = math.length(delta);
-
-            if (dist <= float.Epsilon)
-                return;
+            if (dist <= float.Epsilon) return;
 
             float2 dir = delta / dist;
-
-            AABB expanded = new AABB(
-                box.min - radius,
-                box.max + radius
-            );
-
-            bool contains = GeometryAABB.Contains(expanded, prevCenter);
-            if (contains)
-            {
-                hit.hit = true;
-                hit.length = 0f;
-                hit.point = prevCenter;
-                hit.normal = math.normalize(prevCenter - GeometryAABB.ClosestPoint(expanded, prevCenter));
-                return;
-            }
-
             Ray ray = new Ray(prevCenter, dir);
-            GeometryRaycast.Raycast(ray, dist, expanded, out hit);
+
+            // 1. Tạo 2 box đại diện cho vùng "cạnh" (không bao gồm góc)
+            // Box mở rộng theo trục X, giữ nguyên Y của box gốc
+            AABB expandX = new AABB(new float2(box.min.x - radius, box.min.y), new float2(box.max.x + radius, box.max.y));
+            // Box mở rộng theo trục Y, giữ nguyên X của box gốc
+            AABB expandY = new AABB(new float2(box.min.x, box.min.y - radius), new float2(box.max.x, box.max.y + radius));
+
+            /*GeometryGizmos.DrawRay(ray, Color.white, Time.deltaTime, dist);
+            GeometryGizmos.DrawAABB(expandX, Color.white, Time.deltaTime);
+            GeometryGizmos.DrawAABB(expandY, Color.blue, Time.deltaTime);*/
+            
+            // Raycast với 2 box này trước
+            RayHit2D hitX, hitY;
+            GeometryRaycast.Raycast(ray, dist, expandX, out hitX);
+            GeometryRaycast.Raycast(ray, dist, expandY, out hitY);
+
+            // Lấy va chạm gần nhất trong 2 box
+            hit = hitX.hit ? hitX : hit;
+            if (hitY.hit && (!hit.hit || hitY.length < hit.length)) hit = hitY;
+
+            // 2. Xử lý 4 góc (Mỗi góc là 1 Circle bán kính 'radius' đặt tại đỉnh của AABB gốc)
+            float2[] corners = new float2[] {
+                box.min,
+                new float2(box.max.x, box.min.y),
+                new float2(box.min.x, box.max.y),
+                box.max
+            };
+
+            foreach (float2 cornerPos in corners)
+            {
+                RayHit2D hitCorner;
+                Circle c = new Circle(cornerPos, radius);
+                GeometryRaycast.Raycast(ray, dist, c, out hitCorner);
+
+                if (hitCorner.hit && (!hit.hit || hitCorner.length < hit.length))
+                {
+                    hit = hitCorner;
+                }
+            }
         }
-        
+
         public static void SweepCircleOBB(float2 prevCenter, float2 currCenter, float radius, OBB obb, out RayHit2D hit)
         {
             hit = default;
