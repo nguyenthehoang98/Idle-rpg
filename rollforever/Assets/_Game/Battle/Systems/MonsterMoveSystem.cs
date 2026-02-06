@@ -1,8 +1,8 @@
 using _Game.Battle.Data;
+using Geometry;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace _Game.Battle.Systems
 {

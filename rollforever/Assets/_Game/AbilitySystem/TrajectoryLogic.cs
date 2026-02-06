@@ -9,7 +9,18 @@ namespace _Game.AbilitySystem
 
         public TrajectoryLogic(TrajectoryArg arg)
         {
-            trajectory = new VelocitySubTrajectory(arg.velocity.acceleration, arg.velocity.speed);
+            switch (arg.type)
+            {
+                case TrajectoryType.Velocity:
+                    trajectory = new VelocitySubTrajectory(arg.velocity.acceleration, arg.velocity.speed);
+                    break;
+                default:
+#if UNITY_EDITOR
+                    string message = "Not define TrajectoryType: " + arg.type;
+                    throw new NotImplementedException(message);     
+#endif
+                    break;
+            }
         }
 
         public void Startup(float2 startPos, float2 endPos)

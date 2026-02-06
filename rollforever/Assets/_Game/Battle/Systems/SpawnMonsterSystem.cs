@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using _Game.Battle.Data;
 using _Game.Battle.View;
 using _KIT.Resource;
+using Geometry;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 using Unity.Mathematics;

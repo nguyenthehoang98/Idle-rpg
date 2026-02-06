@@ -1,12 +1,17 @@
 using System.Collections.Generic;
 using Unity.Mathematics;
 
-namespace _Game.Battle.Data
+namespace Geometry
 {
-    public class Shape
+    public sealed class Shape
     {
         static Dictionary<int, Shape> dict = new Dictionary<int, Shape>();
         private static int globalId;
+
+        public static Shape Empty()
+        {
+            return new Shape();
+        }
 
         public static Shape Insert(ShapeType shape, float radius)
         {
@@ -38,13 +43,18 @@ namespace _Game.Battle.Data
         {
             return dict.TryGetValue(id, out instance);
         }
-        
+
+        private Shape()
+        {
+        }
+
         private Shape(int id, ShapeType type, float radius)
         {
             Id = id;
             Type = type;
             Radius = radius;
         }
+
         private Shape(int id, ShapeType type, float2 size)
         {
             Id = id;
@@ -58,10 +68,5 @@ namespace _Game.Battle.Data
         public float2 Size { get; }
         public float2 PrefPosition { get; set; }
         public float2 CurrentPosition { get; set; }
-    }
-
-    public enum ShapeType
-    {
-        Circle, Box, Polygon,
     }
 }

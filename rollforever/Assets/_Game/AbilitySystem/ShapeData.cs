@@ -1,5 +1,5 @@
 using System;
-using _Game.Battle.Data;
+using Geometry;
 using Unity.Mathematics;
 
 namespace _Game.AbilitySystem

@@ -20,42 +20,20 @@ namespace _Game.AbilitySystem
                     shape = Shape.Insert(ShapeType.Circle, data.radius);
                     break;
                 default:
-                    Debug.LogError("Chưa định nghĩa");
+#if UNITY_EDITOR
+                    string message = "Not define ShapeType: " + data.type;
+                    throw new NotImplementedException(message);     
+#endif
+                    shape = Shape.Empty();
                     break;
             }
         }
 
         public void Execute(Vector2 center, Shape other, float deltaTime, out RayHit2D hit2D)
         {
-            hit2D = new RayHit2D();
-            if (shape.Type == ShapeType.Box && other.Type == ShapeType.Box)
-            {
-                hit2D.hit = GeometryAABB.Overlaps(
-                    AABB.FromCenter(center, shape.Size),
-                    AABB.FromCenter(other.CurrentPosition, other.Size)
-                );
-            }
-            else if (shape.Type == ShapeType.Circle && other.Type == ShapeType.Circle)
-            {
-                hit2D.hit = GeometryCircle.Overlaps(
-                    new Circle(center, shape.Radius),
-                    new Circle(other.CurrentPosition, other.Radius)
-                );
-            }
-            else if (shape.Type == ShapeType.Box && other.Type == ShapeType.Circle)
-            {
-                hit2D.hit = GeometryAABB.Overlaps(
-                    AABB.FromCenter(center, shape.Size),
-                    new Circle(other.CurrentPosition, other.Radius)
-                );
-            }
-            else if (shape.Type == ShapeType.Circle && other.Type == ShapeType.Box)
-            {
-                hit2D.hit = GeometryCircle.Overlaps(
-                    new Circle(center, shape.Radius),
-                    AABB.FromCenter(other.CurrentPosition, other.Size)
-                );
-            }
+            shape.PrefPosition = shape.CurrentPosition;
+            shape.CurrentPosition = center;
+            GeometryUtils.Overlaps(shape, other, out hit2D);
         }
 
         public void Dispose()
