@@ -1,6 +1,7 @@
 using Unity.Mathematics;
+using UnityEngine;
 
-namespace Geometry
+namespace Geometry.Primary
 {
     public readonly struct Circle
     {

@@ -480,12 +480,6 @@ namespace RVO
             return this.agents[index].position;
         }
         
-        public float2 GetAgentPrefPosition(int agentId)
-        {
-            var index = this.agentIndexLookup[agentId];
-            return this.agents[index].prefPosition;
-        }
-        
         public bool IsAgentPaused(int agentId)
         {
             var index = this.agentIndexLookup[agentId];

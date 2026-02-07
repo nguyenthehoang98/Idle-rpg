@@ -1,13 +1,16 @@
 using System;
 using Geometry;
+using Geometry.Primary;
 using Unity.Mathematics;
 using UnityEngine;
+using Ray = Geometry.Ray;
 
 namespace _Game.AbilitySystem
 {
     public sealed class ShapeLogic: IDisposable
     {
         private readonly ShapeInstance shapeInstance;
+        private float2 prevPos;
 
         public ShapeLogic(Shape data)
         {
@@ -29,19 +32,40 @@ namespace _Game.AbilitySystem
             }
         }
 
-        public void Execute(Vector2 center, ShapeInstance other, float deltaTime, out RayHit2D hit2D)
+        public void Startup(float2 pos)
         {
-            shapeInstance.PrefPosition = shapeInstance.CurrentPosition;
-            shapeInstance.CurrentPosition = center;
+            prevPos = pos;
+        }
 
-            bool overlaps = GeometryUtils.Overlaps(shapeInstance, other, out hit2D);
+        public void PreExecute()
+        {
+            
+        }
+
+        public void Execute(float2 center, ShapeInstance other, float2 otherPos, float deltaTime, out bool hit)
+        {
+            float2 prev = prevPos;
+            float2 cur = center;
+            RayHit2D hit2D = default;
+            
+            bool overlaps = GeometryUtils.Overlaps(
+                shapeInstance, prev, cur,
+                other, otherPos);
             if (!overlaps)
             {
-                GeometryUtils.Sweep(shapeInstance, other, out hit2D);                
+                GeometryUtils.Sweep(
+                    shapeInstance, prev, cur,
+                    other, otherPos,
+                    out hit2D);
+                hit = hit2D.hit;
             }
-            
+            else
+            {
+                hit = true;
+            }
+
 #if UNITY_EDITOR
-            if (hit2D.hit)
+            if (hit)
             {
                 if (overlaps)
                 {
@@ -53,29 +77,39 @@ namespace _Game.AbilitySystem
                         new Color(1, 0, 0, 1), deltaTime
                     );
                 }
-                Debug.DrawLine((Vector2) shapeInstance.PrefPosition, (Vector2) shapeInstance.CurrentPosition,
+                Debug.DrawLine((Vector2) prev, (Vector2) cur,
                     new Color(1, 0, 0, 1), deltaTime
                 );
             }
             else
             {
                 GeometryGizmos.DrawCircle(
-                    new Circle(other.CurrentPosition, other.Radius), Color.cyan, deltaTime * 2
+                    new Circle(otherPos, other.Radius), Color.cyan, deltaTime * 2
                 );
                 GeometryGizmos.DrawAABB(
-                    AABB.FromCenter(shapeInstance.PrefPosition, new float2(0.35f, 0.35f)),
+                    AABB.FromCenter(prev, new float2(0.35f, 0.35f)),
                     new Color(0.5f, 0, 1f, 0.5f), deltaTime * 2
                 );
-                Debug.DrawLine((Vector2) shapeInstance.PrefPosition, (Vector2) shapeInstance.CurrentPosition,
+                Debug.DrawLine((Vector2) prev, (Vector2) cur,
                     new Color(0.5f, 0, 1f, 0.5f), deltaTime * 2
                 );
             }
+            
 #endif
+        }
+
+        public void AfterExecute(float2 center)
+        {
+            prevPos = center;
+        }
+
+        public void Shutdown()
+        {
+            ShapeInstance.Remove(shapeInstance);
         }
 
         public void Dispose()
         {
-            ShapeInstance.Remove(shapeInstance);
         }
         
         static void Box2dSelected(float2 center, float2 size, Color color, float deltaTime)

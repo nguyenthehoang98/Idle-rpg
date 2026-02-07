@@ -1,3 +1,4 @@
+using Geometry.Primary;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -8,9 +9,8 @@ namespace Geometry
         // ===================== RAY =====================
         public static void DrawRay(Ray ray, Color color, float dt, float length = 10)
         {
-            Debug.DrawLine(ToV3(ray.origin), ToV3(ray.origin + ray.dir * length), color, dt);
+            Debug.DrawRay(ToV3(ray.origin), ToV3(ray.dir * length), color, dt);
         }
-        
         
         // ===================== OBB =====================
         public static void DrawPolygon(in Polygon poly, Color color, float dt)

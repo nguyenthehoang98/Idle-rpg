@@ -63,13 +63,6 @@ namespace _Game.Battle.Systems
                 var goal = shareData.Simulator.GetAgentGoal(unit.agentId);
                 var radius = shareData.Simulator.GetAgentRadius(unit.agentId);
                 var position = shareData.Simulator.GetAgentPosition(unit.agentId);
-                var prefPosition = shareData.Simulator.GetAgentPrefPosition(unit.agentId);
-                
-                if (ShapeInstance.TryGet(unit.shapeId, out var shape))
-                {
-                    shape.PrefPosition = prefPosition;
-                    shape.CurrentPosition = position;
-                }
 
                 if (ShouldPause(position, goal, radius))
                 {
@@ -89,6 +82,8 @@ namespace _Game.Battle.Systems
             }
 
             shareData.Simulator.DoStep();
+            
+            shareData.Simulator.EnsureCompleted();
         }
 
         public void PostRun(IEcsSystems systems)

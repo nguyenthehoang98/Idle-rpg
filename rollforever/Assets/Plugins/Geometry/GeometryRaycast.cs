@@ -1,3 +1,5 @@
+using Geometry.Math;
+using Geometry.Primary;
 using Unity.Mathematics;
 
 namespace Geometry
@@ -6,30 +8,24 @@ namespace Geometry
     {
         public static void Raycast(Ray ray, float length, Circle c, out RayHit2D hit)
         {
-            hit = default;
+            bool result = GeometryMath.RayCircle(
+                ray.origin, ray.dir, length,
+                c.center, c.radius, out float dist, out float2 point
+            );
 
-            float2 oc = ray.origin - c.center;
-
-            float b = math.dot(oc, ray.dir);
-            float cVal = math.dot(oc, oc) - c.radius * c.radius;
-
-            float h = b * b - cVal;
-            if (h < 0f)
-                return;
-
-            h = math.sqrt(h);
-
-            // nghiệm gần nhất
-            float t = -b - h;
-
-            // nếu nghiệm này nằm sau origin hoặc vượt quá length thì reject
-            if (t < 0f || t > length)
-                return;
-
-            hit.hit = true;
-            hit.length = t;
-            hit.point = ray.origin + ray.dir * t;
-            hit.normal = math.normalize(hit.point - c.center);
+            if (result)
+            {
+                hit = new RayHit2D
+                {
+                    hit = true,
+                    length = dist,
+                    point = point
+                };
+            }
+            else
+            {
+                hit = new RayHit2D();
+            }
         }
 
         public static void Raycast(Ray ray, float length, AABB box, out RayHit2D hit)
@@ -104,6 +100,9 @@ namespace Geometry
             return true;
         }
         
+        /// <summary>
+        /// https://www.desmos.com/calculator/qxhbnyyhwy?lang=vi
+        /// </summary>
         public static bool Raycast(Ray ray, Circle circle, out float t, out float2 normal)
         {
             t = 0;

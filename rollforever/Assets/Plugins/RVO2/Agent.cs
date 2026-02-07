@@ -54,7 +54,6 @@ namespace RVO
     {
         internal readonly int id;
         internal bool paused;
-        internal float2 prefPosition;
         internal float2 position;
         internal float2 prefVelocity;
         internal float2 velocity;
@@ -608,7 +607,6 @@ namespace RVO
         internal void Update(float timeStep)
         {
             if (paused) return;
-            this.prefPosition = this.position;
             this.velocity = this.newVelocity;
             this.position += this.velocity * timeStep;
         }

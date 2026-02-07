@@ -2,6 +2,7 @@
 using _Game.Battle;
 using _Game.Battle.Data;
 using Geometry;
+using Geometry.Primary;
 using Leopotam.EcsLite;
 using Unity.Mathematics;
 using UnityEngine;
@@ -49,6 +50,7 @@ namespace _Game.AbilitySystem
             var unit = unitPool.Get(target);
             var targetPos = shareData.Simulator.GetAgentPosition(unit.agentId);
             trajectoryLogic.Startup(startPos, targetPos);
+            shapeLogic.Startup(startPos);
         }
 
         public void Update(float deltaTime)
@@ -56,39 +58,39 @@ namespace _Game.AbilitySystem
             elapsed += deltaTime;
             float2 center = trajectoryLogic.Update(deltaTime);
 
-#if UNITY_EDITOR
             bool hit = false;
-#endif
+            
+            shapeLogic.PreExecute();
+            
             // todo: xử dụng grid để giảm lượng call.
             foreach (var entity in filter)
             {
                 ref var unit = ref unitPool.Get(entity);
-                ShapeInstance.TryGet(unit.shapeId, out var shape);
-                shapeLogic.Execute(center, shape, deltaTime, out var hit2D);
-                if (hit2D.hit)
+                ShapeInstance.TryGet(unit.shapeId, out var target);
+                float2 targetPos = shareData.Simulator.GetAgentPosition(unit.agentId);
+                shapeLogic.Execute(center, target, targetPos, deltaTime, out hit);
+                if (hit)
                 {
-#if UNITY_EDITOR
-                    hit = true;
-#endif
                     deadPool.Add(entity);
                 }
             }
+            
+            shapeLogic.AfterExecute(center);
 
 #if UNITY_EDITOR
             Color color = hit ? Color.red : Color.green;
-            int scale = hit ? 2 : 1;
             if (data.shape.type == ShapeType.Circle)
             {
                 GeometryGizmos.DrawCircle(
                     new Circle(center, data.shape.radius),
-                    color, deltaTime * scale
+                    color, deltaTime
                 );
             }
             else if (data.shape.type == ShapeType.Box)
             {
                 GeometryGizmos.DrawAABB(
                     AABB.FromCenter(center, data.shape.size),
-                    color, deltaTime * scale
+                    color, deltaTime
                 );
             }
 #endif
@@ -96,6 +98,7 @@ namespace _Game.AbilitySystem
 
         public void Shutdown()
         {
+            trajectoryLogic.Shutdown();
             trajectoryLogic.Shutdown();
         }
 

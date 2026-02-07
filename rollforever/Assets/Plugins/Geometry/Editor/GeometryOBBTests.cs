@@ -1,3 +1,4 @@
+using Geometry.Primary;
 using NUnit.Framework;
 using Unity.Mathematics;
 

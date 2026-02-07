@@ -1,3 +1,4 @@
+using Geometry.Primary;
 using Unity.Mathematics;
 
 namespace Geometry

@@ -1,5 +1,6 @@
 using System;
 using _Game.Battle.Data;
+using Geometry;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 using Unity.Mathematics;
@@ -25,15 +26,15 @@ namespace _Game.Battle.Systems
         public void PostRun(IEcsSystems systems)
         {
 #if UNITY_EDITOR
-            shareData.Simulator.EnsureCompleted();
-            
             foreach (var e in ecsFilter)
             {
                 var unit = unitPool.Get(e);
+                    
                 float2 position = shareData.Simulator.GetAgentPosition(unit.agentId);
                 float radius = shareData.Simulator.GetAgentRadius(unit.agentId);
                 float2 velocity = shareData.Simulator.GetAgentVelocity(unit.agentId);
                 float neighborDist = shareData.Simulator.GetAgentNeighborDist(unit.agentId);
+                ShapeInstance.TryGet(unit.shapeId, out var shape);
                 Circle2D(position, radius, unit.color, 12, shareData.TimeDelta);
                 Circle2D(position, neighborDist, new Color(0, 1, 1, 0.05f), 12, shareData.TimeDelta);
                 Debug.DrawRay((Vector2)position, ((Vector2)velocity).normalized * radius);

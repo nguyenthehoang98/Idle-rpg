@@ -1,4 +1,5 @@
 using System;
+using Geometry.Primary;
 using Unity.Mathematics;
 
 namespace Geometry
@@ -49,9 +50,9 @@ namespace Geometry
             float bottom = math.abs(hitPoint.y - box.min.y);
             float top = math.abs(hitPoint.y - box.max.y);
             float min = math.min(math.min(left, right), math.min(bottom, top));
-            if (Math.Abs(min - left) <= 0) return new float2(-1, 0);
-            if (Math.Abs(min - right) <= 0) return new float2(1, 0);
-            if (Math.Abs(min - bottom) <= 0) return new float2(0, -1);
+            if (math.abs(min - left) <= 0) return new float2(-1, 0);
+            if (math.abs(min - right) <= 0) return new float2(1, 0);
+            if (math.abs(min - bottom) <= 0) return new float2(0, -1);
             return new float2(0, 1);
         }
     }

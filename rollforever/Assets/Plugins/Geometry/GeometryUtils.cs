@@ -1,104 +1,99 @@
+using Geometry.Primary;
+using Unity.Mathematics;
+
 namespace Geometry
 {
     public static class GeometryUtils
     {
-        public static bool Overlaps(ShapeInstance source, ShapeInstance target, out RayHit2D hit2D)
+        public static bool Overlaps(
+            ShapeInstance source, float2 sourcePrevPos, float2 sourceCurrPos,
+            ShapeInstance target, float2 targetCurrPos)
         {
-            hit2D = new RayHit2D();
             if (source.Type == ShapeType.Box && target.Type == ShapeType.Box)
             {
-                hit2D.hit = GeometryAABB.Overlaps(
-                    AABB.FromCenter(source.PrefPosition, source.Size),
-                    AABB.FromCenter(target.CurrentPosition, target.Size)
-                );
-                
-                if(!hit2D.hit)
-                {
-                    hit2D.hit = GeometryAABB.Overlaps(
-                        AABB.FromCenter(source.CurrentPosition, source.Size),
-                        AABB.FromCenter(target.CurrentPosition, target.Size)
-                    );
-                }
+                if (GeometryAABB.Overlaps(
+                    AABB.FromCenter(sourcePrevPos, source.Size),
+                    AABB.FromCenter(targetCurrPos, target.Size)
+                )) return true;
+
+                if (GeometryAABB.Overlaps(
+                    AABB.FromCenter(sourceCurrPos, source.Size),
+                    AABB.FromCenter(targetCurrPos, target.Size)
+                )) return true;
             }
             else if (source.Type == ShapeType.Circle && target.Type == ShapeType.Circle)
             {
-                hit2D.hit = GeometryCircle.Overlaps(
-                    new Circle(source.PrefPosition, source.Radius),
-                    new Circle(target.CurrentPosition, target.Radius)
-                );
+                if (GeometryCircle.Overlaps(
+                    new Circle(sourcePrevPos, source.Radius),
+                    new Circle(targetCurrPos, target.Radius)
+                )) return true;
 
-                if (!hit2D.hit)
-                {
-                    hit2D.hit = GeometryCircle.Overlaps(
-                        new Circle(source.CurrentPosition, source.Radius),
-                        new Circle(target.CurrentPosition, target.Radius)
-                    );
-                }
+                if (GeometryCircle.Overlaps(
+                    new Circle(sourceCurrPos, source.Radius),
+                    new Circle(targetCurrPos, target.Radius)
+                )) return true;
             }
             else if (source.Type == ShapeType.Box && target.Type == ShapeType.Circle)
             {
-                hit2D.hit = GeometryAABB.Overlaps(
-                    AABB.FromCenter(source.PrefPosition, source.Size),
-                    new Circle(target.CurrentPosition, target.Radius)
-                );
+                if (GeometryAABB.Overlaps(
+                    AABB.FromCenter(sourcePrevPos, source.Size),
+                    new Circle(targetCurrPos, target.Radius)
+                )) return true;
 
-                if (!hit2D.hit)
-                {
-                    hit2D.hit = GeometryAABB.Overlaps(
-                        AABB.FromCenter(source.CurrentPosition, source.Size),
-                        new Circle(target.CurrentPosition, target.Radius)
-                    );
-                }
+                if (GeometryAABB.Overlaps(
+                    AABB.FromCenter(sourceCurrPos, source.Size),
+                    new Circle(targetCurrPos, target.Radius)
+                )) return true;
             }
             else if (source.Type == ShapeType.Circle && target.Type == ShapeType.Box)
             {
-                hit2D.hit = GeometryCircle.Overlaps(
-                    new Circle(source.PrefPosition, source.Radius),
-                    AABB.FromCenter(target.CurrentPosition, target.Size)
-                );
+                if (GeometryCircle.Overlaps(
+                    new Circle(sourcePrevPos, source.Radius),
+                    AABB.FromCenter(targetCurrPos, target.Size)
+                )) return true;
 
-                if (!hit2D.hit)
-                {
-                    hit2D.hit = GeometryCircle.Overlaps(
-                        new Circle(source.CurrentPosition, source.Radius),
-                        AABB.FromCenter(target.CurrentPosition, target.Size)
-                    );
-                }
+                if (GeometryCircle.Overlaps(
+                    new Circle(sourceCurrPos, source.Radius),
+                    AABB.FromCenter(targetCurrPos, target.Size)
+                )) return true;
             }
 
             return false;
         }
 
-        public static void Sweep(ShapeInstance source, ShapeInstance target, out RayHit2D hit2D)
+        public static void Sweep(
+            ShapeInstance source, float2 sourcePrevPos, float2 sourceCurrPos,
+            ShapeInstance target, float2 targetCurrPos, 
+            out RayHit2D hit2D)
         {
             hit2D = new RayHit2D();
 
             if (source.Type == ShapeType.Box && target.Type == ShapeType.Box)
             {
                 GeometrySweep.SweepAABBAABB(
-                    source.PrefPosition, source.CurrentPosition, source.Size * 0.5f,
-                    AABB.FromCenter(target.CurrentPosition, target.Size), out hit2D
+                    sourcePrevPos, sourceCurrPos, source.Size * 0.5f,
+                    AABB.FromCenter(targetCurrPos, target.Size), out hit2D
                 );
             }
             else if (source.Type == ShapeType.Circle && target.Type == ShapeType.Circle)
             {
                 GeometrySweep.SweepCircleCircle(
-                    source.PrefPosition, source.CurrentPosition, source.Radius,
-                    new Circle(target.CurrentPosition, target.Radius), out hit2D
+                    sourcePrevPos, sourceCurrPos, source.Radius,
+                    new Circle(targetCurrPos, target.Radius), out hit2D
                 );
             }
             else if (source.Type == ShapeType.Box && target.Type == ShapeType.Circle)
             {
                 GeometrySweep.SweepAABBCircle(
-                    source.PrefPosition, source.CurrentPosition, source.Size * 0.5f,
-                    new Circle(target.CurrentPosition, target.Radius), out hit2D 
+                    sourcePrevPos, sourceCurrPos, source.Size * 0.5f,
+                    new Circle(targetCurrPos, target.Radius), out hit2D 
                 );
             }
             else if (source.Type == ShapeType.Circle && target.Type == ShapeType.Box)
             {
                 GeometrySweep.SweepCircleAABB(
-                    source.PrefPosition, source.CurrentPosition, source.Radius,
-                    AABB.FromCenter(target.CurrentPosition, target.Size), out hit2D
+                    sourcePrevPos, sourceCurrPos, source.Radius,
+                    AABB.FromCenter(targetCurrPos, target.Size), out hit2D
                 );
             }
         }

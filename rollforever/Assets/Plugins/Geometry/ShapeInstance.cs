@@ -3,6 +3,9 @@ using Unity.Mathematics;
 
 namespace Geometry
 {
+    /// <summary>
+    /// Chỉ nên lưu thông số shape, ko nên lưu runtime data -> tránh bị sửa sai chỗ
+    /// </summary>
     public sealed class ShapeInstance
     {
         static Dictionary<int, ShapeInstance> dict = new Dictionary<int, ShapeInstance>();
@@ -63,9 +66,5 @@ namespace Geometry
         public ShapeType Type { get; }
         public float Radius { get; }
         public float2 Size { get; }
-        public float2 AxisX { get; } // Áp dụng cho OBB
-        public float2 AxisY { get; } // Áp dụng cho OBB
-        public float2 PrefPosition { get; set; }
-        public float2 CurrentPosition { get; set; }
     }
 }
