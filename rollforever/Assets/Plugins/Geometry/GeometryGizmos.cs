@@ -70,19 +70,6 @@ namespace Geometry
             }
         }
 
-        // ===================== HIT =====================
-        public static void DrawHit(RayHit2D hit, Color color, float dt, float normalLength = 0.5f)
-        {
-            if (!hit.hit) return;
-
-            const float s = 0.5f;
-
-            float3 p = ToV3(hit.point);
-            Debug.DrawLine(p + new float3(-s, -s, 0), p + new float3(s, s, 0), color, dt);
-            Debug.DrawLine(p + new float3(-s, s, 0), p + new float3(s, -s, 0), color, dt);
-            Debug.DrawLine(p, ToV3(hit.point + hit.normal * normalLength), color, dt);
-        }
-
         // ===================== UTILS =====================
         private static float3 ToV3(float2 v)
         {

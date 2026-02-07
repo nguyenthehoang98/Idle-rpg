@@ -17,12 +17,4 @@ namespace Geometry
             this.dir = lenSq > 1e-6f ? dir * math.rsqrt(lenSq) : float2.zero;
         }
     }
-
-    public struct RayHit2D
-    {
-        public bool hit;
-        public float length; // length along ray
-        public float2 point; // hit position
-        public float2 normal; // surface normal
-    }
 }

@@ -17,10 +17,10 @@ namespace _Game.AbilitySystem
             switch (data.type)
             {
                 case ShapeType.Box:
-                    shapeInstance = ShapeInstance.Insert(ShapeType.Box, data.size);
+                    shapeInstance = ShapeInstance.Create(ShapeType.Box, data.size);
                     break;
                 case ShapeType.Circle:
-                    shapeInstance = ShapeInstance.Insert(ShapeType.Circle, data.radius);
+                    shapeInstance = ShapeInstance.Create(ShapeType.Circle, data.radius);
                     break;
                 default:
 #if UNITY_EDITOR
@@ -46,56 +46,16 @@ namespace _Game.AbilitySystem
         {
             float2 prev = prevPos;
             float2 cur = center;
-            RayHit2D hit2D = default;
             
-            bool overlaps = GeometryUtils.Overlaps(
+            hit = GeometryUtils.Overlaps(
                 shapeInstance, prev, cur,
                 other, otherPos);
-            if (!overlaps)
+            if (!hit)
             {
-                GeometryUtils.Sweep(
+                hit = GeometryUtils.Sweep(
                     shapeInstance, prev, cur,
-                    other, otherPos,
-                    out hit2D);
-                hit = hit2D.hit;
+                    other, otherPos);
             }
-            else
-            {
-                hit = true;
-            }
-
-#if UNITY_EDITOR
-            if (hit)
-            {
-                if (overlaps)
-                {
-                    GeometryGizmos.DrawAABB(
-                        AABB.FromCenter(hit2D.point, new float2(0.5f, 0.5f)),
-                        new Color(1, 0, 0, 1), deltaTime
-                    );
-                    Box2dSelected(hit2D.point, new float2(0.5f, 0.5f),
-                        new Color(1, 0, 0, 1), deltaTime
-                    );
-                }
-                Debug.DrawLine((Vector2) prev, (Vector2) cur,
-                    new Color(1, 0, 0, 1), deltaTime
-                );
-            }
-            else
-            {
-                GeometryGizmos.DrawCircle(
-                    new Circle(otherPos, other.Radius), Color.cyan, deltaTime * 2
-                );
-                GeometryGizmos.DrawAABB(
-                    AABB.FromCenter(prev, new float2(0.35f, 0.35f)),
-                    new Color(0.5f, 0, 1f, 0.5f), deltaTime * 2
-                );
-                Debug.DrawLine((Vector2) prev, (Vector2) cur,
-                    new Color(0.5f, 0, 1f, 0.5f), deltaTime * 2
-                );
-            }
-            
-#endif
         }
 
         public void AfterExecute(float2 center)

@@ -20,7 +20,7 @@ MonoBehaviour:
     maxCollision: 0
   shape:
     type: 0
-    radius: 0.5
+    radius: 2
     size:
       x: 0
       y: 0

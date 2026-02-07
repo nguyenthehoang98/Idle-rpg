@@ -6,29 +6,15 @@ namespace Geometry
 {
     public static class GeometryRaycast
     {
-        public static void Raycast(Ray ray, float length, Circle c, out RayHit2D hit)
+        /*public static bool Raycast(Ray ray, float length, Circle c)
         {
-            bool result = GeometryMath.RayCircle(
+            return GeometryMath.RayCircle(
                 ray.origin, ray.dir, length,
-                c.center, c.radius, out float dist, out float2 point
+                c.center, c.radius
             );
+        }*/
 
-            if (result)
-            {
-                hit = new RayHit2D
-                {
-                    hit = true,
-                    length = dist,
-                    point = point
-                };
-            }
-            else
-            {
-                hit = new RayHit2D();
-            }
-        }
-
-        public static void Raycast(Ray ray, float length, AABB box, out RayHit2D hit)
+        /*public static void Raycast(Ray ray, float length, AABB box, out RayHit2D hit)
         {
             hit = default;
 
@@ -45,7 +31,7 @@ namespace Geometry
             hit.length = tMin;
             hit.point = ray.origin + ray.dir * tMin;
             hit.normal = GeometryAABB.ComputeAABBNormal(hit.point, box);
-        }
+        }*/
 
         private static bool Slab(float ro, float rd, float min, float max, ref float tMin, ref float tMax)
         {

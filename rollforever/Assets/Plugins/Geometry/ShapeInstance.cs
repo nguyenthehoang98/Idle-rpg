@@ -13,6 +13,16 @@ namespace Geometry
         
         public static ShapeInstance Empty => new ShapeInstance();
 
+        public static ShapeInstance Create(ShapeType shape, float radius)
+        {
+            return new ShapeInstance(globalId, shape, radius);
+        }
+
+        public static ShapeInstance Create(ShapeType shape, float2 size)
+        {
+            return new ShapeInstance(globalId, shape, size);
+        }
+
         public static ShapeInstance Insert(ShapeType shape, float radius)
         {
             globalId++;

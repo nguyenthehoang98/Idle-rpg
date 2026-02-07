@@ -1,3 +1,4 @@
+using Geometry.Math;
 using Geometry.Primary;
 using Unity.Mathematics;
 
@@ -61,41 +62,40 @@ namespace Geometry
             return false;
         }
 
-        public static void Sweep(
+        public static bool Sweep(
             ShapeInstance source, float2 sourcePrevPos, float2 sourceCurrPos,
-            ShapeInstance target, float2 targetCurrPos, 
-            out RayHit2D hit2D)
+            ShapeInstance target, float2 targetCurrPos)
         {
-            hit2D = new RayHit2D();
-
             if (source.Type == ShapeType.Box && target.Type == ShapeType.Box)
             {
-                GeometrySweep.SweepAABBAABB(
+                /*GeometrySweep.SweepAABBAABB(
                     sourcePrevPos, sourceCurrPos, source.Size * 0.5f,
                     AABB.FromCenter(targetCurrPos, target.Size), out hit2D
-                );
+                );*/
             }
             else if (source.Type == ShapeType.Circle && target.Type == ShapeType.Circle)
             {
-                GeometrySweep.SweepCircleCircle(
+                return GeometryMath.SweepCircleCircle(
                     sourcePrevPos, sourceCurrPos, source.Radius,
-                    new Circle(targetCurrPos, target.Radius), out hit2D
+                    targetCurrPos, target.Radius
                 );
             }
             else if (source.Type == ShapeType.Box && target.Type == ShapeType.Circle)
             {
-                GeometrySweep.SweepAABBCircle(
+                /*GeometrySweep.SweepAABBCircle(
                     sourcePrevPos, sourceCurrPos, source.Size * 0.5f,
                     new Circle(targetCurrPos, target.Radius), out hit2D 
-                );
+                );*/
             }
             else if (source.Type == ShapeType.Circle && target.Type == ShapeType.Box)
             {
-                GeometrySweep.SweepCircleAABB(
+                /*GeometrySweep.SweepCircleAABB(
                     sourcePrevPos, sourceCurrPos, source.Radius,
                     AABB.FromCenter(targetCurrPos, target.Size), out hit2D
-                );
+                );*/
             }
+
+            return false;
         }
     }
 

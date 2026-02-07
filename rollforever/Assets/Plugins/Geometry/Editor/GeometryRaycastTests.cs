@@ -1,4 +1,4 @@
-using Geometry.Primary;
+/*using Geometry.Primary;
 using NUnit.Framework;
 using Unity.Mathematics;
 
@@ -30,4 +30,4 @@ namespace Geometry
             Assert.IsFalse(hit.hit);
         }
     }
-}
+}*/

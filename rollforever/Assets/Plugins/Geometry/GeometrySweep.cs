@@ -6,26 +6,19 @@ namespace Geometry
 {
     public static class GeometrySweep
     {
-        public static void SweepCircleCircle(float2 prevCenter, float2 currCenter, float radiusA, Circle b, out RayHit2D hit)
+        /*public static bool SweepCircleCircle(float2 prevCenter, float2 currCenter, float radiusA, Circle b)
         {
-            hit = default;
-
             float2 delta = currCenter - prevCenter;
             float dist = math.length(delta);
             if (dist <= 0f)
-                return;
+                return false;
 
             Ray ray = new Ray(prevCenter, delta / dist);
-
-            Circle expanded = new Circle(
-                b.center,
-                radiusA + b.radius
-            );
-
-            GeometryRaycast.Raycast(ray, dist, expanded, out hit);
-        }
+            Circle expanded = new Circle(b.center, radiusA + b.radius);
+            return GeometryRaycast.Raycast(ray, dist, expanded);
+        }*/
         
-        public static void SweepCircleAABB(float2 prevCenter, float2 currCenter, float radius, AABB box, out RayHit2D hit)
+        /*public static void SweepCircleAABB(float2 prevCenter, float2 currCenter, float radius, AABB box, out RayHit2D hit)
         {
             hit = default;
             float2 delta = currCenter - prevCenter;
@@ -43,7 +36,7 @@ namespace Geometry
 
             /*GeometryGizmos.DrawRay(ray, Color.white, Time.deltaTime, dist);
             GeometryGizmos.DrawAABB(expandX, Color.white, Time.deltaTime);
-            GeometryGizmos.DrawAABB(expandY, Color.blue, Time.deltaTime);*/
+            GeometryGizmos.DrawAABB(expandY, Color.blue, Time.deltaTime);#1#
             
             // Raycast với 2 box này trước
             RayHit2D hitX, hitY;
@@ -129,7 +122,7 @@ namespace Geometry
 
             /*GeometryGizmos.DrawRay(ray, Color.white, Time.deltaTime, dist);
             GeometryGizmos.DrawAABB(boxX, Color.white, Time.deltaTime);
-            GeometryGizmos.DrawAABB(boxY, Color.blue, Time.deltaTime);*/
+            GeometryGizmos.DrawAABB(boxY, Color.blue, Time.deltaTime);#1#
             
             // 2. Kiểm tra va chạm với các vùng cạnh thẳng
             RayHit2D hitX, hitY;
@@ -202,7 +195,7 @@ namespace Geometry
 
             /*GeometryGizmos.DrawRay(ray, Color.white, Time.deltaTime, dist);
             GeometryGizmos.DrawAABB(expandX, Color.white, Time.deltaTime);
-            GeometryGizmos.DrawAABB(expandY, Color.blue, Time.deltaTime);*/
+            GeometryGizmos.DrawAABB(expandY, Color.blue, Time.deltaTime);#1#
             
             RayHit2D hX, hY;
             GeometryRaycast.Raycast(ray, dist, expandX, out hX);
@@ -306,6 +299,6 @@ namespace Geometry
             tMin = math.max(tMin, t1);
             tMax = math.min(tMax, t2);
             return tMin <= tMax;
-        }
+        }*/
     }
 }

@@ -1,5 +1,4 @@
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace Geometry.Math
 {
@@ -41,22 +40,16 @@ namespace Geometry.Math
     internal static partial class GeometryMath
     {
         internal static bool RayCircle(float2 rayPoint, float2 rayDir, float rayLength,
-            float2 circleCenter, float circleRadius, out float dist, out float2 point)
+            float2 circleCenter, float circleRadius)
         {
-            dist = 0;
-            point = float2.zero;
-
             float2 o = rayPoint;
             float2 d = rayDir;
             float2 p = circleCenter;
             float r = circleRadius;
             float l = rayLength;
             
-            float len = math.length(rayDir);
-            if (len <= math.EPSILON)
+            if (math.lengthsq(rayDir) <= math.EPSILON)
             {
-                /*Debug.Log($"[1]: rayPoint={(Vector2)o}, rayDir={(Vector2)d}, rayLength={rayLength}," +
-                          $"circleCenter={(Vector2)p}, circleRadius={r}");*/
                 return false;
             }
 
@@ -66,33 +59,44 @@ namespace Geometry.Math
 
             if (c > 0f && b > 0f)
             {
-                /*Debug.Log($"[2]: rayPoint={(Vector2)o}, rayDir={(Vector2)d}, rayLength={rayLength}," +
-                          $"circleCenter={(Vector2)p}, circleRadius={r}," +
-                          $"b={b}, c={c}");*/
                 return false;
             }
 
             float discr = b * b - c;
             if (discr < 0f)
             {
-                /*Debug.Log($"[3]: rayPoint={(Vector2)o}, rayDir={(Vector2)d}, rayLength={rayLength}," +
-                          $"circleCenter={(Vector2)p}, circleRadius={r}," +
-                          $"b={b}, c={c}");*/
                 return false;
             }
             
-            float hitT = -b - math.sqrt(discr);
-            if (hitT < 0f)
-                hitT = 0f;
+            float proj = -b; 
+            float d2 = c - proj * proj;
 
-            if (hitT > l)
-            {
+            if (d2 > r * r)
                 return false;
-            }
 
-            dist = hitT;
-            point = rayPoint + d * dist;
             return true;
+        }
+    }
+
+
+    // sweep calculator
+    // Xử lý kiểm tra va chạm 1 vật di chuyển với 1 vật đứng yên
+    internal static partial class GeometryMath
+    {
+        internal static bool SweepCircleCircle(
+            float2 aPrevPos, float2 aCurrPos, float aRadius,
+            float2 bCurrPos, float bRadius
+        )
+        {
+            float2 delta = aCurrPos - aPrevPos;
+            float dist = math.length(delta);
+            if (dist <= 0f)
+                return false;
+
+            return RayCircle(
+                aPrevPos, delta / dist, dist,
+                bCurrPos, aRadius + bRadius
+            );
         }
     }
 }

@@ -1,4 +1,4 @@
-using Geometry;
+/*using Geometry;
 using Geometry.Primary;
 using Unity.Mathematics;
 using UnityEngine;
@@ -302,7 +302,7 @@ public class GeometryTest : MonoBehaviour
                         new Ray(cPos, cDir), cLength,
                         new OBB(bPos, b.size), (bPos, b.size),
                         out hit2D
-                    ); */
+                    ); #1#
                 }
 
                 if (hit2D.hit)
@@ -321,4 +321,4 @@ public class GeometryTest : MonoBehaviour
             }
         }
     }
-}
+}*/

@@ -77,7 +77,7 @@ namespace _Game.AbilitySystem
             
             shapeLogic.AfterExecute(center);
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR && DEVELOP_MODE
             Color color = hit ? Color.red : Color.green;
             if (data.shape.type == ShapeType.Circle)
             {

@@ -48,7 +48,7 @@ namespace _Game.Battle
             
             systems = ecsSystems;
             systems
-#if UNITY_EDITOR
+#if UNITY_EDITOR && DEVELOP_MODE
                 .Add(new EcsSystemsDebugSystem())
                 .Add(new EcsWorldDebugSystem())
                 .Add(new DrawSystem())

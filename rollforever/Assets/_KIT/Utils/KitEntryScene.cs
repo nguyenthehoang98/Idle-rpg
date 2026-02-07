@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace _KIT.Utils
 {
@@ -17,6 +18,21 @@ namespace _KIT.Utils
             DontDestroyOnLoad(gameObject);
             Instance = this;
             OnAwake();
+        }
+
+        private void OnValidate()
+        {
+#if UNITY_EDITOR
+            string develop_mode = "DEVELOP_MODE";
+            if (!enableDebug && DefineSymbolUtils.Has(develop_mode))
+            {
+                DefineSymbolUtils.Remove(develop_mode);
+            }
+            else if (enableDebug && !DefineSymbolUtils.Has(develop_mode))
+            {
+                DefineSymbolUtils.Add(develop_mode);
+            }
+#endif
         }
 
         private void Start()
