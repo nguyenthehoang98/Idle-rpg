@@ -21,6 +21,9 @@ namespace _Game.AbilitySystem
                     modifier = new NoneSubStateModifier();
                     break;
             }
+            
+            Ở đây sẽ xử lý theo entity -> đối với knockback thì sẽ đẩy lại vi chuyển với mỗi frame update
+                mặc kệ viêc agent đi chuyển . force set trực tiếp position.
         }
         
         public void Startup()
