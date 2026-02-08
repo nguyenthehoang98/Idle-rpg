@@ -2,14 +2,13 @@ using System;
 using Geometry;
 using Geometry.Primary;
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace _Game.AbilitySystem
 {
     public sealed class ShapeLogic: IDisposable
     {
         private readonly Shape source;
-        private float2 prevPos;
+        public float2 prevPos { get; private set; }
 
         public ShapeLogic(Shape source)
         {

@@ -85,6 +85,7 @@ namespace _Game.AbilitySystem
             
 #if UNITY_EDITOR && DEVELOP_MODE
             Color color = hit ? Color.red : Color.green;
+            Debug.DrawLine((Vector2) shapeLogic.prevPos, (Vector2) center, color, deltaTime);
             if (data.shape.type == ShapeType.Circle)
             {
                 GeometryGizmos.DrawCircle(new Circle(center, data.shape.radius), color, deltaTime);

@@ -13,22 +13,22 @@ MonoBehaviour:
   m_Name: AbilityData
   m_EditorClassIdentifier: 
   arg:
-    lifeTime: 1
+    lifeTime: 0.05
     bulletPrefab: {fileID: 0}
     muzzleOffsetPosition: {x: 0, y: 0}
     animationName: 0
     maxCollision: 0
   shape:
     type: 0
-    radius: 2
     size:
       x: 0
       y: 0
+    radius: 5
   trajectory:
     type: 0
     path: {fileID: 0}
     velocity:
       acceleration: 0
-      speed: 50
+      speed: 1000
   modifier:
     type: 0
