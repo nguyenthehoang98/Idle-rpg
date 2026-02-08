@@ -22,10 +22,7 @@ namespace _Game.Battle
             {
                 for (int y = 0; y < height; y++)
                 {
-                    matrix[x,y] = new Cell
-                    {
-                        entities = new NativeList<int>(EXPECTED_MAX, Allocator.Persistent)
-                    };
+                    matrix[x, y] = new Cell();
                 }
             }
         }
@@ -37,7 +34,8 @@ namespace _Game.Battle
                 for (var j = 0; j < height; j++)
                 {
                     matrix[i, j].trigger = false;
-                    matrix[i, j].entities.Clear();
+                    if(matrix[i, j].entities.IsCreated)
+                        matrix[i, j].entities.Clear();
                 }
             }
         }
@@ -50,6 +48,8 @@ namespace _Game.Battle
             if (x >= 0 && y >= 0 && x < width && y < height)
             {
                 matrix[x, y].trigger = true;
+                if(!matrix[x,y].entities.IsCreated)
+                    matrix[x,y].entities= new NativeList<int>(EXPECTED_MAX, Allocator.Persistent);
                 matrix[x, y].entities.Add(unit);
             }
         }
@@ -62,6 +62,8 @@ namespace _Game.Battle
             if (x >= 0 && y >= 0 && x < width && y < height)
             {
                 matrix[x, y].occupied = true;
+                if(!matrix[x,y].entities.IsCreated)
+                    matrix[x,y].entities= new NativeList<int>(EXPECTED_MAX, Allocator.Persistent);
                 matrix[x, y].entities.Add(unit);
             }
         }
@@ -86,6 +88,8 @@ namespace _Game.Battle
                     if (math.distancesq(cellWorldPos, position) <= rsq)
                     {
                         matrix[x, y].trigger = true;
+                        if(!matrix[x,y].entities.IsCreated)
+                            matrix[x,y].entities= new NativeList<int>(EXPECTED_MAX, Allocator.Persistent);
                         matrix[x, y].entities.Add(unit);
                     }
                 }
@@ -114,6 +118,8 @@ namespace _Game.Battle
                         math.abs(cellWorldPos.y - position.y) <= halfSize.y)
                     {
                         matrix[x, y].trigger = true;
+                        if(!matrix[x,y].entities.IsCreated)
+                            matrix[x,y].entities= new NativeList<int>(EXPECTED_MAX, Allocator.Persistent);
                         matrix[x, y].entities.Add(unit);
                     }
                 }
