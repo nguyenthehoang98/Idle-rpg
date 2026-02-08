@@ -128,62 +128,92 @@ namespace _Game.Battle
 
         public void ScanArea(float2 position, float radius, ICellVisitor visitor)
         {
-            int2 centerCell = WorldToCell(position);
-            int rangeX = (int)(radius / cellSize);
-            int rangeY = (int)(radius / cellSize);
+            int2 center = WorldToCell(position);
+            int maxRange = (int)(radius / cellSize);
             float rsq = radius * radius;
-            for (int dx = -rangeX; dx <= rangeX; dx++)
-            {
-                for (int dy = -rangeY; dy <= rangeY; dy++)
-                {
-                    int x = centerCell.x + dx;
-                    int y = centerCell.y + dy;
 
-                    if (x < 0 || y < 0 || x >= width || y >= height)
-                        continue;
-                    
-                    float2 cellWorldPos = CellToWorldCenter(x, y);
-                    if (math.distancesq(cellWorldPos, position) <= rsq)
-                    {
-                        NativeList<int> list = matrix[x, y].entities;
-                        if (!list.IsCreated) continue;
-                        for (int i = 0; i < list.Length; i++)
-                        {
-                            visitor.Visit(list[i]);
-                        }
-                    }
+            for (int r = 0; r <= maxRange; r++)
+            {
+                for (int dx = -r; dx <= r; dx++)
+                {
+                    int dy = r;
+                    VisitCell(center.x + dx, center.y + dy);
+                    if (r != 0)
+                        VisitCell(center.x + dx, center.y - dy);
                 }
+                
+                for (int dy = -r + 1; dy <= r - 1; dy++)
+                {
+                    int dx = r;
+
+                    VisitCell(center.x + dx, center.y + dy);
+                    VisitCell(center.x - dx, center.y + dy);
+                }
+            }
+
+            void VisitCell(int x, int y)
+            {
+                if (x < 0 || y < 0 || x >= width || y >= height)
+                    return;
+
+                float2 cellPos = CellToWorldCenter(x, y);
+                if (math.distancesq(cellPos, position) > rsq)
+                    return;
+
+                var list = matrix[x, y].entities;
+                if (!list.IsCreated) return;
+
+                for (int i = 0; i < list.Length; i++)
+                    visitor.Visit(list[i]);
             }
         }
 
         public void ScanArea(float2 position, float2 size, ICellVisitor visitor)
         {
-            int2 centerCell = WorldToCell(position);
+            int2 center = WorldToCell(position);
             float2 halfSize = size * 0.5f;
-            int rangeX = (int)(size.x / cellSize);
-            int rangeY = (int)(size.y / cellSize);
-            
-            for (int dx = -rangeX; dx <= rangeX; dx++)
-            {
-                for (int dy = -rangeY; dy <= rangeY; dy++)
-                {
-                    int x = centerCell.x + dx;
-                    int y = centerCell.y + dy;
 
-                    if (x < 0 || y < 0 || x >= width || y >= height)
-                        continue;
-                    
-                    float2 cellWorldPos = CellToWorldCenter(x, y);
-                    if (math.abs(cellWorldPos.x - position.x) <= halfSize.x &&
-                        math.abs(cellWorldPos.y - position.y) <= halfSize.y)
-                    {
-                        NativeList<int> list = matrix[x, y].entities;
-                        if (!list.IsCreated) continue;
-                        for (int i = 0; i < list.Length; i++)
-                        {
-                            visitor.Visit(list.ElementAt(i));
-                        }
-                    }
+            int rangeX = (int)math.ceil(halfSize.x / cellSize);
+            int rangeY = (int)math.ceil(halfSize.y / cellSize);
+
+            int maxR = math.max(rangeX, rangeY);
+
+            for (int r = 0; r <= maxR; r++)
+            {
+                // top & bottom edges
+                for (int dx = -r; dx <= r; dx++)
+                {
+                    Visit(center.x + dx, center.y + r);
+                    if (r != 0)
+                        Visit(center.x + dx, center.y - r);
+                }
+
+                // left & right edges
+                for (int dy = -r + 1; dy <= r - 1; dy++)
+                {
+                    Visit(center.x + r, center.y + dy);
+                    Visit(center.x - r, center.y + dy);
+                }
+            }
+
+            void Visit(int x, int y)
+            {
+                if (x < 0 || y < 0 || x >= width || y >= height)
+                    return;
+
+                float2 cellPos = CellToWorldCenter(x, y);
+
+                // AABB check chính xác
+                if (math.abs(cellPos.x - position.x) > halfSize.x ||
+                    math.abs(cellPos.y - position.y) > halfSize.y)
+                    return;
+
+                var list = matrix[x, y].entities;
+                if (!list.IsCreated) return;
+
+                for (int i = 0; i < list.Length; i++)
+                {
+                    visitor.Visit(list[i]);
                 }
             }
         }

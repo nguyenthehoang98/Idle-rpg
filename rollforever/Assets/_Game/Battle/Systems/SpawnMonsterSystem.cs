@@ -19,6 +19,7 @@ namespace _Game.Battle.Systems
         [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
         
         private EcsWorld world;
+        private EcsPool<HealthData> healthPool;
         private EcsPool<UnitData> unitPool;
         private EcsPool<ShapeData> shapePool;
         private EcsPool<UnitPosTempData> unitPosTempPool;
@@ -36,7 +37,8 @@ namespace _Game.Battle.Systems
             shapePool = world.GetPool<ShapeData>();
             unitPosTempPool = world.GetPool<UnitPosTempData>();
             monsterFlagPool = world.GetPool<MonsterFlag>();
-                
+            healthPool = world.GetPool<HealthData>();
+            
             shareData.Simulator.SetTimeStep(shareData.TimeDelta);
             shareData.Simulator.SetAgentDefaults(1f, 10, 20f, 20f, 1.5f, 5f, float2.zero);
         }
@@ -83,6 +85,7 @@ namespace _Game.Battle.Systems
                     // todo: add component
                     shapePool.Add(entity) = ShapeData.Circle(radius);
                     unitPosTempPool.Add(entity) = new UnitPosTempData();
+                    healthPool.Add(entity) = new HealthData(100);
 
                     // todo: add flag
                     monsterFlagPool.Add(entity);

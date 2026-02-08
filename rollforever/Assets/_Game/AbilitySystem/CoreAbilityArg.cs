@@ -11,5 +11,7 @@ namespace _Game.AbilitySystem
         public Vector2 muzzleOffsetPosition;
         public AnimationName animationName;
         public int maxCollision;
+        public bool shouldResetCollision;
+        public float resetCollisionInterval;
     }
 }

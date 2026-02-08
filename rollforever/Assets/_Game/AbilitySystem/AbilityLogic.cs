@@ -40,14 +40,16 @@ namespace _Game.AbilitySystem
             shapeLogic = new ShapeLogic(data.shape);
             stateModifierLogic = new StateModifierLogic(data.stateModifier);
             trajectoryLogic = new TrajectoryLogic(data.trajectory);
-            lifeTime = data.arg.lifeTime;
+            lifeTime = data.core.lifeTime;
 
             var shapePool = world.GetPool<ShapeData>();
             var deadPool = world.GetPool<DeadFlag>();
+            var healthPool = world.GetPool<HealthData>();
             unitPool = world.GetPool<UnitData>();
             monsterVisitor = new MonsterCellVisitor(
-                shareData.Simulator, shapeLogic,
-                unitPool, shapePool, deadPool);
+                data.core.maxCollision, data.core.shouldResetCollision, data.core.resetCollisionInterval,
+                shareData.Simulator, shapeLogic, 
+                healthPool, unitPool, shapePool, deadPool);
         }
 
         public void Startup(float2 startPos, int target)
@@ -91,10 +93,10 @@ namespace _Game.AbilitySystem
             
             shapeLogic.AfterExecute(center);
             
-            monsterVisitor.AfterVisit();
+            monsterVisitor.AfterVisit(deltaTime);
             
 #if UNITY_EDITOR && DEVELOP_MODE
-            Color color = monsterVisitor.Hit ? Color.red : Color.green;
+            Color color = monsterVisitor.IsHit ? Color.red : Color.green;
          
             Debug.DrawLine((Vector2) shapeLogic.PrevPos, (Vector2) center, color, deltaTime);
             if (shapeLogic.Shape.type == ShapeType.Circle)
@@ -114,6 +116,7 @@ namespace _Game.AbilitySystem
 
         public void Shutdown()
         {
+            Debug.Log("hit: " + (data.core.maxCollision - monsterVisitor.RemainCanCollision));
             shapeLogic.Shutdown();
             stateModifierLogic.Shutdown();
             trajectoryLogic.Shutdown();
@@ -126,7 +129,7 @@ namespace _Game.AbilitySystem
             trajectoryLogic.Dispose();
         }
 
-        public bool IsCompleted => elapsed >= lifeTime;
+        public bool IsCompleted => elapsed >= lifeTime || monsterVisitor.RemainCanCollision <= 0;
 
         public AbilityLogic CreateInstance(int sourceId)
         {

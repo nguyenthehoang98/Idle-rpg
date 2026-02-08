@@ -89,6 +89,30 @@ namespace Geometry
                 prev = next;
             }
         }
+        
+        public static void DrawCircle(Circle c, Color color, float dt, float disc, int segments = 32)
+        {
+            disc = math.clamp(disc, 0f, 1f);
+            if (disc <= 0f)
+                return;
+
+            int segCount = math.max(1, (int)math.ceil(segments * disc));
+            float angleStep = math.PI * 2f * disc / segCount;
+
+            float2 prev = c.center + new float2(c.radius, 0f);
+
+            for (int i = 1; i <= segCount; i++)
+            {
+                float angle = i * angleStep;
+                float2 next = c.center + new float2(
+                                  math.cos(angle),
+                                  math.sin(angle)
+                              ) * c.radius;
+
+                Debug.DrawLine(ToV3(prev), ToV3(next), color, dt);
+                prev = next;
+            }
+        }
 
         // ===================== UTILS =====================
         private static float3 ToV3(float2 v)
