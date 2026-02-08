@@ -73,6 +73,33 @@ namespace _Game.Battle
                 }
             }
         }
+        
+        public void TriggerArea(float2 position, float2 size)
+        {
+            var centerCell = WorldToCell(position);
+            float2 halfSize = size * 0.5f;
+            int rangeX = (int)(size.x / cellSize);
+            int rangeY = (int)(size.y / cellSize);
+
+            for (int dx = -rangeX; dx <= rangeX; dx++)
+            {
+                for (int dy = -rangeY; dy <= rangeY; dy++)
+                {
+                    int x = centerCell.x + dx;
+                    int y = centerCell.y + dy;
+
+                    if (x < 0 || y < 0 || x >= width || y >= height)
+                        continue;
+
+                    float2 cellWorldPos = CellToWorldCenter(x, y);
+                    if (math.abs(cellWorldPos.x - position.x) <= halfSize.x &&
+                        math.abs(cellWorldPos.y - position.y) <= halfSize.y)
+                    {
+                        matrix[x, y].trigger = true;
+                    }
+                }
+            }
+        }
 
         public bool TryFindCellExpandFromCenter(float2 position, float2 pivot, out float2 result)
         {

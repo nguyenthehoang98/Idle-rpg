@@ -13,6 +13,7 @@ namespace _Game.Battle.Systems
         [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
 
         private const float THREASHOLD_VELOCITYSQ = 0.3f;
+        private const float THREASHOLD_TIME = 1f;
 
         private EcsPool<UnitData> unitPool;
         private EcsPool<ShapeData> shapePool;
@@ -46,6 +47,10 @@ namespace _Game.Battle.Systems
                 if (shape.Value.type == ShapeType.Circle)
                 {
                     shareData.Matrix.TriggerArea(position, shape.Value.radius);   
+                }
+                else if (shape.Value.type == ShapeType.Box)
+                {
+                    shareData.Matrix.TriggerArea(position, shape.Value.size);   
                 }
                 else
                 {
@@ -101,6 +106,7 @@ namespace _Game.Battle.Systems
                 var velocity = shareData.Simulator.GetAgentVelocity(unit.agentId);
                 if (math.lengthsq(velocity) < THREASHOLD_VELOCITYSQ)
                 {
+                    // phần này nên có giới hạn về thời gian. ví dụ trong 0.5s -> 1s mà ko thoát đc thì pause
                     var position = shareData.Simulator.GetAgentPosition(unit.agentId);
                     Pause(unit.agentId, position);
                 }

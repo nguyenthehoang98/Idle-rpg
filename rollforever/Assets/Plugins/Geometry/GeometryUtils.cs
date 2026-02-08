@@ -12,50 +12,50 @@ namespace Geometry
         {
             if (source.type == ShapeType.Box && target.type == ShapeType.Box)
             {
-                if (GeometryAABB.Overlaps(
-                    AABB.FromCenter(sourcePrevPos, source.size),
-                    AABB.FromCenter(targetCurrPos, target.size)
+                if (GeometryMath.OverlapBoxBox(
+                    Box.FromCenter(sourcePrevPos, source.size),
+                    Box.FromCenter(targetCurrPos, target.size)
                 )) return true;
 
-                if (GeometryAABB.Overlaps(
-                    AABB.FromCenter(sourceCurrPos, source.size),
-                    AABB.FromCenter(targetCurrPos, target.size)
+                if (GeometryMath.OverlapBoxBox(
+                    Box.FromCenter(sourceCurrPos, source.size),
+                    Box.FromCenter(targetCurrPos, target.size)
                 )) return true;
             }
             else if (source.type == ShapeType.Circle && target.type == ShapeType.Circle)
             {
-                if (GeometryCircle.Overlaps(
+                if (GeometryMath.OverlapsCircleCircle(
                     new Circle(sourcePrevPos, source.radius),
                     new Circle(targetCurrPos, target.radius)
                 )) return true;
 
-                if (GeometryCircle.Overlaps(
+                if (GeometryMath.OverlapsCircleCircle(
                     new Circle(sourceCurrPos, source.radius),
                     new Circle(targetCurrPos, target.radius)
                 )) return true;
             }
             else if (source.type == ShapeType.Box && target.type == ShapeType.Circle)
             {
-                if (GeometryAABB.Overlaps(
-                    AABB.FromCenter(sourcePrevPos, source.size),
+                if (GeometryMath.OverlapBoxCircle(
+                    Box.FromCenter(sourcePrevPos, source.size),
                     new Circle(targetCurrPos, target.radius)
                 )) return true;
 
-                if (GeometryAABB.Overlaps(
-                    AABB.FromCenter(sourceCurrPos, source.size),
+                if (GeometryMath.OverlapBoxCircle(
+                    Box.FromCenter(sourceCurrPos, source.size),
                     new Circle(targetCurrPos, target.radius)
                 )) return true;
             }
             else if (source.type == ShapeType.Circle && target.type == ShapeType.Box)
             {
-                if (GeometryCircle.Overlaps(
+                if (GeometryMath.OverlapCircleBox(
                     new Circle(sourcePrevPos, source.radius),
-                    AABB.FromCenter(targetCurrPos, target.size)
+                    Box.FromCenter(targetCurrPos, target.size)
                 )) return true;
 
-                if (GeometryCircle.Overlaps(
+                if (GeometryMath.OverlapCircleBox(
                     new Circle(sourceCurrPos, source.radius),
-                    AABB.FromCenter(targetCurrPos, target.size)
+                    Box.FromCenter(targetCurrPos, target.size)
                 )) return true;
             }
 
@@ -68,31 +68,35 @@ namespace Geometry
         {
             if (source.type == ShapeType.Box && target.type == ShapeType.Box)
             {
-                /*GeometrySweep.SweepAABBAABB(
-                    sourcePrevPos, sourceCurrPos, source.Size * 0.5f,
-                    AABB.FromCenter(targetCurrPos, target.Size), out hit2D
-                );*/
+                return GeometryMath.SweepBoxBox(
+                    sourcePrevPos,
+                    Box.FromCenter(sourceCurrPos, source.size),
+                    Box.FromCenter(targetCurrPos, target.size)
+                );
             }
             else if (source.type == ShapeType.Circle && target.type == ShapeType.Circle)
             {
                 return GeometryMath.SweepCircleCircle(
-                    sourcePrevPos, sourceCurrPos, source.radius,
-                    targetCurrPos, target.radius
+                    sourcePrevPos,
+                    new Circle(sourceCurrPos, source.radius),
+                    new Circle(targetCurrPos, target.radius)
                 );
             }
             else if (source.type == ShapeType.Box && target.type == ShapeType.Circle)
             {
-                /*GeometrySweep.SweepAABBCircle(
-                    sourcePrevPos, sourceCurrPos, source.Size * 0.5f,
-                    new Circle(targetCurrPos, target.radius), out hit2D 
-                );*/
+                return GeometryMath.SweepBoxCircle(
+                    sourcePrevPos,
+                    Box.FromCenter(sourceCurrPos, source.size),
+                    new Circle(targetCurrPos, target.radius)
+                );
             }
             else if (source.type == ShapeType.Circle && target.type == ShapeType.Box)
             {
-                /*GeometrySweep.SweepCircleAABB(
-                    sourcePrevPos, sourceCurrPos, source.radius,
-                    AABB.FromCenter(targetCurrPos, target.Size), out hit2D
-                );*/
+                return GeometryMath.SweepCircleBox(
+                    sourcePrevPos,
+                    new Circle(sourceCurrPos, source.radius),
+                    Box.FromCenter(targetCurrPos, target.size)
+                );
             }
 
             return false;

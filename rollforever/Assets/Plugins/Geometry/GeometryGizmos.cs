@@ -1,3 +1,4 @@
+using Geometry.Math;
 using Geometry.Primary;
 using Unity.Mathematics;
 using UnityEngine;
@@ -7,6 +8,18 @@ namespace Geometry
 {
     public static class GeometryGizmos
     {
+        public static void DrawShape(Shape shape, float2 shapePoint, Color color, float dt)
+        {
+            if (shape.type == ShapeType.Box)
+            {
+                DrawBox(Box.FromCenter(shapePoint, shape.size), color, dt);
+            }
+            else if (shape.type == ShapeType.Circle)
+            {
+                DrawCircle(new Circle(shapePoint, shape.radius), color, dt);
+            }
+        }
+        
         // ===================== RAY =====================
         public static void DrawRay(Ray ray, Color color, float dt, float length = 10)
         {
@@ -25,9 +38,9 @@ namespace Geometry
         }
         
         // ===================== OBB =====================
-        public static void DrawOBB(in OBB obb, Color color, float dt)
+        public static void DrawObb(in OBB obb, Color color, float dt)
         {
-            GeometryOBB.GetCorners(obb, out var c0, out var c1, out var c2, out var c3);
+            GeometryMath.GetObbCorners(obb, out var c0, out var c1, out var c2, out var c3);
 
             Debug.DrawLine((Vector2)c0, (Vector2)c1, color, dt);
             Debug.DrawLine((Vector2)c1, (Vector2)c2, color, dt);
@@ -36,7 +49,7 @@ namespace Geometry
         }
 
         // ===================== AABB =====================
-        public static void DrawAABB(AABB box, Color color, float dt)
+        public static void DrawBox(Box box, Color color, float dt)
         {
             float3 min = ToV3(box.min);
             float3 max = ToV3(box.max);

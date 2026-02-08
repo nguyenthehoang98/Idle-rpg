@@ -7,14 +7,16 @@ namespace _Game.Battle.Data
     {
         public Shape Value { get; }
 
-        public ShapeData(ShapeType type, float radius)
+        private ShapeData(Shape shape) => Value = shape;
+
+        public static ShapeData Circle(float radius)
         {
-            Value = new Shape {type = type, radius = radius};
+            return new ShapeData(new Shape {type = ShapeType.Circle, radius = radius});
         }
 
-        public ShapeData(ShapeType type, float2 size)
+        public static ShapeData Box(float2 size)
         {
-            Value = new Shape {type = type, size = size};
+            return new ShapeData(new Shape {type = ShapeType.Box, size = size});
         }
     }
 }

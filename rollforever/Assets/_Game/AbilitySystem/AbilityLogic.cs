@@ -85,6 +85,7 @@ namespace _Game.AbilitySystem
             
 #if UNITY_EDITOR && DEVELOP_MODE
             Color color = hit ? Color.red : Color.green;
+         
             Debug.DrawLine((Vector2) shapeLogic.prevPos, (Vector2) center, color, deltaTime);
             if (data.shape.type == ShapeType.Circle)
             {
@@ -92,7 +93,7 @@ namespace _Game.AbilitySystem
             }
             else if (data.shape.type == ShapeType.Box)
             {
-                GeometryGizmos.DrawAABB(AABB.FromCenter(center, data.shape.size), color, deltaTime);
+                GeometryGizmos.DrawBox(Box.FromCenter(center, data.shape.size), color, deltaTime);
             }
 #endif
         }

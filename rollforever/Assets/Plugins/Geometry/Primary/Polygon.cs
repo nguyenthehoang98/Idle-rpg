@@ -1,7 +1,8 @@
 using Unity.Mathematics;
 
-namespace Geometry
+namespace Geometry.Primary
 {
+    // chưa tét
     public readonly struct Polygon
     {
         public readonly int count;

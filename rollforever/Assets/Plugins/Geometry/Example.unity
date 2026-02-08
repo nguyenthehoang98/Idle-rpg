@@ -163,38 +163,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f213badbdb05edb4fa5af3981c63ece5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableShape: 0
+  enableShape: 1
   a:
-    type: 0
-    radius: 0.25
+    type: 1
     size:
       x: 0.5
       y: 0.5
-  aPrefPos:
-    x: 0.07
-    y: 1.76
-  aPos:
+    radius: 0.64
+  aPrevPos:
     x: 0
     y: 0
+  aPos:
+    x: 1.35
+    y: 3.82
   aAngle: 0
   b:
     type: 0
-    radius: 0.5
     size:
       x: 1
       y: 1
+    radius: 0.5
   bPos:
     x: 0.34
-    y: 3.23
+    y: 1.83
   bAngle: 0
-  enableRay: 1
-  cPos:
-    x: 0
-    y: 0
-  cDir:
-    x: -0.68
-    y: -0.73
-  cLength: 100
 --- !u!1 &2003699158
 GameObject:
   m_ObjectHideFlags: 0
