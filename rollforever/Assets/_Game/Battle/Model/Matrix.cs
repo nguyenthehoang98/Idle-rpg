@@ -146,6 +146,7 @@ namespace _Game.Battle
                     if (math.distancesq(cellWorldPos, position) <= rsq)
                     {
                         NativeList<int> list = matrix[x, y].entities;
+                        if (!list.IsCreated) continue;
                         for (int i = 0; i < list.Length; i++)
                         {
                             visitor.Visit(list[i]);
@@ -177,6 +178,7 @@ namespace _Game.Battle
                         math.abs(cellWorldPos.y - position.y) <= halfSize.y)
                     {
                         NativeList<int> list = matrix[x, y].entities;
+                        if (!list.IsCreated) continue;
                         for (int i = 0; i < list.Length; i++)
                         {
                             visitor.Visit(list.ElementAt(i));
