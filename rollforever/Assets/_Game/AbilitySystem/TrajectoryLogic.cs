@@ -18,8 +18,8 @@ namespace _Game.AbilitySystem
                     trajectory = new VelocitySubTrajectory(arg.velocity.acceleration, arg.velocity.speed);
                     break;
                 default:
-#if UNITY_EDITOR
-                    throw new Exception("Not define TrajectoryType: " + arg.type);     
+#if DEVELOP_MODE
+                    throw new Exception($"Trajectory {arg.type} chưa được xác định");     
 #endif
                     trajectory = new NoneSubTrajectory();
                     break;

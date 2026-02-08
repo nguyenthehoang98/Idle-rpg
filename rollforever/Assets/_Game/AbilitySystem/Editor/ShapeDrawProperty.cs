@@ -37,9 +37,7 @@ namespace _Game.AbilitySystem.Editor
             }
             else
             {
-#if DEVELOP_MODE
-                throw new Exception($"Shape {type} chưa được xác định");        
-#endif          
+                EditorGUILayout.HelpBox($"Shape {type} chưa được định nghĩa", MessageType.Error);
             }
             
             if (customProp.boolValue)

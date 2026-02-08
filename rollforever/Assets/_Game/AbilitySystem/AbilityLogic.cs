@@ -17,9 +17,12 @@ namespace _Game.AbilitySystem
         private readonly BattleStartupRuntimeData runtimeData;
         private readonly BattleStartupShareData shareData;
         private readonly MonsterCellVisitor monsterVisitor;
-        private readonly ShapeLogic shapeLogic;
-        private readonly TrajectoryLogic trajectoryLogic;
         private readonly EcsPool<UnitData> unitPool;
+        
+        // modules
+        private readonly ShapeLogic shapeLogic;
+        private readonly StateModifierLogic stateModifierLogic;
+        private readonly TrajectoryLogic trajectoryLogic;
         private readonly int unitId;
         
         private float lifeTime;
@@ -35,6 +38,7 @@ namespace _Game.AbilitySystem
             this.shareData = shareData;
             this.unitId = unitId;
             shapeLogic = new ShapeLogic(data.shape);
+            stateModifierLogic = new StateModifierLogic(data.stateModifier);
             trajectoryLogic = new TrajectoryLogic(data.trajectory);
             lifeTime = data.arg.lifeTime;
 
@@ -51,6 +55,7 @@ namespace _Game.AbilitySystem
             var unit = unitPool.Get(target);
             var targetPos = shareData.Simulator.GetAgentPosition(unit.agentId);
             trajectoryLogic.Startup(startPos, targetPos);
+            stateModifierLogic.Startup();
             shapeLogic.Startup(startPos);
         }
 
@@ -59,10 +64,12 @@ namespace _Game.AbilitySystem
             elapsed += deltaTime;
             float2 center = trajectoryLogic.Update(deltaTime);
 
+            // todo: pre update
             shapeLogic.PreExecute(deltaTime);
 
             monsterVisitor.PreVisit(center);
             
+            // todo: update
             if (shapeLogic.Shape.type == ShapeType.Box)
             {
                 shareData.Matrix.ScanArea(center, shapeLogic.Shape.size, monsterVisitor);
@@ -77,6 +84,10 @@ namespace _Game.AbilitySystem
                 throw new Exception($"Shape {shapeLogic.Shape.type} chưa được xác định");        
 #endif          
             }
+            
+            stateModifierLogic.Update(deltaTime);
+            
+            // todo: late update
             
             shapeLogic.AfterExecute(center);
             
@@ -104,12 +115,14 @@ namespace _Game.AbilitySystem
         public void Shutdown()
         {
             shapeLogic.Shutdown();
+            stateModifierLogic.Shutdown();
             trajectoryLogic.Shutdown();
         }
 
         public void Dispose()
         {
             shapeLogic.Dispose();
+            stateModifierLogic.Shutdown();
             trajectoryLogic.Dispose();
         }
 
