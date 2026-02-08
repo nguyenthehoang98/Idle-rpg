@@ -7,55 +7,55 @@ namespace Geometry
     public static class GeometryUtils
     {
         public static bool Overlaps(
-            ShapeInstance source, float2 sourcePrevPos, float2 sourceCurrPos,
-            ShapeInstance target, float2 targetCurrPos)
+            Shape source, float2 sourcePrevPos, float2 sourceCurrPos,
+            Shape target, float2 targetCurrPos)
         {
-            if (source.Type == ShapeType.Box && target.Type == ShapeType.Box)
+            if (source.type == ShapeType.Box && target.type == ShapeType.Box)
             {
                 if (GeometryAABB.Overlaps(
-                    AABB.FromCenter(sourcePrevPos, source.Size),
-                    AABB.FromCenter(targetCurrPos, target.Size)
+                    AABB.FromCenter(sourcePrevPos, source.size),
+                    AABB.FromCenter(targetCurrPos, target.size)
                 )) return true;
 
                 if (GeometryAABB.Overlaps(
-                    AABB.FromCenter(sourceCurrPos, source.Size),
-                    AABB.FromCenter(targetCurrPos, target.Size)
+                    AABB.FromCenter(sourceCurrPos, source.size),
+                    AABB.FromCenter(targetCurrPos, target.size)
                 )) return true;
             }
-            else if (source.Type == ShapeType.Circle && target.Type == ShapeType.Circle)
+            else if (source.type == ShapeType.Circle && target.type == ShapeType.Circle)
             {
                 if (GeometryCircle.Overlaps(
-                    new Circle(sourcePrevPos, source.Radius),
-                    new Circle(targetCurrPos, target.Radius)
+                    new Circle(sourcePrevPos, source.radius),
+                    new Circle(targetCurrPos, target.radius)
                 )) return true;
 
                 if (GeometryCircle.Overlaps(
-                    new Circle(sourceCurrPos, source.Radius),
-                    new Circle(targetCurrPos, target.Radius)
+                    new Circle(sourceCurrPos, source.radius),
+                    new Circle(targetCurrPos, target.radius)
                 )) return true;
             }
-            else if (source.Type == ShapeType.Box && target.Type == ShapeType.Circle)
+            else if (source.type == ShapeType.Box && target.type == ShapeType.Circle)
             {
                 if (GeometryAABB.Overlaps(
-                    AABB.FromCenter(sourcePrevPos, source.Size),
-                    new Circle(targetCurrPos, target.Radius)
+                    AABB.FromCenter(sourcePrevPos, source.size),
+                    new Circle(targetCurrPos, target.radius)
                 )) return true;
 
                 if (GeometryAABB.Overlaps(
-                    AABB.FromCenter(sourceCurrPos, source.Size),
-                    new Circle(targetCurrPos, target.Radius)
+                    AABB.FromCenter(sourceCurrPos, source.size),
+                    new Circle(targetCurrPos, target.radius)
                 )) return true;
             }
-            else if (source.Type == ShapeType.Circle && target.Type == ShapeType.Box)
+            else if (source.type == ShapeType.Circle && target.type == ShapeType.Box)
             {
                 if (GeometryCircle.Overlaps(
-                    new Circle(sourcePrevPos, source.Radius),
-                    AABB.FromCenter(targetCurrPos, target.Size)
+                    new Circle(sourcePrevPos, source.radius),
+                    AABB.FromCenter(targetCurrPos, target.size)
                 )) return true;
 
                 if (GeometryCircle.Overlaps(
-                    new Circle(sourceCurrPos, source.Radius),
-                    AABB.FromCenter(targetCurrPos, target.Size)
+                    new Circle(sourceCurrPos, source.radius),
+                    AABB.FromCenter(targetCurrPos, target.size)
                 )) return true;
             }
 
@@ -63,44 +63,39 @@ namespace Geometry
         }
 
         public static bool Sweep(
-            ShapeInstance source, float2 sourcePrevPos, float2 sourceCurrPos,
-            ShapeInstance target, float2 targetCurrPos)
+            Shape source, float2 sourcePrevPos, float2 sourceCurrPos,
+            Shape target, float2 targetCurrPos)
         {
-            if (source.Type == ShapeType.Box && target.Type == ShapeType.Box)
+            if (source.type == ShapeType.Box && target.type == ShapeType.Box)
             {
                 /*GeometrySweep.SweepAABBAABB(
                     sourcePrevPos, sourceCurrPos, source.Size * 0.5f,
                     AABB.FromCenter(targetCurrPos, target.Size), out hit2D
                 );*/
             }
-            else if (source.Type == ShapeType.Circle && target.Type == ShapeType.Circle)
+            else if (source.type == ShapeType.Circle && target.type == ShapeType.Circle)
             {
                 return GeometryMath.SweepCircleCircle(
-                    sourcePrevPos, sourceCurrPos, source.Radius,
-                    targetCurrPos, target.Radius
+                    sourcePrevPos, sourceCurrPos, source.radius,
+                    targetCurrPos, target.radius
                 );
             }
-            else if (source.Type == ShapeType.Box && target.Type == ShapeType.Circle)
+            else if (source.type == ShapeType.Box && target.type == ShapeType.Circle)
             {
                 /*GeometrySweep.SweepAABBCircle(
                     sourcePrevPos, sourceCurrPos, source.Size * 0.5f,
-                    new Circle(targetCurrPos, target.Radius), out hit2D 
+                    new Circle(targetCurrPos, target.radius), out hit2D 
                 );*/
             }
-            else if (source.Type == ShapeType.Circle && target.Type == ShapeType.Box)
+            else if (source.type == ShapeType.Circle && target.type == ShapeType.Box)
             {
                 /*GeometrySweep.SweepCircleAABB(
-                    sourcePrevPos, sourceCurrPos, source.Radius,
+                    sourcePrevPos, sourceCurrPos, source.radius,
                     AABB.FromCenter(targetCurrPos, target.Size), out hit2D
                 );*/
             }
 
             return false;
         }
-    }
-
-    public enum ShapeType
-    {
-        Circle, Box,
     }
 }

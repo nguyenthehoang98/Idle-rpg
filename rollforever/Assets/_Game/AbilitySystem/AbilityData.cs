@@ -1,4 +1,4 @@
-using Geometry;
+using Geometry.Primary;
 using UnityEngine;
 
 namespace _Game.AbilitySystem

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using _Game.Battle.Data;
 using _Game.Battle.View;
 using _KIT.Resource;
-using Geometry;
+using Geometry.Primary;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 using Unity.Mathematics;
@@ -20,6 +20,7 @@ namespace _Game.Battle.Systems
         
         private EcsWorld world;
         private EcsPool<UnitData> unitPool;
+        private EcsPool<ShapeData> shapePool;
         private EcsPool<MonsterFlag> monsterFlagPool;
         private float tick;
         
@@ -31,6 +32,7 @@ namespace _Game.Battle.Systems
             
             world = systems.GetWorld();
             unitPool = world.GetPool<UnitData>();
+            shapePool = world.GetPool<ShapeData>();
             monsterFlagPool = world.GetPool<MonsterFlag>();
                 
             shareData.Simulator.SetTimeStep(shareData.TimeDelta);
@@ -47,10 +49,11 @@ namespace _Game.Battle.Systems
                 float halfSize = 2;
                 float radius = Random.Range(0.5f, 1.5f);
                 float2 center = float2.zero;
-                
+
                 for (var i = 0; i < 10; i++)
                 {
-                    var pos = RandomPointOnCircle(center, Random.Range(20, 30));
+                    float2 pos = RandomPointOnCircle(center, Random.Range(20, 30));
+                   
                     float2 goal;
                     if (RaycastToSquareBorder(pos, center, halfSize, out var hitPoint))
                     {
@@ -60,27 +63,26 @@ namespace _Game.Battle.Systems
                     {
                         goal = ProjectPointToSquareBorder(pos, halfSize);
                     }
-                    var velocity = math.normalize(goal - pos);
-                    var agentId = shareData.Simulator.AddAgent(pos);
-                    
-                    ShapeInstance shapeInstance = ShapeInstance.Insert(ShapeType.Circle, radius);
 
-                    var entity = world.NewEntity();
-                    unitPool.Add(entity) = new UnitData
-                    {
-                        agentId = agentId,
-                        shapeId = shapeInstance.Id,
+                    int agentId = shareData.Simulator.AddAgent(pos);
+
+                    int entity = world.NewEntity();
+                    unitPool.Add(entity) = new UnitData(agentId);
 #if UNITY_EDITOR
-                        color = Random.ColorHSV(0, 1, 0.5f, 1, 0.5f, 1),
+                    unitPool.Get(entity).color = Random.ColorHSV(0, 1, 0.5f, 1, 0.5f, 1);
 #endif
-                    };
 
-                    monsterFlagPool.Add(entity);
-
+                    // todo: set agent
                     shareData.Simulator.SetAgentRadius(agentId, radius);
                     shareData.Simulator.SetAgentNeighborDist(agentId, radius * 3f);
                     shareData.Simulator.SetAgentGoal(agentId, goal);
-                    shareData.Simulator.SetAgentPrefVelocity(agentId, velocity);
+                    shareData.Simulator.SetAgentPrefVelocity(agentId, math.normalize(goal - pos));
+                    
+                    // todo: add shape
+                    shapePool.Add(entity) = new ShapeData(ShapeType.Circle, radius);
+
+                    // todo: add flag
+                    monsterFlagPool.Add(entity);
                 }
 
                 tick = 0;

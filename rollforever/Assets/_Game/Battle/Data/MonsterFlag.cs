@@ -1,6 +1,6 @@
 namespace _Game.Battle.Data
 {
-    public readonly struct DeadFlag
+    public readonly struct MonsterFlag
     {
     }
 }

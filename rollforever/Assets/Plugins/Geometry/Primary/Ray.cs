@@ -1,6 +1,6 @@
 using Unity.Mathematics;
 
-namespace Geometry
+namespace Geometry.Primary
 {
     /// <summary>
     /// Ray là vô hạn một phía

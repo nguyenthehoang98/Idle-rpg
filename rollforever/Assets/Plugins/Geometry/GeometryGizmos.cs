@@ -1,6 +1,7 @@
 using Geometry.Primary;
 using Unity.Mathematics;
 using UnityEngine;
+using Ray = Geometry.Primary.Ray;
 
 namespace Geometry
 {

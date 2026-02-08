@@ -13,8 +13,9 @@ namespace _Game.AbilitySystem
     {
         private readonly AbilityData data;
         private readonly EcsWorld world;
-        private readonly EcsFilter filter;
+        private readonly EcsFilter monsterFilter;
         private readonly EcsPool<UnitData> unitPool;
+        private readonly EcsPool<ShapeData> shapePool;
         private readonly EcsPool<DeadFlag> deadPool;
         private readonly BattleStartupRuntimeData runtimeData;
         private readonly BattleStartupShareData shareData;
@@ -38,9 +39,12 @@ namespace _Game.AbilitySystem
             trajectoryLogic = new TrajectoryLogic(data.trajectory);
             lifeTime = data.arg.lifeTime;
 
-            filter = world.Filter<UnitData>()
+            monsterFilter = world.Filter<UnitData>()
+                .Inc<ShapeData>()
+                .Inc<MonsterFlag>()
                 .Exc<DeadFlag>()
                 .End();
+            shapePool = world.GetPool<ShapeData>();
             deadPool = world.GetPool<DeadFlag>();
             unitPool = world.GetPool<UnitData>();
         }
@@ -58,42 +62,42 @@ namespace _Game.AbilitySystem
             elapsed += deltaTime;
             float2 center = trajectoryLogic.Update(deltaTime);
 
-            bool hit = false;
-            
             shapeLogic.PreExecute();
-            
-            // todo: xử dụng grid để giảm lượng call.
-            foreach (var entity in filter)
-            {
-                ref var unit = ref unitPool.Get(entity);
-                ShapeInstance.TryGet(unit.shapeId, out var target);
-                float2 targetPos = shareData.Simulator.GetAgentPosition(unit.agentId);
-                shapeLogic.Execute(center, target, targetPos, deltaTime, out hit);
-                if (hit)
-                {
-                    deadPool.Add(entity);
-                }
-            }
+
+            ExeMonster(center, deltaTime);
+            ExePlayer(center, deltaTime);
             
             shapeLogic.AfterExecute(center);
+        }
 
+        private void ExeMonster(float2 center, float deltaTime)
+        {
+            // todo: sử dụng grid để giảm lượng call, ở đấy cần xử lý, Matrix.Cell.agentList
+            bool hit = false;
+            foreach (var entity in monsterFilter)
+            {
+                var unit = unitPool.Get(entity);
+                var shape = shapePool.Get(entity);
+                float2 agentPos = shareData.Simulator.GetAgentPosition(unit.agentId);
+                shapeLogic.Execute(center, shape.Value, agentPos, deltaTime, out hit);
+                if (hit) deadPool.Add(entity);
+            }
+            
 #if UNITY_EDITOR && DEVELOP_MODE
             Color color = hit ? Color.red : Color.green;
             if (data.shape.type == ShapeType.Circle)
             {
-                GeometryGizmos.DrawCircle(
-                    new Circle(center, data.shape.radius),
-                    color, deltaTime
-                );
+                GeometryGizmos.DrawCircle(new Circle(center, data.shape.radius), color, deltaTime);
             }
             else if (data.shape.type == ShapeType.Box)
             {
-                GeometryGizmos.DrawAABB(
-                    AABB.FromCenter(center, data.shape.size),
-                    color, deltaTime
-                );
+                GeometryGizmos.DrawAABB(AABB.FromCenter(center, data.shape.size), color, deltaTime);
             }
 #endif
+        }
+
+        private void ExePlayer(float2 center, float deltaTime)
+        {
         }
 
         public void Shutdown()

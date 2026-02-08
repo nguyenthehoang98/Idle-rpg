@@ -1,5 +1,4 @@
 using _Game.Battle.Data;
-using Geometry;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 
@@ -49,7 +48,6 @@ namespace _Game.Battle.Systems
         {
             world.DelEntity(e);
             shareData.Simulator.RemoveAgent(unit.agentId);
-            ShapeInstance.Remove(unit.shapeId);
         }
     }
 }
