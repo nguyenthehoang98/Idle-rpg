@@ -21,6 +21,7 @@ namespace _Game.Battle.Systems
         private EcsWorld world;
         private EcsPool<UnitData> unitPool;
         private EcsPool<ShapeData> shapePool;
+        private EcsPool<UnitPosTempData> unitPosTempPool;
         private EcsPool<MonsterFlag> monsterFlagPool;
         private float tick;
         
@@ -33,6 +34,7 @@ namespace _Game.Battle.Systems
             world = systems.GetWorld();
             unitPool = world.GetPool<UnitData>();
             shapePool = world.GetPool<ShapeData>();
+            unitPosTempPool = world.GetPool<UnitPosTempData>();
             monsterFlagPool = world.GetPool<MonsterFlag>();
                 
             shareData.Simulator.SetTimeStep(shareData.TimeDelta);
@@ -78,8 +80,9 @@ namespace _Game.Battle.Systems
                     shareData.Simulator.SetAgentGoal(agentId, goal);
                     shareData.Simulator.SetAgentPrefVelocity(agentId, math.normalize(goal - pos));
                     
-                    // todo: add shape
-                    shapePool.Add(entity) = new ShapeData(ShapeType.Circle, radius);
+                    // todo: add component
+                    shapePool.Add(entity) = ShapeData.Circle(radius);
+                    unitPosTempPool.Add(entity) = new UnitPosTempData();
 
                     // todo: add flag
                     monsterFlagPool.Add(entity);

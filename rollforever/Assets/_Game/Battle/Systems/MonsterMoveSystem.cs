@@ -12,22 +12,25 @@ namespace _Game.Battle.Systems
         [EcsInject] private readonly BattleStartupShareData shareData;
         [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
 
-        private const float THREASHOLD_VELOCITYSQ = 0.3f;
+        private const float THREASHOLD_VELOCITYSQ = 2.0f;
         private const float THREASHOLD_TIME = 1f;
 
         private EcsPool<UnitData> unitPool;
         private EcsPool<ShapeData> shapePool;
+        private EcsPool<UnitPosTempData> unitPosTempPool;
         private EcsFilter ecsFilter;
 
         public void Init(IEcsSystems systems)
         {
             var world = systems.GetWorld();
             ecsFilter = world.Filter<UnitData>()
+                .Inc<UnitPosTempData>()
                 .Inc<MonsterFlag>()
                 .Exc<DeadFlag>()
                 .End();
             unitPool = world.GetPool<UnitData>();
             shapePool = world.GetPool<ShapeData>();
+            unitPosTempPool = world.GetPool<UnitPosTempData>();
         }
 
         public void Run(IEcsSystems systems)
@@ -103,12 +106,21 @@ namespace _Game.Battle.Systems
                 if (paused)
                     continue;
 
+                ref var unitPosTemp = ref unitPosTempPool.Get(e);
+                
                 var velocity = shareData.Simulator.GetAgentVelocity(unit.agentId);
                 if (math.lengthsq(velocity) < THREASHOLD_VELOCITYSQ)
                 {
-                    // phần này nên có giới hạn về thời gian. ví dụ trong 0.5s -> 1s mà ko thoát đc thì pause
-                    var position = shareData.Simulator.GetAgentPosition(unit.agentId);
-                    Pause(unit.agentId, position);
+                    unitPosTemp.threasholdVelocityElapsed += shareData.TimeDelta;
+                    if (unitPosTemp.threasholdVelocityElapsed >= THREASHOLD_TIME)
+                    {
+                        var position = shareData.Simulator.GetAgentPosition(unit.agentId);
+                        Pause(unit.agentId, position);                        
+                    }
+                }
+                else
+                {
+                    unitPosTemp.threasholdVelocityElapsed = 0;
                 }
             }
         }

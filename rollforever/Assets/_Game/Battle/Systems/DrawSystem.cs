@@ -36,6 +36,10 @@ namespace _Game.Battle.Systems
                 var velocity = shareData.Simulator.GetAgentVelocity(unit.agentId);
                 var neighborDist = shareData.Simulator.GetAgentNeighborDist(unit.agentId);
                 Circle2D(position, radius, unit.color, 12, shareData.TimeDelta);
+              
+                var paused = shareData.Simulator.IsAgentPaused(unit.agentId);
+                if (paused)
+                    continue;
                 Circle2D(position, neighborDist, new Color(0, 1, 1, 0.05f), 12, shareData.TimeDelta);
                 Debug.DrawRay((Vector2)position, ((Vector2)velocity).normalized * radius);
             }
