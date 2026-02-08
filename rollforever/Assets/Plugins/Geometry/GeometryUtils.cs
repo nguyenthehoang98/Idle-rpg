@@ -1,3 +1,4 @@
+using System;
 using Geometry.Math;
 using Geometry.Primary;
 using Unity.Mathematics;
@@ -58,7 +59,12 @@ namespace Geometry
                     Box.FromCenter(targetCurrPos, target.size)
                 )) return true;
             }
-
+            else
+            {
+#if DEVELOP_MODE
+                throw new Exception($"Overlaps [{source.type}, {target.type}] chưa được xác định");     
+#endif
+            }
             return false;
         }
 
@@ -97,6 +103,12 @@ namespace Geometry
                     new Circle(sourceCurrPos, source.radius),
                     Box.FromCenter(targetCurrPos, target.size)
                 );
+            }
+            else
+            {
+#if DEVELOP_MODE
+                throw new Exception($"Sweep [{source.type}, {target.type}] chưa được xác định");     
+#endif
             }
 
             return false;

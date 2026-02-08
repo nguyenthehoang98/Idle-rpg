@@ -1,29 +1,51 @@
-using Geometry;
+using System;
 using Geometry.Primary;
 using UnityEditor;
 using UnityEngine;
 
 namespace _Game.AbilitySystem.Editor
 {
-    [CustomPropertyDrawer(typeof(Shape))]
+    [CustomPropertyDrawer(typeof(ShapeArg))]
     public class ShapeDrawProperty : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUILayout.LabelField("SHAPE");
+
+            var customProp = property.FindPropertyRelative("customValue");
+            EditorGUILayout.PropertyField(customProp);
             
             SerializedProperty typeProp = property.FindPropertyRelative("type");
             EditorGUILayout.PropertyField(typeProp);
         
             ShapeType type = (ShapeType) typeProp.enumValueIndex;
-            switch (type)
+            if(type == ShapeType.Box)
             {
-                case ShapeType.Box:
-                    EditorGUILayout.PropertyField(property.FindPropertyRelative("size"));
-                    break;
-                case ShapeType.Circle:
-                    EditorGUILayout.PropertyField(property.FindPropertyRelative("radius"));
-                    break;
+                EditorGUILayout.PropertyField(property.FindPropertyRelative("size"));
+                if (customProp.boolValue)
+                {
+                    EditorGUILayout.PropertyField(property.FindPropertyRelative("extraSize"));
+                }
+            }
+            else if(type == ShapeType.Circle)
+            {
+                EditorGUILayout.PropertyField(property.FindPropertyRelative("radius"));
+                if (customProp.boolValue)
+                {
+                    EditorGUILayout.PropertyField(property.FindPropertyRelative("extraRadius"));
+                }
+            }
+            else
+            {
+#if DEVELOP_MODE
+                throw new Exception($"Shape {type} chưa được xác định");        
+#endif          
+            }
+            
+            if (customProp.boolValue)
+            {
+                EditorGUILayout.PropertyField(property.FindPropertyRelative("curve"));
+                EditorGUILayout.PropertyField(property.FindPropertyRelative("duration"));
             }
         }
     }

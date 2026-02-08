@@ -5,8 +5,6 @@ using _KIT.Utils;
 using Geometry;
 using Geometry.Primary;
 using Leopotam.EcsLite;
-using RVO;
-using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -31,11 +29,11 @@ namespace _Game.AbilitySystem
             BattleStartupShareData shareData, BattleStartupRuntimeData runtimeData,
             int unitId)
         {
+            this.data = data;
             this.world = world;
             this.runtimeData = runtimeData;
             this.shareData = shareData;
             this.unitId = unitId;
-            this.data = data;
             shapeLogic = new ShapeLogic(data.shape);
             trajectoryLogic = new TrajectoryLogic(data.trajectory);
             lifeTime = data.arg.lifeTime;
@@ -61,45 +59,51 @@ namespace _Game.AbilitySystem
             elapsed += deltaTime;
             float2 center = trajectoryLogic.Update(deltaTime);
 
-            shapeLogic.PreExecute();
-            monsterVisitor.PreVisit(center, deltaTime);
+            shapeLogic.PreExecute(deltaTime);
+
+            monsterVisitor.PreVisit(center);
             
-            if (data.shape.type == ShapeType.Box)
+            if (shapeLogic.Shape.type == ShapeType.Box)
             {
-                shareData.Matrix.ScanArea(center, data.shape.size, monsterVisitor);
+                shareData.Matrix.ScanArea(center, shapeLogic.Shape.size, monsterVisitor);
             }
-            else if (data.shape.type == ShapeType.Circle)
+            else if (shapeLogic.Shape.type == ShapeType.Circle)
             {
-                shareData.Matrix.ScanArea(center, data.shape.radius, monsterVisitor);
+                shareData.Matrix.ScanArea(center, shapeLogic.Shape.radius, monsterVisitor);
             }
             else
             {
-                throw new NotImplementedException("Shape chưa được xác định");
+#if DEVELOP_MODE
+                throw new Exception($"Shape {shapeLogic.Shape.type} chưa được xác định");        
+#endif          
             }
             
             shapeLogic.AfterExecute(center);
             
             monsterVisitor.AfterVisit();
             
-            
 #if UNITY_EDITOR && DEVELOP_MODE
             Color color = monsterVisitor.Hit ? Color.red : Color.green;
          
-            Debug.DrawLine((Vector2) shapeLogic.prevPos, (Vector2) center, color, deltaTime);
-            if (data.shape.type == ShapeType.Circle)
+            Debug.DrawLine((Vector2) shapeLogic.PrevPos, (Vector2) center, color, deltaTime);
+            if (shapeLogic.Shape.type == ShapeType.Circle)
             {
-                GeometryGizmos.DrawCircle(new Circle(center, data.shape.radius), color, deltaTime);
+                GeometryGizmos.DrawCircle(new Circle(center, shapeLogic.Shape.radius), color, deltaTime);
             }
-            else if (data.shape.type == ShapeType.Box)
+            else if (shapeLogic.Shape.type == ShapeType.Box)
             {
-                GeometryGizmos.DrawBox(Box.FromCenter(center, data.shape.size), color, deltaTime);
+                GeometryGizmos.DrawBox(Box.FromCenter(center, shapeLogic.Shape.size), color, deltaTime);
+            }
+            else
+            {
+                Debug.LogError($"Shape {shapeLogic.Shape.type} chưa được xác định");
             }
 #endif
         }
 
         public void Shutdown()
         {
-            trajectoryLogic.Shutdown();
+            shapeLogic.Shutdown();
             trajectoryLogic.Shutdown();
         }
 
@@ -114,71 +118,6 @@ namespace _Game.AbilitySystem
         public AbilityLogic CreateInstance(int sourceId)
         {
             return new AbilityLogic(data, world, shareData, runtimeData, sourceId);
-        }
-    }
-
-    class MonsterCellVisitor : ICellVisitor
-    {
-        private readonly EcsPool<UnitData> unitPool;
-        private readonly EcsPool<ShapeData> shapePool;
-        private readonly EcsPool<DeadFlag> deadPool;
-        private readonly Simulator simulator;
-        private readonly ShapeLogic shapeLogic;
-        private NativeList<int> entityVisitedStamp;
-        private float2 center;
-        private float deltaTime;
-        
-        public int CurrentScanId;
-        public bool Hit;
-
-        public MonsterCellVisitor(
-            Simulator simulator, ShapeLogic shapeLogic,
-            EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool, EcsPool<DeadFlag> deadPool)
-        {
-            this.entityVisitedStamp = new NativeList<int>(10, Allocator.Persistent);
-            this.shapeLogic = shapeLogic;
-            this.simulator = simulator;
-            this.unitPool = unitPool;
-            this.shapePool = shapePool;
-            this.deadPool = deadPool;
-        }
-        
-        public void PreVisit(float2 center, float deltaTime)
-        {
-            this.center = center;
-            this.deltaTime = deltaTime;
-            this.CurrentScanId = 0;
-            this.Hit = false;
-        }
-        
-        public void Visit(int entity)
-        {
-            if (!unitPool.Has(entity)) 
-                return;
-
-            for (int i = 0; i < CurrentScanId; i++)
-            {
-                if (entityVisitedStamp[i] == entity)
-                    return;
-            }
-
-            if(entityVisitedStamp.Length > CurrentScanId)
-                entityVisitedStamp[CurrentScanId] = entity;
-            else 
-                entityVisitedStamp.Add(entity);
-            CurrentScanId++;
-            
-            var unit = unitPool.Get(entity);
-            var shape = shapePool.Get(entity);
-            float2 agentPos = simulator.GetAgentPosition(unit.agentId);
-            
-            shapeLogic.Execute(center, shape.Value, agentPos, deltaTime, out Hit);
-            if (Hit)
-                deadPool.Add(entity);
-        }
-
-        public void AfterVisit()
-        {
         }
     }
 }

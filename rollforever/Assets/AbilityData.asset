@@ -19,11 +19,11 @@ MonoBehaviour:
     animationName: 0
     maxCollision: 0
   shape:
-    type: 1
+    type: 0
     size:
       x: 2
       y: 2
-    radius: 5
+    radius: 1
   trajectory:
     type: 0
     path: {fileID: 0}

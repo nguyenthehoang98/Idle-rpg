@@ -1,4 +1,3 @@
-using Geometry.Primary;
 using UnityEngine;
 
 namespace _Game.AbilitySystem
@@ -7,7 +6,7 @@ namespace _Game.AbilitySystem
     public class AbilityData : ScriptableObject
     {
         public CoreAbilityArg arg;
-        public Shape shape;
+        public ShapeArg shape;
         public TrajectoryArg trajectory;
         public ModifierArg modifier;
     }

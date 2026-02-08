@@ -8,39 +8,56 @@ namespace _Game.AbilitySystem
 {
     public sealed class ShapeLogic: IDisposable
     {
-        private readonly Shape source;
-        public float2 prevPos { get; private set; }
+        private readonly ShapeArg source;
+        private Shape shape;
+        private float elapsed;
 
-        public ShapeLogic(Shape source)
+        public Shape Shape => shape;
+        public float2 PrevPos { get; private set; }
+
+        public ShapeLogic(ShapeArg source)
         {
             this.source = source;
+            shape = new Shape {type = source.type, radius = source.radius, size = source.size};
         }
 
         public void Startup(float2 pos)
         {
-            prevPos = pos;
+            PrevPos = pos;
         }
 
-        public void PreExecute()
+        public void PreExecute(float deltaTime)
         {
-            
+            if (source.customValue)
+            {
+                elapsed += deltaTime;
+
+                float f = math.clamp(elapsed / source.duration, 0, 1);
+                float value = source.curve.Evaluate(f);
+                shape = new Shape
+                {
+                    type = source.type,
+                    radius = math.lerp(source.radius, source.extraRadius, value),
+                    size = math.lerp(source.size, source.extraSize, value)
+                };
+            }
         }
 
-        public void Execute(float2 center, Shape target, float2 targetPos, float deltaTime, out bool hit)
+        public void Execute(float2 center, Shape target, float2 targetPos, out bool hit)
         {
-            if (GeometryUtils.Overlaps(source, prevPos, center, target, targetPos))
+            if (GeometryUtils.Overlaps(shape, PrevPos, center, target, targetPos))
             {
                 hit = true;
             }
             else
             {
-                hit = GeometryUtils.Sweep(source, prevPos, center, target, targetPos);
+                hit = GeometryUtils.Sweep(shape, PrevPos, center, target, targetPos);
             }
         }
 
         public void AfterExecute(float2 center)
         {
-            prevPos = center;
+            PrevPos = center;
         }
 
         public void Shutdown()

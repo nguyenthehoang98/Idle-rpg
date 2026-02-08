@@ -57,7 +57,9 @@ namespace _Game.Battle.Systems
                 }
                 else
                 {
-                    throw new Exception("Shape chưa được xác định: " + shape.Value.type);                    
+#if DEVELOP_MODE
+                    throw new Exception($"Shape {shape.Value.type} chưa được xác định");        
+#endif                
                 }
             }
 

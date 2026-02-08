@@ -18,6 +18,12 @@ namespace Geometry
             {
                 DrawCircle(new Circle(shapePoint, shape.radius), color, dt);
             }
+            else
+            {
+#if UNITY_EDITOR
+                Debug.LogError($"Shape {shape.type} chưa xác định");
+#endif
+            }
         }
         
         // ===================== RAY =====================
