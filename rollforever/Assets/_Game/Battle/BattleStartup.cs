@@ -20,7 +20,7 @@ namespace _Game.Battle
         private EcsWorld world;
         private EcsSystems systems;
         private GameLoop gameLoop;
-
+        private BattleStartupShareData shareData;
         private float elapsed;
         
         private void Awake()
@@ -36,7 +36,7 @@ namespace _Game.Battle
             
             // todo: battle world
             world = new EcsWorld();
-            BattleStartupShareData shareData = new BattleStartupShareData(
+            shareData = new BattleStartupShareData(
                 new Simulator(), new Matrix(100, 120, 0.5f),  gameLoop.FrameDeltaTime
             );
             BattleStartupRuntimeData runtimeData = new BattleStartupRuntimeData();
@@ -107,6 +107,8 @@ namespace _Game.Battle
                 world.Destroy();
                 world = null;
             }
+            
+            shareData.Matrix.Dispose();
         }
     }
 }

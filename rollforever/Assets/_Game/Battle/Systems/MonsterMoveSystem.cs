@@ -45,15 +45,15 @@ namespace _Game.Battle.Systems
                 var shape = shapePool.Get(e);
 
                 var position = shareData.Simulator.GetAgentPosition(unit.agentId);
-                shareData.Matrix.TriggerPoint(position);
+                shareData.Matrix.TriggerPoint(e, position);
 
                 if (shape.Value.type == ShapeType.Circle)
                 {
-                    shareData.Matrix.TriggerArea(position, shape.Value.radius);   
+                    shareData.Matrix.TriggerArea(e, position, shape.Value.radius);   
                 }
                 else if (shape.Value.type == ShapeType.Box)
                 {
-                    shareData.Matrix.TriggerArea(position, shape.Value.size);   
+                    shareData.Matrix.TriggerArea(e, position, shape.Value.size);   
                 }
                 else
                 {
@@ -74,7 +74,7 @@ namespace _Game.Battle.Systems
 
                 if (ShouldPause(position, goal, radius))
                 {
-                    Pause(unit.agentId, position);
+                    Pause(e, unit.agentId, position);
                 }
                 else
                 {
@@ -115,7 +115,7 @@ namespace _Game.Battle.Systems
                     if (unitPosTemp.threasholdVelocityElapsed >= THREASHOLD_TIME)
                     {
                         var position = shareData.Simulator.GetAgentPosition(unit.agentId);
-                        Pause(unit.agentId, position);                        
+                        Pause(e, unit.agentId, position);                        
                     }
                 }
                 else
@@ -125,9 +125,9 @@ namespace _Game.Battle.Systems
             }
         }
 
-        void Pause(int agentId, float2 position)
+        void Pause(int entity, int agentId, float2 position)
         {
-            shareData.Matrix.OccupiedPoint(position);
+            shareData.Matrix.OccupiedPoint(entity, position);
 
             shareData.Simulator.PauseAgent(agentId, true);
         }

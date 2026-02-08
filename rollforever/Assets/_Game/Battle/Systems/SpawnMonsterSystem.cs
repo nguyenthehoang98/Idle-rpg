@@ -44,7 +44,7 @@ namespace _Game.Battle.Systems
         public void Run(IEcsSystems systems)
         {
             tick += shareData.TimeDelta;
-            if (tick >= 1.0f)
+            if (tick >= 1.0f && world.GetEntitiesCount() < 30)
             {
                 shareData.Simulator.EnsureCompleted();
 

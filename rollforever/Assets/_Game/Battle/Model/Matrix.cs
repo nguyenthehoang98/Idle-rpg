@@ -1,10 +1,12 @@
+using System;
 using Unity.Collections;
 using Unity.Mathematics;
 
 namespace _Game.Battle
 {
-    public sealed class Matrix
+    public sealed class Matrix : IDisposable
     {
+        private const int EXPECTED_MAX = 3;
         private float cellSize;
         private int width;
         private int height;
@@ -16,6 +18,16 @@ namespace _Game.Battle
             this.width = width;
             this.height = height;
             this.matrix = new Cell[width, height];
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    matrix[x,y] = new Cell
+                    {
+                        entities = new NativeList<int>(EXPECTED_MAX, Allocator.Persistent)
+                    };
+                }
+            }
         }
 
         public void ResetTrigger()
@@ -23,11 +35,14 @@ namespace _Game.Battle
             for (var i = 0; i < width; i++)
             {
                 for (var j = 0; j < height; j++)
+                {
                     matrix[i, j].trigger = false;
+                    matrix[i, j].entities.Clear();
+                }
             }
         }
         
-        public void TriggerPoint(float2 position)
+        public void TriggerPoint(int unit, float2 position)
         {
             var cell = WorldToCell(position);
             int x = cell.x;
@@ -35,10 +50,11 @@ namespace _Game.Battle
             if (x >= 0 && y >= 0 && x < width && y < height)
             {
                 matrix[x, y].trigger = true;
+                matrix[x, y].entities.Add(unit);
             }
         }
 
-        public void OccupiedPoint(float2 position)
+        public void OccupiedPoint(int unit, float2 position)
         {
             var cell = WorldToCell(position);
             int x = cell.x;
@@ -46,15 +62,16 @@ namespace _Game.Battle
             if (x >= 0 && y >= 0 && x < width && y < height)
             {
                 matrix[x, y].occupied = true;
+                matrix[x, y].entities.Add(unit);
             }
         }
         
-        public void TriggerArea(float2 position, float radius)
+        public void TriggerArea(int unit, float2 position, float radius)
         {
             var centerCell = WorldToCell(position);
             int rangeX = (int)(radius / cellSize);
             int rangeY = (int)(radius / cellSize);
-
+            float rsq = radius * radius;
             for (int dx = -rangeX; dx <= rangeX; dx++)
             {
                 for (int dy = -rangeY; dy <= rangeY; dy++)
@@ -66,17 +83,18 @@ namespace _Game.Battle
                         continue;
 
                     float2 cellWorldPos = CellToWorldCenter(x, y);
-                    if (math.distancesq(cellWorldPos, position) <= radius * radius)
+                    if (math.distancesq(cellWorldPos, position) <= rsq)
                     {
                         matrix[x, y].trigger = true;
+                        matrix[x, y].entities.Add(unit);
                     }
                 }
             }
         }
         
-        public void TriggerArea(float2 position, float2 size)
+        public void TriggerArea(int unit, float2 position, float2 size)
         {
-            var centerCell = WorldToCell(position);
+            int2 centerCell = WorldToCell(position);
             float2 halfSize = size * 0.5f;
             int rangeX = (int)(size.x / cellSize);
             int rangeY = (int)(size.y / cellSize);
@@ -96,6 +114,67 @@ namespace _Game.Battle
                         math.abs(cellWorldPos.y - position.y) <= halfSize.y)
                     {
                         matrix[x, y].trigger = true;
+                        matrix[x, y].entities.Add(unit);
+                    }
+                }
+            }
+        }
+
+        public void ScanArea(float2 position, float radius, ICellVisitor visitor)
+        {
+            int2 centerCell = WorldToCell(position);
+            int rangeX = (int)(radius / cellSize);
+            int rangeY = (int)(radius / cellSize);
+            float rsq = radius * radius;
+            for (int dx = -rangeX; dx <= rangeX; dx++)
+            {
+                for (int dy = -rangeY; dy <= rangeY; dy++)
+                {
+                    int x = centerCell.x + dx;
+                    int y = centerCell.y + dy;
+
+                    if (x < 0 || y < 0 || x >= width || y >= height)
+                        continue;
+                    
+                    float2 cellWorldPos = CellToWorldCenter(x, y);
+                    if (math.distancesq(cellWorldPos, position) <= rsq)
+                    {
+                        NativeList<int> list = matrix[x, y].entities;
+                        for (int i = 0; i < list.Length; i++)
+                        {
+                            visitor.Visit(list[i]);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void ScanArea(float2 position, float2 size, ICellVisitor visitor)
+        {
+            int2 centerCell = WorldToCell(position);
+            float2 halfSize = size * 0.5f;
+            int rangeX = (int)(size.x / cellSize);
+            int rangeY = (int)(size.y / cellSize);
+            
+            for (int dx = -rangeX; dx <= rangeX; dx++)
+            {
+                for (int dy = -rangeY; dy <= rangeY; dy++)
+                {
+                    int x = centerCell.x + dx;
+                    int y = centerCell.y + dy;
+
+                    if (x < 0 || y < 0 || x >= width || y >= height)
+                        continue;
+                    
+                    float2 cellWorldPos = CellToWorldCenter(x, y);
+                    if (math.abs(cellWorldPos.x - position.x) <= halfSize.x &&
+                        math.abs(cellWorldPos.y - position.y) <= halfSize.y)
+                    {
+                        NativeList<int> list = matrix[x, y].entities;
+                        for (int i = 0; i < list.Length; i++)
+                        {
+                            visitor.Visit(list.ElementAt(i));
+                        }
                     }
                 }
             }
@@ -219,12 +298,23 @@ namespace _Game.Battle
 
             return false; // bị bao vây hoàn toàn
         }
+
+        public void Dispose()
+        {
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    matrix[x, y].entities.Dispose();
+                }
+            }
+        }
     }
 
     public struct Cell
     {
         public bool occupied;
         public bool trigger;
-        public NativeList<int> agentList;
+        public NativeList<int> entities;
     }
 }
