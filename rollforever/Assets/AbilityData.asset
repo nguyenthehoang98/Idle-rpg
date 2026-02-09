@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: AbilityData
   m_EditorClassIdentifier: 
   core:
-    lifeTime: 1
+    lifeTime: 0.3333333
     bulletPrefab: {fileID: 0}
     muzzleOffsetPosition: {x: 0, y: 0}
     animationName: 0
-    maxCollision: 10
+    maxCollision: 10000
     shouldResetCollision: 0
     resetCollisionInterval: 0
   shape:
@@ -33,27 +33,18 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: 2
-        outSlope: 2
-        tangentMode: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
         weightedMode: 0
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.35192096
-        value: 1.7002451
-        inSlope: 0.9096949
-        outSlope: 0.9096949
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
         weightedMode: 0
         inWeight: 0
         outWeight: 0
@@ -64,7 +55,7 @@ MonoBehaviour:
     extraSize:
       x: 0
       y: 0
-    duration: 1
+    duration: 0.33333334
   trajectory:
     type: 0
     path: {fileID: 0}

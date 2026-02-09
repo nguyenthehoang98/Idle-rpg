@@ -10,6 +10,7 @@ namespace _Game.AbilitySystem
         private readonly ShapeArg source;
         private Shape shape;
         private float elapsed;
+        private float duration;
 
         public Shape Shape => shape;
         public float2 PrevPos { get; private set; }
@@ -17,6 +18,7 @@ namespace _Game.AbilitySystem
         public ShapeLogic(ShapeArg source)
         {
             this.source = source;
+            this.duration = source.duration;
             shape = new Shape {type = source.type, radius = source.radius, size = source.size};
         }
 
@@ -44,6 +46,15 @@ namespace _Game.AbilitySystem
 
         public void Execute(float2 center, Shape target, float2 targetPos, out bool hit)
         {
+            if (source.customValue)
+            {
+                if (elapsed >= duration)
+                {
+                    hit = false;
+                    return;
+                }
+            }
+            
             if (GeometryUtils.Overlaps(shape, PrevPos, center, target, targetPos))
             {
                 hit = true;

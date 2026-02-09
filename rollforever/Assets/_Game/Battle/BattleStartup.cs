@@ -68,28 +68,9 @@ namespace _Game.Battle
             Startup();
         }
 
-#if UNITY_EDITOR
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Space) && world.GetEntitiesCount() > 1)
-            {
-                int[] entities = null;
-                int count = world.GetAllEntities(ref entities);
-                if (count > 1)
-                    EventBus.Instance.Publish(new CastSkillEvent(0, 0, float2.zero, entities[1]));
-            }
-        }
-#endif
+        public void Startup() => gameLoop.Resume();
 
-        public void Startup()
-        {
-            gameLoop.Resume();
-        }
-
-        public void Shutdown()
-        {
-            gameLoop.Pause();
-        }
+        public void Shutdown() => gameLoop.Pause();
 
         private void OnDestroy()
         {
