@@ -2,9 +2,20 @@ namespace _Game.AbilitySystem
 {
     class NoneSubStateModifier : ISubStateModifier
     {
-        public void Execute(float dt)
+        public void Startup(int entity)
         {
-            
+        }
+
+        public void Trigger(int target)
+        {
+        }
+
+        public void Update(float dt)
+        {
+        }
+
+        public void Shutdown()
+        {
         }
     }
 }

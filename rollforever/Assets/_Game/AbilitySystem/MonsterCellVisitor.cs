@@ -15,6 +15,7 @@ namespace _Game.AbilitySystem
         private readonly EcsPool<HealthData> healthPool;
         private readonly Simulator simulator;
         private readonly ShapeLogic shapeLogic;
+        private readonly StateModifierLogic stateModifierLogic;
         private readonly bool shouldResetCollision;
         private readonly float resetCollisionInterval;
         private NativeList<int> entityVisitedStamp;
@@ -28,12 +29,13 @@ namespace _Game.AbilitySystem
 
         public MonsterCellVisitor(
             int maxCollision, bool shouldResetCollision, float resetCollisionInterval,
-            Simulator simulator, ShapeLogic shapeLogic,
+            Simulator simulator, ShapeLogic shapeLogic, StateModifierLogic stateModifierLogic,
             EcsPool<HealthData> healthPool,
             EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool, EcsPool<DeadFlag> deadPool)
         {
             this.shouldResetCollision = shouldResetCollision;
             this.resetCollisionInterval = resetCollisionInterval;
+            this.stateModifierLogic = stateModifierLogic;
             this.entitiesCollision = new NativeList<int>(10, Allocator.Persistent);
             this.entityVisitedStamp = new NativeList<int>(10, Allocator.Persistent);
             this.healthPool = healthPool;
@@ -85,10 +87,14 @@ namespace _Game.AbilitySystem
             if (IsHit)
             {
                 ref var health = ref healthPool.Get(entity);
-                health.health -= 50;
+                health.health -= 10;
                 if (health.health <= 0)
                 {
                     deadPool.Add(entity);
+                }
+                else
+                {
+                    stateModifierLogic.TriggerTarget(entity);
                 }
 
                 RemainCanCollision--;

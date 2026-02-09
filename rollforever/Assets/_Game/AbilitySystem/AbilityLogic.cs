@@ -18,13 +18,12 @@ namespace _Game.AbilitySystem
         private readonly BattleStartupShareData shareData;
         private readonly MonsterCellVisitor monsterVisitor;
         private readonly EcsPool<UnitData> unitPool;
-        
+        private readonly int unitId;
         // modules
         private readonly ShapeLogic shapeLogic;
         private readonly StateModifierLogic stateModifierLogic;
         private readonly TrajectoryLogic trajectoryLogic;
-        private readonly int unitId;
-        
+
         private float lifeTime;
         private float elapsed;
 
@@ -32,23 +31,25 @@ namespace _Game.AbilitySystem
             BattleStartupShareData shareData, BattleStartupRuntimeData runtimeData,
             int unitId)
         {
+            this.unitId = unitId;
             this.data = data;
             this.world = world;
             this.runtimeData = runtimeData;
             this.shareData = shareData;
-            this.unitId = unitId;
-            shapeLogic = new ShapeLogic(data.shape);
-            stateModifierLogic = new StateModifierLogic(data.stateModifier);
-            trajectoryLogic = new TrajectoryLogic(data.trajectory);
             lifeTime = data.core.lifeTime;
 
             var shapePool = world.GetPool<ShapeData>();
             var deadPool = world.GetPool<DeadFlag>();
             var healthPool = world.GetPool<HealthData>();
             unitPool = world.GetPool<UnitData>();
+            
+            shapeLogic = new ShapeLogic(data.shape);
+            stateModifierLogic = new StateModifierLogic(data.stateModifier, shareData.Simulator, unitPool);
+            trajectoryLogic = new TrajectoryLogic(data.trajectory);
+            
             monsterVisitor = new MonsterCellVisitor(
                 data.core.maxCollision, data.core.shouldResetCollision, data.core.resetCollisionInterval,
-                shareData.Simulator, shapeLogic, 
+                shareData.Simulator, shapeLogic, stateModifierLogic,
                 healthPool, unitPool, shapePool, deadPool);
         }
 
@@ -57,7 +58,7 @@ namespace _Game.AbilitySystem
             var unit = unitPool.Get(target);
             var targetPos = shareData.Simulator.GetAgentPosition(unit.agentId);
             trajectoryLogic.Startup(startPos, targetPos);
-            stateModifierLogic.Startup();
+            stateModifierLogic.Startup(unitId);
             shapeLogic.Startup(startPos);
         }
 
@@ -116,7 +117,6 @@ namespace _Game.AbilitySystem
 
         public void Shutdown()
         {
-            Debug.Log("hit: " + (data.core.maxCollision - monsterVisitor.RemainCanCollision));
             shapeLogic.Shutdown();
             stateModifierLogic.Shutdown();
             trajectoryLogic.Shutdown();
