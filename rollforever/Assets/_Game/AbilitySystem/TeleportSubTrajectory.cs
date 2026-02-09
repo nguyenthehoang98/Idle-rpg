@@ -2,18 +2,18 @@ using Unity.Mathematics;
 
 namespace _Game.AbilitySystem
 {
-    class NoneSubTrajectory : ISubTrajectory
+    class TeleportSubTrajectory : ISubTrajectory
     {
-        private float2 startPos;
+        private float2 pos;
         
         public void Init(float2 startPos, float2 endPos)
         {
-            this.startPos = startPos;
+            this.pos = endPos;
         }
 
         public float2 Execute(float dt)
         {
-            return startPos;
+            return pos;
         }
     }
 }

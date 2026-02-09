@@ -19,7 +19,7 @@ namespace _Game.AbilitySystem.Editor
             TrajectoryType type = (TrajectoryType) typeProp.enumValueIndex;
             switch (type)
             {
-                case TrajectoryType.None:
+                case TrajectoryType.Teleport:
                     break;
                 case TrajectoryType.Path:
                     EditorGUILayout.PropertyField(property.FindPropertyRelative("path"));

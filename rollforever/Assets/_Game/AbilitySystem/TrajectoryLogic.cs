@@ -11,8 +11,8 @@ namespace _Game.AbilitySystem
         {
             switch (arg.type)
             {
-                case TrajectoryType.None:
-                    trajectory = new NoneSubTrajectory();
+                case TrajectoryType.Teleport:
+                    trajectory = new TeleportSubTrajectory();
                     break;
                 case TrajectoryType.Velocity:
                     trajectory = new VelocitySubTrajectory(arg.velocity.acceleration, arg.velocity.speed);
@@ -21,7 +21,7 @@ namespace _Game.AbilitySystem
 #if DEVELOP_MODE
                     throw new Exception($"Trajectory {arg.type} chưa được xác định");     
 #endif
-                    trajectory = new NoneSubTrajectory();
+                    trajectory = new TeleportSubTrajectory();
                     break;
             }
         }

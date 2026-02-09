@@ -20,8 +20,8 @@ namespace _Game.AbilitySystem
 
     public enum TrajectoryType
     {
-        None,
+        Teleport,
         Velocity,
-        Path, 
+        Path,
     }
 }
