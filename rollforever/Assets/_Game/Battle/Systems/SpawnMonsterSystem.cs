@@ -49,7 +49,7 @@ namespace _Game.Battle.Systems
         public void Run(IEcsSystems systems)
         {
             tick += shareData.TimeDelta;
-            if (tick >= 1.0f && world.GetEntitiesCount() < 5)
+            if (tick >= 1.0f)
             {
                 shareData.Simulator.EnsureCompleted();
 
@@ -57,7 +57,7 @@ namespace _Game.Battle.Systems
                 float radius = Random.Range(0.5f, 1.5f);
                 float2 center = float2.zero;
 
-                for (var i = 0; i < 5; i++)
+                for (var i = 0; i < 15; i++)
                 {
                     float2 pos = RandomPointOnCircle(center, Random.Range(20, 30));
                    

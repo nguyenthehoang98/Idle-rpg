@@ -34,12 +34,12 @@ namespace _Game.Battle
                 for (var j = 0; j < height; j++)
                 {
                     matrix[i, j].trigger = false;
-                    if(matrix[i, j].entities.IsCreated)
+                    if (matrix[i, j].entities.IsCreated)
                         matrix[i, j].entities.Clear();
                 }
             }
         }
-        
+
         public void TriggerPoint(int unit, float2 position)
         {
             var cell = WorldToCell(position);
@@ -48,8 +48,8 @@ namespace _Game.Battle
             if (x >= 0 && y >= 0 && x < width && y < height)
             {
                 matrix[x, y].trigger = true;
-                if(!matrix[x,y].entities.IsCreated)
-                    matrix[x,y].entities= new NativeList<int>(EXPECTED_MAX, Allocator.Persistent);
+                if (!matrix[x, y].entities.IsCreated)
+                    matrix[x, y].entities = new NativeList<int>(EXPECTED_MAX, Allocator.Persistent);
                 matrix[x, y].entities.Add(unit);
             }
         }
@@ -62,12 +62,12 @@ namespace _Game.Battle
             if (x >= 0 && y >= 0 && x < width && y < height)
             {
                 matrix[x, y].occupied = true;
-                if(!matrix[x,y].entities.IsCreated)
-                    matrix[x,y].entities= new NativeList<int>(EXPECTED_MAX, Allocator.Persistent);
+                if (!matrix[x, y].entities.IsCreated)
+                    matrix[x, y].entities = new NativeList<int>(EXPECTED_MAX, Allocator.Persistent);
                 matrix[x, y].entities.Add(unit);
             }
         }
-        
+
         public void TriggerArea(int unit, float2 position, float radius)
         {
             var centerCell = WorldToCell(position);
@@ -88,14 +88,14 @@ namespace _Game.Battle
                     if (math.distancesq(cellWorldPos, position) <= rsq)
                     {
                         matrix[x, y].trigger = true;
-                        if(!matrix[x,y].entities.IsCreated)
-                            matrix[x,y].entities= new NativeList<int>(EXPECTED_MAX, Allocator.Persistent);
+                        if (!matrix[x, y].entities.IsCreated)
+                            matrix[x, y].entities = new NativeList<int>(EXPECTED_MAX, Allocator.Persistent);
                         matrix[x, y].entities.Add(unit);
                     }
                 }
             }
         }
-        
+
         public void TriggerArea(int unit, float2 position, float2 size)
         {
             int2 centerCell = WorldToCell(position);
@@ -118,8 +118,8 @@ namespace _Game.Battle
                         math.abs(cellWorldPos.y - position.y) <= halfSize.y)
                     {
                         matrix[x, y].trigger = true;
-                        if(!matrix[x,y].entities.IsCreated)
-                            matrix[x,y].entities= new NativeList<int>(EXPECTED_MAX, Allocator.Persistent);
+                        if (!matrix[x, y].entities.IsCreated)
+                            matrix[x, y].entities = new NativeList<int>(EXPECTED_MAX, Allocator.Persistent);
                         matrix[x, y].entities.Add(unit);
                     }
                 }
@@ -141,7 +141,7 @@ namespace _Game.Battle
                     if (r != 0)
                         VisitCell(center.x + dx, center.y - dy);
                 }
-                
+
                 for (int dy = -r + 1; dy <= r - 1; dy++)
                 {
                     int dx = r;
@@ -218,6 +218,123 @@ namespace _Game.Battle
             }
         }
 
+        public void RemoveUnit(int unit, float2 position)
+        {
+            var cell = WorldToCell(position);
+            int x = cell.x;
+            int y = cell.y;
+            if (x >= 0 && y >= 0 && x < width && y < height)
+            {
+                matrix[x, y].occupied = false;
+
+                var entities = matrix[x, y].entities;
+                if (entities.IsCreated)
+                {
+                    int length = entities.Length;
+                    for (int i = 0; i < length; i++)
+                    {
+                        if (entities[i] == unit)
+                        {
+                            int lastIndex = entities.Length - 1;
+                            entities[i] = entities[lastIndex];
+                            entities.Length--;
+                            break;
+                        }
+                    }
+
+                    matrix[x, y].entities = entities;
+                }
+            }
+        }
+
+        public void RemoveUnit(int unit, float2 position, float radius)
+        {
+            var centerCell = WorldToCell(position);
+            int rangeX = (int)(radius / cellSize);
+            int rangeY = (int)(radius / cellSize);
+            float rsq = radius * radius;
+            for (int dx = -rangeX; dx <= rangeX; dx++)
+            {
+                for (int dy = -rangeY; dy <= rangeY; dy++)
+                {
+                    int x = centerCell.x + dx;
+                    int y = centerCell.y + dy;
+
+                    if (x < 0 || y < 0 || x >= width || y >= height)
+                        continue;
+
+                    float2 cellWorldPos = CellToWorldCenter(x, y);
+                    if (math.distancesq(cellWorldPos, position) <= rsq)
+                    {
+                        matrix[x, y].occupied = false;
+
+                        var entities = matrix[x, y].entities;
+                        if (entities.IsCreated)
+                        {
+                            int length = entities.Length;
+                            for (int i = 0; i < length; i++)
+                            {
+                                if (entities[i] == unit)
+                                {
+                                    int lastIndex = entities.Length - 1;
+                                    entities[i] = entities[lastIndex];
+                                    entities.Length--;
+                                    break;
+                                }
+                            }
+
+                            matrix[x, y].entities = entities;
+                        }
+                    }
+                }
+            }
+        }
+
+        public void RemoveUnit(int unit, float2 position, float2 size)
+        {
+            int2 centerCell = WorldToCell(position);
+            float2 halfSize = size * 0.5f;
+            int rangeX = (int)(size.x / cellSize);
+            int rangeY = (int)(size.y / cellSize);
+
+            for (int dx = -rangeX; dx <= rangeX; dx++)
+            {
+                for (int dy = -rangeY; dy <= rangeY; dy++)
+                {
+                    int x = centerCell.x + dx;
+                    int y = centerCell.y + dy;
+
+                    if (x < 0 || y < 0 || x >= width || y >= height)
+                        continue;
+
+                    float2 cellWorldPos = CellToWorldCenter(x, y);
+                    if (math.abs(cellWorldPos.x - position.x) <= halfSize.x &&
+                        math.abs(cellWorldPos.y - position.y) <= halfSize.y)
+                    {
+                        matrix[x, y].occupied = false;
+
+                        var entities = matrix[x, y].entities;
+                        if (entities.IsCreated)
+                        {
+                            int length = entities.Length;
+                            for (int i = 0; i < length; i++)
+                            {
+                                if (entities[i] == unit)
+                                {
+                                    int lastIndex = entities.Length - 1;
+                                    entities[i] = entities[lastIndex];
+                                    entities.Length--;
+                                    break;
+                                }
+                            }
+
+                            matrix[x, y].entities = entities;
+                        }
+                    }
+                }
+            }
+        }
+
         public bool TryFindCellExpandFromCenter(float2 position, float2 pivot, out float2 result)
         {
             int2 center = WorldToCell(pivot);
@@ -232,32 +349,32 @@ namespace _Game.Battle
                 bestDistToPoint = float.MaxValue;
 
                 for (var dx = -dist; dx <= dist; dx++)
-                for (var dy = -dist; dy <= dist; dy++)
-                {
-                    if (math.max(math.abs(dx), math.abs(dy)) != dist)
-                        continue;
-
-                    var c = new int2(center.x + dx, center.y + dy);
-
-                    if (!IsInsideGrid(c))
-                        continue;
-
-                    if (!IsEmpty(c))
-                        continue;
-
-                    if (!HasAnyFreeNeighbor8(c))
-                        continue;
-
-                    var wp = CellToWorld(c);
-                    var dToPoint = math.lengthsq(wp - position);
-
-                    if (!foundAtThisDist || dToPoint < bestDistToPoint)
+                    for (var dy = -dist; dy <= dist; dy++)
                     {
-                        foundAtThisDist = true;
-                        bestDistToPoint = dToPoint;
-                        snapshot = c;
+                        if (math.max(math.abs(dx), math.abs(dy)) != dist)
+                            continue;
+
+                        var c = new int2(center.x + dx, center.y + dy);
+
+                        if (!IsInsideGrid(c))
+                            continue;
+
+                        if (!IsEmpty(c))
+                            continue;
+
+                        if (!HasAnyFreeNeighbor8(c))
+                            continue;
+
+                        var wp = CellToWorld(c);
+                        var dToPoint = math.lengthsq(wp - position);
+
+                        if (!foundAtThisDist || dToPoint < bestDistToPoint)
+                        {
+                            foundAtThisDist = true;
+                            bestDistToPoint = dToPoint;
+                            snapshot = c;
+                        }
                     }
-                }
 
                 if (foundAtThisDist)
                 {
@@ -271,25 +388,25 @@ namespace _Game.Battle
         }
 
         public float radiussq(float radius) => (radius + cellSize) * (radius + cellSize) + float.Epsilon;
-        
+
         int2 WorldToCell(float2 worldPos) => WorldToCell(worldPos, float2.zero);
 
         int2 WorldToCell(float2 worldPos, float2 gridCenter)
         {
             var halfGrid = HalfGridSize();
-            var x = (int) math.floor(
+            var x = (int)math.floor(
                 (worldPos.x - (gridCenter.x - halfGrid.x)) / cellSize
             );
-            var y = (int) math.floor(
+            var y = (int)math.floor(
                 (worldPos.y - (gridCenter.y - halfGrid.y)) / cellSize
             );
             return new int2(x, y);
         }
-        
+
         float2 HalfGridSize() => new float2(width * cellSize * 0.5f, height * cellSize * 0.5f);
-        
+
         float2 CellToWorldCenter(int x, int y) => CellToWorldCenter(x, y, float2.zero);
-        
+
         float2 CellToWorldCenter(int x, int y, float2 gridCenter)
         {
             var halfGrid = HalfGridSize();
@@ -298,7 +415,7 @@ namespace _Game.Battle
                 gridCenter.y - halfGrid.y + (y + 0.5f) * cellSize
             );
         }
-        
+
         bool IsInsideGrid(int2 c) => c.x >= 0 && c.y >= 0 && c.x < width && c.y < height;
 
         bool IsEmpty(int2 c)
@@ -317,22 +434,22 @@ namespace _Game.Battle
                 gridCenter.y - halfGrid.y + (cell.y + 0.5f) * cellSize
             );
         }
-        
+
         bool HasAnyFreeNeighbor8(int2 cell)
         {
             for (var dx = -1; dx <= 1; dx++)
-            for (var dy = -1; dy <= 1; dy++)
-            {
-                if (dx == 0 && dy == 0)
-                    continue;
+                for (var dy = -1; dy <= 1; dy++)
+                {
+                    if (dx == 0 && dy == 0)
+                        continue;
 
-                var n = new int2(cell.x + dx, cell.y + dy);
+                    var n = new int2(cell.x + dx, cell.y + dy);
 
-                if (!IsInsideGrid(n))
-                    continue;
+                    if (!IsInsideGrid(n))
+                        continue;
 
-                if (IsEmpty(n)) return true;
-            }
+                    if (IsEmpty(n)) return true;
+                }
 
             return false; // bị bao vây hoàn toàn
         }

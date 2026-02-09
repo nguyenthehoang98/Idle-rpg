@@ -1,4 +1,5 @@
 using _Game.Battle.Data;
+using Geometry.Primary;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 
@@ -10,6 +11,7 @@ namespace _Game.Battle.Systems
         [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
 
         private EcsPool<UnitData> unitPool;
+        private EcsPool<ShapeData> shapePool;
         private EcsFilter aliveFilter;
         private EcsFilter deadFilter;
         private EcsWorld world;
@@ -24,6 +26,7 @@ namespace _Game.Battle.Systems
                 .Exc<DeadFlag>()
                 .End();
             unitPool = world.GetPool<UnitData>();
+            shapePool = world.GetPool<ShapeData>();
         }
 
         public void PostRun(IEcsSystems systems)
@@ -46,7 +49,22 @@ namespace _Game.Battle.Systems
 
         void Dispose(int e, UnitData unit)
         {
+            var shape = shapePool.Get(e);
+
             world.DelEntity(e);
+
+            var position = shareData.Simulator.GetAgentPosition(unit.agentId);
+            shareData.Matrix.TriggerPoint(e, position);
+
+            if (shape.Value.type == ShapeType.Circle)
+            {
+                shareData.Matrix.RemoveUnit(e, position, shape.Value.radius);   
+            }
+            else if (shape.Value.type == ShapeType.Box)
+            {
+                shareData.Matrix.RemoveUnit(e, position, shape.Value.size);   
+            }
+
             shareData.Simulator.RemoveAgent(unit.agentId);
         }
     }
