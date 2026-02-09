@@ -3,7 +3,6 @@ using _Game.Battle.Systems;
 using _KIT.Schedule;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
-using Geometry;
 using RVO;
 using UnityEngine;
 using _Game.Battle.Events;
@@ -49,6 +48,7 @@ namespace _Game.Battle
             
             systems = ecsSystems;
             systems
+                .Add(new BuildPlayerSystem())
 #if UNITY_EDITOR && DEVELOP_MODE
                 .Add(new EcsSystemsDebugSystem())
                 .Add(new EcsWorldDebugSystem())
@@ -70,12 +70,12 @@ namespace _Game.Battle
 #if UNITY_EDITOR
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space) && world.GetEntitiesCount() > 0)
+            if (Input.GetKeyDown(KeyCode.Space) && world.GetEntitiesCount() > 1)
             {
                 int[] entities = null;
                 int count = world.GetAllEntities(ref entities);
-                if (count > 0)
-                    EventBus.Instance.Publish(new CastSkillEvent(0, 0, float2.zero, entities[0]));
+                if (count > 1)
+                    EventBus.Instance.Publish(new CastSkillEvent(0, 0, float2.zero, entities[1]));
             }
         }
 #endif

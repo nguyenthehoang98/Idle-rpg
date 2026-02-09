@@ -3,7 +3,6 @@ using _Game.AbilitySystem;
 using _Game.Battle.Data;
 using _Game.Battle.View;
 using _KIT.Resource;
-using Geometry.Primary;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 using Unity.Mathematics;

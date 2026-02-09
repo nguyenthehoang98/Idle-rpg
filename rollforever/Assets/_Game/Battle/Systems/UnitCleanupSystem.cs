@@ -20,9 +20,11 @@ namespace _Game.Battle.Systems
         {
             world = systems.GetWorld();
             deadFilter = world.Filter<UnitData>()
+                .Inc<MonsterFlag>()
                 .Inc<DeadFlag>()
                 .End();
             aliveFilter = world.Filter<UnitData>()
+                .Inc<MonsterFlag>()
                 .Exc<DeadFlag>()
                 .End();
             unitPool = world.GetPool<UnitData>();

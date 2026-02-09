@@ -117,10 +117,6 @@ namespace _Game.AbilitySystem
 
                 UnitData unitData = unitPool.Get(e);
                 simulator.PauseAgent(unitData.agentId, false);
-
-                float d = math.length(data.prevDistance);
-                if(d >= force)
-                    UnityEngine.Debug.Log(d);
             }
         }
 
