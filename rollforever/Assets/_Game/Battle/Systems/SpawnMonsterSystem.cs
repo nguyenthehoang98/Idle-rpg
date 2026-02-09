@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using _Game.AbilitySystem;
 using _Game.Battle.Data;
 using _Game.Battle.View;
 using _KIT.Resource;
@@ -22,6 +23,7 @@ namespace _Game.Battle.Systems
         private EcsPool<HealthData> healthPool;
         private EcsPool<UnitData> unitPool;
         private EcsPool<ShapeData> shapePool;
+        private EcsPool<UnitModifierData> modifierPool;
         private EcsPool<UnitPosTempData> unitPosTempPool;
         private EcsPool<MonsterFlag> monsterFlagPool;
         private float tick;
@@ -38,6 +40,7 @@ namespace _Game.Battle.Systems
             unitPosTempPool = world.GetPool<UnitPosTempData>();
             monsterFlagPool = world.GetPool<MonsterFlag>();
             healthPool = world.GetPool<HealthData>();
+            modifierPool = world.GetPool<UnitModifierData>();
             
             shareData.Simulator.SetTimeStep(shareData.TimeDelta);
             shareData.Simulator.SetAgentDefaults(1f, 10, 20f, 20f, 1.5f, 5f, float2.zero);
@@ -46,7 +49,7 @@ namespace _Game.Battle.Systems
         public void Run(IEcsSystems systems)
         {
             tick += shareData.TimeDelta;
-            if (tick >= 1.0f && world.GetEntitiesCount() < 30)
+            if (tick >= 1.0f && world.GetEntitiesCount() < 5)
             {
                 shareData.Simulator.EnsureCompleted();
 
@@ -54,7 +57,7 @@ namespace _Game.Battle.Systems
                 float radius = Random.Range(0.5f, 1.5f);
                 float2 center = float2.zero;
 
-                for (var i = 0; i < 20; i++)
+                for (var i = 0; i < 5; i++)
                 {
                     float2 pos = RandomPointOnCircle(center, Random.Range(20, 30));
                    
@@ -86,6 +89,7 @@ namespace _Game.Battle.Systems
                     shapePool.Add(entity) = ShapeData.Circle(radius);
                     unitPosTempPool.Add(entity) = new UnitPosTempData();
                     healthPool.Add(entity) = new HealthData(100);
+                    modifierPool.Add(entity) = new UnitModifierData(StatusEffect.None);
 
                     // todo: add flag
                     monsterFlagPool.Add(entity);

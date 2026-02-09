@@ -10,7 +10,9 @@ namespace _Game.AbilitySystem
         private ModifierGroup group;
         private ISubStateModifier modifier;
 
-        public StateModifierLogic(StateModifierArg arg, Simulator simulator, EcsPool<UnitData> unitPool)
+        public StateModifierLogic(StateModifierArg arg,
+            Simulator simulator, EcsPool<UnitData> unitPool, EcsPool<UnitModifierData> modifierPool
+        )
         {
             group = arg.group;
             switch (arg.type)
@@ -20,18 +22,18 @@ namespace _Game.AbilitySystem
                     break;
                 case StateModifierType.Knockback:
                     modifier = new KnockBackSubStateModifier(
-                        arg.value, arg.duration, simulator, unitPool
-                        );
+                        arg.value, arg.duration, simulator, unitPool, modifierPool
+                    );
                     break;
                 default:
 #if DEVELOP_MODE
-                    throw new Exception($"State Modifier {arg.type} chưa được xác định");     
+                    throw new Exception($"State Modifier {arg.type} chưa được xác định");
 #endif
                     modifier = new NoneSubStateModifier();
                     break;
             }
         }
-        
+
         public void Startup(int entity)
         {
             modifier.Startup(entity);

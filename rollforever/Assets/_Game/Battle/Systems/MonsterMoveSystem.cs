@@ -1,4 +1,5 @@
 using System;
+using _Game.AbilitySystem;
 using _Game.Battle.Data;
 using Geometry.Primary;
 using GoodCat.EcsLite.Shared;
@@ -17,6 +18,7 @@ namespace _Game.Battle.Systems
 
         private EcsPool<UnitData> unitPool;
         private EcsPool<ShapeData> shapePool;
+        private EcsPool<UnitModifierData> modifierPool;
         private EcsPool<UnitPosTempData> unitPosTempPool;
         private EcsFilter ecsFilter;
 
@@ -25,18 +27,19 @@ namespace _Game.Battle.Systems
             var world = systems.GetWorld();
             ecsFilter = world.Filter<UnitData>()
                 .Inc<UnitPosTempData>()
+                .Inc<UnitModifierData>()
                 .Inc<MonsterFlag>()
                 .Exc<DeadFlag>()
                 .End();
             unitPool = world.GetPool<UnitData>();
             shapePool = world.GetPool<ShapeData>();
+            modifierPool = world.GetPool<UnitModifierData>();
             unitPosTempPool = world.GetPool<UnitPosTempData>();
         }
 
         public void Run(IEcsSystems systems)
         {
             shareData.Simulator.EnsureCompleted();
-
             shareData.Matrix.ResetTrigger();
 
             foreach (var e in ecsFilter)
@@ -74,7 +77,7 @@ namespace _Game.Battle.Systems
                 var goal = shareData.Simulator.GetAgentGoal(unit.agentId);
                 var radius = shareData.Simulator.GetAgentRadius(unit.agentId);
 
-                if (ShouldPause(position, goal, radius))
+                if (ShouldPause(modifierPool.Get(e).effect, position, goal, radius))
                 {
                     Pause(e, unit.agentId, position);
                 }
@@ -134,8 +137,10 @@ namespace _Game.Battle.Systems
             shareData.Simulator.PauseAgent(agentId, true);
         }
 
-        bool ShouldPause(float2 pos, float2 goal, float radius)
+        bool ShouldPause(StatusEffect effect, float2 pos, float2 goal, float radius)
         {
+            if (effect.Has(StatusEffect.Stun)) return true;
+            if (effect.Has(StatusEffect.KnockBack)) return true;
             return math.distancesq(goal, pos) <= shareData.Matrix.radiussq(radius);
         }
     }

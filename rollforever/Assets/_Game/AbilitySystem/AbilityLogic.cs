@@ -41,10 +41,11 @@ namespace _Game.AbilitySystem
             var shapePool = world.GetPool<ShapeData>();
             var deadPool = world.GetPool<DeadFlag>();
             var healthPool = world.GetPool<HealthData>();
+            var modifierPool = world.GetPool<UnitModifierData>();
             unitPool = world.GetPool<UnitData>();
             
             shapeLogic = new ShapeLogic(data.shape);
-            stateModifierLogic = new StateModifierLogic(data.stateModifier, shareData.Simulator, unitPool);
+            stateModifierLogic = new StateModifierLogic(data.stateModifier, shareData.Simulator, unitPool, modifierPool);
             trajectoryLogic = new TrajectoryLogic(data.trajectory);
             
             monsterVisitor = new MonsterCellVisitor(

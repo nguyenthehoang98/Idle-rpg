@@ -3,7 +3,6 @@ using Leopotam.EcsLite;
 using RVO;
 using Unity.Collections;
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace _Game.AbilitySystem
 {
@@ -11,14 +10,15 @@ namespace _Game.AbilitySystem
     {
         private Simulator simulator;
         private EcsPool<UnitData> unitPool;
+        private EcsPool<UnitModifierData> modifierPool;
 
         private NativeList<Data> list;
-        private int entity;
+        private int unit;
         private float force;
         private float duration;
 
         public KnockBackSubStateModifier(float force, float duration,
-            Simulator simulator, EcsPool<UnitData> unitPool
+            Simulator simulator, EcsPool<UnitData> unitPool, EcsPool<UnitModifierData> modifierPool
         )
         {
             this.force = force;
@@ -26,19 +26,20 @@ namespace _Game.AbilitySystem
             this.list = new NativeList<Data>(Allocator.Persistent);
             this.simulator = simulator;
             this.unitPool = unitPool;
+            this.modifierPool = modifierPool;
         }
 
         public void Startup(int entity)
         {
-            this.entity = entity;
+            this.unit = entity;
         }
 
         public void Trigger(int target)
         {
-            if (target == entity) return;
+            if (target == unit) return;
             if (!unitPool.Has(target)) return;
 
-            UnitData unitData = unitPool.Get(entity);
+            UnitData unitData = unitPool.Get(unit);
             float2 pos = simulator.GetAgentPosition(unitData.agentId);
             UnitData targetData = unitPool.Get(target);
             float2 targetPos = simulator.GetAgentPosition(targetData.agentId);
@@ -72,6 +73,9 @@ namespace _Game.AbilitySystem
                 elapsed = 0,
                 direction = direction
             });
+
+            ref var modifier = ref modifierPool.Get(target);
+            StatusEffectMethod.Add(ref modifier.effect, StatusEffect.KnockBack);
         }
 
         public void Update(float dt)
@@ -84,18 +88,34 @@ namespace _Game.AbilitySystem
                 data.elapsed += dt;
                 float f = math.clamp(data.elapsed / duration, 0f, 1f);
                 float2 distance = f * force * data.direction;
-                float2 delta = distance - data.prevPos;
-                data.prevPos = distance;
+                float2 delta = distance - data.prevDistance;
+                data.prevDistance = distance;
                 list[i] = data;
 
-                UnitData unit = unitPool.Get(data.entity);
-                float2 agentPos = simulator.GetAgentPosition(unit.agentId);
-                simulator.SetAgentPosition(unit.agentId, agentPos + delta);
+                UnitData unitData = unitPool.Get(data.entity);
+                float2 agentPos = simulator.GetAgentPosition(unitData.agentId);
+                simulator.SetAgentPosition(unitData.agentId, agentPos + delta);
             }
         }
 
         public void Shutdown()
         {
+            int length = list.Length;
+            for (int i = 0; i < length; i++)
+            {
+                int e = list[i].entity;
+                if (modifierPool.Has(e))
+                {
+                    ref var modifier = ref modifierPool.Get(e);
+                    StatusEffectMethod.Remove(ref modifier.effect, StatusEffect.KnockBack);
+
+                    if (modifier.effect.Has(StatusEffect.Stun)) continue;
+                    if (modifier.effect.Has(StatusEffect.KnockBack)) continue;
+
+                    UnitData unitData = unitPool.Get(e);
+                    simulator.PauseAgent(unitData.agentId, false);
+                }
+            }
         }
 
         struct Data
@@ -103,7 +123,7 @@ namespace _Game.AbilitySystem
             public int entity;
             public float elapsed;
             public float2 direction;
-            public float2 prevPos;
+            public float2 prevDistance;
         }
     }
 }
