@@ -12,9 +12,7 @@ namespace _Game.Battle.Systems
     {
         [EcsInject] private readonly BattleStartupShareData shareData;
 
-        private EcsPool<UnitData> unitPool;
         private EcsFilter playerEcsFilter;
-        private EcsFilter monsterEcsFilter;
 
         private float elapsed;
 
@@ -25,28 +23,19 @@ namespace _Game.Battle.Systems
                 .Inc<PlayerFlag>()
                 .Exc<DeadFlag>()
                 .End();
-            monsterEcsFilter = world.Filter<UnitData>()
-                .Inc<MonsterFlag>()
-                .Exc<DeadFlag>()
-                .End();
-            unitPool = world.GetPool<UnitData>();
         }
 
         public void Run(IEcsSystems systems)
         {
             elapsed += shareData.TimeDelta;
-            if (elapsed < 0.2f)
-                return;
-
-            elapsed = 0.0f;
-            
-            foreach (var e in playerEcsFilter)
+            if (elapsed >= 0.2f)
             {
-                var monsters = monsterEcsFilter.GetRawEntities();
-                if (monsters.Length > 0)
+                elapsed = 0;
+                
+                foreach (var e in playerEcsFilter)
                 {
                     EventBus.Instance.Publish(
-                        new CastSkillEvent(e, 0, float2.zero, monsters[0])
+                        new CastSkillEvent(e, 0, float2.zero, Team.Player)
                     );
                 }
             }

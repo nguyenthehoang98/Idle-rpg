@@ -56,7 +56,7 @@ namespace _Game.Battle.Systems
                 float radius = Random.Range(0.5f, 1.5f);
                 float2 center = float2.zero;
 
-                for (var i = 0; i < 15; i++)
+                for (var i = 0; i < 1; i++)
                 {
                     float2 pos = RandomPointOnCircle(center, Random.Range(20, 30));
                    

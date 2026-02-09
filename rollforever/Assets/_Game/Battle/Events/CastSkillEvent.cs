@@ -8,13 +8,13 @@ namespace _Game.Battle.Events
         public readonly int SkillId;
         public readonly int Source;
         public readonly float2 StartPosition;
-        public readonly int Target;
+        public readonly Team Team;
         
-        public CastSkillEvent(int source, int skillId, float2 startPosition, int target)
+        public CastSkillEvent(int source, int skillId, float2 startPosition, Team team)
         {
             SkillId = skillId;
             StartPosition = startPosition;
-            Target = target;
+            Team = team;
             Source = source;
         }
     }

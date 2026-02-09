@@ -8,7 +8,11 @@ namespace _Game.AbilitySystem.Editor
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            EditorGUILayout.LabelField("MODIFIER");
+            GUIStyle coreStyle = new GUIStyle(EditorStyles.boldLabel);
+            coreStyle.fontSize = 20;
+            coreStyle.alignment = TextAnchor.MiddleLeft;
+            EditorGUILayout.LabelField("MODIFIER", coreStyle);
+            
             EditorGUILayout.PropertyField(property.FindPropertyRelative("type"));
 
             StateModifierType type = (StateModifierType) property.FindPropertyRelative("type").enumValueIndex;

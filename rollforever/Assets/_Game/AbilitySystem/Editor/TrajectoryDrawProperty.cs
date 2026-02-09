@@ -8,7 +8,10 @@ namespace _Game.AbilitySystem.Editor
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            EditorGUILayout.LabelField("TRAJECTORY");
+            GUIStyle coreStyle = new GUIStyle(EditorStyles.boldLabel);
+            coreStyle.fontSize = 20;
+            coreStyle.alignment = TextAnchor.MiddleLeft;
+            EditorGUILayout.LabelField("TRAJECTORY", coreStyle);
             
             SerializedProperty typeProp = property.FindPropertyRelative("type");
             EditorGUILayout.PropertyField(typeProp);
@@ -25,6 +28,22 @@ namespace _Game.AbilitySystem.Editor
                     EditorGUILayout.PropertyField(property.FindPropertyRelative("velocity"));
                     break;
             }
+        }
+    }
+
+    [CustomPropertyDrawer(typeof(VelocityArg))]
+    public class VelocityDrawProperty : PropertyDrawer
+    {
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            GUIStyle coreStyle = new GUIStyle(EditorStyles.boldLabel);
+            coreStyle.fontSize = 14;
+            coreStyle.alignment = TextAnchor.MiddleLeft;
+            coreStyle.normal.textColor = new Color(1, 0, 0, 0.35f);
+            EditorGUILayout.LabelField("Velocity", coreStyle);
+            
+            EditorGUILayout.PropertyField(property.FindPropertyRelative("acceleration"));
+            EditorGUILayout.PropertyField(property.FindPropertyRelative("speed"));
         }
     }
 }

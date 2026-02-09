@@ -12,7 +12,7 @@ namespace _Game.AbilitySystem
 {
     public sealed class AbilityLogic : IEcsWorldEventListener, IDisposable
     {
-        private readonly AbilityData data;
+        public readonly AbilityData Data;
         private readonly EcsWorld world;
         private readonly BattleStartupRuntimeData runtimeData;
         private readonly BattleStartupShareData shareData;
@@ -32,7 +32,7 @@ namespace _Game.AbilitySystem
             int unitId)
         {
             this.unitId = unitId;
-            this.data = data;
+            this.Data = data;
             this.world = world;
             this.runtimeData = runtimeData;
             this.shareData = shareData;
@@ -134,7 +134,7 @@ namespace _Game.AbilitySystem
 
         public AbilityLogic CreateInstance(int sourceId)
         {
-            return new AbilityLogic(data, world, shareData, runtimeData, sourceId);
+            return new AbilityLogic(Data, world, shareData, runtimeData, sourceId);
         }
 
         public void OnEntityCreated(int entity)

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using _Game.AbilitySystem;
+using _Game.Battle.Data;
 using _Game.Battle.Events;
 using _KIT.Event;
 using _KIT.Resource;
@@ -11,11 +12,15 @@ namespace _Game.Battle.Systems
 {
     public class AbilitySystem : IEcsInitSystem, IEcsRunSystem, IEcsDestroySystem
     {
-        private Dictionary<int, AbilityLogic> skillSource;
-        private EcsWorld world;
-        
         [EcsInject] private readonly BattleStartupShareData shareData;
         [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
+
+        private EcsWorld world;
+        private EcsFilter monsterFilter;
+        private EcsFilter playerFilter;
+        
+        private Dictionary<int, AbilityLogic> skillSource;
+        private Dictionary<FindTargetType, IFindTarget> findTargets;
         
         private List<AbilityLogic> abilities;
         private Queue<AbilityLogic> additions;
@@ -29,6 +34,18 @@ namespace _Game.Battle.Systems
             skillSource = new Dictionary<int, AbilityLogic>();
 
             world = systems.GetWorld();
+            monsterFilter = world.Filter<UnitData>()
+                .Inc<MonsterFlag>()
+                .Exc<DeadFlag>()
+                .End();
+            playerFilter = world.Filter<UnitData>()
+                .Inc<PlayerFlag>()
+                .End();
+            var unitPool = world.GetPool<UnitData>();
+            
+            findTargets = new Dictionary<FindTargetType, IFindTarget>();
+            findTargets.Add(FindTargetType.Farthest, new FarthestFindTarget(shareData.Simulator, unitPool));
+            findTargets.Add(FindTargetType.Nearest, new NearestFindTarget(shareData.Simulator, unitPool));
 
             AbilityData abilityData = await KitLoaded.LoadAsync<AbilityData>("AbilityData");
             skillSource[0] = new AbilityLogic(abilityData, world, shareData, runtimeData, 0);
@@ -38,11 +55,18 @@ namespace _Game.Battle.Systems
 
         private void OnCastSkillArg(CastSkillEvent e)
         {
-            if (skillSource.TryGetValue(e.SkillId, out var abilityLogic))
+            if (skillSource.TryGetValue(e.SkillId, out var ability))
             {
-                var item = abilityLogic.CreateInstance(e.Source);
-                item.Startup(e.StartPosition, e.Target);
-                additions.Enqueue(item);
+                if (findTargets.TryGetValue(ability.Data.core.findTarget, out var findTarget))
+                {
+                    EcsFilter filter = e.Team == Team.Player ? monsterFilter : playerFilter;
+                    if (findTarget.Find(e.StartPosition, filter, out int target))
+                    {
+                        AbilityLogic abilityInstance = ability.CreateInstance(e.Source);
+                        abilityInstance.Startup(e.StartPosition, target);
+                        additions.Enqueue(abilityInstance);
+                    }
+                }
             }
         }
 

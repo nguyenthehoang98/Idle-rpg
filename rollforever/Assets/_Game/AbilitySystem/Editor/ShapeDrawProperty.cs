@@ -1,4 +1,3 @@
-using System;
 using Geometry.Primary;
 using UnityEditor;
 using UnityEngine;
@@ -10,7 +9,10 @@ namespace _Game.AbilitySystem.Editor
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            EditorGUILayout.LabelField("SHAPE");
+            GUIStyle coreStyle = new GUIStyle(EditorStyles.boldLabel);
+            coreStyle.fontSize = 20;
+            coreStyle.alignment = TextAnchor.MiddleLeft;
+            EditorGUILayout.LabelField("SHAPE", coreStyle);
 
             var customProp = property.FindPropertyRelative("customValue");
             EditorGUILayout.PropertyField(customProp);

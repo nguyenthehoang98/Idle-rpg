@@ -10,6 +10,7 @@ namespace _Game.AbilitySystem
         public GameObject bulletPrefab;
         public Vector2 muzzleOffsetPosition;
         public AnimationName animationName;
+        public FindTargetType findTarget;
         public int maxCollision;
         public bool shouldResetCollision;
         public float resetCollisionInterval;

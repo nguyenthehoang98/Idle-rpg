@@ -8,11 +8,16 @@ namespace _Game.AbilitySystem.Editor
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            EditorGUILayout.LabelField("CORE");
+            GUIStyle coreStyle = new GUIStyle(EditorStyles.boldLabel);
+            coreStyle.fontSize = 20;
+            coreStyle.alignment = TextAnchor.MiddleLeft;
+            EditorGUILayout.LabelField("CORE", coreStyle);
+
             EditorGUILayout.PropertyField(property.FindPropertyRelative("lifeTime"));
             EditorGUILayout.PropertyField(property.FindPropertyRelative("bulletPrefab"));
             EditorGUILayout.PropertyField(property.FindPropertyRelative("muzzleOffsetPosition"));
             EditorGUILayout.PropertyField(property.FindPropertyRelative("animationName"));
+            EditorGUILayout.PropertyField(property.FindPropertyRelative("findTarget"));
             EditorGUILayout.PropertyField(property.FindPropertyRelative("maxCollision"));
             EditorGUILayout.PropertyField(property.FindPropertyRelative("shouldResetCollision"));
             if(property.FindPropertyRelative("shouldResetCollision").boolValue)    
