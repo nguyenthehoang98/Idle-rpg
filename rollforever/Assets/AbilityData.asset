@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f1b1926f57db82438a03be8a84358f5, type: 3}
   m_Name: AbilityData
   m_EditorClassIdentifier: 
-  arg:
+  core:
     lifeTime: 1
     bulletPrefab: {fileID: 0}
     muzzleOffsetPosition: {x: 0, y: 0}
     animationName: 0
-    maxCollision: 0
+    maxCollision: 10
+    shouldResetCollision: 0
+    resetCollisionInterval: 0
   shape:
     type: 0
     size:
@@ -72,8 +74,5 @@ MonoBehaviour:
   stateModifier:
     type: 1
     group: 0
-    value: 2
+    value: 5
     duration: 0.1
-    enableStack: 0
-    stackCount: 0
-    stackInterval: 0

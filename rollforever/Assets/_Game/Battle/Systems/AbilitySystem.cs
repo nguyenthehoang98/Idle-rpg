@@ -12,6 +12,7 @@ namespace _Game.Battle.Systems
     public class AbilitySystem : IEcsInitSystem, IEcsRunSystem, IEcsDestroySystem
     {
         private Dictionary<int, AbilityLogic> skillSource;
+        private EcsWorld world;
         
         [EcsInject] private readonly BattleStartupShareData shareData;
         [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
@@ -27,7 +28,7 @@ namespace _Game.Battle.Systems
             abilities = new List<AbilityLogic>();
             skillSource = new Dictionary<int, AbilityLogic>();
 
-            EcsWorld world = systems.GetWorld();
+            world = systems.GetWorld();
 
             AbilityData abilityData = await KitLoaded.LoadAsync<AbilityData>("AbilityData");
             skillSource[0] = new AbilityLogic(abilityData, world, shareData, runtimeData, 0);
@@ -50,6 +51,7 @@ namespace _Game.Battle.Systems
             while (additions.Count > 0)
             {
                 var item = additions.Dequeue();
+                world.AddEventListener(item);
                 abilities.Add(item);
             }
             
@@ -69,6 +71,7 @@ namespace _Game.Battle.Systems
                 var item = completes.Dequeue();
                 item.Shutdown();
                 item.Dispose();
+                world.RemoveEventListener(item);
                 CollectionUtils.RemoveFast(abilities, item);
             }
         }

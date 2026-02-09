@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using _Game.Battle.Data;
 using Leopotam.EcsLite;
 using RVO;
@@ -84,6 +85,7 @@ namespace _Game.AbilitySystem
             for (int i = 0; i < length; i++)
             {
                 var data = list[i];
+                if (data.hasDied) continue;
                 if (data.elapsed >= duration) continue;
                 data.elapsed += dt;
                 float f = math.clamp(data.elapsed / duration, 0f, 1f);
@@ -104,16 +106,35 @@ namespace _Game.AbilitySystem
             for (int i = 0; i < length; i++)
             {
                 int e = list[i].entity;
-                if (modifierPool.Has(e))
+                var data = list[i];
+                if (data.hasDied) continue;
+                
+                ref var modifier = ref modifierPool.Get(e);
+                StatusEffectMethod.Remove(ref modifier.effect, StatusEffect.KnockBack);
+
+                if (modifier.effect.Has(StatusEffect.Stun)) continue;
+                if (modifier.effect.Has(StatusEffect.KnockBack)) continue;
+
+                UnitData unitData = unitPool.Get(e);
+                simulator.PauseAgent(unitData.agentId, false);
+
+                float d = math.length(data.prevDistance);
+                if(d >= force)
+                    UnityEngine.Debug.Log(d);
+            }
+        }
+
+        public void OnEntityDestroyed(int entity)
+        {
+            int length = list.Length;
+            for (int i = 0; i < length; i++)
+            {
+                var data = list[i];
+                if(data.entity == entity)
                 {
-                    ref var modifier = ref modifierPool.Get(e);
-                    StatusEffectMethod.Remove(ref modifier.effect, StatusEffect.KnockBack);
-
-                    if (modifier.effect.Has(StatusEffect.Stun)) continue;
-                    if (modifier.effect.Has(StatusEffect.KnockBack)) continue;
-
-                    UnitData unitData = unitPool.Get(e);
-                    simulator.PauseAgent(unitData.agentId, false);
+                    data.hasDied = true;
+                    list[i] = data;
+                    return;
                 }
             }
         }
@@ -124,6 +145,7 @@ namespace _Game.AbilitySystem
             public float elapsed;
             public float2 direction;
             public float2 prevDistance;
+            public bool hasDied;
         }
     }
 }

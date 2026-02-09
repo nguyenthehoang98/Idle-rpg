@@ -17,5 +17,9 @@ namespace _Game.AbilitySystem
         public void Shutdown()
         {
         }
+
+        public void OnEntityDestroyed(int entity)
+        {
+        }
     }
 }

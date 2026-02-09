@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace _Game.AbilitySystem
 {
-    public sealed class AbilityLogic : IDisposable
+    public sealed class AbilityLogic : IEcsWorldEventListener, IDisposable
     {
         private readonly AbilityData data;
         private readonly EcsWorld world;
@@ -135,6 +135,31 @@ namespace _Game.AbilitySystem
         public AbilityLogic CreateInstance(int sourceId)
         {
             return new AbilityLogic(data, world, shareData, runtimeData, sourceId);
+        }
+
+        public void OnEntityCreated(int entity)
+        {
+        }
+
+        public void OnEntityChanged(int entity, short poolId, bool added)
+        {
+        }
+
+        public void OnEntityDestroyed(int entity)
+        {
+            stateModifierLogic.OnEntityDestroyed(entity);
+        }
+
+        public void OnFilterCreated(EcsFilter filter)
+        {
+        }
+
+        public void OnWorldResized(int newSize)
+        {
+        }
+
+        public void OnWorldDestroyed(EcsWorld world)
+        {
         }
     }
 }

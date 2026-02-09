@@ -1,7 +1,9 @@
 using System;
 using _Game.Battle.Data;
+using JetBrains.Annotations;
 using Leopotam.EcsLite;
 using RVO;
+using UnityEngine;
 
 namespace _Game.AbilitySystem
 {
@@ -63,6 +65,11 @@ namespace _Game.AbilitySystem
         {
             if (group == ModifierGroup.Self) modifier.Trigger(target);
         }
+
+        public void OnEntityDestroyed(int entity)
+        {
+            modifier.OnEntityDestroyed(entity);
+        }
         
         public void Dispose()
         {
@@ -74,6 +81,7 @@ namespace _Game.AbilitySystem
         void Startup(int entity);
         void Trigger(int target);
         void Update(float dt);
+        void OnEntityDestroyed(int entity);
         void Shutdown();
     }
 }
