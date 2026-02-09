@@ -18,10 +18,16 @@ namespace _Game.Battle.Systems
         private EcsWorld world;
         private EcsFilter monsterFilter;
         private EcsFilter playerFilter;
+        private EcsPool<UnitData> unitPool;
+        private EcsPool<ShapeData> shapePool;
+        private EcsPool<DeadFlag> deadPool;
+        private EcsPool<HealthData> healthPool;
+        private EcsPool<UnitModifierData> modifierPool;
+        private EcsPool<UnitPosTempData> unitPosTempPool;
         
+        // model
         private Dictionary<int, AbilityLogic> skillSource;
         private Dictionary<FindTargetType, IFindTarget> findTargets;
-        
         private List<AbilityLogic> abilities;
         private Queue<AbilityLogic> additions;
         private Queue<AbilityLogic> completes;
@@ -41,14 +47,24 @@ namespace _Game.Battle.Systems
             playerFilter = world.Filter<UnitData>()
                 .Inc<PlayerFlag>()
                 .End();
-            var unitPool = world.GetPool<UnitData>();
+            unitPool = world.GetPool<UnitData>();
+            shapePool = world.GetPool<ShapeData>();
+            deadPool = world.GetPool<DeadFlag>();
+            healthPool = world.GetPool<HealthData>();
+            modifierPool = world.GetPool<UnitModifierData>();
+            unitPosTempPool = world.GetPool<UnitPosTempData>();
             
             findTargets = new Dictionary<FindTargetType, IFindTarget>();
             findTargets.Add(FindTargetType.Farthest, new FarthestFindTarget(shareData.Simulator, unitPool));
             findTargets.Add(FindTargetType.Nearest, new NearestFindTarget(shareData.Simulator, unitPool));
 
             AbilityData abilityData = await KitLoaded.LoadAsync<AbilityData>("AbilityData");
-            skillSource[0] = new AbilityLogic(abilityData, world, shareData, runtimeData, 0);
+            foreach (var e in playerFilter)
+            {
+                skillSource[e] = new AbilityLogic(abilityData, shareData, runtimeData,
+                    e, unitPool, shapePool, deadPool, healthPool, modifierPool, unitPosTempPool
+                );
+            }
             
             EventBus.Instance.Subscribe<CastSkillEvent>(OnCastSkillArg);
         }
@@ -62,7 +78,9 @@ namespace _Game.Battle.Systems
                     EcsFilter filter = e.Team == Team.Player ? monsterFilter : playerFilter;
                     if (findTarget.Find(e.StartPosition, filter, out int target))
                     {
-                        AbilityLogic abilityInstance = ability.CreateInstance(e.Source);
+                        AbilityLogic abilityInstance = ability.CreateInstance(
+                            e.Source, unitPool, shapePool, deadPool, healthPool, modifierPool, unitPosTempPool
+                        );
                         abilityInstance.Startup(e.StartPosition, target);
                         additions.Enqueue(abilityInstance);
                     }

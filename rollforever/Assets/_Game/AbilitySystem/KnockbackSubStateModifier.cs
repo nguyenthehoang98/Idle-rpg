@@ -12,6 +12,7 @@ namespace _Game.AbilitySystem
         private Simulator simulator;
         private EcsPool<UnitData> unitPool;
         private EcsPool<UnitModifierData> modifierPool;
+        private EcsPool<UnitPosTempData> unitPosTempPool;
 
         private NativeList<Data> list;
         private int unit;
@@ -19,7 +20,8 @@ namespace _Game.AbilitySystem
         private float duration;
 
         public KnockBackSubStateModifier(float force, float duration,
-            Simulator simulator, EcsPool<UnitData> unitPool, EcsPool<UnitModifierData> modifierPool
+            Simulator simulator, EcsPool<UnitData> unitPool, EcsPool<UnitModifierData> modifierPool,
+            EcsPool<UnitPosTempData> unitPosTempPool
         )
         {
             this.force = force;
@@ -28,6 +30,7 @@ namespace _Game.AbilitySystem
             this.simulator = simulator;
             this.unitPool = unitPool;
             this.modifierPool = modifierPool;
+            this.unitPosTempPool = unitPosTempPool;
         }
 
         public void Startup(int entity)

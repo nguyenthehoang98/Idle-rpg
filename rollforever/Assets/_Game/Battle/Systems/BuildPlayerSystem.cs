@@ -16,6 +16,7 @@ namespace _Game.Battle.Systems
             var world = systems.GetWorld();
             var unitPool = world.GetPool<UnitData>();
             var playerPool = world.GetPool<PlayerFlag>();
+            var attackCasterPool = world.GetPool<AttackCasterData>();
 
             int entity = world.NewEntity();
             int agentId = shareData.Simulator.AddAgent(float2.zero);
@@ -24,6 +25,7 @@ namespace _Game.Battle.Systems
             unitPool.Get(entity).color = Random.ColorHSV(0, 1, 0.5f, 1, 0.5f, 1);
 #endif  
             playerPool.Add(entity);
+            attackCasterPool.Add(entity) = new AttackCasterData {cooldown = 1};
 
             float radius = 0.5f;
             shareData.Simulator.SetAgentRadius(agentId, radius);

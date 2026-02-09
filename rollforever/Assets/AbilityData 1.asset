@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f1b1926f57db82438a03be8a84358f5, type: 3}
-  m_Name: AbilityData
+  m_Name: AbilityData 1
   m_EditorClassIdentifier: 
   core:
     lifeTime: 1
     bulletPrefab: {fileID: 0}
     muzzleOffsetPosition: {x: 0, y: 0}
     animationName: 0
-    findTarget: 1
-    maxCollision: 10000
+    findTarget: 0
+    maxCollision: 1
     shouldResetCollision: 0
     resetCollisionInterval: 0
   shape:
@@ -58,7 +58,7 @@ MonoBehaviour:
       y: 0
     duration: 0.33333334
   trajectory:
-    type: 0
+    type: 1
     path: {fileID: 0}
     velocity:
       acceleration: 0

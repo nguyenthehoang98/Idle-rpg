@@ -13,39 +13,48 @@ namespace _Game.AbilitySystem
     public sealed class AbilityLogic : IEcsWorldEventListener, IDisposable
     {
         public readonly AbilityData Data;
-        private readonly EcsWorld world;
+        // ecs
+        private readonly int unitId;
+        private readonly EcsPool<UnitData> unitPool;
+        private readonly EcsPool<ShapeData> shapePool;
+        private readonly EcsPool<DeadFlag> deadPool;
+        private readonly EcsPool<HealthData> healthPool;
+        private readonly EcsPool<UnitModifierData> modifierPool;
+        private readonly EcsPool<UnitPosTempData> unitPosTempPool;
+        // model
         private readonly BattleStartupRuntimeData runtimeData;
         private readonly BattleStartupShareData shareData;
         private readonly MonsterCellVisitor monsterVisitor;
-        private readonly EcsPool<UnitData> unitPool;
-        private readonly int unitId;
         // modules
         private readonly ShapeLogic shapeLogic;
         private readonly StateModifierLogic stateModifierLogic;
         private readonly TrajectoryLogic trajectoryLogic;
-
-        private float lifeTime;
+        private readonly float lifeTime;
         private float elapsed;
 
-        public AbilityLogic(AbilityData data, EcsWorld world,
+        public AbilityLogic(AbilityData data,
             BattleStartupShareData shareData, BattleStartupRuntimeData runtimeData,
-            int unitId)
+            int unitId, EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool,
+            EcsPool<DeadFlag> deadPool, EcsPool<HealthData> healthPool, 
+            EcsPool<UnitModifierData> modifierPool, EcsPool<UnitPosTempData> unitPosTempPool)
         {
-            this.unitId = unitId;
             this.Data = data;
-            this.world = world;
+            this.lifeTime = data.core.lifeTime;
             this.runtimeData = runtimeData;
             this.shareData = shareData;
-            lifeTime = data.core.lifeTime;
 
-            var shapePool = world.GetPool<ShapeData>();
-            var deadPool = world.GetPool<DeadFlag>();
-            var healthPool = world.GetPool<HealthData>();
-            var modifierPool = world.GetPool<UnitModifierData>();
-            unitPool = world.GetPool<UnitData>();
+            this.unitId = unitId;
+            this.unitPool = unitPool;
+            this.shapePool = shapePool;
+            this.deadPool = deadPool;
+            this.healthPool = healthPool;
+            this.modifierPool = modifierPool;
+            this.unitPosTempPool = unitPosTempPool;
             
             shapeLogic = new ShapeLogic(data.shape);
-            stateModifierLogic = new StateModifierLogic(data.stateModifier, shareData.Simulator, unitPool, modifierPool);
+            stateModifierLogic = new StateModifierLogic(
+                data.stateModifier, shareData.Simulator, unitPool, modifierPool, unitPosTempPool
+            );
             trajectoryLogic = new TrajectoryLogic(data.trajectory);
             
             monsterVisitor = new MonsterCellVisitor(
@@ -56,8 +65,8 @@ namespace _Game.AbilitySystem
 
         public void Startup(float2 startPos, int target)
         {
-            var unit = unitPool.Get(target);
-            var targetPos = shareData.Simulator.GetAgentPosition(unit.agentId);
+            UnitData unit = unitPool.Get(target);
+            float2 targetPos = shareData.Simulator.GetAgentPosition(unit.agentId);
             trajectoryLogic.Startup(startPos, targetPos);
             stateModifierLogic.Startup(unitId);
             shapeLogic.Startup(startPos);
@@ -132,9 +141,13 @@ namespace _Game.AbilitySystem
 
         public bool IsCompleted => elapsed >= lifeTime || monsterVisitor.RemainCanCollision <= 0;
 
-        public AbilityLogic CreateInstance(int sourceId)
+        public AbilityLogic CreateInstance(int unitId, EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool,
+            EcsPool<DeadFlag> deadPool, EcsPool<HealthData> healthPool, 
+            EcsPool<UnitModifierData> modifierPool, EcsPool<UnitPosTempData> unitPosTempPool)
         {
-            return new AbilityLogic(Data, world, shareData, runtimeData, sourceId);
+            return new AbilityLogic(Data, shareData, runtimeData,
+                unitId, unitPool, shapePool, deadPool, healthPool, modifierPool, unitPosTempPool
+            );
         }
 
         public void OnEntityCreated(int entity)

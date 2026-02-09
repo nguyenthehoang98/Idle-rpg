@@ -19,12 +19,12 @@ namespace _Game.Battle.Systems
         private EcsPool<ShapeData> shapePool;
         private EcsPool<UnitModifierData> modifierPool;
         private EcsPool<UnitPosTempData> unitPosTempPool;
-        private EcsFilter ecsFilter;
+        private EcsFilter filter;
 
         public void Init(IEcsSystems systems)
         {
             var world = systems.GetWorld();
-            ecsFilter = world.Filter<UnitData>()
+            filter = world.Filter<UnitData>()
                 .Inc<UnitPosTempData>()
                 .Inc<UnitModifierData>()
                 .Inc<MonsterFlag>()
@@ -41,7 +41,7 @@ namespace _Game.Battle.Systems
             shareData.Simulator.EnsureCompleted();
             shareData.Matrix.ResetTrigger();
 
-            foreach (var e in ecsFilter)
+            foreach (var e in filter)
             {
                 var unit = unitPool.Get(e);
                 var shape = shapePool.Get(e);
@@ -65,7 +65,7 @@ namespace _Game.Battle.Systems
                 }
             }
 
-            foreach (var e in ecsFilter)
+            foreach (var e in filter)
             {
                 var unit = unitPool.Get(e);
                 var paused = shareData.Simulator.IsAgentPaused(unit.agentId);
@@ -75,10 +75,13 @@ namespace _Game.Battle.Systems
                 var position = shareData.Simulator.GetAgentPosition(unit.agentId);
                 var goal = shareData.Simulator.GetAgentGoal(unit.agentId);
                 var radius = shareData.Simulator.GetAgentRadius(unit.agentId);
+                
+                ref var unitPosTemp = ref unitPosTempPool.Get(e);
 
                 if (ShouldPause(modifierPool.Get(e).effect, position, goal, radius))
                 {
                     Pause(e, unit.agentId, position);
+                    unitPosTemp.isStopped = true;
                 }
                 else
                 {
@@ -90,6 +93,8 @@ namespace _Game.Battle.Systems
                     {
                         shareData.Simulator.SetAgentGoal(unit.agentId);
                     }
+                    
+                    unitPosTemp.isStopped = false;
                 }
             }
 
@@ -102,7 +107,7 @@ namespace _Game.Battle.Systems
         {
             shareData.Simulator.EnsureCompleted();
 
-            foreach (var e in ecsFilter)
+            foreach (var e in filter)
             {
                 var unit = unitPool.Get(e);
 
@@ -111,7 +116,6 @@ namespace _Game.Battle.Systems
                     continue;
 
                 ref var unitPosTemp = ref unitPosTempPool.Get(e);
-                
                 var velocity = shareData.Simulator.GetAgentVelocity(unit.agentId);
                 if (math.lengthsq(velocity) < THREASHOLD_VELOCITYSQ)
                 {
@@ -119,7 +123,7 @@ namespace _Game.Battle.Systems
                     if (unitPosTemp.threasholdVelocityElapsed >= THREASHOLD_TIME)
                     {
                         var position = shareData.Simulator.GetAgentPosition(unit.agentId);
-                        Pause(e, unit.agentId, position);                        
+                        Pause(e, unit.agentId, position);
                     }
                 }
                 else

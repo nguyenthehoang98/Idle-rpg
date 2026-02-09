@@ -11,6 +11,7 @@ namespace _Game.Battle.Systems
         [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
 
         private EcsPool<UnitData> unitPool;
+        private EcsPool<UnitPosTempData> unitPosTempPool;
         private EcsPool<ShapeData> shapePool;
         private EcsFilter aliveFilter;
         private EcsFilter deadFilter;
@@ -20,15 +21,18 @@ namespace _Game.Battle.Systems
         {
             world = systems.GetWorld();
             deadFilter = world.Filter<UnitData>()
+                .Inc<UnitPosTempData>()
                 .Inc<MonsterFlag>()
                 .Inc<DeadFlag>()
                 .End();
             aliveFilter = world.Filter<UnitData>()
+                .Inc<UnitPosTempData>()
                 .Inc<MonsterFlag>()
                 .Exc<DeadFlag>()
                 .End();
             unitPool = world.GetPool<UnitData>();
             shapePool = world.GetPool<ShapeData>();
+            unitPosTempPool = world.GetPool<UnitPosTempData>();
         }
 
         public void PostRun(IEcsSystems systems)

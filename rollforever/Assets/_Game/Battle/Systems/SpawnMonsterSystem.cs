@@ -25,6 +25,7 @@ namespace _Game.Battle.Systems
         private EcsPool<UnitModifierData> modifierPool;
         private EcsPool<UnitPosTempData> unitPosTempPool;
         private EcsPool<MonsterFlag> monsterFlagPool;
+        private EcsPool<AttackCasterData> casterPool;
         private float tick;
         
         public async void Init(IEcsSystems systems)
@@ -40,6 +41,7 @@ namespace _Game.Battle.Systems
             monsterFlagPool = world.GetPool<MonsterFlag>();
             healthPool = world.GetPool<HealthData>();
             modifierPool = world.GetPool<UnitModifierData>();
+            casterPool = world.GetPool<AttackCasterData>();
             
             shareData.Simulator.SetTimeStep(shareData.TimeDelta);
             shareData.Simulator.SetAgentDefaults(1f, 10, 20f, 20f, 1.5f, 5f, float2.zero);
@@ -89,6 +91,7 @@ namespace _Game.Battle.Systems
                     unitPosTempPool.Add(entity) = new UnitPosTempData();
                     healthPool.Add(entity) = new HealthData(100);
                     modifierPool.Add(entity) = new UnitModifierData(StatusEffect.None);
+                    casterPool.Add(entity) = new AttackCasterData {cooldown = 0.5f};
 
                     // todo: add flag
                     monsterFlagPool.Add(entity);

@@ -13,7 +13,8 @@ namespace _Game.AbilitySystem
         private ISubStateModifier modifier;
 
         public StateModifierLogic(StateModifierArg arg,
-            Simulator simulator, EcsPool<UnitData> unitPool, EcsPool<UnitModifierData> modifierPool
+            Simulator simulator, EcsPool<UnitData> unitPool, EcsPool<UnitModifierData> modifierPool,
+            EcsPool<UnitPosTempData> unitPosTempPool
         )
         {
             group = arg.group;
@@ -24,7 +25,7 @@ namespace _Game.AbilitySystem
                     break;
                 case StateModifierType.Knockback:
                     modifier = new KnockBackSubStateModifier(
-                        arg.value, arg.duration, simulator, unitPool, modifierPool
+                        arg.value, arg.duration, simulator, unitPool, modifierPool, unitPosTempPool
                     );
                     break;
                 default:

@@ -57,6 +57,7 @@ namespace _Game.Battle
                 .Add(new SpawnMonsterSystem())
                 .Add(new MonsterMoveSystem())
                 .Add(new PlayerCasterSystem())
+                .Add(new MonsterCasterSystem())
                 .Add(new Systems.AbilitySystem())
                 .Add(new UnitCleanupSystem());
 
