@@ -15,14 +15,15 @@ namespace _Game.Battle.Systems
         {
             var world = systems.GetWorld();
             var unitPool = world.GetPool<UnitData>();
+            var playerPool = world.GetPool<PlayerFlag>();
 
             int entity = world.NewEntity();
-
             int agentId = shareData.Simulator.AddAgent(float2.zero);
             unitPool.Add(entity) = new UnitData(agentId);
 #if UNITY_EDITOR
             unitPool.Get(entity).color = Random.ColorHSV(0, 1, 0.5f, 1, 0.5f, 1);
-#endif
+#endif  
+            playerPool.Add(entity);
 
             float radius = 0.5f;
             shareData.Simulator.SetAgentRadius(agentId, radius);

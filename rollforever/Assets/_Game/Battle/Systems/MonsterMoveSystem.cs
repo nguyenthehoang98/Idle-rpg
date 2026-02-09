@@ -11,7 +11,6 @@ namespace _Game.Battle.Systems
     public class MonsterMoveSystem : IEcsInitSystem, IEcsRunSystem, IEcsPostRunSystem
     {
         [EcsInject] private readonly BattleStartupShareData shareData;
-        [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
 
         private const float THREASHOLD_VELOCITYSQ = 2.0f;
         private const float THREASHOLD_TIME = 1f;
