@@ -126,7 +126,7 @@ namespace _Game.Battle
             }
         }
 
-        public void ScanArea(float2 position, float radius, ICellVisitor visitor)
+        public void ScanArea(float2 position, float radius, IVisitor visitor)
         {
             int2 center = WorldToCell(position);
             int maxRange = (int)(radius / cellSize);
@@ -168,7 +168,7 @@ namespace _Game.Battle
             }
         }
 
-        public void ScanArea(float2 position, float2 size, ICellVisitor visitor)
+        public void ScanArea(float2 position, float2 size, IVisitor visitor)
         {
             int2 center = WorldToCell(position);
             float2 halfSize = size * 0.5f;

@@ -7,7 +7,7 @@ using Unity.Mathematics;
 
 namespace _Game.AbilitySystem
 {
-    class MonsterCellVisitor : ICellVisitor
+    class MonsterVisitor : IVisitor
     {
         private readonly EcsPool<UnitData> unitPool;
         private readonly EcsPool<ShapeData> shapePool;
@@ -27,7 +27,7 @@ namespace _Game.AbilitySystem
         public bool IsHit;
         public int RemainCanCollision { get; private set; }
 
-        public MonsterCellVisitor(
+        public MonsterVisitor(
             int maxCollision, bool shouldResetCollision, float resetCollisionInterval,
             Simulator simulator, ShapeLogic shapeLogic, StateModifierLogic stateModifierLogic,
             EcsPool<HealthData> healthPool,

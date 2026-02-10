@@ -8,7 +8,8 @@ namespace _KIT.Schedule
         readonly TickSystem tickSystem = new TickSystem();
         
         [Range(2, 60), SerializeField] private int fps;
-        [Range(0.2f, 10.0f), SerializeField] private float scaleTime = 1f;
+        [Range(0.2f, 10.0f), SerializeField] private float speed = 1f;
+        [Range(0.5f, 2.0f), SerializeField] private float scaleTime = 1f;
         
         public void Pause() => IsPaused = true;
 
@@ -35,6 +36,7 @@ namespace _KIT.Schedule
         private void Awake()
         {
             FrameDeltaTime = 1f / fps;
+            SetTimeScale(scaleTime);
         }
 
         void Update()
@@ -42,7 +44,7 @@ namespace _KIT.Schedule
             if (IsPaused)
                 return;
 
-            float dt = UnityEngine.Time.deltaTime * scaleTime;
+            float dt = UnityEngine.Time.deltaTime * speed;
             elapsed += dt;
             Time += dt;
             while (elapsed >= FrameDeltaTime)

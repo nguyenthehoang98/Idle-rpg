@@ -5,6 +5,7 @@ using _Game.Battle.Events;
 using _KIT.Event;
 using _KIT.Resource;
 using _KIT.Utils;
+using Cysharp.Threading.Tasks;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 using UnityEngine;
@@ -19,12 +20,6 @@ namespace _Game.Battle.Systems
         private EcsWorld world;
         private EcsFilter monsterFilter;
         private EcsFilter playerFilter;
-        private EcsPool<UnitData> unitPool;
-        private EcsPool<ShapeData> shapePool;
-        private EcsPool<DeadFlag> deadPool;
-        private EcsPool<HealthData> healthPool;
-        private EcsPool<UnitModifierData> modifierPool;
-        private EcsPool<UnitPosTempData> unitPosTempPool;
         
         // model
         private Dictionary<int, AbilityLogic> skillSource;
@@ -38,7 +33,6 @@ namespace _Game.Battle.Systems
             additions = new Queue<AbilityLogic>();
             completes = new Queue<AbilityLogic>();
             abilities = new List<AbilityLogic>();
-            skillSource = new Dictionary<int, AbilityLogic>();
 
             world = systems.GetWorld();
             monsterFilter = world.Filter<UnitData>()
@@ -48,26 +42,40 @@ namespace _Game.Battle.Systems
             playerFilter = world.Filter<UnitData>()
                 .Inc<PlayerFlag>()
                 .End();
-            unitPool = world.GetPool<UnitData>();
-            shapePool = world.GetPool<ShapeData>();
-            deadPool = world.GetPool<DeadFlag>();
-            healthPool = world.GetPool<HealthData>();
-            modifierPool = world.GetPool<UnitModifierData>();
-            unitPosTempPool = world.GetPool<UnitPosTempData>();
+           
+            var unitPool = world.GetPool<UnitData>();
+            var shapePool = world.GetPool<ShapeData>();
+            var deadPool = world.GetPool<DeadFlag>();
+            var healthPool = world.GetPool<HealthData>();
+            var modifierPool = world.GetPool<UnitModifierData>();
+            var unitPosTempPool = world.GetPool<UnitPosTempData>();
             
             findTargets = new Dictionary<FindTargetType, IFindTarget>();
             findTargets.Add(FindTargetType.Farthest, new FarthestFindTarget(shareData.Simulator, unitPool));
             findTargets.Add(FindTargetType.Nearest, new NearestFindTarget(shareData.Simulator, unitPool));
-
-            AbilityData abilityData = await KitLoaded.LoadAsync<AbilityData>("AbilityData");
-            skillSource[0] = new AbilityLogic(abilityData, shareData, runtimeData,
-                unitPool, shapePool, deadPool, healthPool, modifierPool, unitPosTempPool
-            );
-            AbilityData abilityData1 = await KitLoaded.LoadAsync<AbilityData>("AbilityData_1");
-            skillSource[1] = new AbilityLogic(abilityData1, shareData, runtimeData,
-                unitPool, shapePool, deadPool, healthPool, modifierPool, unitPosTempPool
-            );
+            skillSource = await BuildAbilities(new Dictionary<int, string>
+                {
+                    { 0, "AbilityData" },
+                    { 1, "AbilityData_1" },
+                }, shareData, runtimeData, unitPool, shapePool, deadPool, healthPool, modifierPool, unitPosTempPool,
+                playerFilter);
             EventBus.Instance.Subscribe<CastSkillEvent>(OnCastSkillArg);
+        }
+        private static async UniTask<Dictionary<int, AbilityLogic>> BuildAbilities(
+            Dictionary<int, string> abilitiesPath, BattleStartupShareData shareData, BattleStartupRuntimeData runtimeData,
+            EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool, EcsPool<DeadFlag> deadPool,
+            EcsPool<HealthData> healthPool, EcsPool<UnitModifierData> modifierPool, EcsPool<UnitPosTempData> unitPosTempPool,
+            EcsFilter playerFilter)
+        {
+            Dictionary<int, AbilityLogic> dict = new Dictionary<int, AbilityLogic>();
+            foreach (var (abilityId, path) in abilitiesPath)
+            {
+                AbilityData abilityData = await KitLoaded.LoadAsync<AbilityData>(path);
+                dict[abilityId] = new AbilityLogic(abilityData, Team.Player, shareData, runtimeData, 
+                    unitPool, shapePool, deadPool, healthPool, modifierPool, unitPosTempPool, playerFilter
+                );
+            }
+            return dict;
         }
 
         private void OnCastSkillArg(CastSkillEvent e)
@@ -79,9 +87,7 @@ namespace _Game.Battle.Systems
                     EcsFilter filter = e.Team == Team.Player ? monsterFilter : playerFilter;
                     if (findTarget.Find(e.StartPosition, filter, out int target))
                     {
-                        AbilityLogic abilityInstance = ability.CreateInstance(
-                            unitPool, shapePool, deadPool, healthPool, modifierPool, unitPosTempPool
-                        );
+                        AbilityLogic abilityInstance = ability.CreateInstance(e.Team);
                         abilityInstance.Startup(e.Source, e.StartPosition, target);
                         additions.Enqueue(abilityInstance);
                     }

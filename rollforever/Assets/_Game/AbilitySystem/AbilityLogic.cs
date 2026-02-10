@@ -1,7 +1,6 @@
 ﻿using System;
 using _Game.Battle;
 using _Game.Battle.Data;
-using _KIT.Utils;
 using Geometry;
 using Geometry.Primary;
 using Leopotam.EcsLite;
@@ -14,34 +13,49 @@ namespace _Game.AbilitySystem
     {
         public readonly AbilityData Data;
         // ecs
-        private readonly EcsPool<UnitData> unitPool;
-        private readonly EcsPool<UnitPosTempData> unitPosTempPool;
-        // model
         private readonly BattleStartupRuntimeData runtimeData;
         private readonly BattleStartupShareData shareData;
-        private readonly MonsterCellVisitor monsterVisitor;
+        private readonly EcsPool<UnitData> unitPool;
+        private readonly EcsPool<ShapeData> shapePool;
+        private readonly EcsPool<DeadFlag> deadPool;
+        private readonly EcsPool<HealthData> healthPool;
+        private readonly EcsPool<UnitModifierData> modifierPool;
+        private readonly EcsPool<UnitPosTempData> unitPosTempPool;
+        private readonly EcsFilter playerFilter; 
+        // model
+        private readonly MonsterVisitor monsterVisitor;
+        private readonly IVisitor playerVisitor;
         // modules
         private readonly ShapeLogic shapeLogic;
         private readonly StateModifierLogic stateModifierLogic;
         private readonly TrajectoryLogic trajectoryLogic;
         private readonly float lifeTime;
         // runtimes
+        private Team sourceTeam;
         private int unitId;
         private float elapsed;
 
-        public AbilityLogic(AbilityData data,
+        public AbilityLogic(AbilityData data, Team sourceTeam,
             BattleStartupShareData shareData, BattleStartupRuntimeData runtimeData,
             EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool,
             EcsPool<DeadFlag> deadPool, EcsPool<HealthData> healthPool, 
-            EcsPool<UnitModifierData> modifierPool, EcsPool<UnitPosTempData> unitPosTempPool)
+            EcsPool<UnitModifierData> modifierPool, EcsPool<UnitPosTempData> unitPosTempPool,
+            EcsFilter playerFilter)
         {
             this.Data = data;
             this.lifeTime = data.core.lifeTime;
-            this.runtimeData = runtimeData;
+            
             this.shareData = shareData;
-
             this.unitPool = unitPool;
+            this.shapePool = shapePool;
+            this.deadPool = deadPool;
+            this.healthPool = healthPool;
+            this.modifierPool = modifierPool;
             this.unitPosTempPool = unitPosTempPool;
+            this.playerFilter = playerFilter;
+            
+            this.sourceTeam = sourceTeam;
+            this.runtimeData = runtimeData;
             
             shapeLogic = new ShapeLogic(data.shape);
             stateModifierLogic = new StateModifierLogic(
@@ -49,10 +63,11 @@ namespace _Game.AbilitySystem
             );
             trajectoryLogic = new TrajectoryLogic(data.trajectory);
             
-            monsterVisitor = new MonsterCellVisitor(
+            monsterVisitor = new MonsterVisitor(
                 data.core.maxCollision, data.core.shouldResetCollision, data.core.resetCollisionInterval,
                 shareData.Simulator, shapeLogic, stateModifierLogic,
                 healthPool, unitPool, shapePool, deadPool);
+            playerVisitor = new PlayerVisitor();
         }
 
         public void Startup(int source, float2 startPos, int target)
@@ -73,23 +88,15 @@ namespace _Game.AbilitySystem
             // todo: pre update
             shapeLogic.PreExecute(deltaTime);
 
-            monsterVisitor.PreVisit(center);
-            
-            // todo: update
-            if (shapeLogic.Shape.type == ShapeType.Box)
-            {
-                shareData.Matrix.ScanArea(center, shapeLogic.Shape.size, monsterVisitor);
-            }
-            else if (shapeLogic.Shape.type == ShapeType.Circle)
-            {
-                shareData.Matrix.ScanArea(center, shapeLogic.Shape.radius, monsterVisitor);
-            }
+            if(sourceTeam == Team.Player)
+                PreHandleMonsters(center);
+            else if (sourceTeam == Team.Monster)
+                PreHandlePlayers(center);
+
+            if (sourceTeam == Team.Player)
+                HandleMonsters(center);
             else
-            {
-#if DEVELOP_MODE
-                throw new Exception($"Shape {shapeLogic.Shape.type} chưa được xác định");        
-#endif          
-            }
+                HandlePlayers(center);
             
             stateModifierLogic.Update(deltaTime);
             
@@ -97,7 +104,10 @@ namespace _Game.AbilitySystem
             
             shapeLogic.AfterExecute(center);
             
-            monsterVisitor.AfterVisit(deltaTime);
+            if (sourceTeam == Team.Player)
+                AfterHandleMonsters(deltaTime);
+            else if (sourceTeam == Team.Monster)
+                AfterHandlePlayer();
             
 #if UNITY_EDITOR && DEVELOP_MODE
             Color color = monsterVisitor.IsHit ? Color.red : Color.green;
@@ -118,6 +128,46 @@ namespace _Game.AbilitySystem
 #endif
         }
 
+        private void PreHandlePlayers(float2 center)
+        {
+        }
+
+        private void HandlePlayers(float2 center)
+        {
+        }
+
+        private void AfterHandlePlayer()
+        {
+        }
+        
+        private void PreHandleMonsters(float2 center)
+        {
+            monsterVisitor.PreVisit(center);
+        }
+
+        private void HandleMonsters(float2 center)
+        {
+            // todo: update
+            if (shapeLogic.Shape.type == ShapeType.Box)
+            {
+                shareData.Matrix.ScanArea(center, shapeLogic.Shape.size, monsterVisitor);
+            }
+            else if (shapeLogic.Shape.type == ShapeType.Circle)
+            {
+                shareData.Matrix.ScanArea(center, shapeLogic.Shape.radius, monsterVisitor);
+            }
+            else
+            {
+#if DEVELOP_MODE
+                throw new Exception($"Shape {shapeLogic.Shape.type} chưa được xác định");        
+#endif          
+            }
+        }
+        private void AfterHandleMonsters(float deltaTime)
+        {
+            monsterVisitor.AfterVisit(deltaTime);
+        }
+        
         public void Shutdown()
         {
             shapeLogic.Shutdown();
@@ -134,13 +184,11 @@ namespace _Game.AbilitySystem
 
         public bool IsCompleted => elapsed >= lifeTime || monsterVisitor.RemainCanCollision <= 0;
 
-        public AbilityLogic CreateInstance(EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool,
-            EcsPool<DeadFlag> deadPool, EcsPool<HealthData> healthPool, 
-            EcsPool<UnitModifierData> modifierPool, EcsPool<UnitPosTempData> unitPosTempPool)
+        public AbilityLogic CreateInstance(Team team)
         {
-            return new AbilityLogic(Data, shareData, runtimeData,
-                unitPool, shapePool, deadPool, healthPool, modifierPool, unitPosTempPool
-            );
+            return new AbilityLogic(Data, team, shareData, runtimeData,
+                unitPool, shapePool, deadPool, healthPool, modifierPool, unitPosTempPool,
+                playerFilter);
         }
 
         public void OnEntityCreated(int entity)
