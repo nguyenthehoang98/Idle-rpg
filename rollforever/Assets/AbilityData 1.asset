@@ -26,7 +26,7 @@ MonoBehaviour:
     size:
       x: 2
       y: 2
-    radius: 2
+    radius: 0.25
     customValue: 0
     curve:
       serializedVersion: 2

@@ -12,6 +12,7 @@ namespace _Game.Battle.Systems
     {
         [EcsInject] private readonly BattleStartupShareData shareData;
 
+        private EcsPool<UnitData> unitPool;
         private EcsPool<UnitPosTempData> unitPosTempPool;
         private EcsPool<AttackCasterData> attackCasterPool;
         private EcsFilter filter;
@@ -24,6 +25,7 @@ namespace _Game.Battle.Systems
                 .Inc<AttackCasterData>()
                 .Exc<DeadFlag>()
                 .End();
+            unitPool = world.GetPool<UnitData>();
             unitPosTempPool = world.GetPool<UnitPosTempData>();
             attackCasterPool = world.GetPool<AttackCasterData>();
         }
@@ -41,10 +43,9 @@ namespace _Game.Battle.Systems
                 if (attack.elapsed >= attack.cooldown)
                 {
                     attack.elapsed = 0;
-                    Debug.Log("monster-caster: " + e);
-                    /*EventBus.Instance.Publish(
-                        new CastSkillEvent(e, 0, float2.zero, Team.Player)
-                    );*/
+                    EventBus.Instance.Publish(
+                        new CastSkillEvent(e, 1, shareData.Simulator.GetAgentPosition(unitPool.Get(e).agentId), Team.Monster)
+                    );
                 }
             }
         }

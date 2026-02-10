@@ -87,10 +87,10 @@ namespace _Game.AbilitySystem
             if (IsHit)
             {
                 ref var health = ref healthPool.Get(entity);
-                health.health -= 10;
+                health.health -= 50;
                 if (health.health <= 0)
                 {
-                    deadPool.Add(entity);
+                    if(!deadPool.Has(entity)) deadPool.Add(entity);
                 }
                 else
                 {

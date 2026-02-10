@@ -7,6 +7,7 @@ using _KIT.Resource;
 using _KIT.Utils;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
+using UnityEngine;
 
 namespace _Game.Battle.Systems
 {
@@ -59,13 +60,13 @@ namespace _Game.Battle.Systems
             findTargets.Add(FindTargetType.Nearest, new NearestFindTarget(shareData.Simulator, unitPool));
 
             AbilityData abilityData = await KitLoaded.LoadAsync<AbilityData>("AbilityData");
-            foreach (var e in playerFilter)
-            {
-                skillSource[e] = new AbilityLogic(abilityData, shareData, runtimeData,
-                    e, unitPool, shapePool, deadPool, healthPool, modifierPool, unitPosTempPool
-                );
-            }
-            
+            skillSource[0] = new AbilityLogic(abilityData, shareData, runtimeData,
+                unitPool, shapePool, deadPool, healthPool, modifierPool, unitPosTempPool
+            );
+            AbilityData abilityData1 = await KitLoaded.LoadAsync<AbilityData>("AbilityData_1");
+            skillSource[1] = new AbilityLogic(abilityData1, shareData, runtimeData,
+                unitPool, shapePool, deadPool, healthPool, modifierPool, unitPosTempPool
+            );
             EventBus.Instance.Subscribe<CastSkillEvent>(OnCastSkillArg);
         }
 
@@ -79,12 +80,30 @@ namespace _Game.Battle.Systems
                     if (findTarget.Find(e.StartPosition, filter, out int target))
                     {
                         AbilityLogic abilityInstance = ability.CreateInstance(
-                            e.Source, unitPool, shapePool, deadPool, healthPool, modifierPool, unitPosTempPool
+                            unitPool, shapePool, deadPool, healthPool, modifierPool, unitPosTempPool
                         );
-                        abilityInstance.Startup(e.StartPosition, target);
+                        abilityInstance.Startup(e.Source, e.StartPosition, target);
                         additions.Enqueue(abilityInstance);
                     }
+                    else
+                    {
+#if DEVELOP_MODE
+                        Debug.LogError($"Không tìm thấy mục tiêu, kĩ năng id '{e.SkillId}'");
+#endif
+                    }
                 }
+                else
+                {
+#if DEVELOP_MODE
+                    Debug.LogError($"Kiểu tìm mục tiêu '{ability.Data.core.findTarget}' chưa được đăng kí, kĩ năng id '{e.SkillId}'");   
+#endif
+                }
+            }
+            else
+            {
+#if DEVELOP_MODE
+                Debug.LogError($"Kĩ năng id '{e.SkillId}' chưa được đăng kí");
+#endif
             }
         }
 

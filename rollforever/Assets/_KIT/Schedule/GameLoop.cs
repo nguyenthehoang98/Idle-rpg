@@ -6,9 +6,10 @@ namespace _KIT.Schedule
     public sealed class GameLoop : MonoBehaviour, ITickSubscribe
     {
         readonly TickSystem tickSystem = new TickSystem();
-
+        
         [Range(2, 60), SerializeField] private int fps;
-
+        [Range(0.2f, 10.0f), SerializeField] private float scaleTime = 1f;
+        
         public void Pause() => IsPaused = true;
 
         public void Resume() => IsPaused = false;
@@ -41,13 +42,13 @@ namespace _KIT.Schedule
             if (IsPaused)
                 return;
 
-            float dt = UnityEngine.Time.deltaTime;
+            float dt = UnityEngine.Time.deltaTime * scaleTime;
             elapsed += dt;
             Time += dt;
-            if (elapsed >= FrameDeltaTime)
+            while (elapsed >= FrameDeltaTime)
             {
                 tickSystem.Update(FrameDeltaTime * ScaleTime);
-                elapsed -= FrameDeltaTime;
+                elapsed -= FrameDeltaTime;                
             }
         }
     }

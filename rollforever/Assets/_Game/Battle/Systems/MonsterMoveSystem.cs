@@ -77,7 +77,6 @@ namespace _Game.Battle.Systems
                 var radius = shareData.Simulator.GetAgentRadius(unit.agentId);
                 
                 ref var unitPosTemp = ref unitPosTempPool.Get(e);
-
                 if (ShouldPause(modifierPool.Get(e).effect, position, goal, radius))
                 {
                     Pause(e, unit.agentId, position);

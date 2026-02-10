@@ -14,12 +14,7 @@ namespace _Game.AbilitySystem
     {
         public readonly AbilityData Data;
         // ecs
-        private readonly int unitId;
         private readonly EcsPool<UnitData> unitPool;
-        private readonly EcsPool<ShapeData> shapePool;
-        private readonly EcsPool<DeadFlag> deadPool;
-        private readonly EcsPool<HealthData> healthPool;
-        private readonly EcsPool<UnitModifierData> modifierPool;
         private readonly EcsPool<UnitPosTempData> unitPosTempPool;
         // model
         private readonly BattleStartupRuntimeData runtimeData;
@@ -30,11 +25,13 @@ namespace _Game.AbilitySystem
         private readonly StateModifierLogic stateModifierLogic;
         private readonly TrajectoryLogic trajectoryLogic;
         private readonly float lifeTime;
+        // runtimes
+        private int unitId;
         private float elapsed;
 
         public AbilityLogic(AbilityData data,
             BattleStartupShareData shareData, BattleStartupRuntimeData runtimeData,
-            int unitId, EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool,
+            EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool,
             EcsPool<DeadFlag> deadPool, EcsPool<HealthData> healthPool, 
             EcsPool<UnitModifierData> modifierPool, EcsPool<UnitPosTempData> unitPosTempPool)
         {
@@ -43,12 +40,7 @@ namespace _Game.AbilitySystem
             this.runtimeData = runtimeData;
             this.shareData = shareData;
 
-            this.unitId = unitId;
             this.unitPool = unitPool;
-            this.shapePool = shapePool;
-            this.deadPool = deadPool;
-            this.healthPool = healthPool;
-            this.modifierPool = modifierPool;
             this.unitPosTempPool = unitPosTempPool;
             
             shapeLogic = new ShapeLogic(data.shape);
@@ -63,10 +55,11 @@ namespace _Game.AbilitySystem
                 healthPool, unitPool, shapePool, deadPool);
         }
 
-        public void Startup(float2 startPos, int target)
+        public void Startup(int source, float2 startPos, int target)
         {
-            UnitData unit = unitPool.Get(target);
-            float2 targetPos = shareData.Simulator.GetAgentPosition(unit.agentId);
+            unitId = source;
+            UnitData targetData = unitPool.Get(target);
+            float2 targetPos = shareData.Simulator.GetAgentPosition(targetData.agentId);
             trajectoryLogic.Startup(startPos, targetPos);
             stateModifierLogic.Startup(unitId);
             shapeLogic.Startup(startPos);
@@ -141,12 +134,12 @@ namespace _Game.AbilitySystem
 
         public bool IsCompleted => elapsed >= lifeTime || monsterVisitor.RemainCanCollision <= 0;
 
-        public AbilityLogic CreateInstance(int unitId, EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool,
+        public AbilityLogic CreateInstance(EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool,
             EcsPool<DeadFlag> deadPool, EcsPool<HealthData> healthPool, 
             EcsPool<UnitModifierData> modifierPool, EcsPool<UnitPosTempData> unitPosTempPool)
         {
             return new AbilityLogic(Data, shareData, runtimeData,
-                unitId, unitPool, shapePool, deadPool, healthPool, modifierPool, unitPosTempPool
+                unitPool, shapePool, deadPool, healthPool, modifierPool, unitPosTempPool
             );
         }
 
