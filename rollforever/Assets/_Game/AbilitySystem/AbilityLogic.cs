@@ -91,7 +91,8 @@ namespace _Game.AbilitySystem
             if(sourceTeam == Team.Player)
                 PreHandleMonsters(center);
             else if (sourceTeam == Team.Monster)
-                PreHandlePlayers(center);
+            {
+            }
 
             if (sourceTeam == Team.Player)
                 HandleMonsters(center);
@@ -107,8 +108,9 @@ namespace _Game.AbilitySystem
             if (sourceTeam == Team.Player)
                 AfterHandleMonsters(deltaTime);
             else if (sourceTeam == Team.Monster)
-                AfterHandlePlayer();
-            
+            {
+            }
+
 #if UNITY_EDITOR && DEVELOP_MODE
             Color color = monsterVisitor.IsHit ? Color.red : Color.green;
          
@@ -128,16 +130,20 @@ namespace _Game.AbilitySystem
 #endif
         }
 
-        private void PreHandlePlayers(float2 center)
-        {
-        }
-
         private void HandlePlayers(float2 center)
         {
-        }
-
-        private void AfterHandlePlayer()
-        {
+            foreach (var e in playerFilter)
+            {
+                var unit = unitPool.Get(e);
+                var shape = shapePool.Get(e);
+                float2 agentPos = shareData.Simulator.GetAgentPosition(unit.agentId);
+                shapeLogic.Execute(center, shape.Value, agentPos, out bool hit);
+                if (hit)
+                {
+                    ref var health = ref healthPool.Get(e);
+                    health.health -= 50;
+                }
+            }
         }
         
         private void PreHandleMonsters(float2 center)
