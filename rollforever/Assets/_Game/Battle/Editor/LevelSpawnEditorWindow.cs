@@ -75,15 +75,40 @@ namespace _Game.Battle.Editor
 
             public void Push(LevelSpawnConfig config, Color color)
             {
-                Point p = new Point();
-                p.color = color;
-
                 List<float> powers = new List<float>();
                 foreach (var wave in config.waves)
                 {
                     powers.Add(wave.power);
                 }
 
+                Point p = new Point();
+                p.color = color;
+                float max = powers.Max();
+                float total = powers.Count - 1;
+                for (int i = 0; i < powers.Count; i++)
+                {
+                    p.points.Add(new Vector2(i / total, powers[i] / max));
+                }
+
+                point = p;
+            }
+
+            public void Push(List<LevelSpawnConfig> configs, Color color)
+            {
+                List<int> powers = new List<int>();
+                foreach (var config in configs)
+                {
+                    int power = 0;
+                    if (config != null)
+                    {
+                        foreach (var wave in config.waves) power += wave.power;
+                    }
+
+                    powers.Add(power);
+                }
+                
+                Point p = new Point();
+                p.color = color;
                 float max = powers.Max();
                 float total = powers.Count - 1;
                 for (int i = 0; i < powers.Count; i++)
@@ -273,7 +298,27 @@ namespace _Game.Battle.Editor
             if (GUILayout.Button("Preview Level", GUILayout.Height(32)))
             {
                 if (ValidateRange(rangeInput))
-                    SpawnRange(rangeInput);
+                {
+                    List<LevelSpawnConfig> list = new List<LevelSpawnConfig>();
+                    for (int level = rangeInput.fromLevel; level <= rangeInput.toLevel; level++)
+                    {
+                        string path = "Assets/SpawnConfig_" + level + ".asset";
+                        LevelSpawnConfig config = AssetDatabase.LoadAssetAtPath<LevelSpawnConfig>(path);
+                        list.Add(config);
+                    }
+
+                    if (list.Count > 0)
+                    {
+                        shouldDrawChart = true;
+                        showHelpbox = false;
+                        chartData.Push(list, Color.yellow);                        
+                    }
+                    else
+                    {
+                        showHelpbox = true;
+                        errorMessage = $"Không có level nào phù hợp [{rangeInput.fromLevel} : [{rangeInput.toLevel}]]";
+                    }
+                }
             }
         }
 
@@ -355,18 +400,6 @@ namespace _Game.Battle.Editor
         private static void ShowError(string message)
         {
             EditorUtility.DisplayDialog("Invalid Input", message, "OK");
-        }
-
-        #endregion
-
-        #region Spawn Logic
-
-        private void SpawnRange(LevelInput input)
-        {
-            for (int level = input.fromLevel; level <= input.toLevel; level++)
-            {
-                Debug.Log($"[Spawn] Level {level}");
-            }
         }
 
         #endregion
