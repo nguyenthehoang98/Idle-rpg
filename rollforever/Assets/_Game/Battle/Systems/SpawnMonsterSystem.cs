@@ -26,12 +26,13 @@ namespace _Game.Battle.Systems
         private EcsPool<UnitPosTempData> unitPosTempPool;
         private EcsPool<MonsterFlag> monsterFlagPool;
         private EcsPool<AttackCasterData> casterPool;
-        
-        private LevelState state = LevelState.Idle;
-        private int currentWaveIndex = 0;
-        private float waveTimer = 0f;
-        private int nextBatchIndex = 0;
-        private float tick;
+       
+        private int waveIndex;
+        private int batchIndex;
+        private int spawnedCount;
+        private float spawnElapsed;
+        private float batchElapsed;
+        private bool isPaused;
         
         public async void Init(IEcsSystems systems)
         {
@@ -54,6 +55,40 @@ namespace _Game.Battle.Systems
 
         public void Run(IEcsSystems systems)
         {
+            float dt = shareData.TimeDelta;
+            if (waveIndex < shareData.LevelSpawnConfig.waves.Count && !isPaused)
+            {
+                var wave = shareData.LevelSpawnConfig.waves[waveIndex];
+                if (batchIndex < wave.batches.Count)
+                {
+                    var batch = wave.batches[batchIndex];
+                    batchElapsed += dt;
+                    spawnElapsed -= dt;
+                    
+                    while (spawnElapsed <= 0 && spawnedCount < batch.enemies.Count)
+                    {
+                        Spawn(batch);
+                        spawnedCount++;
+                        spawnElapsed += batch.interval;
+                    }
+
+                    if (spawnedCount >= batch.count || batchElapsed >= batch.duration)
+                    {
+                        batchIndex++;
+                        spawnedCount = 0;
+                        batchElapsed = 0;
+                        spawnElapsed = 0;
+                    }
+
+                    if (batchIndex >= wave.batches.Length)
+                    {
+                        isPaused = true;
+                        NextWave();
+                    }
+                }
+            }
+            
+            
             tick += shareData.TimeDelta;
             if (tick >= 1.0f)
             {
@@ -171,15 +206,6 @@ namespace _Game.Battle.Systems
 
             hitPoint = pos + dir * t;
             return true;
-        }
-        
-        public enum LevelState
-        {
-            Idle,
-            SpawningWave,
-            WaitingClear,
-            PausedBetweenWave,
-            Completed
         }
     }
 }
