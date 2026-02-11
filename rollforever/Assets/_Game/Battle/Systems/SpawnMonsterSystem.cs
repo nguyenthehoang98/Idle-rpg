@@ -26,6 +26,11 @@ namespace _Game.Battle.Systems
         private EcsPool<UnitPosTempData> unitPosTempPool;
         private EcsPool<MonsterFlag> monsterFlagPool;
         private EcsPool<AttackCasterData> casterPool;
+        
+        private LevelState state = LevelState.Idle;
+        private int currentWaveIndex = 0;
+        private float waveTimer = 0f;
+        private int nextBatchIndex = 0;
         private float tick;
         
         public async void Init(IEcsSystems systems)
@@ -55,52 +60,51 @@ namespace _Game.Battle.Systems
                 shareData.Simulator.EnsureCompleted();
 
                 float halfSize = 2;
-                float radius = Random.Range(0.5f, 1.5f);
                 float2 center = float2.zero;
-
-                for (var i = 0; i < 1; i++)
-                {
-                    float2 pos = RandomPointOnCircle(center, Random.Range(20, 30));
-                   
-                    float2 goal;
-                    if (RaycastToSquareBorder(pos, center, halfSize, out var hitPoint))
-                    {
-                        goal = hitPoint;
-                    }
-                    else
-                    {
-                        goal = ProjectPointToSquareBorder(pos, halfSize);
-                    }
-
-                    int agentId = shareData.Simulator.AddAgent(pos);
-
-                    int entity = world.NewEntity();
-                    unitPool.Add(entity) = new UnitData(agentId);
-#if UNITY_EDITOR
-                    unitPool.Get(entity).color = Random.ColorHSV(0, 1, 0.5f, 1, 0.5f, 1);
-#endif
-
-                    // todo: set agent
-                    shareData.Simulator.SetAgentRadius(agentId, radius);
-                    shareData.Simulator.SetAgentNeighborDist(agentId, radius * 3f);
-                    shareData.Simulator.SetAgentGoal(agentId, goal);
-                    shareData.Simulator.SetAgentPrefVelocity(agentId, math.normalize(goal - pos));
-                    
-                    // todo: add component
-                    shapePool.Add(entity) = ShapeData.Circle(radius);
-                    unitPosTempPool.Add(entity) = new UnitPosTempData();
-                    healthPool.Add(entity) = new HealthData(100);
-                    modifierPool.Add(entity) = new UnitModifierData(StatusEffect.None);
-                    casterPool.Add(entity) = new AttackCasterData {cooldown = 0.5f};
-
-                    // todo: add flag
-                    monsterFlagPool.Add(entity);
-                }
 
                 tick = 0;
             }
         }
 
+        private void SpawnEntity(float2 center, float rangeLimit, float radius)
+        {
+            float2 pos = RandomPointOnCircle(center, Random.Range(20, 30));
+                   
+            float2 goal;
+            if (RaycastToSquareBorder(pos, center, rangeLimit, out var hitPoint))
+            {
+                goal = hitPoint;
+            }
+            else
+            {
+                goal = ProjectPointToSquareBorder(pos, rangeLimit);
+            }
+
+            int agentId = shareData.Simulator.AddAgent(pos);
+
+            int entity = world.NewEntity();
+            unitPool.Add(entity) = new UnitData(agentId);
+#if UNITY_EDITOR
+            unitPool.Get(entity).color = Random.ColorHSV(0, 1, 0.5f, 1, 0.5f, 1);
+#endif
+
+            // todo: set agent
+            shareData.Simulator.SetAgentRadius(agentId, radius);
+            shareData.Simulator.SetAgentNeighborDist(agentId, radius * 3f);
+            shareData.Simulator.SetAgentGoal(agentId, goal);
+            shareData.Simulator.SetAgentPrefVelocity(agentId, math.normalize(goal - pos));
+                    
+            // todo: add component
+            shapePool.Add(entity) = ShapeData.Circle(radius);
+            unitPosTempPool.Add(entity) = new UnitPosTempData();
+            healthPool.Add(entity) = new HealthData(100);
+            modifierPool.Add(entity) = new UnitModifierData(StatusEffect.None);
+            casterPool.Add(entity) = new AttackCasterData {cooldown = 0.5f};
+
+            // todo: add flag
+            monsterFlagPool.Add(entity);
+        }
+        
         static float2 RandomPointOnCircle(float2 center, float radius)
         {
             var angle = Random.Range(0f, Mathf.PI * 2f);
@@ -167,6 +171,15 @@ namespace _Game.Battle.Systems
 
             hitPoint = pos + dir * t;
             return true;
+        }
+        
+        public enum LevelState
+        {
+            Idle,
+            SpawningWave,
+            WaitingClear,
+            PausedBetweenWave,
+            Completed
         }
     }
 }

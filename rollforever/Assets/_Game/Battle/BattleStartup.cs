@@ -7,6 +7,8 @@ using RVO;
 using UnityEngine;
 using _Game.Battle.Events;
 using _KIT.Event;
+using _KIT.Pool;
+using _KIT.Resource;
 using Unity.Mathematics;
 #if UNITY_EDITOR
 using Leopotam.EcsLite.UnityEditor;
@@ -28,16 +30,19 @@ namespace _Game.Battle
             Application.targetFrameRate = 60;
         }
 
-        private void Start()
+        private async void Start()
         {
             // todo: game loop
             gameLoop = GetComponent<GameLoop>();
             gameLoop.Pause();
+
+            LevelSpawnConfig spawnConfig = await KitLoaded.LoadAsync<LevelSpawnConfig>("SpawnConfig_1"); 
             
             // todo: battle world
             world = new EcsWorld();
             shareData = new BattleStartupShareData(
-                new Simulator(), new Matrix(100, 120, 0.5f),  gameLoop.FrameDeltaTime
+                new Simulator(), new Matrix(100, 120, 0.5f), spawnConfig,
+                gameLoop.FrameDeltaTime
             );
             BattleStartupRuntimeData runtimeData = new BattleStartupRuntimeData();
             
