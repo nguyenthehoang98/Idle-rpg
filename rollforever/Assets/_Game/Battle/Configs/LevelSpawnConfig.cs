@@ -32,7 +32,6 @@ namespace _Game.Battle
         {
             public float duration;
             public int powerBudget;
-            public AnimationCurve curve;
             public List<EnemySpawnConfig> enemies;
         }
         
