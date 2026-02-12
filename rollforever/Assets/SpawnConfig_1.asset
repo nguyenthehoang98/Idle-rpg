@@ -12,35 +12,115 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 586ceb6b2ed23db4a972de05fa7d0666, type: 3}
   m_Name: SpawnConfig_1
   m_EditorClassIdentifier: 
-  maxAlive: 0
+  maxAlive: 40
   waves:
   - power: 66
     isBoosWave: 0
-    batches: []
+    batches:
+    - duration: 1
+      waitTimeSpawn: 0
+      power: 44
+      enemies:
+      - enemyId: 1
+        enemyLevelRange: {x: 1, y: 2}
+        weight: 1
+    - duration: 1
+      waitTimeSpawn: 0
+      power: 22
+      enemies:
+      - enemyId: 1
+        enemyLevelRange: {x: 1, y: 2}
+        weight: 1
   - power: 69
     isBoosWave: 0
-    batches: []
+    batches:
+    - duration: 1
+      waitTimeSpawn: 0
+      power: 51
+      enemies:
+      - enemyId: 2
+        enemyLevelRange: {x: 1, y: 2}
+        weight: 1
+      - enemyId: 1
+        enemyLevelRange: {x: 1, y: 2}
+        weight: 1
   - power: 75
     isBoosWave: 0
-    batches: []
+    batches:
+    - duration: 1
+      waitTimeSpawn: 0
+      power: 75
+      enemies:
+      - enemyId: 2
+        enemyLevelRange: {x: 1, y: 2}
+        weight: 1
   - power: 83
     isBoosWave: 0
-    batches: []
+    batches:
+    - duration: 1
+      waitTimeSpawn: 0
+      power: 47
+      enemies:
+      - enemyId: 1
+        enemyLevelRange: {x: 1, y: 2}
+        weight: 1
   - power: 88
     isBoosWave: 0
-    batches: []
+    batches:
+    - duration: 1
+      waitTimeSpawn: 0
+      power: 88
+      enemies:
+      - enemyId: 1
+        enemyLevelRange: {x: 1, y: 2}
+        weight: 1
   - power: 100
     isBoosWave: 0
-    batches: []
+    batches:
+    - duration: 1
+      waitTimeSpawn: 0
+      power: 97
+      enemies:
+      - enemyId: 1
+        enemyLevelRange: {x: 1, y: 2}
+        weight: 1
   - power: 109
     isBoosWave: 0
-    batches: []
+    batches:
+    - duration: 1
+      waitTimeSpawn: 0
+      power: 109
+      enemies:
+      - enemyId: 1
+        enemyLevelRange: {x: 1, y: 2}
+        weight: 1
   - power: 122
     isBoosWave: 0
-    batches: []
+    batches:
+    - duration: 0
+      waitTimeSpawn: 0
+      power: 122
+      enemies:
+      - enemyId: 1
+        enemyLevelRange: {x: 1, y: 2}
+        weight: 1
   - power: 136
     isBoosWave: 0
-    batches: []
+    batches:
+    - duration: 0
+      waitTimeSpawn: 0
+      power: 136
+      enemies:
+      - enemyId: 1
+        enemyLevelRange: {x: 1, y: 2}
+        weight: 1
   - power: 146
     isBoosWave: 0
-    batches: []
+    batches:
+    - duration: 1
+      waitTimeSpawn: 0
+      power: 143
+      enemies:
+      - enemyId: 1
+        enemyLevelRange: {x: 1, y: 2}
+        weight: 1

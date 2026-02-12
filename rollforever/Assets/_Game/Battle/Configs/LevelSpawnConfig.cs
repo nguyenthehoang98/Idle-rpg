@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine.Serialization;
 
 namespace _Game.Battle
@@ -18,9 +17,9 @@ namespace _Game.Battle
     {
         public int maxAlive;
         public List<WaveSpawn> waves = new List<WaveSpawn>();
-        
+
         [Serializable]
-        public struct WaveSpawn
+        public class WaveSpawn
         {
             public int power;
             public bool isBoosWave;
@@ -28,18 +27,19 @@ namespace _Game.Battle
         }
         
         [Serializable]
-        public struct BatchSpawn
+        public class BatchSpawn
         {
             public float duration;
-            public int powerBudget;
-            public List<EnemySpawnConfig> enemies;
+            public float waitTimeSpawn;
+            public int power;
+            public List<EnemySpawn> enemies;
         }
         
         [Serializable]
-        public class EnemySpawnConfig
+        public class EnemySpawn
         {
             public int enemyId;
-            public int2 enemyLevelRange;
+            public Vector2Int enemyLevelRange;
             public int weight;
         }
     }
