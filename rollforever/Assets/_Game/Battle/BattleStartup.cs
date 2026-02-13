@@ -41,6 +41,7 @@ namespace _Game.Battle
             // todo: battle world
             world = new EcsWorld();
             shareData = new BattleStartupShareData(
+                gameLoop,
                 new Simulator(), new Matrix(100, 120, 0.5f), spawnConfig,
                 gameLoop.FrameDeltaTime
             );

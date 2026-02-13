@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using _Game.AbilitySystem;
@@ -33,8 +34,9 @@ namespace _Game.Battle.Systems
         private int waveIndex;
         private int batchIndex;
         private int spawnedCount;
-        private float spawnElapsed;
+        private double spawnElapsed;
         private float batchElapsed;
+        private float waitElapsed;
         private bool isPaused;
 
         public async void Init(IEcsSystems systems)
@@ -68,6 +70,7 @@ namespace _Game.Battle.Systems
                     // todo: xử lý tính toán số lượng quái sinh ra ở đay
                     LevelSpawnConfig.BatchSpawn batchSpawn = waveSpawn.batches[i];
                     Batch batch = new Batch();
+                    batch.duration = batchSpawn.duration;
                     batch.waitTime = batchSpawn.waitTimeSpawn;
                     batch.monsters = new List<MonsterId>();
 
@@ -151,15 +154,21 @@ namespace _Game.Battle.Systems
                 var wave = waves[i];
 
                 int wavePower = 0;
+                List<int> count = new List<int>();
+                List<float> interval = new List<float>();
                 foreach (var batch in wave.batches)
                 {
+                    count.Add(batch.monsters.Count);
+                    interval.Add((float)Math.Round(batch.interval, 3));
                     foreach (var monster in batch.monsters)
                     {
                         wavePower += BattleFormula.PowerMonster(monster.id, monster.level);
                     }
                 }
 
-                sb.AppendLine($"Wave #{i+1}: ({waveSpawn.power}:{wavePower})");
+                sb.AppendLine($"Wave #{i+1}: ({waveSpawn.power}:{wavePower}). " +
+                              $"Count: {string.Join(',', count)}. " +
+                              $"Interval: {string.Join(',', interval)}");
             }
 
             float threshold = 0.3f;
@@ -175,33 +184,41 @@ namespace _Game.Battle.Systems
 
         public void Run(IEcsSystems systems)
         {
-            /*float dt = shareData.TimeDelta;
-            if (waveIndex < shareData.LevelSpawnConfig.waves.Count && !isPaused)
+            float dt = shareData.TimeDelta;
+            if (waveIndex < waves.Count && !isPaused)
             {
-                var wave = shareData.LevelSpawnConfig.waves[waveIndex];
-                if (batchIndex < wave.batches.Count)
+                var wave = waves[waveIndex];
+                if (batchIndex < wave.batches.Length)
                 {
+                    waitElapsed -= dt;
+                    if (waitElapsed > 0)
+                        return;
+                    
+                    shareData.Simulator.EnsureCompleted();
+
                     var batch = wave.batches[batchIndex];
                     batchElapsed += dt;
-                    spawnElapsed -= dt;
-                    
-                    while (spawnElapsed <= 0 && spawnedCount < batch.enemies.Count)
+                    spawnElapsed += dt;
+
+                    // todo: while elapsed interval
+                    while (spawnElapsed > 0 && spawnedCount < batch.monsters.Count)
                     {
-                        shareData.Simulator.EnsureCompleted();
-                        
-                        float halfSize = 2;
-                        float2 center = float2.zero;
-                        Spawn(batch, halfSize, center);
+                        SpawnEntity(float2.zero, 2, RandomUtils.Range(0.5f, 1.25f));
                         spawnedCount++;
-                        spawnElapsed += batch.interval;
+                        spawnElapsed -= batch.interval;
                     }
 
-                    if (spawnedCount >= batch.count || batchElapsed >= batch.duration)
+                    if (spawnedCount >= batch.monsters.Count || batchElapsed >= batch.duration)
                     {
                         batchIndex++;
                         spawnedCount = 0;
                         batchElapsed = 0;
                         spawnElapsed = 0;
+                        waitElapsed = 0;
+                        if (batchIndex < wave.batches.Length)
+                        {
+                            waitElapsed = wave.batches[batchIndex].waitTime;
+                        }
                     }
 
                     if (batchIndex >= wave.batches.Length)
@@ -210,11 +227,7 @@ namespace _Game.Battle.Systems
                         waveIndex++;
                     }
                 }
-            }*/
-        }
-
-        private void Spawn(LevelSpawnConfig.BatchSpawn batchSpawn, float halfTime, float2 center)
-        {
+            }
         }
 
         private void SpawnEntity(float2 center, float rangeLimit, float radius)
@@ -331,9 +344,9 @@ namespace _Game.Battle.Systems
 
         sealed class Batch
         {
-            public int count;
+            public float duration;
             public float waitTime;
-            public float interval;
+            public double interval;
             public List<MonsterId> monsters;
         }
     }
