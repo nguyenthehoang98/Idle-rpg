@@ -50,6 +50,11 @@ namespace _Game.Battle.Editor
             wavesProp = serializedObject.FindProperty("waves");
         }
 
+        private void OnDisable()
+        {
+            if (target is LevelSpawnConfig config) config.Disable();
+        }
+
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
@@ -229,6 +234,7 @@ namespace _Game.Battle.Editor
 
             EditorGUILayout.Space(8);
 
+            EditorGUILayout.PropertyField(batch.FindPropertyRelative("isBoosWave"));
             EditorGUILayout.PropertyField(batch.FindPropertyRelative("waitTimeSpawn"));
             EditorGUILayout.PropertyField(batch.FindPropertyRelative("duration"));
             EditorGUILayout.IntSlider(

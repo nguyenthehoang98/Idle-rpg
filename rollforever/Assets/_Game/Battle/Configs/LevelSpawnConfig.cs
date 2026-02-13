@@ -18,17 +18,35 @@ namespace _Game.Battle
         public int maxAlive;
         public List<WaveSpawn> waves = new List<WaveSpawn>();
 
+        public void Disable()
+        {
+            for (int w = 0; w < waves.Count; w++)
+            {
+                var wave = waves[w];
+                int power = wave.power;
+                for (int b = 0; b < wave.batches.Count; b++)
+                {
+                    power -= wave.batches[b].power;
+                }
+
+                if (power > 0 && wave.batches.Count > 0)
+                {
+                    wave.batches[^1].power += power;
+                }
+            }
+        }
+
         [Serializable]
         public class WaveSpawn
         {
             public int power;
-            public bool isBoosWave;
             public List<BatchSpawn> batches;
         }
         
         [Serializable]
         public class BatchSpawn
         {
+            public bool isBoosWave;
             public float duration;
             public float waitTimeSpawn;
             public int power;
