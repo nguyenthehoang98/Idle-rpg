@@ -15,12 +15,52 @@ MonoBehaviour:
   targetDuration: 0
   waves:
   - power: 7
-    batches: []
+    batches:
+    - isBoosWave: 0
+      duration: 5
+      waitTimeSpawn: 0
+      power: 7
+      enemies:
+      - enemyId: 1
+        enemyLevelRange: {x: 1, y: 2}
+        weight: 1
   - power: 8
-    batches: []
+    batches:
+    - isBoosWave: 0
+      duration: 4
+      waitTimeSpawn: 0
+      power: 8
+      enemies:
+      - enemyId: 1
+        enemyLevelRange: {x: 1, y: 2}
+        weight: 1
   - power: 9
-    batches: []
+    batches:
+    - isBoosWave: 0
+      duration: 5
+      waitTimeSpawn: 0
+      power: 9
+      enemies:
+      - enemyId: 1
+        enemyLevelRange: {x: 1, y: 2}
+        weight: 1
   - power: 11
-    batches: []
+    batches:
+    - isBoosWave: 0
+      duration: 5
+      waitTimeSpawn: 0
+      power: 11
+      enemies:
+      - enemyId: 1
+        enemyLevelRange: {x: 1, y: 2}
+        weight: 1
   - power: 12
-    batches: []
+    batches:
+    - isBoosWave: 0
+      duration: 4
+      waitTimeSpawn: 0
+      power: 12
+      enemies:
+      - enemyId: 1
+        enemyLevelRange: {x: 1, y: 2}
+        weight: 1

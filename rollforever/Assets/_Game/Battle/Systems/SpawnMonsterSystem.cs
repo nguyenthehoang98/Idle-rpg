@@ -261,7 +261,7 @@ namespace _Game.Battle.Systems
                         foreach (var enemy in batchSpawn.enemies)
                         {
                             int level = RandomUtils.Range(enemy.enemyLevelRange.x, enemy.enemyLevelRange.y);
-                            int power = BattleFormula.PowerMonster(enemy.enemyId, level);
+                            int power = FormulaUtils.PowerMonster(enemy.enemyId, level);
                             if (rand < power)
                             {
                                 lastLevel = level;
@@ -308,7 +308,7 @@ namespace _Game.Battle.Systems
                 {
                     foreach (var monster in batch.monsters)
                     {
-                        power += BattleFormula.PowerMonster(monster.id, monster.level);
+                        power += FormulaUtils.PowerMonster(monster.id, monster.level);
                     }
                 }
             }
@@ -328,7 +328,7 @@ namespace _Game.Battle.Systems
                     interval.Add((float)Math.Round(batch.interval, 3));
                     foreach (var monster in batch.monsters)
                     {
-                        wavePower += BattleFormula.PowerMonster(monster.id, monster.level);
+                        wavePower += FormulaUtils.PowerMonster(monster.id, monster.level);
                     }
                 }
 

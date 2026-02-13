@@ -2,11 +2,12 @@ using System;
 
 namespace _Game.Battle
 {
-    public readonly struct SkillId : IEquatable<SkillId>
+    [Serializable]
+    public struct SkillId : IEquatable<SkillId>
     {
-        public readonly int id;
-        public readonly int level;
-
+        public int id;
+        public int level;
+        
         public SkillId(int id, int level)
         {
             this.id = id;

@@ -1,0 +1,37 @@
+Cụ thể ở level 1
+- Số lượng wave: 5
+- Thời gian mong muốn từng wave: 20/25/30/35/50
+- Số quái mong muốn theo wave: 20/25/25/30/40
+- Mỗi level sẽ thêm 1 trang bị.
+
+Với giả định về trang bị tổng DPS.
+- wave 1 (atk=10) lv1
+- wave 2 (atk=10) lv1 & (atk=7) lv1
+- wave 3 (atk=10) lv2 & (atk=7) lv1
+- wave 4 (atk=10) lv2 & (atk=7) lv2
+- wave 5 (atk=10) lv3 & (atk=7) lv3
+ATK là chỉ số base, lv sẽ là hệ số, áp dụng công thức thì sẽ có 1 final ATK.
+
+Vậy thử phỏng đoán final atk & monster stat. (có thể tối đa 4 loại monster trong lần
+mô phỏng này, có nghĩa có ~4 bộ chỉ số)
+
+Bộ chỉ số mẫu
+
+| Wave | Trang bị       | Final ATK | DPS  | Time (s) | Số quái | TTK / quái (s) | HP đề xuất | HitsToKill |
+| ---- | -------------- | --------- | ---- | -------- | ------- | -------------- | ---------- | ---------- |
+| 1    | 10 lv1         | 10        | 10   | 20       | 20      | 1.0            | 10         | 1          |
+| 2    | 10 lv1 + 7 lv1 | 17        | 17   | 25       | 25      | 1.0            | 17         | 1          |
+| 3    | 10 lv2 + 7 lv1 | 22        | 22   | 30       | 25      | 1.2            | 26         | 2          |
+| 4    | 10 lv2 + 7 lv2 | 25.5      | 25.5 | 35       | 30      | 1.17           | 30         | 2          |
+| 5    | 10 lv3 + 7 lv3 | 34        | 34   | 50       | 40      | 1.25           | 55–60      | 2–3        |
+
+Cách làm.
+Đánh giá level trước xem có thể trang bị những gì rồi tìm range sức mạnh cho từng wave.
+- Ví dụ wave 1 : trang bị đc những trang bị gì, khoảng sức mạnh là bao nhiêu. Xử lý tương tự cho các wave sau
+- Đánh giá thời gian mong muốn & số lượng quái sinh ra ở wave đó => dựa vào chart độ khó level để đưa ra.
+	Ví dụ tổng level là 2p. số lượng wave = 5. wave khó > 40s (/24s) thì là wave khó.
+	Sau đó xác định số lượng quái muốn sinh ra 
+	Tính số TTK cần để tiêu diệt số quái đó (với range sức mạnh bên trên)
+	Sau đó tính hit to kill. và đưa ra chỉ số cho quái vật
+
+=> nếu trường hợp quái vật có sẵn chỉ số thì thay đổi bước làm. không tính số quái mong muốn nữa mà quái sinh ra sẽ đc tính cuối cùng
