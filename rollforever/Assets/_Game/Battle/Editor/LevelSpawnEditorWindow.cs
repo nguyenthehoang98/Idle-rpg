@@ -73,51 +73,40 @@ namespace _Game.Battle.Editor
             public Color backgroundColor = new Color(0.5f,0.5f,0.5f, 0.5f);
             public List<Point> points = new List<Point>();
 
-            public void Push(LevelSpawnConfig config, Color color)
+            public void Push(LevelSpawnConfig config)
             {
                 List<float> wavePowers = new List<float>();
                 List<float> batchPowers = new List<float>();
+                List<float> intervalPowers = new List<float>();
                 foreach (var wave in config.waves)
                 {
                     wavePowers.Add(wave.power);
                     foreach (var batch in wave.batches)
                     {
                         batchPowers.Add(batch.power);
+                        intervalPowers.Add(batch.power / batch.duration);
                     }
                 }
 
-                Point GetWavePoint()
+                Point GetPoints(List<float> list, Vector2 offset, Color color)
                 {
                     Point p = new Point();
                     p.color = color;
-                    float max = wavePowers.Max();
-                    float total = wavePowers.Count - 1;
-                    for (int i = 0; i < wavePowers.Count; i++)
+                    float max = list.Max();
+                    float total = list.Count - 1;
+                    for (int i = 0; i < list.Count; i++)
                     {
-                        p.points.Add(new Vector2(i / total, wavePowers[i] / max));
+                        p.points.Add(new Vector2(i / total, list[i] / max) + offset);
                     }
 
                     return p;
                 }
-                
-                Point GetBatchPoint()
-                {
-                    Point p2 = new Point();
-                    p2.color = Color.yellow;
-                    float max = batchPowers.Max();
-                    float total = batchPowers.Count - 1;
-                    for (int i = 0; i < batchPowers.Count; i++)
-                    {
-                        p2.points.Add(new Vector2(i / total, batchPowers[i] / max));
-                    }
-
-                    return p2;
-                }
 
                 points = new List<Point>
                 {
-                    GetWavePoint(),
-                    GetBatchPoint()
+                    GetPoints(wavePowers, Vector2.zero, Color.green),
+                    GetPoints(batchPowers, Vector2.zero, Color.yellow),
+                    GetPoints(intervalPowers, new Vector2(0, 0.01f), Color.red),
                 };
             }
 
@@ -195,7 +184,7 @@ namespace _Game.Battle.Editor
                     GUIChartEditor.PushLineChart(points, p.color);
                     foreach (var vector2 in points)
                     {
-                        GUIChartEditor.PushPoint(vector2, Color.red);
+                        GUIChartEditor.PushPoint(vector2, Color.blue);
                     }
                 }
             }
@@ -312,7 +301,7 @@ namespace _Game.Battle.Editor
                     {
                         shouldDrawChart = true;
                         showHelpbox = false;
-                        chartData.Push(config, Color.green);
+                        chartData.Push(config);
                     }
                     else
                     {

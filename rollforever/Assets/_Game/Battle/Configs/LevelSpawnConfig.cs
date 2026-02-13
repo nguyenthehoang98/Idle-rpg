@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine.Serialization;
 
 namespace _Game.Battle
@@ -32,6 +33,11 @@ namespace _Game.Battle
                 if (power > 0 && wave.batches.Count > 0)
                 {
                     wave.batches[^1].power += power;
+                }
+
+                for (int i = 0; i < wave.batches.Count; i++)
+                {
+                    wave.batches[i].duration = math.max(1, wave.batches[i].duration);
                 }
             }
         }
