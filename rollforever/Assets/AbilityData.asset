@@ -18,7 +18,7 @@ MonoBehaviour:
     muzzleOffsetPosition: {x: 0, y: 0}
     animationName: 0
     findTarget: 0
-    maxCollision: 5
+    maxCollision: 1
     shouldResetCollision: 0
     resetCollisionInterval: 0
   shape:

@@ -59,129 +59,13 @@ namespace _Game.Battle.Systems
             shareData.Simulator.SetAgentDefaults(1f, 10, 20f, 20f, 1.5f, 5f, float2.zero);
 
             // todo: cache spawn data
-            HashSet<MonsterId> monsters = new HashSet<MonsterId>();
+            //HashSet<MonsterId> monsters = new HashSet<MonsterId>();
             var waveSpawns = shareData.LevelSpawnConfig.waves;
-            foreach (var waveSpawn in waveSpawns)
-            {
-                Wave wave = new Wave();
-                wave.batches = new Batch[waveSpawn.batches.Count];
-                for (int i = 0; i < wave.batches.Length; i++)
-                {
-                    // todo: xử lý tính toán số lượng quái sinh ra ở đay
-                    LevelSpawnConfig.BatchSpawn batchSpawn = waveSpawn.batches[i];
-                    Batch batch = new Batch();
-                    batch.duration = batchSpawn.duration;
-                    batch.waitTime = batchSpawn.waitTimeSpawn;
-                    batch.monsters = new List<MonsterId>();
-
-                    int totalWeight = 0;
-                    foreach (var enemy in batchSpawn.enemies)
-                    {
-                        totalWeight += enemy.weight;
-                    }
-
-                    int powerBudget = batchSpawn.power;
-                    while (powerBudget > 0)
-                    {
-                        int rand = RandomUtils.Range(0, totalWeight);
-                        int lastPower = 0;
-                        int lastLevel = 0;
-                        LevelSpawnConfig.EnemySpawn selected = null;
-                        foreach (var enemy in batchSpawn.enemies)
-                        {
-                            int level = RandomUtils.Range(enemy.enemyLevelRange.x, enemy.enemyLevelRange.y);
-                            int power = BattleFormula.PowerMonster(enemy.enemyId, level);
-                            if (rand < power)
-                            {
-                                lastLevel = level;
-                                lastPower = power;
-                                selected = enemy;
-                                break;
-                            }
-
-                            rand -= power;
-                        }
-
-                        if (selected == null)
-                            break;
-
-                        powerBudget -= lastPower;
-
-                        MonsterId monsterId = new MonsterId(selected.enemyId, lastLevel);
-                        batch.monsters.Add(monsterId);
-                        monsters.Add(monsterId);
-                    }
-
-                    batch.interval = batchSpawn.duration / batch.monsters.Count;
-                    wave.batches[i] = batch;
-                }
-
-                waves.Add(wave);
-            }
-
-#if DEVELOP_MODE
-            LogPower(waveSpawns);
-#endif
+            waves = Build(waveSpawns);
 
             // todo: preload assets
         }
-
-        private void LogPower(List<LevelSpawnConfig.WaveSpawn> waveSpawns)
-        {
-#if DEVELOP_MODE
-            int totalPower = 0;
-            foreach (var waveSpawn in waveSpawns)
-            {
-                totalPower += waveSpawn.power;
-            }
-            
-            int power = 0;
-            foreach (var wave in waves)
-            {
-                foreach (var batch in wave.batches)
-                {
-                    foreach (var monster in batch.monsters)
-                    {
-                        power += BattleFormula.PowerMonster(monster.id, monster.level);
-                    }
-                }
-            }
-
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < waveSpawns.Count; i++)
-            {
-                var waveSpawn = waveSpawns[i];
-                var wave = waves[i];
-
-                int wavePower = 0;
-                List<int> count = new List<int>();
-                List<float> interval = new List<float>();
-                foreach (var batch in wave.batches)
-                {
-                    count.Add(batch.monsters.Count);
-                    interval.Add((float)Math.Round(batch.interval, 3));
-                    foreach (var monster in batch.monsters)
-                    {
-                        wavePower += BattleFormula.PowerMonster(monster.id, monster.level);
-                    }
-                }
-
-                sb.AppendLine($"Wave #{i+1}: ({waveSpawn.power}:{wavePower}). " +
-                              $"Count: {string.Join(',', count)}. " +
-                              $"Interval: {string.Join(',', interval)}");
-            }
-
-            float threshold = 0.3f;
-            float error = math.abs(power / (float)totalPower) - 1;
-            if (math.abs(error) < threshold)
-                Debug.Log($"Sai số nhỏ: ({totalPower}:{power}) \n{sb}");
-            else
-            {
-                Debug.LogError($"Sai số lớn: ({totalPower}:{power} \n{sb})");
-            }
-#endif
-        }
-
+        
         public void Run(IEcsSystems systems)
         {
             float dt = shareData.TimeDelta;
@@ -210,6 +94,7 @@ namespace _Game.Battle.Systems
 
                     if (spawnedCount >= batch.monsters.Count || batchElapsed >= batch.duration)
                     {
+                        Debug.Log($"Spawn. Count:{spawnedCount}, Elapsed:{batchElapsed}, Time:{shareData.Time}");
                         batchIndex++;
                         spawnedCount = 0;
                         batchElapsed = 0;
@@ -335,6 +220,132 @@ namespace _Game.Battle.Systems
 
             hitPoint = pos + dir * t;
             return true;
+        }
+
+        public static void ValidateSpawn(LevelSpawnConfig config)
+        {
+            List<LevelSpawnConfig.WaveSpawn> waveSpawns = config.waves;
+            List<Wave> waves = Build(waveSpawns);
+            LogPower(waveSpawns, waves, config.name);
+        }
+
+        static List<Wave> Build(List<LevelSpawnConfig.WaveSpawn> waveSpawns)
+        {
+            List<Wave> waves = new List<Wave>();
+            foreach (var waveSpawn in waveSpawns)
+            {
+                Wave wave = new Wave();
+                wave.batches = new Batch[waveSpawn.batches.Count];
+                for (int i = 0; i < wave.batches.Length; i++)
+                {
+                    // todo: xử lý tính toán số lượng quái sinh ra ở đay
+                    LevelSpawnConfig.BatchSpawn batchSpawn = waveSpawn.batches[i];
+                    Batch batch = new Batch();
+                    batch.duration = batchSpawn.duration;
+                    batch.waitTime = batchSpawn.waitTimeSpawn;
+                    batch.monsters = new List<MonsterId>();
+
+                    int totalWeight = 0;
+                    foreach (var enemy in batchSpawn.enemies)
+                    {
+                        totalWeight += enemy.weight;
+                    }
+
+                    int powerBudget = batchSpawn.power;
+                    while (powerBudget > 0)
+                    {
+                        int rand = RandomUtils.Range(0, totalWeight);
+                        int lastPower = 0;
+                        int lastLevel = 0;
+                        LevelSpawnConfig.EnemySpawn selected = null;
+                        foreach (var enemy in batchSpawn.enemies)
+                        {
+                            int level = RandomUtils.Range(enemy.enemyLevelRange.x, enemy.enemyLevelRange.y);
+                            int power = BattleFormula.PowerMonster(enemy.enemyId, level);
+                            if (rand < power)
+                            {
+                                lastLevel = level;
+                                lastPower = power;
+                                selected = enemy;
+                                break;
+                            }
+
+                            rand -= power;
+                        }
+
+                        if (selected == null)
+                            break;
+
+                        powerBudget -= lastPower;
+
+                        MonsterId monsterId = new MonsterId(selected.enemyId, lastLevel);
+                        batch.monsters.Add(monsterId);
+                    }
+
+                    batch.interval = batchSpawn.duration / batch.monsters.Count;
+                    wave.batches[i] = batch;
+                }
+
+                waves.Add(wave);
+            }
+
+            return waves;
+        }
+        
+        private static void LogPower(List<LevelSpawnConfig.WaveSpawn> waveSpawns, List<Wave> waves, string name)
+        {
+#if DEVELOP_MODE
+            int totalPower = 0;
+            foreach (var waveSpawn in waveSpawns)
+            {
+                totalPower += waveSpawn.power;
+            }
+            
+            int power = 0;
+            foreach (var wave in waves)
+            {
+                foreach (var batch in wave.batches)
+                {
+                    foreach (var monster in batch.monsters)
+                    {
+                        power += BattleFormula.PowerMonster(monster.id, monster.level);
+                    }
+                }
+            }
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < waveSpawns.Count; i++)
+            {
+                var waveSpawn = waveSpawns[i];
+                var wave = waves[i];
+
+                int wavePower = 0;
+                List<int> count = new List<int>();
+                List<float> interval = new List<float>();
+                foreach (var batch in wave.batches)
+                {
+                    count.Add(batch.monsters.Count);
+                    interval.Add((float)Math.Round(batch.interval, 3));
+                    foreach (var monster in batch.monsters)
+                    {
+                        wavePower += BattleFormula.PowerMonster(monster.id, monster.level);
+                    }
+                }
+
+                sb.AppendLine($"Wave #{i+1}: ({waveSpawn.power}:{wavePower}). " +
+                              $"Count: {string.Join(',', count)}. " +
+                              $"Interval: {string.Join(',', interval)}");
+            }
+
+            float threshold = 0.3f;
+            float error = math.abs(power / (float)totalPower) - 1;
+            if (math.abs(error) < threshold)
+                Debug.Log($"LevelSpawnConfig: {name}. [v]");
+            else
+            {
+                Debug.LogError($"LevelSpawnConfig: {name}. Sai số lớn: ({totalPower}:{power}) \n{sb})");
+            }
+#endif
         }
         
         sealed class Wave

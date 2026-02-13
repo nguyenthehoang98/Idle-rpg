@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _Game.Battle.Systems;
 using Unity.Mathematics;
 using UnityEngine.Serialization;
 
@@ -16,14 +17,27 @@ namespace _Game.Battle
     [CreateAssetMenu(fileName = "LevelSpawnConfig", menuName = "LevelSpawnConfig")]
     public class LevelSpawnConfig : ScriptableObject
     {
-        public int maxAlive;
+        public int targetDuration;
         public List<WaveSpawn> waves = new List<WaveSpawn>();
 
+        public void Validate()
+        {
+#if DEVELOP_MODE
+            SpawnMonsterSystem.ValidateSpawn(this);
+#endif
+        }
+        
         public void Disable()
         {
+#if UNITY_EDITOR
             for (int w = 0; w < waves.Count; w++)
             {
                 var wave = waves[w];
+                if (wave.batches.Count == 0)
+                {
+                    wave.batches.Add(new BatchSpawn());
+                }
+                
                 int power = wave.power;
                 for (int b = 0; b < wave.batches.Count; b++)
                 {
@@ -40,6 +54,7 @@ namespace _Game.Battle
                     wave.batches[i].duration = math.max(1, wave.batches[i].duration);
                 }
             }
+#endif
         }
 
         [Serializable]

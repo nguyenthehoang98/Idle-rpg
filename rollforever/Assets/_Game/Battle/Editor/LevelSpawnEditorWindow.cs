@@ -105,8 +105,8 @@ namespace _Game.Battle.Editor
                 points = new List<Point>
                 {
                     GetPoints(wavePowers, Vector2.zero, Color.green),
-                    GetPoints(batchPowers, Vector2.zero, Color.yellow),
-                    GetPoints(intervalPowers, new Vector2(0, 0.01f), Color.red),
+                    GetPoints(batchPowers, new Vector2(0, 0.01f), Color.yellow),
+                    GetPoints(intervalPowers, new Vector2(0, -0.01f), Color.red),
                 };
             }
 

@@ -9,7 +9,6 @@ namespace _Game.Battle.Editor
     [CustomEditor(typeof(LevelSpawnConfig))]
     public class LevelSpawnInspector : UnityEditor.Editor
     {
-        private SerializedProperty maxAliveProp;
         private SerializedProperty wavesProp;
         private int selectedWave = 0;
         private int selectedBatch = -1;
@@ -46,7 +45,6 @@ namespace _Game.Battle.Editor
 
         private void OnEnable()
         {
-            maxAliveProp = serializedObject.FindProperty("maxAlive");
             wavesProp = serializedObject.FindProperty("waves");
         }
 
@@ -58,7 +56,7 @@ namespace _Game.Battle.Editor
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            EditorGUILayout.PropertyField(maxAliveProp);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("targetDuration"));
             EditorGUILayout.Space(10);
 
             DrawWaveSelector();
