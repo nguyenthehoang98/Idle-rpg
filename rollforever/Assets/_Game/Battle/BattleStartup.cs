@@ -6,6 +6,7 @@ using Leopotam.EcsLite;
 using RVO;
 using UnityEngine;
 using _Game.Battle.Events;
+using _KIT.Config;
 using _KIT.Event;
 using _KIT.Pool;
 using _KIT.Resource;
@@ -32,6 +33,11 @@ namespace _Game.Battle
 
         private async void Start()
         {
+            await KitConfigManager.Load(new[]
+            {
+                "MonsterConfig"
+            });
+            
             // todo: game loop
             gameLoop = GetComponent<GameLoop>();
             gameLoop.Pause();

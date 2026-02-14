@@ -4,6 +4,8 @@ using System.Text;
 using _Game.AbilitySystem;
 using _Game.Battle.Data;
 using _Game.Battle.View;
+using _Game.Configs;
+using _KIT.Config;
 using _KIT.Resource;
 using _KIT.Utils;
 using GoodCat.EcsLite.Shared;
@@ -60,8 +62,9 @@ namespace _Game.Battle.Systems
 
             // todo: cache spawn data
             //HashSet<MonsterId> monsters = new HashSet<MonsterId>();
+            var monsterConfig = KitConfigManager.Get<MonsterConfig>();
             var waveSpawns = shareData.LevelSpawnConfig.waves;
-            waves = Build(waveSpawns);
+            waves = Build(waveSpawns, monsterConfig);
 
             // todo: preload assets
         }
@@ -222,14 +225,14 @@ namespace _Game.Battle.Systems
             return true;
         }
 
-        public static void ValidateSpawn(LevelSpawnConfig config)
+        public static void ValidateSpawn(LevelSpawnConfig spawnConfig, MonsterConfig monsterConfig)
         {
-            List<LevelSpawnConfig.WaveSpawn> waveSpawns = config.waves;
-            List<Wave> waves = Build(waveSpawns);
-            LogPower(waveSpawns, waves, config.name);
+            List<LevelSpawnConfig.WaveSpawn> waveSpawns = spawnConfig.waves;
+            List<Wave> waves = Build(waveSpawns, monsterConfig);
+            LogPower(waveSpawns, waves, spawnConfig.name, monsterConfig);
         }
 
-        static List<Wave> Build(List<LevelSpawnConfig.WaveSpawn> waveSpawns)
+        static List<Wave> Build(List<LevelSpawnConfig.WaveSpawn> waveSpawns, MonsterConfig monsterConfig)
         {
             List<Wave> waves = new List<Wave>();
             foreach (var waveSpawn in waveSpawns)
@@ -260,17 +263,19 @@ namespace _Game.Battle.Systems
                         LevelSpawnConfig.EnemySpawn selected = null;
                         foreach (var enemy in batchSpawn.enemies)
                         {
-                            int level = RandomUtils.Range(enemy.enemyLevelRange.x, enemy.enemyLevelRange.y);
-                            int power = FormulaUtils.PowerMonster(enemy.enemyId, level);
-                            if (rand < power)
+                            if (monsterConfig.Find(enemy.id, out var data))
                             {
-                                lastLevel = level;
-                                lastPower = power;
-                                selected = enemy;
-                                break;
-                            }
+                                int power = FormulaUtils.PowerMonster(data, enemy.level);
+                                if (rand < power)
+                                {
+                                    lastLevel = enemy.level;
+                                    lastPower = power;
+                                    selected = enemy;
+                                    break;
+                                }
 
-                            rand -= power;
+                                rand -= power;
+                            }
                         }
 
                         if (selected == null)
@@ -278,7 +283,7 @@ namespace _Game.Battle.Systems
 
                         powerBudget -= lastPower;
 
-                        MonsterId monsterId = new MonsterId(selected.enemyId, lastLevel);
+                        MonsterId monsterId = new MonsterId(selected.id, lastLevel);
                         batch.monsters.Add(monsterId);
                     }
 
@@ -292,7 +297,7 @@ namespace _Game.Battle.Systems
             return waves;
         }
         
-        private static void LogPower(List<LevelSpawnConfig.WaveSpawn> waveSpawns, List<Wave> waves, string name)
+        private static void LogPower(List<LevelSpawnConfig.WaveSpawn> waveSpawns, List<Wave> waves, string name, MonsterConfig monsterConfig)
         {
 #if DEVELOP_MODE
             int totalPower = 0;
@@ -308,7 +313,10 @@ namespace _Game.Battle.Systems
                 {
                     foreach (var monster in batch.monsters)
                     {
-                        power += FormulaUtils.PowerMonster(monster.id, monster.level);
+                        if (monsterConfig.Find(monster.id, out var data))
+                        {
+                            power += FormulaUtils.PowerMonster(data, monster.level);
+                        }
                     }
                 }
             }
@@ -328,7 +336,10 @@ namespace _Game.Battle.Systems
                     interval.Add((float)Math.Round(batch.interval, 3));
                     foreach (var monster in batch.monsters)
                     {
-                        wavePower += FormulaUtils.PowerMonster(monster.id, monster.level);
+                        if (monsterConfig.Find(monster.id, out var data))
+                        {
+                            wavePower += FormulaUtils.PowerMonster(data, monster.level);
+                        }
                     }
                 }
 

@@ -271,8 +271,8 @@ namespace _Game.Battle.Editor
                 enemies.GetArrayElementAtIndex(last).boxedValue = new LevelSpawnConfig.EnemySpawn
                 {
                     weight = 1,
-                    enemyId = 1,
-                    enemyLevelRange = new Vector2Int(1, 2)
+                    id = 1,
+                    level = 1,
                 };
             }
 
@@ -299,8 +299,8 @@ namespace _Game.Battle.Editor
 
                     EditorGUILayout.EndHorizontal();
 
-                    EditorGUILayout.PropertyField(w.FindPropertyRelative("enemyId"));
-                    EditorGUILayout.PropertyField(w.FindPropertyRelative("enemyLevelRange"));
+                    EditorGUILayout.PropertyField(w.FindPropertyRelative("id"));
+                    EditorGUILayout.PropertyField(w.FindPropertyRelative("level"));
                     EditorGUILayout.PropertyField(w.FindPropertyRelative("weight"));
                     w.FindPropertyRelative("weight").intValue = math.max(
                         0, w.FindPropertyRelative("weight").intValue

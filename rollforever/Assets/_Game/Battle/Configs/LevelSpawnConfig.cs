@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using _Game.Battle.Systems;
+using _Game.Configs;
 using Unity.Mathematics;
-using UnityEngine.Serialization;
 
 namespace _Game.Battle
 {
@@ -23,7 +23,7 @@ namespace _Game.Battle
         public void Validate()
         {
 #if DEVELOP_MODE
-            SpawnMonsterSystem.ValidateSpawn(this);
+            SpawnMonsterSystem.ValidateSpawn(this, MonsterConfig.Instance);
 #endif
         }
         
@@ -77,8 +77,8 @@ namespace _Game.Battle
         [Serializable]
         public class EnemySpawn
         {
-            public int enemyId;
-            public Vector2Int enemyLevelRange;
+            public int id;
+            public int level;
             public int weight;
         }
     }

@@ -1,6 +1,7 @@
 using _Game.Configs;
 using _KIT.Utils;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace _Game.Battle
 {
@@ -26,64 +27,98 @@ namespace _Game.Battle
    
     public static class FormulaUtils
     {
-        private const float DEFENSE_K = 100;
-        
-        public static int PowerSkill(SkillId skillId, float attack, float defense, float health)
-        {
-            return 1;
-        }
-
-        public static int PowerMonster(int monsterId, int monsterLevel)
-        {
-            return 0;
-        }
+        private const float DEFENSE_K = 1000;
         
         public static int PowerMonster(MonsterConfig.MonsterData monsterData, int level)
         {
             float attack = monsterData.Attack(level);
             float defense = monsterData.Defense(level);
             float health = monsterData.Health(level);
-
-            float skillPower = PowerSkill(monsterData.SkillId, attack, defense, health);
-            float skillDps = skillPower / monsterData.SkillCooldown;
-            float effective = health * (100f + health) / 100f;
-            float power = skillDps * effective;
+            float skillDamage = monsterData.SkillDamage(attack);
+            float dps = DPS(skillDamage, monsterData.SkillCooldown, 0, 0);
+            float effectiveHp = health * (defense + DEFENSE_K) / DEFENSE_K;
+            float power = dps * effectiveHp;
+            Debug.Log($"Monster:{monsterData.ID}, Level: {level}, DPS:{dps}, EffectiveHp:{effectiveHp}, Power:{power}");
             return (int)math.sqrt(power);
         }
         
+        /*
+         *  Early game: gần như tuyến tính
+         *  Mid game: bắt đầu cong lên
+         *  Late game: tăng cực nhanh do exponential dominate
+         */
         public static float Attack(int level, float baseValue, float valueLinear, float rate)
         {
-            level = math.max(1, level);
-            int m = level - 1;
+            int m = math.max(1, level) - 1;
             return (baseValue + valueLinear * m) * math.pow(rate, m);
         }
 
-        public static float Defense(int level, float baseValue, float valueLinear)
+        /*
+         * Ổn định
+         * Dễ kiểm soát
+         * Không snowball
+         */
+        public static float Defense(int level, float baseValue, float valueLinear, float rate)
         {
-            level = math.max(1, level);
-            int m = level - 1;
-            return (baseValue + valueLinear * m);
+            int m = math.max(1, level) - 1;
+            return (baseValue + valueLinear * m) * math.pow(rate, m);
         }
         
+        /*
+         * Tăng exponential nhưng chậm hơn ATK
+         * Vì ATK nhân cả linear trong exponential
+         */
         public static float Health(int level, float baseValue, float valueLinear, float rate)
         {
-            level = math.max(1, level);
-            int m = level - 1;
-            return baseValue * math.pow(rate, m) + valueLinear * m;
+            int m = math.max(1, level) - 1;
+            return (baseValue + valueLinear * m) * math.pow(rate, m);
         }
 
-        // Mở rộng: xuyên giáp, crit, ...
+        /// <summary>
+        /// Tính sát thương của kĩ năng
+        /// </summary>
+        /// <param name="attack"></param>
+        /// <param name="skillScaleDamage"></param>
+        /// <param name="skillFlatDamage"></param>
+        /// <returns></returns>
+        public static float SkillDamage(float attack, float skillScaleDamage, float skillFlatDamage)
+        {
+            return attack * skillScaleDamage + skillFlatDamage;
+        }
+        
+        /// <summary>
+        /// Hàm tính sát thương -> kẻ dịch
+        /// </summary>
+        /// <param name="attack">Sát thương dạng chỉ số của nhân vật</param>
+        /// <param name="skillScaleDmg">Sát thương % của kĩ năng</param>
+        /// <param name="skillFlatDmg">Sát thương truc tiep của kĩ năng</param>
+        /// <param name="criticalRate">Tỉ lệ có thể critical chung</param>
+        /// <param name="criticalDmg">Sát thương crtitical tăng thêm</param>
+        /// <param name="defense">Thủ của mục tiêu</param>
+        /// <returns></returns>
         public static int Output(float attack, float skillScaleDmg, float skillFlatDmg,
             float criticalRate, float criticalDmg, float defense)
         {
-            float totalDmg = attack * skillScaleDmg + skillFlatDmg;
+            float dmg = SkillDamage(attack, skillScaleDmg, skillFlatDmg);
             bool crit = criticalRate >= RandomUtils.Value;
-            float dmg = crit ? totalDmg * (1 + math.max(0, criticalDmg)) : totalDmg;
+            float totalDmg = crit ? dmg * (1 + math.max(0, criticalDmg)) : dmg;
 
             float armorPenPercent = 0;
             float effectiveDef = defense * (1f - armorPenPercent);
             float reduce = effectiveDef / (effectiveDef + DEFENSE_K);
-            return (int) (dmg * (1 - reduce));
+            int outputDmg = (int)(totalDmg * (1 - reduce));
+            return outputDmg;
+        }
+
+        /// <summary>
+        ///  Chỉ số thể hiện khẳ năng gây sát thương  
+        /// </summary>
+        /// <returns></returns>
+        static float DPS(float skillDmg, float cooldown, float criticalRate, float criticalDmg)
+        {
+            float atkSpeed = cooldown > 0 ? 1f / cooldown : 0f;
+            float criticalFactor = 1f + math.clamp(criticalRate, 0f, 1f) * criticalDmg;
+            return skillDmg * atkSpeed * criticalFactor;
         }
     }
 }
