@@ -15,8 +15,8 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 56ed42d2a06414c47bc7f73ebf421834
   m_SerializeEntries:
-  - m_GUID: 1c00e97b888454b4da1e5544ec639e92
-    m_Address: AbilityData
+  - m_GUID: 4e4263c1db5e4e34aa3a3100965cf2fe
+    m_Address: Skill_101021
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -26,12 +26,17 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a803cecde6eb1eb4b81e13f92279b0ce
-    m_Address: SpawnConfig_1
+    m_Address: Spawner_1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aaab21e6404d22f4ca48695e5e1f59d2
+    m_Address: MonsterConfig
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ac6f1d42f496c154cab2daf30ee3ba7d
-    m_Address: AbilityData_1
+    m_Address: Skill_101011
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

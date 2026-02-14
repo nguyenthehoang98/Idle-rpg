@@ -29,6 +29,8 @@ namespace _Game.Battle.Editor
             {
                 var points = p.NormalizePoints(chartData.heightNormalize);
                 GUIChartEditor.PushLineChart(points, p.color);
+
+                if (!p.drawNumber) continue;
                 foreach (var vector2 in points)
                 {
                     GUIChartEditor.PushPoint(vector2, Color.blue);

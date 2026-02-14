@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using _Game.AbilitySystem;
 using _Game.Battle.Data;
 using _Game.Battle.Events;
+using _Game.Configs;
+using _KIT.Config;
 using _KIT.Event;
 using _KIT.Resource;
 using _KIT.Utils;
@@ -22,7 +24,7 @@ namespace _Game.Battle.Systems
         private EcsFilter playerFilter;
         
         // model
-        private Dictionary<int, AbilityLogic> skillSource;
+        private Dictionary<SkillId, AbilityLogic> skillSource;
         private Dictionary<FindTargetType, IFindTarget> findTargets;
         private List<AbilityLogic> abilities;
         private Queue<AbilityLogic> additions;
@@ -49,25 +51,40 @@ namespace _Game.Battle.Systems
             var healthPool = world.GetPool<HealthData>();
             var modifierPool = world.GetPool<UnitModifierData>();
             var unitPosTempPool = world.GetPool<UnitPosTempData>();
+
+            Dictionary<SkillId, string> allSkills = new Dictionary<SkillId, string>();
+            MonsterConfig monsterConfig = KitConfigManager.Get<MonsterConfig>();
+            foreach (var wave in shareData.LevelSpawnConfig.waves)
+            {
+                foreach (var batch in wave.batches)
+                {
+                    foreach (var enemy in batch.enemies)
+                    {
+                        if (!monsterConfig.Find(enemy.id, out var monsterData)) continue;
+                        if (!allSkills.ContainsKey(monsterData.SkillId))
+                        {
+                            allSkills.Add(monsterData.SkillId, monsterData.SkillId.SkillPath());
+                        }
+                    }
+                }
+            }
             
             findTargets = new Dictionary<FindTargetType, IFindTarget>();
             findTargets.Add(FindTargetType.Farthest, new FarthestFindTarget(shareData.Simulator, unitPool));
             findTargets.Add(FindTargetType.Nearest, new NearestFindTarget(shareData.Simulator, unitPool));
-            skillSource = await BuildAbilities(new Dictionary<int, string>
-                {
-                    { 0, "AbilityData" },
-                    { 1, "AbilityData_1" },
-                }, shareData, runtimeData, unitPool, shapePool, deadPool, healthPool, modifierPool, unitPosTempPool,
-                playerFilter);
+            skillSource = await BuildAbilities(
+                allSkills, shareData, runtimeData, unitPool, shapePool, deadPool,
+                healthPool, modifierPool, unitPosTempPool, playerFilter
+            );
             EventBus.Instance.Subscribe<CastSkillEvent>(OnCastSkillArg);
         }
-        private static async UniTask<Dictionary<int, AbilityLogic>> BuildAbilities(
-            Dictionary<int, string> abilitiesPath, BattleStartupShareData shareData, BattleStartupRuntimeData runtimeData,
+        private static async UniTask<Dictionary<SkillId, AbilityLogic>> BuildAbilities(
+            Dictionary<SkillId, string> abilitiesPath, BattleStartupShareData shareData, BattleStartupRuntimeData runtimeData,
             EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool, EcsPool<DeadFlag> deadPool,
             EcsPool<HealthData> healthPool, EcsPool<UnitModifierData> modifierPool, EcsPool<UnitPosTempData> unitPosTempPool,
             EcsFilter playerFilter)
         {
-            Dictionary<int, AbilityLogic> dict = new Dictionary<int, AbilityLogic>();
+            Dictionary<SkillId, AbilityLogic> dict = new Dictionary<SkillId, AbilityLogic>();
             foreach (var (abilityId, path) in abilitiesPath)
             {
                 AbilityData abilityData = await KitLoaded.LoadAsync<AbilityData>(path);

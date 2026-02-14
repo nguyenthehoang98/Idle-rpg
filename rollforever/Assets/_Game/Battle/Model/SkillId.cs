@@ -26,7 +26,10 @@ namespace _Game.Battle
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(id, level);
+            unchecked
+            {
+                return (id * 397) ^ level;
+            }
         }
 
         public static bool operator ==(SkillId left, SkillId right)

@@ -7,71 +7,90 @@ namespace _Game.Battle.Editor
 {
     public partial class LevelSpawnEditorWindow : BaseEditorWindowChart
     {
-        private const int DEFAULT_LEVEL = 1;
-        private const int Samples = 60;
-
-        private LevelInput singleInput = LevelInput.Single();
-        private LevelInput rangeInput = LevelInput.Range();
-        private GenerateLevelData generateData = new GenerateLevelData();
+        LevelInput input = new LevelInput { level = 1, fromLevel = 1, toLevel = 10 };
+        GenerateLevelData generateData = new GenerateLevelData();
 
         [MenuItem("Tools/Chart/Level Spawn")]
         public static void Open()
         {
-            GetWindow<LevelSpawnEditorWindow>("Level Spawn");
+            GetWindow<LevelSpawnEditorWindow>("Spawn");
+        }
+        
+        [MenuItem("Tools/Validate/Level Spawn")]
+        static void Validate()
+        {
+            string[] guids = AssetDatabase.FindAssets($"t:{typeof(LevelSpawnConfig).Name}");
+            LevelSpawnConfig[] array = guids
+                .Select(guid => AssetDatabase.LoadAssetAtPath<LevelSpawnConfig>(AssetDatabase.GUIDToAssetPath(guid)))
+                .ToArray();
+            foreach (var item in array)
+            {
+                item.Validate();
+            }
+        }
+        
+        void DrawInput(bool isRange)
+        {
+            EditorGUILayout.LabelField("Level Settings", EditorStyles.boldLabel);
+            EditorGUILayout.Space(4);
+
+            if (isRange)
+            {
+                input.fromLevel = EditorGUILayout.IntField("From Level", input.fromLevel);
+                input.toLevel = EditorGUILayout.IntField("To Level", input.toLevel);
+            }
+            else
+            {
+                input.level = EditorGUILayout.IntField("Level", input.level);
+            }
         }
 
         private void DrawSingleTab()
         {
-            DrawLevelInput(singleInput, isRange: false);
+            DrawInput(isRange: false);
 
             EditorGUILayout.Space(10);
 
             if (GUILayout.Button("Preview Level", GUILayout.Height(32)))
             {
-                if (ValidateSingle(singleInput))
+                string path = "Assets/SpawnConfig_" + input.level + ".asset";
+                LevelSpawnConfig config = AssetDatabase.LoadAssetAtPath<LevelSpawnConfig>(path);
+                if (config != null)
                 {
-                    string path = "Assets/SpawnConfig_" + singleInput.level + ".asset";
-                    LevelSpawnConfig config = AssetDatabase.LoadAssetAtPath<LevelSpawnConfig>(path);
-                    if (config != null)
-                    {
-                        EnableChart();
-                        chartData.Push(config);
-                    }
-                    else
-                    {
-                        ShowErrorChart($"Không có level phù hợp với đường dẫn '{path}'");
-                    }
+                    EnableChart();
+                    chartData.Push(config);
+                }
+                else
+                {
+                    LogErrorChart($"Không có level phù hợp với đường dẫn '{path}'");
                 }
             }
         }
 
         private void DrawRangeTab()
         {
-            DrawLevelInput(rangeInput, isRange: true);
+            DrawInput(isRange: true);
 
             EditorGUILayout.Space(10);
 
             if (GUILayout.Button("Preview Level", GUILayout.Height(32)))
             {
-                if (ValidateRange(rangeInput))
+                List<LevelSpawnConfig> list = new List<LevelSpawnConfig>();
+                for (int level = input.fromLevel; level <= input.toLevel; level++)
                 {
-                    List<LevelSpawnConfig> list = new List<LevelSpawnConfig>();
-                    for (int level = rangeInput.fromLevel; level <= rangeInput.toLevel; level++)
-                    {
-                        string path = "Assets/SpawnConfig_" + level + ".asset";
-                        LevelSpawnConfig config = AssetDatabase.LoadAssetAtPath<LevelSpawnConfig>(path);
-                        list.Add(config);
-                    }
+                    string path = "Assets/SpawnConfig_" + level + ".asset";
+                    LevelSpawnConfig config = AssetDatabase.LoadAssetAtPath<LevelSpawnConfig>(path);
+                    list.Add(config);
+                }
 
-                    if (list.Count > 0)
-                    {
-                        EnableChart();
-                        chartData.Push(list, Color.yellow);
-                    }
-                    else
-                    {
-                        ShowErrorChart($"Không có level nào phù hợp [{rangeInput.fromLevel} : [{rangeInput.toLevel}]]");
-                    }
+                if (list.Count > 0)
+                {
+                    EnableChart();
+                    chartData.Push(list);
+                }
+                else
+                {
+                    LogErrorChart($"Không có level nào phù hợp [{input.fromLevel} : [{input.toLevel}]]");
                 }
             }
         }
@@ -93,7 +112,7 @@ namespace _Game.Battle.Editor
 
             EditorGUILayout.Space(8);
         }
-        
+
         protected override string[] ToolbarNames()
         {
             return new[] { "Single", "Range", "Generate" };
@@ -114,64 +133,10 @@ namespace _Game.Battle.Editor
                 DrawGenerateTab();
             }
         }
-      
-        static void DrawLevelInput(LevelInput input, bool isRange)
-        {
-            EditorGUILayout.LabelField("Level Settings", EditorStyles.boldLabel);
-            EditorGUILayout.Space(4);
-
-            if (isRange)
-            {
-                input.fromLevel = EditorGUILayout.IntField("From Level", input.fromLevel);
-                input.toLevel = EditorGUILayout.IntField("To Level", input.toLevel);
-            }
-            else
-            {
-                input.level = EditorGUILayout.IntField("Level", input.level);
-            }
-        }
-        
-        static bool ValidateSingle(LevelInput input)
-        {
-            if (input.level <= 0)
-            {
-                ShowError("Level must be greater than 0");
-                return false;
-            }
-
-            return ValidateCommon(input);
-        }
-
-        static bool ValidateRange(LevelInput input)
-        {
-            if (input.fromLevel <= 0 || input.toLevel <= 0)
-            {
-                ShowError("Level must be greater than 0");
-                return false;
-            }
-
-            if (input.fromLevel > input.toLevel)
-            {
-                ShowError("From Level must be less than or equal To Level");
-                return false;
-            }
-
-            return ValidateCommon(input);
-        }
-
-        static bool ValidateCommon(LevelInput input)
-        {
-            return true;
-        }
-
-        static void ShowError(string message)
-        {
-            EditorUtility.DisplayDialog("Invalid Input", message, "OK");
-        }
 
         static void Build(GenerateLevelData generateData)
         {
-            var samples = SampleCurve(generateData.curve, Samples);
+            var samples = SampleCurve(generateData.curve, 60);
             var wavePowers = ComputeWavePower(samples, generateData.totalWave, generateData.totalPower);
             var config = CreateInstance<LevelSpawnConfig>();
             for (int i = 0; i < generateData.totalWave; i++)
@@ -258,25 +223,8 @@ namespace _Game.Battle.Editor
             public int level;
             public int fromLevel;
             public int toLevel;
-
-            public static LevelInput Single()
-            {
-                return new LevelInput
-                {
-                    level = DEFAULT_LEVEL,
-                };
-            }
-
-            public static LevelInput Range()
-            {
-                return new LevelInput
-                {
-                    fromLevel = DEFAULT_LEVEL,
-                    toLevel = DEFAULT_LEVEL + 9,
-                };
-            }
         }
-
+        
         private class GenerateLevelData
         {
             public int level;
@@ -303,31 +251,17 @@ namespace _Game.Battle.Editor
                 }
             }
 
-            Point GetPoints(List<float> list, Vector2 offset, Color color)
-            {
-                Point p = new Point();
-                p.color = color;
-                float max = list.Max();
-                float total = list.Count - 1;
-                for (int i = 0; i < list.Count; i++)
-                {
-                    p.points.Add(new Vector2(i / total, list[i] / max) + offset);
-                }
-
-                return p;
-            }
-
             points = new List<Point>
             {
-                GetPoints(wavePowers, Vector2.zero, Color.green),
-                GetPoints(batchPowers, new Vector2(0, 0.01f), Color.yellow),
-                GetPoints(intervalPowers, new Vector2(0, -0.01f), Color.red),
+                GetPoints(wavePowers, Vector2.zero, false, Color.green),
+                GetPoints(batchPowers, new Vector2(0, 0.01f), false, Color.yellow),
+                GetPoints(intervalPowers, new Vector2(0, -0.01f), false, Color.red),
             };
         }
 
-        public void Push(List<LevelSpawnConfig> configs, Color color)
+        public void Push(List<LevelSpawnConfig> configs)
         {
-            List<int> powers = new List<int>();
+            List<float> powers = new List<float>();
             foreach (var config in configs)
             {
                 int power = 0;
@@ -339,18 +273,9 @@ namespace _Game.Battle.Editor
                 powers.Add(power);
             }
 
-            Point p = new Point();
-            p.color = color;
-            float max = powers.Max();
-            float total = powers.Count - 1;
-            for (int i = 0; i < powers.Count; i++)
-            {
-                p.points.Add(new Vector2(i / total, powers[i] / max));
-            }
-
             points = new List<Point>
             {
-                p
+                GetPoints(powers, Vector2.zero, false, Color.yellow)
             };
         }
     }

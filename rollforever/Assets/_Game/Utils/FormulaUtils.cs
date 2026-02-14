@@ -28,7 +28,7 @@ namespace _Game.Battle
     public static class FormulaUtils
     {
         private const float DEFENSE_K = 1000;
-        
+
         public static int PowerMonster(MonsterConfig.MonsterData monsterData, int level)
         {
             float attack = monsterData.Attack(level);
@@ -38,10 +38,13 @@ namespace _Game.Battle
             float dps = DPS(skillDamage, monsterData.SkillCooldown, 0, 0);
             float effectiveHp = health * (defense + DEFENSE_K) / DEFENSE_K;
             float power = dps * effectiveHp;
-            Debug.Log($"Monster:{monsterData.ID}, Level: {level}, DPS:{dps}, EffectiveHp:{effectiveHp}, Power:{power}");
+            Debug.Log($"Monster:{monsterData.ID}, Level: {level}, " +
+                      $"\nATK:{attack}, DEF:{defense}, HP:{health}, " +
+                      $"\nDPS:{dps}, EffectiveHp:{effectiveHp}, Power:{(int)math.sqrt(power)}" +
+                      $"\n");
             return (int)math.sqrt(power);
         }
-        
+
         /*
          *  Early game: gần như tuyến tính
          *  Mid game: bắt đầu cong lên

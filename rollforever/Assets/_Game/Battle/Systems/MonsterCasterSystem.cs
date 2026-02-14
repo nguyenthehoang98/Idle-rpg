@@ -43,9 +43,9 @@ namespace _Game.Battle.Systems
                 if (attack.elapsed >= attack.cooldown)
                 {
                     attack.elapsed = 0;
-                    EventBus.Instance.Publish(
+                    /*EventBus.Instance.Publish(
                         new CastSkillEvent(e, 1, shareData.Simulator.GetAgentPosition(unitPool.Get(e).agentId), Team.Monster)
-                    );
+                    );*/
                 }
             }
         }

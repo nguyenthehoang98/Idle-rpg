@@ -31,7 +31,8 @@ namespace _Game.Battle.Systems
         private EcsPool<UnitPosTempData> unitPosTempPool;
         private EcsPool<MonsterFlag> monsterFlagPool;
         private EcsPool<AttackCasterData> casterPool;
-        
+
+        private MonsterConfig monsterConfig;
         private List<Wave> waves = new List<Wave>();
         private int waveIndex;
         private int batchIndex;
@@ -62,9 +63,8 @@ namespace _Game.Battle.Systems
 
             // todo: cache spawn data
             //HashSet<MonsterId> monsters = new HashSet<MonsterId>();
-            var monsterConfig = KitConfigManager.Get<MonsterConfig>();
-            var waveSpawns = shareData.LevelSpawnConfig.waves;
-            waves = Build(waveSpawns, monsterConfig);
+            monsterConfig = KitConfigManager.Get<MonsterConfig>();
+            waves = Build(shareData.LevelSpawnConfig.waves, monsterConfig);
 
             // todo: preload assets
         }
@@ -90,9 +90,22 @@ namespace _Game.Battle.Systems
                     // todo: while elapsed interval
                     while (spawnElapsed > 0 && spawnedCount < batch.monsters.Count)
                     {
-                        SpawnEntity(float2.zero, 2, RandomUtils.Range(0.5f, 1.25f));
-                        spawnedCount++;
-                        spawnElapsed -= batch.interval;
+                        if (batch.monsters.Count > spawnedCount)
+                        {
+                            MonsterId monsterId = batch.monsters[spawnedCount];
+                            if (monsterConfig.Find(monsterId.id, out var monsterData))
+                            {
+                                float radius = 0.5f;
+                                if(monsterId.id > 1000101) radius = 1.5f;
+                                SpawnEntity(monsterData, monsterId.level, float2.zero, 2, radius);
+                                spawnedCount++;
+                                spawnElapsed -= batch.interval;
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
 
                     if (spawnedCount >= batch.monsters.Count || batchElapsed >= batch.duration)
@@ -118,7 +131,7 @@ namespace _Game.Battle.Systems
             }
         }
 
-        private void SpawnEntity(float2 center, float rangeLimit, float radius)
+        private void SpawnEntity(MonsterConfig.MonsterData monsterData, int level, float2 center, float rangeLimit, float radius)
         {
             float2 pos = RandomPointOnCircle(center, Random.Range(20, 30));
                    
@@ -151,7 +164,7 @@ namespace _Game.Battle.Systems
             unitPosTempPool.Add(entity) = new UnitPosTempData();
             healthPool.Add(entity) = new HealthData(100);
             modifierPool.Add(entity) = new UnitModifierData(StatusEffect.None);
-            casterPool.Add(entity) = new AttackCasterData {cooldown = 0.5f};
+            casterPool.Add(entity) = new AttackCasterData {cooldown = 0.5f, skillId = monsterData.SkillId};
 
             // todo: add flag
             monsterFlagPool.Add(entity);

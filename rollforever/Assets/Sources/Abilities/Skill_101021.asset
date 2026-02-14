@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f1b1926f57db82438a03be8a84358f5, type: 3}
-  m_Name: AbilityData 1
+  m_Name: Skill_101021
   m_EditorClassIdentifier: 
   core:
     lifeTime: 1

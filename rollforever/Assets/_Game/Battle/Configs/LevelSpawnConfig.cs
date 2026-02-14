@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using _Game.Battle.Systems;
 using _Game.Configs;
+using _KIT.Resource;
+using Cysharp.Threading.Tasks;
 using Unity.Mathematics;
 
 namespace _Game.Battle
@@ -23,8 +25,25 @@ namespace _Game.Battle
         public void Validate()
         {
 #if DEVELOP_MODE
-            SpawnMonsterSystem.ValidateSpawn(this, MonsterConfig.Instance);
+            MonsterConfig monsterConfig = MonsterConfig.Instance;
+            foreach (var wave in waves)
+            {
+                foreach (var batch in wave.batches)
+                {
+                    foreach (var enemy in batch.enemies)
+                    {
+                        if (monsterConfig.Find(enemy.id, out _)) continue;
+                        Debug.LogError($"Không tìm thấy enemy với id '{enemy.id}' ở {name}");
+                    }
+                }
+            }
+            SpawnMonsterSystem.ValidateSpawn(this, monsterConfig);
 #endif
+        }
+
+        public static UniTask<LevelSpawnConfig> LoadSpawn(int level)
+        {
+            return KitLoaded.LoadAsync<LevelSpawnConfig>($"Spawner_{level}");
         }
         
         public void Disable()

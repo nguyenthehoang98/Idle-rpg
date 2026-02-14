@@ -45,7 +45,7 @@ namespace _Game.Battle.Editor
             showHelpbox = false;
         }
 
-        protected void ShowErrorChart(string message)
+        protected void LogErrorChart(string message)
         {
             showHelpbox = true;
             errorMessage = message;

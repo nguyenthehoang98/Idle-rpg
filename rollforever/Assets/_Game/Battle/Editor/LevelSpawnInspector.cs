@@ -11,7 +11,7 @@ namespace _Game.Battle.Editor
     {
         private SerializedProperty wavesProp;
         private int selectedWave = 0;
-        private int selectedBatch = -1;
+        private int selectedBatch = 0;
         private Dictionary<int, bool> monsterFoldout = new Dictionary<int, bool>();
         private const float MIN_BTN_WIDTH = 135f;
         private const float BTN_HEIGHT = 26f;
@@ -78,7 +78,7 @@ namespace _Game.Battle.Editor
                     .FindPropertyRelative("batches").arraySize = 0;
 
                 selectedWave = wavesProp.arraySize - 1;
-                selectedBatch = -1;
+                selectedBatch = 0;
             }
 
             EditorGUILayout.Space(6);
@@ -99,7 +99,7 @@ namespace _Game.Battle.Editor
                 (index) =>
                 {
                     selectedWave = index;
-                    selectedBatch = -1;
+                    selectedBatch = 0;
                 },
                 Color.yellow, GetOtherColor
             );
@@ -140,7 +140,7 @@ namespace _Game.Battle.Editor
             {
                 wavesProp.DeleteArrayElementAtIndex(selectedWave);
                 selectedWave = Mathf.Clamp(selectedWave - 1, 0, wavesProp.arraySize - 1);
-                selectedBatch = -1;
+                selectedBatch = 0;
                 return;
             }
 
@@ -252,7 +252,7 @@ namespace _Game.Battle.Editor
             SerializedProperty enemies = batch.FindPropertyRelative("enemies");
 
             if (!monsterFoldout.ContainsKey(batchIndex))
-                monsterFoldout[batchIndex] = false;
+                monsterFoldout[batchIndex] = true;
 
             EditorGUILayout.BeginVertical("box");
 

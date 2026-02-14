@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace _Game.Battle.Editor
@@ -12,6 +13,7 @@ namespace _Game.Battle.Editor
         
         public sealed class Point
         {
+            public bool drawNumber;
             public List<Vector2> points = new List<Vector2>();
             public Color color = Color.white;
 
@@ -25,6 +27,21 @@ namespace _Game.Battle.Editor
 
                 return vector2s;
             }
+        }
+        
+        private Point GetPoints(List<float> list, Vector2 offset, bool drawNumber, Color color)
+        {
+            Point p = new Point();
+            p.color = color;
+            p.drawNumber = drawNumber;
+            float max = list.Max();
+            float total = list.Count - 1;
+            for (int i = 0; i < list.Count; i++)
+            {
+                p.points.Add(new Vector2(i / total, list[i] / max) + offset);
+            }
+
+            return p;
         }
     }
 }

@@ -42,7 +42,7 @@ namespace _Game.Battle
             gameLoop = GetComponent<GameLoop>();
             gameLoop.Pause();
 
-            LevelSpawnConfig spawnConfig = await KitLoaded.LoadAsync<LevelSpawnConfig>("SpawnConfig_1"); 
+            LevelSpawnConfig spawnConfig = await LevelSpawnConfig.LoadSpawn(1);
             
             // todo: battle world
             world = new EcsWorld();
