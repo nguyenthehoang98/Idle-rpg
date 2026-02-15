@@ -13,6 +13,7 @@ namespace _Game.AbilitySystem
         private readonly EcsPool<ShapeData> shapePool;
         private readonly EcsPool<DeadFlag> deadPool;
         private readonly EcsPool<HealthData> healthPool;
+        private readonly EcsPool<StatData> statPool;
         private readonly Simulator simulator;
         private readonly ShapeLogic shapeLogic;
         private readonly StateModifierLogic stateModifierLogic;
@@ -30,7 +31,7 @@ namespace _Game.AbilitySystem
         public MonsterVisitor(
             int maxCollision, bool shouldResetCollision, float resetCollisionInterval,
             Simulator simulator, ShapeLogic shapeLogic, StateModifierLogic stateModifierLogic,
-            EcsPool<HealthData> healthPool,
+            EcsPool<HealthData> healthPool, EcsPool<StatData> statPool,
             EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool, EcsPool<DeadFlag> deadPool)
         {
             this.shouldResetCollision = shouldResetCollision;
@@ -39,6 +40,7 @@ namespace _Game.AbilitySystem
             this.entitiesCollision = new NativeList<int>(10, Allocator.Persistent);
             this.entityVisitedStamp = new NativeList<int>(10, Allocator.Persistent);
             this.healthPool = healthPool;
+            this.statPool = statPool;
             this.shapeLogic = shapeLogic;
             this.simulator = simulator;
             this.unitPool = unitPool;
@@ -53,14 +55,11 @@ namespace _Game.AbilitySystem
             this.currentScanId = 0;
             this.IsHit = false;
         }
-        
+
         public void Visit(int entity)
         {
-            if (RemainCanCollision <= 0)
-                return;
-            
-            if (!unitPool.Has(entity)) 
-                return;
+            if (RemainCanCollision <= 0) return;
+            if (!unitPool.Has(entity)) return;
 
             int length = entitiesCollision.Length;
             for (int i = 0; i < length; i++)
@@ -73,24 +72,27 @@ namespace _Game.AbilitySystem
                 if (entityVisitedStamp[i] == entity) return;
             }
 
-            if(entityVisitedStamp.Length > currentScanId)
+            if (entityVisitedStamp.Length > currentScanId)
                 entityVisitedStamp[currentScanId] = entity;
-            else 
+            else
                 entityVisitedStamp.Add(entity);
             currentScanId++;
-            
+
             var unit = unitPool.Get(entity);
             var shape = shapePool.Get(entity);
             float2 agentPos = simulator.GetAgentPosition(unit.agentId);
-            
+
             shapeLogic.Execute(center, shape.Value, agentPos, out IsHit);
             if (IsHit)
             {
                 ref var health = ref healthPool.Get(entity);
-                health.health -= 100;
+                ref var stat = ref statPool.Get(entity);
+                Phần này phải thêm sourceId ể tính toán voi cong thuc
+                int output = 100; //FormulaUtils.Output();
+                health.health -= output;
                 if (health.health <= 0)
                 {
-                    if(!deadPool.Has(entity)) deadPool.Add(entity);
+                    if (!deadPool.Has(entity)) deadPool.Add(entity);
                 }
                 else
                 {

@@ -2,13 +2,11 @@ namespace _Game.Battle.Data
 {
     public struct HealthData
     {
-        public readonly int maxHealth;
         public int health;
 
-        public HealthData(int maxHealth)
+        public HealthData(int health)
         {
-            this.maxHealth = maxHealth;
-            this.health = maxHealth;
+            this.health = health;
         }
     }
 }

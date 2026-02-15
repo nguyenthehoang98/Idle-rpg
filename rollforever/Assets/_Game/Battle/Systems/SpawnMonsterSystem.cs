@@ -10,6 +10,7 @@ using _KIT.Resource;
 using _KIT.Utils;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
+using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -24,6 +25,7 @@ namespace _Game.Battle.Systems
         [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
 
         private EcsWorld world;
+        private EcsPool<StatData> statPool;
         private EcsPool<HealthData> healthPool;
         private EcsPool<UnitData> unitPool;
         private EcsPool<ShapeData> shapePool;
@@ -50,6 +52,7 @@ namespace _Game.Battle.Systems
             unitSource[0] = go.GetComponent<UnitView>();
 
             world = systems.GetWorld();
+            statPool = world.GetPool<StatData>();
             unitPool = world.GetPool<UnitData>();
             shapePool = world.GetPool<ShapeData>();
             unitPosTempPool = world.GetPool<UnitPosTempData>();
@@ -164,10 +167,23 @@ namespace _Game.Battle.Systems
             // todo: add component
             shapePool.Add(entity) = ShapeData.Circle(radius);
             unitPosTempPool.Add(entity) = new UnitPosTempData { stopDistance = monsterData.AttackDistance };
-            healthPool.Add(entity) = new HealthData(100);
+            healthPool.Add(entity) = new HealthData((int)monsterData.Health(level));
             modifierPool.Add(entity) = new UnitModifierData(StatusEffect.None);
             casterPool.Add(entity) = new AttackCasterData { cooldown = 0.5f, skillId = monsterData.SkillId };
-
+            statPool.Add(entity) = new StatData
+            {
+                stats = new NativeArray<Stat>(new Stat[]
+                {
+                    new Stat(StatType.Attack, monsterData.Attack(level)),
+                    new Stat(StatType.Defense, monsterData.Defense(level)),
+                    new Stat(StatType.Health, monsterData.Health(level)),
+                    new Stat(StatType.MoveSpeed, monsterData.MoveSpeed),
+                    new Stat(StatType.SkillReduceCooldown, 0),
+                    new Stat(StatType.CriticalRate, 0),
+                    new Stat(StatType.CriticalDamage, 0)
+                }, Allocator.Persistent)
+            };
+            
             // todo: add flag
             monsterFlagPool.Add(entity);
         }

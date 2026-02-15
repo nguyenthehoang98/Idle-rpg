@@ -21,10 +21,10 @@ namespace _Game.AbilitySystem
         private readonly EcsPool<HealthData> healthPool;
         private readonly EcsPool<UnitModifierData> modifierPool;
         private readonly EcsPool<UnitPosTempData> unitPosTempPool;
+        private readonly EcsPool<StatData> statPool;
         private readonly EcsFilter playerFilter; 
         // model
         private readonly MonsterVisitor monsterVisitor;
-        private readonly IVisitor playerVisitor;
         // modules
         private readonly ShapeLogic shapeLogic;
         private readonly StateModifierLogic stateModifierLogic;
@@ -39,6 +39,7 @@ namespace _Game.AbilitySystem
             BattleStartupShareData shareData, BattleStartupRuntimeData runtimeData,
             EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool,
             EcsPool<DeadFlag> deadPool, EcsPool<HealthData> healthPool, 
+            EcsPool<StatData> statPool,
             EcsPool<UnitModifierData> modifierPool, EcsPool<UnitPosTempData> unitPosTempPool,
             EcsFilter playerFilter)
         {
@@ -46,6 +47,7 @@ namespace _Game.AbilitySystem
             this.lifeTime = data.core.lifeTime;
             
             this.shareData = shareData;
+            this.statPool = statPool;
             this.unitPool = unitPool;
             this.shapePool = shapePool;
             this.deadPool = deadPool;
@@ -66,8 +68,7 @@ namespace _Game.AbilitySystem
             monsterVisitor = new MonsterVisitor(
                 data.core.maxCollision, data.core.shouldResetCollision, data.core.resetCollisionInterval,
                 shareData.Simulator, shapeLogic, stateModifierLogic,
-                healthPool, unitPool, shapePool, deadPool);
-            playerVisitor = new PlayerVisitor();
+                healthPool, statPool, unitPool, shapePool, deadPool);
         }
 
         public void Startup(int source, float2 startPos, int target)
@@ -193,8 +194,8 @@ namespace _Game.AbilitySystem
         public AbilityLogic CreateInstance(Team team)
         {
             return new AbilityLogic(Data, team, shareData, runtimeData,
-                unitPool, shapePool, deadPool, healthPool, modifierPool, unitPosTempPool,
-                playerFilter);
+                unitPool, shapePool, deadPool, healthPool, statPool, modifierPool,
+                unitPosTempPool, playerFilter);
         }
 
         public void OnEntityCreated(int entity)
