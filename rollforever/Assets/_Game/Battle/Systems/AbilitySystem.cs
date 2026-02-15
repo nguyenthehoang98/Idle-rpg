@@ -92,7 +92,13 @@ namespace _Game.Battle.Systems
                 if (findTargets.TryGetValue(ability.Data.core.findTarget, out var findTarget))
                 {
                     EcsFilter filter = e.Team == Team.Player ? monsterFilter : playerFilter;
-                    if (findTarget.Find(e.StartPosition, filter, out int target))
+                    if (filter.GetEntitiesCount() == 0)
+                    {
+#if DEVELOP_MODE
+                        Debug.LogError($"Số lượng entity = 0.\nTeam:{e.Team}");
+#endif                        
+                    }
+                    else if (findTarget.Find(e.StartPosition, filter, out int target))
                     {
                         AbilityLogic abilityInstance = ability.CreateInstance(e.Team);
                         abilityInstance.Startup(e.Source, e.StartPosition, target);
@@ -101,7 +107,7 @@ namespace _Game.Battle.Systems
                     else
                     {
 #if DEVELOP_MODE
-                        Debug.LogError($"Không tìm thấy mục tiêu, kĩ năng id '{e.SkillId}'");
+                        Debug.LogError($"Không tìm thấy mục tiêu.\nTeam:{e.Team}, Source:{e.Source}, Skill:{e.SkillId}, FindTarget: {findTarget.GetType().Name}");
 #endif
                     }
                 }

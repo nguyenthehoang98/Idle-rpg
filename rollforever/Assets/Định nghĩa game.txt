@@ -1,0 +1,8 @@
+SKILL ID: AXXYY | 10101 | 20101
+A: player=>2, monster=>1
+XX: skill
+YY: level
+
+MONSTER ID 10XX | 1001 
+10: CỐ ĐỊNH
+XX: monster

@@ -34,6 +34,7 @@ namespace _Game.Battle
                     foreach (var enemy in batch.enemies)
                     {
                         if (monsterConfig.Find(enemy.id, out _)) continue;
+
                         Debug.LogError($"Không tìm thấy enemy với id '{enemy.id}' ở {name}");
                     }
                 }
@@ -100,6 +101,11 @@ namespace _Game.Battle
             public int id;
             public int level;
             public int weight;
+
+            public EnemySpawn()
+            {
+                id = level = weight = 1;
+            }
         }
     }
 }

@@ -21,10 +21,10 @@ MonoBehaviour:
       waitTimeSpawn: 0
       power: 7
       enemies:
-      - id: 1000101
+      - id: 1001
         level: 1
         weight: 1
-      - id: 1000102
+      - id: 1002
         level: 1
         weight: 1
   - power: 8
@@ -34,10 +34,10 @@ MonoBehaviour:
       waitTimeSpawn: 0
       power: 8
       enemies:
-      - id: 1000101
+      - id: 1001
         level: 1
         weight: 5
-      - id: 1000102
+      - id: 1002
         level: 1
         weight: 1
   - power: 9
@@ -47,10 +47,10 @@ MonoBehaviour:
       waitTimeSpawn: 0
       power: 9
       enemies:
-      - id: 1000101
+      - id: 1001
         level: 1
         weight: 1
-      - id: 1000102
+      - id: 1002
         level: 1
         weight: 1
   - power: 11
@@ -60,7 +60,7 @@ MonoBehaviour:
       waitTimeSpawn: 0
       power: 11
       enemies:
-      - id: 1000101
+      - id: 1001
         level: 1
         weight: 1
   - power: 12
@@ -70,9 +70,9 @@ MonoBehaviour:
       waitTimeSpawn: 0
       power: 12
       enemies:
-      - id: 1000101
+      - id: 1001
         level: 1
         weight: 5
-      - id: 1000102
+      - id: 1001
         level: 2
         weight: 2

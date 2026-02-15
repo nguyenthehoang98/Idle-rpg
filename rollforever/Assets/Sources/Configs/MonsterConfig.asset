@@ -15,9 +15,9 @@ MonoBehaviour:
   fileUrl: 
   enable: 1
   baseData:
-  - id: 1000101
+  - id: 1001
     name: Monster 1
-    address_prefab: 1000101_prefab
+    address_prefab: 1001_monster
     skill_id: 10101
     move_speed: 5
     attack_distance: 5
@@ -30,10 +30,10 @@ MonoBehaviour:
     base_health_stat: 10
     health_linear: 1.5
     health_rate: 1.2
-  - id: 1000102
+  - id: 1002
     name: Monster 2
-    address_prefab: 1000102_prefab
-    skill_id: 10102
+    address_prefab: 1002_monster
+    skill_id: 10201
     move_speed: 5
     attack_distance: 5
     base_attack_stat: 1

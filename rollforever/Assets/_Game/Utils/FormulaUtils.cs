@@ -29,11 +29,6 @@ namespace _Game.Battle
     {
         private const float DEFENSE_K = 1000;
 
-        public static int CreateSkillId(Team team, int skill, int level)
-        {
-            return 10000 * (team == Team.Monster ? 1 : 2) + skill * 100 + level;
-        }
-
         public static int PowerMonster(MonsterConfig.MonsterData monsterData, int level, SkillConfig.SkillData skillData)
         {
             float attack = monsterData.Attack(level);

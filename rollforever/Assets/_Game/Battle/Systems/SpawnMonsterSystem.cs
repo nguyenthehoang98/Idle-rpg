@@ -94,12 +94,11 @@ namespace _Game.Battle.Systems
                     {
                         if (batch.monsters.Count > spawnedCount)
                         {
-                            MonsterId monsterId = batch.monsters[spawnedCount];
-                            if (monsterConfig.Find(monsterId.id, out var monsterData))
+                            var tuple = batch.monsters[spawnedCount];
+                            if (monsterConfig.Find(tuple.id, out var monsterData))
                             {
                                 float radius = 0.5f;
-                                if (monsterId.id > 1000101) radius = 1.5f;
-                                SpawnEntity(monsterData, monsterId.level, float2.zero, 2, radius);
+                                SpawnEntity(monsterData, tuple.level, float2.zero, 2, radius);
                                 spawnedCount++;
                                 spawnElapsed -= batch.interval;
                             }
@@ -259,7 +258,7 @@ namespace _Game.Battle.Systems
                     Batch batch = new Batch();
                     batch.duration = batchSpawn.duration;
                     batch.waitTime = batchSpawn.waitTimeSpawn;
-                    batch.monsters = new List<MonsterId>();
+                    batch.monsters = new List<(int id, int level)>();
 
                     int totalWeight = 0;
                     foreach (var enemy in batchSpawn.enemies)
@@ -296,9 +295,7 @@ namespace _Game.Battle.Systems
                             break;
 
                         powerBudget -= lastPower;
-
-                        MonsterId monsterId = new MonsterId(selected.id, lastLevel);
-                        batch.monsters.Add(monsterId);
+                        batch.monsters.Add((selected.id, lastLevel));
                     }
 
                     batch.interval = batchSpawn.duration / batch.monsters.Count;
@@ -350,12 +347,12 @@ namespace _Game.Battle.Systems
                 {
                     count.Add(batch.monsters.Count);
                     interval.Add((float)Math.Round(batch.interval, 3));
-                    foreach (var monster in batch.monsters)
+                    foreach (var tuple in batch.monsters)
                     {
-                        if (monsterConfig.Find(monster.id, out var monsterData) &&
+                        if (monsterConfig.Find(tuple.id, out var monsterData) &&
                             skillConfig.Find(monsterData.SkillId, out var skillData))
                         {
-                            wavePower += FormulaUtils.PowerMonster(monsterData, monster.level, skillData);
+                            wavePower += FormulaUtils.PowerMonster(monsterData, tuple.level, skillData);
                         }
                     }
                 }
@@ -386,7 +383,7 @@ namespace _Game.Battle.Systems
             public float duration;
             public float waitTime;
             public double interval;
-            public List<MonsterId> monsters;
+            public List<(int id, int level)> monsters;
         }
     }
 }

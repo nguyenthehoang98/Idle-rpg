@@ -35,7 +35,8 @@ namespace _Game.Battle
         {
             await KitConfigManager.Load(new[]
             {
-                "MonsterConfig"
+                "MonsterConfig",
+                "SkillConfig",
             });
             
             // todo: game loop

@@ -37,7 +37,10 @@ namespace _Game.Configs
             }
         }
 
-        public bool Find(int id, out MonsterData value) => cacheData.TryGetValue(id, out value);
+        public bool Find(int monsterId, out MonsterData value)
+        {
+            return cacheData.TryGetValue(monsterId, out value);
+        }
 
         [Serializable]
         public class MonsterData

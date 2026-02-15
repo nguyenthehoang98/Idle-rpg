@@ -268,12 +268,7 @@ namespace _Game.Battle.Editor
             {
                 int last = enemies.arraySize;
                 enemies.arraySize++;
-                enemies.GetArrayElementAtIndex(last).boxedValue = new LevelSpawnConfig.EnemySpawn
-                {
-                    weight = 1,
-                    id = 1,
-                    level = 1,
-                };
+                enemies.GetArrayElementAtIndex(last).boxedValue = new LevelSpawnConfig.EnemySpawn();
             }
 
             EditorGUILayout.EndHorizontal();
