@@ -2,6 +2,13 @@ using System;
 
 namespace _Game.Battle
 {
+    /// <summary>
+    /// SkillId format:
+    /// id: axxyy
+    ///    + a: monster => 1, player => 2
+    ///    + xx: 01->99 => rarity/gear
+    ///    + yy: 01->99 => skin
+    /// </summary>
     [Serializable]
     public struct SkillId : IEquatable<SkillId>
     {

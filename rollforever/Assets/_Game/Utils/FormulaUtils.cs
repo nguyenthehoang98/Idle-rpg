@@ -38,10 +38,10 @@ namespace _Game.Battle
             float dps = DPS(skillDamage, monsterData.SkillCooldown, 0, 0);
             float effectiveHp = health * (defense + DEFENSE_K) / DEFENSE_K;
             float power = dps * effectiveHp;
-            Debug.Log($"Monster:{monsterData.ID}, Level: {level}, " +
+            /*Debug.Log($"Monster:{monsterData.ID}, Level: {level}, " +
                       $"\nATK:{attack}, DEF:{defense}, HP:{health}, " +
                       $"\nDPS:{dps}, EffectiveHp:{effectiveHp}, Power:{(int)math.sqrt(power)}" +
-                      $"\n");
+                      $"\n");*/
             return (int)math.sqrt(power);
         }
 

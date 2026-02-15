@@ -74,10 +74,9 @@ namespace _Game.Battle.Systems
 
                 var position = shareData.Simulator.GetAgentPosition(unit.agentId);
                 var goal = shareData.Simulator.GetAgentGoal(unit.agentId);
-                var radius = shareData.Simulator.GetAgentRadius(unit.agentId);
                 
                 ref var unitPosTemp = ref unitPosTempPool.Get(e);
-                if (ShouldPause(modifierPool.Get(e).effect, position, goal, radius))
+                if (ShouldPause(modifierPool.Get(e).effect, position, goal, unitPosTemp.stopDistance))
                 {
                     Pause(e, unit.agentId, position);
                     unitPosTemp.isStopped = true;
@@ -139,11 +138,11 @@ namespace _Game.Battle.Systems
             shareData.Simulator.PauseAgent(agentId, true);
         }
 
-        bool ShouldPause(StatusEffect effect, float2 pos, float2 goal, float radius)
+        bool ShouldPause(StatusEffect effect, float2 pos, float2 goal, float stopDistance)
         {
             if (effect.Has(StatusEffect.Stun)) return true;
             if (effect.Has(StatusEffect.KnockBack)) return true;
-            return math.distancesq(goal, pos) <= shareData.Matrix.radiussq(radius);
+            return math.distancesq(goal, pos) <= shareData.Matrix.radiussq(stopDistance);
         }
     }
 }

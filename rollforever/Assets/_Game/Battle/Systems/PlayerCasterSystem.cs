@@ -34,9 +34,9 @@ namespace _Game.Battle.Systems
                 if (attack.elapsed >= attack.cooldown)
                 {
                     attack.elapsed = 0;
-                    /*EventBus.Instance.Publish(
-                        new CastSkillEvent(e, 0, float2.zero, Team.Player)
-                    );*/
+                    EventBus.Instance.Publish(
+                        new CastSkillEvent(e, new SkillId(20101, 1), float2.zero, Team.Player)
+                    );
                 }
             }
         }

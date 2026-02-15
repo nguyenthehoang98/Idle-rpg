@@ -68,6 +68,13 @@ namespace _Game.Battle.Systems
                     }
                 }
             }
+
+            List<SkillId> playerSkillsId = new List<SkillId>();
+            playerSkillsId.Add(new SkillId(20101, 1));
+            foreach (var skillId in playerSkillsId)
+            {
+                allSkills.Add(skillId, skillId.SkillPath());
+            }
             
             findTargets = new Dictionary<FindTargetType, IFindTarget>();
             findTargets.Add(FindTargetType.Farthest, new FarthestFindTarget(shareData.Simulator, unitPool));

@@ -23,7 +23,7 @@ MonoBehaviour:
     skill_scale_damage: 1
     skill_flat_damage: 0
     move_speed: 5
-    attack_distance: 1
+    attack_distance: 5
     base_attack_stat: 1
     attack_linear: 0.2
     attack_rate: 1
@@ -44,7 +44,7 @@ MonoBehaviour:
     skill_scale_damage: 1
     skill_flat_damage: 1
     move_speed: 5
-    attack_distance: 1
+    attack_distance: 5
     base_attack_stat: 1
     attack_linear: 0.2
     attack_rate: 1

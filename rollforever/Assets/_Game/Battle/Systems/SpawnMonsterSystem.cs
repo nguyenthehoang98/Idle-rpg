@@ -161,7 +161,7 @@ namespace _Game.Battle.Systems
                     
             // todo: add component
             shapePool.Add(entity) = ShapeData.Circle(radius);
-            unitPosTempPool.Add(entity) = new UnitPosTempData();
+            unitPosTempPool.Add(entity) = new UnitPosTempData { stopDistance = monsterData.AttackDistance };
             healthPool.Add(entity) = new HealthData(100);
             modifierPool.Add(entity) = new UnitModifierData(StatusEffect.None);
             casterPool.Add(entity) = new AttackCasterData {cooldown = 0.5f, skillId = monsterData.SkillId};
