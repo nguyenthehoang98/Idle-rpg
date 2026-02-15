@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eecde63f33af40a0a43d50cfab237720, type: 3}
+  m_Name: SkillConfig
+  m_EditorClassIdentifier: 
+  fileUrl: 
+  enable: 1
+  baseData:
+  - skillId: 10101
+    skill_cooldown: 1
+    skill_scale_damage: 1
+    skill_flat_damage: 0
+  - skillId: 10201
+    skill_cooldown: 1
+    skill_scale_damage: 1
+    skill_flat_damage: 0
+  - skillId: 20101
+    skill_cooldown: 0.5
+    skill_scale_damage: 1
+    skill_flat_damage: 0

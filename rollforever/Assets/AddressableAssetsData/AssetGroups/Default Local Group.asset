@@ -16,7 +16,7 @@ MonoBehaviour:
   m_GUID: 56ed42d2a06414c47bc7f73ebf421834
   m_SerializeEntries:
   - m_GUID: 4e4263c1db5e4e34aa3a3100965cf2fe
-    m_Address: Skill_101021
+    m_Address: Skill_10201
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -36,12 +36,12 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ac6f1d42f496c154cab2daf30ee3ba7d
-    m_Address: Skill_101011
+    m_Address: Skill_10101
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: debd7f8136768814fa2898477657c3d3
-    m_Address: Skill_201011
+    m_Address: Skill_20101
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

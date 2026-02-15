@@ -29,13 +29,18 @@ namespace _Game.Battle
     {
         private const float DEFENSE_K = 1000;
 
-        public static int PowerMonster(MonsterConfig.MonsterData monsterData, int level)
+        public static int CreateSkillId(Team team, int skill, int level)
+        {
+            return 10000 * (team == Team.Monster ? 1 : 2) + skill * 100 + level;
+        }
+
+        public static int PowerMonster(MonsterConfig.MonsterData monsterData, int level, SkillConfig.SkillData skillData)
         {
             float attack = monsterData.Attack(level);
             float defense = monsterData.Defense(level);
             float health = monsterData.Health(level);
-            float skillDamage = monsterData.SkillDamage(attack);
-            float dps = DPS(skillDamage, monsterData.SkillCooldown, 0, 0);
+            float skillDamage = skillData.SkillDamage(attack);
+            float dps = DPS(skillDamage, skillData.SkillCooldown, 0, 0);
             float effectiveHp = health * (defense + DEFENSE_K) / DEFENSE_K;
             float power = dps * effectiveHp;
             /*Debug.Log($"Monster:{monsterData.ID}, Level: {level}, " +

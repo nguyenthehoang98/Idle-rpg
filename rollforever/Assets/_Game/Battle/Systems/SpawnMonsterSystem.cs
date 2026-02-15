@@ -19,10 +19,10 @@ namespace _Game.Battle.Systems
     public class SpawnMonsterSystem : IEcsInitSystem, IEcsRunSystem
     {
         private Dictionary<int, UnitView> unitSource;
-        
+
         [EcsInject] private readonly BattleStartupShareData shareData;
         [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
-        
+
         private EcsWorld world;
         private EcsPool<HealthData> healthPool;
         private EcsPool<UnitData> unitPool;
@@ -32,6 +32,7 @@ namespace _Game.Battle.Systems
         private EcsPool<MonsterFlag> monsterFlagPool;
         private EcsPool<AttackCasterData> casterPool;
 
+        private SkillConfig skillConfig;
         private MonsterConfig monsterConfig;
         private List<Wave> waves = new List<Wave>();
         private int waveIndex;
@@ -64,11 +65,12 @@ namespace _Game.Battle.Systems
             // todo: cache spawn data
             //HashSet<MonsterId> monsters = new HashSet<MonsterId>();
             monsterConfig = KitConfigManager.Get<MonsterConfig>();
-            waves = Build(shareData.LevelSpawnConfig.waves, monsterConfig);
+            skillConfig = KitConfigManager.Get<SkillConfig>();
+            waves = Build(shareData.LevelSpawnConfig.waves, monsterConfig, skillConfig);
 
             // todo: preload assets
         }
-        
+
         public void Run(IEcsSystems systems)
         {
             float dt = shareData.TimeDelta;
@@ -80,7 +82,7 @@ namespace _Game.Battle.Systems
                     waitElapsed -= dt;
                     if (waitElapsed > 0)
                         return;
-                    
+
                     shareData.Simulator.EnsureCompleted();
 
                     var batch = wave.batches[batchIndex];
@@ -96,7 +98,7 @@ namespace _Game.Battle.Systems
                             if (monsterConfig.Find(monsterId.id, out var monsterData))
                             {
                                 float radius = 0.5f;
-                                if(monsterId.id > 1000101) radius = 1.5f;
+                                if (monsterId.id > 1000101) radius = 1.5f;
                                 SpawnEntity(monsterData, monsterId.level, float2.zero, 2, radius);
                                 spawnedCount++;
                                 spawnElapsed -= batch.interval;
@@ -131,10 +133,11 @@ namespace _Game.Battle.Systems
             }
         }
 
-        private void SpawnEntity(MonsterConfig.MonsterData monsterData, int level, float2 center, float rangeLimit, float radius)
+        private void SpawnEntity(MonsterConfig.MonsterData monsterData, int level, float2 center, float rangeLimit,
+            float radius)
         {
             float2 pos = RandomPointOnCircle(center, Random.Range(20, 30));
-                   
+
             float2 goal;
             if (RaycastToSquareBorder(pos, center, rangeLimit, out var hitPoint))
             {
@@ -158,27 +161,27 @@ namespace _Game.Battle.Systems
             shareData.Simulator.SetAgentNeighborDist(agentId, radius * 3f);
             shareData.Simulator.SetAgentGoal(agentId, goal);
             shareData.Simulator.SetAgentPrefVelocity(agentId, math.normalize(goal - pos));
-                    
+
             // todo: add component
             shapePool.Add(entity) = ShapeData.Circle(radius);
             unitPosTempPool.Add(entity) = new UnitPosTempData { stopDistance = monsterData.AttackDistance };
             healthPool.Add(entity) = new HealthData(100);
             modifierPool.Add(entity) = new UnitModifierData(StatusEffect.None);
-            casterPool.Add(entity) = new AttackCasterData {cooldown = 0.5f, skillId = monsterData.SkillId};
+            casterPool.Add(entity) = new AttackCasterData { cooldown = 0.5f, skillId = monsterData.SkillId };
 
             // todo: add flag
             monsterFlagPool.Add(entity);
         }
-        
+
         static float2 RandomPointOnCircle(float2 center, float radius)
         {
             var angle = Random.Range(0f, Mathf.PI * 2f);
             return center + new float2(
-                       Mathf.Cos(angle),
-                       Mathf.Sin(angle)
-                   ) * radius;
+                Mathf.Cos(angle),
+                Mathf.Sin(angle)
+            ) * radius;
         }
-        
+
         static float2 ProjectPointToSquareBorder(float2 pos, float halfSize)
         {
             float2 p = pos;
@@ -201,13 +204,8 @@ namespace _Game.Battle.Systems
 
             return p;
         }
-        
-        static bool RaycastToSquareBorder(
-            float2 pos,
-            float2 center,
-            float halfSize,
-            out float2 hitPoint
-        )
+
+        static bool RaycastToSquareBorder(float2 pos, float2 center, float halfSize, out float2 hitPoint)
         {
             hitPoint = float2.zero;
 
@@ -225,7 +223,7 @@ namespace _Game.Battle.Systems
             float2 tMax = math.max(t1, t2);
 
             float tEnter = math.cmax(tMin);
-            float tExit  = math.cmin(tMax);
+            float tExit = math.cmin(tMax);
 
             // không hit
             if (tExit < 0 || tEnter > tExit)
@@ -238,14 +236,16 @@ namespace _Game.Battle.Systems
             return true;
         }
 
-        public static void ValidateSpawn(LevelSpawnConfig spawnConfig, MonsterConfig monsterConfig)
+        public static void ValidateSpawn(LevelSpawnConfig spawnConfig, MonsterConfig monsterConfig,
+            SkillConfig skillConfig)
         {
             List<LevelSpawnConfig.WaveSpawn> waveSpawns = spawnConfig.waves;
-            List<Wave> waves = Build(waveSpawns, monsterConfig);
-            LogPower(waveSpawns, waves, spawnConfig.name, monsterConfig);
+            List<Wave> waves = Build(waveSpawns, monsterConfig, skillConfig);
+            LogPower(waveSpawns, waves, spawnConfig.name, monsterConfig, skillConfig);
         }
 
-        static List<Wave> Build(List<LevelSpawnConfig.WaveSpawn> waveSpawns, MonsterConfig monsterConfig)
+        static List<Wave> Build(List<LevelSpawnConfig.WaveSpawn> waveSpawns, MonsterConfig monsterConfig,
+            SkillConfig skillConfig)
         {
             List<Wave> waves = new List<Wave>();
             foreach (var waveSpawn in waveSpawns)
@@ -276,9 +276,10 @@ namespace _Game.Battle.Systems
                         LevelSpawnConfig.EnemySpawn selected = null;
                         foreach (var enemy in batchSpawn.enemies)
                         {
-                            if (monsterConfig.Find(enemy.id, out var data))
+                            if (monsterConfig.Find(enemy.id, out var monsterData) &&
+                                skillConfig.Find(monsterData.SkillId, out var skillData))
                             {
-                                int power = FormulaUtils.PowerMonster(data, enemy.level);
+                                int power = FormulaUtils.PowerMonster(monsterData, enemy.level, skillData);
                                 if (rand < power)
                                 {
                                     lastLevel = enemy.level;
@@ -309,8 +310,9 @@ namespace _Game.Battle.Systems
 
             return waves;
         }
-        
-        private static void LogPower(List<LevelSpawnConfig.WaveSpawn> waveSpawns, List<Wave> waves, string name, MonsterConfig monsterConfig)
+
+        private static void LogPower(List<LevelSpawnConfig.WaveSpawn> waveSpawns, List<Wave> waves, string name,
+            MonsterConfig monsterConfig, SkillConfig skillConfig)
         {
 #if DEVELOP_MODE
             int totalPower = 0;
@@ -318,7 +320,7 @@ namespace _Game.Battle.Systems
             {
                 totalPower += waveSpawn.power;
             }
-            
+
             int power = 0;
             foreach (var wave in waves)
             {
@@ -326,9 +328,10 @@ namespace _Game.Battle.Systems
                 {
                     foreach (var monster in batch.monsters)
                     {
-                        if (monsterConfig.Find(monster.id, out var data))
+                        if (monsterConfig.Find(monster.id, out var monsterData) &&
+                            skillConfig.Find(monsterData.SkillId, out var skillData))
                         {
-                            power += FormulaUtils.PowerMonster(data, monster.level);
+                            power += FormulaUtils.PowerMonster(monsterData, monster.level, skillData);
                         }
                     }
                 }
@@ -349,14 +352,15 @@ namespace _Game.Battle.Systems
                     interval.Add((float)Math.Round(batch.interval, 3));
                     foreach (var monster in batch.monsters)
                     {
-                        if (monsterConfig.Find(monster.id, out var data))
+                        if (monsterConfig.Find(monster.id, out var monsterData) &&
+                            skillConfig.Find(monsterData.SkillId, out var skillData))
                         {
-                            wavePower += FormulaUtils.PowerMonster(data, monster.level);
+                            wavePower += FormulaUtils.PowerMonster(monsterData, monster.level, skillData);
                         }
                     }
                 }
 
-                sb.AppendLine($"Wave #{i+1}: ({waveSpawn.power}:{wavePower}). " +
+                sb.AppendLine($"Wave #{i + 1}: ({waveSpawn.power}:{wavePower}). " +
                               $"Count: {string.Join(',', count)}. " +
                               $"Interval: {string.Join(',', interval)}");
             }
@@ -371,7 +375,7 @@ namespace _Game.Battle.Systems
             }
 #endif
         }
-        
+
         sealed class Wave
         {
             public Batch[] batches;

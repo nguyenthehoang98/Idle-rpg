@@ -19,9 +19,6 @@ MonoBehaviour:
     name: Monster 1
     address_prefab: 1000101_prefab
     skill_id: 10101
-    skill_cooldown: 1
-    skill_scale_damage: 1
-    skill_flat_damage: 0
     move_speed: 5
     attack_distance: 5
     base_attack_stat: 1
@@ -33,16 +30,10 @@ MonoBehaviour:
     base_health_stat: 10
     health_linear: 1.5
     health_rate: 1.2
-    skillId:
-      id: 10101
-      level: 1
   - id: 1000102
     name: Monster 2
     address_prefab: 1000102_prefab
     skill_id: 10102
-    skill_cooldown: 1
-    skill_scale_damage: 1
-    skill_flat_damage: 1
     move_speed: 5
     attack_distance: 5
     base_attack_stat: 1
@@ -54,6 +45,3 @@ MonoBehaviour:
     base_health_stat: 10
     health_linear: 1.5
     health_rate: 1.2
-    skillId:
-      id: 10102
-      level: 1

@@ -9,6 +9,7 @@ namespace _Game.Battle.Editor
     public partial class MonsterEditorWindow : BaseEditorWindowChart
     {
         private MonsterConfig monsterConfig;
+        private SkillConfig skillConfig;
         
         private MonsterInput input = new MonsterInput
         {
@@ -26,11 +27,13 @@ namespace _Game.Battle.Editor
         private void OnEnable()
         {
             monsterConfig = MonsterConfig.Instance;
+            skillConfig = SkillConfig.Instance;
         }
 
         private void OnFocus()
         {
             monsterConfig = MonsterConfig.Instance;
+            skillConfig = SkillConfig.Instance;
         }
 
         void DrawInput(bool isRange)
@@ -74,10 +77,11 @@ namespace _Game.Battle.Editor
 
             if (GUILayout.Button("Preview Level", GUILayout.Height(32)))
             {
-                if (monsterConfig.Find(input.id, out var monsterData))
+                if (monsterConfig.Find(input.id, out var monsterData) &&
+                    skillConfig.Find(input.id, out var skillData))
                 {
                     EnableChart();
-                    chartData.Push(monsterData);
+                    chartData.Push(monsterData, skillData);
                 }
                 else
                 {
@@ -110,7 +114,7 @@ namespace _Game.Battle.Editor
 
     public partial class ChartData
     {
-        public void Push(MonsterConfig.MonsterData monsterData)
+        public void Push(MonsterConfig.MonsterData monsterData, SkillConfig.SkillData skillData)
         {
             List<float> attacks = new List<float>();
             List<float> healths = new List<float>();
@@ -121,7 +125,7 @@ namespace _Game.Battle.Editor
                 attacks.Add(monsterData.Attack(i));
                 healths.Add(monsterData.Health(i));
                 defenses.Add(monsterData.Defense(i));
-                powers.Add(FormulaUtils.PowerMonster(monsterData, i));
+                powers.Add(FormulaUtils.PowerMonster(monsterData, i, skillData));
             }
             
             points = new List<Point>

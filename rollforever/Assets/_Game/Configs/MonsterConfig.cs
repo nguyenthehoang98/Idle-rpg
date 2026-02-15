@@ -36,14 +36,6 @@ namespace _Game.Configs
                 cacheData[m.ID] = m;
             }
         }
-     
-        public override void OnPostImported()
-        {
-            foreach (var data in baseData)
-            {
-                data.OnValidate();
-            }
-        }
 
         public bool Find(int id, out MonsterData value) => cacheData.TryGetValue(id, out value);
 
@@ -58,9 +50,6 @@ namespace _Game.Configs
             [SerializeField] private string name;
             [SerializeField] private string address_prefab;
             [SerializeField] private int skill_id; // Monster mặc định kĩ năng level là 1.
-            [SerializeField] private float skill_cooldown;
-            [SerializeField] private float skill_scale_damage;
-            [SerializeField] private float skill_flat_damage;
             [SerializeField] private float move_speed;
             [SerializeField] private float attack_distance; // Phạm vi tấn công
             [SerializeField] private float base_attack_stat;
@@ -73,34 +62,16 @@ namespace _Game.Configs
             [SerializeField] private float health_linear;
             [SerializeField] private float health_rate;
 
-            [SerializeField] private SkillId skillId;
-
             public int ID => id;
-
             public string Name => name;
-
             public string AddressPrefab => address_prefab;
-
-            public SkillId SkillId => skillId;
-
-            public float SkillCooldown => skill_cooldown;
-
+            public int SkillId => skill_id;
             public float MoveSpeed => move_speed;
-
             public float AttackDistance => attack_distance;
 
             public float Attack(int level) => FormulaUtils.Attack(level, base_attack_stat, attack_linear, attack_rate);
-           
             public float Defense(int level) => FormulaUtils.Defense(level, base_defense_stat, defense_linear, defense_rate);
-           
             public float Health(int level) => FormulaUtils.Health(level, base_health_stat, health_linear, health_rate);
-
-            public float SkillDamage(float finalAttack) => FormulaUtils.SkillDamage(finalAttack, skill_scale_damage, skill_flat_damage);
-            
-            public void OnValidate()
-            {
-                skillId = new SkillId(skill_id, 1);
-            }
         }
     }
 }

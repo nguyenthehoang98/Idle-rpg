@@ -26,6 +26,7 @@ namespace _Game.Battle
         {
 #if DEVELOP_MODE
             MonsterConfig monsterConfig = MonsterConfig.Instance;
+            SkillConfig skillConfig  = SkillConfig.Instance;
             foreach (var wave in waves)
             {
                 foreach (var batch in wave.batches)
@@ -37,7 +38,7 @@ namespace _Game.Battle
                     }
                 }
             }
-            SpawnMonsterSystem.ValidateSpawn(this, monsterConfig);
+            SpawnMonsterSystem.ValidateSpawn(this, monsterConfig, skillConfig);
 #endif
         }
 
