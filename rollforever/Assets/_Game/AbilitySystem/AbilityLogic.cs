@@ -33,6 +33,7 @@ namespace _Game.AbilitySystem
         private readonly TrajectoryLogic trajectoryLogic;
         private readonly float lifeTime;
         // runtimes
+        private float2 prevPosition;
         private Team sourceTeam;
         private int unitId;
         private float elapsed;
@@ -94,27 +95,29 @@ namespace _Game.AbilitySystem
             // todo: pre update
             shapeLogic.PreExecute(deltaTime);
 
-            if(sourceTeam == Team.Player)
+            if (sourceTeam == Team.Player)
                 PreHandleMonsters(center);
 
-            if (sourceTeam == Team.Player)
-                HandleMonsters(center);
-            else if (sourceTeam == Team.Monster)
+            if (sourceTeam == Team.Player && elapsed > deltaTime)
+                HandleMonsters(prevPosition, center);
+            else if (sourceTeam == Team.Monster && elapsed > deltaTime)
                 HandlePlayers(center);
-            
+
             stateModifierLogic.Update(deltaTime);
-            
+
             // todo: late update
-            
+
             shapeLogic.AfterExecute(center);
-            
+
             if (sourceTeam == Team.Player)
                 AfterHandleMonsters(deltaTime);
 
+            prevPosition = center;
+
 #if UNITY_EDITOR && DEVELOP_MODE
             Color color = monsterVisitor.IsHit ? Color.red : Color.green;
-         
-            Debug.DrawLine((Vector2) shapeLogic.PrevPos, (Vector2) center, color, deltaTime);
+
+            Debug.DrawLine((Vector2)shapeLogic.PrevPos, (Vector2)center, color, deltaTime);
             if (shapeLogic.Shape.type == ShapeType.Circle)
             {
                 GeometryGizmos.DrawCircle(new Circle(center, shapeLogic.Shape.radius), color, deltaTime);
@@ -151,16 +154,16 @@ namespace _Game.AbilitySystem
             monsterVisitor.PreVisit(center);
         }
 
-        private void HandleMonsters(float2 center)
+        private void HandleMonsters(float2 prev, float2 center)
         {
             // todo: update
             if (shapeLogic.Shape.type == ShapeType.Box)
             {
-                shareData.Matrix.ScanArea(center, shapeLogic.Shape.size, monsterVisitor);
+                shareData.Matrix.ScanArea(prev, center, shapeLogic.Shape.size, monsterVisitor);
             }
             else if (shapeLogic.Shape.type == ShapeType.Circle)
             {
-                shareData.Matrix.ScanArea(center, shapeLogic.Shape.radius, monsterVisitor);
+                shareData.Matrix.ScanArea(prev, center, shapeLogic.Shape.radius, monsterVisitor);
             }
             else
             {

@@ -10,6 +10,7 @@ namespace _Game.Battle
     {
         [Header("Scan")]
         [SerializeField] private bool testScan;
+        [SerializeField] private float2 prevScanPosition;
         [SerializeField] private float2 scanPosition;
         [SerializeField] private float scanRadius;
         [SerializeField] private TestVisitor result;
@@ -25,11 +26,11 @@ namespace _Game.Battle
 #if UNITY_EDITOR
             if(testScan && matrix != null)
             {
+                UnityEditor.Handles.DrawWireDisc((Vector2)prevScanPosition, Vector3.forward, scanRadius);
                 UnityEditor.Handles.DrawWireDisc((Vector2)scanPosition, Vector3.forward, scanRadius);
                 foreach (var item in scanPoints)
                 {
                     Vector2 worldPosition = matrix.CellToWorld(new int2(item.x, item.y));
-                    //UnityEditor.Handles.Label(worldPosition, $"[{item.x}, {item.y}]");
                     UnityEditor.Handles.DrawWireCube(worldPosition, Vector2.one * matrix.CellSize);
                 }
             }
@@ -62,7 +63,7 @@ namespace _Game.Battle
                 scanPoints = result.points.ToArray();
                 result.entities.Clear();
                 result.points.Clear();
-                matrix.ScanArea(scanPosition, scanRadius, result);
+                matrix.ScanArea(prevScanPosition, scanPosition, scanRadius, result);
             }
         }
 

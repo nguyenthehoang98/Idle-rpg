@@ -240,13 +240,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f16fef030a8743a788664d6d2477c523, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  testScan: 1
+  prevScanPosition:
+    x: 0
+    y: 0
   scanPosition:
-    x: 2
-    y: 2
-  scanRadius: 5
+    x: 5
+    y: 5
+  scanRadius: 1
   result:
     entities: 
     points: []
+  testPoint: 0
+  cellPoints: []
 --- !u!4 &1617081983
 Transform:
   m_ObjectHideFlags: 0

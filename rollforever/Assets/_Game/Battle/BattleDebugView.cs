@@ -33,14 +33,14 @@ namespace _Game.Battle
         public void InjectMatrix(Matrix matrix)
         {
             FieldInfo field = typeof(Matrix).GetField("cells",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                BindingFlags.NonPublic | BindingFlags.Instance);
             if (field == null)
             {
                 Debug.LogError("Field 'cells' in Matrix not found");
                 return;
             }
             
-            this.cellsField = field;
+            cellsField = field;
             this.matrix = matrix;
         }
 

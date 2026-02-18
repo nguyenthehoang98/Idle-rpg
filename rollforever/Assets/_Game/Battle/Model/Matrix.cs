@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
@@ -127,100 +129,116 @@ namespace _Game.Battle
             }
         }
 
-        public void ScanArea(float2 position, float radius, IVisitor visitor)
+        public void ScanArea(Vector2 a, Vector2 b, float radius, IVisitor visitor)
         {
-            int2 center = WorldToCell(position);
-            int maxRange = (int)(radius / cellSize);
-            float rsq = radius * radius;
+            float radiusSq = radius * radius;
 
-            for (int r = 0; r <= maxRange; r++)
+            Vector2 dir = b - a;
+            float lengthSq = dir.sqrMagnitude;
+
+            Vector2 min = Vector2.Min(a, b) - Vector2.one * radius;
+            Vector2 max = Vector2.Max(a, b) + Vector2.one * radius;
+
+            int2 minCell = WorldToCell(min);
+            int2 maxCell = WorldToCell(max);
+
+            for (int x = minCell.x; x <= maxCell.x; x++)
             {
-                for (int dx = -r; dx <= r; dx++)
+                for (int y = minCell.y; y <= maxCell.y; y++)
                 {
-                    int dy = r;
-                    VisitCell(center.x + dx, center.y + dy);
-                    if (r != 0)
-                        VisitCell(center.x + dx, center.y - dy);
+                    int2 cell = new int2(x, y);
+                    if (!IsInsideGrid(cell))
+                        continue;
+
+                    Vector2 p = CellToWorld(cell);
+
+                    float t = math.dot(p - a, dir) / lengthSq;
+                    t = math.clamp(t, 0f, 1f);
+
+                    Vector2 closest = a + dir * t;
+
+                    if (math.distancesq(p, closest) <= radiusSq)
+                    {
+                        visitor.VisitCell(x, y);
+
+                        var list = cells[x, y].entities;
+                        if (!list.IsCreated)
+                            continue;
+
+                        for (int i = 0; i < list.Length; i++)
+                            visitor.Visit(list[i]);
+                    }
                 }
-
-                for (int dy = -r + 1; dy <= r - 1; dy++)
-                {
-                    int dx = r;
-
-                    VisitCell(center.x + dx, center.y + dy);
-                    VisitCell(center.x - dx, center.y + dy);
-                }
-            }
-
-            void VisitCell(int x, int y)
-            {
-                if (x < 0 || y < 0 || x >= width || y >= height)
-                    return;
-
-                float2 cellPos = CellToWorldCenter(x, y);
-                if (math.distancesq(cellPos, position) > rsq)
-                    return;
-
-                visitor.VisitCell(x, y);
-
-                var list = cells[x, y].entities;
-                if (!list.IsCreated) return;
-                
-                for (int i = 0; i < list.Length; i++)
-                    visitor.Visit(list[i]);
             }
         }
-
-        public void ScanArea(float2 position, float2 size, IVisitor visitor)
+        
+        public void ScanArea(Vector2 a, Vector2 b, Vector2 size, IVisitor visitor)
         {
-            int2 center = WorldToCell(position);
-            float2 halfSize = size * 0.5f;
+            Vector2 delta = b - a;
+            float length = delta.magnitude;
 
-            int rangeX = (int)math.ceil(halfSize.x / cellSize);
-            int rangeY = (int)math.ceil(halfSize.y / cellSize);
-
-            int maxR = math.max(rangeX, rangeY);
-
-            for (int r = 0; r <= maxR; r++)
+            if (length < 0.0001f)
             {
-                // top & bottom edges
-                for (int dx = -r; dx <= r; dx++)
-                {
-                    Visit(center.x + dx, center.y + r);
-                    if (r != 0)
-                        Visit(center.x + dx, center.y - r);
-                }
-
-                // left & right edges
-                for (int dy = -r + 1; dy <= r - 1; dy++)
-                {
-                    Visit(center.x + r, center.y + dy);
-                    Visit(center.x - r, center.y + dy);
-                }
+                // fallback thành scan circle nhỏ
+                ScanArea(a, a, size.x * 0.5f, visitor);
+                return;
             }
 
-            void Visit(int x, int y)
+            Vector2 dir = delta / length;
+            Vector2 normal = new Vector2(-dir.y, dir.x);
+
+            float halfWidth = size.x * 0.5f;
+            float halfHeight = size.y * 0.5f;
+
+            // ---- Compute 4 corners inline (no array)
+            Vector2 c0 = a - normal * halfWidth - dir * halfHeight;
+            Vector2 c1 = a + normal * halfWidth - dir * halfHeight;
+            Vector2 c2 = b - normal * halfWidth + dir * halfHeight;
+            Vector2 c3 = b + normal * halfWidth + dir * halfHeight;
+
+            float minX = Mathf.Min(c0.x, c1.x, c2.x, c3.x);
+            float minY = Mathf.Min(c0.y, c1.y, c2.y, c3.y);
+            float maxX = Mathf.Max(c0.x, c1.x, c2.x, c3.x);
+            float maxY = Mathf.Max(c0.y, c1.y, c2.y, c3.y);
+
+            int2 minCell = WorldToCell(new Vector2(minX, minY));
+            int2 maxCell = WorldToCell(new Vector2(maxX, maxY));
+
+            for (int x = minCell.x; x <= maxCell.x; x++)
             {
-                if (x < 0 || y < 0 || x >= width || y >= height)
-                    return;
+                for (int y = minCell.y; y <= maxCell.y; y++)
+                {
+                    int2 cell = new int2(x, y);
 
-                float2 cellPos = CellToWorldCenter(x, y);
+                    if (!IsInsideGrid(cell))
+                        continue;
 
-                // AABB check chính xác
-                if (math.abs(cellPos.x - position.x) > halfSize.x ||
-                    math.abs(cellPos.y - position.y) > halfSize.y)
-                    return;
+                    Vector2 worldPos = CellToWorld(cell);
+                    Vector2 ap = worldPos - a;
 
-                visitor.VisitCell(x, y);
+                    float localY = Vector2.Dot(ap, dir);
+                    float localX = Vector2.Dot(ap, normal);
 
-                var list = cells[x, y].entities;
-                if (!list.IsCreated) return;
-                
-                for (int i = 0; i < list.Length; i++)
-                    visitor.Visit(list[i]);
+                    bool inside =
+                        localY >= -halfHeight &&
+                        localY <= length + halfHeight &&
+                        Mathf.Abs(localX) <= halfWidth;
+
+                    if (!inside)
+                        continue;
+
+                    visitor.VisitCell(x, y);
+
+                    var list = cells[x, y].entities;
+                    if (!list.IsCreated)
+                        continue;
+
+                    for (int i = 0; i < list.Length; i++)
+                        visitor.Visit(list[i]);
+                }
             }
         }
-
+        
         public void RemoveUnit(int unit, float2 position)
         {
             var cell = WorldToCell(position);
@@ -390,7 +408,7 @@ namespace _Game.Battle
             return false;
         }
 
-        public float radiussq(float radius) => (radius + cellSize) * (radius + cellSize) + float.Epsilon;
+        public float Radiussq(float radius) => (radius + cellSize) * (radius + cellSize) + float.Epsilon;
 
         int2 WorldToCell(float2 worldPos) => WorldToCell(worldPos, float2.zero);
 
@@ -471,6 +489,7 @@ namespace _Game.Battle
         }
     }
 
+    [Serializable]
     public struct Cell
     {
         public bool occupied;

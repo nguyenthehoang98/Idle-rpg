@@ -142,7 +142,7 @@ namespace _Game.Battle.Systems
         {
             if (effect.Has(StatusEffect.Stun)) return true;
             if (effect.Has(StatusEffect.KnockBack)) return true;
-            return math.distancesq(goal, pos) <= shareData.Matrix.radiussq(stopDistance);
+            return math.distancesq(goal, pos) <= shareData.Matrix.Radiussq(stopDistance);
         }
     }
 }
