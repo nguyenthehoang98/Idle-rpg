@@ -19,6 +19,7 @@ namespace _Game.Battle.Systems
             var shapePool = world.GetPool<ShapeData>();
             var healthPool = world.GetPool<HealthData>();
             var attackCasterPool = world.GetPool<AttackCasterData>();
+            var statPool = world.GetPool<StatData>();
 
             int entity = world.NewEntity();
             int agentId = shareData.Simulator.AddAgent(float2.zero);
@@ -29,7 +30,16 @@ namespace _Game.Battle.Systems
             playerPool.Add(entity);
             attackCasterPool.Add(entity) = new AttackCasterData {cooldown = 1};
             shapePool.Add(entity) = ShapeData.Circle(1);
-            healthPool.Add(entity) = new HealthData(1000000000);
+            statPool.Add(entity) = new StatData()
+                .Insert(StatType.Attack, new Stat(10))
+                .Insert(StatType.Defense, new Stat(10))
+                .Insert(StatType.MaxHealth, new Stat(1000))
+                .Insert(StatType.MoveSpeed, new Stat(0))
+                .Insert(StatType.SkillReduceCooldown, new Stat(0))
+                .Insert(StatType.CriticalRate, new Stat(0))
+                .Insert(StatType.CriticalDamage, new Stat(0));
+            statPool.Get(entity).TryGetValue(StatType.MaxHealth, out var healthStat);
+            healthPool.Add(entity) = new HealthData((int)healthStat.Value);
 
             float radius = 0.5f;
             shareData.Simulator.SetAgentRadius(agentId, radius);

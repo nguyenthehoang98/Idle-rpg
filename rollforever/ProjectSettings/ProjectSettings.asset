@@ -771,7 +771,7 @@ PlayerSettings:
   webWasm2023: 0
   scriptingDefineSymbols:
     Android: DREAMTECK_SPLINES
-    Standalone: DEVELOP_MODE
+    Standalone: DEVELOP_MODE;COMBAT_FULL_LOG
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

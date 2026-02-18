@@ -58,7 +58,7 @@ namespace _Game.Battle
 
     public enum StatType
     {
-        Attack, Defense, Health,
+        Attack, Defense, MaxHealth,
         SkillReduceCooldown, 
         CriticalRate, CriticalDamage,
         MoveSpeed,

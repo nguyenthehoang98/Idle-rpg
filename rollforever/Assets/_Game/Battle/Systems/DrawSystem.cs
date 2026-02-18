@@ -15,7 +15,7 @@ namespace _Game.Battle.Systems
         
         private EcsPool<UnitData> unitPool;
         private EcsPool<HealthData> healthPool;
-        private EcsPool<ShapeData> shapePool;
+        private EcsPool<StatData> statPool;
         private EcsFilter ecsFilter;
         
         public void Init(IEcsSystems systems)
@@ -27,7 +27,7 @@ namespace _Game.Battle.Systems
                 .End();
             healthPool = world.GetPool<HealthData>();
             unitPool = world.GetPool<UnitData>();
-            shapePool = world.GetPool<ShapeData>();
+            statPool = world.GetPool<StatData>();
         }
 
         public void PostRun(IEcsSystems systems)
@@ -41,8 +41,8 @@ namespace _Game.Battle.Systems
                 var velocity = shareData.Simulator.GetAgentVelocity(unit.agentId);
                 var neighborDist = shareData.Simulator.GetAgentNeighborDist(unit.agentId);
 
-                var health = healthPool.Get(e);
-                float percent = health.health / (float) health.maxHealth;
+                statPool.Get(e).TryGetValue(StatType.MaxHealth, out var healthStat);
+                float percent = healthPool.Get(e).health / healthStat.Value;
                 
                 GeometryGizmos.DrawCircle(
                     new Circle(position, radius), unit.color, shareData.TimeDelta, percent, 12

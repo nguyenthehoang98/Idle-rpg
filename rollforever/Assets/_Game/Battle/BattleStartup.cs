@@ -1,16 +1,10 @@
-using _Game.AbilitySystem;
 using _Game.Battle.Systems;
 using _KIT.Schedule;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 using RVO;
 using UnityEngine;
-using _Game.Battle.Events;
 using _KIT.Config;
-using _KIT.Event;
-using _KIT.Pool;
-using _KIT.Resource;
-using Unity.Mathematics;
 #if UNITY_EDITOR
 using Leopotam.EcsLite.UnityEditor;
 #endif
@@ -20,6 +14,7 @@ namespace _Game.Battle
     [RequireComponent(typeof(GameLoop))]
     public class BattleStartup : MonoBehaviour
     {
+        [SerializeField] private bool enableFullBattleLog = true;
         private EcsWorld world;
         private EcsSystems systems;
         private GameLoop gameLoop;
@@ -30,9 +25,28 @@ namespace _Game.Battle
         {
             Application.targetFrameRate = 60;
         }
+        
+        private void OnValidate()
+        {
+#if UNITY_EDITOR
+            string mode = "COMBAT_FULL_LOG";
+            if (!enableFullBattleLog && DefineSymbolUtils.Has(mode))
+            {
+                DefineSymbolUtils.Remove(mode);
+            }
+            else if (enableFullBattleLog && !DefineSymbolUtils.Has(mode))
+            {
+                DefineSymbolUtils.Add(mode);
+            }
+#endif
+        }
 
         private async void Start()
         {
+#if UNITY_EDITOR && (COMBAT_FULL_LOG || DEVELOP_MODE)
+            gameObject.AddComponent<BattleDebugView>();
+#endif
+            
             await KitConfigManager.Load(new[]
             {
                 "MonsterConfig",
@@ -47,12 +61,16 @@ namespace _Game.Battle
             
             // todo: battle world
             world = new EcsWorld();
+            Matrix matrix = new Matrix(100, 120, 0.5f);
             shareData = new BattleStartupShareData(
                 gameLoop,
-                new Simulator(), new Matrix(100, 120, 0.5f), spawnConfig,
+                new Simulator(), matrix, spawnConfig,
                 gameLoop.FrameDeltaTime
             );
             BattleStartupRuntimeData runtimeData = new BattleStartupRuntimeData();
+#if UNITY_EDITOR && (COMBAT_FULL_LOG || DEVELOP_MODE)
+            gameObject.GetComponent<BattleDebugView>().InjectMatrix(matrix);
+#endif
             
             // todo: battle systems
             BattleEcsSystems ecsSystems = new BattleEcsSystems(world);

@@ -173,7 +173,7 @@ namespace _Game.Battle.Systems
             statPool.Add(entity) = new StatData()
                 .Insert(StatType.Attack, new Stat(monsterData.Attack(level)))
                 .Insert(StatType.Defense, new Stat(monsterData.Defense(level)))
-                .Insert(StatType.Health, new Stat(monsterData.Health(level)))
+                .Insert(StatType.MaxHealth, new Stat(monsterData.Health(level)))
                 .Insert(StatType.MoveSpeed, new Stat(monsterData.MoveSpeed))
                 .Insert(StatType.SkillReduceCooldown, new Stat(0))
                 .Insert(StatType.CriticalRate, new Stat(0))

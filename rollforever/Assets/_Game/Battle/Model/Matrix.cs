@@ -1,6 +1,7 @@
 using System;
 using Unity.Collections;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace _Game.Battle
 {
@@ -10,19 +11,19 @@ namespace _Game.Battle
         private float cellSize;
         private int width;
         private int height;
-        private Cell[,] matrix;
+        private Cell[,] cells;
 
         public Matrix(int width, int height, float cellSize)
         {
             this.cellSize = cellSize;
             this.width = width;
             this.height = height;
-            this.matrix = new Cell[width, height];
+            this.cells = new Cell[width, height];
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
                 {
-                    matrix[x, y] = new Cell();
+                    cells[x, y] = new Cell();
                 }
             }
         }
@@ -33,9 +34,9 @@ namespace _Game.Battle
             {
                 for (var j = 0; j < height; j++)
                 {
-                    matrix[i, j].trigger = false;
-                    if (matrix[i, j].entities.IsCreated)
-                        matrix[i, j].entities.Clear();
+                    cells[i, j].trigger = false;
+                    if (cells[i, j].entities.IsCreated)
+                        cells[i, j].entities.Clear();
                 }
             }
         }
@@ -47,10 +48,10 @@ namespace _Game.Battle
             int y = cell.y;
             if (x >= 0 && y >= 0 && x < width && y < height)
             {
-                matrix[x, y].trigger = true;
-                if (!matrix[x, y].entities.IsCreated)
-                    matrix[x, y].entities = new NativeList<int>(EXPECTED_MAX, Allocator.Persistent);
-                matrix[x, y].entities.Add(unit);
+                cells[x, y].trigger = true;
+                if (!cells[x, y].entities.IsCreated)
+                    cells[x, y].entities = new NativeList<int>(EXPECTED_MAX, Allocator.Persistent);
+                cells[x, y].entities.Add(unit);
             }
         }
 
@@ -61,10 +62,10 @@ namespace _Game.Battle
             int y = cell.y;
             if (x >= 0 && y >= 0 && x < width && y < height)
             {
-                matrix[x, y].occupied = true;
-                if (!matrix[x, y].entities.IsCreated)
-                    matrix[x, y].entities = new NativeList<int>(EXPECTED_MAX, Allocator.Persistent);
-                matrix[x, y].entities.Add(unit);
+                cells[x, y].occupied = true;
+                if (!cells[x, y].entities.IsCreated)
+                    cells[x, y].entities = new NativeList<int>(EXPECTED_MAX, Allocator.Persistent);
+                cells[x, y].entities.Add(unit);
             }
         }
 
@@ -87,10 +88,10 @@ namespace _Game.Battle
                     float2 cellWorldPos = CellToWorldCenter(x, y);
                     if (math.distancesq(cellWorldPos, position) <= rsq)
                     {
-                        matrix[x, y].trigger = true;
-                        if (!matrix[x, y].entities.IsCreated)
-                            matrix[x, y].entities = new NativeList<int>(EXPECTED_MAX, Allocator.Persistent);
-                        matrix[x, y].entities.Add(unit);
+                        cells[x, y].trigger = true;
+                        if (!cells[x, y].entities.IsCreated)
+                            cells[x, y].entities = new NativeList<int>(EXPECTED_MAX, Allocator.Persistent);
+                        cells[x, y].entities.Add(unit);
                     }
                 }
             }
@@ -117,10 +118,10 @@ namespace _Game.Battle
                     if (math.abs(cellWorldPos.x - position.x) <= halfSize.x &&
                         math.abs(cellWorldPos.y - position.y) <= halfSize.y)
                     {
-                        matrix[x, y].trigger = true;
-                        if (!matrix[x, y].entities.IsCreated)
-                            matrix[x, y].entities = new NativeList<int>(EXPECTED_MAX, Allocator.Persistent);
-                        matrix[x, y].entities.Add(unit);
+                        cells[x, y].trigger = true;
+                        if (!cells[x, y].entities.IsCreated)
+                            cells[x, y].entities = new NativeList<int>(EXPECTED_MAX, Allocator.Persistent);
+                        cells[x, y].entities.Add(unit);
                     }
                 }
             }
@@ -160,9 +161,11 @@ namespace _Game.Battle
                 if (math.distancesq(cellPos, position) > rsq)
                     return;
 
-                var list = matrix[x, y].entities;
-                if (!list.IsCreated) return;
+                visitor.VisitCell(x, y);
 
+                var list = cells[x, y].entities;
+                if (!list.IsCreated) return;
+                
                 for (int i = 0; i < list.Length; i++)
                     visitor.Visit(list[i]);
             }
@@ -208,13 +211,13 @@ namespace _Game.Battle
                     math.abs(cellPos.y - position.y) > halfSize.y)
                     return;
 
-                var list = matrix[x, y].entities;
-                if (!list.IsCreated) return;
+                visitor.VisitCell(x, y);
 
+                var list = cells[x, y].entities;
+                if (!list.IsCreated) return;
+                
                 for (int i = 0; i < list.Length; i++)
-                {
                     visitor.Visit(list[i]);
-                }
             }
         }
 
@@ -225,9 +228,9 @@ namespace _Game.Battle
             int y = cell.y;
             if (x >= 0 && y >= 0 && x < width && y < height)
             {
-                matrix[x, y].occupied = false;
+                cells[x, y].occupied = false;
 
-                var entities = matrix[x, y].entities;
+                var entities = cells[x, y].entities;
                 if (entities.IsCreated)
                 {
                     int length = entities.Length;
@@ -242,7 +245,7 @@ namespace _Game.Battle
                         }
                     }
 
-                    matrix[x, y].entities = entities;
+                    cells[x, y].entities = entities;
                 }
             }
         }
@@ -266,9 +269,9 @@ namespace _Game.Battle
                     float2 cellWorldPos = CellToWorldCenter(x, y);
                     if (math.distancesq(cellWorldPos, position) <= rsq)
                     {
-                        matrix[x, y].occupied = false;
+                        cells[x, y].occupied = false;
 
-                        var entities = matrix[x, y].entities;
+                        var entities = cells[x, y].entities;
                         if (entities.IsCreated)
                         {
                             int length = entities.Length;
@@ -283,7 +286,7 @@ namespace _Game.Battle
                                 }
                             }
 
-                            matrix[x, y].entities = entities;
+                            cells[x, y].entities = entities;
                         }
                     }
                 }
@@ -311,9 +314,9 @@ namespace _Game.Battle
                     if (math.abs(cellWorldPos.x - position.x) <= halfSize.x &&
                         math.abs(cellWorldPos.y - position.y) <= halfSize.y)
                     {
-                        matrix[x, y].occupied = false;
+                        cells[x, y].occupied = false;
 
-                        var entities = matrix[x, y].entities;
+                        var entities = cells[x, y].entities;
                         if (entities.IsCreated)
                         {
                             int length = entities.Length;
@@ -328,7 +331,7 @@ namespace _Game.Battle
                                 }
                             }
 
-                            matrix[x, y].entities = entities;
+                            cells[x, y].entities = entities;
                         }
                     }
                 }
@@ -420,11 +423,11 @@ namespace _Game.Battle
 
         bool IsEmpty(int2 c)
         {
-            var data = matrix[c.x, c.y];
+            var data = cells[c.x, c.y];
             return IsInsideGrid(c) && !data.occupied && !data.trigger;
         }
 
-        float2 CellToWorld(int2 cell) => CellToWorld(cell, float2.zero);
+        public float2 CellToWorld(int2 cell) => CellToWorld(cell, float2.zero);
 
         float2 CellToWorld(int2 cell, float2 gridCenter)
         {
@@ -454,13 +457,15 @@ namespace _Game.Battle
             return false; // bị bao vây hoàn toàn
         }
 
+        public float CellSize => cellSize;
+
         public void Dispose()
         {
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
                 {
-                    matrix[x, y].entities.Dispose();
+                    cells[x, y].entities.Dispose();
                 }
             }
         }

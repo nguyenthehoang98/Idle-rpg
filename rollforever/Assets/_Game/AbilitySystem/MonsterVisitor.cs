@@ -65,18 +65,35 @@ namespace _Game.AbilitySystem
 
         public void Visit(int entity)
         {
-            if (RemainCanCollision <= 0) return;
-            if (!unitPool.Has(entity)) return;
+            if (RemainCanCollision <= 0)
+            {
+#if COMBAT_FULL_LOG
+                Debug.LogWarning($"MonsterVisitor: {sourceEntity}->{entity}: remain <= 0");
+#endif
+                return;
+            }
 
             int length = entitiesCollision.Length;
             for (int i = 0; i < length; i++)
             {
-                if (entitiesCollision[i] == entity) return;
+                if (entitiesCollision[i] == entity)
+                {
+#if COMBAT_FULL_LOG
+                    Debug.LogWarning($"MonsterVisitor: {sourceEntity}->{entity}: Đã từng va chạm");
+#endif
+                    return;
+                }
             }
 
             for (int i = 0; i < currentScanId; i++)
             {
-                if (entityVisitedStamp[i] == entity) return;
+                if (entityVisitedStamp[i] == entity)
+                {
+#if COMBAT_FULL_LOG
+                    Debug.LogWarning($"MonsterVisitor: {sourceEntity}->{entity}: Đã từng quét");
+#endif
+                    return;
+                }
             }
 
             if (entityVisitedStamp.Length > currentScanId)
@@ -98,46 +115,44 @@ namespace _Game.AbilitySystem
                 bool findAttack = sourceStat.TryGetValue(StatType.Attack, out Stat attackStat);
                 if (!findAttack)
                 {
-#if DEVELOP_MODE
-                    Debug.LogError("Không tìm thấy Attack: " + sourceEntity);    
+#if DEVELOP_MODE || COMBAT_FULL_LOG
+                    Debug.LogError("Không tìm thấy Attack: " + sourceEntity);
 #endif
                     return;
                 }
-                
+
                 bool findCriticalRate = sourceStat.TryGetValue(StatType.CriticalRate, out Stat criticalRateStat);
                 if (!findCriticalRate)
                 {
-#if DEVELOP_MODE
-                    Debug.LogError("Không tìm thấy CriticalRate: " + sourceEntity);    
+#if DEVELOP_MODE || COMBAT_FULL_LOG
+                    Debug.LogError("Không tìm thấy CriticalRate: " + sourceEntity);
 #endif
                     return;
                 }
-                
+
                 bool findCriticalDamage = sourceStat.TryGetValue(StatType.CriticalDamage, out Stat criticalDamageStat);
                 if (!findCriticalDamage)
                 {
-#if DEVELOP_MODE
-                    Debug.LogError("Không tìm thấy CriticalDamage: " + sourceEntity);    
+#if DEVELOP_MODE || COMBAT_FULL_LOG
+                    Debug.LogError("Không tìm thấy CriticalDamage: " + sourceEntity);
 #endif
                     return;
                 }
-                
+
                 bool foundDefense = targetStat.TryGetValue(StatType.Defense, out Stat defenseStat);
                 if (!foundDefense)
                 {
-#if DEVELOP_MODE
-                    Debug.LogError("Không tìm thấy Defense: " + entity);    
+#if DEVELOP_MODE || COMBAT_FULL_LOG
+                    Debug.LogError("Không tìm thấy Defense: " + entity);
 #endif
                     return;
                 }
-                
+
                 int output = FormulaUtils.Output(
                     attackStat.Value, skillData, criticalRateStat.Value, criticalDamageStat.Value,
                     defenseStat.Value
                 );
-                
-                Debug.Log("damage: " + output);
-                
+
                 ref var health = ref healthPool.Get(entity);
                 health.health -= output;
                 if (health.health <= 0)
@@ -152,6 +167,16 @@ namespace _Game.AbilitySystem
                 RemainCanCollision--;
                 entitiesCollision.Add(entity);
             }
+            else
+            {
+#if COMBAT_FULL_LOG
+                Debug.LogWarning($"MonsterVisitor: {sourceEntity}->{entity}: Không va chạm");
+#endif
+            }
+        }
+
+        public void VisitCell(int x, int y)
+        {
         }
 
         public void AfterVisit(float deltaTime)

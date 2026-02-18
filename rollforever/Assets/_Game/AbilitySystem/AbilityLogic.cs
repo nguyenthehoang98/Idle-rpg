@@ -96,13 +96,10 @@ namespace _Game.AbilitySystem
 
             if(sourceTeam == Team.Player)
                 PreHandleMonsters(center);
-            else if (sourceTeam == Team.Monster)
-            {
-            }
 
             if (sourceTeam == Team.Player)
                 HandleMonsters(center);
-            else
+            else if (sourceTeam == Team.Monster)
                 HandlePlayers(center);
             
             stateModifierLogic.Update(deltaTime);
@@ -113,9 +110,6 @@ namespace _Game.AbilitySystem
             
             if (sourceTeam == Team.Player)
                 AfterHandleMonsters(deltaTime);
-            else if (sourceTeam == Team.Monster)
-            {
-            }
 
 #if UNITY_EDITOR && DEVELOP_MODE
             Color color = monsterVisitor.IsHit ? Color.red : Color.green;
