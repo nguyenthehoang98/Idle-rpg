@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using _Game.Battle;
 using _KIT.Utils;
 using Unity.Collections;
 using Unity.Mathematics;
@@ -12,8 +13,9 @@ namespace _Game.AbilitySystem
         [SerializeField] private string entitiesVisitedStampBuffer;
         [SerializeField] private string entitiesCollisionBuffer;
         [SerializeField] private List<int2> entitiesVisitedStamp;
-        private bool running;
+        
         private AbilityLogic logic;
+        private bool running;
 
         void OnDrawGizmosSelected()
         {
@@ -62,6 +64,17 @@ namespace _Game.AbilitySystem
                 }
             }
             else entitiesVisitedStamp.Clear();
+
+            var shareData = TypeUtils.GetFieldNonPublic(logic, "shareData") as BattleStartupShareData;
+            Vector2 previousPosition = Vector2.zero;
+            for (var i = 0; i < entitiesVisitedStamp.Count; i++)
+            {
+                var p = entitiesVisitedStamp[i];
+                Vector2 position = (Vector2) shareData.Matrix.CellToWorld(p);
+                UnityEditor.Handles.DrawWireCube(position, new Vector3(1, 1, 1) * shareData.Matrix.CellSize);
+                if (i > 0) UnityEditor.Handles.DrawLine(previousPosition, position);
+                previousPosition = position;
+            }
         }
 
         void Startup(AbilityLogic logic)

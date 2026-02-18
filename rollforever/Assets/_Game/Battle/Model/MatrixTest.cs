@@ -1,29 +1,51 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Game.Battle
 {
     public class MatrixTest : MonoBehaviour
     {
+        [Header("Scan")]
+        [SerializeField] private bool testScan;
         [SerializeField] private float2 scanPosition;
         [SerializeField] private float scanRadius;
         [SerializeField] private TestVisitor result;
+        [Header("Point")]
+        [SerializeField] private bool testPoint;
+        [SerializeField] List<Vector2Int> cellPoints = new List<Vector2Int>();
 
-        private Vector2Int[] points = new Vector2Int[0];
+        private Vector2Int[] scanPoints = new Vector2Int[0];
         private Matrix matrix;
 
         private void OnDrawGizmosSelected()
         {
 #if UNITY_EDITOR
-            UnityEditor.Handles.DrawWireDisc((Vector2)scanPosition, Vector3.forward, scanRadius);
-            foreach (var item in points)
+            if(testScan && matrix != null)
             {
-                Vector2 worldPosition = matrix.CellToWorld(new int2(item.x, item.y));
-                //UnityEditor.Handles.Label(worldPosition, $"[{item.x}, {item.y}]");
-                UnityEditor.Handles.DrawWireCube(worldPosition, Vector2.one * matrix.CellSize);
+                UnityEditor.Handles.DrawWireDisc((Vector2)scanPosition, Vector3.forward, scanRadius);
+                foreach (var item in scanPoints)
+                {
+                    Vector2 worldPosition = matrix.CellToWorld(new int2(item.x, item.y));
+                    //UnityEditor.Handles.Label(worldPosition, $"[{item.x}, {item.y}]");
+                    UnityEditor.Handles.DrawWireCube(worldPosition, Vector2.one * matrix.CellSize);
+                }
+            }
+
+            if (testPoint && matrix != null)
+            {
+                Vector2Int[] array = cellPoints.ToArray();
+                List<Vector3> worldPositions = new List<Vector3>();
+                foreach (var p in array)
+                {
+                    Vector2 position = matrix.CellToWorld(new int2(p.x, p.y));
+                    worldPositions.Add(position);
+                    UnityEditor.Handles.DrawWireCube(position, Vector2.one * matrix.CellSize);
+                }
+
+                UnityEditor.Handles.DrawLines(worldPositions.ToArray());
             }
 #endif
         }
@@ -35,13 +57,13 @@ namespace _Game.Battle
 
         private void Update()
         {
-            points = result.points.ToArray();
-            
-            result.entities.Clear();
-            result.points.Clear();
-
-            
-            matrix.ScanArea(scanPosition, scanRadius, result);
+            if(testScan)
+            {
+                scanPoints = result.points.ToArray();
+                result.entities.Clear();
+                result.points.Clear();
+                matrix.ScanArea(scanPosition, scanRadius, result);
+            }
         }
 
         [Serializable]
