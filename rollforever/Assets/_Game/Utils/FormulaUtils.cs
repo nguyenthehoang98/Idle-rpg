@@ -92,17 +92,10 @@ namespace _Game.Battle
         /// <summary>
         /// Hàm tính sát thương -> kẻ dịch
         /// </summary>
-        /// <param name="attack">Sát thương dạng chỉ số của nhân vật</param>
-        /// <param name="skillScaleDmg">Sát thương % của kĩ năng</param>
-        /// <param name="skillFlatDmg">Sát thương truc tiep của kĩ năng</param>
-        /// <param name="criticalRate">Tỉ lệ có thể critical chung</param>
-        /// <param name="criticalDmg">Sát thương crtitical tăng thêm</param>
-        /// <param name="defense">Thủ của mục tiêu</param>
-        /// <returns></returns>
-        public static int Output(float attack, float skillScaleDmg, float skillFlatDmg,
+        public static int Output(float attack, SkillConfig.SkillData skillData,
             float criticalRate, float criticalDmg, float defense)
         {
-            float dmg = SkillDamage(attack, skillScaleDmg, skillFlatDmg);
+            float dmg = skillData.SkillDamage(attack);
             bool crit = criticalRate >= RandomUtils.Value;
             float totalDmg = crit ? dmg * (1 + math.max(0, criticalDmg)) : dmg;
 

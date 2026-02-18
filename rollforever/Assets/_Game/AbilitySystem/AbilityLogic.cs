@@ -1,6 +1,7 @@
 ﻿using System;
 using _Game.Battle;
 using _Game.Battle.Data;
+using _Game.Configs;
 using Geometry;
 using Geometry.Primary;
 using Leopotam.EcsLite;
@@ -11,7 +12,8 @@ namespace _Game.AbilitySystem
 {
     public sealed class AbilityLogic : IEcsWorldEventListener, IDisposable
     {
-        public readonly AbilityData Data;
+        public readonly AbilityData AbilityData;
+        private readonly SkillConfig.SkillData SkillData;
         // ecs
         private readonly BattleStartupRuntimeData runtimeData;
         private readonly BattleStartupShareData shareData;
@@ -35,7 +37,8 @@ namespace _Game.AbilitySystem
         private int unitId;
         private float elapsed;
 
-        public AbilityLogic(AbilityData data, Team sourceTeam,
+        public AbilityLogic(AbilityData abilityData, SkillConfig.SkillData skillData,
+            int entity, Team sourceTeam,
             BattleStartupShareData shareData, BattleStartupRuntimeData runtimeData,
             EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool,
             EcsPool<DeadFlag> deadPool, EcsPool<HealthData> healthPool, 
@@ -43,8 +46,9 @@ namespace _Game.AbilitySystem
             EcsPool<UnitModifierData> modifierPool, EcsPool<UnitPosTempData> unitPosTempPool,
             EcsFilter playerFilter)
         {
-            this.Data = data;
-            this.lifeTime = data.core.lifeTime;
+            this.SkillData = skillData;
+            this.AbilityData = abilityData;
+            this.lifeTime = abilityData.core.lifeTime;
             
             this.shareData = shareData;
             this.statPool = statPool;
@@ -59,14 +63,15 @@ namespace _Game.AbilitySystem
             this.sourceTeam = sourceTeam;
             this.runtimeData = runtimeData;
             
-            shapeLogic = new ShapeLogic(data.shape);
+            shapeLogic = new ShapeLogic(abilityData.shape);
             stateModifierLogic = new StateModifierLogic(
-                data.stateModifier, shareData.Simulator, unitPool, modifierPool, unitPosTempPool
+                abilityData.stateModifier, shareData.Simulator, unitPool, modifierPool, unitPosTempPool
             );
-            trajectoryLogic = new TrajectoryLogic(data.trajectory);
+            trajectoryLogic = new TrajectoryLogic(abilityData.trajectory);
             
             monsterVisitor = new MonsterVisitor(
-                data.core.maxCollision, data.core.shouldResetCollision, data.core.resetCollisionInterval,
+                entity, skillData,
+                abilityData.core.maxCollision, abilityData.core.shouldResetCollision, abilityData.core.resetCollisionInterval,
                 shareData.Simulator, shapeLogic, stateModifierLogic,
                 healthPool, statPool, unitPool, shapePool, deadPool);
         }
@@ -191,9 +196,10 @@ namespace _Game.AbilitySystem
 
         public bool IsCompleted => elapsed >= lifeTime || monsterVisitor.RemainCanCollision <= 0;
 
-        public AbilityLogic CreateInstance(Team team)
+        public AbilityLogic CreateInstance(int sourceEntity, Team team)
         {
-            return new AbilityLogic(Data, team, shareData, runtimeData,
+            return new AbilityLogic(AbilityData, SkillData, sourceEntity, team,
+                shareData, runtimeData,
                 unitPool, shapePool, deadPool, healthPool, statPool, modifierPool,
                 unitPosTempPool, playerFilter);
         }

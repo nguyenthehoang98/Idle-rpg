@@ -1,14 +1,18 @@
 using _Game.Battle;
 using _Game.Battle.Data;
+using _Game.Configs;
 using Leopotam.EcsLite;
 using RVO;
 using Unity.Collections;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace _Game.AbilitySystem
 {
     class MonsterVisitor : IVisitor
     {
+        private readonly int sourceEntity;
+        private readonly SkillConfig.SkillData skillData;
         private readonly EcsPool<UnitData> unitPool;
         private readonly EcsPool<ShapeData> shapePool;
         private readonly EcsPool<DeadFlag> deadPool;
@@ -29,11 +33,14 @@ namespace _Game.AbilitySystem
         public int RemainCanCollision { get; private set; }
 
         public MonsterVisitor(
+            int entity, SkillConfig.SkillData skillData,
             int maxCollision, bool shouldResetCollision, float resetCollisionInterval,
             Simulator simulator, ShapeLogic shapeLogic, StateModifierLogic stateModifierLogic,
             EcsPool<HealthData> healthPool, EcsPool<StatData> statPool,
             EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool, EcsPool<DeadFlag> deadPool)
         {
+            this.sourceEntity = entity;
+            this.skillData = skillData;
             this.shouldResetCollision = shouldResetCollision;
             this.resetCollisionInterval = resetCollisionInterval;
             this.stateModifierLogic = stateModifierLogic;
@@ -85,10 +92,53 @@ namespace _Game.AbilitySystem
             shapeLogic.Execute(center, shape.Value, agentPos, out IsHit);
             if (IsHit)
             {
+                var targetStat = statPool.Get(entity);
+                var sourceStat = statPool.Get(sourceEntity);
+
+                bool findAttack = sourceStat.TryGetValue(StatType.Attack, out Stat attackStat);
+                if (!findAttack)
+                {
+#if DEVELOP_MODE
+                    Debug.LogError("Không tìm thấy Attack: " + sourceEntity);    
+#endif
+                    return;
+                }
+                
+                bool findCriticalRate = sourceStat.TryGetValue(StatType.CriticalRate, out Stat criticalRateStat);
+                if (!findCriticalRate)
+                {
+#if DEVELOP_MODE
+                    Debug.LogError("Không tìm thấy CriticalRate: " + sourceEntity);    
+#endif
+                    return;
+                }
+                
+                bool findCriticalDamage = sourceStat.TryGetValue(StatType.CriticalDamage, out Stat criticalDamageStat);
+                if (!findCriticalDamage)
+                {
+#if DEVELOP_MODE
+                    Debug.LogError("Không tìm thấy CriticalDamage: " + sourceEntity);    
+#endif
+                    return;
+                }
+                
+                bool foundDefense = targetStat.TryGetValue(StatType.Defense, out Stat defenseStat);
+                if (!foundDefense)
+                {
+#if DEVELOP_MODE
+                    Debug.LogError("Không tìm thấy Defense: " + entity);    
+#endif
+                    return;
+                }
+                
+                int output = FormulaUtils.Output(
+                    attackStat.Value, skillData, criticalRateStat.Value, criticalDamageStat.Value,
+                    defenseStat.Value
+                );
+                
+                Debug.Log("damage: " + output);
+                
                 ref var health = ref healthPool.Get(entity);
-                ref var stat = ref statPool.Get(entity);
-                Phần này phải thêm sourceId ể tính toán voi cong thuc
-                int output = 100; //FormulaUtils.Output();
                 health.health -= output;
                 if (health.health <= 0)
                 {

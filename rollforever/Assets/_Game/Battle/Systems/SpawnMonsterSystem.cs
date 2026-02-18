@@ -47,9 +47,9 @@ namespace _Game.Battle.Systems
 
         public async void Init(IEcsSystems systems)
         {
-            unitSource = new Dictionary<int, UnitView>();
+            /*unitSource = new Dictionary<int, UnitView>();
             GameObject go = await KitLoaded.LoadAsync<GameObject>("UnitView");
-            unitSource[0] = go.GetComponent<UnitView>();
+            unitSource[0] = go.GetComponent<UnitView>();*/
 
             world = systems.GetWorld();
             statPool = world.GetPool<StatData>();
@@ -170,19 +170,14 @@ namespace _Game.Battle.Systems
             healthPool.Add(entity) = new HealthData((int)monsterData.Health(level));
             modifierPool.Add(entity) = new UnitModifierData(StatusEffect.None);
             casterPool.Add(entity) = new AttackCasterData { cooldown = 0.5f, skillId = monsterData.SkillId };
-            statPool.Add(entity) = new StatData
-            {
-                stats = new NativeArray<Stat>(new Stat[]
-                {
-                    new Stat(StatType.Attack, monsterData.Attack(level)),
-                    new Stat(StatType.Defense, monsterData.Defense(level)),
-                    new Stat(StatType.Health, monsterData.Health(level)),
-                    new Stat(StatType.MoveSpeed, monsterData.MoveSpeed),
-                    new Stat(StatType.SkillReduceCooldown, 0),
-                    new Stat(StatType.CriticalRate, 0),
-                    new Stat(StatType.CriticalDamage, 0)
-                }, Allocator.Persistent)
-            };
+            statPool.Add(entity) = new StatData()
+                .Insert(StatType.Attack, new Stat(monsterData.Attack(level)))
+                .Insert(StatType.Defense, new Stat(monsterData.Defense(level)))
+                .Insert(StatType.Health, new Stat(monsterData.Health(level)))
+                .Insert(StatType.MoveSpeed, new Stat(monsterData.MoveSpeed))
+                .Insert(StatType.SkillReduceCooldown, new Stat(0))
+                .Insert(StatType.CriticalRate, new Stat(0))
+                .Insert(StatType.CriticalDamage, new Stat(0));
             
             // todo: add flag
             monsterFlagPool.Add(entity);

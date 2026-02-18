@@ -22,7 +22,7 @@ namespace _Game.Battle.Systems
         private EcsWorld world;
         private EcsFilter monsterFilter;
         private EcsFilter playerFilter;
-        
+
         // model
         private Dictionary<int, AbilityLogic> skillSource;
         private Dictionary<FindTargetType, IFindTarget> findTargets;
@@ -44,11 +44,12 @@ namespace _Game.Battle.Systems
             playerFilter = world.Filter<UnitData>()
                 .Inc<PlayerFlag>()
                 .End();
-           
+
             var unitPool = world.GetPool<UnitData>();
             var shapePool = world.GetPool<ShapeData>();
             var deadPool = world.GetPool<DeadFlag>();
             var healthPool = world.GetPool<HealthData>();
+            var statPool = world.GetPool<StatData>();
             var modifierPool = world.GetPool<UnitModifierData>();
             var unitPosTempPool = world.GetPool<UnitPosTempData>();
 
@@ -61,10 +62,8 @@ namespace _Game.Battle.Systems
                     foreach (var enemy in batch.enemies)
                     {
                         if (!monsterConfig.Find(enemy.id, out var monsterData)) continue;
-                        if (!allSkills.ContainsKey(monsterData.SkillId))
-                        {
-                            allSkills.Add(monsterData.SkillId, GetSkillAddressPath(monsterData.SkillId));
-                        }
+                        if (allSkills.ContainsKey(monsterData.SkillId)) continue;
+                        allSkills.Add(monsterData.SkillId, GetSkillAddressPath(monsterData.SkillId));
                     }
                 }
             }
@@ -74,47 +73,49 @@ namespace _Game.Battle.Systems
             {
                 allSkills.Add(skillId, GetSkillAddressPath(skillId));
             }
-            
+
             findTargets = new Dictionary<FindTargetType, IFindTarget>();
             findTargets.Add(FindTargetType.Farthest, new FarthestFindTarget(shareData.Simulator, unitPool));
             findTargets.Add(FindTargetType.Nearest, new NearestFindTarget(shareData.Simulator, unitPool));
             skillSource = await BuildAbilities(
                 allSkills, shareData, runtimeData, unitPool, shapePool, deadPool,
-                healthPool, modifierPool, unitPosTempPool, playerFilter
+                healthPool, statPool, modifierPool, unitPosTempPool, playerFilter
             );
             EventBus.Instance.Subscribe<CastSkillEvent>(OnCastSkillArg);
         }
-     
+
         private void OnCastSkillArg(CastSkillEvent e)
         {
             if (skillSource.TryGetValue(e.SkillId, out var ability))
             {
-                if (findTargets.TryGetValue(ability.Data.core.findTarget, out var findTarget))
+                if (findTargets.TryGetValue(ability.AbilityData.core.findTarget, out var findTarget))
                 {
                     EcsFilter filter = e.Team == Team.Player ? monsterFilter : playerFilter;
                     if (filter.GetEntitiesCount() == 0)
                     {
 #if DEVELOP_MODE
                         Debug.LogError($"Số lượng entity = 0.\nTeam:{e.Team}");
-#endif                        
+#endif
                     }
                     else if (findTarget.Find(e.StartPosition, filter, out int target))
                     {
-                        AbilityLogic abilityInstance = ability.CreateInstance(e.Team);
+                        AbilityLogic abilityInstance = ability.CreateInstance(e.Source, e.Team);
                         abilityInstance.Startup(e.Source, e.StartPosition, target);
                         additions.Enqueue(abilityInstance);
                     }
                     else
                     {
 #if DEVELOP_MODE
-                        Debug.LogError($"Không tìm thấy mục tiêu.\nTeam:{e.Team}, Source:{e.Source}, Skill:{e.SkillId}, FindTarget: {findTarget.GetType().Name}");
+                        Debug.LogError(
+                            $"Không tìm thấy mục tiêu.\nTeam:{e.Team}, Source:{e.Source}, Skill:{e.SkillId}, FindTarget: {findTarget.GetType().Name}");
 #endif
                     }
                 }
                 else
                 {
 #if DEVELOP_MODE
-                    Debug.LogError($"Kiểu tìm mục tiêu '{ability.Data.core.findTarget}' chưa được đăng kí, kĩ năng id '{e.SkillId}'");   
+                    Debug.LogError(
+                        $"Kiểu tìm mục tiêu '{ability.AbilityData.core.findTarget}' chưa được đăng kí, kĩ năng id '{e.SkillId}'");
 #endif
                 }
             }
@@ -134,7 +135,7 @@ namespace _Game.Battle.Systems
                 world.AddEventListener(item);
                 abilities.Add(item);
             }
-            
+
             float dt = shareData.TimeDelta;
             foreach (var ability in abilities)
             {
@@ -143,7 +144,7 @@ namespace _Game.Battle.Systems
 
             foreach (var ability in abilities)
             {
-                if(ability.IsCompleted) completes.Enqueue(ability);
+                if (ability.IsCompleted) completes.Enqueue(ability);
             }
 
             while (completes.Count > 0)
@@ -160,21 +161,33 @@ namespace _Game.Battle.Systems
         {
             EventBus.Instance.Unsubscribe<CastSkillEvent>(OnCastSkillArg);
         }
-        
+
         private static async UniTask<Dictionary<int, AbilityLogic>> BuildAbilities(
-            Dictionary<int, string> abilitiesPath, BattleStartupShareData shareData, BattleStartupRuntimeData runtimeData,
+            Dictionary<int, string> abilitiesPath, BattleStartupShareData shareData,
+            BattleStartupRuntimeData runtimeData,
             EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool, EcsPool<DeadFlag> deadPool,
-            EcsPool<HealthData> healthPool, EcsPool<UnitModifierData> modifierPool, EcsPool<UnitPosTempData> unitPosTempPool,
+            EcsPool<HealthData> healthPool, EcsPool<StatData> statPool, EcsPool<UnitModifierData> modifierPool,
+            EcsPool<UnitPosTempData> unitPosTempPool,
             EcsFilter playerFilter)
         {
+            SkillConfig skillConfig = KitConfigManager.Get<SkillConfig>();
             Dictionary<int, AbilityLogic> dict = new Dictionary<int, AbilityLogic>();
             foreach (var (abilityId, path) in abilitiesPath)
             {
+                if (!skillConfig.Find(abilityId, out var skillData))
+                {
+#if DEVELOP_MODE
+                    Debug.LogError($"Không tìm thấy SkillData với id '{abilityId}'");
+#endif
+                    continue;
+                }
+
                 AbilityData abilityData = await KitLoaded.LoadAsync<AbilityData>(path);
-                dict[abilityId] = new AbilityLogic(abilityData, Team.Player, shareData, runtimeData, 
-                    unitPool, shapePool, deadPool, healthPool, modifierPool, unitPosTempPool, playerFilter
+                dict[abilityId] = new AbilityLogic(abilityData, skillData, 0, Team.Player, shareData, runtimeData,
+                    unitPool, shapePool, deadPool, healthPool, statPool, modifierPool, unitPosTempPool, playerFilter
                 );
             }
+
             return dict;
         }
 

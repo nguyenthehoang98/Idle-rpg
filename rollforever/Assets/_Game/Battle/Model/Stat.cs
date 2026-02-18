@@ -8,14 +8,12 @@ namespace _Game.Battle
     [Serializable]
     public struct Stat
     {
-        [SerializeField] StatType type;
         [SerializeField] float baseValue;
         [SerializeField] float value;
         [SerializeField] NativeList<StatModifier> modifiers;
         
-        public Stat(StatType type, float baseValue)
+        public Stat(float baseValue)
         {
-            this.type = type;
             this.baseValue = value = baseValue;
             this.modifiers = new NativeList<StatModifier>(Allocator.Persistent);
         }
