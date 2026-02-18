@@ -24,7 +24,8 @@ namespace _Game.AbilitySystem
         private readonly bool shouldResetCollision;
         private readonly float resetCollisionInterval;
         private NativeList<int> entityVisitedStamp;
-        private NativeList<int> entitiesCollision;
+        private NativeList<int> entitiesCollisionStamp;
+        private NativeList<int2> cellsVisitedStamp;
         private float2 center;
         private int currentScanId;
         private float elapsed;
@@ -44,8 +45,9 @@ namespace _Game.AbilitySystem
             this.shouldResetCollision = shouldResetCollision;
             this.resetCollisionInterval = resetCollisionInterval;
             this.stateModifierLogic = stateModifierLogic;
-            this.entitiesCollision = new NativeList<int>(10, Allocator.Persistent);
+            this.entitiesCollisionStamp = new NativeList<int>(10, Allocator.Persistent);
             this.entityVisitedStamp = new NativeList<int>(10, Allocator.Persistent);
+            this.cellsVisitedStamp = new NativeList<int2>(10, Allocator.Persistent);
             this.healthPool = healthPool;
             this.statPool = statPool;
             this.shapeLogic = shapeLogic;
@@ -73,10 +75,10 @@ namespace _Game.AbilitySystem
                 return;
             }
 
-            int length = entitiesCollision.Length;
+            int length = entitiesCollisionStamp.Length;
             for (int i = 0; i < length; i++)
             {
-                if (entitiesCollision[i] == entity)
+                if (entitiesCollisionStamp[i] == entity)
                 {
 #if COMBAT_FULL_LOG
                     Debug.LogWarning($"MonsterVisitor: {sourceEntity}->{entity}: Đã từng va chạm");
@@ -165,7 +167,7 @@ namespace _Game.AbilitySystem
                 }
 
                 RemainCanCollision--;
-                entitiesCollision.Add(entity);
+                entitiesCollisionStamp.Add(entity);
             }
             else
             {
@@ -177,6 +179,9 @@ namespace _Game.AbilitySystem
 
         public void VisitCell(int x, int y)
         {
+#if UNITY_EDITOR && (COMBAT_FULL_LOG || DEVELOP_MODE)
+            cellsVisitedStamp.Add(new int2(x, y));
+#endif
         }
 
         public void AfterVisit(float deltaTime)
@@ -185,7 +190,7 @@ namespace _Game.AbilitySystem
             if (shouldResetCollision && elapsed >= resetCollisionInterval)
             {
                 elapsed = 0;
-                entitiesCollision.Clear();
+                entitiesCollisionStamp.Clear();
             }
         }
     }

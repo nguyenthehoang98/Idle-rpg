@@ -33,7 +33,7 @@ namespace _KIT.Utils
 			}
 			return null;
 		}
-		public static object GetFieldProtected(object parent, string fieldName)
+		public static object GetFieldNonPublic(object parent, string fieldName)
 		{
 			if (parent != null)
 			{

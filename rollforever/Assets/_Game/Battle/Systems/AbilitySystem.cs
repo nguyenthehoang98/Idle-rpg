@@ -102,6 +102,9 @@ namespace _Game.Battle.Systems
                         AbilityLogic abilityInstance = ability.CreateInstance(e.Source, e.Team);
                         abilityInstance.Startup(e.Source, e.StartPosition, target);
                         additions.Enqueue(abilityInstance);
+#if UNITY_EDITOR && (COMBAT_FULL_LOG || DEVELOP_MODE)
+                        AbilityDebugView.Create(abilityInstance);
+#endif
                     }
                     else
                     {
@@ -153,6 +156,9 @@ namespace _Game.Battle.Systems
                 item.Shutdown();
                 item.Dispose();
                 world.RemoveEventListener(item);
+#if UNITY_EDITOR && (COMBAT_FULL_LOG || DEVELOP_MODE)
+                AbilityDebugView.Release(item);
+#endif
                 CollectionUtils.RemoveFast(abilities, item);
             }
         }
