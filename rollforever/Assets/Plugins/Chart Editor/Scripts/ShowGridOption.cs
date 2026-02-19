@@ -63,7 +63,7 @@ namespace Syrus.Plugins.ChartEditor
 					float minHeight = Mathf.Ceil(GUIChartEditor.sprites.Digits["0"].height / 2 + 2);
 					float vOffset = minHeight * GUIChartEditor.CurrentChart.userDefinedRect.height
 						/ GUIChartEditor.CurrentChart.pixelSizeRect.height;
-					GUIChartEditor.PushValueLabel(x, x, -vOffset, "0.0#");
+					GUIChartEditor.PushValueLabel(x, x, -vOffset, "0");
 				}
 				x += hSize;
 			}
@@ -86,7 +86,7 @@ namespace Syrus.Plugins.ChartEditor
 						hSize += GUIChartEditor.sprites.Digits[c.ToString()].width + 1;
 					float hOffset = hSize / 2 * GUIChartEditor.CurrentChart.userDefinedRect.width
 						/ GUIChartEditor.CurrentChart.pixelSizeRect.width;
-					GUIChartEditor.PushValueLabel(y, -hOffset, y, "0.0#");
+					GUIChartEditor.PushValueLabel(y, -hOffset, y, "0");
 				}
 
 				y += vSize;

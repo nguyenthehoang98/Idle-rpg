@@ -101,7 +101,7 @@ namespace _Game.Battle.Editor
                     selectedWave = index;
                     selectedBatch = 0;
                 },
-                Color.yellow, GetOtherColor
+                EditorGUIUtility.isProSkin ? Color.yellow : Color.blue, GetOtherColor
             );
 
             Color GetOtherColor(int index)
@@ -201,7 +201,8 @@ namespace _Game.Battle.Editor
                 },
                 (index) => selectedBatch == index,
                 (index) => selectedBatch = index,
-                highlightColor: Color.cyan, i => EditorGUIUtility.isProSkin ? Color.white : Color.black
+                highlightColor: EditorGUIUtility.isProSkin ?  Color.cyan : new Color(0.5f, 0.4f, 0.1f), 
+                i => EditorGUIUtility.isProSkin ? Color.white : Color.black
             );
         }
 

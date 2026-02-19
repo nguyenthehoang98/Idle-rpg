@@ -31,7 +31,7 @@ namespace _Game.Battle.Systems
             attackCasterPool.Add(entity) = new AttackCasterData {cooldown = 1};
             shapePool.Add(entity) = ShapeData.Circle(1);
             statPool.Add(entity) = new StatData()
-                .Insert(StatType.Attack, new Stat(10))
+                .Insert(StatType.Attack, new Stat(12))
                 .Insert(StatType.Defense, new Stat(10))
                 .Insert(StatType.MaxHealth, new Stat(1000))
                 .Insert(StatType.MoveSpeed, new Stat(0))

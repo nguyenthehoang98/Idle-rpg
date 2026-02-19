@@ -14,13 +14,59 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetDuration: 0
   waves:
-  - power: 5000
+  - power: 60
     batches:
     - isBoosWave: 0
       duration: 20
       waitTimeSpawn: 0
-      power: 5000
+      power: 60
       enemies:
       - id: 1001
         level: 1
+        weight: 1
+  - power: 75
+    batches:
+    - isBoosWave: 0
+      duration: 25
+      waitTimeSpawn: 0
+      power: 75
+      enemies:
+      - id: 1001
+        level: 1
+        weight: 1
+  - power: 90
+    batches:
+    - isBoosWave: 0
+      duration: 30
+      waitTimeSpawn: 0
+      power: 90
+      enemies:
+      - id: 1001
+        level: 1
+        weight: 1
+  - power: 105
+    batches:
+    - isBoosWave: 0
+      duration: 25
+      waitTimeSpawn: 0
+      power: 105
+      enemies:
+      - id: 1001
+        level: 1
+        weight: 3
+      - id: 1001
+        level: 2
+        weight: 1
+  - power: 130
+    batches:
+    - isBoosWave: 0
+      duration: 30
+      waitTimeSpawn: 0
+      power: 130
+      enemies:
+      - id: 1001
+        level: 1
+        weight: 2
+      - id: 1001
+        level: 2
         weight: 1

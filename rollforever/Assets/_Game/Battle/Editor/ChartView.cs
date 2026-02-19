@@ -31,9 +31,12 @@ namespace _Game.Battle.Editor
                 GUIChartEditor.PushLineChart(points, p.color);
 
                 if (!p.drawNumber) continue;
-                foreach (var vector2 in points)
+                for (var i = 0; i < points.Length; i++)
                 {
-                    GUIChartEditor.PushPoint(vector2, Color.blue);
+                    float value = p.values[i];
+                    Vector2 point = points[i];
+                    GUIChartEditor.PushPoint(point, p.color);
+                    GUIChartEditor.PushValueLabel(value, point.x, point.y, p.floatFormat);
                 }
             }
         }

@@ -13,19 +13,21 @@ namespace _Game.Battle.Editor
         
         public sealed class Point
         {
+            public string floatFormat = "0";
             public bool drawNumber;
             public List<Vector2> points = new List<Vector2>();
+            public List<float> values = new List<float>();
             public Color color = Color.white;
 
             public Vector2[] NormalizePoints(float scale)
             {
-                Vector2[] vector2s = new Vector2[points.Count];
-                for (int i = 0; i < vector2s.Length; i++)
+                Vector2[] normalizePoints = new Vector2[points.Count];
+                for (int i = 0; i < normalizePoints.Length; i++)
                 {
-                    vector2s[i] = points[i] * new Vector2(1f, 1f) * scale;
+                    normalizePoints[i] = points[i] * new Vector2(1f, 1f) * scale;
                 }
 
-                return vector2s;
+                return normalizePoints;
             }
         }
         
@@ -33,6 +35,7 @@ namespace _Game.Battle.Editor
         {
             Point p = new Point();
             p.color = color;
+            p.values = list;
             p.drawNumber = drawNumber;
             float max = list.Max();
             float total = list.Count - 1;

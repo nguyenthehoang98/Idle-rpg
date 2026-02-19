@@ -7,13 +7,16 @@ namespace _Game.Battle.Editor
 {
     public partial class LevelSpawnEditorWindow : BaseEditorWindowChart
     {
-        LevelInput input = new LevelInput { level = 1, fromLevel = 1, toLevel = 10 };
-        GenerateLevelData generateData = new GenerateLevelData();
+        private LevelInput input = new LevelInput { level = 1, fromLevel = 1, toLevel = 10 };
+        private GenerateLevelData generateData = new GenerateLevelData();
+        private bool drawWave = true;
+        private bool drawBatch;
+        private bool drawInterval;
 
         [MenuItem("Tools/Chart/Level Spawn")]
         public static void Open()
         {
-            GetWindow<LevelSpawnEditorWindow>("Spawn");
+            GetWindow<LevelSpawnEditorWindow>("Level Spawn");
         }
         
         [MenuItem("Tools/Validate/Level Spawn")]
@@ -32,6 +35,11 @@ namespace _Game.Battle.Editor
         void DrawInput(bool isRange)
         {
             EditorGUILayout.LabelField("Level Settings", EditorStyles.boldLabel);
+            EditorGUILayout.BeginHorizontal();
+            drawWave = EditorGUILayout.Toggle("Wave?", drawWave);
+            drawBatch = EditorGUILayout.Toggle("Batch?", drawBatch);
+            drawInterval = EditorGUILayout.Toggle("Interval?", drawInterval);
+            EditorGUILayout.EndHorizontal();
             EditorGUILayout.Space(4);
 
             if (isRange)
@@ -53,12 +61,12 @@ namespace _Game.Battle.Editor
 
             if (GUILayout.Button("Preview Level", GUILayout.Height(32)))
             {
-                string path = "Assets/SpawnConfig_" + input.level + ".asset";
+                string path = "Assets/Sources/Spawners/Spawner_" + input.level + ".asset";
                 LevelSpawnConfig config = AssetDatabase.LoadAssetAtPath<LevelSpawnConfig>(path);
                 if (config != null)
                 {
                     EnableChart();
-                    chartData.Push(config);
+                    chartData.Push(config, drawWave, drawBatch, drawInterval);
                 }
                 else
                 {
@@ -236,7 +244,7 @@ namespace _Game.Battle.Editor
 
     public partial class ChartData
     {
-        public void Push(LevelSpawnConfig config)
+        public void Push(LevelSpawnConfig config, bool drawWave, bool drawBatch, bool drawInterval)
         {
             List<float> wavePowers = new List<float>();
             List<float> batchPowers = new List<float>();
@@ -251,12 +259,10 @@ namespace _Game.Battle.Editor
                 }
             }
 
-            points = new List<Point>
-            {
-                GetPoints(wavePowers, Vector2.zero, false, Color.green),
-                GetPoints(batchPowers, new Vector2(0, 0.01f), false, Color.yellow),
-                GetPoints(intervalPowers, new Vector2(0, -0.01f), false, Color.red),
-            };
+            points = new List<Point>();
+            if (drawWave) points.Add(GetPoints(wavePowers, Vector2.zero, true, Color.green));
+            if (drawBatch) points.Add(GetPoints(batchPowers, Vector2.zero, true, Color.yellow));
+            if (drawInterval) points.Add(GetPoints(intervalPowers, Vector2.zero, true, Color.red));
         }
 
         public void Push(List<LevelSpawnConfig> configs)

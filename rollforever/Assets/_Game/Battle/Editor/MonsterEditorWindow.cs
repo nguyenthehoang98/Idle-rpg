@@ -10,7 +10,10 @@ namespace _Game.Battle.Editor
     {
         private MonsterConfig monsterConfig;
         private SkillConfig skillConfig;
-        
+        private bool drawPower = true;
+        private bool drawHealth;
+        private bool drawDefense;
+        private bool drawAttack;
         private MonsterInput input = new MonsterInput
         {
             id = 1001,
@@ -39,6 +42,15 @@ namespace _Game.Battle.Editor
         void DrawInput(bool isRange)
         {
             EditorGUILayout.LabelField("Monster Settings", EditorStyles.boldLabel);
+            EditorGUILayout.BeginHorizontal();
+            drawPower = EditorGUILayout.Toggle("Power?", drawPower);
+            drawAttack = EditorGUILayout.Toggle("Attack?", drawAttack);
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            drawHealth = EditorGUILayout.Toggle("Health?", drawHealth);
+            drawDefense = EditorGUILayout.Toggle("Defense?", drawDefense);
+            EditorGUILayout.EndHorizontal();
             EditorGUILayout.Space(4);
 
             if (isRange)
@@ -81,7 +93,9 @@ namespace _Game.Battle.Editor
                     skillConfig.Find(monsterData.SkillId, out var skillData))
                 {
                     EnableChart();
-                    chartData.Push(monsterData, skillData);
+                    chartData.Push(monsterData, skillData,
+                        drawPower, drawAttack, drawHealth, drawDefense
+                    );
                 }
                 else
                 {
@@ -114,7 +128,8 @@ namespace _Game.Battle.Editor
 
     public partial class ChartData
     {
-        public void Push(MonsterConfig.MonsterData monsterData, SkillConfig.SkillData skillData)
+        public void Push(MonsterConfig.MonsterData monsterData, SkillConfig.SkillData skillData,
+            bool drawPower, bool drawAttack, bool drawHealth, bool drawDefense)
         {
             List<float> attacks = new List<float>();
             List<float> healths = new List<float>();
@@ -127,14 +142,12 @@ namespace _Game.Battle.Editor
                 defenses.Add(monsterData.Defense(i));
                 powers.Add(FormulaUtils.PowerMonster(monsterData, i, skillData));
             }
-            
-            points = new List<Point>
-            {
-                GetPoints(attacks, Vector2.zero, false, Color.red),
-                GetPoints(defenses, new Vector2(0, -0.01f), false, Color.blue),
-                GetPoints(healths, new Vector2(0, 0.01f), false, Color.green),
-                GetPoints(powers, new Vector2(0, 0.0f), false, Color.yellow),
-            };
+
+            points = new List<Point>();
+            if (drawPower) points.Add(GetPoints(powers, Vector2.zero, true, Color.yellow));
+            if (drawAttack) points.Add(GetPoints(attacks, Vector2.zero, true, Color.red));
+            if (drawDefense) points.Add(GetPoints(defenses, Vector2.zero, true, Color.blue));
+            if (drawHealth) points.Add(GetPoints(healths, Vector2.zero, true, Color.green));
         }
     }
 }
