@@ -153,6 +153,31 @@ namespace _Game.Battle.Systems
             EventBus.Instance.Unsubscribe<CastSkillEvent>(OnCastSkillArg);
         }
 
+        public void ClearAll()
+        {
+            while (additions.Count > 0)
+            {
+                completes.Enqueue(additions.Dequeue());
+            }
+
+            foreach (var ability in abilities)
+            {
+                completes.Enqueue(ability);
+            }
+            
+            while (completes.Count > 0)
+            {
+                var item = completes.Dequeue();
+                item.Shutdown();
+                item.Dispose();
+                world.RemoveEventListener(item);
+#if UNITY_EDITOR && (COMBAT_FULL_LOG || DEVELOP_MODE)
+                AbilityDebugView.Release(item);
+#endif
+                CollectionUtils.RemoveFast(abilities, item);
+            }
+        }
+
         private static async UniTask<Dictionary<int, AbilityLogic>> BuildAbilities(
             Dictionary<int, string> abilitiesPath, BattleStartupShareData shareData,
             BattleStartupRuntimeData runtimeData,

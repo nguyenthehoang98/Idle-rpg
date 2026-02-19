@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using _Game.AbilitySystem;
 using _Game.Battle.Data;
+using _Game.Battle.Events;
 using _Game.Battle.View;
 using _Game.Configs;
 using _KIT.Config;
+using _KIT.Event;
 using _KIT.Resource;
 using _KIT.Utils;
 using GoodCat.EcsLite.Shared;
@@ -26,6 +28,7 @@ namespace _Game.Battle.Systems
         [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
 
         private EcsWorld world;
+        private IEcsSystems systems;
         private EcsPool<StatData> statPool;
         private EcsPool<HealthData> healthPool;
         private EcsPool<UnitData> unitPool;
@@ -54,6 +57,7 @@ namespace _Game.Battle.Systems
             GameObject go = await KitLoaded.LoadAsync<GameObject>("UnitView");
             unitSource[0] = go.GetComponent<UnitView>();*/
 
+            this.systems = systems;
             world = systems.GetWorld();
             statPool = world.GetPool<StatData>();
             unitPool = world.GetPool<UnitData>();
@@ -150,7 +154,8 @@ namespace _Game.Battle.Systems
 
             if (waitingNextWave && monsterAliveFilter.GetEntitiesCount() == 0)
             {
-                Debug.LogError("show next wave");
+                waitingNextWave = false;
+                EventBus.Instance.Publish(new NextWaveEvent(systems, () => isPaused = false));
             }
         }
 

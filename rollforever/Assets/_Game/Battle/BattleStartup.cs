@@ -6,6 +6,7 @@ using Leopotam.EcsLite;
 using RVO;
 using UnityEngine;
 using _KIT.Config;
+using Checker;
 #if UNITY_EDITOR
 using Leopotam.EcsLite.UnityEditor;
 #endif
@@ -25,6 +26,9 @@ namespace _Game.Battle
         private void Awake()
         {
             Application.targetFrameRate = 60;
+#if UNITY_EDITOR && (DEVELOP_MODE || COMBAT_FULL_LOG)
+            gameObject.AddComponent<CpuFrame>();
+#endif
         }
         
         private void OnValidate()
