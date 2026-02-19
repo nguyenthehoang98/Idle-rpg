@@ -151,8 +151,9 @@ namespace _Game.Battle.Editor
 
             EditorGUILayout.BeginVertical("box");
 
-            EditorGUILayout.LabelField($"Wave {selectedWave + 1} Details $Power [{power}]",
-                EditorStyles.boldLabel);
+            EditorGUILayout.LabelField($"Wave {selectedWave + 1} Details", EditorStyles.boldLabel);
+
+            EditorGUILayout.PropertyField(powerProp);
 
             SerializedProperty batches = wave.FindPropertyRelative("batches");
 

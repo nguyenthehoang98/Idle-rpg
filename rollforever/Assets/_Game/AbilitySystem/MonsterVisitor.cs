@@ -67,35 +67,17 @@ namespace _Game.AbilitySystem
 
         public void Visit(int entity)
         {
-            if (RemainCanCollision <= 0)
-            {
-#if COMBAT_FULL_LOG
-                Debug.LogWarning($"MonsterVisitor: {sourceEntity}->{entity}: remain <= 0");
-#endif
-                return;
-            }
+            if (RemainCanCollision <= 0) return;
 
             int length = entitiesCollisionStamp.Length;
             for (int i = 0; i < length; i++)
             {
-                if (entitiesCollisionStamp[i] == entity)
-                {
-#if COMBAT_FULL_LOG
-                    Debug.LogWarning($"MonsterVisitor: {sourceEntity}->{entity}: Đã từng va chạm");
-#endif
-                    return;
-                }
+                if (entitiesCollisionStamp[i] == entity) return;
             }
 
             for (int i = 0; i < currentScanId; i++)
             {
-                if (entityVisitedStamp[i] == entity)
-                {
-#if COMBAT_FULL_LOG
-                    Debug.LogWarning($"MonsterVisitor: {sourceEntity}->{entity}: Đã từng quét");
-#endif
-                    return;
-                }
+                if (entityVisitedStamp[i] == entity) return;
             }
 
             if (entityVisitedStamp.Length > currentScanId)

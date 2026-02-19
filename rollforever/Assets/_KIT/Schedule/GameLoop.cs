@@ -8,7 +8,7 @@ namespace _KIT.Schedule
         readonly TickSystem tickSystem = new TickSystem();
         
         [Range(2, 60), SerializeField] private int fps;
-        [Range(0.2f, 10.0f), SerializeField] private float speed = 1f;
+        [Range(0.2f, 20.0f), SerializeField] private float speed = 1f;
         [Range(0.5f, 2.0f), SerializeField] private float scaleTime = 1f;
         
         public void Pause() => IsPaused = true;

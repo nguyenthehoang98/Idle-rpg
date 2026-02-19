@@ -13,13 +13,18 @@ namespace _Game.Battle.Systems
         [EcsInject] private readonly BattleStartupShareData shareData;
 
         private EcsPool<AttackCasterData> attackCasterPool;
-        private EcsFilter filter;
+        private EcsFilter playerFilter;
+        private EcsFilter monsterFilter;
 
         public void Init(IEcsSystems systems)
         {
             EcsWorld world = systems.GetWorld();
-            filter = world.Filter<UnitData>()
+            playerFilter = world.Filter<UnitData>()
                 .Inc<PlayerFlag>()
+                .Exc<DeadFlag>()
+                .End();
+            monsterFilter = world.Filter<UnitData>()
+                .Inc<MonsterFlag>()
                 .Exc<DeadFlag>()
                 .End();
             attackCasterPool = world.GetPool<AttackCasterData>();
@@ -27,11 +32,11 @@ namespace _Game.Battle.Systems
 
         public void Run(IEcsSystems systems)
         {
-            foreach (var e in filter)
+            foreach (var e in playerFilter)
             {
                 ref var attack = ref attackCasterPool.Get(e);
                 attack.elapsed += shareData.TimeDelta;
-                if (attack.elapsed >= attack.cooldown)
+                if (attack.elapsed >= attack.cooldown && monsterFilter.GetEntitiesCount() > 0)
                 {
                     attack.elapsed = 0;
                     EventBus.Instance.Publish(

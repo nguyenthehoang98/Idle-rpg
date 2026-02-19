@@ -12,6 +12,7 @@ using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 using Unity.Collections;
 using Unity.Mathematics;
+using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -36,16 +37,16 @@ namespace _Game.Battle.Systems
 
         private SkillConfig skillConfig;
         private MonsterConfig monsterConfig;
-        private List<Wave> waves = new List<Wave>();
+        private WaveContainer waveContainer;
         private int waveIndex;
         private int batchIndex;
         private int spawnedCount;
         private double spawnElapsed;
         private float batchElapsed;
         private float waitElapsed;
-        private bool isPaused;
+        private bool isPaused = true;
 
-        public async void Init(IEcsSystems systems)
+        public void Init(IEcsSystems systems)
         {
             /*unitSource = new Dictionary<int, UnitView>();
             GameObject go = await KitLoaded.LoadAsync<GameObject>("UnitView");
@@ -69,15 +70,23 @@ namespace _Game.Battle.Systems
             //HashSet<MonsterId> monsters = new HashSet<MonsterId>();
             monsterConfig = KitConfigManager.Get<MonsterConfig>();
             skillConfig = KitConfigManager.Get<SkillConfig>();
-            waves = Build(shareData.LevelSpawnConfig.waves, monsterConfig, skillConfig);
-
+            waveContainer = new WaveContainer
+            {
+                waves = Build(shareData.LevelSpawnConfig.waves, monsterConfig, skillConfig)
+            };
+#if UNITY_EDITOR && (COMBAT_FULL_LOG || DEVELOP_MODE)
+            Debug.Log("Spawn wave: " + JsonUtility.ToJson(waveContainer));
+#endif
             // todo: preload assets
+
+            isPaused = false;
         }
 
         public void Run(IEcsSystems systems)
         {
             float dt = shareData.TimeDelta;
-            if (waveIndex < waves.Count && !isPaused)
+            Wave[] waves = waveContainer.waves;
+            if (!isPaused && waveIndex < waves.Length)
             {
                 var wave = waves[waveIndex];
                 if (batchIndex < wave.batches.Length)
@@ -93,9 +102,9 @@ namespace _Game.Battle.Systems
                     spawnElapsed += dt;
 
                     // todo: while elapsed interval
-                    while (spawnElapsed > 0 && spawnedCount < batch.monsters.Count)
+                    while (spawnElapsed > 0 && spawnedCount < batch.monsters.Length)
                     {
-                        if (batch.monsters.Count > spawnedCount)
+                        if (batch.monsters.Length > spawnedCount)
                         {
                             var tuple = batch.monsters[spawnedCount];
                             if (monsterConfig.Find(tuple.id, out var monsterData))
@@ -112,7 +121,7 @@ namespace _Game.Battle.Systems
                         }
                     }
 
-                    if (spawnedCount >= batch.monsters.Count || batchElapsed >= batch.duration)
+                    if (spawnedCount >= batch.monsters.Length || batchElapsed >= batch.duration)
                     {
                         Debug.Log($"Spawn. Count:{spawnedCount}, Elapsed:{batchElapsed}, Time:{shareData.Time}");
                         batchIndex++;
@@ -250,27 +259,27 @@ namespace _Game.Battle.Systems
             SkillConfig skillConfig)
         {
             List<LevelSpawnConfig.WaveSpawn> waveSpawns = spawnConfig.waves;
-            List<Wave> waves = Build(waveSpawns, monsterConfig, skillConfig);
+            Wave[] waves = Build(waveSpawns, monsterConfig, skillConfig);
             LogPower(waveSpawns, waves, spawnConfig.name, monsterConfig, skillConfig);
         }
 
-        static List<Wave> Build(List<LevelSpawnConfig.WaveSpawn> waveSpawns, MonsterConfig monsterConfig,
+        static Wave[] Build(List<LevelSpawnConfig.WaveSpawn> waveSpawns, MonsterConfig monsterConfig,
             SkillConfig skillConfig)
         {
-            List<Wave> waves = new List<Wave>();
-            foreach (var waveSpawn in waveSpawns)
+            Wave[] waves = new Wave[waveSpawns.Count];
+            for (var w = 0; w < waveSpawns.Count; w++)
             {
+                LevelSpawnConfig.WaveSpawn waveSpawn = waveSpawns[w];
                 Wave wave = new Wave();
                 wave.batches = new Batch[waveSpawn.batches.Count];
-                for (int i = 0; i < wave.batches.Length; i++)
+                for (int b = 0; b < wave.batches.Length; b++)
                 {
                     // todo: xử lý tính toán số lượng quái sinh ra ở đay
-                    LevelSpawnConfig.BatchSpawn batchSpawn = waveSpawn.batches[i];
+                    LevelSpawnConfig.BatchSpawn batchSpawn = waveSpawn.batches[b];
                     Batch batch = new Batch();
                     batch.duration = batchSpawn.duration;
                     batch.waitTime = batchSpawn.waitTimeSpawn;
-                    batch.monsters = new List<(int id, int level)>();
-
+                    List<MonsterData> monsters = new List<MonsterData>();
                     int totalWeight = 0;
                     foreach (var enemy in batchSpawn.enemies)
                     {
@@ -286,8 +295,15 @@ namespace _Game.Battle.Systems
                         LevelSpawnConfig.EnemySpawn selected = null;
                         foreach (var enemy in batchSpawn.enemies)
                         {
-                            if (monsterConfig.Find(enemy.id, out var monsterData) &&
-                                skillConfig.Find(monsterData.SkillId, out var skillData))
+                            bool flag1 = monsterConfig.Find(enemy.id, out var monsterData);
+#if DEVELOP_MODE || COMBAT_FULL_LOG
+                            if (!flag1) Debug.LogError($"Not found enemy with id '{enemy.id}'");
+#endif
+                            bool flag2 = skillConfig.Find(monsterData.SkillId, out var skillData);
+#if DEVELOP_MODE || COMBAT_FULL_LOG
+                            if (!flag2) Debug.LogError($"Not found skill with skill_id '{skillData.SkillId}'");
+#endif
+                            if (flag1 && flag2)
                             {
                                 int power = FormulaUtils.PowerMonster(monsterData, enemy.level, skillData);
                                 if (rand < power)
@@ -306,20 +322,28 @@ namespace _Game.Battle.Systems
                             break;
 
                         powerBudget -= lastPower;
-                        batch.monsters.Add((selected.id, lastLevel));
+                        monsters.Add(new MonsterData(selected.id, lastLevel));
                     }
 
-                    batch.interval = batchSpawn.duration / batch.monsters.Count;
-                    wave.batches[i] = batch;
+#if DEVELOP_MODE || COMBAT_FULL_LOG
+                    if (monsters.Count == 0)
+                    {
+                        Debug.LogError($"No monsters were spawned. Wave: {w + 1}, Batch: {b + 1}, PowerBudget: {powerBudget}");
+                    }
+#endif
+                    batch.interval = batchSpawn.duration / monsters.Count;
+                    batch.monsters = monsters.ToArray();
+                    batch.total = monsters.Count;
+                    wave.batches[b] = batch;
                 }
 
-                waves.Add(wave);
+                waves[w] = wave;
             }
 
             return waves;
         }
 
-        private static void LogPower(List<LevelSpawnConfig.WaveSpawn> waveSpawns, List<Wave> waves, string name,
+        private static void LogPower(List<LevelSpawnConfig.WaveSpawn> waveSpawns, Wave[] waves, string name,
             MonsterConfig monsterConfig, SkillConfig skillConfig)
         {
 #if DEVELOP_MODE
@@ -356,7 +380,7 @@ namespace _Game.Battle.Systems
                 List<float> interval = new List<float>();
                 foreach (var batch in wave.batches)
                 {
-                    count.Add(batch.monsters.Count);
+                    count.Add(batch.monsters.Length);
                     interval.Add((float)Math.Round(batch.interval, 3));
                     foreach (var tuple in batch.monsters)
                     {
@@ -383,18 +407,40 @@ namespace _Game.Battle.Systems
             }
 #endif
         }
+        
+        [Serializable]
+        struct WaveContainer
+        {
+            public Wave[] waves;
+        }
 
-        sealed class Wave
+        [Serializable]
+        struct Wave
         {
             public Batch[] batches;
         }
 
-        sealed class Batch
+        [Serializable]
+        struct Batch
         {
             public float duration;
             public float waitTime;
             public double interval;
-            public List<(int id, int level)> monsters;
+            public MonsterData[] monsters { get; set; }
+            public int total;
+        }
+        
+        [Serializable]
+        struct MonsterData
+        {
+            public int id;
+            public int level;
+
+            public MonsterData(int id, int level)
+            {
+                this.id = id;
+                this.level = level;
+            }
         }
     }
 }

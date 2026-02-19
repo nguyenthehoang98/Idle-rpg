@@ -13,9 +13,9 @@ namespace _Game.Battle.Editor
         
         private MonsterInput input = new MonsterInput
         {
-            id = 1000101,
-            fromId = 1000101,
-            toId = 1000101,
+            id = 1001,
+            fromId = 1001,
+            toId = 1001,
         };
         
         [MenuItem("Tools/Chart/Monster")]
@@ -78,7 +78,7 @@ namespace _Game.Battle.Editor
             if (GUILayout.Button("Preview Level", GUILayout.Height(32)))
             {
                 if (monsterConfig.Find(input.id, out var monsterData) &&
-                    skillConfig.Find(input.id, out var skillData))
+                    skillConfig.Find(monsterData.SkillId, out var skillData))
                 {
                     EnableChart();
                     chartData.Push(monsterData, skillData);

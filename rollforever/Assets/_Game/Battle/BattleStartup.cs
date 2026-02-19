@@ -69,7 +69,9 @@ namespace _Game.Battle
             );
             BattleStartupRuntimeData runtimeData = new BattleStartupRuntimeData();
 #if UNITY_EDITOR && (COMBAT_FULL_LOG || DEVELOP_MODE)
-            gameObject.GetComponent<BattleDebugView>().InjectMatrix(matrix);
+            BattleDebugView debugView = gameObject.GetComponent<BattleDebugView>();
+            debugView.InjectShareData(shareData);
+            world.AddEventListener(debugView);
 #endif
             
             // todo: battle systems
