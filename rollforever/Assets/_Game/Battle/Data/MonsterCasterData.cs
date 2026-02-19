@@ -1,6 +1,6 @@
 namespace _Game.Battle.Data
 {
-    public struct AttackCasterData
+    public struct MonsterCasterData
     {
         public int skillId;
         public float elapsed;

@@ -91,41 +91,26 @@ namespace _Game.Battle.Systems
                 if (findTargets.TryGetValue(ability.AbilityData.core.findTarget, out var findTarget))
                 {
                     EcsFilter filter = e.Team == Team.Player ? monsterFilter : playerFilter;
-                    if (filter.GetEntitiesCount() == 0)
-                    {
-#if DEVELOP_MODE
-                        Debug.LogError($"Số lượng entity = 0.\nTeam:{e.Team}");
-#endif
-                    }
-                    else if (findTarget.Find(e.StartPosition, filter, out int target))
-                    {
-                        AbilityLogic abilityInstance = ability.CreateInstance(e.Source, e.Team);
-                        abilityInstance.Startup(e.Source, e.StartPosition, target);
-                        additions.Enqueue(abilityInstance);
+                    bool found = findTarget.Find(e.StartPosition, filter, out int target);
+                    
+                    AbilityLogic abilityInstance = ability.CreateInstance(e.Source, e.Team);
+                    abilityInstance.Startup(e.Source, e.StartPosition, found, target);
+                    additions.Enqueue(abilityInstance);
 #if UNITY_EDITOR && (COMBAT_FULL_LOG || DEVELOP_MODE)
-                        AbilityDebugView.Create(abilityInstance);
+                    AbilityDebugView.Create(abilityInstance);
 #endif
-                    }
-                    else
-                    {
-#if DEVELOP_MODE
-                        Debug.LogError(
-                            $"Không tìm thấy mục tiêu.\nTeam:{e.Team}, Source:{e.Source}, Skill:{e.SkillId}, FindTarget: {findTarget.GetType().Name}");
-#endif
-                    }
                 }
                 else
                 {
 #if DEVELOP_MODE
-                    Debug.LogError(
-                        $"Kiểu tìm mục tiêu '{ability.AbilityData.core.findTarget}' chưa được đăng kí, kĩ năng id '{e.SkillId}'");
+                    Debug.LogError($"'{ability.AbilityData.core.findTarget}' not registered to system, skill source '{e.SkillId}'");
 #endif
                 }
             }
             else
             {
 #if DEVELOP_MODE
-                Debug.LogError($"Kĩ năng id '{e.SkillId}' chưa được đăng kí");
+                Debug.LogError($"Skill '{e.SkillId}' not registered");
 #endif
             }
         }

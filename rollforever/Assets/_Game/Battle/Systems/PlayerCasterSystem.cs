@@ -1,10 +1,16 @@
 
+using System.Collections.Generic;
 using _Game.Battle.Data;
 using _Game.Battle.Events;
+using _Game.Configs;
+using _KIT.Config;
 using _KIT.Event;
+using Geometry;
+using Geometry.Primary;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace _Game.Battle.Systems
 {
@@ -12,38 +18,106 @@ namespace _Game.Battle.Systems
     {
         [EcsInject] private readonly BattleStartupShareData shareData;
 
-        private EcsPool<AttackCasterData> attackCasterPool;
-        private EcsFilter playerFilter;
-        private EcsFilter monsterFilter;
+        private Dictionary<int, int> mapSlotEntities = new Dictionary<int, int>();
+        private WeaponConfig weaponConfig;
+        private Vector2[] points;
+        private int currentPoint;
+        private float elapsed;
+        private float duration = 1f;
+        
+        private EcsPool<StatData> statPool;
+        private EcsPool<WeaponCasterData> weaponCasterPool;
+        private EcsFilter weaponFilter;
+        private EcsWorld world;
 
         public void Init(IEcsSystems systems)
         {
-            EcsWorld world = systems.GetWorld();
-            playerFilter = world.Filter<UnitData>()
-                .Inc<PlayerFlag>()
-                .Exc<DeadFlag>()
+            world = systems.GetWorld();
+            weaponFilter = world.Filter<WeaponCasterData>()
                 .End();
-            monsterFilter = world.Filter<UnitData>()
-                .Inc<MonsterFlag>()
-                .Exc<DeadFlag>()
-                .End();
-            attackCasterPool = world.GetPool<AttackCasterData>();
+            weaponCasterPool = world.GetPool<WeaponCasterData>();
+            statPool = world.GetPool<StatData>();
+            
+            weaponConfig = KitConfigManager.Get<WeaponConfig>();
+            points = shareData.LevelSpawnConfig.designConfig.LoopPoints();
         }
 
         public void Run(IEcsSystems systems)
         {
-            foreach (var e in playerFilter)
+            elapsed += shareData.TimeDelta;
+            Vector2 cur = points[currentPoint];
+            Vector2 target = points[0];
+            if (currentPoint + 1 < points.Length)
             {
-                ref var attack = ref attackCasterPool.Get(e);
-                attack.elapsed += shareData.TimeDelta;
-                if (attack.elapsed >= attack.cooldown && monsterFilter.GetEntitiesCount() > 0)
+                target = points[currentPoint + 1];
+            }
+
+            Vector2 position = Vector2.Lerp(cur, target, elapsed / duration);
+            if (elapsed >= duration)
+            {
+                currentPoint++;
+                if (currentPoint >= points.Length) currentPoint = 0;
+                elapsed = 0;
+
+                if (mapSlotEntities.TryGetValue(currentPoint, out int entity))
                 {
-                    attack.elapsed = 0;
+                    ref var caster = ref weaponCasterPool.Get(entity);
                     EventBus.Instance.Publish(
-                        new CastSkillEvent(e, 20101, float2.zero, Team.Player)
+                        new CastSkillEvent(entity, caster.skillId, caster.startPosition, Team.Player)
                     );
+#if UNITY_EDITOR && (DEVELOP_MODE || COMBAT_FULL_LOG)
+                    GeometryGizmos.DrawObb(
+                        new OBB(caster.startPosition, new float2(0.4f, 0.4f), new float2(1, 0), new float2(0, 1)),
+                        Color.red, shareData.TimeDelta
+                    );
+#endif
                 }
             }
+            
+#if UNITY_EDITOR && (DEVELOP_MODE || COMBAT_FULL_LOG)
+            GeometryGizmos.DrawCircle(
+                new Circle(position, 0.45f),
+                Color.yellow, shareData.TimeDelta
+            );
+#endif
+            
+#if UNITY_EDITOR && (DEVELOP_MODE || COMBAT_FULL_LOG)
+            foreach (var e in weaponFilter)
+            {
+                var caster = weaponCasterPool.Get(e);
+                GeometryGizmos.DrawBox(
+                    Box.FromCenter(caster.startPosition, new float2(1, 1)),
+                    Color.magenta, shareData.TimeDelta
+                );
+            }
+#endif
+        }
+        
+        public void Equip(int slotId, int weaponId, int level)
+        {
+            bool flag1 = weaponConfig.Find(weaponId, out WeaponConfig.WeaponData weaponData);
+            if (!flag1)
+            {
+#if DEVELOP_MODE || COMBAT_FULL_LOG
+                Debug.LogError($"Not found Weapon with id '{weaponId}'");
+#endif
+                return;
+            }
+
+            Vector2 position = shareData.LevelSpawnConfig.designConfig.LoopPoints()[slotId];
+            
+            int entity = world.NewEntity();
+            weaponCasterPool.Add(entity) = new WeaponCasterData
+            {
+                skillId = weaponData.SkillId,
+                startPosition = position,
+            };
+            statPool.Add(entity) = new StatData()
+                .Insert(StatType.Attack, new Stat(weaponData.Attack(level)))
+                .Insert(StatType.SkillReduceCooldown, new Stat(0))
+                .Insert(StatType.CriticalRate, new Stat(0))
+                .Insert(StatType.CriticalDamage, new Stat(0));
+            mapSlotEntities[slotId] = entity;
         }
     }
 }

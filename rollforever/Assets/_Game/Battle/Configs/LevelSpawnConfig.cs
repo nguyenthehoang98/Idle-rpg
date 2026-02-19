@@ -46,7 +46,7 @@ namespace _Game.Battle
 
         public static UniTask<LevelSpawnConfig> LoadSpawn(int level)
         {
-            return KitLoaded.LoadAsync<LevelSpawnConfig>($"Spawner_{level}");
+            return KitLoaded.LoadAsync<LevelSpawnConfig>($"LevelSpawner_{level}");
         }
         
         public void Disable()

@@ -2,6 +2,7 @@
 using _Game.Battle;
 using _Game.Battle.Data;
 using _Game.Configs;
+using _KIT.Utils;
 using Geometry;
 using Geometry.Primary;
 using Leopotam.EcsLite;
@@ -77,11 +78,21 @@ namespace _Game.AbilitySystem
                 healthPool, statPool, unitPool, shapePool, deadPool);
         }
 
-        public void Startup(int source, float2 startPos, int target)
+        public void Startup(int source, float2 startPos, bool isTargetValid, int target)
         {
             unitId = source;
-            UnitData targetData = unitPool.Get(target);
-            float2 targetPos = shareData.Simulator.GetAgentPosition(targetData.agentId);
+            float2 targetPos;
+            if (isTargetValid)
+            {
+                UnitData targetData = unitPool.Get(target);
+                targetPos = shareData.Simulator.GetAgentPosition(targetData.agentId);
+            }
+            else
+            {
+                targetPos = new float2(RandomUtils.Value, RandomUtils.Value);
+                targetPos = math.normalize(targetPos) * 50;
+            }
+
             trajectoryLogic.Startup(startPos, targetPos);
             stateModifierLogic.Startup(unitId);
             shapeLogic.Startup(startPos);

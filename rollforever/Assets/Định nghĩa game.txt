@@ -4,5 +4,9 @@ XX: skill
 YY: level
 
 MONSTER ID 10XX | 1001 
-10: CỐ ĐỊNH
+10-19: CỐ ĐỊNH
 XX: monster
+
+WEAPON ID 20XX | 2001
+20-29: CỐ ĐỊNH
+XX: weapon

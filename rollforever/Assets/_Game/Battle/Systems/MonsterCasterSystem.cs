@@ -12,22 +12,18 @@ namespace _Game.Battle.Systems
     {
         [EcsInject] private readonly BattleStartupShareData shareData;
 
-        private EcsPool<UnitData> unitPool;
         private EcsPool<UnitPosTempData> unitPosTempPool;
-        private EcsPool<AttackCasterData> attackCasterPool;
+        private EcsPool<MonsterCasterData> monsterCasterPool;
         private EcsFilter filter;
         
         public void Init(IEcsSystems systems)
         {
             EcsWorld world = systems.GetWorld();
-            filter = world.Filter<UnitData>()
-                .Inc<MonsterFlag>()
-                .Inc<AttackCasterData>()
+            filter = world.Filter<MonsterCasterData>()
                 .Exc<DeadFlag>()
                 .End();
-            unitPool = world.GetPool<UnitData>();
             unitPosTempPool = world.GetPool<UnitPosTempData>();
-            attackCasterPool = world.GetPool<AttackCasterData>();
+            monsterCasterPool = world.GetPool<MonsterCasterData>();
         }
 
         public void Run(IEcsSystems systems)
@@ -38,13 +34,13 @@ namespace _Game.Battle.Systems
                 if (!unitPos.isStopped)
                     continue;
                 
-                ref var attack = ref attackCasterPool.Get(e);
-                attack.elapsed += shareData.TimeDelta;
-                if (attack.elapsed >= attack.cooldown)
+                ref var caster = ref monsterCasterPool.Get(e);
+                caster.elapsed += shareData.TimeDelta;
+                if (caster.elapsed >= caster.cooldown)
                 {
-                    attack.elapsed = 0;
+                    caster.elapsed = 0;
                     /*EventBus.Instance.Publish(
-                        new CastSkillEvent(e, 1, shareData.Simulator.GetAgentPosition(unitPool.Get(e).agentId), Team.Monster)
+                        new CastSkillEvent(e, caster.skillId, shareData.Simulator.GetAgentPosition(unitPool.Get(e).agentId), Team.Monster)
                     );*/
                 }
             }

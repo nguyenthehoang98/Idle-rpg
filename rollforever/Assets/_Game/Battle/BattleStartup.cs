@@ -1,3 +1,4 @@
+using System.Linq;
 using _Game.Battle.Systems;
 using _KIT.Schedule;
 using GoodCat.EcsLite.Shared;
@@ -46,19 +47,20 @@ namespace _Game.Battle
 #if UNITY_EDITOR && (COMBAT_FULL_LOG || DEVELOP_MODE)
             gameObject.AddComponent<BattleDebugView>();
 #endif
-            
+
             await KitConfigManager.Load(new[]
             {
                 "MonsterConfig",
                 "SkillConfig",
+                "WeaponConfig",
             });
-            
+
             // todo: game loop
             gameLoop = GetComponent<GameLoop>();
             gameLoop.Pause();
 
             LevelSpawnConfig spawnConfig = await LevelSpawnConfig.LoadSpawn(1);
-            
+
             // todo: battle world
             world = new EcsWorld();
             Matrix matrix = new Matrix(100, 120, 0.5f);
@@ -73,15 +75,14 @@ namespace _Game.Battle
             debugView.InjectShareData(shareData);
             world.AddEventListener(debugView);
 #endif
-            
+
             // todo: battle systems
             BattleEcsSystems ecsSystems = new BattleEcsSystems(world);
-            
+
             gameLoop.Register(ecsSystems);
-            
+
             systems = ecsSystems;
             systems
-                .Add(new BuildPlayerSystem())
 #if UNITY_EDITOR && DEVELOP_MODE
                 .Add(new EcsSystemsDebugSystem())
                 .Add(new EcsWorldDebugSystem())
@@ -98,7 +99,15 @@ namespace _Game.Battle
             systems.InjectShared(runtimeData);
             systems.InitShared();
             systems.Init();
-            
+
+            PlayerCasterSystem playerCasterSystem =
+                systems.GetAllSystems().FirstOrDefault(system => system.GetType() == typeof(PlayerCasterSystem))
+                    as PlayerCasterSystem;
+            for (int i = 0; i < 8; i++)
+            {
+                playerCasterSystem.Equip(i, 2001, 1);
+            }
+
             Startup();
         }
 

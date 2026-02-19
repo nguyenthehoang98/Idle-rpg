@@ -6,9 +6,9 @@ namespace _Game.Battle
     {
         [SerializeField] private Transform[] children;
 
-        public Vector3[] LoopPoints()
+        public Vector2[] LoopPoints()
         {
-            Vector3[] points = new Vector3[children.Length];
+            Vector2[] points = new Vector2[children.Length];
             for (int i = 0; i < children.Length; i++)
             {
                 points[i] = children[i].position;

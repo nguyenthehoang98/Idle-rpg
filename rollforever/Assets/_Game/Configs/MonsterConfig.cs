@@ -52,7 +52,7 @@ namespace _Game.Configs
             [SerializeField] private int id;
             [SerializeField] private string name;
             [SerializeField] private string address_prefab;
-            [SerializeField] private int skill_id; // Monster mặc định kĩ năng level là 1.
+            [SerializeField] private int skill_id; 
             [SerializeField] private float move_speed;
             [SerializeField] private float attack_distance; // Phạm vi tấn công
             [SerializeField] private float base_attack_stat;
@@ -71,7 +71,6 @@ namespace _Game.Configs
             public int SkillId => skill_id;
             public float MoveSpeed => move_speed;
             public float AttackDistance => attack_distance;
-
             public float Attack(int level) => FormulaUtils.Attack(level, base_attack_stat, attack_linear, attack_rate);
             public float Defense(int level) => FormulaUtils.Defense(level, base_defense_stat, defense_linear, defense_rate);
             public float Health(int level) => FormulaUtils.Health(level, base_health_stat, health_linear, health_rate);

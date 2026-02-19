@@ -33,7 +33,7 @@ namespace _Game.Battle.Systems
         private EcsPool<UnitModifierData> modifierPool;
         private EcsPool<UnitPosTempData> unitPosTempPool;
         private EcsPool<MonsterFlag> monsterFlagPool;
-        private EcsPool<AttackCasterData> casterPool;
+        private EcsPool<MonsterCasterData> monsterCasterPool;
 
         private SkillConfig skillConfig;
         private MonsterConfig monsterConfig;
@@ -60,7 +60,7 @@ namespace _Game.Battle.Systems
             monsterFlagPool = world.GetPool<MonsterFlag>();
             healthPool = world.GetPool<HealthData>();
             modifierPool = world.GetPool<UnitModifierData>();
-            casterPool = world.GetPool<AttackCasterData>();
+            monsterCasterPool = world.GetPool<MonsterCasterData>();
 
             // todo: setup agents 
             shareData.Simulator.SetTimeStep(shareData.TimeDelta);
@@ -178,7 +178,10 @@ namespace _Game.Battle.Systems
             unitPosTempPool.Add(entity) = new UnitPosTempData { stopDistance = monsterData.AttackDistance };
             healthPool.Add(entity) = new HealthData((int)monsterData.Health(level));
             modifierPool.Add(entity) = new UnitModifierData(StatusEffect.None);
-            casterPool.Add(entity) = new AttackCasterData { cooldown = 0.5f, skillId = monsterData.SkillId };
+            monsterCasterPool.Add(entity) = new MonsterCasterData
+            {
+                skillId = monsterData.SkillId
+            };
             statPool.Add(entity) = new StatData()
                 .Insert(StatType.Attack, new Stat(monsterData.Attack(level)))
                 .Insert(StatType.Defense, new Stat(monsterData.Defense(level)))
