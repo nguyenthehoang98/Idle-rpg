@@ -34,6 +34,7 @@ namespace _Game.Battle.Systems
         private EcsPool<UnitPosTempData> unitPosTempPool;
         private EcsPool<MonsterFlag> monsterFlagPool;
         private EcsPool<MonsterCasterData> monsterCasterPool;
+        private EcsFilter monsterAliveFilter;
 
         private SkillConfig skillConfig;
         private MonsterConfig monsterConfig;
@@ -45,6 +46,7 @@ namespace _Game.Battle.Systems
         private float batchElapsed;
         private float waitElapsed;
         private bool isPaused = true;
+        private bool waitingNextWave;
 
         public void Init(IEcsSystems systems)
         {
@@ -61,6 +63,9 @@ namespace _Game.Battle.Systems
             healthPool = world.GetPool<HealthData>();
             modifierPool = world.GetPool<UnitModifierData>();
             monsterCasterPool = world.GetPool<MonsterCasterData>();
+            monsterAliveFilter = world.Filter<MonsterFlag>()
+                .Exc<DeadFlag>()
+                .End();
 
             // todo: setup agents 
             shareData.Simulator.SetTimeStep(shareData.TimeDelta);
@@ -123,7 +128,6 @@ namespace _Game.Battle.Systems
 
                     if (spawnedCount >= batch.monsters.Length || batchElapsed >= batch.duration)
                     {
-                        Debug.Log($"Spawn. Count:{spawnedCount}, Elapsed:{batchElapsed}, Time:{shareData.Time}");
                         batchIndex++;
                         spawnedCount = 0;
                         batchElapsed = 0;
@@ -139,8 +143,14 @@ namespace _Game.Battle.Systems
                     {
                         isPaused = true;
                         waveIndex++;
+                        waitingNextWave = true;
                     }
                 }
+            }
+
+            if (waitingNextWave && monsterAliveFilter.GetEntitiesCount() == 0)
+            {
+                Debug.LogError("show next wave");
             }
         }
 
