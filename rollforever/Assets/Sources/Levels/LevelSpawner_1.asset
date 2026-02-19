@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 586ceb6b2ed23db4a972de05fa7d0666, type: 3}
-  m_Name: Spawner_1
+  m_Name: LevelSpawner_1
   m_EditorClassIdentifier: 
   targetDuration: 0
+  designConfig: {fileID: 9214457234326659011, guid: 9b176cafad8baf843b40beab01850032, type: 3}
   waves:
   - power: 60
     batches:

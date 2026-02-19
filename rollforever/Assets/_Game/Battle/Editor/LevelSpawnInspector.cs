@@ -56,7 +56,8 @@ namespace _Game.Battle.Editor
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("targetDuration"));
+            EditorGUILayout.FloatField("Target duration", serializedObject.FindProperty("targetDuration").floatValue);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("designConfig"));
             EditorGUILayout.Space(10);
 
             DrawWaveSelector();

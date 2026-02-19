@@ -5,11 +5,10 @@ using _Game.Configs;
 using _KIT.Resource;
 using Cysharp.Threading.Tasks;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace _Game.Battle
 {
-    using UnityEngine;
-
     /// <summary>
     /// Điều tiết việc sinh quái vật dựa trên waves/batch/power/duration
     /// Input: số lượng waves, batch mỗi wave, power & duration mỗi batch, số enemy & rate random mỗi batch
@@ -19,22 +18,24 @@ namespace _Game.Battle
     [CreateAssetMenu(fileName = "LevelSpawnConfig", menuName = "LevelSpawnConfig")]
     public class LevelSpawnConfig : ScriptableObject
     {
-        public int targetDuration;
+        public float targetDuration;
+        public LevelDesignConfig designConfig;
         public List<WaveSpawn> waves = new List<WaveSpawn>();
 
         public void Validate()
         {
 #if DEVELOP_MODE
+            targetDuration = 0;
             MonsterConfig monsterConfig = MonsterConfig.Instance;
             SkillConfig skillConfig  = SkillConfig.Instance;
             foreach (var wave in waves)
             {
                 foreach (var batch in wave.batches)
                 {
+                    targetDuration += batch.duration;
                     foreach (var enemy in batch.enemies)
                     {
                         if (monsterConfig.Find(enemy.id, out _)) continue;
-
                         Debug.LogError($"Không tìm thấy enemy với id '{enemy.id}' ở {name}");
                     }
                 }
