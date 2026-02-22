@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace _KIT.Schedule
@@ -5,6 +6,8 @@ namespace _KIT.Schedule
     [DefaultExecutionOrder(-10000)]
     public sealed class GameLoop : MonoBehaviour, ITickSubscribe
     {
+        public event Action OnChangeScaleTime;
+        
         readonly TickSystem tickSystem = new TickSystem();
         
         [Range(2, 60), SerializeField] private int fps;
@@ -15,7 +18,11 @@ namespace _KIT.Schedule
         public void Resume() => IsPaused = false;
         public void Register(ITick module) => tickSystem.pendingAdd.Enqueue(module);
         public void UnRegister(ITick module) => tickSystem.pendingRemove.Enqueue(module);
-        public void SetTimeScale(float value) => ScaleTime = Mathf.Max(1, value);
+        public void SetTimeScale(float value)
+        {
+            ScaleTime = Mathf.Max(1, value);
+            OnChangeScaleTime?.Invoke();
+        }
         public void SetFpsRate(int rate) => FrameDeltaTime = 1f / rate;
 
         public double Time { get; private set; }

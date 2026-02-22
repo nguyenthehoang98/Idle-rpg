@@ -45,7 +45,7 @@ namespace _Game.Battle.Systems
                 float percent = healthPool.Get(e).health / healthStat.Value;
                 
                 GeometryGizmos.DrawCircle(
-                    new Circle(position, radius), unit.color, shareData.TimeDelta, percent, 12
+                    new Circle(position, radius), unit.color, shareData.GizmosTimeDelta, percent, 12
                 );
 
                 var paused = shareData.Simulator.IsAgentPaused(unit.agentId);
@@ -53,7 +53,7 @@ namespace _Game.Battle.Systems
                     continue;
 
                 GeometryGizmos.DrawCircle(
-                    new Circle(position, neighborDist), new Color(0, 1, 1, 0.05f), shareData.TimeDelta, percent, 12
+                    new Circle(position, neighborDist), new Color(0, 1, 1, 0.05f), shareData.GizmosTimeDelta, percent, 12
                 );
                 Debug.DrawRay((Vector2) position, ((Vector2) velocity).normalized * radius);
             }

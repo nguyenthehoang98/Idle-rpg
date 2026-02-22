@@ -1,4 +1,3 @@
-using System.Linq;
 using _Game.Battle.Systems;
 using _KIT.Schedule;
 using GoodCat.EcsLite.Shared;
@@ -67,8 +66,7 @@ namespace _Game.Battle
             Matrix matrix = new Matrix(100, 120, 0.5f);
             shareData = new BattleStartupShareData(
                 gameLoop,
-                new Simulator(), matrix, spawnConfig,
-                gameLoop.FrameDeltaTime
+                new Simulator(), matrix, spawnConfig
             );
             BattleStartupRuntimeData runtimeData = new BattleStartupRuntimeData();
 
@@ -128,7 +126,7 @@ namespace _Game.Battle
                 world = null;
             }
             
-            shareData.Matrix.Dispose();
+            shareData.Dispose();
         }
     }
 }

@@ -1,20 +1,31 @@
+using System;
 using _KIT.Schedule;
 using RVO;
+using Unity.Mathematics;
 
 namespace _Game.Battle
 {
-    public class BattleStartupShareData
+    public class BattleStartupShareData : IDisposable
     {
         public BattleStartupShareData(
             GameLoop gameLoop,
-            Simulator simulator, Matrix matrix, LevelSpawnConfig levelSpawnConfig,
-            float timeDelta)
+            Simulator simulator, Matrix matrix, LevelSpawnConfig levelSpawnConfig)
         {
             GameLoop = gameLoop;
             LevelSpawnConfig = levelSpawnConfig;
             Matrix = matrix;
-            TimeDelta = timeDelta;
             Simulator = simulator;
+            GizmosTimeDelta = TimeDelta = GameLoop.FrameDeltaTime * GameLoop.ScaleTime;
+            Simulator.SetTimeStep(TimeDelta);
+            Simulator.SetAgentDefaults(1f, 10, 20f, 20f, 1.5f, 5f, float2.zero);
+
+            GameLoop.OnChangeScaleTime += ChangeTimeScale;
+        }
+
+        private void ChangeTimeScale()
+        {
+            GizmosTimeDelta = TimeDelta = GameLoop.FrameDeltaTime * GameLoop.ScaleTime;
+            Simulator.SetTimeStep(TimeDelta);
         }
 
         GameLoop GameLoop { get; }
@@ -25,8 +36,16 @@ namespace _Game.Battle
         
         public Matrix Matrix { get; }
         
-        public float TimeDelta { get; }
+        public float TimeDelta { get; private set; }
+        public float GizmosTimeDelta { get; private set; }
 
         public double Time => GameLoop.Time;
+
+        public void Dispose()
+        {
+            if(GameLoop != null) GameLoop.OnChangeScaleTime -= ChangeTimeScale;
+            Simulator.Dispose();
+            Matrix.Dispose();
+        }
     }
 }

@@ -70,10 +70,6 @@ namespace _Game.Battle.Systems
                 .Exc<DeadFlag>()
                 .End();
 
-            // todo: setup agents 
-            shareData.Simulator.SetTimeStep(shareData.TimeDelta);
-            shareData.Simulator.SetAgentDefaults(1f, 10, 20f, 20f, 1.5f, 5f, float2.zero);
-
             // todo: cache spawn data
             //HashSet<MonsterId> monsters = new HashSet<MonsterId>();
             monsterConfig = KitConfigManager.Get<MonsterConfig>();
@@ -97,7 +93,6 @@ namespace _Game.Battle.Systems
             if (!isPaused && waveIndex < waves.Length)
             {
                 Wave wave = waves[waveIndex];
-                Debug.Log($"Wave index: {waveIndex}, Batch index: {batchIndex}, Length: {wave.batches.Length}");
                 if (batchIndex < wave.batches.Length)
                 {
                     waitElapsed -= dt;
