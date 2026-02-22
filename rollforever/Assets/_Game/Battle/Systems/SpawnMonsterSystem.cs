@@ -20,6 +20,7 @@ using Random = UnityEngine.Random;
 
 namespace _Game.Battle.Systems
 {
+    [Serializable]
     public class SpawnMonsterSystem : IEcsInitSystem, IEcsRunSystem
     {
         private Dictionary<int, UnitView> unitSource;
@@ -28,7 +29,6 @@ namespace _Game.Battle.Systems
         [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
 
         private EcsWorld world;
-        private IEcsSystems systems;
         private EcsPool<StatData> statPool;
         private EcsPool<HealthData> healthPool;
         private EcsPool<UnitData> unitPool;
@@ -57,7 +57,6 @@ namespace _Game.Battle.Systems
             GameObject go = await KitLoaded.LoadAsync<GameObject>("UnitView");
             unitSource[0] = go.GetComponent<UnitView>();*/
 
-            this.systems = systems;
             world = systems.GetWorld();
             statPool = world.GetPool<StatData>();
             unitPool = world.GetPool<UnitData>();
@@ -97,7 +96,8 @@ namespace _Game.Battle.Systems
             Wave[] waves = waveContainer.waves;
             if (!isPaused && waveIndex < waves.Length)
             {
-                var wave = waves[waveIndex];
+                Wave wave = waves[waveIndex];
+                Debug.Log($"Wave index: {waveIndex}, Batch index: {batchIndex}, Length: {wave.batches.Length}");
                 if (batchIndex < wave.batches.Length)
                 {
                     waitElapsed -= dt;
@@ -106,7 +106,7 @@ namespace _Game.Battle.Systems
 
                     shareData.Simulator.EnsureCompleted();
 
-                    var batch = wave.batches[batchIndex];
+                    Batch batch = wave.batches[batchIndex];
                     batchElapsed += dt;
                     spawnElapsed += dt;
 
@@ -115,8 +115,8 @@ namespace _Game.Battle.Systems
                     {
                         if (batch.monsters.Length > spawnedCount)
                         {
-                            var tuple = batch.monsters[spawnedCount];
-                            if (monsterConfig.Find(tuple.id, out var monsterData))
+                            MonsterData tuple = batch.monsters[spawnedCount];
+                            if (monsterConfig.Find(tuple.id, out MonsterConfig.MonsterData monsterData))
                             {
                                 float radius = 0.5f;
                                 SpawnEntity(monsterData, tuple.level, float2.zero, 2, radius);
@@ -155,7 +155,16 @@ namespace _Game.Battle.Systems
             if (waitingNextWave && monsterAliveFilter.GetEntitiesCount() == 0)
             {
                 waitingNextWave = false;
-                EventBus.Instance.Publish(new NextWaveEvent((EcsSystems)systems, () => isPaused = false));
+                Action onComplete = () =>
+                {
+                    batchIndex = 0;
+                    spawnedCount = 0;
+                    batchElapsed = 0;
+                    spawnElapsed = 0;
+                    waitElapsed = 0;
+                    isPaused = false;
+                };
+                EventBus.Instance.Publish(new NextWaveEvent((EcsSystems)systems, onComplete));
             }
         }
 
@@ -165,7 +174,7 @@ namespace _Game.Battle.Systems
             float2 pos = RandomPointOnCircle(center, Random.Range(20, 30));
 
             float2 goal;
-            if (RaycastToSquareBorder(pos, center, rangeLimit, out var hitPoint))
+            if (RaycastToSquareBorder(pos, center, rangeLimit, out float2 hitPoint))
             {
                 goal = hitPoint;
             }
@@ -211,7 +220,7 @@ namespace _Game.Battle.Systems
 
         static float2 RandomPointOnCircle(float2 center, float radius)
         {
-            var angle = Random.Range(0f, Mathf.PI * 2f);
+            float angle = Random.Range(0f, Mathf.PI * 2f);
             return center + new float2(
                 Mathf.Cos(angle),
                 Mathf.Sin(angle)
@@ -284,7 +293,7 @@ namespace _Game.Battle.Systems
             SkillConfig skillConfig)
         {
             Wave[] waves = new Wave[waveSpawns.Count];
-            for (var w = 0; w < waveSpawns.Count; w++)
+            for (int w = 0; w < waveSpawns.Count; w++)
             {
                 LevelSpawnConfig.WaveSpawn waveSpawn = waveSpawns[w];
                 Wave wave = new Wave();
@@ -298,7 +307,7 @@ namespace _Game.Battle.Systems
                     batch.waitTime = batchSpawn.waitTimeSpawn;
                     List<MonsterData> monsters = new List<MonsterData>();
                     int totalWeight = 0;
-                    foreach (var enemy in batchSpawn.enemies)
+                    foreach (LevelSpawnConfig.EnemySpawn enemy in batchSpawn.enemies)
                     {
                         totalWeight += enemy.weight;
                     }
@@ -310,13 +319,13 @@ namespace _Game.Battle.Systems
                         int lastPower = 0;
                         int lastLevel = 0;
                         LevelSpawnConfig.EnemySpawn selected = null;
-                        foreach (var enemy in batchSpawn.enemies)
+                        foreach (LevelSpawnConfig.EnemySpawn enemy in batchSpawn.enemies)
                         {
-                            bool flag1 = monsterConfig.Find(enemy.id, out var monsterData);
+                            bool flag1 = monsterConfig.Find(enemy.id, out MonsterConfig.MonsterData monsterData);
 #if DEVELOP_MODE || COMBAT_FULL_LOG
                             if (!flag1) Debug.LogError($"Not found enemy with id '{enemy.id}'");
 #endif
-                            bool flag2 = skillConfig.Find(monsterData.SkillId, out var skillData);
+                            bool flag2 = skillConfig.Find(monsterData.SkillId, out SkillConfig.SkillData skillData);
 #if DEVELOP_MODE || COMBAT_FULL_LOG
                             if (!flag2) Debug.LogError($"Not found skill with skill_id '{skillData.SkillId}'");
 #endif
@@ -365,20 +374,20 @@ namespace _Game.Battle.Systems
         {
 #if DEVELOP_MODE
             int totalPower = 0;
-            foreach (var waveSpawn in waveSpawns)
+            foreach (LevelSpawnConfig.WaveSpawn waveSpawn in waveSpawns)
             {
                 totalPower += waveSpawn.power;
             }
 
             int power = 0;
-            foreach (var wave in waves)
+            foreach (Wave wave in waves)
             {
-                foreach (var batch in wave.batches)
+                foreach (Batch batch in wave.batches)
                 {
-                    foreach (var monster in batch.monsters)
+                    foreach (MonsterData monster in batch.monsters)
                     {
-                        if (monsterConfig.Find(monster.id, out var monsterData) &&
-                            skillConfig.Find(monsterData.SkillId, out var skillData))
+                        if (monsterConfig.Find(monster.id, out MonsterConfig.MonsterData monsterData) &&
+                            skillConfig.Find(monsterData.SkillId, out SkillConfig.SkillData skillData))
                         {
                             power += FormulaUtils.PowerMonster(monsterData, monster.level, skillData);
                         }
@@ -389,20 +398,20 @@ namespace _Game.Battle.Systems
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < waveSpawns.Count; i++)
             {
-                var waveSpawn = waveSpawns[i];
-                var wave = waves[i];
+                LevelSpawnConfig.WaveSpawn waveSpawn = waveSpawns[i];
+                Wave wave = waves[i];
 
                 int wavePower = 0;
                 List<int> count = new List<int>();
                 List<float> interval = new List<float>();
-                foreach (var batch in wave.batches)
+                foreach (Batch batch in wave.batches)
                 {
                     count.Add(batch.monsters.Length);
                     interval.Add((float)Math.Round(batch.interval, 3));
-                    foreach (var tuple in batch.monsters)
+                    foreach (MonsterData tuple in batch.monsters)
                     {
-                        if (monsterConfig.Find(tuple.id, out var monsterData) &&
-                            skillConfig.Find(monsterData.SkillId, out var skillData))
+                        if (monsterConfig.Find(tuple.id, out MonsterConfig.MonsterData monsterData) &&
+                            skillConfig.Find(monsterData.SkillId, out SkillConfig.SkillData skillData))
                         {
                             wavePower += FormulaUtils.PowerMonster(monsterData, tuple.level, skillData);
                         }

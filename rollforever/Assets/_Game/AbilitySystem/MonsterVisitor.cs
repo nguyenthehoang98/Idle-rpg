@@ -97,6 +97,15 @@ namespace _Game.AbilitySystem
             {
                 var targetStat = statPool.Get(entity);
                 var sourceStat = statPool.Get(sourceEntity);
+                
+                bool findAttackPercent = sourceStat.TryGetValue(StatType.AttackPercent, out Stat attackPercentStat);
+                if (!findAttackPercent)
+                {
+#if DEVELOP_MODE || COMBAT_FULL_LOG
+                    Debug.LogError("Không tìm thấy AttackPercent: " + sourceEntity);
+#endif
+                    return;
+                }
 
                 bool findAttack = sourceStat.TryGetValue(StatType.Attack, out Stat attackStat);
                 if (!findAttack)
@@ -135,7 +144,8 @@ namespace _Game.AbilitySystem
                 }
 
                 int output = FormulaUtils.Output(
-                    attackStat.Value, skillData, criticalRateStat.Value, criticalDamageStat.Value,
+                    attackStat.Value * (1 + attackPercentStat.Value), skillData, 
+                    criticalRateStat.Value, criticalDamageStat.Value,
                     defenseStat.Value
                 );
 

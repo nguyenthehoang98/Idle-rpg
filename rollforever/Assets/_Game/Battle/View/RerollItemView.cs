@@ -10,7 +10,9 @@ public class RerollItemView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI text;
 
     private static bool clickable = false;
-    private event Action OnSelect;
+
+    private BuffConfig.BuffData buffData;
+    private event Action<BuffConfig.BuffData> OnSelect;
     
     void Awake()
     {
@@ -18,15 +20,16 @@ public class RerollItemView : MonoBehaviour
         {
             if (clickable)
             {
-                if (OnSelect != null) OnSelect.Invoke();
+                if (OnSelect != null) OnSelect.Invoke(buffData);
                 OnSelect = null;
                 clickable = false;
             }
         });
     }
 
-    public void Show(BuffConfig.BuffData buffData, Action onSelect)
+    public void Show(BuffConfig.BuffData buffData, Action<BuffConfig.BuffData> onSelect)
     {
+        this.buffData = buffData;
         OnSelect = onSelect;
         text.SetText($"[{buffData.StatType}] up {buffData.Value}");
         clickable = true;

@@ -24,7 +24,7 @@ namespace _Game.Battle.Systems
         private int currentPoint;
         private float elapsed;
         private float duration = 1f;
-        
+
         private EcsPool<StatData> statPool;
         private EcsPool<WeaponCasterData> weaponCasterPool;
         private EcsFilter weaponFilter;
@@ -115,10 +115,21 @@ namespace _Game.Battle.Systems
             statPool.Add(entity) = new StatData()
                 .Insert(StatType.Attack, new Stat(weaponData.Attack(level)))
                 .Insert(StatType.CriticalRate, new Stat(0))
-                .Insert(StatType.CriticalDamage, new Stat(0));
+                .Insert(StatType.CriticalDamage, new Stat(0))
+                .Insert(StatType.AttackPercent, new Stat(0));
             
             mapSlotEntities[slotId] = entity;
             EventBus.Instance.Publish(new EquipEquipmentEvent(slotId, weaponId, level));
+        }
+
+        // Cần xóa stat cũ -> stat mới.
+        public void UpgradeStat(List<BuffConfig.BuffData> buffDatas)
+        {
+            foreach (var e in weaponFilter)
+            {
+                ref var stat = ref statPool.Get(e);
+                stat.ReplaceModifier(buffDatas);
+            }
         }
     }
 }

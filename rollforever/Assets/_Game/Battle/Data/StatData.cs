@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using _Game.Configs;
 using Unity.Collections;
 
 namespace _Game.Battle.Data
@@ -5,6 +7,7 @@ namespace _Game.Battle.Data
     public struct StatData
     {
         NativeHashMap<int, Stat> map;
+        NativeHashMap<int, StatModifier> modifiers;
 
         public StatData Insert(StatType type, Stat stat)
         {
@@ -33,6 +36,30 @@ namespace _Game.Battle.Data
             {
                 stat.RemoveModifier(modifier);
                 map[(int)type] = stat;
+            }
+        }
+
+        public void ReplaceModifier(List<BuffConfig.BuffData> buffDatas)
+        {
+            if (modifiers.IsCreated)
+            {
+                foreach (var m in modifiers)
+                {
+                    RemoveModifier((StatType)m.Key, m.Value);
+                }
+            }
+            else
+            {
+                modifiers = new NativeHashMap<int, StatModifier>(buffDatas.Count, Allocator.Persistent);
+            }
+
+            modifiers.Clear();
+
+            foreach (var buffData in buffDatas)
+            {
+                var modifier = new StatModifier(StatModifierType.Additive, buffData.Value);
+                modifiers.Add((int)buffData.StatType, modifier);
+                AddModifier(buffData.StatType, modifier);
             }
         }
     }

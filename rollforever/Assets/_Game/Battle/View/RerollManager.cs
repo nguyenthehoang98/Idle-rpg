@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using _Game.Battle;
 using _Game.Battle.Events;
 using _Game.Battle.Systems;
 using _Game.Configs;
@@ -15,6 +17,7 @@ public class RerollManager : MonoBehaviour
     [SerializeField] private GameLoop gameLoop;
     [SerializeField] private RerollItemView[] itemsView;
 
+    private Dictionary<StatType, BuffConfig.BuffData> allValue = new Dictionary<StatType, BuffConfig.BuffData>();
     private Dictionary<int, int> mapSlotEquipment = new Dictionary<int, int>();
     private BuffConfig buffConfig;
 
@@ -41,15 +44,26 @@ public class RerollManager : MonoBehaviour
         AbilitySystem system = e.Systems.GetSystem<AbilitySystem>();
         system.ClearAll();
 
-        Action onComplete = () =>
+        Action<BuffConfig.BuffData> onComplete = (BuffConfig.BuffData buffData) =>
         {
+            allValue[buffData.StatType] = buffData;
+            List<BuffConfig.BuffData> buffDatas = allValue.Values.ToList();
+            e.Systems.GetSystem<PlayerCasterSystem>().UpgradeStat(buffDatas);
+            
             e.OnCompleted();
             container.SetActive(false);
+            
+            gameLoop.Resume();
         };
         ShowReroll(1, onComplete);
     }
 
-    private void ShowReroll(int buffLevel, Action onSelect)
+    private void ShowEquipment()
+    {
+    }
+
+    // Nâng cấp chỉ số các slot. 
+    private void ShowReroll(int buffLevel, Action<BuffConfig.BuffData> onSelect)
     {
         var list = GetAllBuffs(buffLevel);
         CollectionUtils.Shuffle(ref list);
