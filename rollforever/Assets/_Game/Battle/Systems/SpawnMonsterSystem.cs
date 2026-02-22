@@ -202,7 +202,6 @@ namespace _Game.Battle.Systems
                 .Insert(StatType.Defense, new Stat(monsterData.Defense(level)))
                 .Insert(StatType.MaxHealth, new Stat(monsterData.Health(level)))
                 .Insert(StatType.MoveSpeed, new Stat(monsterData.MoveSpeed))
-                .Insert(StatType.SkillReduceCooldown, new Stat(0))
                 .Insert(StatType.CriticalRate, new Stat(0))
                 .Insert(StatType.CriticalDamage, new Stat(0));
             

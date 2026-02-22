@@ -114,7 +114,6 @@ namespace _Game.Battle.Systems
             };
             statPool.Add(entity) = new StatData()
                 .Insert(StatType.Attack, new Stat(weaponData.Attack(level)))
-                .Insert(StatType.SkillReduceCooldown, new Stat(0))
                 .Insert(StatType.CriticalRate, new Stat(0))
                 .Insert(StatType.CriticalDamage, new Stat(0));
             mapSlotEntities[slotId] = entity;

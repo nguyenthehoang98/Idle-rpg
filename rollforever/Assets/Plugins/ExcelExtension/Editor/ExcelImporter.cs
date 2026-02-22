@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEditor;
 using System;
+using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -154,32 +155,47 @@ public class ExcelImporter : AssetPostprocessor
 					return cell.StringCellValue;
 				}
 
-				if (fieldInfo.FieldType.IsArray)
+				if (fieldInfo.FieldType.IsArray || 
+				    (fieldInfo.FieldType.IsGenericType && fieldInfo.FieldType.GetGenericTypeDefinition() == typeof(List<>)))
 				{
-					string[] elements = cell.StringCellValue.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries)
-						.Where(s => !string.IsNullOrWhiteSpace(s))
+					string raw = cell.StringCellValue;
+
+					string[] elements = raw.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+						.Select(e => e.Trim())
+						.Where(e => !string.IsNullOrEmpty(e))
 						.ToArray();
 
-					Type elementType = fieldInfo.FieldType.GetElementType();
-					if (elementType == typeof(string))
-						return elements.Where(element => !string.IsNullOrEmpty(element)).ToArray();
-					if (elementType == typeof(int))
-						return Array.ConvertAll(cell.StringCellValue.Split(','), int.Parse);
-					if (elementType == typeof(float))
-						return Array.ConvertAll(cell.StringCellValue.Split(','), float.Parse);
+					Type elementType = fieldInfo.FieldType.IsArray
+						? fieldInfo.FieldType.GetElementType()
+						: fieldInfo.FieldType.GetGenericArguments()[0];
 
-					object[] array = new object[elements.Length];
-					for (var i = 0; i < array.Length; i++)
+					// ===== Primitive =====
+					if (elementType == typeof(string))
 					{
-						array[i] = JsonUtility.FromJson(elements[i], fieldInfo.FieldType);
+						return CreateCollection(fieldInfo.FieldType, elements);
 					}
 
-					return array;
-				}
+					if (elementType == typeof(int))
+					{
+						var values = elements.Select(int.Parse).ToArray();
+						return CreateCollection(fieldInfo.FieldType, values);
+					}
 
-				if (fieldInfo.FieldType.IsGenericType)
-				{
-					Debug.LogError("Chưa hỗ trợ List");
+					if (elementType == typeof(float))
+					{
+						var values = elements.Select(float.Parse).ToArray();
+						return CreateCollection(fieldInfo.FieldType, values);
+					}
+
+					// ===== Object / Struct =====
+					Array array = Array.CreateInstance(elementType, elements.Length);
+
+					for (int i = 0; i < elements.Length; i++)
+					{
+						array.SetValue(JsonUtility.FromJson(elements[i], elementType), i);
+					}
+
+					return CreateCollection(fieldInfo.FieldType, array);
 				}
 
 				if (cell.CellType == CellType.Formula)
@@ -209,6 +225,23 @@ public class ExcelImporter : AssetPostprocessor
 
 				return null;
 		}
+	}
+	
+	static object CreateCollection(Type collectionType, Array sourceArray)
+	{
+		if (collectionType.IsArray)
+			return sourceArray;
+
+		if (collectionType.IsGenericType &&
+		    collectionType.GetGenericTypeDefinition() == typeof(List<>))
+		{
+			var list = (IList)Activator.CreateInstance(collectionType);
+			foreach (var item in sourceArray)
+				list.Add(item);
+			return list;
+		}
+
+		throw new NotSupportedException($"Unsupported collection type: {collectionType}");
 	}
 
 	static object CreateEntityFromRow(IRow row, List<string> columnNames, Type entityType, string sheetName)

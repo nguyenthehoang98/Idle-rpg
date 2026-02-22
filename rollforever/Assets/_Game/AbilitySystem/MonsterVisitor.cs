@@ -1,6 +1,8 @@
 using _Game.Battle;
 using _Game.Battle.Data;
+using _Game.Battle.Events;
 using _Game.Configs;
+using _KIT.Event;
 using Leopotam.EcsLite;
 using RVO;
 using Unity.Collections;
@@ -139,6 +141,9 @@ namespace _Game.AbilitySystem
 
                 ref var health = ref healthPool.Get(entity);
                 health.health -= output;
+                
+                EventBus.Instance.Publish(new DamageMonsterEvent(sourceEntity, output, agentPos));
+                
                 if (health.health <= 0)
                 {
                     if (!deadPool.Has(entity)) deadPool.Add(entity);

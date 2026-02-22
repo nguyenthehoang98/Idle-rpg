@@ -48,10 +48,6 @@ namespace _Game.Battle
 
         private async void Start()
         {
-#if UNITY_EDITOR && (COMBAT_FULL_LOG || DEVELOP_MODE)
-            gameObject.AddComponent<BattleDebugView>();
-#endif
-
             await KitConfigManager.Load(new[]
             {
                 "MonsterConfig",
@@ -74,11 +70,6 @@ namespace _Game.Battle
                 gameLoop.FrameDeltaTime
             );
             BattleStartupRuntimeData runtimeData = new BattleStartupRuntimeData();
-#if UNITY_EDITOR && (COMBAT_FULL_LOG || DEVELOP_MODE)
-            BattleDebugView debugView = gameObject.GetComponent<BattleDebugView>();
-            debugView.InjectShareData(shareData);
-            world.AddEventListener(debugView);
-#endif
 
             // todo: battle systems
             BattleEcsSystems ecsSystems = new BattleEcsSystems(world);

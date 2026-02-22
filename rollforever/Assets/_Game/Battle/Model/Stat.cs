@@ -58,9 +58,17 @@ namespace _Game.Battle
 
     public enum StatType
     {
-        Attack, Defense, MaxHealth,
-        SkillReduceCooldown, 
-        CriticalRate, CriticalDamage,
-        MoveSpeed,
+        Attack, // chỉ số tấn công 
+        Defense, // chỉ số phòng thủ
+        MaxHealth, // chỉ số máu
+        CriticalRate, // chỉ số khả năng gây chí mạng
+        CriticalDamage, // chỉ số tăng sát thương khi chi mạng
+        MoveSpeed, // tốc độ di chuyển của monster
+        AttackPercent, // hệ số tăng thêm chỉ số tấn công (nhân với atk cuối)
+        MaxHealthPercent, // hệ số tăng thêm chỉ số máu (nhân với maxHealth cuối)
+        DamageAreaPercent, // phạm vi gây sát thương
+        Bounce, // số lần nảy
+        EffectDuration, // thời gian hiệu ứng
+        EffectDamagePercent, // tỉ lệ sát thương với 1 số sát thương nhất định: độc, cháy...
     }
 }

@@ -10,3 +10,19 @@ XX: monster
 WEAPON ID 20XX | 2001
 20-29: CỐ ĐỊNH
 XX: weapon
+
+BUFF ID 3AXX
+A: LEVEL 1->5
+MAX MỖI TRANG BỊ 5 LEVEL
+CHUNG: 300101 : 
+    - TĂNG ATK: 10%, 15%, 25%, 30%, 40%
+    - TĂNG CRITICAL RATE: 5%, 10%, 15%, 20%, 25%
+    - TĂNG CRITICAL DAMAGE 
+    - TĂNG PHẠM VI SÁT THƯƠNG
+    - LỢI TỨC COI 
+RIÊNG: 310101 :
+    - TĂNG SỐ ĐẠN
+    - TĂNG SỐ LẦN NẢY
+    - TĂNG THỜI GIAN HIỆU LỰC
+    - TĂNG HIỆU ỨNG DMG: LỬA, BĂNG, ...
+    - TĂNG COIN RƠI
