@@ -116,7 +116,9 @@ namespace _Game.Battle.Systems
                 .Insert(StatType.Attack, new Stat(weaponData.Attack(level)))
                 .Insert(StatType.CriticalRate, new Stat(0))
                 .Insert(StatType.CriticalDamage, new Stat(0));
+            
             mapSlotEntities[slotId] = entity;
+            EventBus.Instance.Publish(new EquipEquipmentEvent(slotId, weaponId, level));
         }
     }
 }

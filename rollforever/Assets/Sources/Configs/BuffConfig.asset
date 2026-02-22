@@ -40,3 +40,53 @@ MonoBehaviour:
     statType: 6
     buffValue: 0.35
     skillIds: ffffffff
+  - buffId: 3102
+    buffLevel: 1
+    statType: 3
+    buffValue: 0.05
+    skillIds: ffffffff
+  - buffId: 3202
+    buffLevel: 2
+    statType: 3
+    buffValue: 0.1
+    skillIds: ffffffff
+  - buffId: 3302
+    buffLevel: 3
+    statType: 3
+    buffValue: 0.15
+    skillIds: ffffffff
+  - buffId: 3402
+    buffLevel: 4
+    statType: 3
+    buffValue: 0.2
+    skillIds: ffffffff
+  - buffId: 3502
+    buffLevel: 5
+    statType: 3
+    buffValue: 0.25
+    skillIds: ffffffff
+  - buffId: 3103
+    buffLevel: 1
+    statType: 4
+    buffValue: 0.05
+    skillIds: ffffffff
+  - buffId: 3203
+    buffLevel: 2
+    statType: 4
+    buffValue: 0.1
+    skillIds: ffffffff
+  - buffId: 3303
+    buffLevel: 3
+    statType: 4
+    buffValue: 0.15
+    skillIds: ffffffff
+  - buffId: 3403
+    buffLevel: 4
+    statType: 4
+    buffValue: 0.2
+    skillIds: ffffffff
+  - buffId: 3503
+    buffLevel: 5
+    statType: 4
+    buffValue: 0.25
+    skillIds: ffffffff

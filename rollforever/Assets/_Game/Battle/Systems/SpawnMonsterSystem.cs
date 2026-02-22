@@ -155,7 +155,7 @@ namespace _Game.Battle.Systems
             if (waitingNextWave && monsterAliveFilter.GetEntitiesCount() == 0)
             {
                 waitingNextWave = false;
-                EventBus.Instance.Publish(new NextWaveEvent(systems, () => isPaused = false));
+                EventBus.Instance.Publish(new NextWaveEvent((EcsSystems)systems, () => isPaused = false));
             }
         }
 

@@ -117,6 +117,16 @@ namespace Leopotam.EcsLite {
             return _allSystems;
         }
 
+        public T GetSystem<T>() where T : class, IEcsSystem
+        {
+            foreach (var system in _allSystems)
+            {
+                if (system is T tSystem) return tSystem;
+            }
+
+            return null;
+        }
+
         public virtual void Init () {
 #if DEBUG && !LEOECSLITE_NO_SANITIZE_CHECKS
             if (_inited) { throw new System.Exception ("Already initialized."); }

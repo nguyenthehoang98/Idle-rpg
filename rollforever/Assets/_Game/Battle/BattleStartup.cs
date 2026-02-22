@@ -53,6 +53,7 @@ namespace _Game.Battle
                 "MonsterConfig",
                 "SkillConfig",
                 "WeaponConfig",
+                "BuffConfig",
             });
 
             // todo: game loop
@@ -95,9 +96,7 @@ namespace _Game.Battle
             systems.InitShared();
             systems.Init();
 
-            PlayerCasterSystem playerCasterSystem =
-                systems.GetAllSystems().FirstOrDefault(system => system.GetType() == typeof(PlayerCasterSystem))
-                    as PlayerCasterSystem;
+            PlayerCasterSystem playerCasterSystem = systems.GetSystem<PlayerCasterSystem>();
             for (int i = 0; i < 8; i++)
             {
                 playerCasterSystem.Equip(i, 2001, 1);
