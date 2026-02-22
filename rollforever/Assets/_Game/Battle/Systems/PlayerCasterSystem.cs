@@ -68,7 +68,7 @@ namespace _Game.Battle.Systems
 #if UNITY_EDITOR && (DEVELOP_MODE || COMBAT_FULL_LOG)
                     GeometryGizmos.DrawObb(
                         new OBB(caster.startPosition, new float2(0.4f, 0.4f), new float2(1, 0), new float2(0, 1)),
-                        Color.red, shareData.GizmosTimeDelta
+                        Color.red, shareData.TimeDelta
                     );
 #endif
                 }
@@ -77,7 +77,7 @@ namespace _Game.Battle.Systems
 #if UNITY_EDITOR && (DEVELOP_MODE || COMBAT_FULL_LOG)
             GeometryGizmos.DrawCircle(
                 new Circle(position, 0.45f),
-                Color.yellow, shareData.GizmosTimeDelta
+                Color.yellow, shareData.TimeDelta
             );
 #endif
             
@@ -87,7 +87,7 @@ namespace _Game.Battle.Systems
                 var caster = weaponCasterPool.Get(e);
                 GeometryGizmos.DrawBox(
                     Box.FromCenter(caster.startPosition, new float2(1, 1)),
-                    Color.magenta, shareData.GizmosTimeDelta
+                    Color.magenta, shareData.TimeDelta
                 );
             }
 #endif

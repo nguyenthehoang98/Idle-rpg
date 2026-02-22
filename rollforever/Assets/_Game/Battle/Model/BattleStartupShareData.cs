@@ -15,17 +15,9 @@ namespace _Game.Battle
             LevelSpawnConfig = levelSpawnConfig;
             Matrix = matrix;
             Simulator = simulator;
-            GizmosTimeDelta = TimeDelta = GameLoop.FrameDeltaTime * GameLoop.ScaleTime;
+            TimeDelta = GameLoop.FrameDeltaTime;
             Simulator.SetTimeStep(TimeDelta);
             Simulator.SetAgentDefaults(1f, 10, 20f, 20f, 1.5f, 5f, float2.zero);
-
-            GameLoop.OnChangeScaleTime += ChangeTimeScale;
-        }
-
-        private void ChangeTimeScale()
-        {
-            GizmosTimeDelta = TimeDelta = GameLoop.FrameDeltaTime * GameLoop.ScaleTime;
-            Simulator.SetTimeStep(TimeDelta);
         }
 
         GameLoop GameLoop { get; }
@@ -37,13 +29,11 @@ namespace _Game.Battle
         public Matrix Matrix { get; }
         
         public float TimeDelta { get; private set; }
-        public float GizmosTimeDelta { get; private set; }
 
         public double Time => GameLoop.Time;
 
         public void Dispose()
         {
-            if(GameLoop != null) GameLoop.OnChangeScaleTime -= ChangeTimeScale;
             Simulator.Dispose();
             Matrix.Dispose();
         }

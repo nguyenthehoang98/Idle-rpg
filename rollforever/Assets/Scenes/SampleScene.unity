@@ -1215,8 +1215,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fps: 20
-  speed: 1
-  scaleTime: 2
+  speed: 2
 --- !u!4 &739745918
 Transform:
   m_ObjectHideFlags: 0
