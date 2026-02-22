@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Skill_20101
   m_EditorClassIdentifier: 
   core:
-    lifeTime: 1
+    lifeTime: 2
     bulletPrefab: {fileID: 0}
     muzzleOffsetPosition: {x: 0, y: 0}
     animationName: 0
@@ -62,7 +62,7 @@ MonoBehaviour:
     path: {fileID: 0}
     velocity:
       acceleration: 0
-      speed: 15
+      speed: 20
   stateModifier:
     type: 0
     group: 0
