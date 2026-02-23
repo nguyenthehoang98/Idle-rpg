@@ -16,13 +16,5 @@ namespace _Game.Battle.Configs
 
             return points;
         }
-
-        private void OnDrawGizmos()
-        {
-            foreach (var child in children)
-            {
-                Gizmos.DrawCube(child.position, Vector3.one);
-            }
-        }
     }
 }

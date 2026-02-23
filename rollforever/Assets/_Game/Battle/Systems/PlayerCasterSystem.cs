@@ -6,6 +6,8 @@ using _Game.Battle.Model;
 using _Game.Scripts.Configs;
 using _KIT.Config;
 using _KIT.Event;
+using _KIT.Pool;
+using _KIT.Resource;
 using Geometry;
 using Geometry.Primary;
 using GoodCat.EcsLite.Shared;
@@ -31,7 +33,9 @@ namespace _Game.Battle.Systems
         private EcsFilter weaponFilter;
         private EcsWorld world;
 
-        public void Init(IEcsSystems systems)
+        private Transform playerInstance;
+
+        public async void Init(IEcsSystems systems)
         {
             world = systems.GetWorld();
             weaponFilter = world.Filter<WeaponCasterData>()
@@ -41,6 +45,13 @@ namespace _Game.Battle.Systems
             
             weaponConfig = KitConfigManager.Get<WeaponConfig>();
             points = shareData.LevelSpawnConfig.designConfig.LoopPoints();
+
+            Object.Instantiate(shareData.LevelSpawnConfig.designConfig)
+                .transform.position = Vector3.zero;
+
+            GameObject go = await KitLoaded.LoadAsync<GameObject>("Player");
+            playerInstance = Object.Instantiate(go).transform;
+            playerInstance.position = new Vector3(points[0].x, points[0].y);
         }
 
         public void Run(IEcsSystems systems)
@@ -54,6 +65,9 @@ namespace _Game.Battle.Systems
             }
 
             Vector2 position = Vector2.Lerp(cur, target, elapsed / duration);
+            
+            playerInstance.position = position;
+            
             if (elapsed >= duration)
             {
                 currentPoint++;
