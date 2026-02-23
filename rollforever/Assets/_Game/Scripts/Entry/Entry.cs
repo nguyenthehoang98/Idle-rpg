@@ -1,3 +1,4 @@
+using System;
 using _KIT.Config;
 using _KIT.Utils;
 using UnityEngine;
@@ -13,6 +14,8 @@ namespace _Game.Scripts.Entry
     {
         private float elapsed = 1;
         private bool isLoadingScene = false;
+        
+        [SerializeField] private GameObject container;
         
         protected override void OnNewGame()
         {
@@ -33,6 +36,8 @@ namespace _Game.Scripts.Entry
                 "WeaponConfig",
                 "BuffConfig",
             });
+
+            ChangeSceneAsync("GameplayScene");
             
             isLoadingScene = true;
         }
@@ -44,9 +49,17 @@ namespace _Game.Scripts.Entry
                 elapsed -= Time.deltaTime;
                 if (elapsed <= 0)
                 {
-                    SceneManager.LoadScene("GameplayScene");
+                    StopChangeScene();
                     isLoadingScene = false;
                 }
+            }
+        }
+
+        public override void CloseLoadingScene()
+        {
+            if (container != null && container.activeInHierarchy)
+            {
+                container.gameObject.SetActive(false);
             }
         }
 

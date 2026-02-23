@@ -80,13 +80,13 @@ namespace _KIT.Utils
         public virtual void ChangeSceneAsync(string sceneName)
         {
             if (isLoading) return;
-            
+
             isLoading = true;
             asyncOperation = SceneManager.LoadSceneAsync(sceneName);
             asyncOperation.allowSceneActivation = false;
         }
 
-        public virtual void ForceCloseChangeScene(Action onComplete)
+        public virtual void StopChangeScene()
         {
             if (!isLoading || asyncOperation == null)
                 return;
@@ -94,10 +94,13 @@ namespace _KIT.Utils
             asyncOperation.allowSceneActivation = true;
             asyncOperation.completed += _ =>
             {
-                onComplete?.Invoke();
                 asyncOperation = null;
                 isLoading = false;
             };
+        }
+
+        public virtual void CloseLoadingScene()
+        {
         }
     }
 }

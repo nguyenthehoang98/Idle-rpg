@@ -1,13 +1,17 @@
 using _Game.Battle.Checker;
 using _Game.Battle.Configs;
+using _Game.Battle.Events;
 using _Game.Battle.Model;
 using _Game.Battle.Systems;
 using _KIT.Config;
+using _KIT.Event;
 using _KIT.Schedule;
+using _KIT.Utils;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.UnityEditor;
 using RVO;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _Game.Battle
@@ -85,9 +89,10 @@ namespace _Game.Battle
             systems.InjectShared(runtimeData);
             systems.InitShared();
             systems.Init();
+            
+            EventBus.Instance.Publish(new OpenEquipmentSelectionEvent(0, 4.5f, new float2(0, -1)));
 
-            PlayerCasterSystem playerCasterSystem = systems.GetSystem<PlayerCasterSystem>();
-            playerCasterSystem.SetActivePlayer(false);
+            this.WaitNextFrame(KitEntryScene.Instance.CloseLoadingScene);
         }
 
         private void OnDestroy()
