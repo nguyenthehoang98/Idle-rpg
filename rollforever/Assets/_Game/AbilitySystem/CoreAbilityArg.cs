@@ -1,5 +1,6 @@
 using System;
 using _Game.Battle.View;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _Game.AbilitySystem
@@ -12,6 +13,8 @@ namespace _Game.AbilitySystem
         public Vector2 muzzleOffsetPosition;
         public AnimationName animationName;
         public FindTargetType findTarget;
+        public bool isRequireTarget;
+        public float maxDistanceFindTarget;
         public int maxCollision;
         public bool shouldResetCollision;
         public float resetCollisionInterval;

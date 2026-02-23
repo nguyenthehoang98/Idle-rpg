@@ -92,14 +92,20 @@ namespace _Game.Battle.Systems
                 if (findTargets.TryGetValue(ability.AbilityData.core.findTarget, out var findTarget))
                 {
                     EcsFilter filter = e.Team == Team.Player ? monsterFilter : playerFilter;
-                    bool found = findTarget.Find(e.StartPosition, filter, out int target);
-                    
-                    AbilityLogic abilityInstance = ability.CreateInstance(e.Source, e.Team);
-                    abilityInstance.Startup(e.Source, e.StartPosition, found, target);
-                    additions.Enqueue(abilityInstance);
+                    bool found = findTarget.Find(e.StartPosition,
+                        ability.AbilityData.core.maxDistanceFindTarget,
+                        filter, out int target
+                    );
+
+                    if (found || !ability.AbilityData.core.isRequireTarget)
+                    {
+                        AbilityLogic abilityInstance = ability.CreateInstance(e.Source, e.Team);
+                        abilityInstance.Startup(e.Source, e.StartPosition, found, target);
+                        additions.Enqueue(abilityInstance);
 #if UNITY_EDITOR && (COMBAT_FULL_LOG || DEVELOP_MODE)
-                    AbilityDebugView.Create(abilityInstance);
-#endif
+                        AbilityDebugView.Create(abilityInstance);
+#endif                        
+                    }
                 }
                 else
                 {

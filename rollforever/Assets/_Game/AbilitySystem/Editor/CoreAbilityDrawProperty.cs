@@ -18,6 +18,8 @@ namespace _Game.AbilitySystem.Editor
             EditorGUILayout.PropertyField(property.FindPropertyRelative("muzzleOffsetPosition"));
             EditorGUILayout.PropertyField(property.FindPropertyRelative("animationName"));
             EditorGUILayout.PropertyField(property.FindPropertyRelative("findTarget"));
+            EditorGUILayout.PropertyField(property.FindPropertyRelative("isRequireTarget"));
+            EditorGUILayout.PropertyField(property.FindPropertyRelative("maxDistanceFindTarget"));
             EditorGUILayout.PropertyField(property.FindPropertyRelative("maxCollision"));
             EditorGUILayout.PropertyField(property.FindPropertyRelative("shouldResetCollision"));
             if(property.FindPropertyRelative("shouldResetCollision").boolValue)    
