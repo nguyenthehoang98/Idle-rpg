@@ -5,6 +5,7 @@ using _Game.Battle.Events;
 using _Game.Configs;
 using _KIT.Config;
 using _KIT.Event;
+using _KIT.Pool;
 using _KIT.Resource;
 using _KIT.Utils;
 using Cysharp.Threading.Tasks;
@@ -202,6 +203,11 @@ namespace _Game.Battle.Systems
                 dict[abilityId] = new AbilityLogic(abilityData, skillData, 0, Team.Player, shareData, runtimeData,
                     unitPool, shapePool, deadPool, healthPool, statPool, modifierPool, unitPosTempPool, playerFilter
                 );
+
+                if (abilityData.core.bulletPrefab != null)
+                {
+                    KitPool.RegisterPool(abilityData.core.bulletPrefab.gameObject, true);
+                }
             }
 
             return dict;

@@ -1,4 +1,5 @@
 using System;
+using _Game.Battle.View;
 using UnityEngine;
 
 namespace _Game.AbilitySystem
@@ -7,7 +8,7 @@ namespace _Game.AbilitySystem
     public struct CoreAbilityArg
     {
         public float lifeTime;
-        public GameObject bulletPrefab;
+        public BulletView bulletPrefab;
         public Vector2 muzzleOffsetPosition;
         public AnimationName animationName;
         public FindTargetType findTarget;

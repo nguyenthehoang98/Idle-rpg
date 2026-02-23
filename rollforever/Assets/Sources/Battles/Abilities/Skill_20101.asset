@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   core:
     lifeTime: 2
-    bulletPrefab: {fileID: 0}
+    bulletPrefab: {fileID: 7537890236477739534, guid: 608432944272fc547adb39d2c4af0e0a, type: 3}
     muzzleOffsetPosition: {x: 0, y: 0}
     animationName: 0
     findTarget: 0

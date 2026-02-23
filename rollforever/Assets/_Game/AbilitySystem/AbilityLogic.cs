@@ -1,7 +1,9 @@
 ﻿using System;
 using _Game.Battle;
 using _Game.Battle.Data;
+using _Game.Battle.View;
 using _Game.Configs;
+using _KIT.Pool;
 using _KIT.Utils;
 using Geometry;
 using Geometry.Primary;
@@ -33,7 +35,9 @@ namespace _Game.AbilitySystem
         private readonly StateModifierLogic stateModifierLogic;
         private readonly TrajectoryLogic trajectoryLogic;
         private readonly float lifeTime;
+        private readonly BulletView bulletPrefab;
         // runtimes
+        private BulletView bulletInstance;
         private float2 prevPosition;
         private Team sourceTeam;
         private int unitId;
@@ -51,6 +55,7 @@ namespace _Game.AbilitySystem
             this.SkillData = skillData;
             this.AbilityData = abilityData;
             this.lifeTime = abilityData.core.lifeTime;
+            this.bulletPrefab = abilityData.core.bulletPrefab;
             
             this.shareData = shareData;
             this.statPool = statPool;
@@ -96,12 +101,23 @@ namespace _Game.AbilitySystem
             trajectoryLogic.Startup(startPos, targetPos);
             stateModifierLogic.Startup(unitId);
             shapeLogic.Startup(startPos);
+
+            if (bulletPrefab != null)
+            {
+                bulletInstance = KitPool.Instantiate(bulletPrefab);
+                bulletInstance.Init(startPos, shareData);
+            }
         }
 
         public void Update(float deltaTime)
         {
             elapsed += deltaTime;
             float2 center = trajectoryLogic.Update(deltaTime);
+
+            if (bulletInstance != null)
+            {
+                bulletInstance.UpdatePosition(center);
+            }
 
             // todo: pre update
             shapeLogic.PreExecute(deltaTime);
@@ -190,6 +206,12 @@ namespace _Game.AbilitySystem
         
         public void Shutdown()
         {
+            if (bulletInstance != null)
+            {
+                KitPool.Destroy(bulletInstance.gameObject);
+                bulletInstance = null;
+            }
+            
             shapeLogic.Shutdown();
             stateModifierLogic.Shutdown();
             trajectoryLogic.Shutdown();
