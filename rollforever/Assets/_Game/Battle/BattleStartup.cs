@@ -47,14 +47,6 @@ namespace _Game.Battle
 
         private async void Start()
         {
-            await KitConfigManager.Load(new[]
-            {
-                "MonsterConfig",
-                "SkillConfig",
-                "WeaponConfig",
-                "BuffConfig",
-            });
-
             // todo: game loop
             gameLoop = GetComponent<GameLoop>();
             gameLoop.Pause();

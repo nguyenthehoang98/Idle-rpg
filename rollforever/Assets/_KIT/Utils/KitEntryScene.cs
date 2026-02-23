@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace _KIT.Utils
 {
@@ -8,6 +9,9 @@ namespace _KIT.Utils
         public static KitEntryScene Instance { get; private set; }
 
         [SerializeField] protected bool enableDebug = true;
+
+        private AsyncOperation asyncOperation;
+        private bool isLoading;
 
         private void Awake()
         {
@@ -68,13 +72,32 @@ namespace _KIT.Utils
         protected virtual void OnNewGame()
         {
         }
-        
-        public virtual void ChangeScene(string sceneName)
-        {
-        }
 
         protected virtual void InitService()
         {
+        }
+
+        public virtual void ChangeSceneAsync(string sceneName)
+        {
+            if (isLoading) return;
+            
+            isLoading = true;
+            asyncOperation = SceneManager.LoadSceneAsync(sceneName);
+            asyncOperation.allowSceneActivation = false;
+        }
+
+        public virtual void ForceCloseChangeScene(Action onComplete)
+        {
+            if (!isLoading || asyncOperation == null)
+                return;
+
+            asyncOperation.allowSceneActivation = true;
+            asyncOperation.completed += _ =>
+            {
+                onComplete?.Invoke();
+                asyncOperation = null;
+                isLoading = false;
+            };
         }
     }
 }
