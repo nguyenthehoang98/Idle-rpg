@@ -87,17 +87,8 @@ namespace _Game.Battle
             systems.Init();
 
             PlayerCasterSystem playerCasterSystem = systems.GetSystem<PlayerCasterSystem>();
-            for (int i = 0; i < 8; i++)
-            {
-                playerCasterSystem.Equip(i, 2001, 1);
-            }
-
-            Startup();
+            playerCasterSystem.SetActivePlayer(false);
         }
-
-        public void Startup() => gameLoop.Resume();
-
-        public void Shutdown() => gameLoop.Pause();
 
         private void OnDestroy()
         {

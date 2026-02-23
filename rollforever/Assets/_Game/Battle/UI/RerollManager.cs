@@ -11,13 +11,13 @@ using _KIT.Schedule;
 using _KIT.Utils;
 using UnityEngine;
 
-namespace _Game.Battle.View
+namespace _Game.Battle.UI
 {
     public class RerollManager : MonoBehaviour
     {
         [SerializeField] private GameObject container;
         [SerializeField] private GameLoop gameLoop;
-        [SerializeField] private RerollItemView[] itemsView;
+        [SerializeField] private RerollItem[] itemsView;
 
         private Dictionary<StatType, BuffConfig.BuffData> allValue = new Dictionary<StatType, BuffConfig.BuffData>();
         private Dictionary<int, int> mapSlotEquipment = new Dictionary<int, int>();

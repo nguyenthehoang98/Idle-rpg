@@ -4,9 +4,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace _Game.Battle.View
+namespace _Game.Battle.UI
 {
-    public class RerollItemView : MonoBehaviour
+    public class RerollItem : MonoBehaviour
     {
         [SerializeField] private Button button;
         [SerializeField] private TextMeshProUGUI text;

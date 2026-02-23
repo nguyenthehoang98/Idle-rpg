@@ -52,6 +52,7 @@ namespace _Game.Battle.Systems
             GameObject go = await KitLoaded.LoadAsync<GameObject>("Player");
             playerInstance = Object.Instantiate(go).transform;
             playerInstance.position = new Vector3(points[0].x, points[0].y);
+            playerInstance.gameObject.SetActive(false);
         }
 
         public void Run(IEcsSystems systems)
@@ -66,7 +67,8 @@ namespace _Game.Battle.Systems
 
             Vector2 position = Vector2.Lerp(cur, target, elapsed / duration);
             
-            playerInstance.position = position;
+            if(playerInstance != null)
+                playerInstance.position = position;
             
             if (elapsed >= duration)
             {
@@ -145,6 +147,11 @@ namespace _Game.Battle.Systems
                 ref var stat = ref statPool.Get(e);
                 stat.ReplaceModifier(buffDatas);
             }
+        }
+
+        public void SetActivePlayer(bool active)
+        {
+            if (playerInstance != null) playerInstance.gameObject.SetActive(active);
         }
     }
 }
