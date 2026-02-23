@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace _Game.Battle
+namespace _Game.Battle.Model
 {
     public sealed class Matrix : IDisposable
     {

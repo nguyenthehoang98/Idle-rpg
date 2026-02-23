@@ -4,7 +4,7 @@ using _KIT.Event;
 using TMPro;
 using UnityEngine;
 
-namespace _Game.Battle
+namespace _Game.Battle.View
 {
     public class ReportManager : MonoBehaviour
     {

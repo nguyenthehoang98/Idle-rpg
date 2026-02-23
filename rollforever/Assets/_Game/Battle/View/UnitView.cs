@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using _Game.Battle.Model;
 using Unity.Mathematics;
 using UnityEngine;
 

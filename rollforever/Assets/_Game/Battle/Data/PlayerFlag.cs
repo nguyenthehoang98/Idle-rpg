@@ -1,3 +1,6 @@
-public struct PlayerFlag
+namespace _Game.Battle.Data
 {
+    public struct PlayerFlag
+    {
+    }
 }

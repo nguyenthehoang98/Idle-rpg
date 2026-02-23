@@ -1,103 +1,88 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using _Game.Battle;
 using _Game.Battle.Events;
+using _Game.Battle.Model;
 using _Game.Battle.Systems;
-using _Game.Configs;
+using _Game.Scripts.Configs;
 using _KIT.Config;
 using _KIT.Event;
 using _KIT.Schedule;
 using _KIT.Utils;
 using UnityEngine;
 
-public class RerollManager : MonoBehaviour
+namespace _Game.Battle.View
 {
-    [SerializeField] private GameObject container;
-    [SerializeField] private GameLoop gameLoop;
-    [SerializeField] private RerollItemView[] itemsView;
-
-    private Dictionary<StatType, BuffConfig.BuffData> allValue = new Dictionary<StatType, BuffConfig.BuffData>();
-    private Dictionary<int, int> mapSlotEquipment = new Dictionary<int, int>();
-    private BuffConfig buffConfig;
-
-    private void OnEnable()
+    public class RerollManager : MonoBehaviour
     {
-        EventBus.Instance.Subscribe<NextWaveEvent>(OnNextWave);
-        EventBus.Instance.Subscribe<EquipEquipmentEvent>(OnEquipEquipment);
-    }
+        [SerializeField] private GameObject container;
+        [SerializeField] private GameLoop gameLoop;
+        [SerializeField] private RerollItemView[] itemsView;
 
-    private void OnDisable()
-    {
-        EventBus.Instance.Unsubscribe<NextWaveEvent>(OnNextWave);
-        EventBus.Instance.Unsubscribe<EquipEquipmentEvent>(OnEquipEquipment);
-    }
+        private Dictionary<StatType, BuffConfig.BuffData> allValue = new Dictionary<StatType, BuffConfig.BuffData>();
+        private Dictionary<int, int> mapSlotEquipment = new Dictionary<int, int>();
+        private BuffConfig buffConfig;
 
-    private void OnEquipEquipment(EquipEquipmentEvent e)
-    {
-        mapSlotEquipment[e.SlotId] = e.WeaponId;
-    }
-
-    private void OnNextWave(NextWaveEvent e)
-    {
-        gameLoop.Pause();
-        AbilitySystem system = e.Systems.GetSystem<AbilitySystem>();
-        system.ClearAll();
-
-        Action<BuffConfig.BuffData> onComplete = (BuffConfig.BuffData buffData) =>
+        private void OnEnable()
         {
-            allValue[buffData.StatType] = buffData;
-            List<BuffConfig.BuffData> buffDatas = allValue.Values.ToList();
-            e.Systems.GetSystem<PlayerCasterSystem>().UpgradeStat(buffDatas);
-            
-            e.OnCompleted();
-            container.SetActive(false);
-            
-            gameLoop.Resume();
-        };
-        ShowReroll(1, onComplete);
-    }
-
-    private void ShowEquipment()
-    {
-    }
-
-    // Nâng cấp chỉ số các slot. 
-    private void ShowReroll(int buffLevel, Action<BuffConfig.BuffData> onSelect)
-    {
-        var list = GetAllBuffs(buffLevel);
-        CollectionUtils.Shuffle(ref list);
-        for (int i = 0; i < itemsView.Length; i++)
-        {
-            itemsView[i].Show(list[i], onSelect);
+            EventBus.Instance.Subscribe<NextWaveEvent>(OnNextWave);
+            EventBus.Instance.Subscribe<EquipEquipmentEvent>(OnEquipEquipment);
         }
 
-        container.SetActive(true);
-    }
-
-    List<BuffConfig.BuffData> GetAllBuffs(int buffLevel)
-    {
-        if (buffConfig == null) buffConfig = KitConfigManager.Get<BuffConfig>();
-        HashSet<(int, int)> hashSet = new HashSet<(int, int)>();        
-        List<BuffConfig.BuffData> buffs = new List<BuffConfig.BuffData>();
-        if (buffConfig.Find(-1, buffLevel, out var list))
+        private void OnDisable()
         {
-            foreach (var buffData in list)
+            EventBus.Instance.Unsubscribe<NextWaveEvent>(OnNextWave);
+            EventBus.Instance.Unsubscribe<EquipEquipmentEvent>(OnEquipEquipment);
+        }
+
+        private void OnEquipEquipment(EquipEquipmentEvent e)
+        {
+            mapSlotEquipment[e.SlotId] = e.WeaponId;
+        }
+
+        private void OnNextWave(NextWaveEvent e)
+        {
+            gameLoop.Pause();
+            Systems.AbilitySystem system = e.Systems.GetSystem<Systems.AbilitySystem>();
+            system.ClearAll();
+
+            Action<BuffConfig.BuffData> onComplete = (BuffConfig.BuffData buffData) =>
             {
-                if (hashSet.Add((buffData.BuffId, buffData.BuffLevel)))
-                {
-                    buffs.Add(buffData);
-                }
-            }
+                allValue[buffData.StatType] = buffData;
+                List<BuffConfig.BuffData> buffDatas = allValue.Values.ToList();
+                e.Systems.GetSystem<PlayerCasterSystem>().UpgradeStat(buffDatas);
+            
+                e.OnCompleted();
+                container.SetActive(false);
+            
+                gameLoop.Resume();
+            };
+            ShowReroll(1, onComplete);
         }
 
-        var values = mapSlotEquipment.Values;
-        HashSet<int> equipments = new HashSet<int>();
-        foreach (var value in values)
-            equipments.Add(value);
-        foreach (var equipment in equipments)
+        private void ShowEquipment()
         {
-            if (buffConfig.Find(equipment, buffLevel, out list))
+        }
+
+        // Nâng cấp chỉ số các slot. 
+        private void ShowReroll(int buffLevel, Action<BuffConfig.BuffData> onSelect)
+        {
+            var list = GetAllBuffs(buffLevel);
+            CollectionUtils.Shuffle(ref list);
+            for (int i = 0; i < itemsView.Length; i++)
+            {
+                itemsView[i].Show(list[i], onSelect);
+            }
+
+            container.SetActive(true);
+        }
+
+        List<BuffConfig.BuffData> GetAllBuffs(int buffLevel)
+        {
+            if (buffConfig == null) buffConfig = KitConfigManager.Get<BuffConfig>();
+            HashSet<(int, int)> hashSet = new HashSet<(int, int)>();        
+            List<BuffConfig.BuffData> buffs = new List<BuffConfig.BuffData>();
+            if (buffConfig.Find(-1, buffLevel, out var list))
             {
                 foreach (var buffData in list)
                 {
@@ -107,8 +92,26 @@ public class RerollManager : MonoBehaviour
                     }
                 }
             }
-        }
+
+            var values = mapSlotEquipment.Values;
+            HashSet<int> equipments = new HashSet<int>();
+            foreach (var value in values)
+                equipments.Add(value);
+            foreach (var equipment in equipments)
+            {
+                if (buffConfig.Find(equipment, buffLevel, out list))
+                {
+                    foreach (var buffData in list)
+                    {
+                        if (hashSet.Add((buffData.BuffId, buffData.BuffLevel)))
+                        {
+                            buffs.Add(buffData);
+                        }
+                    }
+                }
+            }
         
-        return buffs;
+            return buffs;
+        }
     }
 }

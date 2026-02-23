@@ -1,5 +1,6 @@
 using _Game.Battle.Data;
 using _Game.Battle.Events;
+using _Game.Battle.Model;
 using _KIT.Event;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;

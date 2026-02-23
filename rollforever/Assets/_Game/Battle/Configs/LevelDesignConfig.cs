@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace _Game.Battle
+namespace _Game.Battle.Configs
 {
     public class LevelDesignConfig : MonoBehaviour
     {

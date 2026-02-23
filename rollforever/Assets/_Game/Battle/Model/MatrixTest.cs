@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace _Game.Battle
+namespace _Game.Battle.Model
 {
     public class MatrixTest : MonoBehaviour
     {

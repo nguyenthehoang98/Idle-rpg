@@ -1,4 +1,5 @@
 using _Game.Battle.Data;
+using _Game.Battle.Model;
 using _Game.Battle.View;
 using _KIT.Pool;
 using Geometry.Primary;

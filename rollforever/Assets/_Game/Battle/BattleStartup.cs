@@ -1,14 +1,14 @@
+using _Game.Battle.Checker;
+using _Game.Battle.Configs;
+using _Game.Battle.Model;
 using _Game.Battle.Systems;
+using _KIT.Config;
 using _KIT.Schedule;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
+using Leopotam.EcsLite.UnityEditor;
 using RVO;
 using UnityEngine;
-using _KIT.Config;
-using Checker;
-#if UNITY_EDITOR
-using Leopotam.EcsLite.UnityEditor;
-#endif
 
 namespace _Game.Battle
 {

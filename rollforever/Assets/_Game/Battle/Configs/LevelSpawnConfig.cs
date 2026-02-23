@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using _Game.Battle.Systems;
-using _Game.Configs;
+using _Game.Scripts.Configs;
 using _KIT.Resource;
 using Cysharp.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace _Game.Battle
+namespace _Game.Battle.Configs
 {
     /// <summary>
     /// Điều tiết việc sinh quái vật dựa trên waves/batch/power/duration

@@ -1,3 +1,4 @@
+using _Game.Battle.Model;
 using _KIT.Event;
 using Unity.Mathematics;
 

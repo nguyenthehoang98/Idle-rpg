@@ -1,5 +1,6 @@
 using System.Reflection;
 using _Game.Battle.Data;
+using _Game.Battle.Model;
 using Leopotam.EcsLite.UnityEditor;
 using Unity.Collections;
 using UnityEditor;

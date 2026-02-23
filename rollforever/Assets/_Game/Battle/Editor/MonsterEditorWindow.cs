@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using _Game.Configs;
+using _Game.Battle.Utils;
+using _Game.Scripts.Configs;
 using UnityEditor;
 using UnityEngine;
 

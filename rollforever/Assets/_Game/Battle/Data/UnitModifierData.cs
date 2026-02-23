@@ -1,4 +1,4 @@
-using _Game.AbilitySystem;
+using _Game.Battle.AbilitySystem;
 
 namespace _Game.Battle.Data
 {

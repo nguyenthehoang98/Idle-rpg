@@ -1,4 +1,4 @@
-namespace _Game.Battle
+namespace _Game.Battle.Model
 {
     public readonly struct StatModifier
     {

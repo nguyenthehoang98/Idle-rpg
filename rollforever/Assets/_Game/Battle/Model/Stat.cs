@@ -1,9 +1,8 @@
 using System;
-using _Game.Battle.Data;
 using Unity.Collections;
 using UnityEngine;
 
-namespace _Game.Battle
+namespace _Game.Battle.Model
 {
     [Serializable]
     public struct Stat

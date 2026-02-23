@@ -1,6 +1,7 @@
 using System;
-using _Game.AbilitySystem;
+using _Game.Battle.AbilitySystem;
 using _Game.Battle.Data;
+using _Game.Battle.Model;
 using _Game.Battle.View;
 using Geometry.Primary;
 using GoodCat.EcsLite.Shared;

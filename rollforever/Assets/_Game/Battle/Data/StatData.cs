@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using _Game.Configs;
+using _Game.Battle.Model;
+using _Game.Scripts.Configs;
 using Unity.Collections;
 
 namespace _Game.Battle.Data

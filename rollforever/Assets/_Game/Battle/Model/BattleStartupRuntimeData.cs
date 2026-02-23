@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using _Game.Battle.View;
 
-namespace _Game.Battle
+namespace _Game.Battle.Model
 {
     public class BattleStartupRuntimeData
     {

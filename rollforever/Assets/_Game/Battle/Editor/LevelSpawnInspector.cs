@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _Game.Battle.Configs;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;

@@ -1,9 +1,10 @@
 using System;
+using _Game.Battle.Configs;
 using _KIT.Schedule;
 using RVO;
 using Unity.Mathematics;
 
-namespace _Game.Battle
+namespace _Game.Battle.Model
 {
     public class BattleStartupShareData : IDisposable
     {

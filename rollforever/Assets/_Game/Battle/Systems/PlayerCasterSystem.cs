@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using _Game.Battle.Data;
 using _Game.Battle.Events;
-using _Game.Configs;
+using _Game.Battle.Model;
+using _Game.Scripts.Configs;
 using _KIT.Config;
 using _KIT.Event;
 using Geometry;
