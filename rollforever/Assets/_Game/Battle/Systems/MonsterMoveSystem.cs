@@ -1,6 +1,7 @@
 using System;
 using _Game.AbilitySystem;
 using _Game.Battle.Data;
+using _Game.Battle.View;
 using Geometry.Primary;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
@@ -74,6 +75,8 @@ namespace _Game.Battle.Systems
 
                 var position = shareData.Simulator.GetAgentPosition(unit.agentId);
                 var goal = shareData.Simulator.GetAgentGoal(unit.agentId);
+
+                UnitView.TryUpdatePosition(e, position);
                 
                 ref var unitPosTemp = ref unitPosTempPool.Get(e);
                 if (ShouldPause(modifierPool.Get(e).effect, position, goal, unitPosTemp.stopDistance))

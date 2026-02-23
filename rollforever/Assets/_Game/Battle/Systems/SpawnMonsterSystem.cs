@@ -8,6 +8,7 @@ using _Game.Battle.View;
 using _Game.Configs;
 using _KIT.Config;
 using _KIT.Event;
+using _KIT.Pool;
 using _KIT.Resource;
 using _KIT.Utils;
 using GoodCat.EcsLite.Shared;
@@ -23,7 +24,7 @@ namespace _Game.Battle.Systems
     [Serializable]
     public class SpawnMonsterSystem : IEcsInitSystem, IEcsRunSystem
     {
-        private Dictionary<int, UnitView> unitSource;
+        private Dictionary<int, UnitView> sourcePrefab;
 
         [EcsInject] private readonly BattleStartupShareData shareData;
         [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
@@ -51,11 +52,12 @@ namespace _Game.Battle.Systems
         private bool isPaused = true;
         private bool waitingNextWave;
 
-        public void Init(IEcsSystems systems)
+        public async void Init(IEcsSystems systems)
         {
-            /*unitSource = new Dictionary<int, UnitView>();
+            sourcePrefab = new Dictionary<int, UnitView>();
             GameObject go = await KitLoaded.LoadAsync<GameObject>("UnitView");
-            unitSource[0] = go.GetComponent<UnitView>();*/
+            sourcePrefab[0] = go.GetComponent<UnitView>();
+            KitPool.RegisterPool(go, true);
 
             world = systems.GetWorld();
             statPool = world.GetPool<StatData>();
@@ -208,9 +210,13 @@ namespace _Game.Battle.Systems
                 .Insert(StatType.MoveSpeed, new Stat(monsterData.MoveSpeed))
                 .Insert(StatType.CriticalRate, new Stat(0))
                 .Insert(StatType.CriticalDamage, new Stat(0));
-            
+
             // todo: add flag
             monsterFlagPool.Add(entity);
+            
+            // todo: build view
+            UnitView view = KitPool.Instantiate(sourcePrefab[0]);
+            view.Init(entity, pos, shareData);
         }
 
         static float2 RandomPointOnCircle(float2 center, float radius)

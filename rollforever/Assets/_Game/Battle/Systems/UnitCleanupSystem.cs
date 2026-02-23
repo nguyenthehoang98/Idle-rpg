@@ -1,4 +1,6 @@
 using _Game.Battle.Data;
+using _Game.Battle.View;
+using _KIT.Pool;
 using Geometry.Primary;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
@@ -72,6 +74,11 @@ namespace _Game.Battle.Systems
             }
 
             shareData.Simulator.RemoveAgent(unit.agentId);
+            
+            if(UnitView.TryRelease(e, out UnitView unitView))
+            {
+                KitPool.Destroy(unitView.gameObject);
+            }
         }
     }
 }
