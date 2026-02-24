@@ -3,12 +3,25 @@ using _KIT.Event;
 using DG.Tweening;
 using Unity.Mathematics;
 using UnityEngine;
+using System;
+using TMPro;
 
 namespace _Game.Battle.UI
 {
     public class EquipmentManager : MonoBehaviour
     {
+        [Serializable]
+        public class Data
+        {
+            public EquipmentItem equipmentItem;
+            public TextMeshProUGUI textTitle;
+            public TextMeshProUGUI textprice;
+
+            private int price;
+        }
+        
         [SerializeField] private Camera mainCamera;
+        [SerializeField] private Data[] equipments;
         [SerializeField] private RectTransform container;
         [SerializeField] private float yStartPosition;
 
@@ -31,6 +44,9 @@ namespace _Game.Battle.UI
 
         void OnOpenEquipmentSelection(OpenEquipmentSelectionEvent e)
         {
+            // tính toán dữ liệu & fill vào data (equipments)
+            equipments
+            
             Vector3 cameraPosition = mainCamera.transform.position;
             cameraPosition.x = e.CameraOffsetPosition.x;
             cameraPosition.y = e.CameraOffsetPosition.y;

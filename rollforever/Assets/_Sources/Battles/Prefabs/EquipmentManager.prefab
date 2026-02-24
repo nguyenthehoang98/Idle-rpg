@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1202290257647024983}
   - component: {fileID: 5067344053240588354}
   m_Layer: 5
-  m_Name: Icon
+  m_Name: Equipment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 1522978719657964635}
   - component: {fileID: 8394296125758552480}
   m_Layer: 5
-  m_Name: Icon
+  m_Name: Equipment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2360,7 +2360,7 @@ GameObject:
   - component: {fileID: 6657699114180878273}
   - component: {fileID: 8251622295602386373}
   m_Layer: 5
-  m_Name: Icon
+  m_Name: Equipment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

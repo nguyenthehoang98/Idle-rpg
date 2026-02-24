@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 namespace _Game.Battle.UI
 {
-    public class EquipmentSlotItem : DragAndDropBehavior
+    public class EquipmentItem : DragAndDropBehavior
     {
         protected override bool IsCompleteDrag(PointerEventData eventData, out GameObject dragObject)
         {
