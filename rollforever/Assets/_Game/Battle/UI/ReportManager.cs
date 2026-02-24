@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using _Game.Battle.Events;
+using _Game.Battle.Ecs.Events;
 using _KIT.Event;
 using TMPro;
 using UnityEngine;

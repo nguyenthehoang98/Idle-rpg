@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using _Game.Battle.Model;
+using _Game.Scripts.Model;
 using _KIT.Config;
 using _KIT.Config.ExcelExtension.Runtime;
 using Unity.Mathematics;
@@ -10,7 +10,7 @@ namespace _Game.Scripts.Configs
 {
     [ExcelAsset(
         ExcelPath = "Assets/Excels/BuffConfig.xlsx",
-        ConfigPath = "Assets/Sources/Configs/BuffConfig.asset")]
+        ConfigPath = "Assets/_Sources/Configs/BuffConfig.asset")]
     public class BuffConfig : KitBaseConfig
     {
         [SerializeField] private List<BuffData> baseData = new List<BuffData>();
@@ -21,7 +21,7 @@ namespace _Game.Scripts.Configs
         {
             get
             {
-                string path = "Assets/Sources/Configs/BuffConfig.asset";
+                string path = "Assets/_Sources/Configs/BuffConfig.asset";
                 SkillConfig instance = UnityEditor.AssetDatabase.LoadAssetAtPath<SkillConfig>(path);
                 instance.OnMapValue();
                 return instance;

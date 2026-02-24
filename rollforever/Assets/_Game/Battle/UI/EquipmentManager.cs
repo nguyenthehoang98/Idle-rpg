@@ -1,5 +1,4 @@
-using System;
-using _Game.Battle.Events;
+using _Game.Battle.Ecs.Events;
 using _KIT.Event;
 using DG.Tweening;
 using Unity.Mathematics;

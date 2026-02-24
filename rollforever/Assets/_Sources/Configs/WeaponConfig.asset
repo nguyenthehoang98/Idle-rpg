@@ -15,9 +15,8 @@ MonoBehaviour:
   fileUrl: 
   enable: 1
   baseData:
-  - weaponId: 2001
+  - weapon_id: 2001
     name: "M\u0169i t\xEAn"
-    address_prefab: 
     skill_id: 20101
     base_attack_stat: 12
     attack_linear: 3

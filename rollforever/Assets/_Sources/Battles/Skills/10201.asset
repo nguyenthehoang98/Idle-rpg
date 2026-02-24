@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f1b1926f57db82438a03be8a84358f5, type: 3}
+  m_Name: 10201
+  m_EditorClassIdentifier: 
+  core:
+    lifeTime: 1
+    bulletPrefab: {fileID: 0}
+    muzzleOffsetPosition: {x: 0, y: 0}
+    animationName: 0
+    findTarget: 0
+    maxCollision: 1
+    shouldResetCollision: 0
+    resetCollisionInterval: 0
+  shape:
+    type: 0
+    size:
+      x: 2
+      y: 2
+    radius: 0.25
+    customValue: 0
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    extraRadius: 5
+    extraSize:
+      x: 0
+      y: 0
+    duration: 0.33333334
+  trajectory:
+    type: 1
+    path: {fileID: 0}
+    velocity:
+      acceleration: 0
+      speed: 10
+  stateModifier:
+    type: 0
+    group: 0
+    value: 5
+    duration: 0.1

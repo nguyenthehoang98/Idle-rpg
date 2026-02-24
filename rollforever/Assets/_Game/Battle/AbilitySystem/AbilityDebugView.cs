@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using _Game.Battle.Model;
+using _Game.Battle.Ecs.Model;
 using _KIT.Utils;
 using Unity.Collections;
 using Unity.Mathematics;
@@ -24,7 +24,7 @@ namespace _Game.Battle.AbilitySystem
             var unitId = TypeUtils.GetFieldNonPublic(logic, "unitId");
             if (sourceTeam == null || unitId == null) return;
 
-            name = $"[{logic.AbilityData.name}]_{sourceTeam}_{unitId}";
+            name = $"[{logic.AbilitySo.name}]_{sourceTeam}_{unitId}";
 
             var monsterVisitor = TypeUtils.GetFieldNonPublic(logic, "monsterVisitor") as MonsterVisitor;
             var entityVisitedStamp = TypeUtils.GetFieldNonPublic(monsterVisitor, "entityVisitedStamp");
@@ -79,7 +79,7 @@ namespace _Game.Battle.AbilitySystem
         void Startup(AbilityLogic logic)
         {
             this.logic = logic;
-            name = $"[{logic.AbilityData.name}]";
+            name = $"[{logic.AbilitySo.name}]";
             running = true;
             container[this.logic] = this;
         }

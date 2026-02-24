@@ -1,15 +1,18 @@
 using System;
 using System.Collections.Generic;
 using _Game.Battle.Utils;
+using _Game.Scripts.Weapon;
 using _KIT.Config;
 using _KIT.Config.ExcelExtension.Runtime;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Game.Scripts.Configs
 {
     [ExcelAsset(
         ExcelPath = "Assets/Excels/WeaponConfig.xlsx",
-        ConfigPath = "Assets/Sources/Configs/WeaponConfig.asset")]
+        ConfigPath = "Assets/_Sources/Configs/WeaponConfig.asset")]
     public class WeaponConfig : KitBaseConfig
     {
         [SerializeField] private List<WeaponData> baseData = new List<WeaponData>();
@@ -20,7 +23,7 @@ namespace _Game.Scripts.Configs
         {
             get
             {
-                string path = "Assets/Sources/Configs/WeaponConfig.asset";
+                string path = "Assets/_Sources/Configs/WeaponConfig.asset";
                 WeaponConfig instance = UnityEditor.AssetDatabase.LoadAssetAtPath<WeaponConfig>(path);
                 instance.OnMapValue();
                 return instance;
@@ -33,9 +36,47 @@ namespace _Game.Scripts.Configs
             cacheData = new Dictionary<int, WeaponData>();
             foreach (var m in baseData)
             {
-                cacheData[m.ID] = m;
+                cacheData[m.WeaponId] = m;
             }
         }
+
+#if UNITY_EDITOR
+        public override void OnPostImported()
+        {
+            // todo: validate weapon so
+            string folder = "Assets/_Sources/Battles/Weapons";
+            UnityEngine.Object[] objects = AssetDatabase.LoadAllAssetsAtPath(folder);
+            foreach (var weaponData in baseData)
+            {
+                bool found = false;
+                foreach (var o in objects)
+                {
+                    if (o.name == weaponData.WeaponId.ToString())
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found)
+                {
+                    Debug.LogError($"Not found file WeaponSO with id '{weaponData.WeaponId}'");
+                }
+            }
+
+            foreach (var obj in objects)
+            {
+                if (obj is WeaponSO weaponSo)
+                {
+                    if(weaponSo.WeaponIcon == null)
+                    {
+                        Debug.LogError("WeaponIcon is null, at file WeaponSO: " + AssetDatabase.GetAssetPath(obj));
+                    }
+                }
+                else Debug.LogError($"Object {AssetDatabase.GetAssetPath(obj)} not defined is WeaponSO");
+            }
+        }
+#endif
 
         public bool Find(int monsterId, out WeaponData value)
         {
@@ -45,9 +86,8 @@ namespace _Game.Scripts.Configs
         [Serializable]
         public class WeaponData
         {
-            [SerializeField] private int weaponId;
+            [FormerlySerializedAs("weapon_id")] [SerializeField] private int weaponWeaponID;
             [SerializeField] private string name;
-            [SerializeField] private string address_prefab;
             [SerializeField] private int skill_id;
             [SerializeField] private float base_attack_stat;
             [SerializeField] private float attack_linear;
@@ -59,9 +99,8 @@ namespace _Game.Scripts.Configs
             [SerializeField] private string jsonUnlockLv25;
             [SerializeField] private string jsonUnlockLv30;
 
-            public int ID => weaponId;
+            public int WeaponId => weaponWeaponID;
             public string Name => name;
-            public string AddressPrefab => address_prefab;
             public int SkillId => skill_id;
             public float Attack(int level) => FormulaUtils.Attack(level, base_attack_stat, attack_linear, attack_rate);
         }

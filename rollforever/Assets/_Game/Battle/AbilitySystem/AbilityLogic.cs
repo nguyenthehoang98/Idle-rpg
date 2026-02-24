@@ -1,7 +1,7 @@
 ﻿using System;
-using _Game.Battle.Data;
-using _Game.Battle.Model;
-using _Game.Battle.View;
+using _Game.Battle.Ecs.Data;
+using _Game.Battle.Ecs.Model;
+using _Game.Battle.Ecs.View;
 using _Game.Scripts.Configs;
 using _KIT.Pool;
 using _KIT.Utils;
@@ -15,7 +15,7 @@ namespace _Game.Battle.AbilitySystem
 {
     public sealed class AbilityLogic : IEcsWorldEventListener, IDisposable
     {
-        public readonly AbilityData AbilityData;
+        public readonly AbilitySO AbilitySo;
         private readonly SkillConfig.SkillData SkillData;
         // ecs
         private readonly BattleStartupRuntimeData runtimeData;
@@ -43,7 +43,7 @@ namespace _Game.Battle.AbilitySystem
         private int unitId;
         private float elapsed;
 
-        public AbilityLogic(AbilityData abilityData, SkillConfig.SkillData skillData,
+        public AbilityLogic(AbilitySO abilitySo, SkillConfig.SkillData skillData,
             int entity, Team sourceTeam,
             BattleStartupShareData shareData, BattleStartupRuntimeData runtimeData,
             EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool,
@@ -53,9 +53,9 @@ namespace _Game.Battle.AbilitySystem
             EcsFilter playerFilter)
         {
             this.SkillData = skillData;
-            this.AbilityData = abilityData;
-            this.lifeTime = abilityData.core.lifeTime;
-            this.bulletPrefab = abilityData.core.bulletPrefab;
+            this.AbilitySo = abilitySo;
+            this.lifeTime = abilitySo.core.lifeTime;
+            this.bulletPrefab = abilitySo.core.bulletPrefab;
             
             this.shareData = shareData;
             this.statPool = statPool;
@@ -70,15 +70,15 @@ namespace _Game.Battle.AbilitySystem
             this.sourceTeam = sourceTeam;
             this.runtimeData = runtimeData;
             
-            shapeLogic = new ShapeLogic(abilityData.shape);
+            shapeLogic = new ShapeLogic(abilitySo.shape);
             stateModifierLogic = new StateModifierLogic(
-                abilityData.stateModifier, shareData.Simulator, unitPool, modifierPool, unitPosTempPool
+                abilitySo.stateModifier, shareData.Simulator, unitPool, modifierPool, unitPosTempPool
             );
-            trajectoryLogic = new TrajectoryLogic(abilityData.trajectory);
+            trajectoryLogic = new TrajectoryLogic(abilitySo.trajectory);
             
             monsterVisitor = new MonsterVisitor(
                 entity, skillData,
-                abilityData.core.maxCollision, abilityData.core.shouldResetCollision, abilityData.core.resetCollisionInterval,
+                abilitySo.core.maxCollision, abilitySo.core.shouldResetCollision, abilitySo.core.resetCollisionInterval,
                 shareData.Simulator, shapeLogic, stateModifierLogic,
                 healthPool, statPool, unitPool, shapePool, deadPool);
         }
@@ -228,7 +228,7 @@ namespace _Game.Battle.AbilitySystem
 
         public AbilityLogic CreateInstance(int sourceEntity, Team team)
         {
-            return new AbilityLogic(AbilityData, SkillData, sourceEntity, team,
+            return new AbilityLogic(AbilitySo, SkillData, sourceEntity, team,
                 shareData, runtimeData,
                 unitPool, shapePool, deadPool, healthPool, statPool, modifierPool,
                 unitPosTempPool, playerFilter);

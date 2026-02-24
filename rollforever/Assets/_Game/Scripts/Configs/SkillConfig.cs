@@ -9,7 +9,7 @@ namespace _Game.Scripts.Configs
 {
     [ExcelAsset(
         ExcelPath = "Assets/Excels/SkillConfig.xlsx",
-        ConfigPath = "Assets/Sources/Configs/SkillConfig.asset")]
+        ConfigPath = "Assets/_Sources/Configs/SkillConfig.asset")]
     public class SkillConfig : KitBaseConfig
     {
         [SerializeField] private List<SkillData> baseData = new List<SkillData>();
@@ -20,7 +20,7 @@ namespace _Game.Scripts.Configs
         {
             get
             {
-                string path = "Assets/Sources/Configs/SkillConfig.asset";
+                string path = "Assets/_Sources/Configs/SkillConfig.asset";
                 SkillConfig instance = UnityEditor.AssetDatabase.LoadAssetAtPath<SkillConfig>(path);
                 instance.OnMapValue();
                 return instance;
@@ -42,12 +42,12 @@ namespace _Game.Scripts.Configs
         [Serializable]
         public class SkillData
         {
-            [SerializeField] private int skillId;
+            [SerializeField] private int skill_id;
             [SerializeField] private float skill_cooldown;
             [SerializeField] private float skill_scale_damage;
             [SerializeField] private float skill_flat_damage;
 
-            public int SkillId => skillId;
+            public int SkillId => skill_id;
             
             public float SkillCooldown => skill_cooldown;
             

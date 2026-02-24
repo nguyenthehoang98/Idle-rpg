@@ -1,4 +1,4 @@
-using _Game.Battle.Data;
+using _Game.Battle.Ecs.Data;
 using Leopotam.EcsLite;
 using RVO;
 using Unity.Collections;

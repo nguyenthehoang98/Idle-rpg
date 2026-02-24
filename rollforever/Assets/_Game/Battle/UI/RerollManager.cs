@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using _Game.Battle.Events;
-using _Game.Battle.Model;
-using _Game.Battle.Systems;
+using _Game.Battle.Ecs.Events;
+using _Game.Battle.Ecs.Systems;
 using _Game.Scripts.Configs;
+using _Game.Scripts.Model;
 using _KIT.Config;
 using _KIT.Event;
 using _KIT.Schedule;
@@ -43,7 +43,7 @@ namespace _Game.Battle.UI
         private void OnNextWave(NextWaveEvent e)
         {
             gameLoop.Pause();
-            Systems.AbilitySystem system = e.Systems.GetSystem<Systems.AbilitySystem>();
+            Ecs.Systems.AbilitySystem system = e.Systems.GetSystem<Ecs.Systems.AbilitySystem>();
             system.ClearAll();
 
             Action<BuffConfig.BuffData> onComplete = (BuffConfig.BuffData buffData) =>

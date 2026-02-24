@@ -1,5 +1,5 @@
 using System;
-using _Game.Battle.View;
+using _Game.Battle.Ecs.View;
 using UnityEngine;
 
 namespace _Game.Battle.AbilitySystem

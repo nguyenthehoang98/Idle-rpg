@@ -1,8 +1,9 @@
-using _Game.Battle.Data;
-using _Game.Battle.Events;
-using _Game.Battle.Model;
+using _Game.Battle.Ecs.Data;
+using _Game.Battle.Ecs.Events;
+using _Game.Battle.Ecs.Model;
 using _Game.Battle.Utils;
 using _Game.Scripts.Configs;
+using _Game.Scripts.Model;
 using _KIT.Event;
 using Leopotam.EcsLite;
 using RVO;

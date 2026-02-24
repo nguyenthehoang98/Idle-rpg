@@ -1,8 +1,8 @@
 using _Game.Battle.Checker;
-using _Game.Battle.Configs;
-using _Game.Battle.Events;
-using _Game.Battle.Model;
-using _Game.Battle.Systems;
+using _Game.Battle.Ecs.Events;
+using _Game.Battle.Ecs.Model;
+using _Game.Battle.Ecs.Systems;
+using _Game.Battle.Level;
 using _KIT.Config;
 using _KIT.Event;
 using _KIT.Schedule;
@@ -55,14 +55,14 @@ namespace _Game.Battle
             gameLoop = GetComponent<GameLoop>();
             gameLoop.Pause();
 
-            LevelSpawnConfig spawnConfig = await LevelSpawnConfig.LoadSpawn(1);
+            LevelSpawnSO spawnSo = await LevelSpawnSO.LoadSpawn(1);
 
             // todo: battle world
             world = new EcsWorld();
             Matrix matrix = new Matrix(100, 120, 0.5f);
             shareData = new BattleStartupShareData(
                 gameLoop,
-                new Simulator(), matrix, spawnConfig
+                new Simulator(), matrix, spawnSo
             );
             BattleStartupRuntimeData runtimeData = new BattleStartupRuntimeData();
 
@@ -82,7 +82,7 @@ namespace _Game.Battle
                 .Add(new MonsterMoveSystem())
                 .Add(new PlayerCasterSystem())
                 .Add(new MonsterCasterSystem())
-                .Add(new Systems.AbilitySystem())
+                .Add(new Ecs.Systems.AbilitySystem())
                 .Add(new UnitCleanupSystem());
 
             systems.InjectShared(shareData);

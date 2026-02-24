@@ -9,7 +9,7 @@ namespace _Game.Scripts.Configs
 {
     [ExcelAsset(
         ExcelPath = "Assets/Excels/MonsterConfig.xlsx",
-        ConfigPath = "Assets/Sources/Configs/MonsterConfig.asset")]
+        ConfigPath = "Assets/_Sources/Configs/MonsterConfig.asset")]
     public class MonsterConfig : KitBaseConfig
     {
         [SerializeField] private List<MonsterData> baseData = new List<MonsterData>();
@@ -20,7 +20,7 @@ namespace _Game.Scripts.Configs
         {
             get
             {
-                string path = "Assets/Sources/Configs/MonsterConfig.asset";
+                string path = "Assets/_Sources/Configs/MonsterConfig.asset";
                 MonsterConfig instance = UnityEditor.AssetDatabase.LoadAssetAtPath<MonsterConfig>(path);
                 instance.OnMapValue();
                 return instance;

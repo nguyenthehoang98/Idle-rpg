@@ -15,15 +15,15 @@ MonoBehaviour:
   fileUrl: 
   enable: 1
   baseData:
-  - skillId: 10101
+  - skill_id: 10101
     skill_cooldown: 1
     skill_scale_damage: 1
     skill_flat_damage: 0
-  - skillId: 10201
+  - skill_id: 10201
     skill_cooldown: 1
     skill_scale_damage: 1
     skill_flat_damage: 0
-  - skillId: 20101
+  - skill_id: 20101
     skill_cooldown: 0.5
     skill_scale_damage: 1
     skill_flat_damage: 0
