@@ -37,10 +37,6 @@ namespace _Game.Battle.Utils
             float dps = DPS(skillDamage, skillData.SkillCooldown, 0, 0);
             float effectiveHp = health * (defense + DEFENSE_K) / DEFENSE_K;
             float power = dps * effectiveHp;
-            /*Debug.Log($"Monster:{monsterData.ID}, Level: {level}, " +
-                      $"\nATK:{attack}, DEF:{defense}, HP:{health}, " +
-                      $"\nDPS:{dps}, EffectiveHp:{effectiveHp}, Power:{(int)math.sqrt(power)}" +
-                      $"\n");*/
             return (int)math.sqrt(power);
         }
 
@@ -115,5 +111,52 @@ namespace _Game.Battle.Utils
             float criticalFactor = 1f + math.clamp(criticalRate, 0f, 1f) * criticalDmg;
             return skillDmg * atkSpeed * criticalFactor;
         }
+        
+        // =================================================================== //
+        
+        /// <summary>
+        /// Tính giá mỗi lần mua trang bị
+        /// </summary>
+        public static int Price(int level, int basePrice, int priceLinear)
+        {
+            return basePrice * level * priceLinear;
+        }
+
+        public static int RandomEquipmentLevel(int playerLevel, int currentWave, float bonusRate)
+        {
+            float waveFactor = currentWave * WAVE_FACTOR_MULTIPLIER;
+            float levelFactor = playerLevel * LEVEL_FACTOR_MULTIPLIER;
+            float flat = 1 + waveFactor + levelFactor + bonusRate;
+            float[] weights = new float[BaseRateEquipment.Length];
+            for (int i = 0; i < weights.Length; i++)
+            {
+                weights[i] = flat + BaseRateEquipment[i];
+            }
+
+            return GetWeightedRandomIndex(weights);
+        }
+        
+        private static int GetWeightedRandomIndex(float[] weights)
+        {
+            float total = 0f;
+            for (int i = 0; i < weights.Length; i++)
+                total += weights[i];
+
+            float rand = RandomUtils.Range(0, total);
+            float cumulative = 0f;
+
+            for (int i = 0; i < weights.Length; i++)
+            {
+                cumulative += weights[i];
+                if (rand <= cumulative)
+                    return i;
+            }
+
+            return 0;
+        }
+
+        private const float WAVE_FACTOR_MULTIPLIER = 3f;
+        private const float LEVEL_FACTOR_MULTIPLIER = 1f;
+        private static readonly int[] BaseRateEquipment = new int[] { 50, 30, 15, 4, 1 };
     }
 }

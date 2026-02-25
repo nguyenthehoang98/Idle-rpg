@@ -1,11 +1,25 @@
+using _Game.Scripts.Configs;
 using _Game.Scripts.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace _Game.Battle.UI
 {
     public class EquipmentItem : DragAndDropBehavior
     {
+        [SerializeField] private Image imgIcon;
+        
+        private WeaponConfig.WeaponData weaponData;
+        private int weaponLevel;
+
+        public void Init(Sprite sprite, WeaponConfig.WeaponData weaponData, int weaponLevel)
+        {
+            this.imgIcon.sprite = sprite;
+            this.weaponData = weaponData;
+            this.weaponLevel = weaponLevel;
+        }
+        
         protected override bool IsCompleteDrag(PointerEventData eventData, out GameObject dragObject)
         {
             Vector2 worldPos = Camera.main.ScreenToWorldPoint(eventData.position);

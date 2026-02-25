@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using _Game.Battle.Utils;
 using _Game.Scripts.Weapon;
 using _KIT.Config;
@@ -78,10 +79,9 @@ namespace _Game.Scripts.Configs
         }
 #endif
 
-        public bool Find(int monsterId, out WeaponData value)
-        {
-            return cacheData.TryGetValue(monsterId, out value);
-        }
+        public int[] AllKeys => cacheData.Keys.ToArray();
+        
+        public bool Find(int weaponId, out WeaponData value) => cacheData.TryGetValue(weaponId, out value);
 
         [Serializable]
         public class WeaponData
@@ -92,6 +92,8 @@ namespace _Game.Scripts.Configs
             [SerializeField] private float base_attack_stat;
             [SerializeField] private float attack_linear;
             [SerializeField] private float attack_rate;
+            [SerializeField] private int base_price;
+            [SerializeField] private int price_linear;
             [SerializeField] private string jsonUnlockLv5;
             [SerializeField] private string jsonUnlockLv10;
             [SerializeField] private string jsonUnlockLv15;
@@ -102,6 +104,7 @@ namespace _Game.Scripts.Configs
             public int WeaponId => weaponWeaponID;
             public string Name => name;
             public int SkillId => skill_id;
+            public int Price(int level) => FormulaUtils.Price(level, base_price, price_linear);
             public float Attack(int level) => FormulaUtils.Attack(level, base_attack_stat, attack_linear, attack_rate);
         }
     }

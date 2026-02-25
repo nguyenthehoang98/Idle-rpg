@@ -4,6 +4,12 @@ using DG.Tweening;
 using Unity.Mathematics;
 using UnityEngine;
 using System;
+using System.Collections.Generic;
+using _Game.Battle.Utils;
+using _Game.Scripts.Configs;
+using _Game.Scripts.Weapon;
+using _KIT.Config;
+using _KIT.Resource;
 using TMPro;
 
 namespace _Game.Battle.UI
@@ -15,7 +21,7 @@ namespace _Game.Battle.UI
         {
             public EquipmentItem equipmentItem;
             public TextMeshProUGUI textTitle;
-            public TextMeshProUGUI textprice;
+            public TextMeshProUGUI textPrice;
 
             private int price;
         }
@@ -25,11 +31,23 @@ namespace _Game.Battle.UI
         [SerializeField] private RectTransform container;
         [SerializeField] private float yStartPosition;
 
+        private List<WeaponConfig.WeaponData> weapons = new List<WeaponConfig.WeaponData>();
+
         private void Awake()
         {
             Vector3 anchoredPosition = container.anchoredPosition3D;
             anchoredPosition.y = yStartPosition;
             container.anchoredPosition3D = anchoredPosition;
+        }
+
+        private void Start()
+        {
+            WeaponConfig weaponConfig = KitConfigManager.Get<WeaponConfig>();
+            foreach (var w in weaponConfig.AllKeys)
+            {
+                weaponConfig.Find(w, out var weaponData);
+                weapons.Add(weaponData);
+            }
         }
 
         private void OnEnable()
@@ -45,7 +63,7 @@ namespace _Game.Battle.UI
         void OnOpenEquipmentSelection(OpenEquipmentSelectionEvent e)
         {
             // tính toán dữ liệu & fill vào data (equipments)
-            equipments
+            PickWeapon();
             
             Vector3 cameraPosition = mainCamera.transform.position;
             cameraPosition.x = e.CameraOffsetPosition.x;
@@ -63,6 +81,27 @@ namespace _Game.Battle.UI
                 mainCamera.transform.position = cameraPosition;
                 container.anchoredPosition3D = Vector3.zero;
                 container.gameObject.SetActive(true);
+            }
+        }
+
+        private async void PickWeapon()
+        {
+            // Lấy weapon từ pool: vũ khí, máu, giáp ...
+            // Random level dựa trên wave hiện tại và level hiện tại
+            List<WeaponConfig.WeaponData> list = new List<WeaponConfig.WeaponData>();
+            list.AddRange(weapons);
+            list.AddRange(weapons);
+            list.AddRange(weapons);
+
+            for (int i = 0; i < equipments.Length; i++)
+            {
+                WeaponConfig.WeaponData weaponData = list[i];
+                WeaponSO so = await KitLoaded.LoadAsync<WeaponSO>(weaponData.WeaponId.ToString());
+                int equipmentLevel = FormulaUtils.RandomEquipmentLevel(1, 1, 5); 
+                Data data = equipments[i];
+                data.textPrice.SetText(weaponData.Price(equipmentLevel).ToString());
+                data.textTitle.SetText(weaponData.Name);
+                data.equipmentItem.Init(so.WeaponIcon, weaponData, equipmentLevel);
             }
         }
     }
