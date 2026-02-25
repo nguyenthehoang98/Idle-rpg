@@ -1,3 +1,4 @@
+using _Game.Battle.UI;
 using UnityEngine;
 
 namespace _Game.Battle.Level
@@ -5,6 +6,7 @@ namespace _Game.Battle.Level
     public class LevelDesignConfig : MonoBehaviour
     {
         [SerializeField] private Transform[] children;
+        [SerializeField] private Transform[] slots;
 
         public Vector2[] LoopPoints()
         {
@@ -15,6 +17,16 @@ namespace _Game.Battle.Level
             }
 
             return points;
+        }
+
+        public EquipmentItem[] AllEquipments()
+        {
+            EquipmentItem[] equipments = new EquipmentItem[children.Length];
+            for (int i = 0; i < equipments.Length; i++)
+            {
+                equipments[i] = slots[i].GetComponentInChildren<EquipmentItem>();
+            }
+            return equipments;
         }
     }
 }

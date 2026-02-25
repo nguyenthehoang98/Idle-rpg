@@ -89,8 +89,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imgIcon: {fileID: 1202290257647024983}
-  weaponId: 0
-  weaponLevel: 0
 --- !u!1 &319084829890734868
 GameObject:
   m_ObjectHideFlags: 0
@@ -259,8 +257,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imgIcon: {fileID: 1522978719657964635}
-  weaponId: 0
-  weaponLevel: 0
 --- !u!1 &611039410196598862
 GameObject:
   m_ObjectHideFlags: 0
@@ -580,6 +576,7 @@ MonoBehaviour:
     textPrice: {fileID: 5053094149934298585}
   container: {fileID: 4998748182359168110}
   yStartPosition: -700
+  btnResume: {fileID: 2803196466493205477}
 --- !u!1 &2135575763236634134
 GameObject:
   m_ObjectHideFlags: 0
@@ -2452,8 +2449,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imgIcon: {fileID: 6657699114180878273}
-  weaponId: 0
-  weaponLevel: 0
 --- !u!1 &8328738421247652547
 GameObject:
   m_ObjectHideFlags: 0

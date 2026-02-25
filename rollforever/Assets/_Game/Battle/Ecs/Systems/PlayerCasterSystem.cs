@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using _Game.Battle.Ecs.Data;
 using _Game.Battle.Ecs.Events;
 using _Game.Battle.Ecs.Model;
+using _Game.Battle.Level;
+using _Game.Battle.UI;
 using _Game.Scripts.Configs;
 using _Game.Scripts.Model;
 using _KIT.Config;
@@ -33,6 +35,7 @@ namespace _Game.Battle.Ecs.Systems
         private EcsWorld world;
 
         private Transform playerInstance;
+        private LevelDesignConfig levelDesignInstance; 
 
         public async void Init(IEcsSystems systems)
         {
@@ -45,13 +48,25 @@ namespace _Game.Battle.Ecs.Systems
             weaponConfig = KitConfigManager.Get<WeaponConfig>();
             points = shareData.LevelSpawnSo.designConfig.LoopPoints();
 
-            Object.Instantiate(shareData.LevelSpawnSo.designConfig)
-                .transform.position = Vector3.zero;
+            levelDesignInstance = Object.Instantiate(shareData.LevelSpawnSo.designConfig);
+            levelDesignInstance.transform.position = Vector3.zero;
 
             GameObject go = await KitLoaded.LoadAsync<GameObject>("Player");
             playerInstance = Object.Instantiate(go).transform;
             playerInstance.position = new Vector3(points[0].x, points[0].y);
             playerInstance.gameObject.SetActive(false);
+
+            // todo: build slots
+            for (int i = 0; i < points.Length; i++)
+            {
+                int entity = world.NewEntity();
+                statPool.Add(entity) = new StatData()
+                    .Insert(StatType.Attack, new Stat(0))
+                    .Insert(StatType.CriticalRate, new Stat(0))
+                    .Insert(StatType.CriticalDamage, new Stat(0))
+                    .Insert(StatType.AttackPercent, new Stat(0));
+                mapSlotEntities[i] = entity;
+            }
         }
 
         public void Run(IEcsSystems systems)
@@ -108,34 +123,48 @@ namespace _Game.Battle.Ecs.Systems
             }
 #endif
         }
-        
-        public void Equip(int slotId, int weaponId, int level)
-        {
-            bool flag1 = weaponConfig.Find(weaponId, out WeaponConfig.WeaponData weaponData);
-            if (!flag1)
-            {
-#if DEVELOP_MODE || COMBAT_FULL_LOG
-                Debug.LogError($"Not found Weapon with id '{weaponId}'");
-#endif
-                return;
-            }
 
-            Vector2 position = shareData.LevelSpawnSo.designConfig.LoopPoints()[slotId];
-            
-            int entity = world.NewEntity();
-            weaponCasterPool.Add(entity) = new WeaponCasterData
+        public void UpdateEquipment()
+        {
+            var equipments = levelDesignInstance.AllEquipments();
+            for (int i = 0; i < equipments.Length; i++)
             {
-                skillId = weaponData.SkillId,
-                startPosition = position,
-            };
-            statPool.Add(entity) = new StatData()
-                .Insert(StatType.Attack, new Stat(weaponData.Attack(level)))
-                .Insert(StatType.CriticalRate, new Stat(0))
-                .Insert(StatType.CriticalDamage, new Stat(0))
-                .Insert(StatType.AttackPercent, new Stat(0));
-            
-            mapSlotEntities[slotId] = entity;
-            EventBus.Instance.Publish(new EquipEquipmentEvent(slotId, weaponId, level));
+                int entity = mapSlotEntities[i];
+                EquipmentItem equipment = equipments[i];
+                if (equipment == null)
+                    continue;
+
+                int level = equipment.WeaponLevel;
+                int weaponId = equipment.WeaponData.WeaponId;
+                bool flag1 = weaponConfig.Find(weaponId, out WeaponConfig.WeaponData weaponData);
+                if (!flag1)
+                {
+#if DEVELOP_MODE || COMBAT_FULL_LOG
+                    Debug.LogError($"Not found Weapon with id '{weaponId}'");
+#endif
+                    continue;
+                }
+                
+                Vector2 position = equipment.transform.parent.position;
+                WeaponCasterData casterData = new WeaponCasterData
+                {
+                    skillId = weaponData.WeaponId,
+                    startPosition = position,
+                };
+                if (weaponCasterPool.Has(entity))
+                {
+                    weaponCasterPool.Get(entity) = casterData;
+                }
+                else
+                {
+                    weaponCasterPool.Add(entity) = casterData;
+                }
+
+                ref var stat = ref statPool.Get(entity);
+                stat.Replace(StatType.Attack, new Stat(weaponData.Attack(level)));
+                
+                EventBus.Instance.Publish(new WaveChooseEquipmentEvent(i, weaponId, level));
+            }
         }
 
         // Cần xóa stat cũ -> stat mới.

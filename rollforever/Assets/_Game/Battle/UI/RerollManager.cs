@@ -9,12 +9,14 @@ using _KIT.Config;
 using _KIT.Event;
 using _KIT.Schedule;
 using _KIT.Utils;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _Game.Battle.UI
 {
     public class RerollManager : MonoBehaviour
     {
+        [SerializeField] private EquipmentManager equipmentManager;
         [SerializeField] private GameObject container;
         [SerializeField] private GameLoop gameLoop;
         [SerializeField] private RerollItem[] itemsView;
@@ -25,43 +27,39 @@ namespace _Game.Battle.UI
 
         private void OnEnable()
         {
-            EventBus.Instance.Subscribe<NextWaveEvent>(OnNextWave);
-            EventBus.Instance.Subscribe<EquipEquipmentEvent>(OnEquipEquipment);
+            EventBus.Instance.Subscribe<WaveCompleteEvent>(OnNextWave);
+            EventBus.Instance.Subscribe<WaveChooseEquipmentEvent>(OnEquipEquipment);
         }
 
         private void OnDisable()
         {
-            EventBus.Instance.Unsubscribe<NextWaveEvent>(OnNextWave);
-            EventBus.Instance.Unsubscribe<EquipEquipmentEvent>(OnEquipEquipment);
+            EventBus.Instance.Unsubscribe<WaveCompleteEvent>(OnNextWave);
+            EventBus.Instance.Unsubscribe<WaveChooseEquipmentEvent>(OnEquipEquipment);
         }
 
-        private void OnEquipEquipment(EquipEquipmentEvent e)
+        private void OnEquipEquipment(WaveChooseEquipmentEvent e)
         {
             mapSlotEquipment[e.SlotId] = e.WeaponId;
         }
 
-        private void OnNextWave(NextWaveEvent e)
+        private void OnNextWave(WaveCompleteEvent e)
         {
-            gameLoop.Pause();
-            Ecs.Systems.AbilitySystem system = e.Systems.GetSystem<Ecs.Systems.AbilitySystem>();
-            system.ClearAll();
-
-            Action<BuffConfig.BuffData> onComplete = (BuffConfig.BuffData buffData) =>
+            int[] wavesChooseBuff = new int[] { 2, 5, 7, 10, 12, 15, 17, 20 };
+            if (wavesChooseBuff.Contains(e.Wave))
             {
-                allValue[buffData.StatType] = buffData;
-                List<BuffConfig.BuffData> buffDatas = allValue.Values.ToList();
-                e.Systems.GetSystem<PlayerCasterSystem>().UpgradeStat(buffDatas);
-            
-                e.OnCompleted();
-                container.SetActive(false);
-            
-                gameLoop.Resume();
-            };
-            ShowReroll(1, onComplete);
-        }
-
-        private void ShowEquipment()
-        {
+                Action<BuffConfig.BuffData> onComplete = (BuffConfig.BuffData buffData) =>
+                {
+                    allValue[buffData.StatType] = buffData;
+                    EventBus.Instance.Publish(new WaveChooseBuffEvent(allValue.Values.ToArray()));
+                    container.SetActive(false);
+                    EventBus.Instance.Publish(new WaveShowChooseEquipmentEvent(1, 4.5f, new float2(0, -1)));
+                };
+                ShowReroll(1, onComplete);                
+            }
+            else
+            {
+                EventBus.Instance.Publish(new WaveShowChooseEquipmentEvent(1, 4.5f, new float2(0, -1)));
+            }
         }
 
         // Nâng cấp chỉ số các slot. 
@@ -93,7 +91,7 @@ namespace _Game.Battle.UI
                 }
             }
 
-            var values = mapSlotEquipment.Values;
+            Dictionary<int, int>.ValueCollection values = mapSlotEquipment.Values;
             HashSet<int> equipments = new HashSet<int>();
             foreach (var value in values)
                 equipments.Add(value);

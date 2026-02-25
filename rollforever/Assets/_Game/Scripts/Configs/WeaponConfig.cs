@@ -45,36 +45,21 @@ namespace _Game.Scripts.Configs
         public override void OnPostImported()
         {
             // todo: validate weapon so
-            string folder = "Assets/_Sources/Battles/Weapons";
-            UnityEngine.Object[] objects = AssetDatabase.LoadAllAssetsAtPath(folder);
+            string folder = "Assets/_Sources/Battles/Weapons/{0}.asset";
             foreach (var weaponData in baseData)
             {
-                bool found = false;
-                foreach (var o in objects)
-                {
-                    if (o.name == weaponData.WeaponId.ToString())
-                    {
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found)
+                var so = AssetDatabase.LoadAssetAtPath<WeaponSO>(string.Format(folder, weaponData.WeaponId));
+                if (so == null)
                 {
                     Debug.LogError($"Not found file WeaponSO with id '{weaponData.WeaponId}'");
                 }
-            }
-
-            foreach (var obj in objects)
-            {
-                if (obj is WeaponSO weaponSo)
+                else
                 {
-                    if(weaponSo.WeaponIcon == null)
+                    if (so.WeaponIcon == null)
                     {
-                        Debug.LogError("WeaponIcon is null, at file WeaponSO: " + AssetDatabase.GetAssetPath(obj));
+                        Debug.LogError("WeaponIcon is null, at file WeaponSO: " + string.Format(folder, weaponData.WeaponId));
                     }
                 }
-                else Debug.LogError($"Object {AssetDatabase.GetAssetPath(obj)} not defined is WeaponSO");
             }
         }
 #endif
@@ -86,7 +71,7 @@ namespace _Game.Scripts.Configs
         [Serializable]
         public class WeaponData
         {
-            [FormerlySerializedAs("weapon_id")] [SerializeField] private int weaponWeaponID;
+            [SerializeField] private int weapon_id;
             [SerializeField] private string name;
             [SerializeField] private int skill_id;
             [SerializeField] private float base_attack_stat;
@@ -101,7 +86,7 @@ namespace _Game.Scripts.Configs
             [SerializeField] private string jsonUnlockLv25;
             [SerializeField] private string jsonUnlockLv30;
 
-            public int WeaponId => weaponWeaponID;
+            public int WeaponId => weapon_id;
             public string Name => name;
             public int SkillId => skill_id;
             public int Price(int level) => FormulaUtils.Price(level, base_price, price_linear);

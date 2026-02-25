@@ -11,6 +11,7 @@ using _Game.Scripts.Weapon;
 using _KIT.Config;
 using _KIT.Resource;
 using TMPro;
+using UnityEngine.UI;
 
 namespace _Game.Battle.UI
 {
@@ -30,11 +31,16 @@ namespace _Game.Battle.UI
         [SerializeField] private Data[] equipments;
         [SerializeField] private RectTransform container;
         [SerializeField] private float yStartPosition;
-
+        [Header("Buttons")]
+        [SerializeField] private Button btnResume;
         private List<WeaponConfig.WeaponData> weapons = new List<WeaponConfig.WeaponData>();
 
         private void Awake()
         {
+            btnResume.onClick.AddListener(() =>
+            {
+                EventBus.Instance.Publish(new WaveResumeEvent());
+            });
             Vector3 anchoredPosition = container.anchoredPosition3D;
             anchoredPosition.y = yStartPosition;
             container.anchoredPosition3D = anchoredPosition;
@@ -52,15 +58,15 @@ namespace _Game.Battle.UI
 
         private void OnEnable()
         {
-            EventBus.Instance.Subscribe<OpenEquipmentSelectionEvent>(OnOpenEquipmentSelection);
+            EventBus.Instance.Subscribe<WaveShowChooseEquipmentEvent>(OnOpenEquipmentSelection);
         }
 
         private void OnDisable()
         {
-            EventBus.Instance.Unsubscribe<OpenEquipmentSelectionEvent>(OnOpenEquipmentSelection);
+            EventBus.Instance.Unsubscribe<WaveShowChooseEquipmentEvent>(OnOpenEquipmentSelection);
         }
 
-        void OnOpenEquipmentSelection(OpenEquipmentSelectionEvent e)
+        void OnOpenEquipmentSelection(WaveShowChooseEquipmentEvent e)
         {
             // tính toán dữ liệu & fill vào data (equipments)
             PickWeapon();
@@ -96,8 +102,8 @@ namespace _Game.Battle.UI
             for (int i = 0; i < equipments.Length; i++)
             {
                 WeaponConfig.WeaponData weaponData = list[i];
-                WeaponSO so = await KitLoaded.LoadAsync<WeaponSO>(weaponData.WeaponId.ToString());
-                int equipmentLevel = FormulaUtils.RandomEquipmentLevel(1, 1, 5); 
+                WeaponSO so = await KitLoaded.LoadAsync<WeaponSO>(weaponData.WeaponId.ToString(), true);
+                int equipmentLevel = FormulaUtils.RandomEquipmentLevel(1, 1, 1); 
                 Data data = equipments[i];
                 data.textPrice.SetText(weaponData.Price(equipmentLevel).ToString());
                 data.textTitle.SetText(weaponData.Name);

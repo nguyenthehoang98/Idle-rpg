@@ -21,6 +21,8 @@ MonoBehaviour:
     base_attack_stat: 12
     attack_linear: 3
     attack_rate: 1.05
+    base_price: 0
+    price_linear: 1
     jsonUnlockLv5: 
     jsonUnlockLv10: 
     jsonUnlockLv15: 

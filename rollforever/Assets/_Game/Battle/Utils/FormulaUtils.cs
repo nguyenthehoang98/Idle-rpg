@@ -1,6 +1,7 @@
 using _Game.Scripts.Configs;
 using _KIT.Utils;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace _Game.Battle.Utils
 {
@@ -119,44 +120,45 @@ namespace _Game.Battle.Utils
         /// </summary>
         public static int Price(int level, int basePrice, int priceLinear)
         {
-            return basePrice * level * priceLinear;
+            return basePrice + level * priceLinear;
         }
 
         public static int RandomEquipmentLevel(int playerLevel, int currentWave, float bonusRate)
         {
             float waveFactor = currentWave * WAVE_FACTOR_MULTIPLIER;
             float levelFactor = playerLevel * LEVEL_FACTOR_MULTIPLIER;
-            float flat = 1 + waveFactor + levelFactor + bonusRate;
-            float[] weights = new float[BaseRateEquipment.Length];
+            float flat = waveFactor + levelFactor + bonusRate;
+            int[] weights = BaseRateEquipment;
             for (int i = 0; i < weights.Length; i++)
             {
-                weights[i] = flat + BaseRateEquipment[i];
+                weights[i] += (int)flat;
             }
 
             return GetWeightedRandomIndex(weights);
         }
         
-        private static int GetWeightedRandomIndex(float[] weights)
+        private static int GetWeightedRandomIndex(int[] weights)
         {
-            float total = 0f;
+            int total = 0;
             for (int i = 0; i < weights.Length; i++)
                 total += weights[i];
+            int rand = RandomUtils.Range(0, total);
 
-            float rand = RandomUtils.Range(0, total);
-            float cumulative = 0f;
-
+#if DEVELOP_MODE || COMBAT_FULL_LOG
+            Debug.Log($"Random weapon level. Picker:{rand}, Range:[{string.Join(',', weights)}]");
+#endif
             for (int i = 0; i < weights.Length; i++)
             {
-                cumulative += weights[i];
-                if (rand <= cumulative)
-                    return i;
+                rand -= weights[i];
+                if (rand <= 0)
+                    return (i + 1);
             }
 
             return 0;
         }
 
-        private const float WAVE_FACTOR_MULTIPLIER = 3f;
-        private const float LEVEL_FACTOR_MULTIPLIER = 1f;
-        private static readonly int[] BaseRateEquipment = new int[] { 50, 30, 15, 4, 1 };
+        private const float WAVE_FACTOR_MULTIPLIER = 1f;
+        private const float LEVEL_FACTOR_MULTIPLIER = 0.5f;
+        private static int[] BaseRateEquipment => new int[] { 70, 20, 10, 4, 1 };
     }
 }

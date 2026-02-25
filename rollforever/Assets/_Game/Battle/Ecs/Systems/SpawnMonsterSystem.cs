@@ -24,7 +24,7 @@ using Random = UnityEngine.Random;
 namespace _Game.Battle.Ecs.Systems
 {
     [Serializable]
-    public class SpawnMonsterSystem : IEcsInitSystem, IEcsRunSystem
+    public class SpawnMonsterSystem : IEcsInitSystem, IEcsRunSystem, IEcsPostDestroySystem
     {
         private Dictionary<int, UnitView> sourcePrefab;
 
@@ -86,6 +86,8 @@ namespace _Game.Battle.Ecs.Systems
             Debug.Log("Spawn wave: " + JsonUtility.ToJson(waveContainer));
 #endif
             // todo: preload assets
+            
+            EventBus.Instance.Subscribe<WaveResumeEvent>(OnWaveResume);
 
             isPaused = false;
         }
@@ -154,19 +156,25 @@ namespace _Game.Battle.Ecs.Systems
             if (waitingNextWave && monsterAliveFilter.GetEntitiesCount() == 0)
             {
                 waitingNextWave = false;
-                Action onComplete = () =>
-                {
-                    batchIndex = 0;
-                    spawnedCount = 0;
-                    batchElapsed = 0;
-                    spawnElapsed = 0;
-                    waitElapsed = 0;
-                    isPaused = false;
-                };
-                EventBus.Instance.Publish(new NextWaveEvent((EcsSystems)systems, onComplete));
+                EventBus.Instance.Publish(new WaveCompleteEvent(waveIndex));
             }
         }
 
+        public void PostDestroy(IEcsSystems systems)
+        {
+            EventBus.Instance.Unsubscribe<WaveResumeEvent>(OnWaveResume);
+        }
+        
+        private void OnWaveResume(WaveResumeEvent e)
+        {
+            batchIndex = 0;
+            spawnedCount = 0;
+            batchElapsed = 0;
+            spawnElapsed = 0;
+            waitElapsed = 0;
+            isPaused = false;
+        }
+        
         private void SpawnEntity(MonsterConfig.MonsterData monsterData, int level, float2 center, float rangeLimit,
             float radius)
         {

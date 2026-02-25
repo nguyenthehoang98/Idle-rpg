@@ -1,3 +1,4 @@
+using System;
 using _Game.Battle.Checker;
 using _Game.Battle.Ecs.Events;
 using _Game.Battle.Ecs.Model;
@@ -90,9 +91,33 @@ namespace _Game.Battle
             systems.InitShared();
             systems.Init();
             
-            EventBus.Instance.Publish(new OpenEquipmentSelectionEvent(0, 4.5f, new float2(0, -1)));
+            EventBus.Instance.Publish(new WaveShowChooseEquipmentEvent(0, 4.5f, new float2(0, -1)));
 
             this.WaitNextFrame(KitEntryScene.Instance.CloseLoadingScene);
+        }
+
+        private void OnEnable()
+        {
+            EventBus.Instance.Subscribe<WaveCompleteEvent>(OnNextWave);
+            EventBus.Instance.Subscribe<WaveResumeEvent>(OnWaveResume);
+        }
+
+        private void OnDisable()
+        {
+            EventBus.Instance.Unsubscribe<WaveCompleteEvent>(OnNextWave);
+            EventBus.Instance.Unsubscribe<WaveResumeEvent>(OnWaveResume);
+        }
+
+        private void OnWaveResume(WaveResumeEvent e)
+        {
+            gameLoop.Resume();
+        }
+
+        private void OnNextWave(WaveCompleteEvent e)
+        {
+            gameLoop.Pause();
+            Ecs.Systems.AbilitySystem system = systems.GetSystem<Ecs.Systems.AbilitySystem>();
+            system.ClearAll();
         }
 
         private void OnDestroy()

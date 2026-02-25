@@ -13,6 +13,10 @@ namespace _Game.Battle.UI
         private WeaponConfig.WeaponData weaponData;
         private int weaponLevel;
 
+        public WeaponConfig.WeaponData WeaponData => weaponData;
+
+        public int WeaponLevel => weaponLevel;
+
         public void Init(Sprite sprite, WeaponConfig.WeaponData weaponData, int weaponLevel)
         {
             this.imgIcon.sprite = sprite;

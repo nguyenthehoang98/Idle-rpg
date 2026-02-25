@@ -17,6 +17,11 @@ namespace _Game.Battle.Ecs.Data
             return this;
         }
 
+        public void Replace(StatType type, Stat stat)
+        {
+            map[(int)type] = stat;
+        }
+
         public bool TryGetValue(StatType type, out Stat stat)
         {
             return map.TryGetValue((int)type, out stat);
