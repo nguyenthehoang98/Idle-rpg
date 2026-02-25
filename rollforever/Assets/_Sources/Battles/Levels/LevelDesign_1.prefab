@@ -149,6 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equipmentContainer: {fileID: 5679993020761211645}
+  slotSize: {x: 80, y: 80}
 --- !u!1 &1267598604380160021
 GameObject:
   m_ObjectHideFlags: 0
@@ -399,6 +400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equipmentContainer: {fileID: 1267598604380160021}
+  slotSize: {x: 80, y: 80}
 --- !u!1 &2456534092589935374
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,6 +550,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equipmentContainer: {fileID: 5256149209948777562}
+  slotSize: {x: 80, y: 80}
 --- !u!1 &2458983898679472003
 GameObject:
   m_ObjectHideFlags: 0
@@ -697,6 +700,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equipmentContainer: {fileID: 3625978708086603317}
+  slotSize: {x: 80, y: 80}
 --- !u!1 &2823356496719471094
 GameObject:
   m_ObjectHideFlags: 0
@@ -846,6 +850,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equipmentContainer: {fileID: 7348841307904097041}
+  slotSize: {x: 80, y: 80}
 --- !u!1 &3016885483357574561
 GameObject:
   m_ObjectHideFlags: 0
@@ -1096,6 +1101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equipmentContainer: {fileID: 6275395606713878068}
+  slotSize: {x: 80, y: 80}
 --- !u!1 &3325895496224286759
 GameObject:
   m_ObjectHideFlags: 0
@@ -1150,6 +1156,15 @@ MonoBehaviour:
   - {fileID: 7748928129196202815}
   - {fileID: 7629490104215738035}
   - {fileID: 4581514363079082181}
+  slots:
+  - {fileID: 4843695585409986871}
+  - {fileID: 7996912361724464888}
+  - {fileID: 3318797932628600873}
+  - {fileID: 742872633733185968}
+  - {fileID: 1038635465709176379}
+  - {fileID: 1949391714733971050}
+  - {fileID: 8625813807814839631}
+  - {fileID: 7883282213268834680}
 --- !u!1 &3625978708086603317
 GameObject:
   m_ObjectHideFlags: 0
@@ -1944,6 +1959,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equipmentContainer: {fileID: 3016885483357574561}
+  slotSize: {x: 80, y: 80}
 --- !u!1 &8993481368375591784
 GameObject:
   m_ObjectHideFlags: 0
@@ -2093,3 +2109,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equipmentContainer: {fileID: 5110614861997318158}
+  slotSize: {x: 80, y: 80}

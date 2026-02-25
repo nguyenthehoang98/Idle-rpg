@@ -10,6 +10,7 @@ using _Game.Scripts.Configs;
 using _Game.Scripts.Weapon;
 using _KIT.Config;
 using _KIT.Resource;
+using _KIT.Utils;
 using TMPro;
 using UnityEngine.UI;
 
@@ -31,15 +32,26 @@ namespace _Game.Battle.UI
         [SerializeField] private Data[] equipments;
         [SerializeField] private RectTransform container;
         [SerializeField] private float yStartPosition;
+        [SerializeField] private float cameraOrthographicSize = 17;
         [Header("Buttons")]
         [SerializeField] private Button btnResume;
         private List<WeaponConfig.WeaponData> weapons = new List<WeaponConfig.WeaponData>();
 
+        private Vector3 prevCameraPosition;
+        private bool canClickButton;
+        
         private void Awake()
         {
             btnResume.onClick.AddListener(() =>
             {
-                EventBus.Instance.Publish(new WaveResumeEvent());
+                if (canClickButton)
+                {
+                    canClickButton = false;
+                    Close(() =>
+                    {
+                        EventBus.Instance.Publish(new WaveResumeEvent());                        
+                    });
+                }
             });
             Vector3 anchoredPosition = container.anchoredPosition3D;
             anchoredPosition.y = yStartPosition;
@@ -72,6 +84,7 @@ namespace _Game.Battle.UI
             PickWeapon();
             
             Vector3 cameraPosition = mainCamera.transform.position;
+            prevCameraPosition = cameraPosition;
             cameraPosition.x = e.CameraOffsetPosition.x;
             cameraPosition.y = e.CameraOffsetPosition.y;
             if (math.abs(e.Duration) > 0)
@@ -80,6 +93,7 @@ namespace _Game.Battle.UI
                 mainCamera.transform.DOMove(cameraPosition, e.Duration).SetEase(Ease.OutSine);
                 mainCamera.DOOrthoSize(e.OrthoSize, e.Duration).SetEase(Ease.OutSine);
                 container.DOAnchorPosY(0, e.Duration).SetEase(Ease.OutSine);
+                this.WaitInvoke(e.Duration, () => { canClickButton = true; });
             }
             else
             {
@@ -87,7 +101,21 @@ namespace _Game.Battle.UI
                 mainCamera.transform.position = cameraPosition;
                 container.anchoredPosition3D = Vector3.zero;
                 container.gameObject.SetActive(true);
+                canClickButton = true;
             }
+        }
+
+        private void Close(Action onClosed)
+        {
+            float duration = 0.3f;
+            mainCamera.transform.DOMove(prevCameraPosition, duration).SetEase(Ease.OutSine);
+            mainCamera.DOOrthoSize(cameraOrthographicSize, duration).SetEase(Ease.OutSine);
+            container.DOAnchorPosY(yStartPosition, duration).SetEase(Ease.OutSine);
+            this.WaitInvoke(duration, () =>
+            {
+                container.gameObject.SetActive(false);
+                onClosed();
+            });
         }
 
         private async void PickWeapon()

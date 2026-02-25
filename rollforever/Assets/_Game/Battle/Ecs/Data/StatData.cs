@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using _Game.Scripts.Configs;
 using _Game.Scripts.Model;
 using Unity.Collections;
@@ -45,7 +45,7 @@ namespace _Game.Battle.Ecs.Data
             }
         }
 
-        public void ReplaceModifier(List<BuffConfig.BuffData> buffDatas)
+        public void ReplaceModifier(BuffConfig.BuffData[] buffDatas)
         {
             if (modifiers.IsCreated)
             {
@@ -56,7 +56,7 @@ namespace _Game.Battle.Ecs.Data
             }
             else
             {
-                modifiers = new NativeHashMap<int, StatModifier>(buffDatas.Count, Allocator.Persistent);
+                modifiers = new NativeHashMap<int, StatModifier>(buffDatas.Length, Allocator.Persistent);
             }
 
             modifiers.Clear();

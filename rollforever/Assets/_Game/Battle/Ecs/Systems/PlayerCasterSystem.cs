@@ -18,7 +18,7 @@ using UnityEngine;
 
 namespace _Game.Battle.Ecs.Systems
 {
-    public class PlayerCasterSystem : IEcsInitSystem, IEcsRunSystem
+    public class PlayerCasterSystem : IEcsInitSystem, IEcsRunSystem, IEcsPostDestroySystem
     {
         [EcsInject] private readonly BattleStartupShareData shareData;
 
@@ -41,6 +41,7 @@ namespace _Game.Battle.Ecs.Systems
         {
             world = systems.GetWorld();
             weaponFilter = world.Filter<WeaponCasterData>()
+                .Inc<StatData>()
                 .End();
             weaponCasterPool = world.GetPool<WeaponCasterData>();
             statPool = world.GetPool<StatData>();
@@ -67,6 +68,10 @@ namespace _Game.Battle.Ecs.Systems
                     .Insert(StatType.AttackPercent, new Stat(0));
                 mapSlotEntities[i] = entity;
             }
+            
+            EventBus.Instance.Subscribe<WaveCompleteEvent>(OnWaveComplete);
+            EventBus.Instance.Subscribe<WaveResumeEvent>(OnWaveResume);
+            EventBus.Instance.Subscribe<WaveChooseBuffEvent>(OnWaveChooseBuff);
         }
 
         public void Run(IEcsSystems systems)
@@ -92,16 +97,19 @@ namespace _Game.Battle.Ecs.Systems
 
                 if (mapSlotEntities.TryGetValue(currentPoint, out int entity))
                 {
-                    ref var caster = ref weaponCasterPool.Get(entity);
-                    EventBus.Instance.Publish(
-                        new CastSkillEvent(entity, caster.skillId, caster.startPosition, Team.Player)
-                    );
+                    if (weaponCasterPool.Has(entity))
+                    {
+                        ref var caster = ref weaponCasterPool.Get(entity);
+                        EventBus.Instance.Publish(
+                            new CastSkillEvent(entity, caster.skillId, caster.startPosition, Team.Player)
+                        );
 #if UNITY_EDITOR && (DEVELOP_MODE || COMBAT_FULL_LOG)
-                    GeometryGizmos.DrawObb(
-                        new OBB(caster.startPosition, new float2(0.4f, 0.4f), new float2(1, 0), new float2(0, 1)),
-                        Color.red, shareData.TimeDelta
-                    );
+                        GeometryGizmos.DrawObb(
+                            new OBB(caster.startPosition, new float2(0.4f, 0.4f), new float2(1, 0), new float2(0, 1)),
+                            Color.red, shareData.TimeDelta
+                        );
 #endif
+                    }
                 }
             }
             
@@ -124,8 +132,31 @@ namespace _Game.Battle.Ecs.Systems
 #endif
         }
 
-        public void UpdateEquipment()
+        public void PostDestroy(IEcsSystems systems)
         {
+            EventBus.Instance.Unsubscribe<WaveCompleteEvent>(OnWaveComplete);
+            EventBus.Instance.Unsubscribe<WaveResumeEvent>(OnWaveResume);
+            EventBus.Instance.Unsubscribe<WaveChooseBuffEvent>(OnWaveChooseBuff);
+        }
+
+        private void OnWaveComplete(WaveCompleteEvent obj)
+        {
+            SetActivePlayer(false);
+        }
+
+        private void OnWaveChooseBuff(WaveChooseBuffEvent e)
+        {
+            foreach (var entity in weaponFilter)
+            {
+                ref var stat = ref statPool.Get(entity);
+                stat.ReplaceModifier(e.Buffs);
+                EventBus.Instance.Publish(new EntityChangedStatEvent(entity));
+            }
+        }
+
+        private void OnWaveResume(WaveResumeEvent e)
+        {
+            // todo: update eqm
             var equipments = levelDesignInstance.AllEquipments();
             for (int i = 0; i < equipments.Length; i++)
             {
@@ -148,7 +179,7 @@ namespace _Game.Battle.Ecs.Systems
                 Vector2 position = equipment.transform.parent.position;
                 WeaponCasterData casterData = new WeaponCasterData
                 {
-                    skillId = weaponData.WeaponId,
+                    skillId = weaponData.SkillId,
                     startPosition = position,
                 };
                 if (weaponCasterPool.Has(entity))
@@ -163,21 +194,13 @@ namespace _Game.Battle.Ecs.Systems
                 ref var stat = ref statPool.Get(entity);
                 stat.Replace(StatType.Attack, new Stat(weaponData.Attack(level)));
                 
-                EventBus.Instance.Publish(new WaveChooseEquipmentEvent(i, weaponId, level));
+                EventBus.Instance.Publish(new WaveUpdateEquipmentEvent(i, weaponId, level));
             }
+
+            SetActivePlayer(true);
         }
 
-        // Cần xóa stat cũ -> stat mới.
-        public void UpgradeStat(List<BuffConfig.BuffData> buffDatas)
-        {
-            foreach (var e in weaponFilter)
-            {
-                ref var stat = ref statPool.Get(e);
-                stat.ReplaceModifier(buffDatas);
-            }
-        }
-
-        public void SetActivePlayer(bool active)
+        void SetActivePlayer(bool active)
         {
             if (playerInstance != null) playerInstance.gameObject.SetActive(active);
         }

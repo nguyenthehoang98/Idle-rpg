@@ -86,10 +86,11 @@ namespace _Game.Battle.Ecs.Systems
             Debug.Log("Spawn wave: " + JsonUtility.ToJson(waveContainer));
 #endif
             // todo: preload assets
-            
-            EventBus.Instance.Subscribe<WaveResumeEvent>(OnWaveResume);
 
             isPaused = false;
+            
+            EventBus.Instance.Subscribe<WaveResumeEvent>(OnWaveResume);
+            EventBus.Instance.Subscribe<EntityChangedStatEvent>(OnEntityChangedStat);
         }
 
         public void Run(IEcsSystems systems)
@@ -162,9 +163,22 @@ namespace _Game.Battle.Ecs.Systems
 
         public void PostDestroy(IEcsSystems systems)
         {
+            EventBus.Instance.Subscribe<EntityChangedStatEvent>(OnEntityChangedStat);
             EventBus.Instance.Unsubscribe<WaveResumeEvent>(OnWaveResume);
         }
-        
+
+        private void OnEntityChangedStat(EntityChangedStatEvent e)
+        {
+            if (statPool.Has(e.Entity))
+            {
+                var stat = statPool.Get(e.Entity);
+                stat.TryGetValue(StatType.MoveSpeed, out var moveSpeed);
+                
+                var unit = unitPool.Get(e.Entity);
+                shareData.Simulator.SetAgentMaxSpeed(unit.agentId, moveSpeed.Value);
+            }
+        }
+
         private void OnWaveResume(WaveResumeEvent e)
         {
             batchIndex = 0;
@@ -199,6 +213,7 @@ namespace _Game.Battle.Ecs.Systems
 #endif
 
             // todo: set agent
+            shareData.Simulator.SetAgentMaxSpeed(agentId, monsterData.MoveSpeed);
             shareData.Simulator.SetAgentRadius(agentId, radius);
             shareData.Simulator.SetAgentNeighborDist(agentId, radius * 3f);
             shareData.Simulator.SetAgentGoal(agentId, goal);

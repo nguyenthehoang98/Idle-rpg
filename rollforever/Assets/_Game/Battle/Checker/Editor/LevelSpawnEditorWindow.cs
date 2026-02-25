@@ -62,7 +62,7 @@ namespace _Game.Battle.Checker.Editor
 
             if (GUILayout.Button("Preview Level", GUILayout.Height(32)))
             {
-                string path = "Assets/Sources/Spawners/Spawner_" + input.level + ".asset";
+                string path = "Assets/_Sources/Battles/Levels/LevelSpawner_" + input.level + ".asset";
                 LevelSpawnSO so = AssetDatabase.LoadAssetAtPath<LevelSpawnSO>(path);
                 if (so != null)
                 {

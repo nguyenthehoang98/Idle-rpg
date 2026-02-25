@@ -28,16 +28,16 @@ namespace _Game.Battle.UI
         private void OnEnable()
         {
             EventBus.Instance.Subscribe<WaveCompleteEvent>(OnNextWave);
-            EventBus.Instance.Subscribe<WaveChooseEquipmentEvent>(OnEquipEquipment);
+            EventBus.Instance.Subscribe<WaveUpdateEquipmentEvent>(OnEquipEquipment);
         }
 
         private void OnDisable()
         {
             EventBus.Instance.Unsubscribe<WaveCompleteEvent>(OnNextWave);
-            EventBus.Instance.Unsubscribe<WaveChooseEquipmentEvent>(OnEquipEquipment);
+            EventBus.Instance.Unsubscribe<WaveUpdateEquipmentEvent>(OnEquipEquipment);
         }
 
-        private void OnEquipEquipment(WaveChooseEquipmentEvent e)
+        private void OnEquipEquipment(WaveUpdateEquipmentEvent e)
         {
             mapSlotEquipment[e.SlotId] = e.WeaponId;
         }

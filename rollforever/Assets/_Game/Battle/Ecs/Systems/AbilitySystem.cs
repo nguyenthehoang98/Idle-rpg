@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using _Game.Battle.AbilitySystem;
 using _Game.Battle.Ecs.Data;
 using _Game.Battle.Ecs.Events;
@@ -70,11 +71,21 @@ namespace _Game.Battle.Ecs.Systems
                 }
             }
 
-            List<int> playerSkillsId = new List<int> { 20101 };
-            foreach (var skillId in playerSkillsId)
+            WeaponConfig weaponConfig = KitConfigManager.Get<WeaponConfig>();
+            int[] keys = weaponConfig.AllKeys;
+            foreach (var key in keys)
             {
-                allSkills.Add(skillId, GetSkillAddressPath(skillId));
+                if (weaponConfig.Find(key, out var weaponData))
+                {
+                    int skillId = weaponData.SkillId;
+                    allSkills.Add(skillId, GetSkillAddressPath(skillId));
+                }
             }
+
+#if DEVELOP_MODE || COMBAT_FULL_LOG
+            int[] ids = allSkills.Keys.ToArray();
+            Debug.Log($"Abilities Loaded: " + string.Join(',', ids));
+#endif
 
             findTargets = new Dictionary<FindTargetType, IFindTarget>();
             findTargets.Add(FindTargetType.Farthest, new FarthestFindTarget(shareData.Simulator, unitPool));
