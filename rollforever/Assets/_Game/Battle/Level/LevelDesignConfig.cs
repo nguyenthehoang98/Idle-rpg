@@ -7,6 +7,9 @@ namespace _Game.Battle.Level
     {
         [SerializeField] private Transform[] children;
         [SerializeField] private Transform[] slots;
+        [SerializeField] private Vector2 cellSize = new Vector2(0.8f, 0.8f);
+
+        public Vector2 CellSize => cellSize;
 
         public Vector2[] LoopPoints()
         {

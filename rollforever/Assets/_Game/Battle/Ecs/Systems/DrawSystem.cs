@@ -5,6 +5,8 @@ using Geometry;
 using Geometry.Primary;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
+using RVO;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _Game.Battle.Ecs.Systems
@@ -58,6 +60,35 @@ namespace _Game.Battle.Ecs.Systems
                 Debug.DrawRay((Vector2) position, ((Vector2) velocity).normalized * radius);
             }
 #endif
+
+#if UNITY_EDITOR
+            Simulator simulator = shareData.Simulator;
+            simulator.EnsureCompleted();
+            foreach (var obstacle in shareData.Obstacles)
+            {
+                var first = simulator.GetFirstObstacleVertexId(obstacle);
+
+                var current = first;
+
+                while (true)
+                {
+                    var next = simulator.GetNextObstacleVertexId(current);
+
+                    float2 p0 = simulator.GetObstacleVertex(current);
+                    float2 p1 = simulator.GetObstacleVertex(next);
+
+                    Debug.DrawLine((Vector2)p0, (Vector2)p1, Color.yellow, shareData.TimeDelta);
+
+                    if (next == first)
+                    {
+                        break;
+                    }
+
+                    current = next;
+                }
+            }
+#endif
+            
         }
     }
 }

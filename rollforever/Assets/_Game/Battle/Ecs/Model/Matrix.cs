@@ -354,58 +354,6 @@ namespace _Game.Battle.Ecs.Model
             }
         }
 
-        public bool TryFindCellExpandFromCenter(float2 position, float2 pivot, out float2 result)
-        {
-            int2 center = WorldToCell(pivot);
-            int2 snapshot = new int2(-1, -1);
-
-            var bestDistToPoint = float.MaxValue;
-            var maxDist = math.max(width, height);
-
-            for (var dist = 0; dist <= maxDist; dist++)
-            {
-                var foundAtThisDist = false;
-                bestDistToPoint = float.MaxValue;
-
-                for (var dx = -dist; dx <= dist; dx++)
-                    for (var dy = -dist; dy <= dist; dy++)
-                    {
-                        if (math.max(math.abs(dx), math.abs(dy)) != dist)
-                            continue;
-
-                        var c = new int2(center.x + dx, center.y + dy);
-
-                        if (!IsInsideGrid(c))
-                            continue;
-
-                        if (!IsEmpty(c))
-                            continue;
-
-                        if (!HasAnyFreeNeighbor8(c))
-                            continue;
-
-                        var wp = CellToWorld(c);
-                        var dToPoint = math.lengthsq(wp - position);
-
-                        if (!foundAtThisDist || dToPoint < bestDistToPoint)
-                        {
-                            foundAtThisDist = true;
-                            bestDistToPoint = dToPoint;
-                            snapshot = c;
-                        }
-                    }
-
-                if (foundAtThisDist)
-                {
-                    result = CellToWorld(snapshot);
-                    return true;
-                }
-            }
-
-            result = CellToWorld(snapshot);
-            return false;
-        }
-
         int2 WorldToCell(float2 worldPos) => WorldToCell(worldPos, float2.zero);
 
         int2 WorldToCell(float2 worldPos, float2 gridCenter)

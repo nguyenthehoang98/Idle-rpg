@@ -15,11 +15,14 @@ using _KIT.Event;
 using _KIT.Pool;
 using _KIT.Resource;
 using _KIT.Utils;
+using Geometry;
+using Geometry.Primary;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using Ray = Geometry.Primary.Ray;
 
 namespace _Game.Battle.Ecs.Systems
 {
@@ -88,8 +91,7 @@ namespace _Game.Battle.Ecs.Systems
 #endif
             // todo: preload assets
             var points = shareData.LevelSpawnSo.designConfig.LoopPoints();
-            CalculateBounds(points, out var center, out var size, out var min, out var max);
-            boxSize = size;
+            CalculateBounds(points, shareData.LevelSpawnSo.designConfig.CellSize * 1.1f, out boxSize);
             isPaused = false;
             
             EventBus.Instance.Subscribe<WaveResumeEvent>(OnWaveResume);
@@ -197,17 +199,18 @@ namespace _Game.Battle.Ecs.Systems
             float2 pos = RandomPointBetweenRects_NoLoop(new Vector2(10, 17), new Vector2(12, 19), center);
 
             float2 goal;
-            if (RaycastToSquareBorder(pos, center, rangeLimit, out float2 hitPoint))
+            Ray ray = new Ray(pos, math.normalize(center - pos));
+            Shape shape = new Shape { type = ShapeType.Box, size = boxSize };
+            if (GeometryUtils.Ray(ray, 99, shape, float2.zero, out _, out var hitPoint))
             {
                 goal = hitPoint;
             }
             else
             {
-                goal = ProjectPointToSquareBorder(pos, rangeLimit);
+                goal = ProjectPointToSquareBorder(pos, boxSize);
             }
 
             int agentId = shareData.Simulator.AddAgent(pos);
-
             int entity = world.NewEntity();
             unitPool.Add(entity) = new UnitData(agentId);
 #if UNITY_EDITOR
@@ -299,9 +302,10 @@ namespace _Game.Battle.Ecs.Systems
             return center + new Vector2(xRight, yRight);
         }
 
-        static float2 ProjectPointToSquareBorder(float2 pos, float halfSize)
+        static float2 ProjectPointToSquareBorder(float2 pos, float2 size)
         {
             float2 p = pos;
+            float2 halfSize = size / 2;
 
             float absX = math.abs(p.x);
             float absY = math.abs(p.y);
@@ -309,22 +313,23 @@ namespace _Game.Battle.Ecs.Systems
             if (absX > absY)
             {
                 // chạm cạnh trái / phải
-                p.x = math.sign(p.x) * halfSize;
-                p.y = math.clamp(p.y, -halfSize, halfSize);
+                p.x = math.sign(p.x) * halfSize.x;
+                p.y = math.clamp(p.y, -halfSize.y, halfSize.y);
             }
             else
             {
                 // chạm cạnh trên / dưới
-                p.y = math.sign(p.y) * halfSize;
-                p.x = math.clamp(p.x, -halfSize, halfSize);
+                p.y = math.sign(p.y) * halfSize.y;
+                p.x = math.clamp(p.x, -halfSize.x, halfSize.x);
             }
 
             return p;
         }
 
-        static bool RaycastToSquareBorder(float2 pos, float2 center, float2 halfSize, out float2 hitPoint)
+        static bool RaycastToSquareBorder(float2 pos, float2 center, float2 size, out float2 hitPoint)
         {
             hitPoint = float2.zero;
+            float2 halfSize = size / 2;
 
             float2 dir = math.normalize(center - pos);
 
@@ -506,13 +511,15 @@ namespace _Game.Battle.Ecs.Systems
 #endif
         }
 
-        static void CalculateBounds(Vector2[] points, out Vector2 center, out Vector2 size, out Vector2 min, out Vector2 max)
+        static void CalculateBounds(Vector2[] points, Vector2 cellSize, out Vector2 boxSize)
         {
             if (points == null || points.Length == 0)
             {
-                center = size = min = max = Vector2.zero;
+                boxSize = Vector2.zero;
                 return;
             }
+
+            Vector2 halfCell = cellSize * 0.5f;
 
             float minX = points[0].x;
             float maxX = points[0].x;
@@ -529,11 +536,13 @@ namespace _Game.Battle.Ecs.Systems
                 if (p.y > maxY) maxY = p.y;
             }
 
-            min = new Vector2(minX, minY);
-            max = new Vector2(maxX, maxY);
+            // Expand theo kích thước cell
+            minX -= halfCell.x;
+            maxX += halfCell.x;
+            minY -= halfCell.y;
+            maxY += halfCell.y;
 
-            size = max - min;
-            center = (min + max) * 0.5f;
+            boxSize = new Vector2(maxX - minX, maxY - minY);
         }
         
         #endregion

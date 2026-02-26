@@ -3,6 +3,7 @@ using _Game.Battle.AbilitySystem;
 using _Game.Battle.Ecs.Data;
 using _Game.Battle.Ecs.Model;
 using _Game.Battle.Ecs.View;
+using Geometry;
 using Geometry.Primary;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
@@ -15,8 +16,8 @@ namespace _Game.Battle.Ecs.Systems
     {
         [EcsInject] private readonly BattleStartupShareData shareData;
 
-        private const float THREASHOLD_VELOCITYSQ = 0.5f;
-        private const float THREASHOLD_TIME = 1f;
+        private const float THREASHOLD_VELOCITY = 0.015f;
+        private const float THREASHOLD_TIME = 3f;
 
         private EcsPool<UnitData> unitPool;
         private EcsPool<ShapeData> shapePool;
@@ -72,11 +73,11 @@ namespace _Game.Battle.Ecs.Systems
             {
                 var unit = unitPool.Get(e);
                 var paused = shareData.Simulator.IsAgentPaused(unit.agentId);
-                if (paused)
-                    continue;
-
                 var position = shareData.Simulator.GetAgentPosition(unit.agentId);
                 var goal = shareData.Simulator.GetAgentGoal(unit.agentId);
+                Debug.DrawLine((Vector2)position, (Vector2)goal, paused? Color.green : Color.red, shareData.TimeDelta);
+                if (paused)
+                    continue;
 
                 UnitView.TryUpdatePosition(e, position);
                 
@@ -88,15 +89,7 @@ namespace _Game.Battle.Ecs.Systems
                 }
                 else
                 {
-                    if (shareData.Matrix.TryFindCellExpandFromCenter(position, goal, out var result))
-                    {
-                        shareData.Simulator.SetAgentGoal(unit.agentId, result);
-                    }
-                    else
-                    {
-                        shareData.Simulator.SetAgentGoal(unit.agentId);
-                    }
-                    
+                    shareData.Simulator.SetAgentGoal(unit.agentId);
                     unitPosTemp.isStopped = false;
                 }
             }
@@ -117,10 +110,10 @@ namespace _Game.Battle.Ecs.Systems
                 var paused = shareData.Simulator.IsAgentPaused(unit.agentId);
                 if (paused)
                     continue;
-
-                ref var unitPosTemp = ref unitPosTempPool.Get(e);
+                /*ref var unitPosTemp = ref unitPosTempPool.Get(e);
                 var velocity = shareData.Simulator.GetAgentVelocity(unit.agentId);
-                if (math.lengthsq(velocity) < THREASHOLD_VELOCITYSQ)
+                var maxSpeed = shareData.Simulator.GetAgentMaxSpeed(unit.agentId);
+                if (maxSpeed * THREASHOLD_VELOCITY > math.length(velocity))
                 {
                     unitPosTemp.threasholdVelocityElapsed += shareData.TimeDelta;
                     if (unitPosTemp.threasholdVelocityElapsed >= THREASHOLD_TIME)
@@ -132,7 +125,7 @@ namespace _Game.Battle.Ecs.Systems
                 else
                 {
                     unitPosTemp.threasholdVelocityElapsed = 0;
-                }
+                }*/
             }
         }
 
@@ -154,7 +147,7 @@ namespace _Game.Battle.Ecs.Systems
             float2 halfSize = size * 0.5f;
             float a = math.abs(point.x - center.x);
             float b = math.abs(point.y - center.y);
-            bool inside = a <= halfSize.x || b <= halfSize.y;
+            bool inside = a <= halfSize.x && b <= halfSize.y;
             return inside;
         }
     }

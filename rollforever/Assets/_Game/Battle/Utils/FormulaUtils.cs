@@ -125,13 +125,27 @@ namespace _Game.Battle.Utils
 
         public static int RandomEquipmentLevel(int playerLevel, int currentWave, float bonusRate)
         {
+            int maxTier = GetMaxTierByWave(currentWave);
+
             float waveFactor = currentWave * WAVE_FACTOR_MULTIPLIER;
             float levelFactor = playerLevel * LEVEL_FACTOR_MULTIPLIER;
-            float flat = waveFactor + levelFactor + bonusRate;
-            int[] weights = BaseRateEquipment;
-            for (int i = 0; i < weights.Length; i++)
+            float power = waveFactor + levelFactor + bonusRate;
+
+            int[] baseRates = BaseRateEquipment;
+            int[] weights = new int[baseRates.Length];
+
+            for (int i = 0; i < baseRates.Length; i++)
             {
-                weights[i] += (int)flat;
+                // Hard cap: khóa tier cao
+                if (i + 1 > maxTier)
+                {
+                    weights[i] = 0;
+                    continue;
+                }
+
+                // Multiplicative scaling
+                float scale = 1f + power * ScaleRate[i];
+                weights[i] = Mathf.Max(1, Mathf.RoundToInt(baseRates[i] * scale));
             }
 
             return GetWeightedRandomIndex(weights);
@@ -142,23 +156,35 @@ namespace _Game.Battle.Utils
             int total = 0;
             for (int i = 0; i < weights.Length; i++)
                 total += weights[i];
-            int rand = RandomUtils.Range(0, total);
+
+            int rand = RandomUtils.Range(0, total); // [0, total)
 
 #if DEVELOP_MODE || COMBAT_FULL_LOG
-            Debug.Log($"Random weapon level. Picker:{rand}, Range:[{string.Join(',', weights)}]");
+            Debug.Log($"Random weapon level. Picker:{rand}, Weights:[{string.Join(',', weights)}]");
 #endif
+
+            int cumulative = 0;
             for (int i = 0; i < weights.Length; i++)
             {
-                rand -= weights[i];
-                if (rand <= 0)
-                    return (i + 1);
+                cumulative += weights[i];
+                if (rand < cumulative)
+                    return i + 1; // level bắt đầu từ 1
             }
 
-            return 0;
+            return weights.Length; // fallback
         }
 
+        private static int GetMaxTierByWave(int wave)
+        {
+            if (wave < 4) return 2;
+            if (wave < 8) return 3;
+            if (wave < 12) return 4;
+            return 5;
+        }
+        
         private const float WAVE_FACTOR_MULTIPLIER = 1f;
         private const float LEVEL_FACTOR_MULTIPLIER = 0.5f;
-        private static int[] BaseRateEquipment => new int[] { 70, 20, 10, 4, 1 };
+        private static int[] BaseRateEquipment => new int[] { 800, 100, 50, 20, 10 };
+        private static float[] ScaleRate = new float[] { 1, 0.6f, 0.4f, 0.25f, 0.1f };
     }
 }

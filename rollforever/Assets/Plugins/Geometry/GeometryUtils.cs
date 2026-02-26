@@ -7,6 +7,27 @@ namespace Geometry
 {
     public static class GeometryUtils
     {
+        public static bool Ray(
+            Ray ray, float length, Shape shape, float2 shapeCurrPos, 
+            out float hitLength, out float2 hitPoint
+        )
+        {
+            if (shape.type == ShapeType.Circle)
+            {
+                return GeometryMath.RayCircle(ray, new Circle(shapeCurrPos, shape.radius), length,
+                    out hitLength, out hitPoint);
+            }
+            else if (shape.type == ShapeType.Box)
+            {
+                return GeometryMath.RayBox(ray, Box.FromCenter(shapeCurrPos, shape.size), length,
+                    out hitLength, out hitPoint);
+            }
+            else
+            {
+                throw new NotImplementedException("Unknown shape type");
+            }
+        }
+        
         public static bool Overlaps(
             Shape source, float2 sourcePrevPos, float2 sourceCurrPos,
             Shape target, float2 targetCurrPos)

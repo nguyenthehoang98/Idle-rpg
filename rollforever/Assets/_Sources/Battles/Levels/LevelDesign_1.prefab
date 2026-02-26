@@ -1165,6 +1165,7 @@ MonoBehaviour:
   - {fileID: 1949391714733971050}
   - {fileID: 8625813807814839631}
   - {fileID: 7883282213268834680}
+  cellSize: {x: 1, y: 1}
 --- !u!1 &3625978708086603317
 GameObject:
   m_ObjectHideFlags: 0
