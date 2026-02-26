@@ -45,6 +45,7 @@ namespace _Game.Battle.Ecs.Systems
         private SkillConfig skillConfig;
         private MonsterConfig monsterConfig;
         private WaveContainer waveContainer;
+        private Vector2 boxSize;
         private int waveIndex;
         private int batchIndex;
         private int spawnedCount;
@@ -86,7 +87,9 @@ namespace _Game.Battle.Ecs.Systems
             Debug.Log("Spawn wave: " + JsonUtility.ToJson(waveContainer));
 #endif
             // todo: preload assets
-
+            var points = shareData.LevelSpawnSo.designConfig.LoopPoints();
+            CalculateBounds(points, out var center, out var size, out var min, out var max);
+            boxSize = size;
             isPaused = false;
             
             EventBus.Instance.Subscribe<WaveResumeEvent>(OnWaveResume);
@@ -121,7 +124,7 @@ namespace _Game.Battle.Ecs.Systems
                             if (monsterConfig.Find(tuple.id, out MonsterConfig.MonsterData monsterData))
                             {
                                 float radius = 0.5f;
-                                SpawnEntity(monsterData, tuple.level, float2.zero, 2, radius);
+                                SpawnEntity(monsterData, tuple.level, float2.zero, radius);
                                 spawnedCount++;
                                 spawnElapsed -= batch.interval;
                             }
@@ -189,10 +192,9 @@ namespace _Game.Battle.Ecs.Systems
             isPaused = false;
         }
         
-        private void SpawnEntity(MonsterConfig.MonsterData monsterData, int level, float2 center, float rangeLimit,
-            float radius)
+        private void SpawnEntity(MonsterConfig.MonsterData monsterData, int level, float2 center, float radius)
         {
-            float2 pos = RandomPointOnCircle(center, Random.Range(20, 30));
+            float2 pos = RandomPointBetweenRects_NoLoop(new Vector2(10, 17), new Vector2(12, 19), center);
 
             float2 goal;
             if (RaycastToSquareBorder(pos, center, rangeLimit, out float2 hitPoint))
@@ -221,7 +223,10 @@ namespace _Game.Battle.Ecs.Systems
 
             // todo: add component
             shapePool.Add(entity) = ShapeData.Circle(radius);
-            unitPosTempPool.Add(entity) = new UnitPosTempData { stopDistance = monsterData.AttackDistance };
+            unitPosTempPool.Add(entity) = new UnitPosTempData
+            {
+                stopDistance = boxSize + Vector2.one * monsterData.AttackDistance
+            };
             healthPool.Add(entity) = new HealthData((int)monsterData.Health(level));
             modifierPool.Add(entity) = new UnitModifierData(StatusEffect.None);
             monsterCasterPool.Add(entity) = new MonsterCasterData
@@ -244,13 +249,54 @@ namespace _Game.Battle.Ecs.Systems
             view.Init(entity, pos, shareData);
         }
 
-        static float2 RandomPointOnCircle(float2 center, float radius)
+        #region Static
+        
+        static Vector2 RandomPointBetweenRects_NoLoop(Vector2 sizeA, Vector2 sizeB, Vector2 center)
         {
-            float angle = Random.Range(0f, Mathf.PI * 2f);
-            return center + new float2(
-                Mathf.Cos(angle),
-                Mathf.Sin(angle)
-            ) * radius;
+            Vector2 halfA = sizeA * 0.5f;
+            Vector2 halfB = sizeB * 0.5f;
+
+            float topArea = sizeB.x * (halfB.y - halfA.y);
+            float bottomArea = topArea;
+            float leftArea = (halfB.x - halfA.x) * sizeA.y;
+            float rightArea = leftArea;
+
+            float totalArea = topArea + bottomArea + leftArea + rightArea;
+
+            float r = Random.Range(0f, totalArea);
+
+            // TOP
+            if (r < topArea)
+            {
+                float x = Random.Range(-halfB.x, halfB.x);
+                float y = Random.Range(halfA.y, halfB.y);
+                return center + new Vector2(x, y);
+            }
+
+            r -= topArea;
+
+            // BOTTOM
+            if (r < bottomArea)
+            {
+                float x = Random.Range(-halfB.x, halfB.x);
+                float y = Random.Range(-halfB.y, -halfA.y);
+                return center + new Vector2(x, y);
+            }
+
+            r -= bottomArea;
+
+            // LEFT
+            if (r < leftArea)
+            {
+                float x = Random.Range(-halfB.x, -halfA.x);
+                float y = Random.Range(-halfA.y, halfA.y);
+                return center + new Vector2(x, y);
+            }
+
+            // RIGHT
+            float xRight = Random.Range(halfA.x, halfB.x);
+            float yRight = Random.Range(-halfA.y, halfA.y);
+            return center + new Vector2(xRight, yRight);
         }
 
         static float2 ProjectPointToSquareBorder(float2 pos, float halfSize)
@@ -276,14 +322,14 @@ namespace _Game.Battle.Ecs.Systems
             return p;
         }
 
-        static bool RaycastToSquareBorder(float2 pos, float2 center, float halfSize, out float2 hitPoint)
+        static bool RaycastToSquareBorder(float2 pos, float2 center, float2 halfSize, out float2 hitPoint)
         {
             hitPoint = float2.zero;
 
             float2 dir = math.normalize(center - pos);
 
-            float2 min = center - halfSize;
-            float2 max = center + halfSize;
+            float2 min = center - halfSize.x;
+            float2 max = center + halfSize.y;
 
             float2 invDir = 1.0f / dir;
 
@@ -395,7 +441,7 @@ namespace _Game.Battle.Ecs.Systems
             return waves;
         }
 
-        private static void LogPower(List<LevelSpawnSO.WaveSpawn> waveSpawns, Wave[] waves, string name,
+        static void LogPower(List<LevelSpawnSO.WaveSpawn> waveSpawns, Wave[] waves, string name,
             MonsterConfig monsterConfig, SkillConfig skillConfig)
         {
 #if DEVELOP_MODE
@@ -459,6 +505,40 @@ namespace _Game.Battle.Ecs.Systems
             }
 #endif
         }
+
+        static void CalculateBounds(Vector2[] points, out Vector2 center, out Vector2 size, out Vector2 min, out Vector2 max)
+        {
+            if (points == null || points.Length == 0)
+            {
+                center = size = min = max = Vector2.zero;
+                return;
+            }
+
+            float minX = points[0].x;
+            float maxX = points[0].x;
+            float minY = points[0].y;
+            float maxY = points[0].y;
+
+            for (int i = 1; i < points.Length; i++)
+            {
+                Vector2 p = points[i];
+
+                if (p.x < minX) minX = p.x;
+                if (p.x > maxX) maxX = p.x;
+                if (p.y < minY) minY = p.y;
+                if (p.y > maxY) maxY = p.y;
+            }
+
+            min = new Vector2(minX, minY);
+            max = new Vector2(maxX, maxY);
+
+            size = max - min;
+            center = (min + max) * 0.5f;
+        }
+        
+        #endregion
+
+        #region Struct Data
         
         [Serializable]
         struct WaveContainer
@@ -494,5 +574,7 @@ namespace _Game.Battle.Ecs.Systems
                 this.level = level;
             }
         }
+
+        #endregion
     }
 }

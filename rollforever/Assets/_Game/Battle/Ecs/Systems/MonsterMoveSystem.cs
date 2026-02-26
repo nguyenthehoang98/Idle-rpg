@@ -7,6 +7,7 @@ using Geometry.Primary;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace _Game.Battle.Ecs.Systems
 {
@@ -14,7 +15,7 @@ namespace _Game.Battle.Ecs.Systems
     {
         [EcsInject] private readonly BattleStartupShareData shareData;
 
-        private const float THREASHOLD_VELOCITYSQ = 2.0f;
+        private const float THREASHOLD_VELOCITYSQ = 0.5f;
         private const float THREASHOLD_TIME = 1f;
 
         private EcsPool<UnitData> unitPool;
@@ -138,15 +139,23 @@ namespace _Game.Battle.Ecs.Systems
         void Pause(int entity, int agentId, float2 position)
         {
             shareData.Matrix.OccupiedPoint(entity, position);
-
             shareData.Simulator.PauseAgent(agentId, true);
         }
 
-        bool ShouldPause(StatusEffect effect, float2 pos, float2 goal, float stopDistance)
+        bool ShouldPause(StatusEffect effect, float2 point, float2 goal, float2 stopSize)
         {
             if (effect.Has(StatusEffect.Stun)) return true;
             if (effect.Has(StatusEffect.KnockBack)) return true;
-            return math.distancesq(goal, pos) <= shareData.Matrix.Radiussq(stopDistance);
+            return IsInside(float2.zero, point, stopSize);
+        }
+        
+        bool IsInside(float2 center, float2 point, float2 size)
+        {
+            float2 halfSize = size * 0.5f;
+            float a = math.abs(point.x - center.x);
+            float b = math.abs(point.y - center.y);
+            bool inside = a <= halfSize.x || b <= halfSize.y;
+            return inside;
         }
     }
 }

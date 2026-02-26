@@ -406,8 +406,6 @@ namespace _Game.Battle.Ecs.Model
             return false;
         }
 
-        public float Radiussq(float radius) => (radius + cellSize) * (radius + cellSize) + float.Epsilon;
-
         int2 WorldToCell(float2 worldPos) => WorldToCell(worldPos, float2.zero);
 
         int2 WorldToCell(float2 worldPos, float2 gridCenter)
