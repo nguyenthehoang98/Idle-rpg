@@ -19,7 +19,7 @@ MonoBehaviour:
     name: Monster 1
     address_prefab: 1001_monster
     skill_id: 10101
-    move_speed: 1
+    move_speed: 2
     attack_distance: 0.75
     base_attack_stat: 1
     attack_linear: 0.2
@@ -34,7 +34,7 @@ MonoBehaviour:
     name: Monster 2
     address_prefab: 1002_monster
     skill_id: 10201
-    move_speed: 1
+    move_speed: 2
     attack_distance: 0.75
     base_attack_stat: 1
     attack_linear: 0.2

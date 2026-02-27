@@ -866,8 +866,8 @@ namespace RVO
 
         public void SetAgentGoal(int agentId, float2 goal)
         {
-            var index = this.agentIndexLookup[agentId];
-            Agent agent = this.agents[index];
+            var index = agentIndexLookup[agentId];
+            Agent agent = agents[index];
             float2 direction = goal - agent.position;
             if (math.abs(direction.x) <= 0 && math.abs(direction.y) <= 0)
             {
@@ -875,7 +875,12 @@ namespace RVO
             }
             else
             {
-                agent.prefVelocity = math.normalize(direction) * agent.maxSpeed;                
+                if (math.lengthsq(direction) > 1f)
+                {
+                    direction = math.normalize(direction);
+                }
+
+                SetAgentPrefVelocity(agentId, direction);
             }
 
             agent.goal = goal;
@@ -901,7 +906,12 @@ namespace RVO
             }
             else
             {
-                agent.prefVelocity = math.normalize(direction) * agent.maxSpeed;                
+                if (math.lengthsq(direction) > 1f)
+                {
+                    direction = math.normalize(direction);
+                }
+
+                SetAgentPrefVelocity(agentId, direction);
             }
 
             this.agents[index] = agent;

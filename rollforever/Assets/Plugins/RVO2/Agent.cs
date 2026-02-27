@@ -607,7 +607,7 @@ namespace RVO
         internal void Update(float timeStep)
         {
             if (paused) return;
-            this.velocity = this.newVelocity;
+            this.velocity = newVelocity;
             this.position += this.velocity * timeStep;
         }
 

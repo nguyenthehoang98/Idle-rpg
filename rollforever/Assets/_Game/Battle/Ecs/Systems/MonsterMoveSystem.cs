@@ -9,15 +9,15 @@ using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
 using Unity.Mathematics;
 using UnityEngine;
+using Ray = Geometry.Primary.Ray;
 
 namespace _Game.Battle.Ecs.Systems
 {
-    public class MonsterMoveSystem : IEcsInitSystem, IEcsRunSystem, IEcsPostRunSystem
+    public class MonsterMoveSystem : IEcsInitSystem, IEcsRunSystem
     {
         [EcsInject] private readonly BattleStartupShareData shareData;
-
-        private const float THREASHOLD_VELOCITY = 0.015f;
-        private const float THREASHOLD_TIME = 3f;
+        
+        const float THRESHOLD_DISTANCE = 0.3F;
 
         private EcsPool<UnitData> unitPool;
         private EcsPool<ShapeData> shapePool;
@@ -89,7 +89,16 @@ namespace _Game.Battle.Ecs.Systems
                 }
                 else
                 {
-                    shareData.Simulator.SetAgentGoal(unit.agentId);
+                    if (shareData.Matrix.TryFindCellExpandFromCenter(position, goal, out var result))
+                    {
+                        shareData.Simulator.SetAgentGoal(unit.agentId, result);
+                        Debug.DrawLine((Vector2)position, (Vector2)goal, Color.magenta, 1);
+                        GeometryGizmos.DrawBox(Box.FromCenter(goal, new float2(0.4f, 0.4f)), Color.magenta, 1);
+                    }
+                    else
+                    {
+                        shareData.Simulator.SetAgentGoal(unit.agentId);
+                    }
                     unitPosTemp.isStopped = false;
                 }
             }
@@ -99,56 +108,26 @@ namespace _Game.Battle.Ecs.Systems
             shareData.Simulator.EnsureCompleted();
         }
 
-        public void PostRun(IEcsSystems systems)
-        {
-            shareData.Simulator.EnsureCompleted();
-
-            foreach (var e in filter)
-            {
-                var unit = unitPool.Get(e);
-
-                var paused = shareData.Simulator.IsAgentPaused(unit.agentId);
-                if (paused)
-                    continue;
-                /*ref var unitPosTemp = ref unitPosTempPool.Get(e);
-                var velocity = shareData.Simulator.GetAgentVelocity(unit.agentId);
-                var maxSpeed = shareData.Simulator.GetAgentMaxSpeed(unit.agentId);
-                if (maxSpeed * THREASHOLD_VELOCITY > math.length(velocity))
-                {
-                    unitPosTemp.threasholdVelocityElapsed += shareData.TimeDelta;
-                    if (unitPosTemp.threasholdVelocityElapsed >= THREASHOLD_TIME)
-                    {
-                        var position = shareData.Simulator.GetAgentPosition(unit.agentId);
-                        Pause(e, unit.agentId, position);
-                    }
-                }
-                else
-                {
-                    unitPosTemp.threasholdVelocityElapsed = 0;
-                }*/
-            }
-        }
-
         void Pause(int entity, int agentId, float2 position)
         {
             shareData.Matrix.OccupiedPoint(entity, position);
             shareData.Simulator.PauseAgent(agentId, true);
         }
 
-        bool ShouldPause(StatusEffect effect, float2 point, float2 goal, float2 stopSize)
+        bool ShouldPause(StatusEffect effect, float2 point, float2 goal, float2 boxSize)
         {
             if (effect.Has(StatusEffect.Stun)) return true;
             if (effect.Has(StatusEffect.KnockBack)) return true;
-            return IsInside(float2.zero, point, stopSize);
-        }
-        
-        bool IsInside(float2 center, float2 point, float2 size)
-        {
-            float2 halfSize = size * 0.5f;
-            float a = math.abs(point.x - center.x);
-            float b = math.abs(point.y - center.y);
-            bool inside = a <= halfSize.x && b <= halfSize.y;
-            return inside;
+            Ray ray = new Ray(point, point - goal);
+            Shape shape = new Shape { type = ShapeType.Box, size = boxSize };
+            if (GeometryUtils.Ray(ray, 99, shape, float2.zero, out var hitLength, out var hitPoint))
+            {
+                // Khoảng cách từ điểm -> center có 
+                float d1 = math.distance(point, goal);
+                return hitLength - d1 < THRESHOLD_DISTANCE;
+            }
+
+            return false;
         }
     }
 }

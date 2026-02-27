@@ -20,7 +20,7 @@ namespace _Game.Battle.Ecs.Model
             Simulator = simulator;
             TimeDelta = GameLoop.FrameDeltaTime;
             Simulator.SetTimeStep(TimeDelta);
-            Simulator.SetAgentDefaults(1f, 10, 20f, 20f, 1.5f, 5f, float2.zero);
+            Simulator.SetAgentDefaults(15f, 10, 5f, 5f, 2f, 2f, new float2(0f, 0f));
             List<int> obstacles = new List<int>();
             foreach (var point in levelSpawnSo.designConfig.LoopPoints())
             {
