@@ -17,7 +17,7 @@ namespace _Game.Battle.Ecs.Systems
     {
         [EcsInject] private readonly BattleStartupShareData shareData;
         
-        const float THRESHOLD_DISTANCE = 0.3F;
+        const float THRESHOLD_DISTANCE = 0.1F;
 
         private EcsPool<UnitData> unitPool;
         private EcsPool<ShapeData> shapePool;
@@ -89,7 +89,7 @@ namespace _Game.Battle.Ecs.Systems
                 }
                 else
                 {
-                    if (shareData.Matrix.TryFindCellExpandFromCenter(position, goal, out var result))
+                    if (shareData.Matrix.TryFindCellOutsideAreaFromPivot(goal, float2.zero, shareData.BoxSize, out var result))
                     {
                         shareData.Simulator.SetAgentGoal(unit.agentId, result);
                         Debug.DrawLine((Vector2)position, (Vector2)goal, Color.magenta, 1);

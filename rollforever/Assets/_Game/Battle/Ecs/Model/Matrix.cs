@@ -354,56 +354,101 @@ namespace _Game.Battle.Ecs.Model
             }
         }
 
-        public bool TryFindCellExpandFromCenter(float2 position, float2 pivot, out float2 result)
+        public bool TryFindCellOutsideAreaFromPivot(
+            float2 pivot,
+            float2 areaCenter,
+            float2 areaSize,
+            out float2 result)
         {
             int2 center = WorldToCell(pivot);
-            int2 snapshot = new int2(-1, -1);
+            int2 bestCell = default;
 
-            var bestDistToPoint = float.MaxValue;
-            var maxDist = math.max(width, height);
+            float maxDist = math.max(width, height);
 
-            for (var dist = 0; dist <= maxDist; dist++)
+            float2 areaHalf = areaSize * 0.5f;
+            float2 areaMin = areaCenter - areaHalf;
+            float2 areaMax = areaCenter + areaHalf;
+
+            for (int dist = 0; dist <= maxDist; dist++)
             {
-                var foundAtThisDist = false;
-                bestDistToPoint = float.MaxValue;
+                bool found = false;
+                float bestDistSq = float.MaxValue;
 
-                for (var dx = -dist; dx <= dist; dx++)
-                    for (var dy = -dist; dy <= dist; dy++)
-                    {
-                        if (math.max(math.abs(dx), math.abs(dy)) != dist)
-                            continue;
-
-                        var c = new int2(center.x + dx, center.y + dy);
-
-                        if (!IsInsideGrid(c))
-                            continue;
-
-                        if (!IsEmpty(c))
-                            continue;
-
-                        if (!HasAnyFreeNeighbor8(c))
-                            continue;
-
-                        var wp = CellToWorld(c);
-                        var dToPoint = math.lengthsq(wp - position);
-
-                        if (!foundAtThisDist || dToPoint < bestDistToPoint)
-                        {
-                            foundAtThisDist = true;
-                            bestDistToPoint = dToPoint;
-                            snapshot = c;
-                        }
-                    }
-
-                if (foundAtThisDist)
+                void Check(int2 c)
                 {
-                    result = CellToWorld(snapshot);
+                    if (!IsInsideGrid(c))
+                        return;
+
+                    if (!IsEmpty(c))
+                        return;
+
+                    float2 cellCenter = CellToWorld(c);
+                    float2 cellHalf = cellSize * 0.5f;
+
+                    float2 cellMin = cellCenter - cellHalf;
+                    float2 cellMax = cellCenter + cellHalf;
+
+                    // ❗ Skip nếu cell còn overlap area
+                    if (OverlapAABB(cellMin, cellMax, areaMin, areaMax))
+                        return;
+
+                    // Tính khoảng cách thật giữa 2 AABB
+                    float distSq = DistanceSqAABB(cellMin, cellMax, areaMin, areaMax);
+
+                    if (!found || distSq < bestDistSq)
+                    {
+                        found = true;
+                        bestDistSq = distSq;
+                        bestCell = c;
+                    }
+                }
+
+                // ==== Duyệt perimeter ring ====
+
+                // Top & Bottom
+                for (int x = -dist; x <= dist; x++)
+                {
+                    Check(new int2(center.x + x, center.y + dist));
+                    Check(new int2(center.x + x, center.y - dist));
+                }
+
+                // Left & Right (bỏ góc để tránh check 2 lần)
+                for (int y = -dist + 1; y <= dist - 1; y++)
+                {
+                    Check(new int2(center.x + dist, center.y + y));
+                    Check(new int2(center.x - dist, center.y + y));
+                }
+
+                if (found)
+                {
+                    result = CellToWorld(bestCell);
                     return true;
                 }
             }
 
-            result = CellToWorld(snapshot);
+            result = default;
             return false;
+        }
+        
+        private bool OverlapAABB(
+            float2 minA, float2 maxA,
+            float2 minB, float2 maxB)
+        {
+            return !(maxA.x <= minB.x || minA.x >= maxB.x ||
+                     maxA.y <= minB.y || minA.y >= maxB.y);
+        }
+        
+        private float DistanceSqAABB(
+            float2 minA, float2 maxA,
+            float2 minB, float2 maxB)
+        {
+            float dx = math.max(0,
+                math.max(minB.x - maxA.x, minA.x - maxB.x));
+
+            float dy = math.max(0,
+                math.max(minB.y - maxA.y, minA.y - maxB.y));
+
+            return dx * dx + dy * dy;
         }
 
         int2 WorldToCell(float2 worldPos) => WorldToCell(worldPos, float2.zero);

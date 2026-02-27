@@ -48,7 +48,6 @@ namespace _Game.Battle.Ecs.Systems
         private SkillConfig skillConfig;
         private MonsterConfig monsterConfig;
         private WaveContainer waveContainer;
-        private Vector2 boxSize;
         private int waveIndex;
         private int batchIndex;
         private int spawnedCount;
@@ -90,8 +89,6 @@ namespace _Game.Battle.Ecs.Systems
             Debug.Log("Spawn wave: " + JsonUtility.ToJson(waveContainer));
 #endif
             // todo: preload assets
-            var points = shareData.LevelSpawnSo.designConfig.LoopPoints();
-            CalculateBounds(points, shareData.LevelSpawnSo.designConfig.CellSize * 1.1f, out boxSize);
             isPaused = false;
             
             EventBus.Instance.Subscribe<WaveResumeEvent>(OnWaveResume);
@@ -200,14 +197,14 @@ namespace _Game.Battle.Ecs.Systems
 
             float2 goal;
             Ray ray = new Ray(pos, math.normalize(center - pos));
-            Shape shape = new Shape { type = ShapeType.Box, size = boxSize };
+            Shape shape = new Shape { type = ShapeType.Box, size = shareData.BoxSize };
             if (GeometryUtils.Ray(ray, 99, shape, float2.zero, out _, out var hitPoint))
             {
                 goal = hitPoint;
             }
             else
             {
-                goal = ProjectPointToSquareBorder(pos, boxSize);
+                goal = ProjectPointToSquareBorder(pos, shareData.BoxSize);
             }
 
             int agentId = shareData.Simulator.AddAgent(pos);
@@ -228,7 +225,7 @@ namespace _Game.Battle.Ecs.Systems
             shapePool.Add(entity) = ShapeData.Circle(radius);
             unitPosTempPool.Add(entity) = new UnitPosTempData
             {
-                stopDistance = boxSize + Vector2.one * monsterData.AttackDistance
+                stopDistance = shareData.BoxSize + Vector2.one * monsterData.AttackDistance
             };
             healthPool.Add(entity) = new HealthData((int)monsterData.Health(level));
             modifierPool.Add(entity) = new UnitModifierData(StatusEffect.None);
@@ -511,40 +508,6 @@ namespace _Game.Battle.Ecs.Systems
 #endif
         }
 
-        static void CalculateBounds(Vector2[] points, Vector2 cellSize, out Vector2 boxSize)
-        {
-            if (points == null || points.Length == 0)
-            {
-                boxSize = Vector2.zero;
-                return;
-            }
-
-            Vector2 halfCell = cellSize * 0.5f;
-
-            float minX = points[0].x;
-            float maxX = points[0].x;
-            float minY = points[0].y;
-            float maxY = points[0].y;
-
-            for (int i = 1; i < points.Length; i++)
-            {
-                Vector2 p = points[i];
-
-                if (p.x < minX) minX = p.x;
-                if (p.x > maxX) maxX = p.x;
-                if (p.y < minY) minY = p.y;
-                if (p.y > maxY) maxY = p.y;
-            }
-
-            // Expand theo kích thước cell
-            minX -= halfCell.x;
-            maxX += halfCell.x;
-            minY -= halfCell.y;
-            maxY += halfCell.y;
-
-            boxSize = new Vector2(maxX - minX, maxY - minY);
-        }
-        
         #endregion
 
         #region Struct Data

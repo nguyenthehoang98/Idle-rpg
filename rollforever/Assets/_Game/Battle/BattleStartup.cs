@@ -60,7 +60,7 @@ namespace _Game.Battle
 
             // todo: battle world
             world = new EcsWorld();
-            Matrix matrix = new Matrix(100, 120, 0.5f);
+            Matrix matrix = new Matrix(100, 120, 1f);
             shareData = new BattleStartupShareData(
                 gameLoop,
                 new Simulator(), matrix, spawnSo

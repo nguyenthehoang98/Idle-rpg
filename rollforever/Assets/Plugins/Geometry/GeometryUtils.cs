@@ -134,5 +134,39 @@ namespace Geometry
 
             return false;
         }
+        
+        public static void CalculateBounds(float2[] points, float2 cellSize, out float2 boxSize)
+        {
+            if (points == null || points.Length == 0)
+            {
+                boxSize = float2.zero;
+                return;
+            }
+
+            float2 halfCell = cellSize * 0.5f;
+
+            float minX = points[0].x;
+            float maxX = points[0].x;
+            float minY = points[0].y;
+            float maxY = points[0].y;
+
+            for (int i = 1; i < points.Length; i++)
+            {
+                float2 p = points[i];
+
+                if (p.x < minX) minX = p.x;
+                if (p.x > maxX) maxX = p.x;
+                if (p.y < minY) minY = p.y;
+                if (p.y > maxY) maxY = p.y;
+            }
+
+            // Expand theo kích thước cell
+            minX -= halfCell.x;
+            maxX += halfCell.x;
+            minY -= halfCell.y;
+            maxY += halfCell.y;
+
+            boxSize = new float2(maxX - minX, maxY - minY);
+        }
     }
 }

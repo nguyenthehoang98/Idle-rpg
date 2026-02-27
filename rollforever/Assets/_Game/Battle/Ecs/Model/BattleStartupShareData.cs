@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using _Game.Battle.Level;
 using _KIT.Schedule;
+using Geometry;
 using RVO;
 using Unity.Mathematics;
 using UnityEngine;
@@ -20,11 +21,15 @@ namespace _Game.Battle.Ecs.Model
             Simulator = simulator;
             TimeDelta = GameLoop.FrameDeltaTime;
             Simulator.SetTimeStep(TimeDelta);
-            Simulator.SetAgentDefaults(15f, 10, 5f, 5f, 2f, 2f, new float2(0f, 0f));
+            Simulator.SetAgentDefaults(5f, 5, 1f, 1f, 2f, 2f, new float2(0f, 0f));
             List<int> obstacles = new List<int>();
-            foreach (var point in levelSpawnSo.designConfig.LoopPoints())
+            Vector2 cellSize = levelSpawnSo.designConfig.CellSize;
+            Vector2[] allPoints = levelSpawnSo.designConfig.LoopPoints();
+            float2[] pointsConvert = new float2[allPoints.Length];
+            for (var i = 0; i < allPoints.Length; i++)
             {
-                float2 halfSize = levelSpawnSo.designConfig.CellSize * 0.55f;
+                Vector2 point = allPoints[i];
+                float2 halfSize = cellSize * 0.55f;
                 List<float2> points = new List<float2>
                 {
                     point + new Vector2(-halfSize.x, -halfSize.y),
@@ -33,9 +38,13 @@ namespace _Game.Battle.Ecs.Model
                     point + new Vector2(halfSize.x, -halfSize.y),
                 };
                 obstacles.Add(Simulator.AddObstacle(points));
+                pointsConvert[i] = point;
             }
 
             Obstacles = obstacles.ToArray();
+            
+            GeometryUtils.CalculateBounds(pointsConvert, cellSize * 1.1f, out float2 boxSize);
+            BoxSize = boxSize;
         }
 
         GameLoop GameLoop { get; }
@@ -49,6 +58,8 @@ namespace _Game.Battle.Ecs.Model
         public float TimeDelta { get; private set; }
 
         public readonly int[] Obstacles;
+        
+        public Vector2 BoxSize { get; }
 
         public double Time => GameLoop.Time;
 
