@@ -58,6 +58,7 @@ namespace _Game.Battle.UI
             Vector3 anchoredPosition = container.anchoredPosition3D;
             anchoredPosition.y = yStartPosition;
             container.anchoredPosition3D = anchoredPosition;
+            container.gameObject.SetActive(false);
         }
 
         private void Start()

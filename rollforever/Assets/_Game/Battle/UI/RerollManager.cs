@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using _Game.Battle.Ecs.Events;
-using _Game.Battle.Ecs.Systems;
 using _Game.Scripts.Configs;
 using _Game.Scripts.Model;
 using _KIT.Config;
@@ -24,6 +23,11 @@ namespace _Game.Battle.UI
         private Dictionary<StatType, BuffConfig.BuffData> allValue = new Dictionary<StatType, BuffConfig.BuffData>();
         private Dictionary<int, int> mapSlotEquipment = new Dictionary<int, int>();
         private BuffConfig buffConfig;
+
+        private void Awake()
+        {
+            container.SetActive(false);
+        }
 
         private void OnEnable()
         {
