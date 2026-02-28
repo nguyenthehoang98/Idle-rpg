@@ -131,14 +131,14 @@ namespace _Game.Battle.Ecs.Model
         {
             float radiusSq = radius * radius;
 
-            Vector2 dir = b - a;
-            float lengthSq = dir.sqrMagnitude;
-
+            // Bounding box để giới hạn vùng quét
             Vector2 min = Vector2.Min(a, b) - Vector2.one * radius;
             Vector2 max = Vector2.Max(a, b) + Vector2.one * radius;
 
             int2 minCell = WorldToCell(min);
             int2 maxCell = WorldToCell(max);
+
+            float half = cellSize * 0.5f;
 
             for (int x = minCell.x; x <= maxCell.x; x++)
             {
@@ -148,14 +148,14 @@ namespace _Game.Battle.Ecs.Model
                     if (!IsInsideGrid(cell))
                         continue;
 
-                    Vector2 p = CellToWorld(cell);
+                    // ===== LẤY AABB CỦA CELL =====
+                    Vector2 center = CellToWorld(cell);
+                    Vector2 boxMin = center - new Vector2(half, half);
+                    Vector2 boxMax = center + new Vector2(half, half);
 
-                    float t = math.dot(p - a, dir) / lengthSq;
-                    t = math.clamp(t, 0f, 1f);
-
-                    Vector2 closest = a + dir * t;
-
-                    if (math.distancesq(p, closest) <= radiusSq)
+                    // ===== TÌM ĐIỂM GẦN NHẤT GIỮA SEGMENT & AABB =====
+                    Vector2 closest = ClosestPointSegmentAABB(a, b, boxMin, boxMax);
+                    if (math.distancesq(closest, ClosestPointOnSegment(a, b, closest)) <= radiusSq)
                     {
                         visitor.VisitCell(x, y);
 
@@ -168,6 +168,45 @@ namespace _Game.Battle.Ecs.Model
                     }
                 }
             }
+        }
+        
+        private Vector2 ClosestPointOnSegment(Vector2 a, Vector2 b, Vector2 p)
+        {
+            Vector2 dir = b - a;
+            float lengthSq = dir.sqrMagnitude;
+
+            if (lengthSq == 0f)
+                return a;
+
+            float t = math.dot(p - a, dir) / lengthSq;
+            t = math.clamp(t, 0f, 1f);
+
+            return a + dir * t;
+        }
+        
+        private Vector2 ClosestPointSegmentAABB(Vector2 a, Vector2 b, Vector2 boxMin, Vector2 boxMax)
+        {
+            Vector2 dir = b - a;
+            float lengthSq = dir.sqrMagnitude;
+
+            float t = 0f;
+
+            if (lengthSq > 0f)
+                t = math.dot((Clamp(a, boxMin, boxMax) - a), dir) / lengthSq;
+
+            t = math.clamp(t, 0f, 1f);
+
+            Vector2 pointOnSegment = a + dir * t;
+
+            return Clamp(pointOnSegment, boxMin, boxMax);
+        }
+        
+        private Vector2 Clamp(Vector2 p, Vector2 min, Vector2 max)
+        {
+            return new Vector2(
+                math.clamp(p.x, min.x, max.x),
+                math.clamp(p.y, min.y, max.y)
+            );
         }
         
         public void ScanArea(Vector2 a, Vector2 b, Vector2 size, IVisitor visitor)
@@ -216,11 +255,11 @@ namespace _Game.Battle.Ecs.Model
 
                     float localY = Vector2.Dot(ap, dir);
                     float localX = Vector2.Dot(ap, normal);
-
+                    float halfCell = cellSize * 0.5f;
                     bool inside =
-                        localY >= -halfHeight &&
-                        localY <= length + halfHeight &&
-                        Mathf.Abs(localX) <= halfWidth;
+                        localY >= -halfHeight - halfCell &&
+                        localY <= length + halfHeight + halfCell &&
+                        Mathf.Abs(localX) <= halfWidth + halfCell;
 
                     if (!inside)
                         continue;

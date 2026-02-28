@@ -73,12 +73,11 @@ namespace _Game.Battle.Ecs.Systems
             {
                 var unit = unitPool.Get(e);
                 var paused = shareData.Simulator.IsAgentPaused(unit.agentId);
-                var position = shareData.Simulator.GetAgentPosition(unit.agentId);
-                var goal = shareData.Simulator.GetAgentGoal(unit.agentId);
-                Debug.DrawLine((Vector2)position, (Vector2)goal, paused? Color.green : Color.red, shareData.TimeDelta);
                 if (paused)
                     continue;
 
+                var position = shareData.Simulator.GetAgentPosition(unit.agentId);
+                var goal = shareData.Simulator.GetAgentGoal(unit.agentId);
                 UnitView.TryUpdatePosition(e, position);
                 
                 ref var unitPosTemp = ref unitPosTempPool.Get(e);
@@ -92,8 +91,6 @@ namespace _Game.Battle.Ecs.Systems
                     if (shareData.Matrix.TryFindCellOutsideAreaFromPivot(goal, float2.zero, shareData.BoxSize, out var result))
                     {
                         shareData.Simulator.SetAgentGoal(unit.agentId, result);
-                        Debug.DrawLine((Vector2)position, (Vector2)goal, Color.magenta, 1);
-                        GeometryGizmos.DrawBox(Box.FromCenter(goal, new float2(0.4f, 0.4f)), Color.magenta, 1);
                     }
                     else
                     {
