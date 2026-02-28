@@ -148,6 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf3a8a9ddd6848e595c805376ba78354, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 425510609652478350}
   equipmentContainer: {fileID: 5679993020761211645}
   slotSize: {x: 80, y: 80}
 --- !u!1 &1267598604380160021
@@ -399,6 +400,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf3a8a9ddd6848e595c805376ba78354, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 4871360487701848067}
   equipmentContainer: {fileID: 1267598604380160021}
   slotSize: {x: 80, y: 80}
 --- !u!1 &2456534092589935374
@@ -549,6 +551,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf3a8a9ddd6848e595c805376ba78354, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 4953052189792559816}
   equipmentContainer: {fileID: 5256149209948777562}
   slotSize: {x: 80, y: 80}
 --- !u!1 &2458983898679472003
@@ -699,6 +702,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf3a8a9ddd6848e595c805376ba78354, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 8104493770304633353}
   equipmentContainer: {fileID: 3625978708086603317}
   slotSize: {x: 80, y: 80}
 --- !u!1 &2823356496719471094
@@ -849,6 +853,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf3a8a9ddd6848e595c805376ba78354, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 3104126127622728580}
   equipmentContainer: {fileID: 7348841307904097041}
   slotSize: {x: 80, y: 80}
 --- !u!1 &3016885483357574561
@@ -1100,6 +1105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf3a8a9ddd6848e595c805376ba78354, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 1047353792281583290}
   equipmentContainer: {fileID: 6275395606713878068}
   slotSize: {x: 80, y: 80}
 --- !u!1 &3325895496224286759
@@ -1959,6 +1965,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf3a8a9ddd6848e595c805376ba78354, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 3425720674918801408}
   equipmentContainer: {fileID: 3016885483357574561}
   slotSize: {x: 80, y: 80}
 --- !u!1 &8993481368375591784
@@ -2109,5 +2116,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf3a8a9ddd6848e595c805376ba78354, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 7892524725175652869}
   equipmentContainer: {fileID: 5110614861997318158}
   slotSize: {x: 80, y: 80}

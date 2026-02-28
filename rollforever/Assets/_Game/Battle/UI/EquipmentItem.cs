@@ -38,7 +38,7 @@ namespace _Game.Battle.UI
             base.OnDrag(eventData);
             if (slotItem != null)
             {
-                slotItem.transform.SetAsLastSibling();
+                slotItem.SetOrderCanvas(10);
             }
         }
 
@@ -51,14 +51,16 @@ namespace _Game.Battle.UI
                 EquipmentItem item = r.gameObject.GetComponent<EquipmentItem>();
                 if (item != null)
                 {
-                    if (item.WeaponData.WeaponId == WeaponData.WeaponId&&
+                    if (item.WeaponData.WeaponId == WeaponData.WeaponId &&
                         item.WeaponLevel == WeaponLevel)
                     {
                         item.Init(imgIcon.sprite, weaponData, weaponLevel + 1, null);
+                        OnPickEquipment();
+                        ResetOrderCanvas();
                         Object.Destroy(gameObject);
                         return true;
                     }
-                    
+
                     return false;
                 }
             }
@@ -71,17 +73,30 @@ namespace _Game.Battle.UI
                 if (sl != null && !sl.IsEquipped)
                 {
                     slotItem = sl;
-                    if (onPickEquipment != null)
-                    {
-                        onPickEquipment();
-                        onPickEquipment = null;
-                    }
                     sl.Push(this);
+                    OnPickEquipment();
                     return true;
                 }
             }
 
             return false;
+        }
+
+        void OnPickEquipment()
+        {
+            if (onPickEquipment != null)
+            {
+                onPickEquipment();
+                onPickEquipment = null;
+            }
+        }
+
+        void ResetOrderCanvas()
+        {
+            if (slotItem != null)
+            {
+                slotItem.SetOrderCanvas(0);
+            }
         }
     }
 }

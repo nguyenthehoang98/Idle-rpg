@@ -4,6 +4,7 @@ namespace _Game.Battle.UI
 {
     public class SlotItem : MonoBehaviour
     {
+        [SerializeField] private Canvas canvas;
         [SerializeField] private GameObject equipmentContainer;
         [SerializeField] private Vector2 slotSize = new Vector2(80, 80);
 
@@ -19,6 +20,11 @@ namespace _Game.Battle.UI
             equipmentItem.transform.SetParent(equipmentContainer.transform);
             equipmentItem.transform.localPosition = Vector3.zero;
             equipmentItem.transform.localScale = scale; 
+        }
+
+        public void SetOrderCanvas(int order)
+        {
+            canvas.sortingOrder = order;
         }
     }
 }
