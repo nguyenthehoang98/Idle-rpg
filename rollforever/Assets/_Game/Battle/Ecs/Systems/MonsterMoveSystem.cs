@@ -13,11 +13,13 @@ using Ray = Geometry.Primary.Ray;
 
 namespace _Game.Battle.Ecs.Systems
 {
-    public class MonsterMoveSystem : IEcsInitSystem, IEcsRunSystem
+    public class MonsterMoveSystem : IEcsInitSystem, IEcsRunSystem, IEcsPostRunSystem
     {
         [EcsInject] private readonly BattleStartupShareData shareData;
         
+        const float THRESHOLD_VELOCITYSQ = 0.1f;
         const float THRESHOLD_DISTANCE = 0.1F;
+        const float THRESHOLD_TIME = 2f;
 
         private EcsPool<UnitData> unitPool;
         private EcsPool<ShapeData> shapePool;
@@ -103,6 +105,36 @@ namespace _Game.Battle.Ecs.Systems
             shareData.Simulator.DoStep();
 
             shareData.Simulator.EnsureCompleted();
+        }
+        
+        public void PostRun(IEcsSystems systems)
+        {
+            shareData.Simulator.EnsureCompleted();
+
+            foreach (var e in filter)
+            {
+                var unit = unitPool.Get(e);
+
+                var paused = shareData.Simulator.IsAgentPaused(unit.agentId);
+                if (paused)
+                    continue;
+
+                ref var unitPosTemp = ref unitPosTempPool.Get(e);
+                var velocity = shareData.Simulator.GetAgentVelocity(unit.agentId);
+                if (math.lengthsq(velocity) < THRESHOLD_VELOCITYSQ)
+                {
+                    unitPosTemp.threasholdVelocityElapsed += shareData.TimeDelta;
+                    if (unitPosTemp.threasholdVelocityElapsed >= THRESHOLD_TIME)
+                    {
+                        var position = shareData.Simulator.GetAgentPosition(unit.agentId);
+                        Pause(e, unit.agentId, position);
+                    }
+                }
+                else
+                {
+                    unitPosTemp.threasholdVelocityElapsed = 0;
+                }
+            }
         }
 
         void Pause(int entity, int agentId, float2 position)

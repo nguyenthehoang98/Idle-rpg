@@ -15,6 +15,7 @@ namespace _KIT.Schedule
         public void Register(ITick module) => tickSystem.pendingAdd.Enqueue(module);
         public void UnRegister(ITick module) => tickSystem.pendingRemove.Enqueue(module);
         public void SetFpsRate(int rate) => FrameDeltaTime = 1f / rate;
+        public void SetSpeed(float value) => speed = value;
 
         public double Time { get; private set; }
         public float FrameDeltaTime { get; private set; } = 0.05f; // 10 fps

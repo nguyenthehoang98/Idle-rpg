@@ -64,7 +64,7 @@ MonoBehaviour:
     path: {fileID: 0}
     velocity:
       acceleration: 0
-      speed: 20
+      speed: 15
   stateModifier:
     type: 0
     group: 0

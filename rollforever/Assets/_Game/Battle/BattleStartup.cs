@@ -4,6 +4,7 @@ using _Game.Battle.Ecs.Events;
 using _Game.Battle.Ecs.Model;
 using _Game.Battle.Ecs.Systems;
 using _Game.Battle.Level;
+using _Game.Scripts.Entry;
 using _KIT.Config;
 using _KIT.Event;
 using _KIT.Schedule;
@@ -55,6 +56,9 @@ namespace _Game.Battle
             // todo: game loop
             gameLoop = GetComponent<GameLoop>();
             gameLoop.Pause();
+#if UNITY_EDITOR
+            gameLoop.SetSpeed(((Entry)KitEntryScene.Instance).speed);
+#endif
 
             LevelSpawnSO spawnSo = await LevelSpawnSO.LoadSpawn(1);
 

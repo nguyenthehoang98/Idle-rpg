@@ -21,13 +21,15 @@ namespace _Game.Battle.UI
         [Serializable]
         public class Data
         {
-            public EquipmentItem equipmentItem;
+            public Transform container;
             public TextMeshProUGUI textTitle;
             public TextMeshProUGUI textPrice;
-
-            private int price;
+         
+            [HideInInspector] public EquipmentItem equipmentItem;
+            [HideInInspector] public int price;
         }
-        
+
+        [SerializeField] private EquipmentItem equipmentItemPrefab;
         [SerializeField] private Camera mainCamera;
         [SerializeField] private Data[] equipments;
         [SerializeField] private RectTransform container;
@@ -113,6 +115,7 @@ namespace _Game.Battle.UI
             container.DOAnchorPosY(yStartPosition, duration).SetEase(Ease.OutSine);
             this.WaitInvoke(duration, () =>
             {
+                ReturnPool();
                 container.gameObject.SetActive(false);
                 onClosed();
             });
@@ -131,11 +134,36 @@ namespace _Game.Battle.UI
             {
                 WeaponConfig.WeaponData weaponData = list[i];
                 WeaponSO so = await KitLoaded.LoadAsync<WeaponSO>(weaponData.WeaponId.ToString(), true);
-                int equipmentLevel = FormulaUtils.RandomEquipmentLevel(1, 1, 1); 
+                int equipmentLevel = FormulaUtils.RandomEquipmentLevel(1, 1, 1);
                 Data data = equipments[i];
-                data.textPrice.SetText(weaponData.Price(equipmentLevel).ToString());
-                data.textTitle.SetText(weaponData.Name);
-                data.equipmentItem.Init(so.WeaponIcon, weaponData, equipmentLevel);
+                data.textPrice.SetText("Price x" + weaponData.Price(equipmentLevel));
+                data.textTitle.SetText("Name " + weaponData.Name);
+
+                if (data.equipmentItem == null)
+                {
+                   EquipmentItem equipmentItem = Instantiate(equipmentItemPrefab, data.container);
+                   equipmentItem.transform.SetAsFirstSibling();
+                   equipmentItem.GetComponent<RectTransform>().anchoredPosition3D = Vector3.zero;
+                   data.equipmentItem = equipmentItem;
+                }
+
+                data.equipmentItem.Init(so.WeaponIcon, weaponData, equipmentLevel, () =>
+                {
+                    data.textPrice.SetText(String.Empty);
+                    data.textTitle.SetText(String.Empty);
+                });
+            }
+        }
+
+        private void ReturnPool()
+        {
+            for (int i = 0; i < equipments.Length; i++)
+            {
+                var eqm = equipments[i];
+                if (eqm.equipmentItem == null || eqm.equipmentItem.transform.parent != eqm.container)
+                {
+                    equipments[i].equipmentItem = null;
+                }
             }
         }
     }

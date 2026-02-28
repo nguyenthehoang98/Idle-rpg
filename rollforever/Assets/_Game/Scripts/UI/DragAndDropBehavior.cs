@@ -24,7 +24,7 @@ namespace _Game.Scripts.UI
             offset = rectTransform.anchoredPosition - localPoint;
         }
 
-        public void OnDrag(PointerEventData eventData)
+        public virtual void OnDrag(PointerEventData eventData)
         {
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 canvas.transform as RectTransform,
@@ -36,24 +36,12 @@ namespace _Game.Scripts.UI
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (IsCompleteDrag(eventData, out GameObject dragObject))
-            {
-                CompleteDrag(dragObject);
-            }
-            else
+            if (!EndDrop(eventData))
             {
                 rectTransform.anchoredPosition = originalPos;
             }
         }
 
-        protected virtual bool IsCompleteDrag(PointerEventData eventData, out GameObject dragObject)
-        {
-            dragObject = null;
-            return false;
-        }
-
-        protected virtual void CompleteDrag(GameObject targetObject)
-        {
-        }
+        protected abstract bool EndDrop(PointerEventData eventData);
     }
 }

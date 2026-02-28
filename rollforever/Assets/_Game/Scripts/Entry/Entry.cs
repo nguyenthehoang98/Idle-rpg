@@ -1,8 +1,6 @@
-using System;
 using _KIT.Config;
 using _KIT.Utils;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor.SceneManagement;
 using UnityEditor;
@@ -12,6 +10,9 @@ namespace _Game.Scripts.Entry
 {
     public class Entry : KitEntryScene
     {
+#if UNITY_EDITOR
+        [Range(0.2f, 20.0f)] public float speed = 1f;
+#endif
         private float elapsed = 1;
         private bool isLoadingScene = false;
         

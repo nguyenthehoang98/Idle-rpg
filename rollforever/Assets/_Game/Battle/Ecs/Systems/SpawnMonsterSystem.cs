@@ -171,7 +171,7 @@ namespace _Game.Battle.Ecs.Systems
 
         private void OnEntityChangedStat(EntityChangedStatEvent e)
         {
-            if (statPool.Has(e.Entity))
+            if (monsterFlagPool.Has(e.Entity))
             {
                 var stat = statPool.Get(e.Entity);
                 stat.TryGetValue(StatType.MoveSpeed, out var moveSpeed);
