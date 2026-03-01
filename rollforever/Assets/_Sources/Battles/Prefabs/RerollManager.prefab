@@ -146,12 +146,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4075755837464155193}
   m_Layer: 5
-  m_Name: Container
+  m_Name: Content
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4075755837464155193
 RectTransform:
   m_ObjectHideFlags: 0
@@ -631,7 +631,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 977fc7df8d8a468c88f1b02c4f89edab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  container: {fileID: 606555568864286841}
+  equipmentManager: {fileID: 0}
+  content: {fileID: 606555568864286841}
   gameLoop: {fileID: 0}
   itemsView:
   - {fileID: 1019145420913673899}

@@ -11,7 +11,6 @@ namespace _Game.Battle.Ecs.Systems
     public class UnitCleanupSystem : IEcsInitSystem, IEcsPostRunSystem
     {
         [EcsInject] private readonly BattleStartupShareData shareData;
-        [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
 
         private EcsPool<UnitData> unitPool;
         private EcsPool<UnitPosTempData> unitPosTempPool;

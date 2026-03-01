@@ -52,7 +52,8 @@ namespace _Game.Scripts.Configs
             [SerializeField] private int id;
             [SerializeField] private string name;
             [SerializeField] private string address_prefab;
-            [SerializeField] private int skill_id; 
+            [SerializeField] private int skill_id;
+            [SerializeField] private float skill_cooldown;
             [SerializeField] private float move_speed;
             [SerializeField] private float attack_distance; // Phạm vi tấn công
             [SerializeField] private float base_attack_stat;
@@ -68,6 +69,7 @@ namespace _Game.Scripts.Configs
             public int ID => id;
             public string Name => name;
             public string AddressPrefab => address_prefab;
+            public float SkillCooldown => skill_cooldown;
             public int SkillId => skill_id;
             public float MoveSpeed => move_speed;
             public float AttackDistance => attack_distance;

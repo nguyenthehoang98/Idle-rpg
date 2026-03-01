@@ -27,12 +27,11 @@ using Ray = Geometry.Primary.Ray;
 namespace _Game.Battle.Ecs.Systems
 {
     [Serializable]
-    public class SpawnMonsterSystem : IEcsInitSystem, IEcsRunSystem, IEcsPostDestroySystem
+    public class MonsterSpawnerSystem : IEcsInitSystem, IEcsRunSystem, IEcsPostDestroySystem
     {
         private Dictionary<int, UnitView> sourcePrefab;
 
         [EcsInject] private readonly BattleStartupShareData shareData;
-        [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
 
         private EcsWorld world;
         private EcsPool<StatData> statPool;
@@ -73,6 +72,7 @@ namespace _Game.Battle.Ecs.Systems
             healthPool = world.GetPool<HealthData>();
             modifierPool = world.GetPool<UnitModifierData>();
             monsterCasterPool = world.GetPool<MonsterCasterData>();
+            
             monsterAliveFilter = world.Filter<MonsterFlag>()
                 .Exc<DeadFlag>()
                 .End();
@@ -231,7 +231,8 @@ namespace _Game.Battle.Ecs.Systems
             modifierPool.Add(entity) = new UnitModifierData(StatusEffect.None);
             monsterCasterPool.Add(entity) = new MonsterCasterData
             {
-                skillId = monsterData.SkillId
+                skillId = monsterData.SkillId,
+                cooldown = monsterData.SkillCooldown,
             };
             statPool.Add(entity) = new StatData()
                 .Insert(StatType.Attack, new Stat(monsterData.Attack(level)))

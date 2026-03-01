@@ -20,7 +20,6 @@ namespace _Game.Battle.Ecs.Systems
     public class AbilitySystem : IEcsInitSystem, IEcsRunSystem, IEcsDestroySystem
     {
         [EcsInject] private readonly BattleStartupShareData shareData;
-        [EcsInject] private readonly BattleStartupRuntimeData runtimeData;
 
         private EcsWorld world;
         private EcsFilter monsterFilter;
@@ -42,10 +41,15 @@ namespace _Game.Battle.Ecs.Systems
             world = systems.GetWorld();
             monsterFilter = world.Filter<UnitData>()
                 .Inc<MonsterFlag>()
+                .Exc<PlayerFlag>()
                 .Exc<DeadFlag>()
                 .End();
-            playerFilter = world.Filter<UnitData>()
+            playerFilter = world.Filter<StatData>()
+                .Inc<HealthData>()
+                .Inc<ShapeData>()
                 .Inc<PlayerFlag>()
+                .Exc<MonsterFlag>()
+                .Exc<DeadFlag>()
                 .End();
 
             var unitPool = world.GetPool<UnitData>();
@@ -91,7 +95,7 @@ namespace _Game.Battle.Ecs.Systems
             findTargets.Add(FindTargetType.Farthest, new FarthestFindTarget(shareData.Simulator, unitPool));
             findTargets.Add(FindTargetType.Nearest, new NearestFindTarget(shareData.Simulator, unitPool));
             skillSource = await BuildAbilities(
-                allSkills, shareData, runtimeData, unitPool, shapePool, deadPool,
+                allSkills, shareData, unitPool, shapePool, deadPool,
                 healthPool, statPool, modifierPool, unitPosTempPool, playerFilter
             );
             EventBus.Instance.Subscribe<CastSkillEvent>(OnCastSkillArg);
@@ -103,12 +107,20 @@ namespace _Game.Battle.Ecs.Systems
             {
                 if (findTargets.TryGetValue(ability.AbilitySo.core.findTarget, out var findTarget))
                 {
-                    EcsFilter filter = e.Team == Team.Player ? monsterFilter : playerFilter;
-                    bool found = findTarget.Find(e.StartPosition,
-                        ability.AbilitySo.core.maxDistanceFindTarget,
-                        filter, out int target
-                    );
-
+                    bool found = false;
+                    int target = -1;
+                    if (e.Team == Team.Player)
+                    {
+                        found = findTarget.Find(e.StartPosition,
+                            ability.AbilitySo.core.maxDistanceFindTarget,
+                            monsterFilter, out target
+                        );
+                    }
+                    else if (e.Team == Team.Monster)
+                    {
+                        Debug.Log("Xử lý phần này, mở rộng findTarget ra.");
+                    }
+                    
                     if (found || !ability.AbilitySo.core.isRequireTarget)
                     {
                         AbilityLogic abilityInstance = ability.CreateInstance(e.Source, e.Team);
@@ -116,7 +128,7 @@ namespace _Game.Battle.Ecs.Systems
                         additions.Enqueue(abilityInstance);
 #if UNITY_EDITOR && (COMBAT_FULL_LOG || DEVELOP_MODE)
                         AbilityDebugView.Create(abilityInstance);
-#endif                        
+#endif
                     }
                 }
                 else
@@ -199,7 +211,6 @@ namespace _Game.Battle.Ecs.Systems
 
         private static async UniTask<Dictionary<int, AbilityLogic>> BuildAbilities(
             Dictionary<int, string> abilitiesPath, BattleStartupShareData shareData,
-            BattleStartupRuntimeData runtimeData,
             EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool, EcsPool<DeadFlag> deadPool,
             EcsPool<HealthData> healthPool, EcsPool<StatData> statPool, EcsPool<UnitModifierData> modifierPool,
             EcsPool<UnitPosTempData> unitPosTempPool,
@@ -218,7 +229,7 @@ namespace _Game.Battle.Ecs.Systems
                 }
 
                 AbilitySO abilitySo = await KitLoaded.LoadAsync<AbilitySO>(path);
-                dict[abilityId] = new AbilityLogic(abilitySo, skillData, 0, Team.Player, shareData, runtimeData,
+                dict[abilityId] = new AbilityLogic(abilitySo, skillData, 0, Team.Player, shareData, 
                     unitPool, shapePool, deadPool, healthPool, statPool, modifierPool, unitPosTempPool, playerFilter
                 );
 

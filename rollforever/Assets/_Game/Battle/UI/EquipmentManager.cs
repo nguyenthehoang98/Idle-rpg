@@ -31,8 +31,8 @@ namespace _Game.Battle.UI
 
         [SerializeField] private EquipmentItem equipmentItemPrefab;
         [SerializeField] private Camera mainCamera;
+        [SerializeField] private RectTransform content;
         [SerializeField] private Data[] equipments;
-        [SerializeField] private RectTransform container;
         [SerializeField] private float yStartPosition;
         [SerializeField] private float cameraOrthographicSize = 17;
         [Header("Buttons")]
@@ -55,10 +55,10 @@ namespace _Game.Battle.UI
                     });
                 }
             });
-            Vector3 anchoredPosition = container.anchoredPosition3D;
+            Vector3 anchoredPosition = content.anchoredPosition3D;
             anchoredPosition.y = yStartPosition;
-            container.anchoredPosition3D = anchoredPosition;
-            container.gameObject.SetActive(false);
+            content.anchoredPosition3D = anchoredPosition;
+            content.gameObject.SetActive(false);
         }
 
         private void Start()
@@ -73,15 +73,15 @@ namespace _Game.Battle.UI
 
         private void OnEnable()
         {
-            EventBus.Instance.Subscribe<WaveShowChooseEquipmentEvent>(OnOpenEquipmentSelection);
+            EventBus.Instance.Subscribe<ShowChooseEquipmentEvent>(OnOpenEquipmentSelection);
         }
 
         private void OnDisable()
         {
-            EventBus.Instance.Unsubscribe<WaveShowChooseEquipmentEvent>(OnOpenEquipmentSelection);
+            EventBus.Instance.Unsubscribe<ShowChooseEquipmentEvent>(OnOpenEquipmentSelection);
         }
 
-        void OnOpenEquipmentSelection(WaveShowChooseEquipmentEvent e)
+        void OnOpenEquipmentSelection(ShowChooseEquipmentEvent e)
         {
             // tính toán dữ liệu & fill vào data (equipments)
             PickWeapon();
@@ -92,18 +92,18 @@ namespace _Game.Battle.UI
             cameraPosition.y = e.CameraOffsetPosition.y;
             if (math.abs(e.Duration) > 0)
             {
-                container.gameObject.SetActive(true);
+                content.gameObject.SetActive(true);
                 mainCamera.transform.DOMove(cameraPosition, e.Duration).SetEase(Ease.OutSine);
                 mainCamera.DOOrthoSize(e.OrthoSize, e.Duration).SetEase(Ease.OutSine);
-                container.DOAnchorPosY(0, e.Duration).SetEase(Ease.OutSine);
+                content.DOAnchorPosY(0, e.Duration).SetEase(Ease.OutSine);
                 this.WaitInvoke(e.Duration, () => { canClickButton = true; });
             }
             else
             {
+                content.gameObject.SetActive(true);
                 mainCamera.orthographicSize = e.OrthoSize;
                 mainCamera.transform.position = cameraPosition;
-                container.anchoredPosition3D = Vector3.zero;
-                container.gameObject.SetActive(true);
+                content.anchoredPosition3D = Vector3.zero;
                 canClickButton = true;
             }
         }
@@ -113,11 +113,11 @@ namespace _Game.Battle.UI
             float duration = 0.3f;
             mainCamera.transform.DOMove(prevCameraPosition, duration).SetEase(Ease.OutSine);
             mainCamera.DOOrthoSize(cameraOrthographicSize, duration).SetEase(Ease.OutSine);
-            container.DOAnchorPosY(yStartPosition, duration).SetEase(Ease.OutSine);
+            content.DOAnchorPosY(yStartPosition, duration).SetEase(Ease.OutSine);
             this.WaitInvoke(duration, () =>
             {
                 ReturnPool();
-                container.gameObject.SetActive(false);
+                content.gameObject.SetActive(false);
                 onClosed();
             });
         }

@@ -3,13 +3,13 @@ using Unity.Mathematics;
 
 namespace _Game.Battle.Ecs.Events
 {
-    public readonly struct WaveShowChooseEquipmentEvent : IEvent
+    public readonly struct ShowChooseEquipmentEvent : IEvent
     {
         public readonly float2 CameraOffsetPosition;
         public readonly float OrthoSize;
         public readonly float Duration;
 
-        public WaveShowChooseEquipmentEvent(float duration, float orthoSize, float2 cameraOffsetPosition)
+        public ShowChooseEquipmentEvent(float duration, float orthoSize, float2 cameraOffsetPosition)
         {
             Duration = duration;
             OrthoSize = orthoSize;

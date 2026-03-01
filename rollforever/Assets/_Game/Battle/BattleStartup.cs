@@ -69,7 +69,6 @@ namespace _Game.Battle
                 gameLoop,
                 new Simulator(), matrix, spawnSo
             );
-            BattleStartupRuntimeData runtimeData = new BattleStartupRuntimeData();
 
             // todo: battle systems
             BattleEcsSystems ecsSystems = new BattleEcsSystems(world);
@@ -83,19 +82,19 @@ namespace _Game.Battle
                 .Add(new EcsWorldDebugSystem())
                 .Add(new DrawSystem())
 #endif
-                .Add(new SpawnMonsterSystem())
+                .Add(new PlayerBuilderSystem())
+                .Add(new MonsterSpawnerSystem())
                 .Add(new MonsterMoveSystem())
-                .Add(new PlayerCasterSystem())
+                .Add(new WeaponCasterSystem())
                 .Add(new MonsterCasterSystem())
                 .Add(new Ecs.Systems.AbilitySystem())
                 .Add(new UnitCleanupSystem());
 
             systems.InjectShared(shareData);
-            systems.InjectShared(runtimeData);
             systems.InitShared();
             systems.Init();
             
-            EventBus.Instance.Publish(new WaveShowChooseEquipmentEvent(0, 4.5f, new float2(0, -1)));
+            EventBus.Instance.Publish(new ShowChooseEquipmentEvent(0, 4.5f, new float2(0, -1)));
 
             this.WaitNextFrame(KitEntryScene.Instance.CloseLoadingScene);
         }

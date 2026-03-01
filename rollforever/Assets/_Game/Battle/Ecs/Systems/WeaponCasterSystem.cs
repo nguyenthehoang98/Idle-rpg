@@ -18,7 +18,7 @@ using UnityEngine;
 
 namespace _Game.Battle.Ecs.Systems
 {
-    public class PlayerCasterSystem : IEcsInitSystem, IEcsRunSystem, IEcsPostDestroySystem
+    public class WeaponCasterSystem : IEcsInitSystem, IEcsRunSystem, IEcsPostDestroySystem
     {
         [EcsInject] private readonly BattleStartupShareData shareData;
 
@@ -43,6 +43,8 @@ namespace _Game.Battle.Ecs.Systems
             weaponFilter = world.Filter<WeaponCasterData>()
                 .Inc<StatData>()
                 .End();
+
+            var weaponFlagPool = world.GetPool<WeaponFlag>();
             weaponCasterPool = world.GetPool<WeaponCasterData>();
             statPool = world.GetPool<StatData>();
             
@@ -61,6 +63,7 @@ namespace _Game.Battle.Ecs.Systems
             for (int i = 0; i < points.Length; i++)
             {
                 int entity = world.NewEntity();
+                weaponFlagPool.Add(entity);
                 statPool.Add(entity) = new StatData()
                     .Insert(StatType.Attack, new Stat(0))
                     .Insert(StatType.CriticalRate, new Stat(0))
@@ -194,7 +197,7 @@ namespace _Game.Battle.Ecs.Systems
                 ref var stat = ref statPool.Get(entity);
                 stat.Replace(StatType.Attack, new Stat(weaponData.Attack(level)));
                 
-                EventBus.Instance.Publish(new WaveUpdateEquipmentEvent(i, weaponId, level));
+                EventBus.Instance.Publish(new UpdateEquipmentEvent(i, weaponId, level));
             }
 
             SetActivePlayer(true);

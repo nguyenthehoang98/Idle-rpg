@@ -45,6 +45,7 @@ namespace _Game.Battle.Ecs.Model
             
             GeometryUtils.CalculateBounds(pointsConvert, cellSize * 1.1f, out float2 boxSize);
             BoxSize = boxSize;
+            PlayerPosition = Vector2.zero;
         }
 
         GameLoop GameLoop { get; }
@@ -60,6 +61,8 @@ namespace _Game.Battle.Ecs.Model
         public readonly int[] Obstacles;
         
         public Vector2 BoxSize { get; }
+        
+        public Vector2 PlayerPosition { get; }
 
         public double Time => GameLoop.Time;
 

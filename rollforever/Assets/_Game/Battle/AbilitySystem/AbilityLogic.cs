@@ -1,8 +1,11 @@
 ﻿using System;
 using _Game.Battle.Ecs.Data;
+using _Game.Battle.Ecs.Events;
 using _Game.Battle.Ecs.Model;
 using _Game.Battle.Ecs.View;
 using _Game.Scripts.Configs;
+using _Game.Scripts.Model;
+using _KIT.Event;
 using _KIT.Pool;
 using _KIT.Utils;
 using Geometry;
@@ -18,7 +21,6 @@ namespace _Game.Battle.AbilitySystem
         public readonly AbilitySO AbilitySo;
         private readonly SkillConfig.SkillData SkillData;
         // ecs
-        private readonly BattleStartupRuntimeData runtimeData;
         private readonly BattleStartupShareData shareData;
         private readonly EcsPool<UnitData> unitPool;
         private readonly EcsPool<ShapeData> shapePool;
@@ -44,8 +46,7 @@ namespace _Game.Battle.AbilitySystem
         private float elapsed;
 
         public AbilityLogic(AbilitySO abilitySo, SkillConfig.SkillData skillData,
-            int entity, Team sourceTeam,
-            BattleStartupShareData shareData, BattleStartupRuntimeData runtimeData,
+            int entity, Team sourceTeam, BattleStartupShareData shareData, 
             EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool,
             EcsPool<DeadFlag> deadPool, EcsPool<HealthData> healthPool, 
             EcsPool<StatData> statPool,
@@ -68,7 +69,6 @@ namespace _Game.Battle.AbilitySystem
             this.playerFilter = playerFilter;
             
             this.sourceTeam = sourceTeam;
-            this.runtimeData = runtimeData;
             
             shapeLogic = new ShapeLogic(abilitySo.shape);
             stateModifierLogic = new StateModifierLogic(
@@ -125,9 +125,9 @@ namespace _Game.Battle.AbilitySystem
             if (sourceTeam == Team.Player)
                 PreHandleMonsters(center);
 
-            if (sourceTeam == Team.Player && elapsed > deltaTime)
+            if (sourceTeam == Team.Player)
                 HandleMonsters(prevPosition, center);
-            else if (sourceTeam == Team.Monster && elapsed > deltaTime)
+            else if (sourceTeam == Team.Monster)
                 HandlePlayers(center);
 
             stateModifierLogic.Update(deltaTime);
@@ -164,14 +164,18 @@ namespace _Game.Battle.AbilitySystem
         {
             foreach (var e in playerFilter)
             {
-                var unit = unitPool.Get(e);
                 var shape = shapePool.Get(e);
-                float2 agentPos = shareData.Simulator.GetAgentPosition(unit.agentId);
-                shapeLogic.Execute(center, shape.Value, agentPos, out bool hit);
+                shapeLogic.Execute(center, shape.Value, shareData.PlayerPosition, out bool hit);
                 if (hit)
                 {
+                    int dmg = 50;
                     ref var health = ref healthPool.Get(e);
-                    health.health -= 50;
+                    health.health = dmg;
+
+                    var stat = statPool.Get(e);
+                    stat.TryGetValue(StatType.MaxHealth, out var healthStat);
+                    
+                    EventBus.Instance.Publish(new DamagePlayerEvent(dmg, health.health, math.max(0, (int)healthStat.Value)));
                 }
             }
         }
@@ -228,8 +232,7 @@ namespace _Game.Battle.AbilitySystem
 
         public AbilityLogic CreateInstance(int sourceEntity, Team team)
         {
-            return new AbilityLogic(AbilitySo, SkillData, sourceEntity, team,
-                shareData, runtimeData,
+            return new AbilityLogic(AbilitySo, SkillData, sourceEntity, team, shareData, 
                 unitPool, shapePool, deadPool, healthPool, statPool, modifierPool,
                 unitPosTempPool, playerFilter);
         }

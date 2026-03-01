@@ -16,7 +16,7 @@ namespace _Game.Battle.UI
     public class RerollManager : MonoBehaviour
     {
         [SerializeField] private EquipmentManager equipmentManager;
-        [SerializeField] private GameObject container;
+        [SerializeField] private GameObject content;
         [SerializeField] private GameLoop gameLoop;
         [SerializeField] private RerollItem[] itemsView;
 
@@ -26,22 +26,22 @@ namespace _Game.Battle.UI
 
         private void Awake()
         {
-            container.SetActive(false);
+            content.SetActive(false);
         }
 
         private void OnEnable()
         {
             EventBus.Instance.Subscribe<WaveCompleteEvent>(OnNextWave);
-            EventBus.Instance.Subscribe<WaveUpdateEquipmentEvent>(OnEquipEquipment);
+            EventBus.Instance.Subscribe<UpdateEquipmentEvent>(OnEquipEquipment);
         }
 
         private void OnDisable()
         {
             EventBus.Instance.Unsubscribe<WaveCompleteEvent>(OnNextWave);
-            EventBus.Instance.Unsubscribe<WaveUpdateEquipmentEvent>(OnEquipEquipment);
+            EventBus.Instance.Unsubscribe<UpdateEquipmentEvent>(OnEquipEquipment);
         }
 
-        private void OnEquipEquipment(WaveUpdateEquipmentEvent e)
+        private void OnEquipEquipment(UpdateEquipmentEvent e)
         {
             mapSlotEquipment[e.SlotId] = e.WeaponId;
         }
@@ -55,14 +55,14 @@ namespace _Game.Battle.UI
                 {
                     allValue[buffData.StatType] = buffData;
                     EventBus.Instance.Publish(new WaveChooseBuffEvent(allValue.Values.ToArray()));
-                    container.SetActive(false);
-                    EventBus.Instance.Publish(new WaveShowChooseEquipmentEvent(1, 4.5f, new float2(0, -1)));
+                    content.SetActive(false);
+                    EventBus.Instance.Publish(new ShowChooseEquipmentEvent(1, 4.5f, new float2(0, -1)));
                 };
                 ShowReroll(1, onComplete);                
             }
             else
             {
-                EventBus.Instance.Publish(new WaveShowChooseEquipmentEvent(1, 4.5f, new float2(0, -1)));
+                EventBus.Instance.Publish(new ShowChooseEquipmentEvent(1, 4.5f, new float2(0, -1)));
             }
         }
 
@@ -76,7 +76,7 @@ namespace _Game.Battle.UI
                 itemsView[i].Show(list[i], onSelect);
             }
 
-            container.SetActive(true);
+            content.SetActive(true);
         }
 
         List<BuffConfig.BuffData> GetAllBuffs(int buffLevel)

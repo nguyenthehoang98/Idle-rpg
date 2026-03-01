@@ -41,7 +41,7 @@ namespace _Game.Battle.Level
                     }
                 }
             }
-            SpawnMonsterSystem.ValidateSpawn(this, monsterConfig, skillConfig);
+            MonsterSpawnerSystem.ValidateSpawn(this, monsterConfig, skillConfig);
 #endif
         }
 
