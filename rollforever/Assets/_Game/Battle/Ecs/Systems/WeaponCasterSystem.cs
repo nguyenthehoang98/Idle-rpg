@@ -117,13 +117,6 @@ namespace _Game.Battle.Ecs.Systems
             }
             
 #if UNITY_EDITOR && (DEVELOP_MODE || COMBAT_FULL_LOG)
-            GeometryGizmos.DrawCircle(
-                new Circle(position, 0.45f),
-                Color.yellow, shareData.TimeDelta
-            );
-#endif
-            
-#if UNITY_EDITOR && (DEVELOP_MODE || COMBAT_FULL_LOG)
             foreach (var e in weaponFilter)
             {
                 var caster = weaponCasterPool.Get(e);

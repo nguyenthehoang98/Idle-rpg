@@ -1,4 +1,6 @@
 using System;
+using Geometry;
+using Geometry.Primary;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
@@ -393,11 +395,7 @@ namespace _Game.Battle.Ecs.Model
             }
         }
 
-        public bool TryFindCellOutsideAreaFromPivot(
-            float2 pivot,
-            float2 areaCenter,
-            float2 areaSize,
-            out float2 result)
+        public bool TryFindCellOutsideAreaFromPivot(float2 pivot, float2 areaCenter, float2 areaSize, out float2 result)
         {
             int2 center = WorldToCell(pivot);
             int2 bestCell = default;
@@ -469,17 +467,13 @@ namespace _Game.Battle.Ecs.Model
             return false;
         }
         
-        private bool OverlapAABB(
-            float2 minA, float2 maxA,
-            float2 minB, float2 maxB)
+        private bool OverlapAABB(float2 minA, float2 maxA, float2 minB, float2 maxB)
         {
             return !(maxA.x <= minB.x || minA.x >= maxB.x ||
                      maxA.y <= minB.y || minA.y >= maxB.y);
         }
         
-        private float DistanceSqAABB(
-            float2 minA, float2 maxA,
-            float2 minB, float2 maxB)
+        private float DistanceSqAABB(float2 minA, float2 maxA, float2 minB, float2 maxB)
         {
             float dx = math.max(0,
                 math.max(minB.x - maxA.x, minA.x - maxB.x));

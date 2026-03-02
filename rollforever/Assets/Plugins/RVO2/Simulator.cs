@@ -515,6 +515,18 @@ namespace RVO
             var index = this.agentIndexLookup[agentId];
             return this.agents[index].radius;
         }
+        
+        public float2 GetAgentNewVelocity(int agentId)
+        {
+            var index = this.agentIndexLookup[agentId];
+            return this.agents[index].newVelocity;
+        }
+        
+        public bool GetAgentPaused(int agentId)
+        {
+            var index = this.agentIndexLookup[agentId];
+            return this.agents[index].paused;
+        }
 
         /// <summary>
         /// Returns the time horizon of a specified agent.
@@ -871,7 +883,7 @@ namespace RVO
             float2 direction = goal - agent.position;
             if (math.abs(direction.x) <= 0 && math.abs(direction.y) <= 0)
             {
-                
+                SetAgentPrefVelocity(agentId, -agent.position);
             }
             else
             {

@@ -112,31 +112,36 @@ namespace _Game.Battle.AbilitySystem
 
         public void Update(float deltaTime)
         {
+            if (IsCompleted) return;
+            
             elapsed += deltaTime;
             float2 center = trajectoryLogic.Update(deltaTime);
 
-            if (bulletInstance != null)
-            {
-                bulletInstance.UpdatePosition(center);
-            }
+            if (bulletInstance != null) bulletInstance.UpdatePosition(center);
 
-            // todo: pre update
+            // todo: cập nhật shape (thay đổi kích thước theo config)
             shapeLogic.PreExecute(deltaTime);
 
+            // todo: lưu vị trí 
             if (sourceTeam == Team.Player)
                 PreHandleMonsters(center);
 
-            if (sourceTeam == Team.Player)
-                HandleMonsters(prevPosition, center);
-            else if (sourceTeam == Team.Monster)
-                HandlePlayer(center);
+            // todo: xử lý va chạm
+            if (trajectoryLogic.CanDamageTarget())
+            {
+                if (sourceTeam == Team.Player)
+                    HandleMonsters(prevPosition, center);
+                else if (sourceTeam == Team.Monster)
+                    HandlePlayer(center);
+            }
 
+            // todo: cập nhật các modifier
             stateModifierLogic.Update(deltaTime);
 
-            // todo: late update
-
+            // todo: lưu vị trí
             shapeLogic.AfterExecute(center);
 
+            // todo: lưu trạng thái
             if (sourceTeam == Team.Player)
                 AfterHandleMonsters(deltaTime);
 

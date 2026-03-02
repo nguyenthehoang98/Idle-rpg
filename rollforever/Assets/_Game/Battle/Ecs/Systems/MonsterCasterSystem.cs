@@ -32,8 +32,8 @@ namespace _Game.Battle.Ecs.Systems
         {
             foreach (var e in filter)
             {
-                var unitPos = unitPosTempPool.Get(e);
-                if (!unitPos.isStopped)
+                ref var tempData = ref unitPosTempPool.Get(e);
+                if (!tempData.isStopped)
                     continue;
 
                 int agentId = unitPool.Get(e).agentId;

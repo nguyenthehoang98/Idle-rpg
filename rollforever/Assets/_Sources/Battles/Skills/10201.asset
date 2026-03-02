@@ -62,7 +62,7 @@ MonoBehaviour:
       y: 0
     duration: 0.33333334
   trajectory:
-    delayStart: 0
+    delayStart: 0.5
     type: 0
     path: {fileID: 0}
     velocity:

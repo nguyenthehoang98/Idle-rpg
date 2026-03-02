@@ -1,4 +1,5 @@
 using System;
+using Unity.Burst.Intrinsics;
 using Unity.Mathematics;
 
 namespace _Game.Battle.AbilitySystem
@@ -6,9 +7,14 @@ namespace _Game.Battle.AbilitySystem
     public sealed class TrajectoryLogic : IDisposable
     {
         private readonly ISubTrajectory trajectory;
+        private float2 startPos;
+        private float elapsed;
+        private float delayStart;
 
         public TrajectoryLogic(TrajectoryArg arg)
         {
+            elapsed = 0;
+            delayStart = arg.delayStart;
             switch (arg.type)
             {
                 case TrajectoryType.Teleport:
@@ -28,17 +34,22 @@ namespace _Game.Battle.AbilitySystem
 
         public void Startup(float2 startPos, float2 endPos)
         {
+            this.startPos = startPos;
             trajectory.Init(startPos, endPos);
         }
 
         public float2 Update(float dt)
         {
-            return trajectory.Execute(dt);
+            elapsed += dt;
+            if (elapsed >= delayStart)
+                return trajectory.Execute(dt);
+            return startPos;
         }
+
+        public bool CanDamageTarget() => elapsed >= delayStart; 
 
         public void Shutdown()
         {
-            
         }
         
         public void Dispose()

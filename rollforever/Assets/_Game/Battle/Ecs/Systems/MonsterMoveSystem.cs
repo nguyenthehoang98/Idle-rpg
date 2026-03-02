@@ -21,10 +21,10 @@ namespace _Game.Battle.Ecs.Systems
         const float THRESHOLD_DISTANCE = 0.1F;
         const float THRESHOLD_TIME = 2f;
 
-        private EcsPool<MonsterAgentData> unitPool;
+        private EcsPool<MonsterAgentData> agentPool;
         private EcsPool<ShapeData> shapePool;
         private EcsPool<UnitModifierData> modifierPool;
-        private EcsPool<MonsterTempData> unitPosTempPool;
+        private EcsPool<MonsterTempData> tempDataPool;
         private EcsFilter filter;
 
         public void Init(IEcsSystems systems)
@@ -36,10 +36,10 @@ namespace _Game.Battle.Ecs.Systems
                 .Inc<MonsterFlag>()
                 .Exc<DeadFlag>()
                 .End();
-            unitPool = world.GetPool<MonsterAgentData>();
+            agentPool = world.GetPool<MonsterAgentData>();
             shapePool = world.GetPool<ShapeData>();
             modifierPool = world.GetPool<UnitModifierData>();
-            unitPosTempPool = world.GetPool<MonsterTempData>();
+            tempDataPool = world.GetPool<MonsterTempData>();
         }
 
         public void Run(IEcsSystems systems)
@@ -49,10 +49,10 @@ namespace _Game.Battle.Ecs.Systems
 
             foreach (var e in filter)
             {
-                var unit = unitPool.Get(e);
+                var agentId = agentPool.Get(e).agentId;
                 var shape = shapePool.Get(e);
 
-                var position = shareData.Simulator.GetAgentPosition(unit.agentId);
+                var position = shareData.Simulator.GetAgentPosition(agentId);
                 shareData.Matrix.TriggerPoint(e, position);
 
                 if (shape.Value.type == ShapeType.Circle)
@@ -69,36 +69,59 @@ namespace _Game.Battle.Ecs.Systems
                     throw new Exception($"Shape {shape.Value.type} chưa được xác định");        
 #endif                
                 }
+                
+#if UNITY_EDITOR
+                ref var tempData = ref tempDataPool.Get(e);
+                tempData.position = position;
+                tempData.velocity = shareData.Simulator.GetAgentVelocity(agentId);
+                tempData.prefVelocity = shareData.Simulator.GetAgentPrefVelocity(agentId);
+                tempData.newVelocity = shareData.Simulator.GetAgentNewVelocity(agentId);
+                tempData.paused = shareData.Simulator.GetAgentPaused(agentId);
+#endif
             }
 
             foreach (var e in filter)
             {
-                var unit = unitPool.Get(e);
-                var paused = shareData.Simulator.IsAgentPaused(unit.agentId);
+                var agentId = agentPool.Get(e).agentId;
+                var paused = shareData.Simulator.IsAgentPaused(agentId);
                 if (paused)
                     continue;
 
-                var position = shareData.Simulator.GetAgentPosition(unit.agentId);
-                var goal = shareData.Simulator.GetAgentGoal(unit.agentId);
+                var position = shareData.Simulator.GetAgentPosition(agentId);
+                var goal = shareData.Simulator.GetAgentGoal(agentId);
                 UnitView.TryUpdatePosition(e, position);
                 
-                ref var unitPosTemp = ref unitPosTempPool.Get(e);
-                if (ShouldPause(modifierPool.Get(e).effect, position, goal, unitPosTemp.stopDistance))
+                ref var tempData = ref tempDataPool.Get(e);
+                if (ShouldPause(modifierPool.Get(e).effect, position, goal, tempData.stopDistance))
                 {
-                    Pause(e, unit.agentId, position);
-                    unitPosTemp.isStopped = true;
+                    Pause(e, agentId, position);
+                    tempData.isStopped = true;
+                    
+                    Ray ray = new Ray(position, float2.zero - position);
+                    Shape shape = new Shape { type = ShapeType.Box, size = shareData.BoxSize };
+                    if (GeometryUtils.Ray(ray, 10, shape, float2.zero, out float length, out float2 point))
+                    {
+                        // todo: Kiểm tra length
+                        Debug.DrawLine((Vector2)position, (Vector2)point, Color.cyan, 10);
+                    }
                 }
                 else
                 {
-                    if (shareData.Matrix.TryFindCellOutsideAreaFromPivot(goal, float2.zero, shareData.BoxSize, out var result))
+                    if (shareData.Matrix.TryFindCellOutsideAreaFromPivot(goal, float2.zero, 
+                            shareData.BoxSize, out var result))
                     {
-                        shareData.Simulator.SetAgentGoal(unit.agentId, result);
+#if UNITY_EDITOR
+                        tempData.goal = result;
+#endif
+                        shareData.Simulator.SetAgentGoal(agentId, result);
                     }
                     else
                     {
-                        shareData.Simulator.SetAgentGoal(unit.agentId);
+                        shareData.Simulator.SetAgentGoal(agentId);
+                        Debug.LogError("out of goal");
                     }
-                    unitPosTemp.isStopped = false;
+
+                    tempData.isStopped = false;
                 }
             }
 
@@ -113,26 +136,25 @@ namespace _Game.Battle.Ecs.Systems
 
             foreach (var e in filter)
             {
-                var unit = unitPool.Get(e);
-
-                var paused = shareData.Simulator.IsAgentPaused(unit.agentId);
+                var agentId = agentPool.Get(e).agentId;
+                var paused = shareData.Simulator.IsAgentPaused(agentId);
                 if (paused)
                     continue;
 
-                ref var unitPosTemp = ref unitPosTempPool.Get(e);
-                var velocity = shareData.Simulator.GetAgentVelocity(unit.agentId);
+                ref var tempData = ref tempDataPool.Get(e);
+                var velocity = shareData.Simulator.GetAgentVelocity(agentId);
                 if (math.lengthsq(velocity) < THRESHOLD_VELOCITYSQ)
                 {
-                    unitPosTemp.threasholdVelocityElapsed += shareData.TimeDelta;
-                    if (unitPosTemp.threasholdVelocityElapsed >= THRESHOLD_TIME)
+                    tempData.threasholdVelocityElapsed += shareData.TimeDelta;
+                    if (tempData.threasholdVelocityElapsed >= THRESHOLD_TIME)
                     {
-                        var position = shareData.Simulator.GetAgentPosition(unit.agentId);
-                        Pause(e, unit.agentId, position);
+                        var position = shareData.Simulator.GetAgentPosition(agentId);
+                        Pause(e, agentId, position);
                     }
                 }
                 else
                 {
-                    unitPosTemp.threasholdVelocityElapsed = 0;
+                    tempData.threasholdVelocityElapsed = 0;
                 }
             }
         }

@@ -225,6 +225,9 @@ namespace _Game.Battle.Ecs.Systems
             shapePool.Add(entity) = ShapeData.Circle(radius);
             unitPosTempPool.Add(entity) = new MonsterTempData
             {
+#if UNITY_EDITOR
+                goal = goal,
+#endif
                 stopDistance = shareData.BoxSize + Vector2.one * monsterData.AttackDistance
             };
             healthPool.Add(entity) = new HealthData((int)monsterData.Health(level));
