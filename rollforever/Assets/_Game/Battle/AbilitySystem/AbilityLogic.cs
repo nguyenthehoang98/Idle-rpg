@@ -44,6 +44,7 @@ namespace _Game.Battle.AbilitySystem
         private Team sourceTeam;
         private int unitId;
         private float elapsed;
+        private bool isHitPlayer;
 
         public AbilityLogic(AbilitySO abilitySo, SkillConfig.SkillData skillData,
             int entity, Team sourceTeam, BattleStartupShareData shareData, 
@@ -128,7 +129,7 @@ namespace _Game.Battle.AbilitySystem
             if (sourceTeam == Team.Player)
                 HandleMonsters(prevPosition, center);
             else if (sourceTeam == Team.Monster)
-                HandlePlayers(center);
+                HandlePlayer(center);
 
             stateModifierLogic.Update(deltaTime);
 
@@ -160,7 +161,7 @@ namespace _Game.Battle.AbilitySystem
 #endif
         }
 
-        private void HandlePlayers(float2 center)
+        private void HandlePlayer(float2 center)
         {
             foreach (var e in playerFilter)
             {
@@ -168,14 +169,16 @@ namespace _Game.Battle.AbilitySystem
                 shapeLogic.Execute(center, shape.Value, shareData.PlayerPosition, out bool hit);
                 if (hit)
                 {
-                    int dmg = 50;
+                    int dmg = 10;
                     ref var health = ref healthPool.Get(e);
-                    health.health = dmg;
+                    health.health = math.max(health.health - dmg, 0);
 
                     var stat = statPool.Get(e);
                     stat.TryGetValue(StatType.MaxHealth, out var healthStat);
                     
-                    EventBus.Instance.Publish(new DamagePlayerEvent(dmg, health.health, math.max(0, (int)healthStat.Value)));
+                    EventBus.Instance.Publish(new DamagePlayerEvent(dmg, health.health, (int)healthStat.Value));
+
+                    isHitPlayer = true;
                 }
             }
         }
@@ -228,7 +231,7 @@ namespace _Game.Battle.AbilitySystem
             trajectoryLogic.Dispose();
         }
 
-        public bool IsCompleted => elapsed >= lifeTime || monsterVisitor.RemainCanCollision <= 0;
+        public bool IsCompleted => elapsed >= lifeTime || isHitPlayer || monsterVisitor.RemainCanCollision <= 0;
 
         public AbilityLogic CreateInstance(int sourceEntity, Team team)
         {

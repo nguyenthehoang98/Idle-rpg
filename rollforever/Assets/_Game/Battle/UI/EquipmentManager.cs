@@ -12,6 +12,8 @@ using _KIT.Config;
 using _KIT.Resource;
 using _KIT.Utils;
 using TMPro;
+using UnityEngine.Events;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace _Game.Battle.UI
@@ -28,13 +30,17 @@ namespace _Game.Battle.UI
             [HideInInspector] public EquipmentItem equipmentItem;
             [HideInInspector] public int price;
         }
-
+        
         [SerializeField] private EquipmentItem equipmentItemPrefab;
-        [SerializeField] private Camera mainCamera;
         [SerializeField] private RectTransform content;
+        [SerializeField] private Camera mainCamera;
         [SerializeField] private Data[] equipments;
+        [Header("Tweens")]
         [SerializeField] private float yStartPosition;
         [SerializeField] private float cameraOrthographicSize = 17;
+        [SerializeField] private float closeDuration = 0.3f;
+        [SerializeField] private UnityEvent onStartPush;
+        [SerializeField] private UnityEvent onStartPull;
         [Header("Buttons")]
         [SerializeField] private Button btnResume;
         private List<WeaponConfig.WeaponData> weapons = new List<WeaponConfig.WeaponData>();
@@ -49,7 +55,7 @@ namespace _Game.Battle.UI
                 if (canClickButton)
                 {
                     canClickButton = false;
-                    Close(() =>
+                    Pull(() =>
                     {
                         EventBus.Instance.Publish(new WaveResumeEvent());                        
                     });
@@ -85,7 +91,12 @@ namespace _Game.Battle.UI
         {
             // tính toán dữ liệu & fill vào data (equipments)
             PickWeapon();
-            
+            Push(e);
+        }
+
+        public void Push(ShowChooseEquipmentEvent e)
+        {
+            onStartPush?.Invoke();
             Vector3 cameraPosition = mainCamera.transform.position;
             prevCameraPosition = cameraPosition;
             cameraPosition.x = e.CameraOffsetPosition.x;
@@ -108,9 +119,10 @@ namespace _Game.Battle.UI
             }
         }
 
-        private void Close(Action onClosed)
+        private void Pull(Action onClosed)
         {
-            float duration = 0.3f;
+            float duration = closeDuration;
+            onStartPull?.Invoke();
             mainCamera.transform.DOMove(prevCameraPosition, duration).SetEase(Ease.OutSine);
             mainCamera.DOOrthoSize(cameraOrthographicSize, duration).SetEase(Ease.OutSine);
             content.DOAnchorPosY(yStartPosition, duration).SetEase(Ease.OutSine);

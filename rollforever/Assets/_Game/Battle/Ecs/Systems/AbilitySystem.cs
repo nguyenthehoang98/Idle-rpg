@@ -13,6 +13,7 @@ using _KIT.Utils;
 using Cysharp.Threading.Tasks;
 using GoodCat.EcsLite.Shared;
 using Leopotam.EcsLite;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _Game.Battle.Ecs.Systems
@@ -24,7 +25,7 @@ namespace _Game.Battle.Ecs.Systems
         private EcsWorld world;
         private EcsFilter monsterFilter;
         private EcsFilter playerFilter;
-
+        private EcsPool<UnitData> unitPool;
         // model
         private Dictionary<int, AbilityLogic> skillSource;
         private Dictionary<FindTargetType, IFindTarget> findTargets;
@@ -52,7 +53,7 @@ namespace _Game.Battle.Ecs.Systems
                 .Exc<DeadFlag>()
                 .End();
 
-            var unitPool = world.GetPool<UnitData>();
+            unitPool = world.GetPool<UnitData>();
             var shapePool = world.GetPool<ShapeData>();
             var deadPool = world.GetPool<DeadFlag>();
             var healthPool = world.GetPool<HealthData>();
@@ -92,8 +93,8 @@ namespace _Game.Battle.Ecs.Systems
 #endif
 
             findTargets = new Dictionary<FindTargetType, IFindTarget>();
-            findTargets.Add(FindTargetType.Farthest, new FarthestFindTarget(shareData.Simulator, unitPool));
-            findTargets.Add(FindTargetType.Nearest, new NearestFindTarget(shareData.Simulator, unitPool));
+            findTargets.Add(FindTargetType.Farthest, new FarthestFindTarget());
+            findTargets.Add(FindTargetType.Nearest, new NearestFindTarget());
             skillSource = await BuildAbilities(
                 allSkills, shareData, unitPool, shapePool, deadPool,
                 healthPool, statPool, modifierPool, unitPosTempPool, playerFilter
@@ -111,14 +112,19 @@ namespace _Game.Battle.Ecs.Systems
                     int target = -1;
                     if (e.Team == Team.Player)
                     {
-                        found = findTarget.Find(e.StartPosition,
-                            ability.AbilitySo.core.maxDistanceFindTarget,
-                            monsterFilter, out target
+                        found = findTarget.Find(e.StartPosition, ability.AbilitySo.core.maxDistanceFindTarget,
+                            monsterFilter, entity =>
+                            {
+                                int agentId = unitPool.Get(entity).agentId;
+                                return shareData.Simulator.GetAgentPosition(agentId);
+                            }, out target
                         );
                     }
                     else if (e.Team == Team.Monster)
                     {
-                        Debug.Log("Xử lý phần này, mở rộng findTarget ra.");
+                        found = findTarget.Find(e.StartPosition, ability.AbilitySo.core.maxDistanceFindTarget,
+                            playerFilter, entity => float2.zero, out target
+                        );
                     }
                     
                     if (found || !ability.AbilitySo.core.isRequireTarget)

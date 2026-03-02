@@ -92,7 +92,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1464201742320542403
 RectTransform:
   m_ObjectHideFlags: 0
@@ -415,6 +415,8 @@ MonoBehaviour:
   content: {fileID: 1464201742320542403}
   healthFill: {fileID: 4031549276290466394}
   textHealth: {fileID: 831684028936581475}
+  yStartPosition: -400
+  closeDuration: 0.3
 --- !u!1 &6014909712981493641
 GameObject:
   m_ObjectHideFlags: 0
