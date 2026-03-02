@@ -6,6 +6,7 @@ namespace _Game.Battle.AbilitySystem
     [Serializable]
     public struct TrajectoryArg
     {
+        public float delayStart;
         public TrajectoryType type;
         public PathCreator path;
         public VelocityArg velocity;

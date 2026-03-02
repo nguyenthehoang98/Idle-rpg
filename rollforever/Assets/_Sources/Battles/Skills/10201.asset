@@ -12,12 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f1b1926f57db82438a03be8a84358f5, type: 3}
   m_Name: 10201
   m_EditorClassIdentifier: 
+  note: "Ki\u0303 n\u0103ng cu\u0309a monster, \u0111a\u0301nh c\xE2\u0323n chi\xEA\u0301n
+    g\xE2y sa\u0301t th\u01B0\u01A1ng sau 0.5s"
   core:
     lifeTime: 1
     bulletPrefab: {fileID: 0}
     muzzleOffsetPosition: {x: 0, y: 0}
     animationName: 0
     findTarget: 0
+    isRequireTarget: 0
+    maxDistanceFindTarget: 0
     maxCollision: 1
     shouldResetCollision: 0
     resetCollisionInterval: 0
@@ -58,7 +62,8 @@ MonoBehaviour:
       y: 0
     duration: 0.33333334
   trajectory:
-    type: 1
+    delayStart: 0
+    type: 0
     path: {fileID: 0}
     velocity:
       acceleration: 0

@@ -36,10 +36,10 @@ namespace _Game.Battle.Ecs.Systems
         private EcsWorld world;
         private EcsPool<StatData> statPool;
         private EcsPool<HealthData> healthPool;
-        private EcsPool<UnitData> unitPool;
+        private EcsPool<MonsterAgentData> unitPool;
         private EcsPool<ShapeData> shapePool;
         private EcsPool<UnitModifierData> modifierPool;
-        private EcsPool<UnitPosTempData> unitPosTempPool;
+        private EcsPool<MonsterTempData> unitPosTempPool;
         private EcsPool<MonsterFlag> monsterFlagPool;
         private EcsPool<MonsterCasterData> monsterCasterPool;
         private EcsFilter monsterAliveFilter;
@@ -65,9 +65,9 @@ namespace _Game.Battle.Ecs.Systems
 
             world = systems.GetWorld();
             statPool = world.GetPool<StatData>();
-            unitPool = world.GetPool<UnitData>();
+            unitPool = world.GetPool<MonsterAgentData>();
             shapePool = world.GetPool<ShapeData>();
-            unitPosTempPool = world.GetPool<UnitPosTempData>();
+            unitPosTempPool = world.GetPool<MonsterTempData>();
             monsterFlagPool = world.GetPool<MonsterFlag>();
             healthPool = world.GetPool<HealthData>();
             modifierPool = world.GetPool<UnitModifierData>();
@@ -209,7 +209,7 @@ namespace _Game.Battle.Ecs.Systems
 
             int agentId = shareData.Simulator.AddAgent(pos);
             int entity = world.NewEntity();
-            unitPool.Add(entity) = new UnitData(agentId);
+            unitPool.Add(entity) = new MonsterAgentData(agentId);
 #if UNITY_EDITOR
             unitPool.Get(entity).color = Random.ColorHSV(0, 1, 0.5f, 1, 0.5f, 1);
 #endif
@@ -223,7 +223,7 @@ namespace _Game.Battle.Ecs.Systems
 
             // todo: add component
             shapePool.Add(entity) = ShapeData.Circle(radius);
-            unitPosTempPool.Add(entity) = new UnitPosTempData
+            unitPosTempPool.Add(entity) = new MonsterTempData
             {
                 stopDistance = shareData.BoxSize + Vector2.one * monsterData.AttackDistance
             };

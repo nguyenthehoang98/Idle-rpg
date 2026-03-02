@@ -12,8 +12,8 @@ namespace _Game.Battle.Ecs.Systems
     {
         [EcsInject] private readonly BattleStartupShareData shareData;
 
-        private EcsPool<UnitData> unitPool;
-        private EcsPool<UnitPosTempData> unitPosTempPool;
+        private EcsPool<MonsterAgentData> unitPool;
+        private EcsPool<MonsterTempData> unitPosTempPool;
         private EcsPool<ShapeData> shapePool;
         private EcsFilter aliveFilter;
         private EcsFilter deadFilter;
@@ -22,19 +22,19 @@ namespace _Game.Battle.Ecs.Systems
         public void Init(IEcsSystems systems)
         {
             world = systems.GetWorld();
-            deadFilter = world.Filter<UnitData>()
-                .Inc<UnitPosTempData>()
+            deadFilter = world.Filter<MonsterAgentData>()
+                .Inc<MonsterTempData>()
                 .Inc<MonsterFlag>()
                 .Inc<DeadFlag>()
                 .End();
-            aliveFilter = world.Filter<UnitData>()
-                .Inc<UnitPosTempData>()
+            aliveFilter = world.Filter<MonsterAgentData>()
+                .Inc<MonsterTempData>()
                 .Inc<MonsterFlag>()
                 .Exc<DeadFlag>()
                 .End();
-            unitPool = world.GetPool<UnitData>();
+            unitPool = world.GetPool<MonsterAgentData>();
             shapePool = world.GetPool<ShapeData>();
-            unitPosTempPool = world.GetPool<UnitPosTempData>();
+            unitPosTempPool = world.GetPool<MonsterTempData>();
         }
 
         public void PostRun(IEcsSystems systems)
@@ -55,13 +55,13 @@ namespace _Game.Battle.Ecs.Systems
             }
         }
 
-        void Dispose(int e, UnitData unit)
+        void Dispose(int e, MonsterAgentData monsterAgent)
         {
             var shape = shapePool.Get(e);
 
             world.DelEntity(e);
 
-            var position = shareData.Simulator.GetAgentPosition(unit.agentId);
+            var position = shareData.Simulator.GetAgentPosition(monsterAgent.agentId);
             shareData.Matrix.TriggerPoint(e, position);
 
             if (shape.Value.type == ShapeType.Circle)
@@ -73,7 +73,7 @@ namespace _Game.Battle.Ecs.Systems
                 shareData.Matrix.RemoveUnit(e, position, shape.Value.size);   
             }
 
-            shareData.Simulator.RemoveAgent(unit.agentId);
+            shareData.Simulator.RemoveAgent(monsterAgent.agentId);
             
             if(UnitView.TryRelease(e, out UnitView unitView))
             {

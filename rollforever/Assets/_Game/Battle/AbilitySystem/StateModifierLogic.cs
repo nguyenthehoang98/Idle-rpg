@@ -11,8 +11,8 @@ namespace _Game.Battle.AbilitySystem
         private ISubStateModifier modifier;
 
         public StateModifierLogic(StateModifierArg arg,
-            Simulator simulator, EcsPool<UnitData> unitPool, EcsPool<UnitModifierData> modifierPool,
-            EcsPool<UnitPosTempData> unitPosTempPool
+            Simulator simulator, EcsPool<MonsterAgentData> unitPool, EcsPool<UnitModifierData> modifierPool,
+            EcsPool<MonsterTempData> unitPosTempPool
         )
         {
             group = arg.group;

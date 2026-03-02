@@ -2,7 +2,7 @@ using Unity.Mathematics;
 
 namespace _Game.Battle.Ecs.Data
 {
-    public struct UnitPosTempData
+    public struct MonsterTempData
     {
         public float2 stopDistance;
         public float threasholdVelocityElapsed;

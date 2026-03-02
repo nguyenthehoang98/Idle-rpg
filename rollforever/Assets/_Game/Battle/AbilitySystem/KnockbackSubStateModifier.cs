@@ -9,9 +9,9 @@ namespace _Game.Battle.AbilitySystem
     class KnockBackSubStateModifier : ISubStateModifier
     {
         private Simulator simulator;
-        private EcsPool<UnitData> unitPool;
+        private EcsPool<MonsterAgentData> unitPool;
         private EcsPool<UnitModifierData> modifierPool;
-        private EcsPool<UnitPosTempData> unitPosTempPool;
+        private EcsPool<MonsterTempData> unitPosTempPool;
 
         private NativeList<Data> list;
         private int unit;
@@ -19,8 +19,8 @@ namespace _Game.Battle.AbilitySystem
         private float duration;
 
         public KnockBackSubStateModifier(float force, float duration,
-            Simulator simulator, EcsPool<UnitData> unitPool, EcsPool<UnitModifierData> modifierPool,
-            EcsPool<UnitPosTempData> unitPosTempPool
+            Simulator simulator, EcsPool<MonsterAgentData> unitPool, EcsPool<UnitModifierData> modifierPool,
+            EcsPool<MonsterTempData> unitPosTempPool
         )
         {
             this.force = force;
@@ -42,9 +42,9 @@ namespace _Game.Battle.AbilitySystem
             if (target == unit) return;
             if (!unitPool.Has(target)) return;
 
-            UnitData unitData = unitPool.Get(unit);
-            float2 pos = simulator.GetAgentPosition(unitData.agentId);
-            UnitData targetData = unitPool.Get(target);
+            MonsterAgentData monsterAgentData = unitPool.Get(unit);
+            float2 pos = simulator.GetAgentPosition(monsterAgentData.agentId);
+            MonsterAgentData targetData = unitPool.Get(target);
             float2 targetPos = simulator.GetAgentPosition(targetData.agentId);
             float2 direction = float2.zero;
             if (math.lengthsq(targetPos - pos) <= 0)
@@ -96,9 +96,9 @@ namespace _Game.Battle.AbilitySystem
                 data.prevDistance = distance;
                 list[i] = data;
 
-                UnitData unitData = unitPool.Get(data.entity);
-                float2 agentPos = simulator.GetAgentPosition(unitData.agentId);
-                simulator.SetAgentPosition(unitData.agentId, agentPos + delta);
+                MonsterAgentData monsterAgentData = unitPool.Get(data.entity);
+                float2 agentPos = simulator.GetAgentPosition(monsterAgentData.agentId);
+                simulator.SetAgentPosition(monsterAgentData.agentId, agentPos + delta);
             }
         }
 
@@ -117,8 +117,8 @@ namespace _Game.Battle.AbilitySystem
                 if (modifier.effect.Has(StatusEffect.Stun)) continue;
                 if (modifier.effect.Has(StatusEffect.KnockBack)) continue;
 
-                UnitData unitData = unitPool.Get(e);
-                simulator.PauseAgent(unitData.agentId, false);
+                MonsterAgentData monsterAgentData = unitPool.Get(e);
+                simulator.PauseAgent(monsterAgentData.agentId, false);
             }
         }
 

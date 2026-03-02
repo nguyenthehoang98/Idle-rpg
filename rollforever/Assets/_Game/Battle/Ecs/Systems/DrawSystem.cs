@@ -15,7 +15,7 @@ namespace _Game.Battle.Ecs.Systems
     {
         [EcsInject] private readonly BattleStartupShareData shareData;
         
-        private EcsPool<UnitData> unitPool;
+        private EcsPool<MonsterAgentData> unitPool;
         private EcsPool<HealthData> healthPool;
         private EcsPool<StatData> statPool;
         private EcsFilter ecsFilter;
@@ -23,12 +23,12 @@ namespace _Game.Battle.Ecs.Systems
         public void Init(IEcsSystems systems)
         {
             var world = systems.GetWorld();
-            ecsFilter = world.Filter<UnitData>()
+            ecsFilter = world.Filter<MonsterAgentData>()
                 .Inc<ShapeData>()
                 .Inc<HealthData>()
                 .End();
             healthPool = world.GetPool<HealthData>();
-            unitPool = world.GetPool<UnitData>();
+            unitPool = world.GetPool<MonsterAgentData>();
             statPool = world.GetPool<StatData>();
         }
 

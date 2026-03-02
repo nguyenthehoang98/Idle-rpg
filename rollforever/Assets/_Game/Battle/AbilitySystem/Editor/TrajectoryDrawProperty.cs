@@ -16,6 +16,7 @@ namespace _Game.AbilitySystem.Editor
             
             SerializedProperty typeProp = property.FindPropertyRelative("type");
             EditorGUILayout.PropertyField(typeProp);
+            EditorGUILayout.PropertyField(property.FindPropertyRelative("delayStart"));
 
             TrajectoryType type = (TrajectoryType) typeProp.enumValueIndex;
             switch (type)

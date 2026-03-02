@@ -11,8 +11,8 @@ namespace _Game.Battle.Ecs.Systems
     {
         [EcsInject] private readonly BattleStartupShareData shareData;
 
-        private EcsPool<UnitData> unitPool;
-        private EcsPool<UnitPosTempData> unitPosTempPool;
+        private EcsPool<MonsterAgentData> unitPool;
+        private EcsPool<MonsterTempData> unitPosTempPool;
         private EcsPool<MonsterCasterData> monsterCasterPool;
         private EcsFilter filter;
         
@@ -20,11 +20,11 @@ namespace _Game.Battle.Ecs.Systems
         {
             EcsWorld world = systems.GetWorld();
             filter = world.Filter<MonsterCasterData>()
-                .Inc<UnitData>()
+                .Inc<MonsterAgentData>()
                 .Exc<DeadFlag>()
                 .End();
-            unitPool = world.GetPool<UnitData>();
-            unitPosTempPool = world.GetPool<UnitPosTempData>();
+            unitPool = world.GetPool<MonsterAgentData>();
+            unitPosTempPool = world.GetPool<MonsterTempData>();
             monsterCasterPool = world.GetPool<MonsterCasterData>();
         }
 

@@ -22,12 +22,12 @@ namespace _Game.Battle.AbilitySystem
         private readonly SkillConfig.SkillData SkillData;
         // ecs
         private readonly BattleStartupShareData shareData;
-        private readonly EcsPool<UnitData> unitPool;
+        private readonly EcsPool<MonsterAgentData> unitPool;
         private readonly EcsPool<ShapeData> shapePool;
         private readonly EcsPool<DeadFlag> deadPool;
         private readonly EcsPool<HealthData> healthPool;
         private readonly EcsPool<UnitModifierData> modifierPool;
-        private readonly EcsPool<UnitPosTempData> unitPosTempPool;
+        private readonly EcsPool<MonsterTempData> unitPosTempPool;
         private readonly EcsPool<StatData> statPool;
         private readonly EcsFilter playerFilter; 
         // model
@@ -48,10 +48,10 @@ namespace _Game.Battle.AbilitySystem
 
         public AbilityLogic(AbilitySO abilitySo, SkillConfig.SkillData skillData,
             int entity, Team sourceTeam, BattleStartupShareData shareData, 
-            EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool,
+            EcsPool<MonsterAgentData> unitPool, EcsPool<ShapeData> shapePool,
             EcsPool<DeadFlag> deadPool, EcsPool<HealthData> healthPool, 
             EcsPool<StatData> statPool,
-            EcsPool<UnitModifierData> modifierPool, EcsPool<UnitPosTempData> unitPosTempPool,
+            EcsPool<UnitModifierData> modifierPool, EcsPool<MonsterTempData> unitPosTempPool,
             EcsFilter playerFilter)
         {
             this.SkillData = skillData;
@@ -90,7 +90,7 @@ namespace _Game.Battle.AbilitySystem
             float2 targetPos;
             if (isTargetValid)
             {
-                UnitData targetData = unitPool.Get(target);
+                MonsterAgentData targetData = unitPool.Get(target);
                 targetPos = shareData.Simulator.GetAgentPosition(targetData.agentId);
             }
             else

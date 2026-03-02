@@ -2,13 +2,13 @@ using UnityEngine;
 
 namespace _Game.Battle.Ecs.Data
 {
-    public struct UnitData
+    public struct MonsterAgentData
     {
         public readonly int agentId;
 #if UNITY_EDITOR
         public Color color;
 #endif
-        public UnitData(int agentId)
+        public MonsterAgentData(int agentId)
         {
             this.agentId = agentId;
 #if UNITY_EDITOR

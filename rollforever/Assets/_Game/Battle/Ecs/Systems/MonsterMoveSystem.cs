@@ -21,25 +21,25 @@ namespace _Game.Battle.Ecs.Systems
         const float THRESHOLD_DISTANCE = 0.1F;
         const float THRESHOLD_TIME = 2f;
 
-        private EcsPool<UnitData> unitPool;
+        private EcsPool<MonsterAgentData> unitPool;
         private EcsPool<ShapeData> shapePool;
         private EcsPool<UnitModifierData> modifierPool;
-        private EcsPool<UnitPosTempData> unitPosTempPool;
+        private EcsPool<MonsterTempData> unitPosTempPool;
         private EcsFilter filter;
 
         public void Init(IEcsSystems systems)
         {
             var world = systems.GetWorld();
-            filter = world.Filter<UnitData>()
-                .Inc<UnitPosTempData>()
+            filter = world.Filter<MonsterAgentData>()
+                .Inc<MonsterTempData>()
                 .Inc<UnitModifierData>()
                 .Inc<MonsterFlag>()
                 .Exc<DeadFlag>()
                 .End();
-            unitPool = world.GetPool<UnitData>();
+            unitPool = world.GetPool<MonsterAgentData>();
             shapePool = world.GetPool<ShapeData>();
             modifierPool = world.GetPool<UnitModifierData>();
-            unitPosTempPool = world.GetPool<UnitPosTempData>();
+            unitPosTempPool = world.GetPool<MonsterTempData>();
         }
 
         public void Run(IEcsSystems systems)

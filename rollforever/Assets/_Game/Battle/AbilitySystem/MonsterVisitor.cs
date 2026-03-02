@@ -17,7 +17,7 @@ namespace _Game.Battle.AbilitySystem
     {
         private readonly int sourceEntity;
         private readonly SkillConfig.SkillData skillData;
-        private readonly EcsPool<UnitData> unitPool;
+        private readonly EcsPool<MonsterAgentData> unitPool;
         private readonly EcsPool<ShapeData> shapePool;
         private readonly EcsPool<DeadFlag> deadPool;
         private readonly EcsPool<HealthData> healthPool;
@@ -42,7 +42,7 @@ namespace _Game.Battle.AbilitySystem
             int maxCollision, bool shouldResetCollision, float resetCollisionInterval,
             Simulator simulator, ShapeLogic shapeLogic, StateModifierLogic stateModifierLogic,
             EcsPool<HealthData> healthPool, EcsPool<StatData> statPool,
-            EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool, EcsPool<DeadFlag> deadPool)
+            EcsPool<MonsterAgentData> unitPool, EcsPool<ShapeData> shapePool, EcsPool<DeadFlag> deadPool)
         {
             this.sourceEntity = entity;
             this.skillData = skillData;

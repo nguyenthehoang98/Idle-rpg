@@ -25,7 +25,7 @@ namespace _Game.Battle.Ecs.Systems
         private EcsWorld world;
         private EcsFilter monsterFilter;
         private EcsFilter playerFilter;
-        private EcsPool<UnitData> unitPool;
+        private EcsPool<MonsterAgentData> unitPool;
         // model
         private Dictionary<int, AbilityLogic> skillSource;
         private Dictionary<FindTargetType, IFindTarget> findTargets;
@@ -40,7 +40,7 @@ namespace _Game.Battle.Ecs.Systems
             abilities = new List<AbilityLogic>();
 
             world = systems.GetWorld();
-            monsterFilter = world.Filter<UnitData>()
+            monsterFilter = world.Filter<MonsterAgentData>()
                 .Inc<MonsterFlag>()
                 .Exc<PlayerFlag>()
                 .Exc<DeadFlag>()
@@ -53,13 +53,13 @@ namespace _Game.Battle.Ecs.Systems
                 .Exc<DeadFlag>()
                 .End();
 
-            unitPool = world.GetPool<UnitData>();
+            unitPool = world.GetPool<MonsterAgentData>();
             var shapePool = world.GetPool<ShapeData>();
             var deadPool = world.GetPool<DeadFlag>();
             var healthPool = world.GetPool<HealthData>();
             var statPool = world.GetPool<StatData>();
             var modifierPool = world.GetPool<UnitModifierData>();
-            var unitPosTempPool = world.GetPool<UnitPosTempData>();
+            var unitPosTempPool = world.GetPool<MonsterTempData>();
 
             Dictionary<int, string> allSkills = new Dictionary<int, string>();
             MonsterConfig monsterConfig = KitConfigManager.Get<MonsterConfig>();
@@ -217,9 +217,9 @@ namespace _Game.Battle.Ecs.Systems
 
         private static async UniTask<Dictionary<int, AbilityLogic>> BuildAbilities(
             Dictionary<int, string> abilitiesPath, BattleStartupShareData shareData,
-            EcsPool<UnitData> unitPool, EcsPool<ShapeData> shapePool, EcsPool<DeadFlag> deadPool,
+            EcsPool<MonsterAgentData> unitPool, EcsPool<ShapeData> shapePool, EcsPool<DeadFlag> deadPool,
             EcsPool<HealthData> healthPool, EcsPool<StatData> statPool, EcsPool<UnitModifierData> modifierPool,
-            EcsPool<UnitPosTempData> unitPosTempPool,
+            EcsPool<MonsterTempData> unitPosTempPool,
             EcsFilter playerFilter)
         {
             SkillConfig skillConfig = KitConfigManager.Get<SkillConfig>();
