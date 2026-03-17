@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using _Games.Combat.Model;
+using Unity.Entities;
 
 namespace _Games.Combat.EntityComponentSystem.Data
 {
@@ -11,6 +12,7 @@ namespace _Games.Combat.EntityComponentSystem.Data
         public readonly float AttackRangeSq;
         public readonly float DelayCastTime;
         
+        public AnimationName AnimationName;
         public bool IsLastTriggerSkill;
         public bool IsRunning;
         public double LastAttackTime;
@@ -27,6 +29,7 @@ namespace _Games.Combat.EntityComponentSystem.Data
             IsLastTriggerSkill = false;
             IsRunning = true;
             LastAttackTime = 0;
+            AnimationName = AnimationName.Move;
         }
 
         public bool IsReady(double time)

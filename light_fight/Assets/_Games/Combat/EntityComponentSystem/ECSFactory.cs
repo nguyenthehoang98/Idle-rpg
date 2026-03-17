@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using _Games.Combat.EntityComponentSystem.Data;
 using _Games.Combat.EntityComponentSystem.View;
+using _Games.Combat.Model;
 using _KIT.Config;
 using _KIT.Pool;
 using _KIT.Resource;
@@ -28,8 +29,9 @@ namespace _Games.Combat.EntityComponentSystem
         }
 
         public static async UniTask BuildMonster(int monsterID, float bonusRange,
-            float3 position, float3 destination)
+            float3 position)
         {
+            Vector3 destination = float3.zero;
             KitConfigManager.Get<MonsterConfig>().Find(monsterID, out var monsterData);
             GameObject go = await KitLoaded.LoadAsync<GameObject>(monsterData.MonsterObjectId, true);
             if (monstersPath.Add(monsterData.MonsterObjectId))
@@ -38,10 +40,17 @@ namespace _Games.Combat.EntityComponentSystem
             }
             EntityView view = KitPool.Instantiate(go.GetComponent<EntityView>());
             view.transform.position = position;
+            Monster monster = view.GetComponent<Monster>();
+            float radius = monster.Radius;
             
             EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
             Entity entity = view.GetOrCreateEntity();
             manager.AddComponentData(entity, new MonsterTag());
+            manager.AddComponentData(entity, new MonsterFlipData
+            {
+                Changed = true,
+                FacingRight = position.x >= destination.x,
+            });
             manager.AddComponentData(entity, new LocalTransform
             {
                 Position = position, Rotation = quaternion.identity, Scale = 1
@@ -61,21 +70,22 @@ namespace _Games.Combat.EntityComponentSystem
             manager.AddComponentData(entity, new AgentLocomotion
             {
                 Speed = monsterData.MoveSpeed, Acceleration = monsterData.MoveSpeed, AngularSpeed = 0,
-                StoppingDistance = bonusRange + monsterData.StopMoveDistance,
+                StoppingDistance = bonusRange + monsterData.StopMoveDistance + radius,
                 AutoBreaking = true,
             });
             manager.AddComponentData(entity, new AgentSeparation
             {
-                Radius = monsterData.Radius, Weight = 1,
+                Radius = radius, Weight = 1,
                 Layers = monsterData.IsRanged ? NavigationLayers.Layer1 : NavigationLayers.Default
             });
             manager.AddComponentData(entity, new AgentShape
             {
-                Radius = monsterData.Radius, Type = ShapeType.Circle
+                Radius = radius, Type = ShapeType.Circle,
+                Offset = monster.Offset
             });
             manager.AddComponentData(entity, new AgentSonarAvoid
             {
-                Radius = monsterData.Radius * 2,
+                Radius = radius * 2,
                 Mode = SonarAvoidMode.IgnoreBehindAgents,
                 MaxAngle = math.radians(360),
                 Angle = math.radians(180),
@@ -92,7 +102,7 @@ namespace _Games.Combat.EntityComponentSystem
             });
             manager.AddComponentData(entity,
                 new MonsterSkillData(monsterID, monsterData.SkillId, monsterData.SkillLevel,
-                    monsterData.SkillCooldown, bonusRange + monsterData.AttackDistance, 1)
+                    monsterData.SkillCooldown, bonusRange + monsterData.AttackDistance + radius, 1)
             );
             if (monsterData.IsRanged)
                 manager.AddComponentData(entity, new MonsterRangedTag());
@@ -100,7 +110,8 @@ namespace _Games.Combat.EntityComponentSystem
                 manager.AddComponentData(entity, new MonsterMeleeTag());
             manager.AddComponentObject(entity, view.transform);
 #if UNITY_EDITOR
-            manager.SetName(entity, view.name);
+            manager.SetName(entity, go.name + "#" + entity.GetHashCode());
+            view.name = go.name + "#" + entity.GetHashCode();
 #endif
             manager.SetEnabled(entity, true);
             view.gameObject.SendMessage("Initialize", entity);

@@ -13,11 +13,9 @@ namespace _Games.Combat.Model
             var design = levelSpawn.design;
             BoxSize = CalculateBounds(design.LoopPoints(), design.CellSize);
             RadiusBonus = Mathf.Max(BoxSize.x, BoxSize.y) / 2f;
-            PlayerPosition = Vector3.zero;
         }
 
         public Entity Player { get; }
-        public Vector3 PlayerPosition { get; }
         public LevelSpawnSO LevelSpawn { get; }
         public Vector2 BoxSize { get; }
         public float RadiusBonus { get; }

@@ -36,7 +36,6 @@ namespace _Games.Combat
 #if DEVELOP_MODE
             gameObject.AddComponent<CpuFrame>();
 #endif
-            EventBus.Instance.Publish(new WaveSelectWeaponEvent(0, new Vector3(0, -1, -60)));
             
             isRunning = true;
         }

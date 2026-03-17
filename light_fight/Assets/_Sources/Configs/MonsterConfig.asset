@@ -17,14 +17,13 @@ MonoBehaviour:
   monsters:
   - monsterId: 10000
     monsterName: Smile
-    monsterObjectId: Monster_10000
+    monsterObjectId: Unit Goose
     isRanged: 0
-    radius: 0.5
     skillId: 100000
     skillLevel: 1
     skillCooldown: 1
     moveSpeed: 3
-    stopMoveDistance: 0.5
+    stopMoveDistance: 0.2
     attackDistance: 1.25
     attack: 1
     defense: 0

@@ -73,9 +73,9 @@ namespace _Games.Combat.Level
                             if (monsterConfig.Find(monster, out MonsterData monsterData))
                             {
                                 Vector3 position = RandomPointBetweenRects_NoLoop(
-                                    new Vector2(12, 22), new Vector2(14, 24), shareData.PlayerPosition
+                                    new Vector2(12, 22), new Vector2(14, 24), Vector2.zero
                                 );
-                                await ECSFactory.BuildMonster(monster, shareData.RadiusBonus, position, shareData.PlayerPosition);
+                                await ECSFactory.BuildMonster(monster, shareData.RadiusBonus, position);
                                 spawnedCount++;
                                 spawnElapsed -= batch.interval;
                             }
