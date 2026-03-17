@@ -300,7 +300,6 @@ namespace _Games.Combat.Level.Editor
                     EditorGUILayout.EndHorizontal();
 
                     EditorGUILayout.PropertyField(w.FindPropertyRelative("id"));
-                    EditorGUILayout.PropertyField(w.FindPropertyRelative("level"));
                     EditorGUILayout.PropertyField(w.FindPropertyRelative("weight"));
                     w.FindPropertyRelative("weight").intValue = math.max(
                         0, w.FindPropertyRelative("weight").intValue

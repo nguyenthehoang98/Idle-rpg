@@ -48,7 +48,7 @@ namespace _Games.Combat.Level
             isPaused = false;
         }
 
-        public void Update(float dt)
+        public async void Update(float dt)
         {
             Wave[] waves = waveContainer.waves;
             if (!isPaused && waveIndex < waves.Length)
@@ -75,7 +75,7 @@ namespace _Games.Combat.Level
                                 Vector3 position = RandomPointBetweenRects_NoLoop(
                                     new Vector2(12, 22), new Vector2(14, 24), shareData.PlayerPosition
                                 );
-                                ECSFactory.BuildMonster(monster, shareData.RadiusBonus, position, shareData.PlayerPosition);
+                                await ECSFactory.BuildMonster(monster, shareData.RadiusBonus, position, shareData.PlayerPosition);
                                 spawnedCount++;
                                 spawnElapsed -= batch.interval;
                             }

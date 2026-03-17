@@ -4,6 +4,7 @@ using _Games.Combat.EntityComponentSystem.View;
 using _KIT.Config;
 using _KIT.Pool;
 using _KIT.Resource;
+using Cysharp.Threading.Tasks;
 using ProjectDawn.Navigation;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -26,7 +27,7 @@ namespace _Games.Combat.EntityComponentSystem
             return entity;
         }
 
-        public static async void BuildMonster(int monsterID, float bonusRange,
+        public static async UniTask BuildMonster(int monsterID, float bonusRange,
             float3 position, float3 destination)
         {
             KitConfigManager.Get<MonsterConfig>().Find(monsterID, out var monsterData);
@@ -103,6 +104,7 @@ namespace _Games.Combat.EntityComponentSystem
 #endif
             manager.SetEnabled(entity, true);
             view.gameObject.SendMessage("Initialize", entity);
+            await UniTask.CompletedTask;
         }
 
         public static void UnloadAll()

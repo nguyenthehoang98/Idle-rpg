@@ -47,7 +47,7 @@ public class MonsterData
     [SerializeField] private int monsterId;
     [SerializeField] private string monsterName;
     [SerializeField] private string monsterObjectId;
-    [SerializeField] private bool isRanged;
+    [SerializeField] private int isRanged;
     [SerializeField] private float radius;
     [SerializeField] private int skillId;
     [SerializeField] private int skillLevel;
@@ -62,7 +62,7 @@ public class MonsterData
     public int MonsterId => monsterId;
     public string MonsterName => monsterName;
     public string MonsterObjectId => monsterObjectId;
-    public bool IsRanged => isRanged;
+    public bool IsRanged => isRanged == 1;
     public float Radius => radius;
     public int SkillId => skillId;
     public int SkillLevel => skillLevel;

@@ -15,13 +15,12 @@ MonoBehaviour:
   targetDuration: 20
   design: {fileID: 8906630564117218888, guid: f8b6ba07e97b3c740a0f4bb11dff3c9d, type: 3}
   waves:
-  - power: 100
+  - power: 3000
     batches:
     - isBoosWave: 0
       duration: 20
       waitTimeSpawn: 0
-      power: 100
+      power: 3000
       enemies:
       - id: 10000
-        level: 1
         weight: 1

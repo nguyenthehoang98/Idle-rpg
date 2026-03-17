@@ -10,7 +10,7 @@ namespace _Games.Combat.SkillSystem.Model
         [SerializeField] private float lifeTime;
         [SerializeField] private float castTime;
         [SerializeField] private FindTargetType type;
-        [SerializeField] private bool needTargetToCast;
+        [SerializeField] private int needTargetToCast;
         [SerializeField] private float maxTargetRange;
         [SerializeField] private int maxHitCount;
         [SerializeField] private float collisionResetInterval;
@@ -25,7 +25,7 @@ namespace _Games.Combat.SkillSystem.Model
         public float LifeTime => lifeTime;
         public float CastTime => castTime;
         public FindTargetType Type => type;
-        public bool NeedTargetToCast => needTargetToCast;
+        public bool NeedTargetToCast => needTargetToCast == 1;
         public float MaxTargetRange => maxTargetRange;
         public int MaxHitCount => maxHitCount;
         public float CollisionResetInterval => collisionResetInterval;
