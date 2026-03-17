@@ -8,46 +8,46 @@ namespace _Games.Combat.SkillSystem
 {
     public static class SkillFactory
     {
-        static Dictionary<string, Skill> container = new Dictionary<string, Skill>();
+        static Dictionary<int, Skill> container = new Dictionary<int, Skill>();
         static HashSet<string> cache = new HashSet<string>();
         
         public static async UniTask<Skill> CreateSkill(SkillData data)
         {
-            if (container.TryGetValue(data.skillId, out Skill skill))
+            if (container.TryGetValue(data.SkillId, out Skill skill))
                 return skill;
 
             SkillMainModule main = new SkillMainModule
             {
-                lifeTime = data.lifeTime,
-                castTime = data.castTime,
-                type = data.type,
-                needTargetToCast = data.needTargetToCast,
-                maxTargetRange = data.maxTargetRange,
-                maxHitCount = data.maxHitCount,
-                collisionResetInterval = data.collisionResetInterval
+                lifeTime = data.LifeTime,
+                castTime = data.CastTime,
+                type = data.Type,
+                needTargetToCast = data.NeedTargetToCast,
+                maxTargetRange = data.MaxTargetRange,
+                maxHitCount = data.MaxHitCount,
+                collisionResetInterval = data.CollisionResetInterval
             };
 
-            ProjectileSO projectile = await KitLoaded.LoadAsync<ProjectileSO>(data.projectileId, true);
-            cache.Add(data.projectileId);
-            BaseColliderSO collider = await KitLoaded.LoadAsync<BaseColliderSO>(data.colliderId, true);
-            cache.Add(data.colliderId);
-            BaseTrajectorySO trajectory = await KitLoaded.LoadAsync<BaseTrajectorySO>(data.trajectoryId, true);
-            cache.Add(data.trajectoryId);
-            BaseModifierSO[] modifiers = new BaseModifierSO[data.modifiersId.Length];
-            for (int i = 0; i < data.modifiersId.Length; i++)
+            ProjectileSO projectile = await KitLoaded.LoadAsync<ProjectileSO>(data.ProjectileId, true);
+            cache.Add(data.ProjectileId);
+            BaseColliderSO collider = await KitLoaded.LoadAsync<BaseColliderSO>(data.ColliderId, true);
+            cache.Add(data.ColliderId);
+            BaseTrajectorySO trajectory = await KitLoaded.LoadAsync<BaseTrajectorySO>(data.TrajectoryId, true);
+            cache.Add(data.TrajectoryId);
+            BaseModifierSO[] modifiers = new BaseModifierSO[data.ModifiersId.Length];
+            for (int i = 0; i < data.ModifiersId.Length; i++)
             {
-                modifiers[i] = await KitLoaded.LoadAsync<BaseModifierSO>(data.modifiersId[i], true);
-                cache.Add(data.modifiersId[i]);
+                modifiers[i] = await KitLoaded.LoadAsync<BaseModifierSO>(data.ModifiersId[i], true);
+                cache.Add(data.ModifiersId[i]);
             }
-            BaseBehaviorSO[] behaviors = new BaseBehaviorSO[data.behaviorsId.Length];
-            for (int i = 0; i < data.behaviorsId.Length; i++)
+            BaseBehaviorSO[] behaviors = new BaseBehaviorSO[data.BehaviorsId.Length];
+            for (int i = 0; i < data.BehaviorsId.Length; i++)
             {
-                behaviors[i] = await KitLoaded.LoadAsync<BaseBehaviorSO>(data.behaviorsId[i], true);
-                cache.Add(data.behaviorsId[i]);
+                behaviors[i] = await KitLoaded.LoadAsync<BaseBehaviorSO>(data.BehaviorsId[i], true);
+                cache.Add(data.BehaviorsId[i]);
             }
             
             skill = new Skill(main, projectile, collider, trajectory, modifiers, behaviors);
-            container.Add(data.skillId, skill);
+            container.Add(data.SkillId, skill);
             return skill;
         }
 
