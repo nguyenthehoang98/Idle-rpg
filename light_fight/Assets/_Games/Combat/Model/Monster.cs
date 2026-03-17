@@ -1,72 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using _KIT.Utils;
+using Animancer;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 namespace _Games.Combat.Model
 {
+    [RequireComponent(typeof(AnimancerComponent))]
     public class Monster : MonoBehaviour, IAuthoring
     {
         [Header("Renderer")]
         [SerializeField] private SortingGroup sortingGroup;
-        [Header("Animations")] 
-        [SerializeField] private Animation unityAnimation;
-        [SerializeField] private AnimationData[] clips;
         [Header("Collider")]
         [SerializeField] private float radius;
         [SerializeField] private Vector3 offset;
+        [Header("Animations")] 
+        [SerializeField] private AnimationData[] clips;
 
-        private void OnValidate()
+        AnimancerComponent animancerComponent;
+
+        private void Awake()
         {
-            if (unityAnimation == null || clips == null) return;
-
-            // --- Build set name mới ---
-            var newNames = new HashSet<string>();
-            foreach (var data in clips)
-            {
-                if (data.clip == null) continue;
-                newNames.Add(data.name.ToString());
-            }
-
-            // --- Remove clip không còn dùng ---
-            var toRemove = new List<string>();
-            foreach (AnimationState state in unityAnimation)
-            {
-                if (!newNames.Contains(state.name))
-                    toRemove.Add(state.name);
-            }
-
-            foreach (var clipName in toRemove)
-            {
-                unityAnimation.RemoveClip(clipName);
-            }
-
-            // --- Add / Replace clip ---
-            foreach (var data in clips)
-            {
-                if (data.clip == null) continue;
-
-                string clipName = data.name.ToString();
-
-                // đảm bảo legacy
-                if (!data.clip.legacy)
-                    data.clip.legacy = true;
-
-                // nếu đã tồn tại → remove trước để tránh bug overwrite ngầm
-                if (unityAnimation.GetClip(clipName) != null)
-                {
-                    unityAnimation.RemoveClip(clipName);
-                }
-
-                unityAnimation.AddClip(data.clip, clipName);
-            }
-
-            // --- Set default clip ---
-            if (clips.Length > 0 && clips[0].clip != null)
-            {
-                unityAnimation.clip = clips[0].clip;
-            }
+            animancerComponent = GetComponent<AnimancerComponent>();
         }
 
         public void Initialize(Entity entity)
@@ -98,25 +55,33 @@ namespace _Games.Combat.Model
 
         public void OnAttackEnd()
         {
+            Debug.Log("trigger cooldown");
         }
 
-        public void PlayAnimation(AnimationName animationName)
+        public AnimancerState PlayAnimation(AnimationName animationName)
         {
-            unityAnimation.Stop();
-            unityAnimation.Play(animationName.ToString());
+            foreach (var data in clips)
+            {
+                if (data.name == animationName)
+                {
+                    return animancerComponent.Play(data.transition);
+                }
+            }
+
+            return null;
         }
 
         public void QueueAnimation(AnimationName animationName, AnimationName nextAnimationName)
         {
-            PlayAnimation(animationName);
-            this.WaitInvoke(unityAnimation[animationName.ToString()].length, () => PlayAnimation(nextAnimationName));
+            var state = PlayAnimation(animationName);
+            this.WaitInvoke(state.Duration, () => PlayAnimation(nextAnimationName));
         }
 
         [System.Serializable]
         class AnimationData
         {
             public AnimationName name;
-            public AnimationClip clip;
+            public ClipTransition transition;
         }
     }
 }

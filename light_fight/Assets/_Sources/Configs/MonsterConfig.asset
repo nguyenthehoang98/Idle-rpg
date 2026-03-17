@@ -21,7 +21,7 @@ MonoBehaviour:
     isRanged: 0
     skillId: 100000
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 2
     moveSpeed: 3
     stopMoveDistance: 0.2
     attackDistance: 1.25
