@@ -6,9 +6,11 @@ namespace _Games.Combat.Level
 {
     public class SlotView : MonoBehaviour
     {
-        [Header("Setting")] [SerializeField] private Canvas canvas;
+        [Header("Setting")] 
+        [SerializeField] private Canvas canvas;
         [SerializeField] private Vector2 slotSize = new Vector2(80, 80);
-        [Header("Sprite")] [SerializeField] private SpriteRenderer border;
+        [Header("Sprite")]
+        [SerializeField] private SpriteRenderer border;
         [SerializeField] private SpriteRenderer body;
 
         private Color originalBorderColor = new Color(51f / 255f, 51f / 255f, 51f / 255f, 128f / 255f);

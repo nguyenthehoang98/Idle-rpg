@@ -12,7 +12,20 @@ public class MonsterConfig : KitBaseConfig
     [SerializeField] private List<MonsterData> monsters = new List<MonsterData>();
     
     private Dictionary<int, MonsterData> cacheMonsterData;
-
+    
+#if UNITY_EDITOR
+    public static MonsterConfig Instance
+    {
+        get
+        {
+            string path = "Assets/_Sources/Configs/MonsterConfig.asset";
+            MonsterConfig instance = UnityEditor.AssetDatabase.LoadAssetAtPath<MonsterConfig>(path);
+            instance.OnMapValue();
+            return instance;
+        }
+    }
+#endif
+    
     public override void OnMapValue()
     {
         cacheMonsterData = new Dictionary<int, MonsterData>();
