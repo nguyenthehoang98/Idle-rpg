@@ -11,16 +11,18 @@ namespace _Games.Combat
     public class BattleStartup : MonoBehaviour
     {
         private ShareData shareData;
+        private SpawnLogic spawnLogic;
         private LevelDesign levelDesign;
         private bool isRunning = false;
         
         private async void Start()
         {
             Entity player = ECSFactory.BuildPlayer();
-            shareData = new ShareData(player);
-       
             LevelSpawnSO levelSpawn = await LevelSpawnSO.LoadSpawn(1);
             levelDesign = Instantiate(levelSpawn.design);
+            shareData = new ShareData(player, levelSpawn);
+            spawnLogic = new SpawnLogic(shareData);
+            
             // todo: close loading scene
             KitEntryScene.Instance.CloseLoadingScene();
 #if DEVELOP_MODE

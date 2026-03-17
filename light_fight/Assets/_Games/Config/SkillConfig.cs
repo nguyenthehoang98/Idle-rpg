@@ -15,6 +15,20 @@ public class SkillConfig : KitBaseConfig
     private Dictionary<int, SkillData> cacheSkillData;
     private Dictionary<string, SkillStatData> cacheSkillStatData;
     
+#if UNITY_EDITOR
+    public static SkillConfig Instance
+    {
+        get
+        {
+            string path = "Assets/_Sources/Configs/SkillConfig.asset";
+            SkillConfig instance = UnityEditor.AssetDatabase.LoadAssetAtPath<SkillConfig>(path);
+            instance.OnMapValue();
+            return instance;
+        }
+    }
+#endif
+
+    
     public override void OnMapValue()
     {
         cacheSkillData = new Dictionary<int, SkillData>();

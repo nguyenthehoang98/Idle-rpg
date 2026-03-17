@@ -49,7 +49,7 @@ namespace _Games.Combat.Level
                 }
             }
 
-            //SpawnMonsterLogic.ValidateSpawn(this, monsterConfig, SkillConfig.Instance);
+            SpawnLogic.ValidateSpawn(this, monsterConfig, SkillConfig.Instance);
 #endif
         }
 

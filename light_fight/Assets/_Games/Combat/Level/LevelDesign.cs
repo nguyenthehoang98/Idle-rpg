@@ -39,9 +39,9 @@ namespace _Games.Combat.Level
 
         public Vector2 CellSize => cellSize;
 
-        public float2[] LoopPoints()
+        public Vector2[] LoopPoints()
         {
-            float2[] points = new float2[slots.Length];
+            Vector2[] points = new Vector2[slots.Length];
             for (int i = 0; i < slots.Length; i++)
             {
                 Vector2 point = slots[i].transform.position;
