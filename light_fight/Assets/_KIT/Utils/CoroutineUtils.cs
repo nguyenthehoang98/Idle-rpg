@@ -22,6 +22,16 @@ namespace _KIT.Utils
             action?.Invoke();
         } 
 
+        static IEnumerator WhileInvokeIE(float interval, Action action)
+        {
+            WaitForSeconds wfs = new WaitForSeconds(interval);
+            while (true)
+            {
+                yield return wfs;
+                action?.Invoke();
+            }
+        }
+
         public static Coroutine WaitNextFrame(this MonoBehaviour target, Action action, int frame = 1)
         {
             if(target != null)
@@ -33,6 +43,13 @@ namespace _KIT.Utils
         {
             if(target != null)
                 return target.StartCoroutine(WaitInvokeIE(duration, action));
+            return null;
+        }
+
+        public static Coroutine WhileInvoke(this MonoBehaviour target, float interval, Action action)
+        {
+            if(target != null)
+                return target.StartCoroutine(WhileInvokeIE(interval, action));
             return null;
         }
     }

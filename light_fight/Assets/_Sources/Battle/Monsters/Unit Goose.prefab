@@ -92,6 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee6e28cabe474d96970e7712f32e2ce9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sortingGroup: {fileID: 210308195770225104}
   unityAnimation: {fileID: 1265709764138107645}
   clips:
   - name: 0
