@@ -109,12 +109,11 @@ namespace _Games.Combat.Level
         public class EnemySpawn
         {
             public int id;
-            public int level;
             public int weight;
 
             public EnemySpawn()
             {
-                id = level = weight = 1;
+                id = weight = 1;
             }
         }
     }

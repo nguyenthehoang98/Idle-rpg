@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4278a4345f624e229306800f2cf5e43e, type: 3}
+  m_Name: MonsterConfig
+  m_EditorClassIdentifier: 
+  fileUrl: 
+  enable: 1
+  monsters:
+  - monsterId: 10000
+    monsterName: Smile
+    monsterObjectId: Monster_10000
+    isRanged: 1
+    radius: 0.3
+    skillId: 100000
+    skillLevel: 1
+    skillCooldown: 1
+    moveSpeed: 3
+    stopMoveDistance: 0.2
+    attackDistance: 1
+    attack: 1
+    defense: 0
+    health: 20
