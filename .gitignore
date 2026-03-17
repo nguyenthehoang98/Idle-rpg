@@ -1,0 +1,7 @@
+﻿light_fight/.idea
+light_fight/UserSettings
+*.csproj
+light_fight/Library
+light_fight/Logs
+light_fight/obj
+light_fight/Temp
