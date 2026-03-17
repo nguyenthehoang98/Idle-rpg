@@ -19,7 +19,7 @@ MonoBehaviour:
     monsterName: Smile
     monsterObjectId: Monster_10000
     isRanged: 0
-    radius: 0.6
+    radius: 0.5
     skillId: 100000
     skillLevel: 1
     skillCooldown: 1

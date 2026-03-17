@@ -73,7 +73,7 @@ namespace ProjectDawn.Navigation
                 }
 
                 // Update position
-                transform.Position += DeltaTime * body.Velocity;
+                transform.Position += DeltaTime * math.normalizesafe(body.Velocity) * maxSpeed;
 
                 // Update rotation
                 if (shape.Type == ShapeType.Circle)
