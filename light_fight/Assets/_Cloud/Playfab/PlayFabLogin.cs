@@ -8,16 +8,16 @@ namespace _Cloud.Playfab
 {
     public class PlayFabLogin : ICloudLogin
     {
-        public async UniTask<(ResultArg result, LoginSessionData session)> LoginCustomId(string customId)
+        public async UniTask<(RequestResult result, LoginSessionData session)> LoginCustomId(string customId)
         {
             var login = await LoginWithParameter(customId, false);
-            if (login.result.Result)
+            if (login.result.Success)
             {
                 return login;
             }
             else
             {
-                PlayFabErrorCode errorCode = (PlayFabErrorCode)login.result.ErrorCode;
+                var errorCode = (PlayFabErrorCode)login.result.ErrorCode;
                 switch (errorCode)
                 {
                     case PlayFabErrorCode.AccountNotFound:
@@ -28,12 +28,12 @@ namespace _Cloud.Playfab
             }
         }
 
-        UniTask<(ResultArg result, LoginSessionData session)> LoginWithParameter(string customId, bool createAccount)
+        UniTask<(RequestResult result, LoginSessionData session)> LoginWithParameter(string customId, bool createAccount)
         {
-            var tcs = new UniTaskCompletionSource<(ResultArg, LoginSessionData)>();
+            var tcs = new UniTaskCompletionSource<(RequestResult, LoginSessionData)>();
 
-            ResultArg result = new ResultArg { Method = "PlayFab" };
-            LoginSessionData session = new LoginSessionData();
+            var result = new RequestResult { Method = "PlayFab" };
+            var session = new LoginSessionData();
 
             PlayFabClientAPI.LoginWithCustomID(
                 new LoginWithCustomIDRequest
@@ -46,14 +46,14 @@ namespace _Cloud.Playfab
                     session.UserId = success.PlayFabId;
                     session.IsNewPlayer = success.NewlyCreated;
                     session.LoginTime = success.LastLoginTime ?? DateTime.UtcNow;
-
-                    result.Result = true;
-
+                    session.AuthenticationContext = success.AuthenticationContext;
+                    result.Success = true;
+                        
                     tcs.TrySetResult((result, session));
                 },
                 error =>
                 {
-                    result.Result = false;
+                    result.Success = false;
                     result.ErrorMessage = error.ErrorMessage;
                     result.ErrorCode = (int)error.Error;
 

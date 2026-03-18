@@ -1,8 +1,8 @@
 ﻿namespace _Cloud.Model
 {
-    public struct ResultArg
+    public struct RequestResult
     {
-        public bool Result;
+        public bool Success;
         public string Method;
         public string ErrorMessage;
         public int ErrorCode;

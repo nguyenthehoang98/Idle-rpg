@@ -4,6 +4,7 @@ namespace _Cloud.Model
     {
         public string UserId;
         public bool IsNewPlayer;
+        public object AuthenticationContext;
         public System.DateTime LoginTime;
     }
 }
