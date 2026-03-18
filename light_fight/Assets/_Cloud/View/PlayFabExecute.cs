@@ -52,7 +52,12 @@ public class PlayFabExecute : MonoBehaviour
             RequestResult result = getResult.Item1;
             if (result.Success)
             {
-                Debug.Log("Save successful: " + JsonUtility.ToJson(getResult.Item2));
+                List<string> jsons = new List<string>();
+                foreach (var o in getResult.Item2.Objects)
+                {
+                    jsons.Add($"[{o.Name}:{o.Object}]");
+                }
+                Debug.Log("Save successful: " + string.Join(',', jsons));
             }
             else
             {

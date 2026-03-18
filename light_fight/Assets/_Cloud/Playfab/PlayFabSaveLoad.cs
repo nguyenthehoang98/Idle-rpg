@@ -97,8 +97,7 @@ namespace _Cloud.Playfab
                     int i = 0;
                     foreach (KeyValuePair<string, ObjectResult> kv in success.Objects)
                     {
-                        Debug.Log($"{kv.Key} :: {JsonUtility.ToJson(kv.Value)}");
-                        objects[i] = new ObjectData { Name = kv.Key, Object = kv.Value };
+                        objects[i] = new ObjectData { Name = kv.Key, Object = kv.Value.DataObject };
                         i++;
                     }
                     objectData.Objects = objects;
