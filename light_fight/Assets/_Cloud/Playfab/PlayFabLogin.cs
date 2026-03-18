@@ -1,3 +1,4 @@
+using System;
 using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine;
@@ -11,6 +12,8 @@ public class PlayFabLogin : MonoBehaviour
 
     void Login()
     {
+        Debug.Log("Calling PlayFab Login...");
+
         var request = new LoginWithCustomIDRequest
         {
             CustomId = SystemInfo.deviceUniqueIdentifier,
@@ -18,11 +21,24 @@ public class PlayFabLogin : MonoBehaviour
         };
 
         PlayFabClientAPI.LoginWithCustomID(request,
-            result => {
-                Debug.Log("Login success!");
+            result =>
+            {
+                Invoke(() =>
+                {
+                    Debug.Log("✅ Login success!");
+                });
             },
-            error => {
-                Debug.LogError(error.GenerateErrorReport());
+            error =>
+            {
+                Invoke(() =>
+                {
+                    Debug.LogError("❌ Login failed: " + error.GenerateErrorReport());
+                });
             });
+    }
+
+    void Invoke(Action callback)
+    {
+        UnityMainThreadDispatcher.Instance.Enqueue(callback);
     }
 }
