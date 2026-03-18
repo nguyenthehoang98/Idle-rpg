@@ -1,44 +1,47 @@
 using System;
+using _Cloud.Model;
+using Cysharp.Threading.Tasks;
 using PlayFab;
 using PlayFab.ClientModels;
-using UnityEngine;
 
-public class PlayFabLogin : MonoBehaviour
+namespace _Cloud.Playfab
 {
-    void Start()
+    public class PlayFabLogin : ICloudLogin
     {
-        Login();
-    }
-
-    void Login()
-    {
-        Debug.Log("Calling PlayFab Login...");
-
-        var request = new LoginWithCustomIDRequest
+        public UniTask<(ResultArg result, LoginSessionData session)> LoginCustomId(string customId)
         {
-            CustomId = SystemInfo.deviceUniqueIdentifier,
-            CreateAccount = true
-        };
+            var tcs = new UniTaskCompletionSource<(ResultArg, LoginSessionData)>();
 
-        PlayFabClientAPI.LoginWithCustomID(request,
-            result =>
-            {
-                Invoke(() =>
-                {
-                    Debug.Log("✅ Login success!");
-                });
-            },
-            error =>
-            {
-                Invoke(() =>
-                {
-                    Debug.LogError("❌ Login failed: " + error.GenerateErrorReport());
-                });
-            });
-    }
+            ResultArg result = new ResultArg { Method = "PlayFab" };
+            LoginSessionData session = new LoginSessionData();
 
-    void Invoke(Action callback)
-    {
-        UnityMainThreadDispatcher.Instance.Enqueue(callback);
+            PlayFabClientAPI.LoginWithCustomID(
+                new LoginWithCustomIDRequest
+                {
+                    CustomId = customId,
+                    CreateAccount = false
+                },
+                success =>
+                {
+                    session.UserId = success.PlayFabId;
+                    session.IsNewPlayer = success.NewlyCreated;
+                    session.LoginTime = success.LastLoginTime ?? DateTime.UtcNow;
+
+                    result.Result = true;
+
+                    tcs.TrySetResult((result, session));
+                },
+                error =>
+                {
+                    result.Result = false;
+                    result.ErrorMessage = error.ErrorMessage;
+                    result.ErrorCode = (int)error.Error;
+
+                    tcs.TrySetResult((result, session));
+                }
+            );
+
+            return tcs.Task;
+        }
     }
 }
