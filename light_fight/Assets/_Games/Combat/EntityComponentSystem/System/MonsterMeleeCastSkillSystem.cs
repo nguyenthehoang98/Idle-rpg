@@ -6,6 +6,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
+using NotImplementedException = System.NotImplementedException;
 
 namespace _Games.Combat.EntityComponentSystem.System
 {
@@ -14,7 +15,14 @@ namespace _Games.Combat.EntityComponentSystem.System
     public partial struct MonsterMeleeCastSkillSystem : ISystem
     {
         const float THRESHOLD = 1f;
-        
+
+        [BurstCompile]
+        public void OnCreate(ref SystemState state)
+        {
+            state.RequireForUpdate<PlayerTag>();
+        }
+
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             state.Dependency = new CastSkillJob
@@ -23,14 +31,14 @@ namespace _Games.Combat.EntityComponentSystem.System
             }.ScheduleParallel(state.Dependency);
             state.Dependency.Complete();
 
-            foreach ((RefRW<MonsterSkillData> skillData, RefRO<AgentBody> bod, Entity entity) in SystemAPI
+            foreach ((RefRW<MonsterSkillData> skillData, RefRO<AgentBody> body, Entity entity) in SystemAPI
                          .Query<RefRW<MonsterSkillData>, RefRO<AgentBody>>()
                          .WithAll<MonsterMeleeTag>()
                          .WithNone<MonsterDeadTag, MonsterBlockCastSkillTag>()
                          .WithEntityAccess())
             {
                 MonsterSkillData data = skillData.ValueRO;
-                if (data.AnimationName == AnimationName.Move && math.lengthsq(bod.ValueRO.Velocity) < THRESHOLD)
+                if (data.AnimationName == AnimationName.Move && math.lengthsq(body.ValueRO.Velocity) < THRESHOLD)
                 {
                     data.AnimationName = AnimationName.Idle;
                     
@@ -43,7 +51,7 @@ namespace _Games.Combat.EntityComponentSystem.System
                     monster.PlayAnimation(AnimationName.Idle);
                 }
                 
-                if (data.AnimationName == AnimationName.Idle && math.lengthsq(bod.ValueRO.Velocity) > THRESHOLD)
+                if (data.AnimationName == AnimationName.Idle && math.lengthsq(body.ValueRO.Velocity) > THRESHOLD)
                 {
                     data.AnimationName = AnimationName.Move;
                     
@@ -66,6 +74,9 @@ namespace _Games.Combat.EntityComponentSystem.System
                     Monster monster = transform.GetComponent<Monster>();
                     if (monster == null)
                         return;
+
+                    var player = SystemAPI.GetSingletonEntity<PlayerTag>();
+                    monster.InjectMeleeAttack(new MeleeAttackRequest(player, data.MonsterId, data.SkillId, data.SkillLevel));
                     monster.QueueAnimation(AnimationName.Attack, AnimationName.Idle);
                 }
 

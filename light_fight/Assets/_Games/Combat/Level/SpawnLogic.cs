@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using _Games.Combat.EntityComponentSystem;
-using _Games.Combat.Events;
+using _Games.Combat.Event;
 using _Games.Combat.Model;
 using _Games.Combat.SkillSystem;
 using _Games.Combat.SkillSystem.Model;

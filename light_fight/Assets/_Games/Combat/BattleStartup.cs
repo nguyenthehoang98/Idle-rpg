@@ -1,5 +1,5 @@
 using _Games.Combat.EntityComponentSystem;
-using _Games.Combat.Events;
+using _Games.Combat.Event;
 using _Games.Combat.Level;
 using _Games.Combat.Model;
 using _KIT.Checker;
@@ -15,6 +15,8 @@ namespace _Games.Combat
 {
     public class BattleStartup : MonoBehaviour
     {
+        [SerializeField] private PlayerHealthUI healthUI;
+        
         private ShareData shareData;
         private SpawnLogic spawnLogic;
         private LevelDesign levelDesign;
@@ -24,9 +26,11 @@ namespace _Games.Combat
         private async void Start()
         {
             Entity player = ECSFactory.BuildPlayer();
+            healthUI.Initialize(player);
+            
             LevelSpawnSO levelSpawn = await LevelSpawnSO.LoadSpawn(1);
             levelDesign = Instantiate(levelSpawn.design);
-            shareData = new ShareData(player, levelSpawn);
+            shareData = new ShareData(levelSpawn);
             spawnLogic = new SpawnLogic(shareData);
             weaponLogic = new TriggerWeaponLogic(levelDesign);
             levelDesign.OnTriggerWeapon += weaponLogic.Trigger;

@@ -22,6 +22,8 @@ namespace _Games.Combat.EntityComponentSystem
         {
             EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
             Entity entity = manager.CreateEntity();
+            manager.AddComponentData(entity, new PlayerTag());
+            manager.AddComponentData(entity, new HealthData { Health = 100000, MaxHealth = 100000 });
 #if UNITY_EDITOR
             manager.SetName(entity, "Player");
 #endif
@@ -92,7 +94,7 @@ namespace _Games.Combat.EntityComponentSystem
                 Layers = monsterData.IsRanged ? NavigationLayers.Default : NavigationLayers.Layer1
             });
             manager.AddComponentData(entity,
-                new DefaultStatData(monsterData.MoveSpeed, monsterData.Attack, monsterData.Defense, monsterData.Health)
+                new DefaultStatData(monsterData.MoveSpeed, monsterData.Attack, monsterData.Health)
             );
             manager.AddComponentData(entity, new HealthData
             {

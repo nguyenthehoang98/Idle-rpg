@@ -1,5 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using _Games.Combat.EntityComponentSystem.Data;
+using _Games.Combat.Event;
+using _Games.Utils;
+using _KIT.Config;
+using _KIT.Event;
 using _KIT.Utils;
 using Animancer;
 using Unity.Entities;
@@ -19,10 +24,17 @@ namespace _Games.Combat.Model
         [Header("Animations")] 
         [SerializeField] private AnimationData[] clips;
 
-        AnimancerComponent animancerComponent;
+        private AnimancerComponent animancerComponent;
+        private MeleeAttackRequest meleeAttackRequest;
+        
+        public float Radius => radius;
+        MonsterConfig monsterConfig;
+        SkillConfig skillConfig;
 
         private void Awake()
         {
+            monsterConfig = KitConfigManager.Get<MonsterConfig>();
+            skillConfig = KitConfigManager.Get<SkillConfig>();
             animancerComponent = GetComponent<AnimancerComponent>();
         }
 
@@ -34,8 +46,6 @@ namespace _Games.Combat.Model
                 sortingGroup.sortingOrder = -(int)(transform.position.y * 10);
             });
         }
-        
-        public float Radius => radius;
 
         private void OnDrawGizmosSelected()
         {
@@ -45,6 +55,23 @@ namespace _Games.Combat.Model
         
         public void OnAttack()
         {
+            if (meleeAttackRequest.IsValid)
+            {
+                var manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+                HealthData player = manager.GetComponentData<HealthData>(meleeAttackRequest.Target);
+                monsterConfig.Find(meleeAttackRequest.MonsterId, out var monsterData);
+                skillConfig.Find(meleeAttackRequest.SkillId, meleeAttackRequest.SkillLevel, out var skillData);
+                player.Health -= FormulaUtils.Output(monsterData.Attack, skillData, 0, 0, 0);
+                manager.SetComponentData(meleeAttackRequest.Target, player);     
+                EventBus.Instance.Publish(new PlayerOnDamageEvent());
+                
+                meleeAttackRequest = MeleeAttackRequest.None();
+            }
+        }
+
+        public void InjectMeleeAttack(MeleeAttackRequest request)
+        {
+            meleeAttackRequest = request;
         }
 
         public AnimancerState PlayAnimation(AnimationName animationName)

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using _Games.Combat.Events;
+using _Games.Combat.Event;
 using _KIT.Event;
 using UnityEngine;
 

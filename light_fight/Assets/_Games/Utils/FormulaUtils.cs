@@ -32,7 +32,7 @@ namespace _Games.Utils
         public static int PowerMonster(MonsterData monsterData, SkillStatData skillStatData)
         {
             int attack = monsterData.Attack;
-            int defense = monsterData.Defense;
+            int defense = 0;
             int health = monsterData.Health;
             float skillDamage = SkillDamage(attack, skillStatData.ScaleDamage, skillStatData.BaseDamage);
             float dps = DPS(skillDamage, 0, 0);
@@ -80,15 +80,15 @@ namespace _Games.Utils
         /// <param name="skillScaleDamage"></param>
         /// <param name="skillFlatDamage"></param>
         /// <returns></returns>
-        public static float SkillDamage(float attack, float skillScaleDamage, float skillFlatDamage)
+        public static int SkillDamage(int attack, float skillScaleDamage, float skillFlatDamage)
         {
-            return attack * skillScaleDamage + skillFlatDamage;
+            return (int)(attack * skillScaleDamage + skillFlatDamage);
         }
         
         /// <summary>
         /// Hàm tính sát thương -> kẻ dịch
         /// </summary>
-        public static int Output(float attack, SkillStatData skillStatData,
+        public static int Output(int attack, SkillStatData skillStatData,
             float criticalRate, float criticalDmg, float defense)
         {
             float dmg = SkillDamage(attack, skillStatData.ScaleDamage, skillStatData.BaseDamage);

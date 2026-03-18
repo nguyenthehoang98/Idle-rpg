@@ -55,7 +55,6 @@ public class MonsterData
     [SerializeField] private float stopMoveDistance;
     [SerializeField] private float attackDistance;
     [SerializeField] private int attack;
-    [SerializeField] private int defense;
     [SerializeField] private int health;
 
     public int MonsterId => monsterId;
@@ -69,6 +68,5 @@ public class MonsterData
     public float StopMoveDistance => stopMoveDistance;
     public float AttackDistance => attackDistance;
     public int Attack => attack;
-    public int Defense => defense;
     public int Health => health;
 }

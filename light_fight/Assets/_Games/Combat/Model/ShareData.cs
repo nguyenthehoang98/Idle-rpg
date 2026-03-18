@@ -1,21 +1,18 @@
 ﻿using _Games.Combat.Level;
-using Unity.Entities;
 using UnityEngine;
 
 namespace _Games.Combat.Model
 {
     public class ShareData
     {
-        public ShareData(Entity player, LevelSpawnSO levelSpawn)
+        public ShareData(LevelSpawnSO levelSpawn)
         {
-            Player = player;
             LevelSpawn = levelSpawn;
             var design = levelSpawn.design;
             BoxSize = CalculateBounds(design.LoopPoints(), design.CellSize);
             RadiusBonus = Mathf.Max(BoxSize.x, BoxSize.y) / 2f;
         }
 
-        public Entity Player { get; }
         public LevelSpawnSO LevelSpawn { get; }
         public Vector2 BoxSize { get; }
         public float RadiusBonus { get; }
