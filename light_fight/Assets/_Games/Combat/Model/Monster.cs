@@ -42,16 +42,8 @@ namespace _Games.Combat.Model
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(transform.position + offset, radius);
         }
-
-        public void OnAttackStart()
-        {
-        }
-
+        
         public void OnAttack()
-        {
-        }
-
-        public void OnAttackEnd()
         {
         }
 
@@ -74,7 +66,7 @@ namespace _Games.Combat.Model
             this.WaitInvoke(state.Duration, () => PlayAnimation(nextAnimationName));
         }
 
-        [System.Serializable]
+        [Serializable]
         class AnimationData
         {
             public AnimationName name;
