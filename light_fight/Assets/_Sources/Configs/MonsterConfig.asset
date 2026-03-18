@@ -16,7 +16,7 @@ MonoBehaviour:
   enable: 1
   monsters:
   - monsterId: 10000
-    monsterName: Smile
+    monsterName: Goose
     monsterObjectId: Unit Goose
     isRanged: 0
     skillId: 100000
@@ -24,6 +24,18 @@ MonoBehaviour:
     skillCooldown: 3
     moveSpeed: 3
     stopMoveDistance: 0.2
-    attackDistance: 1.25
+    attackDistance: 1.2
     attack: 1
     health: 20
+  - monsterId: 10010
+    monsterName: Cowboy
+    monsterObjectId: Unit Cowboy
+    isRanged: 1
+    skillId: 100010
+    skillLevel: 1
+    skillCooldown: 3
+    moveSpeed: 2.25
+    stopMoveDistance: 5
+    attackDistance: 6
+    attack: 2
+    health: 18

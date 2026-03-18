@@ -10,6 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46e95d0b1b5f4b9bac0ccf0f664bedd8, type: 3}
-  m_Name: Circle_001
+  m_Name: Collider_Circle_0.2
   m_EditorClassIdentifier: 
-  list: []
+  list:
+  - radius: 0.2
+    offset: {x: 0, y: 0, z: 0}
+    adjustRadius: 0
+    extraRadius: 0
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0

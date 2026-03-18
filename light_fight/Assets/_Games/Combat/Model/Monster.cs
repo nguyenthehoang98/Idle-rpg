@@ -14,13 +14,13 @@ using UnityEngine.Rendering;
 namespace _Games.Combat.Model
 {
     [RequireComponent(typeof(AnimancerComponent))]
+    [RequireComponent(typeof(Animator))]
     public class Monster : MonoBehaviour, IAuthoring
     {
         [Header("Renderer")]
         [SerializeField] private SortingGroup sortingGroup;
         [Header("Collider")]
         [SerializeField] private float radius;
-        [SerializeField] private Vector3 offset;
         [Header("Animations")] 
         [SerializeField] private AnimationData[] clips;
 
@@ -50,10 +50,10 @@ namespace _Games.Combat.Model
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(transform.position + offset, radius);
+            Gizmos.DrawWireSphere(transform.position, radius);
         }
         
-        public void OnAttack()
+        public virtual void OnAttack()
         {
             if (meleeAttackRequest.IsValid)
             {
@@ -87,10 +87,10 @@ namespace _Games.Combat.Model
             return null;
         }
 
-        public void QueueAnimation(AnimationName animationName, AnimationName nextAnimationName)
+        public virtual void PlayAttackAnimation()
         {
-            var state = PlayAnimation(animationName);
-            this.WaitInvoke(state.Duration, () => PlayAnimation(nextAnimationName));
+            var state = PlayAnimation(AnimationName.Attack);
+            this.WaitInvoke(state.Duration, () => PlayAnimation(AnimationName.Idle));
         }
 
         [Serializable]

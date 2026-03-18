@@ -30,7 +30,7 @@ namespace _Games.Combat.EntityComponentSystem.System
                 ElapsedTime = state.WorldUnmanaged.Time.ElapsedTime,
             }.ScheduleParallel(state.Dependency);
             state.Dependency.Complete();
-
+            
             foreach ((RefRW<MonsterSkillData> skillData, RefRO<AgentBody> body, Entity entity) in SystemAPI
                          .Query<RefRW<MonsterSkillData>, RefRO<AgentBody>>()
                          .WithAll<MonsterMeleeTag>()
@@ -41,13 +41,8 @@ namespace _Games.Combat.EntityComponentSystem.System
                 if (data.AnimationName == AnimationName.Move && math.lengthsq(body.ValueRO.Velocity) < THRESHOLD)
                 {
                     data.AnimationName = AnimationName.Idle;
-                    
-                    if (!SystemAPI.ManagedAPI.HasComponent<Transform>(entity))
-                        return;
-                    Transform transform = SystemAPI.ManagedAPI.GetComponent<Transform>(entity);
-                    Monster monster = transform.GetComponent<Monster>();
-                    if (monster == null)
-                        return;
+
+                    Monster monster = state.EntityManager.GetComponentObject<Monster>(entity);
                     monster.PlayAnimation(AnimationName.Idle);
                 }
                 
@@ -55,12 +50,7 @@ namespace _Games.Combat.EntityComponentSystem.System
                 {
                     data.AnimationName = AnimationName.Move;
                     
-                    if (!SystemAPI.ManagedAPI.HasComponent<Transform>(entity))
-                        return;
-                    Transform transform = SystemAPI.ManagedAPI.GetComponent<Transform>(entity);
-                    Monster monster = transform.GetComponent<Monster>();
-                    if (monster == null)
-                        return;
+                    Monster monster = state.EntityManager.GetComponentObject<Monster>(entity);
                     monster.PlayAnimation(AnimationName.Move);
                 }
                 
@@ -68,23 +58,16 @@ namespace _Games.Combat.EntityComponentSystem.System
                 {
                     data.IsLastTriggerSkill = false;
                     
-                    if (!SystemAPI.ManagedAPI.HasComponent<Transform>(entity))
-                        return;
-                    Transform transform = SystemAPI.ManagedAPI.GetComponent<Transform>(entity);
-                    Monster monster = transform.GetComponent<Monster>();
-                    if (monster == null)
-                        return;
-
-                    var player = SystemAPI.GetSingletonEntity<PlayerTag>();
+                    Monster monster = state.EntityManager.GetComponentObject<Monster>(entity);
+                    Entity player = SystemAPI.GetSingletonEntity<PlayerTag>();
                     monster.InjectMeleeAttack(new MeleeAttackRequest(player, data.MonsterId, data.SkillId, data.SkillLevel));
-                    monster.QueueAnimation(AnimationName.Attack, AnimationName.Idle);
+                    monster.PlayAttackAnimation();
                 }
 
                 skillData.ValueRW = data;
             }
         }
 
-        [BurstCompile]
         [WithNone(typeof(MonsterDeadTag), typeof(MonsterBlockCastSkillTag))]
         partial struct CastSkillJob : IJobEntity
         {

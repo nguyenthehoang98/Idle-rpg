@@ -2,6 +2,7 @@
 {
     public enum AnimationName
     {
-        Idle, Move, Attack, Death
+        Idle, Move, Attack, Death,
+        Recovery
     }
 }

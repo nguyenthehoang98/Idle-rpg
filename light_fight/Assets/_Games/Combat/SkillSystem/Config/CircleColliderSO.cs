@@ -12,6 +12,7 @@ namespace _Games.Combat.SkillSystem.Config
         public class Circle
         {
             public float radius;
+            public Vector3 offset;
             public bool adjustRadius;
             public float extraRadius;
             public AnimationCurve curve;

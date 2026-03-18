@@ -17,8 +17,8 @@ namespace _Games.Combat.SkillSystem.Model
         [SerializeField] private string projectileId;
         [SerializeField] private string colliderId;
         [SerializeField] private string trajectoryId;
-        [SerializeField] private string[] modifiersId;
-        [SerializeField] private string[] behaviorsId;
+        [SerializeField] private string[] modifiersId = new string[0];
+        [SerializeField] private string[] behaviorsId = new string[0];
 
         public int SkillId => skillId;
         public string SkillName => skillName;

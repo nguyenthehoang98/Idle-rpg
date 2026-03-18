@@ -9,13 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68338d15ee43475984b497bcb41345fe, type: 3}
-  m_Name: Curve_001
+  m_Script: {fileID: 11500000, guid: 3c505b8ab11a412990c42740f0c8f251, type: 3}
+  m_Name: Projectile_Bullet_001
   m_EditorClassIdentifier: 
-  curve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  value: 0
+  prefab: {fileID: 0}

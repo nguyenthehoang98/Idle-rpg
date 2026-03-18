@@ -30,8 +30,28 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e12be267797a9f4a99e2f7d22b3a1b2
+    m_Address: Collider_Circle_0.2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9c8a4ee2d729d7e4aaa7714da3b17cd1
+    m_Address: Unit Cowboy
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: de16f2d80ad248f47b20a374769a0357
     m_Address: SkillConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eda77aa656e14d043a1724659ea6f8ba
+    m_Address: Trajectory_Curve_7
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f7b12e2a973d18943ae564838a102d3a
+    m_Address: Projectile_Bullet_001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
