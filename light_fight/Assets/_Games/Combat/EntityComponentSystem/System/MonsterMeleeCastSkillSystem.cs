@@ -10,19 +10,16 @@ using NotImplementedException = System.NotImplementedException;
 
 namespace _Games.Combat.EntityComponentSystem.System
 {
-    [BurstCompile]
     [RequireMatchingQueriesForUpdate]
     public partial struct MonsterMeleeCastSkillSystem : ISystem
     {
         const float THRESHOLD = 1f;
 
-        [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<PlayerTag>();
         }
 
-        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             state.Dependency = new CastSkillJob
