@@ -8,7 +8,27 @@ namespace _Cloud.Playfab
 {
     public class PlayFabLogin : ICloudLogin
     {
-        public UniTask<(ResultArg result, LoginSessionData session)> LoginCustomId(string customId)
+        public async UniTask<(ResultArg result, LoginSessionData session)> LoginCustomId(string customId)
+        {
+            var login = await LoginWithParameter(customId, false);
+            if (login.result.Result)
+            {
+                return login;
+            }
+            else
+            {
+                PlayFabErrorCode errorCode = (PlayFabErrorCode)login.result.ErrorCode;
+                switch (errorCode)
+                {
+                    case PlayFabErrorCode.AccountNotFound:
+                        return await LoginWithParameter(customId, true);
+                    default:
+                        return login;
+                }
+            }
+        }
+
+        UniTask<(ResultArg result, LoginSessionData session)> LoginWithParameter(string customId, bool createAccount)
         {
             var tcs = new UniTaskCompletionSource<(ResultArg, LoginSessionData)>();
 
@@ -19,7 +39,7 @@ namespace _Cloud.Playfab
                 new LoginWithCustomIDRequest
                 {
                     CustomId = customId,
-                    CreateAccount = false
+                    CreateAccount = createAccount
                 },
                 success =>
                 {

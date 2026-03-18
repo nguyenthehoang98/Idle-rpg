@@ -1,4 +1,3 @@
-using System;
 using _Cloud.Model;
 using UnityEngine;
 
@@ -13,7 +12,7 @@ public class Login : MonoBehaviour
         var login = await CloudUtils.GetCloudLogin().LoginCustomId(userId);
         if (login.result.Result)
         {
-            Debug.Log("Login successful: " + login.session.UserId);
+            Debug.Log("Login successful: " + login.session.UserId + ", new_player: " + login.session.IsNewPlayer);
         }
         else
         {
