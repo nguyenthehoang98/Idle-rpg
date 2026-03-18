@@ -74,7 +74,7 @@ namespace _Games.Combat.EntityComponentSystem.System
             void Execute(Entity entity, in LocalTransform transform, in AgentShape shape, in MonsterTag tag)
             {
                 float radius = shape.Radius;
-                float2 pos = transform.Position.xy + shape.Offset.xy;
+                float2 pos = transform.Position.xy;
                 float2 min = pos - radius;
                 float2 max = pos + radius;
                 int2 minCell = (int2)math.floor(min);

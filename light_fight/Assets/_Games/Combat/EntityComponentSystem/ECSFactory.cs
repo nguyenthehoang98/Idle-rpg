@@ -81,7 +81,6 @@ namespace _Games.Combat.EntityComponentSystem
             manager.AddComponentData(entity, new AgentShape
             {
                 Radius = radius, Type = ShapeType.Circle,
-                Offset = monster.Offset
             });
             manager.AddComponentData(entity, new AgentSonarAvoid
             {

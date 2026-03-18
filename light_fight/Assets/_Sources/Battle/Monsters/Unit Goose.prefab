@@ -94,15 +94,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sortingGroup: {fileID: 210308195770225104}
-  radius: 0.75
-  offset: {x: 0, y: 0.4, z: 0}
+  radius: 0.35
+  offset: {x: 0, y: 0, z: 0}
   clips:
   - name: 0
     transition:
       _FadeDuration: 0.25
       _Speed: 1
       _Events:
-        _NormalizedTimes: []
+        _NormalizedTimes:
+        - 0.87640446
         _Callbacks: []
         _Names: []
       _Clip: {fileID: 7400000, guid: c30bd1b06963b5f459b355ba2309ecab, type: 2}
@@ -290,9 +291,9 @@ Transform:
   m_GameObject: {fileID: 1493008596273859}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: -0.25, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4434988134996336}
   - {fileID: 4379957315839782}

@@ -37,8 +37,6 @@ namespace _Games.Combat.Model
         
         public float Radius => radius;
 
-        public Vector3 Offset => offset;
-
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.green;
@@ -55,7 +53,6 @@ namespace _Games.Combat.Model
 
         public void OnAttackEnd()
         {
-            Debug.Log("trigger cooldown");
         }
 
         public AnimancerState PlayAnimation(AnimationName animationName)

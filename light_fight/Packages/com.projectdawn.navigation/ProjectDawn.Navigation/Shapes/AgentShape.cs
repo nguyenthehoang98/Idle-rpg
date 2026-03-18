@@ -31,8 +31,6 @@ namespace ProjectDawn.Navigation
         /// </summary>
         public ShapeType Type;
 
-        public float3 Offset;
-
         public float3 Up => Type == ShapeType.Cylinder ? new float3(0, 1, 0) : new float3(0, 0, 1);
         public quaternion Orentation => Type == ShapeType.Cylinder ? CylinderRotation : CircleRotation;
 
