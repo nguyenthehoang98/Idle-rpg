@@ -26,6 +26,7 @@ namespace _Games.Combat.Model
 
         private AnimancerComponent animancerComponent;
         private MeleeAttackRequest meleeAttackRequest;
+        private Coroutine attackCoroutine;
         
         public float Radius => radius;
         MonsterConfig monsterConfig;
@@ -69,6 +70,10 @@ namespace _Games.Combat.Model
             }
         }
 
+        public virtual void OnDeath()
+        {
+        }
+
         public void InjectMeleeAttack(MeleeAttackRequest request)
         {
             meleeAttackRequest = request;
@@ -79,9 +84,7 @@ namespace _Games.Combat.Model
             foreach (var data in clips)
             {
                 if (data.name == animationName)
-                {
                     return animancerComponent.Play(data.transition);
-                }
             }
 
             return null;
@@ -89,8 +92,9 @@ namespace _Games.Combat.Model
 
         public virtual void PlayAttackAnimation()
         {
-            var state = PlayAnimation(AnimationName.Attack);
-            this.WaitInvoke(state.Duration, () => PlayAnimation(AnimationName.Idle));
+            if (attackCoroutine != null) StopCoroutine(attackCoroutine);
+            AnimancerState state = PlayAnimation(AnimationName.Attack);
+            attackCoroutine = this.WaitInvoke(state.Duration, () => PlayAnimation(AnimationName.Idle));
         }
 
         [Serializable]

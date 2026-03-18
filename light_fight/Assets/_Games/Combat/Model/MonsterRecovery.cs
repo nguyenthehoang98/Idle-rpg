@@ -6,7 +6,7 @@ namespace _Games.Combat.Model
 {
     public class MonsterRecovery : Monster
     {
-        private Coroutine attackCoroutine;
+        private new Coroutine attackCoroutine;
         private Coroutine recoverCoroutine;
         
         public override void OnAttack()

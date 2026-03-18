@@ -12,15 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9589df6e3879b514c89d7589b489436f, type: 3}
   m_Name: LevelSpawner_001
   m_EditorClassIdentifier: 
-  targetDuration: 50
+  targetDuration: 10
   design: {fileID: 8906630564117218888, guid: f8b6ba07e97b3c740a0f4bb11dff3c9d, type: 3}
   waves:
-  - power: 500
+  - power: 50
     batches:
     - isBoosWave: 0
-      duration: 50
+      duration: 10
       waitTimeSpawn: 0
-      power: 500
+      power: 50
       enemies:
       - id: 10000
         weight: 1
+      - id: 10010
+        weight: 3

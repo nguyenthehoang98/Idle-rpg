@@ -9,10 +9,10 @@ using UnityEngine;
 namespace _Games.Combat.EntityComponentSystem.System
 {
     [RequireMatchingQueriesForUpdate]
-    public partial struct MonsterMeleeCastSkillSystem : ISystem
+    public partial struct MonsterRangedCastSkillSystem : ISystem
     {
         const float THRESHOLD = 1f;
-
+        
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<PlayerTag>();
@@ -28,7 +28,7 @@ namespace _Games.Combat.EntityComponentSystem.System
             
             foreach ((RefRW<MonsterSkillData> skillData, RefRO<AgentBody> body, Entity entity) in SystemAPI
                          .Query<RefRW<MonsterSkillData>, RefRO<AgentBody>>()
-                         .WithAll<MonsterMeleeTag>()
+                         .WithAll<MonsterRangedTag>()
                          .WithNone<MonsterDeadTag, MonsterBlockCastSkillTag>()
                          .WithEntityAccess())
             {
@@ -65,13 +65,13 @@ namespace _Games.Combat.EntityComponentSystem.System
                 skillData.ValueRW = data;
             }
         }
-
+        
         [WithNone(typeof(MonsterDeadTag), typeof(MonsterBlockCastSkillTag))]
         partial struct CastSkillJob : IJobEntity
         {
             public double ElapsedTime;
 
-            public void Execute(in Entity entity, in MonsterMeleeTag tag, in LocalTransform transform, in AgentBody body,
+            public void Execute(in Entity entity, in MonsterRangedTag tag, in LocalTransform transform, in AgentBody body,
                 ref MonsterSkillData skill)
             {
                 float3 position = transform.Position;

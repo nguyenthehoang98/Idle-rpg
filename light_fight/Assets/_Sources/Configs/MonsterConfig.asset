@@ -35,7 +35,7 @@ MonoBehaviour:
     skillLevel: 1
     skillCooldown: 3
     moveSpeed: 2.25
-    stopMoveDistance: 5
-    attackDistance: 6
+    stopMoveDistance: 3
+    attackDistance: 4
     attack: 2
     health: 18

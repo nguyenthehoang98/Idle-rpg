@@ -110,7 +110,6 @@ namespace _Games.Combat.EntityComponentSystem
             else
                 manager.AddComponentData(entity, new MonsterMeleeTag());
             manager.AddComponentObject(entity, view.transform);
-            manager.AddComponentObject(entity, monster);
 #if UNITY_EDITOR
             manager.SetName(entity, go.name + "#" + entity.GetHashCode());
             view.name = go.name + "#" + entity.GetHashCode();
