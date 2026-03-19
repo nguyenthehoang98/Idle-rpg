@@ -1,6 +1,6 @@
-﻿namespace _Cloud.Playfab
+﻿namespace CloudAPI.Utils
 {
-    public static class PlayFabUtils
+    public static class CloudAPIConfig
     {
         public const string TYPE_PLAYER_ACCOUNT = "title_player_account";
         public const string TYPE_CHARACTER = "character";

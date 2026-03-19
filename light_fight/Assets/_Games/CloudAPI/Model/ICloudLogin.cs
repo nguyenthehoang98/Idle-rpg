@@ -1,6 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 
-namespace _Cloud.Model
+namespace CloudAPI.Model
 {
     interface ICloudLogin
     {

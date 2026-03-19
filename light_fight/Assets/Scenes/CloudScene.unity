@@ -145,11 +145,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1315533434}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9061a7143a2a6f746a8477c829149ecc, type: 3}
+  m_Script: {fileID: 11500000, guid: b43698fe03eee344683731be4c0686a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  customId: Absadsa132412iu3o12
-  useDeviceId: 1
+  PlayerData:
+    Name: Nguyen The Hoang
+    Local: VietNam
+  ProgressData:
+    Chapter: 13
+    Power: 1000
 --- !u!4 &1315533436
 Transform:
   m_ObjectHideFlags: 0

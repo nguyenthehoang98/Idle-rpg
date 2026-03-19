@@ -1,10 +1,10 @@
 using System;
-using _Cloud.Model;
+using CloudAPI.Model;
 using Cysharp.Threading.Tasks;
 using PlayFab;
 using PlayFab.ClientModels;
 
-namespace _Cloud.Playfab
+namespace CloudAPI.Playfab
 {
     public class PlayFabLogin : ICloudLogin
     {

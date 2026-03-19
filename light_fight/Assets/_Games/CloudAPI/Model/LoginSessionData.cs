@@ -1,4 +1,4 @@
-namespace _Cloud.Model
+namespace CloudAPI.Model
 {
     public struct LoginSessionData
     {

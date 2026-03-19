@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace _Cloud.Model
+namespace CloudAPI.Utils
 {
     public static class CloudCallback
     {
