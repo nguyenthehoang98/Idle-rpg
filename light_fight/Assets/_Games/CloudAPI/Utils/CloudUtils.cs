@@ -28,9 +28,14 @@ namespace CloudAPI.Utils
             return SaveLoad.GetObjectsAsync(sessionData, title);
         }
 
-        public static UniTask<RequestResult> UpdateStatistics(StatisticData[] statisticsData)
+        public static UniTask<RequestResult> UpdateLeaderboard(StatisticData[] statisticsData)
         {
-            return Leaderboard.UpdateStatistics(sessionData, statisticsData);
+            return Leaderboard.UpdateLeaderboard(sessionData, statisticsData);
+        }
+
+        public static UniTask<(RequestResult, LeaderboardData)> GetLeaderboardData(LeaderboardRequestData requestData)
+        {
+            return Leaderboard.GetLeaderboardData(sessionData, requestData);
         }
     }
 }

@@ -154,6 +154,9 @@ MonoBehaviour:
   ProgressData:
     Chapter: 13
     Power: 1000
+  Statistics:
+  - Name: Rank
+    Value: 5
 --- !u!4 &1315533436
 Transform:
   m_ObjectHideFlags: 0
