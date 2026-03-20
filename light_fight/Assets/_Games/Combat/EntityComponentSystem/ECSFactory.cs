@@ -175,9 +175,9 @@ namespace _Games.Combat.EntityComponentSystem
                     break;
             }
 
-            /*manager.AddComponentData(entity,
+            manager.AddComponentData(entity,
                 new ProjectileTrajectory(startPosition, direction)
-            );*/
+            );
             
             manager.AddComponentObject(entity, view.transform);
 #if UNITY_EDITOR
