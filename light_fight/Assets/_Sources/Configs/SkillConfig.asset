@@ -38,7 +38,7 @@ MonoBehaviour:
     maxTargetRange: 0
     maxHitCount: 1
     collisionResetInterval: 999
-    projectileId: Projectile_Bullet_001
+    projectileId: Projectile_Bullet_Goose
     colliderId: Collider_Circle_0.2
     trajectoryId: Trajectory_Curve_7
     modifiersId: []

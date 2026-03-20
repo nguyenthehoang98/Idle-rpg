@@ -6,5 +6,6 @@ namespace _Games.Combat.SkillSystem.Config
     public class PiercingBehaviourSO : BaseBehaviorSO
     {
         public int count;
+        public override BehaviourType Type => BehaviourType.Piercing;
     }
 }

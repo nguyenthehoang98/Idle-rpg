@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c505b8ab11a412990c42740f0c8f251, type: 3}
-  m_Name: Projectile_Bullet_001
+  m_Name: Projectile_Bullet_Goose
   m_EditorClassIdentifier: 
-  prefab: {fileID: 0}
+  prefab: {fileID: 8915901254529840914, guid: 1c38298e86d81fc4d8a00cb587e087c3, type: 3}

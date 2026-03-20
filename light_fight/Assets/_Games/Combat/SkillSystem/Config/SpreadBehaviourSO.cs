@@ -9,5 +9,6 @@ namespace _Games.Combat.SkillSystem.Config
         public float angleStep;
         public float delayBetween;
         public bool randomAngle;
+        public override BehaviourType Type => BehaviourType.Spread;
     }
 }

@@ -11,5 +11,6 @@ namespace _Games.Combat.SkillSystem.Config
         public float radius;
         public bool overrideCenter;
         public float angle;
+        public override BehaviourType Type => BehaviourType.DropStrike;
     }
 }

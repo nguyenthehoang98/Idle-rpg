@@ -1,5 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using _Games.Combat.EntityComponentSystem.Data;
 using _Games.Combat.EntityComponentSystem.Model;
+using _Games.Combat.SkillSystem;
+using _Games.Combat.SkillSystem.Model;
+using _KIT.Config;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -13,9 +18,20 @@ namespace _Games.Combat.EntityComponentSystem.View
 
         public static EntityCastSkillManager Instance {get; private set;}
 
+        private EntityManager manager;
+        private MonsterConfig monsterConfig;
+        private SkillConfig skillConfig;
+        
         private void Awake()
         {
             Instance = this;
+        }
+
+        private void Start()
+        {
+            manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            monsterConfig = KitConfigManager.Get<MonsterConfig>();
+            skillConfig = KitConfigManager.Get<SkillConfig>();
         }
 
         private void OnDestroy()
@@ -23,12 +39,23 @@ namespace _Games.Combat.EntityComponentSystem.View
             Instance = null;
         }
 
-        private void Update()
+        private async void Update()
         {
             while (queue.Count > 0)
             {
-                RangedCastSkillData data = queue.Dequeue();
-                Debug.Log("cast skill data: " + data.Entity);
+                RangedCastSkillData item = queue.Dequeue();
+                if (manager.HasComponent<MonsterTag>(item.Entity) && manager.HasComponent<MonsterRangedTag>(item.Entity))
+                {
+                    MonsterSkillData data = manager.GetComponentData<MonsterSkillData>(item.Entity);
+                    monsterConfig.Find(data.MonsterId, out MonsterData monsterData);
+                    skillConfig.Find(monsterData.SkillId, out SkillData skillData);
+                    skillConfig.Find(monsterData.SkillId, monsterData.SkillLevel, out var skillStatData);
+                    Skill skill = await SkillFactory.CreateSkill(skillData);
+                    ECSFactory.BuildProjectile(manager, item.Entity,
+                        item.StartPosition, item.EndPosition,
+                        skill, skillStatData
+                    );
+                }
             }
         }
 

@@ -12,6 +12,7 @@ using _KIT.Event;
 using _KIT.Pool;
 using _KIT.Resource;
 using _KIT.Utils;
+using Cysharp.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -45,7 +46,33 @@ namespace _Games.Combat.Level
             {
                 waves = Build(shareData.LevelSpawn.waves, monsterConfig, skillConfig)
             };
-            isPaused = false;
+            
+            LoadSkillAsync(() =>
+            {
+                isPaused = false;                
+            });
+        }
+
+        private async void LoadSkillAsync(Action onComplete)
+        {
+            HashSet<int> monsters = new HashSet<int>();
+            foreach (var wave in waveContainer.waves)
+            {
+                foreach (var batch in wave.batches)
+                foreach (var monster in batch.monsters)
+                    monsters.Add(monster);
+            }
+
+            foreach (var monster in monsters)
+            {
+                monsterConfig.Find(monster, out var monsterData);
+                await KitLoaded.LoadAsync<GameObject>(monsterData.MonsterObjectId, true);
+                if (!monsterData.IsRanged) continue;
+                skillConfig.Find(monsterData.SkillId, out var skillData);
+                await SkillFactory.CreateSkill(skillData);
+            }
+            
+            onComplete?.Invoke();
         }
 
         public async void Update(float dt)

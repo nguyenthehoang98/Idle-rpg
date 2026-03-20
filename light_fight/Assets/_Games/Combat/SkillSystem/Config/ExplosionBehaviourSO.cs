@@ -7,5 +7,6 @@ namespace _Games.Combat.SkillSystem.Config
     {
         public float radius;
         public Vector3 offset;
+        public override BehaviourType Type => BehaviourType.Explosion;
     }
 }

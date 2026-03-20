@@ -51,7 +51,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f7b12e2a973d18943ae564838a102d3a
-    m_Address: Projectile_Bullet_001
+    m_Address: Projectile_Bullet_Goose
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

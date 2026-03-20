@@ -7,5 +7,6 @@ namespace _Games.Combat.SkillSystem.Config
     {
         public AnimationCurve curve;
         public float value;
+        public override TrajectoryType Type => TrajectoryType.Curve;
     }
 }
