@@ -647,6 +647,8 @@ MonoBehaviour:
         _Names: []
       _Clip: {fileID: 7400000, guid: f5243ab14ee402e439b6d76af4ecbadd, type: 2}
       _NormalizedStartTime: NaN
+  shouldRecovery: 1
+  muzzleOffset: {x: -0.7, y: 0, z: 0}
   references:
     version: 2
     RefIds: []

@@ -1,4 +1,6 @@
 ﻿using _Games.Combat.EntityComponentSystem.Data;
+using _Games.Combat.EntityComponentSystem.Model;
+using _Games.Combat.EntityComponentSystem.View;
 using _Games.Combat.Model;
 using ProjectDawn.Navigation;
 using Unity.Entities;
@@ -26,8 +28,8 @@ namespace _Games.Combat.EntityComponentSystem.System
             }.ScheduleParallel(state.Dependency);
             state.Dependency.Complete();
             
-            foreach ((RefRW<MonsterSkillData> skillData, RefRO<AgentBody> body, Entity entity) in SystemAPI
-                         .Query<RefRW<MonsterSkillData>, RefRO<AgentBody>>()
+            foreach ((RefRW<MonsterSkillData> skillData, RefRO<LocalTransform> local, RefRO<AgentBody> body, Entity entity) in SystemAPI
+                         .Query<RefRW<MonsterSkillData>, RefRO<LocalTransform>, RefRO<AgentBody>>()
                          .WithAll<MonsterRangedTag>()
                          .WithNone<MonsterDeadTag, MonsterBlockCastSkillTag>()
                          .WithEntityAccess())
@@ -60,6 +62,10 @@ namespace _Games.Combat.EntityComponentSystem.System
                     Entity player = SystemAPI.GetSingletonEntity<PlayerTag>();
                     monster.InjectMeleeAttack(new MeleeAttackRequest(player, data.MonsterId, data.SkillId, data.SkillLevel));
                     monster.PlayAttackAnimation();
+
+                    EntityCastSkillManager.Instance.QueueSkill(
+                        new RangedCastSkillData(entity, local.ValueRO.Position, body.ValueRO.Destination)
+                    );
                 }
 
                 skillData.ValueRW = data;

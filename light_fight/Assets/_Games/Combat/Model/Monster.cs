@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using _Games.Combat.EntityComponentSystem.Data;
+using _Games.Combat.EntityComponentSystem.Model;
 using _Games.Combat.Event;
 using _Games.Utils;
 using _KIT.Config;
@@ -27,10 +28,11 @@ namespace _Games.Combat.Model
         private AnimancerComponent animancerComponent;
         private MeleeAttackRequest meleeAttackRequest;
         private Coroutine attackCoroutine;
+        private MonsterConfig monsterConfig;
+        private SkillConfig skillConfig;
+        protected Entity Entity { get; private set; }
         
         public float Radius => radius;
-        MonsterConfig monsterConfig;
-        SkillConfig skillConfig;
 
         private void Awake()
         {
@@ -41,6 +43,7 @@ namespace _Games.Combat.Model
 
         public void Initialize(Entity entity)
         {
+            Entity = entity;
             PlayAnimation(AnimationName.Move);
             this.WhileInvoke(1, () =>
             {
