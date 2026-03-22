@@ -93,16 +93,18 @@ namespace _Games.Combat.EntityComponentSystem.System
                         for (int y = minCell.y; y <= maxCell.y; y++)
                         {
                             int2 cell = new int2(x, y);
-                            if (Grid.TryGetFirstValue(cell, out var monster, out var iterator))
+                            if (Grid.TryGetFirstValue(cell, out var unit, out var iterator))
                             {
                                 do
                                 {
-                                    if (!LocalTransformLookup.HasComponent(monster))
+                                    if (!LocalTransformLookup.HasComponent(unit))
                                         continue;
-                                    if (!CircleBufferLookup.TryGetBuffer(monster, out DynamicBuffer<CircleBuffer> otherBuffers))
+                                    if (!CollisionBufferLookup.EntityExists(unit))
+                                        continue;
+                                    if (!CircleBufferLookup.TryGetBuffer(unit, out DynamicBuffer<CircleBuffer> otherBuffers))
                                         continue;
 
-                                    float2 monsterPosition = LocalTransformLookup[monster].Position.xy;
+                                    float2 monsterPosition = LocalTransformLookup[unit].Position.xy;
                                     foreach (var circleBuffer in otherBuffers)
                                     {
                                         float bufferRadius = circleBuffer.Radius;
@@ -110,21 +112,21 @@ namespace _Games.Combat.EntityComponentSystem.System
                                         float distanceSq = math.distancesq(monsterPosition, position);
                                         if (distanceSq <= totalRadius * totalRadius)
                                         {
-                                            temps.Add(monster);
+                                            temps.Add(unit);
                                             break;
                                         }
                                     }
-                                } while (Grid.TryGetNextValue(out monster, ref iterator));
+                                } while (Grid.TryGetNextValue(out unit, ref iterator));
                             }
                         }
                     }
                     
-                    foreach (var monster in temps)
+                    foreach (var unit in temps)
                     {
-                        if (copy.Add(monster))
+                        if (copy.Add(unit))
                         {
                             skillData.TotalUnitBeHit++;
-                            CollisionBufferLookup[entity].Add(new CollisionBuffer(monster));
+                            CollisionBufferLookup[unit].Add(new CollisionBuffer(unit));
                         }
                     }
 

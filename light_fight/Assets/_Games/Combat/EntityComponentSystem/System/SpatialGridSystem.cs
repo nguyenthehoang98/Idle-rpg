@@ -34,11 +34,17 @@ namespace _Games.Combat.EntityComponentSystem.System
             }
             
             Grid.Clear();
-            CircleSpatialGridJob job = new CircleSpatialGridJob
+
+            state.Dependency = new PlayerCircleSpatialGridJob
+            {
+                Grid = Grid,
+            }.Schedule(state.Dependency);
+            state.Dependency.Complete();
+
+            state.Dependency = new MonsterCircleSpatialGridJob
             {
                 Grid = Grid.AsParallelWriter()
-            };
-            state.Dependency = job.ScheduleParallel(state.Dependency);
+            }.ScheduleParallel(state.Dependency);
             state.Dependency.Complete();
 
 #if UNITY_EDITOR
@@ -64,9 +70,37 @@ namespace _Games.Combat.EntityComponentSystem.System
             if (Grid.IsCreated)
                 Grid.Dispose();
         }
-        
+
+
         [BurstCompile]
-        public partial struct CircleSpatialGridJob : IJobEntity
+        public partial struct PlayerCircleSpatialGridJob : IJobEntity
+        {
+            public NativeParallelMultiHashMap<int2, Entity> Grid;
+
+            void Execute(Entity entity, in LocalTransform transform, in PlayerTag tag,
+                ref DynamicBuffer<CircleBuffer> buffers)
+            {
+                foreach (var buffer in buffers)
+                {
+                    float radius = buffer.Radius;
+                    float2 position = transform.Position.xy + buffer.Offset.xy;
+                    float2 min = position - radius;
+                    float2 max = position + radius;
+                    int2 minCell = (int2)math.floor(min);
+                    int2 maxCell = (int2)math.floor(max);
+                    for (int x = minCell.x; x <= maxCell.x; x++)
+                    {
+                        for (int y = minCell.y; y <= maxCell.y; y++)
+                        {
+                            Grid.Add(new int2(x, y), entity);
+                        }
+                    }
+                }
+            }
+        }
+
+        [BurstCompile]
+        public partial struct MonsterCircleSpatialGridJob : IJobEntity
         {
             public NativeParallelMultiHashMap<int2, Entity>.ParallelWriter Grid;
 
