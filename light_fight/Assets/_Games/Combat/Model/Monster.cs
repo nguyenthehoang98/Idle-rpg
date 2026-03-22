@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using _Games.Combat.EntityComponentSystem.Data;
-using _Games.Combat.EntityComponentSystem.Model;
 using _Games.Combat.Event;
 using _Games.Utils;
 using _KIT.Config;

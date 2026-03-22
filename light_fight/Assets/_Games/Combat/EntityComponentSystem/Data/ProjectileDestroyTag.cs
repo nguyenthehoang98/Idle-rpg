@@ -2,12 +2,12 @@
 
 namespace _Games.Combat.EntityComponentSystem.Data
 {
-    public struct ProjectileDeadTag : IComponentData
+    public struct ProjectileDestroyTag : IComponentData
     {
         public ProjectileDeadReason Reason;
         public bool IsTrigger;
 
-        public ProjectileDeadTag(ProjectileDeadReason reason)
+        public ProjectileDestroyTag(ProjectileDeadReason reason)
         {
             Reason = reason;
             IsTrigger = false;

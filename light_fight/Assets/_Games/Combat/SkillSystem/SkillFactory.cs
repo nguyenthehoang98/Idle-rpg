@@ -10,6 +10,11 @@ namespace _Games.Combat.SkillSystem
     {
         static Dictionary<int, Skill> container = new Dictionary<int, Skill>();
         static HashSet<string> cache = new HashSet<string>();
+
+        public static bool FindSkill(int skillID, out Skill skill)
+        {
+            return container.TryGetValue(skillID, out skill);
+        }
         
         public static async UniTask<Skill> CreateSkill(SkillData data)
         {
@@ -46,7 +51,7 @@ namespace _Games.Combat.SkillSystem
                 cache.Add(data.BehaviorsId[i]);
             }
             
-            skill = new Skill(main, projectile, collider, trajectory, modifiers, behaviors);
+            skill = new Skill(data.SkillId, main, projectile, collider, trajectory, modifiers, behaviors);
             container.Add(data.SkillId, skill);
             return skill;
         }

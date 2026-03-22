@@ -101,6 +101,23 @@ namespace _Games.Utils
             int outputDmg = (int)(totalDmg * (1 - reduce));
             return outputDmg;
         }
+        
+        /// <summary>
+        /// Hàm tính sát thương -> kẻ dịch
+        /// </summary>
+        public static int Output(int attack, float skillBaseDamage, float skillScaleDamage,
+            float criticalRate, float criticalDmg, float defense)
+        {
+            float dmg = SkillDamage(attack, skillScaleDamage, skillBaseDamage);
+            bool crit = criticalRate >= RandomUtils.Value;
+            float totalDmg = crit ? dmg * (1 + math.max(0, criticalDmg)) : dmg;
+
+            float armorPenPercent = 0;
+            float effectiveDef = defense * (1f - armorPenPercent);
+            float reduce = effectiveDef / (effectiveDef + DEFENSE_K);
+            int outputDmg = (int)(totalDmg * (1 - reduce));
+            return outputDmg;
+        }
 
         /// <summary>
         ///  Chỉ số thể hiện khẳ năng gây sát thương  

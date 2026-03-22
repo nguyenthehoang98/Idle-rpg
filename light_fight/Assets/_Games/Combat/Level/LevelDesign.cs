@@ -1,11 +1,12 @@
 using System;
-using Unity.Mathematics;
+using ProjectDawn.Navigation.Hybrid;
 using UnityEngine;
 
 namespace _Games.Combat.Level
 {
     public class LevelDesign : MonoBehaviour
     {
+        [SerializeField] private AgentCircleShapeAuthoring shapeAuthoring;
         [SerializeField, Tooltip("Các ví trí để đặt vũ khí")] 
         private SlotView[] slots;
         [SerializeField, Tooltip("Kích thước của từng ô")]
@@ -13,7 +14,9 @@ namespace _Games.Combat.Level
         [SerializeField] private CastleTurret turret;
 
         public event Action<int> OnTriggerWeapon;
-        
+
+        public AgentCircleShapeAuthoring ShapeAuthoring => shapeAuthoring;
+
         private void Start()
         {
             Transform[] temps = new Transform[slots.Length];

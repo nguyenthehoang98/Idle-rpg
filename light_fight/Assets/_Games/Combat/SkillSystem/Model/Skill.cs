@@ -4,6 +4,7 @@ namespace _Games.Combat.SkillSystem.Model
 {
     public sealed class Skill
     {
+        public readonly int Id;
         public readonly SkillMainModule main;
         public readonly ProjectileSO projectile;
         public readonly BaseColliderSO collider;
@@ -11,8 +12,9 @@ namespace _Games.Combat.SkillSystem.Model
         public readonly BaseModifierSO[] modifiers;
         public readonly BaseBehaviorSO[] behaviors;
 
-        public Skill(SkillMainModule main, ProjectileSO projectile, BaseColliderSO collider, BaseTrajectorySO trajectory, BaseModifierSO[] modifiers, BaseBehaviorSO[] behaviors)
+        public Skill(int id, SkillMainModule main, ProjectileSO projectile, BaseColliderSO collider, BaseTrajectorySO trajectory, BaseModifierSO[] modifiers, BaseBehaviorSO[] behaviors)
         {
+            Id = id;
             this.projectile = projectile;
             this.collider = collider;
             this.trajectory = trajectory;

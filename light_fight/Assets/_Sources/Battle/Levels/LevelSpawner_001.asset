@@ -22,7 +22,5 @@ MonoBehaviour:
       waitTimeSpawn: 0
       power: 50
       enemies:
-      - id: 10000
-        weight: 1
       - id: 10010
         weight: 3

@@ -28,15 +28,8 @@ namespace _Games.Combat.EntityComponentSystem
         {
             EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
             Entity entity = manager.CreateEntity();
-            manager.AddBuffer<CollisionBuffer>(entity);
             DynamicBuffer<CircleBuffer> circleBuffers = manager.AddBuffer<CircleBuffer>(entity);
-            foreach (var slotView in levelDesign.Slots)
-            {
-                AgentCircleShapeAuthoring authoring = slotView.GetComponent<AgentCircleShapeAuthoring>();
-                float3 offset = authoring.transform.position;
-                circleBuffers.Add(new CircleBuffer(authoring.Radius, offset, false, 0));
-            }
-            
+            circleBuffers.Add(new CircleBuffer(levelDesign.ShapeAuthoring.Radius, float3.zero, false, 0));
             manager.AddComponentData(entity, new PlayerTag());
             manager.AddComponentData(entity, new LocalTransform { Position = float3.zero });
             
@@ -157,7 +150,6 @@ namespace _Games.Combat.EntityComponentSystem
             float3 startPosition, float3 endPosition,
             Skill skill, SkillStatData statData)
         {
-            Debug.Break();
             GameObject go = KitPool.Instantiate(skill.projectile.prefab);
             go.transform.position = startPosition;
             
@@ -168,6 +160,8 @@ namespace _Games.Combat.EntityComponentSystem
             
             EntityView view = go.GetComponent<EntityView>();
             Entity entity = view.GetOrCreateEntity();
+            manager.AddComponentData(entity, new ProjectileTag());
+            manager.AddBuffer<CollisionBuffer>(entity);
             manager.AddComponentData(entity, new LocalTransform
             {
                 Position = startPosition,
@@ -209,8 +203,9 @@ namespace _Games.Combat.EntityComponentSystem
                 new ProjectileTrajectory(startPosition, math.normalizesafe(direction))
             );
             manager.AddComponentData(entity,
-                new ProjectileSkillData(source, lifeTime, main.castTime,
-                    main.maxHitCount, main.collisionResetInterval)
+                new ProjectileSkillData(source, skill.Id, lifeTime, main.castTime,
+                    main.maxHitCount, main.collisionResetInterval,
+                    statData.BaseDamage, statData.ScaleDamage)
             );
             
             manager.AddComponentObject(entity, view.transform);
@@ -239,7 +234,6 @@ namespace _Games.Combat.EntityComponentSystem
             
             EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
             Entity entity = view.GetOrCreateEntity();
-            manager.AddBuffer<CollisionBuffer>(entity);
             DynamicBuffer<CircleBuffer> circleBuffers = manager.AddBuffer<CircleBuffer>(entity);
             circleBuffers.Add(new CircleBuffer(radius, float3.zero, false, 0));
             manager.AddComponentData(entity, new MonsterTag());

@@ -41,6 +41,7 @@ namespace _Games.Combat
 #endif
             isRunning = true;
             Debug.Log(@"Tạo level config -> spawn level theo wave/batch...");
+            Debug.Log(@"Phần tường raào mà monster stop & tấn công được nên có 1 cái fx như shield của BagMaster");
         }
         
         private void OnEnable()

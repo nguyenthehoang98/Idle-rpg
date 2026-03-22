@@ -69,7 +69,8 @@ namespace _Games.Combat.Level
                 await KitLoaded.LoadAsync<GameObject>(monsterData.MonsterObjectId, true);
                 if (!monsterData.IsRanged) continue;
                 skillConfig.Find(monsterData.SkillId, out var skillData);
-                await SkillFactory.CreateSkill(skillData);
+                Skill skill = await SkillFactory.CreateSkill(skillData);
+                KitPool.RegisterPool(skill.projectile.prefab, true);
             }
             
             onComplete?.Invoke();

@@ -176,7 +176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d100d0744d5954b4cb6bc1932de8472c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Radius: 2
+  Radius: 2.1
 --- !u!1 &4729453146560311112
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,6 +310,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6d2de3d63970e94d88504176009d9ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shapeAuthoring: {fileID: 2523955997759216951}
   slots:
   - {fileID: 8174672058627400773}
   - {fileID: 8742509711862218388}

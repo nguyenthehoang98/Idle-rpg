@@ -15,11 +15,9 @@ namespace _Games.Combat.EntityComponentSystem.System
         ComponentLookup<ProjectileSkillData> projectileSkillDataLookup;
         ComponentLookup<LocalTransform> localTransformLookup;
         BufferLookup<CircleBuffer> circleBufferLookup;
-        BufferLookup<CollisionBuffer> collisionBufferLookup;
 
         public void OnCreate(ref SystemState state)
         {
-            collisionBufferLookup = state.GetBufferLookup<CollisionBuffer>();
             localTransformLookup = state.GetComponentLookup<LocalTransform>();
             circleBufferLookup = state.GetBufferLookup<CircleBuffer>();
             projectileSkillDataLookup = state.GetComponentLookup<ProjectileSkillData>();
@@ -31,7 +29,6 @@ namespace _Games.Combat.EntityComponentSystem.System
             localTransformLookup.Update(ref state);
             circleBufferLookup.Update(ref state);
             projectileSkillDataLookup.Update(ref state);
-            collisionBufferLookup.Update(ref state);
             
             var handle = state.WorldUnmanaged.GetExistingUnmanagedSystem<SpatialGridSystem>();
             ref var gridSystem = ref state.WorldUnmanaged.GetUnsafeSystemRef<SpatialGridSystem>(handle);
@@ -42,7 +39,6 @@ namespace _Games.Combat.EntityComponentSystem.System
                 Grid = grid,
                 LocalTransformLookup = localTransformLookup,
                 CircleBufferLookup = circleBufferLookup,
-                CollisionBufferLookup = collisionBufferLookup,
             };
             state.Dependency = job.ScheduleParallel(state.Dependency);
             state.CompleteDependency();
@@ -55,10 +51,9 @@ namespace _Games.Combat.EntityComponentSystem.System
             [ReadOnly] public ComponentLookup<LocalTransform> LocalTransformLookup;
             [NativeDisableParallelForRestriction]
             public BufferLookup<CircleBuffer> CircleBufferLookup;
-            [NativeDisableParallelForRestriction]
-            public BufferLookup<CollisionBuffer> CollisionBufferLookup;
 
-            public void Execute(in Entity entity, in LocalTransform transform, ref ProjectileSkillData skillData)
+            public void Execute(in Entity entity, in LocalTransform transform,
+                ref DynamicBuffer<CollisionBuffer> collisionBuffers, ref ProjectileSkillData skillData)
             {
                 if (!CircleBufferLookup.TryGetBuffer(entity, out DynamicBuffer<CircleBuffer> buffers))
                     return;
@@ -71,21 +66,10 @@ namespace _Games.Combat.EntityComponentSystem.System
                     float2 max = position + radius;
                     int2 minCell = (int2)math.floor(min);
                     int2 maxCell = (int2)math.floor(max);
-                    int capacity = math.abs(maxCell.x - minCell.x + 1) * math.abs(maxCell.y - minCell.y + 1);
-                    NativeParallelHashSet<Entity> temps = new NativeParallelHashSet<Entity>(capacity, Allocator.Temp);
-                    NativeParallelHashSet<Entity> copy;
-                    if (CollisionBufferLookup.HasBuffer(entity))
+                    NativeParallelHashSet<Entity> copy = new NativeParallelHashSet<Entity>(collisionBuffers.Capacity, Allocator.Temp);
+                    foreach (var collisionBuffer in collisionBuffers)
                     {
-                        DynamicBuffer<CollisionBuffer> collections = CollisionBufferLookup[entity];
-                        copy = new NativeParallelHashSet<Entity>(collections.Capacity, Allocator.Temp);
-                        foreach (var monster in collections)
-                        {
-                            copy.Add(monster.Entity);
-                        }
-                    }
-                    else
-                    {
-                        copy = new NativeParallelHashSet<Entity>(capacity, Allocator.Temp);
+                        copy.Add(collisionBuffer.Entity);
                     }
 
                     for (int x = minCell.x; x <= maxCell.x; x++)
@@ -99,8 +83,6 @@ namespace _Games.Combat.EntityComponentSystem.System
                                 {
                                     if (!LocalTransformLookup.HasComponent(unit))
                                         continue;
-                                    if (!CollisionBufferLookup.EntityExists(unit))
-                                        continue;
                                     if (!CircleBufferLookup.TryGetBuffer(unit, out DynamicBuffer<CircleBuffer> otherBuffers))
                                         continue;
 
@@ -112,26 +94,20 @@ namespace _Games.Combat.EntityComponentSystem.System
                                         float distanceSq = math.distancesq(monsterPosition, position);
                                         if (distanceSq <= totalRadius * totalRadius)
                                         {
-                                            temps.Add(unit);
-                                            break;
+                                            if (copy.Add(unit) && skillData.TotalUnitBeHit < skillData.MaximumHits)
+                                            {
+                                                skillData.TotalUnitBeHit++;
+                                                collisionBuffers.Add(new CollisionBuffer(unit));                                                
+                                                break;
+                                            }
                                         }
                                     }
                                 } while (Grid.TryGetNextValue(out unit, ref iterator));
                             }
                         }
                     }
-                    
-                    foreach (var unit in temps)
-                    {
-                        if (copy.Add(unit))
-                        {
-                            skillData.TotalUnitBeHit++;
-                            CollisionBufferLookup[unit].Add(new CollisionBuffer(unit));
-                        }
-                    }
 
                     copy.Dispose();
-                    temps.Dispose();
                 }
             }
         }

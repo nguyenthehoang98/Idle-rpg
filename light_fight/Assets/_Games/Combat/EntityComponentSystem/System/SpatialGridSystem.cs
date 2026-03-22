@@ -47,9 +47,10 @@ namespace _Games.Combat.EntityComponentSystem.System
             }.ScheduleParallel(state.Dependency);
             state.Dependency.Complete();
 
-#if UNITY_EDITOR
+/*#if UNITY_EDITOR
             foreach (var pair in Grid)
             {
+                Color color = state.EntityManager.HasComponent<PlayerTag>(pair.Value) ? Color.yellow : Color.green;
                 int2 cell = pair.Key;
 
                 Vector3 p0 = new Vector3(cell.x, cell.y);
@@ -57,12 +58,12 @@ namespace _Games.Combat.EntityComponentSystem.System
                 Vector3 p2 = new Vector3(cell.x + 1, cell.y + 1);
                 Vector3 p3 = new Vector3(cell.x + 1, cell.y);
 
-                Debug.DrawLine(p0, p1, Color.green);
-                Debug.DrawLine(p1, p2, Color.green);
-                Debug.DrawLine(p2, p3, Color.green);
-                Debug.DrawLine(p3, p0, Color.green);
+                Debug.DrawLine(p0, p1, color);
+                Debug.DrawLine(p1, p2, color);
+                Debug.DrawLine(p2, p3, color);
+                Debug.DrawLine(p3, p0, color);
             }
-#endif
+#endif*/
         }
 
         public void OnDestroy(ref SystemState state)
