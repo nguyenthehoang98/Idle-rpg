@@ -160,8 +160,9 @@ namespace _Games.Combat.EntityComponentSystem
                 Rotation = rotation,
                 Scale = 1
             });
-            
-            float lifeTime = skill.main.lifeTime;
+
+            SkillMainModule main = skill.main;
+            float lifeTime = main.lifeTime;
             switch (skill.trajectory.Type)
             {
                 case TrajectoryType.Curve:
@@ -177,6 +178,10 @@ namespace _Games.Combat.EntityComponentSystem
 
             manager.AddComponentData(entity,
                 new ProjectileTrajectory(startPosition, direction)
+            );
+            manager.AddComponentData(entity,
+                new ProjectileSkillData(source, lifeTime, main.castTime,
+                    main.maxHitCount, main.collisionResetInterval)
             );
             
             manager.AddComponentObject(entity, view.transform);
@@ -205,6 +210,7 @@ namespace _Games.Combat.EntityComponentSystem
             
             EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
             Entity entity = view.GetOrCreateEntity();
+            manager.AddBuffer<CollisionBuffer>(entity);
             manager.AddComponentData(entity, new MonsterTag());
             manager.AddComponentData(entity, new MonsterFlipData
             {

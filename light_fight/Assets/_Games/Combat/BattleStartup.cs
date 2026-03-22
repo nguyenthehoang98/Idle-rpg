@@ -40,8 +40,8 @@ namespace _Games.Combat
 #if DEVELOP_MODE
             gameObject.AddComponent<CpuFrame>();
 #endif
-            
             isRunning = true;
+            Debug.Log(@"Tạo level config -> spawn level theo wave/batch...");
         }
         
         private void OnEnable()
