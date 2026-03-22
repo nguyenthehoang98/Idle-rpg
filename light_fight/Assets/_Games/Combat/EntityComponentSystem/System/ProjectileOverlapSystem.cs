@@ -1,5 +1,4 @@
 ﻿using _Games.Combat.EntityComponentSystem.Data;
-using ProjectDawn.Navigation;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;

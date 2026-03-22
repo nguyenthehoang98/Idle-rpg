@@ -5,7 +5,6 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
 
 namespace _Games.Combat.EntityComponentSystem.System
 {
@@ -46,24 +45,6 @@ namespace _Games.Combat.EntityComponentSystem.System
                 Grid = Grid.AsParallelWriter()
             }.ScheduleParallel(state.Dependency);
             state.Dependency.Complete();
-
-/*#if UNITY_EDITOR
-            foreach (var pair in Grid)
-            {
-                Color color = state.EntityManager.HasComponent<PlayerTag>(pair.Value) ? Color.yellow : Color.green;
-                int2 cell = pair.Key;
-
-                Vector3 p0 = new Vector3(cell.x, cell.y);
-                Vector3 p1 = new Vector3(cell.x, cell.y + 1);
-                Vector3 p2 = new Vector3(cell.x + 1, cell.y + 1);
-                Vector3 p3 = new Vector3(cell.x + 1, cell.y);
-
-                Debug.DrawLine(p0, p1, color);
-                Debug.DrawLine(p1, p2, color);
-                Debug.DrawLine(p2, p3, color);
-                Debug.DrawLine(p3, p0, color);
-            }
-#endif*/
         }
 
         public void OnDestroy(ref SystemState state)
