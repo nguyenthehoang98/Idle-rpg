@@ -14,7 +14,7 @@ namespace ProjectDawn.Navigation.Hybrid
     public class AgentCircleShapeAuthoring : MonoBehaviour
     {
         [SerializeField]
-        protected float Radius = 0.5f;
+        public float Radius = 0.5f;
 
         Entity m_Entity;
 

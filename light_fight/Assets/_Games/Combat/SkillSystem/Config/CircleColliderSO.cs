@@ -17,5 +17,7 @@ namespace _Games.Combat.SkillSystem.Config
             public float extraRadius;
             public AnimationCurve curve;
         }
+
+        public override ColliderType Type => ColliderType.Circle;
     }
 }

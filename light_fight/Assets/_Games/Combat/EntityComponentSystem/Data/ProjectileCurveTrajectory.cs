@@ -7,7 +7,7 @@ namespace _Games.Combat.EntityComponentSystem.Data
     {
         public BlobAssetReference<CurveBlob> Blob;
         public readonly float Duration;
-        private readonly float MaxValue;
+        public readonly float MaxValue;
 
         public ProjectileCurveTrajectory(AnimationCurve curve, float maxValue, float duration)
         {

@@ -25,11 +25,10 @@ namespace _Games.Combat
         
         private async void Start()
         {
-            Entity player = ECSFactory.BuildPlayer();
-            healthUI.Initialize(player);
-            
             LevelSpawnSO levelSpawn = await LevelSpawnSO.LoadSpawn(1);
             levelDesign = Instantiate(levelSpawn.design);
+            Entity player = ECSFactory.BuildPlayer(levelDesign);
+            healthUI.Initialize(player);
             shareData = new ShareData(levelSpawn);
             spawnLogic = new SpawnLogic(shareData);
             weaponLogic = new TriggerWeaponLogic(levelDesign);

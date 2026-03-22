@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using _Games.Combat.EntityComponentSystem.Data;
 using _Games.Combat.EntityComponentSystem.View;
+using _Games.Combat.Level;
 using _Games.Combat.Model;
 using _Games.Combat.SkillSystem.Config;
 using _Games.Combat.SkillSystem.Model;
@@ -11,6 +12,7 @@ using _KIT.Resource;
 using _KIT.Utils;
 using Cysharp.Threading.Tasks;
 using ProjectDawn.Navigation;
+using ProjectDawn.Navigation.Hybrid;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -22,11 +24,22 @@ namespace _Games.Combat.EntityComponentSystem
     {
         private static HashSet<string> monstersPath = new HashSet<string>();
         
-        public static Entity BuildPlayer()
+        public static Entity BuildPlayer(LevelDesign levelDesign)
         {
             EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
             Entity entity = manager.CreateEntity();
+            manager.AddBuffer<CollisionBuffer>(entity);
+            DynamicBuffer<CircleBuffer> circleBuffers = manager.AddBuffer<CircleBuffer>(entity);
+            foreach (var slotView in levelDesign.Slots)
+            {
+                AgentCircleShapeAuthoring authoring = slotView.GetComponent<AgentCircleShapeAuthoring>();
+                float3 offset = authoring.transform.position;
+                circleBuffers.Add(new CircleBuffer(authoring.Radius, offset, false, 0));
+            }
+            
             manager.AddComponentData(entity, new PlayerTag());
+            manager.AddComponentData(entity, new LocalTransform { Position = float3.zero });
+            
             manager.AddComponentData(entity, new HealthData { Health = 100000, MaxHealth = 100000 });
 #if UNITY_EDITOR
             manager.SetName(entity, "Player");
@@ -144,6 +157,7 @@ namespace _Games.Combat.EntityComponentSystem
             float3 startPosition, float3 endPosition,
             Skill skill, SkillStatData statData)
         {
+            Debug.Break();
             GameObject go = KitPool.Instantiate(skill.projectile.prefab);
             go.transform.position = startPosition;
             
@@ -176,8 +190,23 @@ namespace _Games.Combat.EntityComponentSystem
                     break;
             }
 
+            switch (skill.collider.Type)
+            {
+                case ColliderType.Circle:
+                    var circleBuffers = manager.AddBuffer<CircleBuffer>(entity);
+                    CircleColliderSO circle = skill.collider as CircleColliderSO;
+                    foreach (var c in circle.list)
+                    {
+                        circleBuffers.Add(new CircleBuffer(c.radius, c.offset, c.adjustRadius, c.extraRadius));
+                    }
+                    break;
+                default:
+                    Debug.LogError("Invalid collider type " + skill.collider.Type);
+                    break;
+            }
+
             manager.AddComponentData(entity,
-                new ProjectileTrajectory(startPosition, direction)
+                new ProjectileTrajectory(startPosition, math.normalizesafe(direction))
             );
             manager.AddComponentData(entity,
                 new ProjectileSkillData(source, lifeTime, main.castTime,
@@ -211,6 +240,8 @@ namespace _Games.Combat.EntityComponentSystem
             EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
             Entity entity = view.GetOrCreateEntity();
             manager.AddBuffer<CollisionBuffer>(entity);
+            DynamicBuffer<CircleBuffer> circleBuffers = manager.AddBuffer<CircleBuffer>(entity);
+            circleBuffers.Add(new CircleBuffer(radius, float3.zero, false, 0));
             manager.AddComponentData(entity, new MonsterTag());
             manager.AddComponentData(entity, new MonsterFlipData
             {

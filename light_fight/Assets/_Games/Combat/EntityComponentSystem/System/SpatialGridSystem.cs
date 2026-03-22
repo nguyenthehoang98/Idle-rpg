@@ -6,7 +6,6 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
-using NotImplementedException = System.NotImplementedException;
 
 namespace _Games.Combat.EntityComponentSystem.System
 {
