@@ -32,14 +32,24 @@ namespace _Games.CloudAPI.Samples
                 return;
             }
 
-            var result = await CloudAPIUtils.UpdateLeaderBoard(new PlayerScore(score));
-            if (result.success)
+            var joinLeaderBoardResult = await CloudAPIUtils.JoinLeaderboard();
+            if (joinLeaderBoardResult.result.success)
+            {
+                Debug.Log($"Successfully joined leaderboard: {JsonUtility.ToJson(joinLeaderBoardResult.rankResult)}");
+            }
+            else
+            {
+                Debug.LogError($"Error join leaderboard: {joinLeaderBoardResult.result.message}");
+            }
+            
+            var updateLeaderBoardResult = await CloudAPIUtils.UpdateLeaderBoard(new PlayerScore(score));
+            if (updateLeaderBoardResult.success)
             {
                 Debug.Log("update leaderboard success.");
             }
             else
             {
-                Debug.LogError("update leaderboard failed. " + result.message + ". Code: " + result.errorCode);
+                Debug.LogError("update leaderboard failed. " + updateLeaderBoardResult.message + ". Code: " + updateLeaderBoardResult.errorCode);
             }
 
             CloudAPIUtils.Logout();

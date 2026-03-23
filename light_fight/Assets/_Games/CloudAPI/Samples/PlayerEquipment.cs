@@ -37,4 +37,14 @@ namespace _Games.CloudAPI.Samples
             return score.ToString();
         }
     }
+
+    public enum RankName
+    {
+        Iron, Bronze, Silver, Gold, Platinum, Emerald
+    }
+
+    public enum TierName
+    {
+        V, IV, III, II, I
+    }
 }

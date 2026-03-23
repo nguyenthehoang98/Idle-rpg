@@ -1,4 +1,5 @@
 ﻿using System;
+using _Games.CloudAPI.Samples;
 
 namespace _Games.CloudAPI.Model
 {
@@ -32,5 +33,14 @@ namespace _Games.CloudAPI.Model
     {
         public string UserId;
         public int Index;
+    }
+
+    [Serializable]
+    public class PlayerRankResult
+    {
+        public bool IsNew;
+        public RankName Rank;
+        public TierName Tier;
+        public string Season;
     }
 }

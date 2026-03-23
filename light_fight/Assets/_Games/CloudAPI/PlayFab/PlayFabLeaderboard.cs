@@ -40,6 +40,41 @@ namespace _Games.CloudAPI.PlayFab
             }
         }
 
+        public async UniTask<(RequestResult result, PlayerRankResult rankResult)> JoinLeaderboard(LoginSessionResult session)
+        {
+            var result = new RequestResult();
+            if (session.Context is PlayFabAuthenticationContext context)
+            {
+            }
+            else
+            {
+                result.success = false;
+                result.errorCode = (int)PlayFabErrorCode.NotAuthenticated;
+                result.message = "Invalid AuthenticationContext";
+                return (result, new PlayerRankResult());
+            }
+            
+            var execute = await ExecuteScript("initPlayer", null);
+            if (execute.Item1.success)
+            {
+                try
+                {
+                    PlayerRankResult rankResult = JsonUtility.FromJson<PlayerRankResult>(execute.Item2.ToString());
+                    result.success = true;
+                    return (result, rankResult);
+                }
+                catch (Exception e)
+                {
+                    result.errorCode = (int)ErrorCode.Unknown;
+                    result.message = e.Message;
+                    result.success = false;
+                    return (result, null);
+                }
+            }
+
+            return (execute.Item1, new PlayerRankResult());
+        }
+
         public UniTask<(RequestResult result, LeaderboardResult leaderboard)> GetLeaderboardData(LoginSessionResult session, LeaderBoardRequest request)
         {
             var tcs = new UniTaskCompletionSource<(RequestResult, LeaderboardResult)>();

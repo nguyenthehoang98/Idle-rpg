@@ -7,10 +7,19 @@
     if (score < 0) return error(1002, "Score must be non-negative");
     if (score > 1000000) return error(1003, "Score exceeds allowed limit");
 
+    var titleData = server.GetTitleData({
+        Keys: ["CURRENT_SEASON"]
+    });
+    var CURRENT_SEASON = titleData.Data["CURRENT_SEASON"];
+    if (!CURRENT_SEASON) {
+        return error(2000, "CURRENT_SEASON is not configured");
+    }
+    
+    var statName = CURRENT_SEASON + "_Score";
     var result = server.UpdatePlayerStatistics({
         PlayFabId: playerId,
         Statistics: [{
-            StatisticName: "Score",
+            StatisticName: statName,
             Value: score
         }]
     });
