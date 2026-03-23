@@ -8,6 +8,5 @@ namespace _Games.CloudAPI.Model
         public bool success;
         public string message;
         public int errorCode;
-        public string errorCodeType;
     }
 }

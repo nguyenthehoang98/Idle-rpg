@@ -1,6 +1,6 @@
 ﻿namespace _Games.CloudAPI.Model
 {
-    public enum ClientErrorCode
+    public enum ErrorCode
     {
         Unknown = 100,
         LEADERBOARD_UPDATE_SCORE_MISSING = 1000,

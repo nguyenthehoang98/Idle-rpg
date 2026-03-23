@@ -8,7 +8,7 @@ namespace _Games.CloudAPI.PlayFab
 {
     public class PlayFabDataSaveLoad : IDataSaveLoad
     {
-        public UniTask<RequestResult> SaveData(LoginSessionResult session, ClientData[] clients)
+        public UniTask<RequestResult> SaveData(LoginSessionResult session, KeyObjectData[] clients)
         {
             var tcs = new UniTaskCompletionSource<RequestResult>();
             var result = new RequestResult();
@@ -21,7 +21,6 @@ namespace _Games.CloudAPI.PlayFab
             {
                 result.success = false;
                 result.errorCode = (int)PlayFabErrorCode.NotAuthenticated;
-                result.errorCodeType = typeof(PlayFabErrorCode).ToString();
                 result.message = "Invalid AuthenticationContext";
                 tcs.TrySetResult(result);
                 return tcs.Task;
@@ -46,16 +45,15 @@ namespace _Games.CloudAPI.PlayFab
                 result.success = false;
                 result.message = error.ErrorMessage;
                 result.errorCode = (int)error.Error;
-                result.errorCodeType = error.Error.GetType().ToString();
                 tcs.TrySetResult(result);
             });
 
             return tcs.Task;
         }
 
-        public UniTask<(RequestResult, ClientData[])> GetData(LoginSessionResult session)
+        public UniTask<(RequestResult, KeyObjectData[])> GetData(LoginSessionResult session)
         {
-            var tcs = new UniTaskCompletionSource<(RequestResult, ClientData[])>();
+            var tcs = new UniTaskCompletionSource<(RequestResult, KeyObjectData[])>();
             var result = new RequestResult();
 
             string entityId = "";
@@ -67,7 +65,6 @@ namespace _Games.CloudAPI.PlayFab
             {
                 result.success = false;
                 result.errorCode = (int)PlayFabErrorCode.NotAuthenticated;
-                result.errorCodeType = typeof(PlayFabErrorCode).ToString();
                 result.message = "Invalid AuthenticationContext";
                 return tcs.Task;
             }
@@ -82,14 +79,14 @@ namespace _Games.CloudAPI.PlayFab
             };
             PlayFabDataAPI.GetObjects(request, success =>
             {
-                ClientData[] clients = new ClientData[0];
+                KeyObjectData[] clients = new KeyObjectData[0];
                 if (success.Objects != null)
                 {
-                    clients = new ClientData[success.Objects.Count];
+                    clients = new KeyObjectData[success.Objects.Count];
                     int i = 0;
                     foreach (KeyValuePair<string, ObjectResult> kv in success.Objects)
                     {
-                        clients[i] = new ClientData { Name = kv.Key, Object = kv.Value.DataObject };
+                        clients[i] = new KeyObjectData { Name = kv.Key, Object = kv.Value.DataObject };
                         i++;
                     }
                 }
@@ -100,14 +97,13 @@ namespace _Games.CloudAPI.PlayFab
                 result.success = false;
                 result.message = error.ErrorMessage;
                 result.errorCode = (int)error.Error;
-                result.errorCodeType = error.Error.GetType().ToString();
-                tcs.TrySetResult((result, new ClientData[0]));
+                tcs.TrySetResult((result, new KeyObjectData[0]));
             });
 
             return tcs.Task;
         }
 
-        private static List<SetObject> ConvertToSetObjects(ClientData[] clients)
+        private static List<SetObject> ConvertToSetObjects(KeyObjectData[] clients)
         {
             List<SetObject> list = new List<SetObject>();
             foreach (var o in clients)

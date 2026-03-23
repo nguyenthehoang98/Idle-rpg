@@ -33,6 +33,13 @@ namespace _Games.CloudAPI.PlayFab
             throw new System.NotImplementedException();
         }
 
+        public UniTask<RequestResult> Logout()
+        {
+            PlayFabClientAPI.ForgetAllCredentials();
+            RequestResult result = new RequestResult{success = true};
+            return new UniTask<RequestResult>(result);
+        }
+
         private UniTask<(RequestResult result, LoginSessionResult session)> LoginWithParameter(string customId,
             bool createAccount)
         {
@@ -59,7 +66,6 @@ namespace _Games.CloudAPI.PlayFab
                     result.success = false;
                     result.message = error.ErrorMessage;
                     result.errorCode = (int)error.Error;
-                    result.errorCodeType = error.Error.GetType().ToString();
                     tcs.TrySetResult((result, session));
                 }
             );
