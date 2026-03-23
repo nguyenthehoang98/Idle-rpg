@@ -1,0 +1,13 @@
+﻿namespace _Games.CloudAPI.Model
+{
+    public enum ClientErrorCode
+    {
+        Unknown = 100,
+        LEADERBOARD_UPDATE_SCORE_MISSING = 1000,
+        LEADERBOARD_UPDATE_SCORE_UNDEFINE_TYPE = 1001,
+        LEADERBOARD_UPDATE_SCORE_INVALID_VALUE = 1002,
+        LEADERBOARD_UPDATE_SCORE_TOO_LARGE = 1003,
+        LEADERBOARD_EMPTY = 1004,
+        LEADERBOARD_NOT_FOUND_OPPONENT = 1005,
+    }
+}
