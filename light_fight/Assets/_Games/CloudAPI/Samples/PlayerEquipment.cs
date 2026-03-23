@@ -40,11 +40,11 @@ namespace _Games.CloudAPI.Samples
 
     public enum RankName
     {
-        Iron, Bronze, Silver, Gold, Platinum, Emerald
+        Iron = 0, Bronze, Silver, Gold, Platinum, Emerald
     }
 
     public enum TierName
     {
-        V, IV, III, II, I
+        V = 0, IV, III, II, I
     }
 }

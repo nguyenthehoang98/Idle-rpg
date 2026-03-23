@@ -150,8 +150,9 @@ namespace _Games.CloudAPI.PlayFab
                 try
                 {
                     JsonObject json = JsonSerialization.FromJson<JsonObject>(execute.Item2.ToString());
-                    if (json.TryGetValue("PlayFabId", out object playFabId) &&
-                        json.TryGetValue("Position", out object position))
+                    bool flag1 = json.TryGetValue("PlayFabId", out object playFabId);
+                    bool flag2 = json.TryGetValue("Position", out object position);
+                    if (flag1 && flag2)
                     {
                         string userId = playFabId.ToString();
                         int index = int.Parse(position.ToString());
@@ -161,7 +162,9 @@ namespace _Games.CloudAPI.PlayFab
                     else
                     {
                         result.errorCode = (int)ErrorCode.Unknown;
-                        result.message = "Invalid PlayFabId or Position";
+                        result.message = "Invalid";
+                        if (!flag1) result.message += " PlayFabId, ";
+                        if (!flag2) result.message += " Position";
                         result.success = false;
                         return (result, null);
                     }
