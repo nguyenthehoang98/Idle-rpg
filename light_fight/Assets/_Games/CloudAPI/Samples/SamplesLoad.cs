@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Text;
+﻿using System.Text;
 using UnityEngine;
 
 namespace _Games.CloudAPI.Samples

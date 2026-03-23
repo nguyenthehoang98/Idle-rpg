@@ -37,5 +37,10 @@ namespace _Games.CloudAPI
         {
             return leaderboard.UpdateLeaderBoard(session, data);
         }
+
+        public static UniTask<(RequestResult result, FindOpponentResult opponent)> FindOpponent()
+        {
+            return leaderboard.FindOpponent(session);
+        }
     }
 }

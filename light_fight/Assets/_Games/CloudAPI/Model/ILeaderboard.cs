@@ -8,6 +8,6 @@ namespace _Games.CloudAPI.Model
 
         UniTask<(RequestResult result, LeaderboardResult leaderboard)> GetLeaderboardData(LoginSessionResult session, LeaderBoardRequest request);
 
-        UniTask<(RequestResult result, FindOpponentResult opponent)> FindOpponents(LoginSessionResult session);
+        UniTask<(RequestResult result, FindOpponentResult opponent)> FindOpponent(LoginSessionResult session);
     }
 }

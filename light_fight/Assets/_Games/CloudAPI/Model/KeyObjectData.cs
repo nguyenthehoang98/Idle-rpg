@@ -3,7 +3,6 @@
     public interface IObjectData
     {
         public string Name();
-        public object Value();
     }
 
     // protected this class
@@ -20,6 +19,9 @@
 
         public string Name() => name;
 
-        public object Value() => value;
+        public override string ToString()
+        {
+            return value.ToString();
+        }
     }
 }

@@ -108,7 +108,7 @@ namespace _Games.CloudAPI.PlayFab
             List<SetObject> list = new List<SetObject>();
             foreach (var o in clients)
             {
-                list.Add(new SetObject { ObjectName = o.Name(), DataObject = o.Value() });
+                list.Add(new SetObject { ObjectName = o.Name(), DataObject = o });
             }
 
             return list;

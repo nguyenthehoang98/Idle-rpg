@@ -12,7 +12,7 @@ namespace _Games.CloudAPI
             {
                 if (obj.Name() == result.Name())
                 {
-                    result = JsonUtility.FromJson<T>(obj.Value().ToString());
+                    result = JsonUtility.FromJson<T>(obj.ToString());
                     return true;
                 }
             }

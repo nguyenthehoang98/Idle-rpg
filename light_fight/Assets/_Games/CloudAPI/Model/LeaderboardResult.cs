@@ -30,6 +30,7 @@ namespace _Games.CloudAPI.Model
     [Serializable]
     public class FindOpponentResult
     {
-        
+        public string UserId;
+        public int Index;
     }
 }

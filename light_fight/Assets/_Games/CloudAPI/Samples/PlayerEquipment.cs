@@ -10,11 +10,6 @@ namespace _Games.CloudAPI.Samples
         public List<int> equipments;
        
         public string Name() => "PlayerEquipment";
-
-        public object Value()
-        {
-            return this;
-        }
     }
 
     [Serializable]
@@ -23,10 +18,23 @@ namespace _Games.CloudAPI.Samples
         public string name;
         public int level;
         public string Name() => "PlayerProgress";
+    }
 
-        public object Value()
+    [Serializable]
+    public struct PlayerScore : IObjectData
+    {
+        public int score;
+
+        public PlayerScore(int score)
         {
-            return this;
+            this.score = score;
+        }
+
+        public string Name() => "Score";
+
+        public override string ToString()
+        {
+            return score.ToString();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using _Games.CloudAPI.Model;
 using Cysharp.Threading.Tasks;
 using PlayFab;
@@ -24,9 +25,9 @@ namespace _Games.CloudAPI.PlayFab
                 return result;
             }
 
-            var execute = await ExecuteScript("updateScore", new Dictionary<string, object>
+            var execute = await ExecuteScript("updateLeaderboard", new Dictionary<string, object>
             {
-                { data.Name(), data.Value() }
+                { data.Name(), data.ToString() }
             });
             if (execute.Item1.success)
             {
@@ -94,7 +95,7 @@ namespace _Games.CloudAPI.PlayFab
             return tcs.Task;
         }
 
-        public async UniTask<(RequestResult result, FindOpponentResult opponent)> FindOpponents(LoginSessionResult session)
+        public async UniTask<(RequestResult result, FindOpponentResult opponent)> FindOpponent(LoginSessionResult session)
         {
             var result = new RequestResult();
             if (session.Context is PlayFabAuthenticationContext context)
@@ -111,13 +112,35 @@ namespace _Games.CloudAPI.PlayFab
             var execute = await ExecuteScript("findOpponent", null);
             if (execute.Item1.success)
             {
-                result.success = true;
-                return (result, null);
+                try
+                {
+                    JsonObject json = JsonSerialization.FromJson<JsonObject>(execute.Item2.ToString());
+                    if (json.TryGetValue("PlayFabId", out object playFabId) &&
+                        json.TryGetValue("Position", out object position))
+                    {
+                        string userId = playFabId.ToString();
+                        int index = int.Parse(position.ToString());
+                        result.success = true;
+                        return (result, new FindOpponentResult { UserId = userId, Index = index });
+                    }
+                    else
+                    {
+                        result.errorCode = (int)ErrorCode.Unknown;
+                        result.message = "Invalid PlayFabId or Position";
+                        result.success = false;
+                        return (result, null);
+                    }
+                }
+                catch (Exception e)
+                {
+                    result.errorCode = (int)ErrorCode.Unknown;
+                    result.message = e.Message;
+                    result.success = false;
+                    return (result, null);
+                }
             }
-            else
-            {
-                return (execute.Item1, null);
-            }
+
+            return (execute.Item1, null);
         }
 
         UniTask<(RequestResult, object)> ExecuteScript(string functionName, Dictionary<string, object> objects)
@@ -134,8 +157,18 @@ namespace _Games.CloudAPI.PlayFab
 #if DEBUG
                     Debug.Log($"{functionName}: " + JsonSerialization.ToJson(execute));
 #endif
-                    result.success = true;
-                    tcs.TrySetResult((result, execute.FunctionResult));
+                    if (execute.Error != null)
+                    {
+                        result.success = false;
+                        result.message = execute.Error.Message;
+                        result.errorCode = (int)ErrorCode.Unknown;
+                        tcs.TrySetResult((result, default));
+                    }
+                    else
+                    {
+                        result.success = true;
+                        tcs.TrySetResult((result, execute.FunctionResult));                        
+                    }
                 },
                 error =>
                 {
