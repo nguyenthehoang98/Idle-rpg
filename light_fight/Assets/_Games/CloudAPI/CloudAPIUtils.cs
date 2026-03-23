@@ -11,9 +11,11 @@ namespace _Games.CloudAPI
         private static IDataSaveLoad saveLoad = new PlayFabDataSaveLoad();
         private static ILeaderboard leaderboard = new PlayFabLeaderboard();
 
-        public static UniTask<(RequestResult result, LoginSessionResult session)> LoginWithId(string userId)
+        public static async UniTask<(RequestResult result, LoginSessionResult session)> LoginWithId(string userId)
         {
-            return login.LoginWithId(userId);
+            var result = await login.LoginWithId(userId);
+            session = result.session;
+            return result;
         }
 
         public static UniTask<RequestResult> Logout()
@@ -21,17 +23,17 @@ namespace _Games.CloudAPI
             return login.Logout();
         }
 
-        public static UniTask<RequestResult> SaveData(KeyObjectData[] clients)
+        public static UniTask<RequestResult> SaveData(params IObjectData[] clients)
         {
             return saveLoad.SaveData(session, clients);
         }
 
-        public static UniTask<(RequestResult, KeyObjectData[])> GetData()
+        public static UniTask<(RequestResult result, IObjectData[] objects)> GetData()
         {
             return saveLoad.GetData(session);
         }
 
-        public static UniTask<RequestResult> UpdateLeaderBoard(KeyObjectData data)
+        public static UniTask<RequestResult> UpdateLeaderBoard(IObjectData data)
         {
             return leaderboard.UpdateLeaderBoard(session, data);
         }

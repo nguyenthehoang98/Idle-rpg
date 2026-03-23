@@ -8,12 +8,12 @@ namespace _Games.CloudAPI.PlayFab
 {
     public class PlayFabDataSaveLoad : IDataSaveLoad
     {
-        public UniTask<RequestResult> SaveData(LoginSessionResult session, KeyObjectData[] clients)
+        public UniTask<RequestResult> SaveData(LoginSessionResult session, params IObjectData[] clients)
         {
             var tcs = new UniTaskCompletionSource<RequestResult>();
             var result = new RequestResult();
             string entityId = "";
-            if (session.Context is PlayFabAuthenticationContext context)
+            if (session.Context != null && session.Context is PlayFabAuthenticationContext context)
             {
                 entityId = context.EntityId;
             }
@@ -51,9 +51,9 @@ namespace _Games.CloudAPI.PlayFab
             return tcs.Task;
         }
 
-        public UniTask<(RequestResult, KeyObjectData[])> GetData(LoginSessionResult session)
+        public UniTask<(RequestResult result, IObjectData[] objects)> GetData(LoginSessionResult session)
         {
-            var tcs = new UniTaskCompletionSource<(RequestResult, KeyObjectData[])>();
+            var tcs = new UniTaskCompletionSource<(RequestResult, IObjectData[])>();
             var result = new RequestResult();
 
             string entityId = "";
@@ -79,14 +79,14 @@ namespace _Games.CloudAPI.PlayFab
             };
             PlayFabDataAPI.GetObjects(request, success =>
             {
-                KeyObjectData[] clients = new KeyObjectData[0];
+                IObjectData[] clients = new IObjectData[0];
                 if (success.Objects != null)
                 {
-                    clients = new KeyObjectData[success.Objects.Count];
+                    clients = new IObjectData[success.Objects.Count];
                     int i = 0;
                     foreach (KeyValuePair<string, ObjectResult> kv in success.Objects)
                     {
-                        clients[i] = new KeyObjectData { Name = kv.Key, Object = kv.Value.DataObject };
+                        clients[i] = new DefaultObjectData(kv.Key, kv.Value.DataObject);
                         i++;
                     }
                 }
@@ -97,18 +97,18 @@ namespace _Games.CloudAPI.PlayFab
                 result.success = false;
                 result.message = error.ErrorMessage;
                 result.errorCode = (int)error.Error;
-                tcs.TrySetResult((result, new KeyObjectData[0]));
+                tcs.TrySetResult((result, new IObjectData[0]));
             });
 
             return tcs.Task;
         }
 
-        private static List<SetObject> ConvertToSetObjects(KeyObjectData[] clients)
+        private static List<SetObject> ConvertToSetObjects(IObjectData[] clients)
         {
             List<SetObject> list = new List<SetObject>();
             foreach (var o in clients)
             {
-                list.Add(new SetObject { ObjectName = o.Name, DataObject = o.Object });
+                list.Add(new SetObject { ObjectName = o.Name(), DataObject = o.Value() });
             }
 
             return list;

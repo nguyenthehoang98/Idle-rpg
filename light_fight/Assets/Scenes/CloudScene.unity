@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 393824400}
   - component: {fileID: 393824399}
   m_Layer: 0
-  m_Name: FakeCloudFunction
+  m_Name: SamplesLoad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -145,30 +145,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 393824398}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a67904974224c8994a3810cabf717e0, type: 3}
+  m_Script: {fileID: 11500000, guid: b13763b8361c44f3bc35cd7344009ee3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  usersId:
-  - 2ce0d713-d290-45f2-9335-5b006b1ea21c
-  - 0f84aeab-f670-46be-8b7c-3a177aedb5e0
-  - 724d877a-e14f-4acc-9db9-818c8041ab40
-  - 3948e55b-fac7-494a-a572-7b05c94a36b8
-  - 177ed385-39bd-4127-a4d6-fc0f6bdb647e
-  - 991df093-1b48-494c-a41d-558586881e89
-  - 8594571a-d503-428c-bc4b-d23656a192fb
-  - 14244036-438f-42cb-8adb-1fb4e87fc67d
-  - d4e43584-f547-40a1-8440-2013cf847a72
-  - 52ece674-c63e-4a2a-a180-b6c2e9ae3d2e
-  - cbaaaae1-c137-4726-bf22-9f2aee80c867
-  - 6f1aa963-381b-48f4-91ad-eb58872f52b5
-  - 6e342148-31ba-437c-ae6b-51e1ea52d5b3
-  - 80113c17-738a-421b-99a4-6105b7fc5ac0
-  - c5d7c3c3-bc1f-46bf-9b2f-d8921d4b2f0e
-  - f680f33e-ab13-4bae-a1b3-7f8314dafa56
-  - 7515dfc6-702c-465c-91e4-767694e16ba7
-  - 5dd85467-6a6e-4ff2-8fdd-fed348f6b80c
-  - e9555b29-6c61-4375-8e41-a9239c1384af
-  - 457c1df9-8af1-46ff-946b-2a73168e39fa
 --- !u!4 &393824400
 Transform:
   m_ObjectHideFlags: 0
@@ -195,7 +174,7 @@ GameObject:
   - component: {fileID: 1315533436}
   - component: {fileID: 1315533435}
   m_Layer: 0
-  m_Name: Login
+  m_Name: SamplesLogin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -208,20 +187,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1315533434}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b43698fe03eee344683731be4c0686a6, type: 3}
+  m_Script: {fileID: 11500000, guid: 692c31c4f3b94a8e9f931d7d0e390579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerData:
-    Name: Nguyen The Hoang
-    Local: VietNam
-  ProgressData:
-    Chapter: 13
-    Power: 1000
-  Statistics:
-    Name: 
-    Value: 0
 --- !u!4 &1315533436
 Transform:
   m_ObjectHideFlags: 0
@@ -340,12 +310,12 @@ GameObject:
   - component: {fileID: 1871736318}
   - component: {fileID: 1871736319}
   m_Layer: 0
-  m_Name: FindOpponent
+  m_Name: SamplesSave
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1871736318
 Transform:
   m_ObjectHideFlags: 0
@@ -370,10 +340,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1871736317}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0972a77797624ee6a274a732bfe5bbdf, type: 3}
+  m_Script: {fileID: 11500000, guid: 41fd1e961d874cc5ac866bd3feaafcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  userId: e4ed7e56-f50e-49ba-9fd7-fd32ae3dd104
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

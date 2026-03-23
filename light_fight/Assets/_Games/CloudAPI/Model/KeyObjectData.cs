@@ -1,11 +1,25 @@
-﻿using System;
-
-namespace _Games.CloudAPI.Model
+﻿namespace _Games.CloudAPI.Model
 {
-    [Serializable]
-    public class KeyObjectData
+    public interface IObjectData
     {
-        public string Name;
-        public object Object;
+        public string Name();
+        public object Value();
+    }
+
+    // protected this class
+    internal class DefaultObjectData : IObjectData
+    {
+        private string name;
+        private object value;
+
+        public DefaultObjectData(string name, object value)
+        {
+            this.name = name;
+            this.value = value;
+        }
+
+        public string Name() => name;
+
+        public object Value() => value;
     }
 }

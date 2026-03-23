@@ -10,7 +10,7 @@ namespace _Games.CloudAPI.PlayFab
 {
     public class PlayFabLeaderboard : ILeaderboard
     {
-        public async UniTask<RequestResult> UpdateLeaderBoard(LoginSessionResult session, KeyObjectData data)
+        public async UniTask<RequestResult> UpdateLeaderBoard(LoginSessionResult session, IObjectData data)
         {
             var result = new RequestResult();
             if (session.Context is PlayFabAuthenticationContext context)
@@ -26,7 +26,7 @@ namespace _Games.CloudAPI.PlayFab
 
             var execute = await ExecuteScript("updateScore", new Dictionary<string, object>
             {
-                { data.Name, data.Object }
+                { data.Name(), data.Value() }
             });
             if (execute.Item1.success)
             {
@@ -39,7 +39,7 @@ namespace _Games.CloudAPI.PlayFab
             }
         }
 
-        public UniTask<(RequestResult, LeaderboardResult)> GetLeaderboardData(LoginSessionResult session, LeaderBoardRequest request)
+        public UniTask<(RequestResult result, LeaderboardResult leaderboard)> GetLeaderboardData(LoginSessionResult session, LeaderBoardRequest request)
         {
             var tcs = new UniTaskCompletionSource<(RequestResult, LeaderboardResult)>();
             var result = new RequestResult();
@@ -94,7 +94,7 @@ namespace _Games.CloudAPI.PlayFab
             return tcs.Task;
         }
 
-        public async UniTask<(RequestResult, FindOpponentResult)> FindOpponents(LoginSessionResult session)
+        public async UniTask<(RequestResult result, FindOpponentResult opponent)> FindOpponents(LoginSessionResult session)
         {
             var result = new RequestResult();
             if (session.Context is PlayFabAuthenticationContext context)
