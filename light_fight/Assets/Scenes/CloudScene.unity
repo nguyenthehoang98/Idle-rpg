@@ -135,7 +135,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &393824399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,36 +169,6 @@ MonoBehaviour:
   - 5dd85467-6a6e-4ff2-8fdd-fed348f6b80c
   - e9555b29-6c61-4375-8e41-a9239c1384af
   - 457c1df9-8af1-46ff-946b-2a73168e39fa
-  - 30c61eae-d6b1-4c80-9b4c-0bd39c04a625
-  - a6795893-e1eb-4e37-b4ef-75f6f6c9eab9
-  - b1e99b1d-ca4f-4192-9c42-82b0dcf50c4b
-  - 2761ec5b-f477-44aa-8bf4-e33217f304bf
-  - 5d475fe1-a602-4f63-85e7-aa916c5ff7d7
-  - 418ace28-7eab-4049-9761-75b691c669f1
-  - fedc5c24-3cce-4769-9980-b11a60511a62
-  - bcbcb9f6-d1c2-4186-b07b-3bebc628ed94
-  - 61b82a23-4d1e-4cf2-9b5c-a997625f722f
-  - 9c0f8b90-8982-4dc8-b0d3-f06584d623a2
-  - 398f82a7-def7-4087-9cef-eff440bb7985
-  - f0976a0f-631c-417f-a938-6f74d8d514a1
-  - 745c84bf-6c15-463e-a640-1993760d7d25
-  - 37f45e10-42d2-44d9-a4b3-9de498ad378c
-  - 2b52410a-12c6-4acc-a5d4-6d6a783cb572
-  - 9e049df1-51e0-4bbf-9acb-cc1a0861a6a7
-  - eab7f2f8-fbff-4586-b75b-686635e23d7f
-  - fe819c71-e1f1-4127-b9a4-dc4257cbfa45
-  - 13d24b44-4144-48ce-8617-ab42ef30518a
-  - 48581152-e6b6-4feb-b4e4-4c17b772a82d
-  - beb1134a-990c-4f82-8611-5e78565231ea
-  - aeea810d-6bdc-45a9-99a5-befbcfde4c51
-  - e1079448-e9e2-421f-9e25-e71c5657317e
-  - 44adc6ce-e879-4949-bde9-4a932f5b6792
-  - b6dcd1ce-eac5-4f68-b9bf-ad72e003d763
-  - a033904d-b4ee-4181-b770-a192e53fa6d4
-  - 134aec0f-9685-4389-b61f-88777ce7f335
-  - aad06da9-263a-4931-a170-ab9c2a32c9e3
-  - 685849a6-71c9-4da4-badf-fa30d045231c
-  - 6e8222a9-9b05-4e44-8fcb-697ecd28cc1c
 --- !u!4 &393824400
 Transform:
   m_ObjectHideFlags: 0
@@ -250,8 +220,8 @@ MonoBehaviour:
     Chapter: 13
     Power: 1000
   Statistics:
-  - Name: Rank
-    Value: 5
+    Name: 
+    Value: 0
 --- !u!4 &1315533436
 Transform:
   m_ObjectHideFlags: 0
@@ -403,6 +373,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0972a77797624ee6a274a732bfe5bbdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userId: e4ed7e56-f50e-49ba-9fd7-fd32ae3dd104
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
