@@ -1,5 +1,6 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
+using _Games.CloudAPI.Playfab;
 using CloudAPI.Model;
 using Cysharp.Threading.Tasks;
 using PlayFab;
@@ -9,7 +10,13 @@ namespace CloudAPI.Playfab
 {
     public class PlayFabLeaderboard : ICloudLeaderboard
     {
-        public UniTask<RequestResult> UpdateLeaderboard(LoginSessionData session, StatisticData[] statisticsData)
+        /// <summary>
+        /// Sau chuyển thành update kết quả trận đấu. với match Id
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="statisticsData"></param>
+        /// <returns></returns>
+        public async UniTask<RequestResult> UpdateLeaderboard(LoginSessionData session, StatisticData statisticsData)
         {
             var tcs = new UniTaskCompletionSource<RequestResult>();
             var result = new RequestResult { Method = "PlayFab" };
@@ -25,23 +32,20 @@ namespace CloudAPI.Playfab
                 return tcs.Task;
             }
 
-            UpdatePlayerStatisticsRequest request = new UpdatePlayerStatisticsRequest
+            var execute = await PlayFabCloudScript.ExecuteCloudScript("updateScore",
+                new Dictionary<string, object>
+                {
+                    { statisticsData.Name, statisticsData.Value }
+                });
+            if (execute.result.Success)
             {
-                Statistics = ConvertToSetStatistic(statisticsData),
-                AuthenticationContext = context
-            };
+                
+            }
+            else
+            {
+                tcs.TrySetResult(execute.result);
+            }
             
-            PlayFabClientAPI.UpdatePlayerStatistics(request, success =>
-            {
-                result.Success = true;
-                tcs.TrySetResult(result);
-            }, error =>
-            {
-                result.Success = false;
-                result.ErrorMessage = error.ErrorMessage;
-                result.ErrorCode = (int)error.Error;
-                tcs.TrySetResult(result);
-            });
             return tcs.Task;
         }
 
@@ -104,19 +108,12 @@ namespace CloudAPI.Playfab
             return tcs.Task;
         }
 
-        List<StatisticUpdate> ConvertToSetStatistic(StatisticData[] statisticsData)
+        [Serializable]
+        struct FindOpponentResult
         {
-            List<StatisticUpdate> list = new List<StatisticUpdate>();
-            foreach (var data in statisticsData)
-            {
-                list.Add(new StatisticUpdate
-                {
-                    StatisticName = data.Name,
-                    Value = data.Value
-                });
-            }
-
-            return list;
+            public string PlayFabId;
+            public int StatValue;
+            public int Position;
         }
     }
-}
+}*/

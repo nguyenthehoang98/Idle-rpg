@@ -26,22 +26,8 @@ namespace _Games.CloudAPI.Playfab
                 {
                     Debug.Log($"{functionName}: " + JsonSerialization.ToJson(execute));
 
-                    try
-                    {
-                        CloudScriptResult cloudScriptResult = JsonUtility.FromJson<CloudScriptResult>(execute.FunctionResult.ToString());
-                        result.Success = cloudScriptResult.success;
-                        result.ErrorCode = cloudScriptResult.error.code;
-                        result.ErrorMessage = cloudScriptResult.error.message;
-                        Debug.Log(execute.FunctionResult.ToString());
-                        tcs.TrySetResult((result, execute.FunctionResult));
-                    }
-                    catch (Exception e)
-                    {
-                        result.Success = false;
-                        result.ErrorMessage = "Error parse data";
-                        result.ErrorCode = (int)ErrorCode.Unknown;
-                        tcs.TrySetResult((result, execute.FunctionResult));
-                    }
+                    result.Success = true;
+                    tcs.TrySetResult((result, execute.FunctionResult));
                 },
                 error =>
                 {
@@ -54,6 +40,31 @@ namespace _Games.CloudAPI.Playfab
             return tcs.Task;
         }
 
+        public static bool TryGetResult(string json, out RequestResult result)
+        {
+            try
+            {
+                CloudScriptResult script = JsonUtility.FromJson<CloudScriptResult>(json);
+                result = new RequestResult
+                {
+                    Success = script.success,
+                    ErrorCode = script.error.code,
+                    ErrorMessage = script.error.message
+                };
+                return result.Success;
+            }
+            catch (Exception e)
+            {
+                result = new RequestResult
+                {
+                    Success = false,
+                    ErrorCode = (int)ErrorCode.Unknown,
+                    ErrorMessage = "Error parse data\n" + e.Message
+                };
+                return false;
+            }
+        }
+        
         [Serializable]
         struct CloudScriptResult
         {
@@ -69,3 +80,4 @@ namespace _Games.CloudAPI.Playfab
         }
     }
 }
+

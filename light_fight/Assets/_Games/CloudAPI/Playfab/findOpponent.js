@@ -1,62 +1,51 @@
 ﻿handlers.findOpponent = function(args, context) {
+    var STAT_NAME = "Score";
+    var RANGE = 5;
 
     var playerId = currentPlayerId;
+    var myScore = 0;
 
-    log.info("=== findOpponent START ===", {
-        playerId: playerId
-    });
-
-    // ===== STEP 1: GET MY SCORE =====
-    var stats = server.GetPlayerStatistics({
+    var statsResult = server.GetPlayerStatistics({
         PlayFabId: playerId
     });
 
-    var myScore = 0;
+    if (statsResult.Statistics) {
+        for (var i = 0; i < statsResult.Statistics.length; i++) {
+            var stat = statsResult.Statistics[i];
 
-    if (stats.Statistics) {
-        for (var i = 0; i < stats.Statistics.length; i++) {
-            if (stats.Statistics[i].StatisticName === "Score") {
-                myScore = stats.Statistics[i].Value;
+            if (stat.StatisticName === STAT_NAME) {
+                myScore = stat.Value;
                 break;
             }
         }
     }
 
-    log.info("My score", {
-        score: myScore
-    });
-
-    // ===== STEP 2: LOAD LEADERBOARD =====
-    var list = server.GetLeaderboard({
-        StatisticName: "Score",
+    var leaderboardResult = server.GetLeaderboard({
+        StatisticName: STAT_NAME,
         StartPosition: 0,
         MaxResultsCount: 100
     });
 
-    if (!list.Leaderboard || list.Leaderboard.length === 0) {
-        log.error("No leaderboard data", {
-            score: score
-        });
-        throw "No leaderboard data";
+    var leaderboard = leaderboardResult.Leaderboard;
+
+    if (!leaderboard || leaderboard.length === 0) {
+        return error(1004, "Leaderboard is empty");
     }
 
-    // ===== STEP 3: FIND MY POSITION (approx) =====
     var myIndex = -1;
-
-    for (var i = 0; i < list.Leaderboard.length; i++) {
-        if (list.Leaderboard[i].PlayFabId === playerId) {
+    for (var i = 0; i < leaderboard.length; i++) {
+        if (leaderboard[i].PlayFabId === playerId) {
             myIndex = i;
             break;
         }
     }
 
-    // nếu không nằm trong top 100 → fallback theo score
     if (myIndex === -1) {
         var closestIndex = 0;
         var minDiff = Number.MAX_VALUE;
 
-        for (var i = 0; i < list.Leaderboard.length; i++) {
-            var diff = Math.abs(list.Leaderboard[i].StatValue - myScore);
+        for (var i = 0; i < leaderboard.length; i++) {
+            var diff = Math.abs(leaderboard[i].StatValue - myScore);
 
             if (diff < minDiff) {
                 minDiff = diff;
@@ -65,47 +54,26 @@
         }
 
         myIndex = closestIndex;
-
-        log.info("Fallback by score", {
-            index: myIndex,
-            score: list.Leaderboard[myIndex].StatValue
-        });
     }
 
-    log.info("My index (approx)", {
-        index: myIndex
-    });
-
-    // ===== STEP 4: GET RANGE =====
-    var RANGE = 5;
-
     var start = Math.max(0, myIndex - RANGE);
-    var end = Math.min(list.Leaderboard.length, myIndex + RANGE + 1);
+    var end = Math.min(leaderboard.length, myIndex + RANGE + 1);
 
     var candidates = [];
 
     for (var i = start; i < end; i++) {
-        var p = list.Leaderboard[i];
+        var entry = leaderboard[i];
 
-        if (p.PlayFabId !== playerId) {
-            candidates.push(p);
+        if (entry.PlayFabId !== playerId) {
+            candidates.push(entry);
         }
     }
 
     if (candidates.length === 0) {
-        log.error("No opponent found", {
-            score: score
-        });
-        throw "No opponent found";
+        return error(1005, "No suitable opponent");
     }
 
-    // ===== RANDOM PICK =====
-    var opponent = candidates[Math.floor(Math.random() * candidates.length)];
-
-    log.info("Opponent selected", {
-        opponentId: opponent.PlayFabId,
-        score: opponent.StatValue
-    });
-
-    return opponent;
+    // ===== STEP 6: RANDOM OPPONENT =====
+    var randomIndex = Math.floor(Math.random() * candidates.length);
+    return candidates[randomIndex];
 };
