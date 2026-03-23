@@ -1,9 +1,6 @@
-using System.Collections.Generic;
 using CloudAPI.Model;
 using CloudAPI.Utils;
 using Cysharp.Threading.Tasks;
-using PlayFab;
-using PlayFab.ClientModels;
 using UnityEngine;
 
 public class CloudClient : MonoBehaviour

@@ -1,46 +1,32 @@
-using System;
+using _Games.CloudAPI.Playfab;
 using CloudAPI.Model;
 using CloudAPI.Utils;
-using Cysharp.Threading.Tasks;
-using PlayFab;
-using PlayFab.ClientModels;
-using Unity.Serialization.Json;
 using UnityEngine;
 
 namespace _Games.CloudClient.View
 {
     public class FindOpponent : MonoBehaviour
     {
+        [SerializeField] private string userId = "e4ed7e56-f50e-49ba-9fd7-fd32ae3dd104";
+        
         async void Start()
         {
-            string userId = "B85366EFBCE25BB4";
-            RequestResult login = await Login(userId);
+            RequestResult login = (await CloudUtils.LoginCustomId(userId)).result;
             if (!login.Success)
             {
                 Debug.LogError($"Error login: {login.ErrorMessage}, code: {login.ErrorCode}");
                 return;
             }
-            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest
+            var execute = await PlayFabCloudScript.ExecuteCloudScript("findOpponent", null);
+            if (execute.result.Success)
             {
-                FunctionName = "findOpponent",
-                FunctionParameter = new {
-                    rank = 100,
-                    score = 1500,
-                    rankOffset = 5,
-                    scoreOffset = 200
-                }
-            }, result => {
-                Debug.Log("Opponent: " + result.FunctionResult);
-                Debug.Log("Opponent: " + JsonSerialization.ToJson(result));
-            }, error => {
-                Debug.LogError(error.GenerateErrorReport());
-            });
-        }
-        
-        async UniTask<RequestResult> Login(string userId)
-        {
-            var result = await CloudUtils.LoginCustomId(userId);
-            return result.result;
+                Debug.Log("find opponent success.");
+                Debug.Log("result: " + execute.data.ToString());
+            }
+            else
+            {
+                Debug.LogError("find opponent failed. Code:" + execute.result.ErrorCode + ". Message: " + execute.result.ErrorMessage);
+            }
         }
     }
 }

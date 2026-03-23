@@ -1,0 +1,11 @@
+﻿namespace CloudAPI.Model
+{
+    public enum ErrorCode
+    {
+        Unknown = 100,
+        LEADERBOARD_UPDATE_SCORE_MISSING = 1000,
+        LEADERBOARD_UPDATE_SCORE_UNDEFINE_TYPE = 1001,
+        LEADERBOARD_UPDATE_SCORE_INVALID_VALUE = 1002,
+        LEADERBOARD_UPDATE_SCORE_TOO_LARGE = 1003,
+    }
+}
