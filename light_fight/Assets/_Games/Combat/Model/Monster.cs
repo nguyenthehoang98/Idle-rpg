@@ -39,6 +39,12 @@ namespace _Games.Combat.Model
             animancerComponent = GetComponent<AnimancerComponent>();
         }
 
+        private void Start()
+        {
+            Debug.Log(@"Tạo 1 monster chỉ chứa logic. Monster này sẽ chuyển thành monster view để có thể xử lý strest test.
+Phần callback OnAttack sẽ chuyển sang invoke theo thời gian, config với mỗi monster");
+        }
+
         public void Initialize(Entity entity)
         {
             Entity = entity;
