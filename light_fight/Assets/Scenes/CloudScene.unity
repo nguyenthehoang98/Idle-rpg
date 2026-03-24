@@ -192,6 +192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdf5a5b2c6dc46a19b6d211233038317, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  win: 1
 --- !u!4 &1034085623
 Transform:
   m_ObjectHideFlags: 0
@@ -354,7 +355,7 @@ GameObject:
   - component: {fileID: 1774850314}
   - component: {fileID: 1774850315}
   m_Layer: 0
-  m_Name: SamplesUploadLeaderBoard
+  m_Name: SamplesInitPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

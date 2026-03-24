@@ -44,4 +44,11 @@ namespace _Games.CloudAPI.Model
         public int Score;
         public string Season;
     }
+
+    [Serializable]
+    public class MatchingSubmitRequest
+    {
+        public string MatchId;
+        public bool IsWin;
+    }
 }

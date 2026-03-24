@@ -4,7 +4,7 @@ namespace _Games.CloudAPI.Model
 {
     internal interface ILeaderboard
     {
-        UniTask<RequestResult> UpdateLeaderBoard(LoginSessionResult session, IObjectData data);
+        UniTask<(RequestResult result, PlayerRankResult rankResult)> SubmitResultBattle(LoginSessionResult session, MatchingSubmitRequest submitRequest);
         
         UniTask<(RequestResult result, PlayerRankResult rankResult)> JoinLeaderboard(LoginSessionResult session);
 

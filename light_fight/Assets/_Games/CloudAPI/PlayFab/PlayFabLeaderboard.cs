@@ -11,7 +11,7 @@ namespace _Games.CloudAPI.PlayFab
 {
     public class PlayFabLeaderboard : ILeaderboard
     {
-        public async UniTask<RequestResult> UpdateLeaderBoard(LoginSessionResult session, IObjectData data)
+        public async UniTask<(RequestResult result, PlayerRankResult rankResult)> SubmitResultBattle(LoginSessionResult session, MatchingSubmitRequest submitRequest)
         {
             var result = new RequestResult();
             if (session.Context is PlayFabAuthenticationContext context)
@@ -22,22 +22,32 @@ namespace _Games.CloudAPI.PlayFab
                 result.success = false;
                 result.errorCode = (int)PlayFabErrorCode.NotAuthenticated;
                 result.message = "Invalid AuthenticationContext";
-                return result;
+                return (result, new PlayerRankResult());
             }
 
-            var execute = await ExecuteScript("updateLeaderboard", new Dictionary<string, object>
+            var execute = await ExecuteScript("submitResult", new Dictionary<string, object>
             {
-                { data.Name(), data.ToString() }
+                { "MatchId", submitRequest.MatchId },
+                { "Result", submitRequest.IsWin }
             });
             if (execute.Item1.success)
             {
-                result.success = true;
-                return result;
+                try
+                {
+                    PlayerRankResult rankResult = JsonUtility.FromJson<PlayerRankResult>(execute.Item2.ToString());
+                    result.success = true;
+                    return (result, rankResult);
+                }
+                catch (Exception e)
+                {
+                    result.errorCode = (int)ErrorCode.Unknown;
+                    result.message = e.Message;
+                    result.success = false;
+                    return (result, null);
+                }
             }
-            else
-            {
-                return execute.Item1;
-            }
+
+            return (execute.Item1, new PlayerRankResult());
         }
 
         public async UniTask<(RequestResult result, PlayerRankResult rankResult)> JoinLeaderboard(LoginSessionResult session)

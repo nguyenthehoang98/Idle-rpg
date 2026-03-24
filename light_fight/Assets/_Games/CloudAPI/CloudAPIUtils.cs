@@ -33,9 +33,9 @@ namespace _Games.CloudAPI
             return saveLoad.GetData(session);
         }
 
-        public static UniTask<RequestResult> UpdateLeaderBoard(IObjectData data)
+        public static UniTask<(RequestResult result, PlayerRankResult rankResult)> SubmitResultBattle(MatchingSubmitRequest submitRequest)
         {
-            return leaderboard.UpdateLeaderBoard(session, data);
+            return leaderboard.SubmitResultBattle(session, submitRequest);
         }
 
         public static UniTask<(RequestResult result, FindOpponentResult opponent)> FindOpponent()

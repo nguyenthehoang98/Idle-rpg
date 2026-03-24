@@ -48,7 +48,7 @@ handlers.submitResult = function(args, context) {
         rank,
         tier,
         currentScore
-    } = ParseScore(currentMatchScore);
+    } = decodeScore(currentMatchScore);
 
     // tính điểm dựa trên thắng thua, rank...
     var delta;
@@ -103,10 +103,9 @@ handlers.submitResult = function(args, context) {
     });
 
     return {
-        success: true,
-        delta: delta,
-        score: newScore,
-        rank: rank,
-        tier: tier
+        Score: newScore,
+        Rank: rank,
+        Tier: tier,
+        Season: currentSeason
     }
 }

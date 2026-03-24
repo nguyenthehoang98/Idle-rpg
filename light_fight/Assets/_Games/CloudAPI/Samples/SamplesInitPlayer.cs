@@ -17,13 +17,12 @@ namespace _Games.CloudAPI.Samples
             int count = Mathf.Min(max, usersId.Length);
             for (int i = 0; i < count; i++)
             {
-                int score = random.Next(100, 10000);
-                UploadData(usersId[i], score);
+                JoinData(usersId[i]);
                 await UniTask.WaitForSeconds(10);
             }
         }
 
-        async void UploadData(string userId, int score)
+        async void JoinData(string userId)
         {
             RequestResult login = (await CloudAPIUtils.LoginWithId(userId)).result;
             if (!login.success)
@@ -36,7 +35,7 @@ namespace _Games.CloudAPI.Samples
             if (joinLeaderBoardResult.result.success)
             {
                 var o = joinLeaderBoardResult.rankResult;
-                Debug.Log($"Successfully joined leaderboard: Season: {o.Season}, Rank: {o.Rank}, Tier: {o.Tier}, Score: {o.Score}, NewPlayer: {o.Tier}");
+                Debug.Log($"Successfully joined leaderboard: Season: {o.Season}, Rank: {o.Rank}, Tier: {o.Tier}, Score: {o.Score}, NewPlayer: {o.IsNew}");
             }
             else
             {

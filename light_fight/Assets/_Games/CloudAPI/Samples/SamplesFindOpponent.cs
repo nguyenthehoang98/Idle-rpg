@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using _Games.CloudAPI.Model;
+using UnityEngine;
 
 namespace _Games.CloudAPI.Samples
 {
     public class SamplesFindOpponent : MonoBehaviour
     {
+        [SerializeField] private bool win;
+        
         private async void Start()
         {
             var userId = SystemInfo.deviceUniqueIdentifier;
@@ -24,6 +27,22 @@ namespace _Games.CloudAPI.Samples
             else
             {
                 Debug.LogError("find opponent failed. " + findOpponentResult.result.message + ". Code: " + findOpponentResult.result.errorCode);
+                return;
+            }
+
+            var submitResult = await CloudAPIUtils.SubmitResultBattle(new MatchingSubmitRequest
+            {
+                MatchId = findOpponentResult.opponent.MatchId,
+                IsWin = win
+            });
+            if (submitResult.result.success)
+            {
+                var o = submitResult.rankResult;
+                Debug.Log($"submit battle success: Season: {o.Season}, Rank: {o.Rank}, Tier: {o.Tier}, Score: {o.Score}");
+            }
+            else
+            {
+                Debug.LogError("submit battle failed. " + submitResult.result.message + ". Code: " + submitResult.result.errorCode);
             }
         }
     }
