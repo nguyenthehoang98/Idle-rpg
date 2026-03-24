@@ -28,7 +28,7 @@
 
     if (needReset) {
         season = {
-            season: currentSeason, 
+            season: currentSeason,
             win: 0,
             lose: 0,
             rank: 0,
@@ -41,6 +41,15 @@
             Data: {
                 [USER_DATA_INTERNAL_SEASON_DATA]: JSON.stringify(season)
             }
+        });
+
+        var newMatchScore = encodeScore(0, 0, 0);
+        server.UpdatePlayerStatistics({
+            PlayFabId: playerId,
+            Statistics: [{
+                StatisticName: getStatisticsKey(currentSeason),
+                Value: newMatchScore
+            }]
         });
 
         return {

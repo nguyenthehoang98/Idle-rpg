@@ -12,7 +12,6 @@ namespace _Games.CloudAPI.Samples
         private async void Start()
         {
             Application.runInBackground = true;
-            System.Random random = new System.Random();
             string[] usersId = textAsset.Split(',');
             int count = Mathf.Min(max, usersId.Length);
             for (int i = 0; i < count; i++)

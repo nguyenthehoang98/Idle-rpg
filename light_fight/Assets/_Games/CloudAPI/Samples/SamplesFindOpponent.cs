@@ -17,6 +17,18 @@ namespace _Games.CloudAPI.Samples
                 Debug.LogError("login failed. " + loginResult.result.message + ". Code: " + loginResult.result.errorCode);
                 return;
             }
+            
+            var joinLeaderBoardResult = await CloudAPIUtils.JoinLeaderboard();
+            if (joinLeaderBoardResult.result.success)
+            {
+                var o = joinLeaderBoardResult.rankResult;
+                Debug.Log($"Successfully joined leaderboard: Season: {o.Season}, Rank: {o.Rank}, Tier: {o.Tier}, Score: {o.Score}, NewPlayer: {o.IsNew}");
+            }
+            else
+            {
+                Debug.LogError($"Error join leaderboard: {joinLeaderBoardResult.result.message}");
+                return;
+            }
 
             var findOpponentResult = await CloudAPIUtils.FindOpponent();
             if (findOpponentResult.result.success)
@@ -44,6 +56,8 @@ namespace _Games.CloudAPI.Samples
             {
                 Debug.LogError("submit battle failed. " + submitResult.result.message + ". Code: " + submitResult.result.errorCode);
             }
+
+            CloudAPIUtils.Logout();
         }
     }
 }
