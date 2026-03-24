@@ -1,45 +1,44 @@
 ﻿handlers.initPlayer = function(args, context) {
     var playerId = currentPlayerId;
-    var titleData = server.GetTitleData({
-        Keys: ["CURRENT_SEASON"]
-    });
-    var CURRENT_SEASON = titleData.Data["CURRENT_SEASON"];
+    var currentSeason = getCurrentSeason();
+
     var userData = server.GetUserInternalData({
         PlayFabId: playerId,
-        Keys: ["Rank", "Season", "Tier"]
+        Keys: [USER_DATA_INTERNAL_SEASON_DATA]
     });
 
-    var data = userData.Data || {};
-    var rank = data["Rank"] ? data["Rank"].Value : null;
-    var season = data["Season"] ? data["Season"].Value : null;
-    var tier = data["Tier"] ? data["Tier"].Value : null;
-    if (!rank) {
-        rank = "Bronze";
-        tier = "V";
+    var isNewPlayer = userData.Data?.[USER_DATA_INTERNAL_SEASON_DATA];
+    if (isNewPlayer) {
+        var season = {
+            win: 0,
+            lose: 0,
+            rank: 0,
+            tier: 0,
+            score: 0
+        };
+
         server.UpdateUserInternalData({
             PlayFabId: playerId,
             Data: {
-                Rank: rank,
-                Tier: tier,
-                Season: CURRENT_SEASON,
-                Score: "0"
+                [USER_DATA_INTERNAL_SEASON_DATA]: JSON.stringify(season)
             }
         });
 
         return {
             IsNew: true,
-            Rank: rank,
-            Tier: tier,
-            Season: CURRENT_SEASON
+            Rank: season.rank,
+            Tier: season.tier,
+            Score: season.score,
+            Season: currentSeason
         };
     }
 
-    // Sẽ phải kiểm tra rank mới ở đây rồi check logic update rank
-    //if (season !== CURRENT_SEASON) {
-
+    var season = JSON.parse(isNewPlayer.Value);
     return {
-        Rank: rank,
-        Tier: tier,
-        Season: CURRENT_SEASON
+        IsNew: false,
+        Rank: season.rank,
+        Tier: season.tier,
+        Score: season.score,
+        Season: currentSeason
     };
 };

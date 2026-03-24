@@ -4,8 +4,6 @@
 - Content -> Title Data
     + CURRENT_SEASON: biến xác đính ss hiện tại   
 
-
-
 ------------------------------------------------
 Cấu trúc PlayerData
 Match_Data:
@@ -23,3 +21,10 @@ Season_Data
     + Score
     + Win
     + Lose
+
+------------------------------------------------ Error code
+1000-1099: Lỗi validate
+- 1000: Input bị thiếu trường nào đó
+- 1001: Input sai kiểu dữ liệu
+- 1002: Không tìm thấy dữ liệu
+- 1003: Dữ liệu so sánh không đúng

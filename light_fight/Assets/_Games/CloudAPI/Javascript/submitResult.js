@@ -1,5 +1,4 @@
 handlers.submitResult = function(args, context) {
-    var playerId = currentPlayerId;
     var matchId = args.MatchId;
     var isWin = args.Result;
 
@@ -8,12 +7,8 @@ handlers.submitResult = function(args, context) {
     if (typeof isWin !== "boolean") return error(1001, "Result must be boolean");
 
     // Session info
-    var titleData = server.GetTitleData({
-        Keys: [TITLE_DATA_INTERNAL_CURRENT_SEASON]
-    });
-    var CURRENT_SEASON = titleData.Data[TITLE_DATA_INTERNAL_CURRENT_SEASON];
-    if (!CURRENT_SEASON) return error(1002, "Season not found");
-
+    var playerId = currentPlayerId;
+    var currentSeason = getCurrentSeason()
     var userData = server.GetUserInternalData({
         PlayFabId: playerId,
         Keys: [USER_DATA_INTERNAL_HISTORY_MATCH,
@@ -27,11 +22,11 @@ handlers.submitResult = function(args, context) {
         null;
 
     // Kiểm tra xem match có hợp lệ không
-    if (!match) return error(2000, "Match not found");
-    if (match.matchId !== matchId) return error(2001, "Invalid matchId");
-    if (match.playerId !== playerId) return error(2001, "Invalid player");
-    if (match.status == true) return error(2002, "Match already completed");
-    if (Date.now() - match.createdAt > 15 * 60 * 1000) return error(2003, "Match expired");
+    if (!match) return error(1002, "Match not found");
+    if (match.matchId !== matchId) return error(1003, "Invalid matchId");
+    if (match.playerId !== playerId) return error(1003, "Invalid player");
+    if (match.status == true) return error(1003, "Match already completed");
+    if (Date.now() - match.createdAt > 15 * 60 * 1000) return error(1003, "Match expired");
 
     // Tìm chỉ số của player hiện tại
     var stats = server.GetPlayerStatistics({
@@ -41,7 +36,7 @@ handlers.submitResult = function(args, context) {
     if (stats.Statistics) {
         for (var i = 0; i < stats.Statistics.length; i++) {
             var s = stats.Statistics[i];
-            if (s.StatisticName === GetStatisticsKey(CURRENT_SEASON)) {
+            if (s.StatisticName === getStatisticsKey(currentSeason)) {
                 currentMatchScore = s.Value;
                 break;
             }
@@ -62,13 +57,13 @@ handlers.submitResult = function(args, context) {
 
     // tính lại công thức
     var newScore = Math.max(0, currentScore + delta);
-    var newMatchScore = EncodeScore(rank, tier, newScore);
+    var newMatchScore = encodeScore(rank, tier, newScore);
 
     // Cập nhật leaderboard
     server.UpdatePlayerStatistics({
         PlayFabId: playerId,
         Statistics: [{
-            StatisticName: GetStatisticsKey(CURRENT_SEASON),
+            StatisticName: getStatisticsKey(currentSeason),
             Value: newMatchScore
         }]
     });
