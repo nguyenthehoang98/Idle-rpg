@@ -15,6 +15,20 @@ namespace _Games.Combat.EntityComponentSystem.System
         {
             foreach (var (transform, buffers, entity) in
                      SystemAPI.Query<RefRO<LocalTransform>, DynamicBuffer<CircleBuffer>>()
+                         .WithAll<PlayerTag>()
+                         .WithEntityAccess())
+            {
+                Vector3 position = transform.ValueRO.Position;
+                foreach (var buffer in buffers)
+                {
+                    float radius = buffer.Radius;
+                    Vector3 finalPosition = position + (Vector3)buffer.Offset;
+                    DrawCircleDebug(finalPosition, radius, Color.magenta, 12);
+                }
+            }
+
+            foreach (var (transform, buffers, entity) in
+                     SystemAPI.Query<RefRO<LocalTransform>, DynamicBuffer<CircleBuffer>>()
                          .WithAll<MonsterTag>()
                          .WithEntityAccess())
             {
@@ -26,6 +40,7 @@ namespace _Games.Combat.EntityComponentSystem.System
                     DrawCircleDebug(finalPosition, radius, Color.green, 12);
                 }
             }
+            
             foreach (var (transform, buffers, entity) in
                      SystemAPI.Query<RefRO<LocalTransform>, DynamicBuffer<CircleBuffer>>()
                          .WithAll<ProjectileTag>()

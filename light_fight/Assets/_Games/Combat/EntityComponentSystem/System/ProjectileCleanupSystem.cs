@@ -8,8 +8,8 @@ using UnityEngine;
 namespace _Games.Combat.EntityComponentSystem.System
 {
     [BurstCompile]
-    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
     [UpdateAfter(typeof(ProjectileDamageMonsterSystem))]
+    [UpdateAfter(typeof(ProjectileDamagePlayerSystem))]
     public partial struct ProjectileCleanupSystem : ISystem
     {
         ComponentLookup<ProjectileDestroyTag> ProjectileDeadTagEvents;
@@ -35,18 +35,17 @@ namespace _Games.Combat.EntityComponentSystem.System
         {
             ProjectileDeadTagEvents.Update(ref state);
 
-            EntityCommandBuffer.ParallelWriter ecb = SystemAPI
+            EntityCommandBuffer ecb = SystemAPI
                 .GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
-                .CreateCommandBuffer(state.WorldUnmanaged)
-                .AsParallelWriter();
-
+                .CreateCommandBuffer(state.WorldUnmanaged);
+            EntityCommandBuffer.ParallelWriter ecb2 = ecb.AsParallelWriter();
             state.Dependency = new CollisionLimitedJob
             {
-                ECB = ecb,
+                ECB = ecb2,
             }.ScheduleParallel(queryJob1, state.Dependency);
             state.Dependency = new EndCycleTimeJob
             {
-                ECB = ecb,
+                ECB = ecb2,
                 DeltaTime = state.WorldUnmanaged.Time.DeltaTime,
             }.ScheduleParallel(queryJob2, state.Dependency);
             state.Dependency = new ResetHitBufferJob
@@ -73,6 +72,7 @@ namespace _Games.Combat.EntityComponentSystem.System
                     
                     Transform go = state.EntityManager.GetComponentObject<Transform>(entity);
                     go.GetComponent<Projectile>().DestroyProjectile();
+                    ecb.DestroyEntity(entity);
                 }
             }
         }

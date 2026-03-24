@@ -7,8 +7,6 @@ using Unity.Transforms;
 namespace _Games.Combat.EntityComponentSystem.System
 {
     [BurstCompile]
-    [RequireMatchingQueriesForUpdate]
-    [UpdateBefore(typeof(ProjectileOverlapSystem))]
     public partial struct ProjectileTrajectorySystem : ISystem
     {
         [BurstCompile]

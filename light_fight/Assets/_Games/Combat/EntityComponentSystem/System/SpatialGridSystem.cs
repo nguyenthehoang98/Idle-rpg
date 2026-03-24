@@ -9,7 +9,7 @@ using Unity.Transforms;
 namespace _Games.Combat.EntityComponentSystem.System
 {
     [BurstCompile]
-    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+    [UpdateBefore(typeof(ProjectileTrajectorySystem))]
     public partial struct SpatialGridSystem : ISystem
     {
         public NativeParallelMultiHashMap<int2, Entity> Grid;
@@ -69,7 +69,7 @@ namespace _Games.Combat.EntityComponentSystem.System
                     float2 min = position - radius;
                     float2 max = position + radius;
                     int2 minCell = (int2)math.floor(min);
-                    int2 maxCell = (int2)math.floor(max);
+                    int2 maxCell = (int2)math.ceil(max);
                     for (int x = minCell.x; x <= maxCell.x; x++)
                     {
                         for (int y = minCell.y; y <= maxCell.y; y++)

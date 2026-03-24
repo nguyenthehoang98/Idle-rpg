@@ -8,13 +8,14 @@ using Unity.Transforms;
 namespace _Games.Combat.EntityComponentSystem.System
 {
     [BurstCompile]
-    [RequireMatchingQueriesForUpdate]
+    [UpdateAfter(typeof(SpatialGridSystem))]
     public partial struct ProjectileOverlapSystem : ISystem
     {
         ComponentLookup<ProjectileSkillData> projectileSkillDataLookup;
         ComponentLookup<LocalTransform> localTransformLookup;
         BufferLookup<CircleBuffer> circleBufferLookup;
 
+        [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
             localTransformLookup = state.GetComponentLookup<LocalTransform>();
@@ -64,7 +65,7 @@ namespace _Games.Combat.EntityComponentSystem.System
                     float2 min = position - radius;
                     float2 max = position + radius;
                     int2 minCell = (int2)math.floor(min);
-                    int2 maxCell = (int2)math.floor(max);
+                    int2 maxCell = (int2)math.ceil(max);
                     NativeParallelHashSet<Entity> copy = new NativeParallelHashSet<Entity>(collisionBuffers.Capacity, Allocator.Temp);
                     foreach (var collisionBuffer in collisionBuffers)
                     {
