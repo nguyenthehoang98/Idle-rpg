@@ -1,10 +1,10 @@
 ﻿handlers.findOpponent = function(args, context) {
     var STAT_NAME = "Score";
     var RANGE = 5;
-
+    var MAX_RESULT = 10;
     var playerId = currentPlayerId;
-    var myScore = 0;
-
+    var score = 0;
+    
     var statsResult = server.GetPlayerStatistics({
         PlayFabId: playerId
     });
@@ -12,18 +12,27 @@
     if (statsResult.Statistics) {
         for (var i = 0; i < statsResult.Statistics.length; i++) {
             var stat = statsResult.Statistics[i];
-
             if (stat.StatisticName === STAT_NAME) {
-                myScore = stat.Value;
+                score = stat.Value;
                 break;
             }
         }
     }
 
+    var userData = server.GetUserInternalData({
+        PlayFabId: playerId,
+        Keys: ["Rank", "Season", "Tier"]
+    });
+    
+    var data = userData.Data || {};
+    var myRank = data["Rank"] ? parseInt(data["Rank"].Value) : null;
+    var mySeason = data["Season"] ? data["Season"].Value : null;
+    var myTier = data["Tier"] ? data["Tier"].Value : null;
+
     var leaderboardResult = server.GetLeaderboard({
         StatisticName: STAT_NAME,
         StartPosition: 0,
-        MaxResultsCount: 100
+        MaxResultsCount: MAX_RESULT
     });
 
     var leaderboard = leaderboardResult.Leaderboard;
@@ -45,7 +54,7 @@
         var minDiff = Number.MAX_VALUE;
 
         for (var i = 0; i < leaderboard.length; i++) {
-            var diff = Math.abs(leaderboard[i].StatValue - myScore);
+            var diff = Math.abs(leaderboard[i].StatValue - score);
 
             if (diff < minDiff) {
                 minDiff = diff;

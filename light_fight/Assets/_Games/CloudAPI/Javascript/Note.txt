@@ -3,3 +3,23 @@
     + Disable player creation using Login -> false : Tắt để có thể tạo tài khoản login
 - Content -> Title Data
     + CURRENT_SEASON: biến xác đính ss hiện tại   
+
+
+
+------------------------------------------------
+Cấu trúc PlayerData
+Match_Data:
+    + MatchId
+    + PlayerId
+    + OpponentId
+    + Delta
+    + Status
+    + CreatedAt
+Histories_Data
+    + Match_Data[]
+Season_Data
+    + Rank
+    + Tier
+    + Score
+    + Win
+    + Lose
