@@ -18,7 +18,8 @@ namespace _Games.CloudAPI.Samples
             var findOpponentResult = await CloudAPIUtils.FindOpponent();
             if (findOpponentResult.result.success)
             {
-                Debug.Log("find opponent success: " + JsonUtility.ToJson(findOpponentResult.opponent));
+                var o = findOpponentResult.opponent;
+                Debug.Log($"find opponent success: MatchId: {o.MatchId}, OpponentId: {o.OpponentId}");
             }
             else
             {

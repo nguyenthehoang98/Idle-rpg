@@ -31,8 +31,8 @@ namespace _Games.CloudAPI.Model
     [Serializable]
     public class FindOpponentResult
     {
-        public string UserId;
-        public int Index;
+        public string MatchId;
+        public string OpponentId;
     }
 
     [Serializable]
@@ -41,6 +41,7 @@ namespace _Games.CloudAPI.Model
         public bool IsNew;
         public RankName Rank;
         public TierName Tier;
+        public int Score;
         public string Season;
     }
 }

@@ -1,15 +1,34 @@
 ﻿handlers.initPlayer = function(args, context) {
     var playerId = currentPlayerId;
     var currentSeason = getCurrentSeason();
-
     var userData = server.GetUserInternalData({
         PlayFabId: playerId,
         Keys: [USER_DATA_INTERNAL_SEASON_DATA]
     });
 
-    var isNewPlayer = userData.Data?.[USER_DATA_INTERNAL_SEASON_DATA];
-    if (isNewPlayer) {
-        var season = {
+    var raw = userData.Data?.[USER_DATA_INTERNAL_SEASON_DATA];
+
+    var needReset = false;
+    var season;
+
+    // Chưa có data => tạo
+    if (!raw || !raw.Value) {
+        needReset = true;
+    } else {
+        try {
+            season = JSON.parse(raw.Value);
+            // Sang season mới
+            if (season.season !== currentSeason) {
+                needReset = true;
+            }
+        } catch (e) {
+            needReset = true;
+        }
+    }
+
+    if (needReset) {
+        season = {
+            season: currentSeason, 
             win: 0,
             lose: 0,
             rank: 0,
@@ -33,7 +52,6 @@
         };
     }
 
-    var season = JSON.parse(isNewPlayer.Value);
     return {
         IsNew: false,
         Rank: season.rank,

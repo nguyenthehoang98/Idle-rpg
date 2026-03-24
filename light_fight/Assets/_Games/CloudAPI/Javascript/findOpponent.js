@@ -1,88 +1,97 @@
-﻿handlers.findOpponent = function(args, context) {
-    var STAT_NAME = "Score";
-    var RANGE = 5;
-    var MAX_RESULT = 10;
+﻿handlers.findOpponent = function (args, context) {
     var playerId = currentPlayerId;
-    var score = 0;
-    
-    var statsResult = server.GetPlayerStatistics({
-        PlayFabId: playerId
+    var currentSeason = getCurrentSeason();
+    var userData = server.GetUserInternalData({
+        PlayFabId: playerId,
+        Keys: [USER_DATA_INTERNAL_LAST_OPPONENTS]
     });
 
-    if (statsResult.Statistics) {
-        for (var i = 0; i < statsResult.Statistics.length; i++) {
-            var stat = statsResult.Statistics[i];
-            if (stat.StatisticName === STAT_NAME) {
-                score = stat.Value;
+    // Tìm chỉ số của player hiện tại
+    var stats = server.GetPlayerStatistics({ PlayFabId: playerId });
+    var matchScore = 0;
+    if (stats.Statistics) {
+        for (var i = 0; i < stats.Statistics.length; i++) {
+            if (stats.Statistics[i].StatisticName === getStatisticsKey(currentSeason)) {
+                matchScore = stats.Statistics[i].Value;
                 break;
             }
         }
     }
 
-    var userData = server.GetUserInternalData({
+    // tính thông tin hiện tại của player
+    const {
+        rank,
+        tier,
+        currentScore
+    } = decodeScore(matchScore);
+
+    // dánh sách các đối thủ trước đó
+     var lastOpponents = userData.Data?.last_opponents
+        ? JSON.parse(userData.Data.last_opponents.Value)
+        : [];
+
+    var lb = server.GetLeaderboard({
+        StatisticName: getStatisticsKey(currentSeason),
         PlayFabId: playerId,
-        Keys: ["Rank", "Season", "Tier"]
-    });
-    
-    var data = userData.Data || {};
-    var myRank = data["Rank"] ? parseInt(data["Rank"].Value) : null;
-    var mySeason = data["Season"] ? data["Season"].Value : null;
-    var myTier = data["Tier"] ? data["Tier"].Value : null;
-
-    var leaderboardResult = server.GetLeaderboard({
-        StatisticName: STAT_NAME,
-        StartPosition: 0,
-        MaxResultsCount: MAX_RESULT
+        MaxResultsCount: FIND_OPPONENT_MAXIMUM_QUERY
     });
 
-    var leaderboard = leaderboardResult.Leaderboard;
-
-    if (!leaderboard || leaderboard.length === 0) {
-        return error(1004, "Leaderboard is empty");
+    var list = lb.Leaderboard || [];
+    if (list.length === 0) {
+        return error(1003, "Leaderboard empty");
     }
-
-    var myIndex = -1;
-    for (var i = 0; i < leaderboard.length; i++) {
-        if (leaderboard[i].PlayFabId === playerId) {
-            myIndex = i;
-            break;
-        }
-    }
-
-    if (myIndex === -1) {
-        var closestIndex = 0;
-        var minDiff = Number.MAX_VALUE;
-
-        for (var i = 0; i < leaderboard.length; i++) {
-            var diff = Math.abs(leaderboard[i].StatValue - score);
-
-            if (diff < minDiff) {
-                minDiff = diff;
-                closestIndex = i;
-            }
-        }
-
-        myIndex = closestIndex;
-    }
-
-    var start = Math.max(0, myIndex - RANGE);
-    var end = Math.min(leaderboard.length, myIndex + RANGE + 1);
 
     var candidates = [];
+    for (var i = 0; i < list.length; i++) {
+        var entry = list[i];
+        if (entry.PlayFabId === playerId) continue;
+        if (lastOpponents.includes(entry.PlayFabId)) continue;
+        candidates.push(entry);
+    }
 
-    for (var i = start; i < end; i++) {
-        var entry = leaderboard[i];
-
-        if (entry.PlayFabId !== playerId) {
-            candidates.push(entry);
+    // fallback nếu filter hết
+    if (candidates.length === 0) {
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].PlayFabId !== playerId) {
+                candidates.push(list[i]);
+            }
         }
     }
 
     if (candidates.length === 0) {
-        return error(1005, "No suitable opponent");
+        return error(1003, "No opponent found");
     }
 
-    // ===== STEP 6: RANDOM OPPONENT =====
-    var randomIndex = Math.floor(Math.random() * candidates.length);
-    return candidates[randomIndex];
-};
+    var opponent = candidates[Math.floor(Math.random() * candidates.length)];
+    lastOpponents.push(opponent.PlayFabId);
+    if (lastOpponents.length > USER_DATA_INTERNAL_MAXIMUM_CHECK_LAST_OPPONENT) {
+        lastOpponents.shift();
+    }
+
+    function generateMatchId() {
+        return Math.random().toString(36).substr(2, 9);
+    }
+
+    // Tạo matchId
+    var match = {
+        matchId: generateMatchId(),
+        playerId: playerId,
+        opponentId: opponent.PlayFabId,
+        createdAt: Date.now(),
+        status: false
+    };
+
+    server.UpdateUserInternalData({
+        PlayFabId: playerId,
+        Data: {
+            [USER_DATA_INTERNAL_CURRENT_MATCH]: JSON.stringify(match),
+            [USER_DATA_INTERNAL_LAST_OPPONENTS]: JSON.stringify(lastOpponents)
+        }
+    });
+
+    // nếu cần trường thông tin thì lấy ở đây luôn, đỡ phải query từ client
+    return {
+        MatchId: match.matchId,
+        OpponentId: opponent.PlayFabId
+    };
+}

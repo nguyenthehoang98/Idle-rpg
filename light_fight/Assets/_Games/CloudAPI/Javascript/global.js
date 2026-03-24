@@ -1,10 +1,13 @@
 const USER_DATA_INTERNAL_CURRENT_MATCH = "current_match";
 const USER_DATA_INTERNAL_SEASON_DATA = "season_data";
 const USER_DATA_INTERNAL_HISTORY_MATCH = "histoties_match";
+const USER_DATA_INTERNAL_LAST_OPPONENTS = "last_opponents";
 const TITLE_DATA_INTERNAL_CURRENT_SEASON = "CURRENT_SEASON";
 const SCORE_BASE = 1e7;
 const TIER_BASE = 1e9;
 const USER_DATA_INTERNAL_MAXIMUM_HISTORY = 10;
+const USER_DATA_INTERNAL_MAXIMUM_CHECK_LAST_OPPONENT = 5;
+const FIND_OPPONENT_MAXIMUM_QUERY = 10;
 
 var cachedSeason = null;
 function getCurrentSeason() {
