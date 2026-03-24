@@ -39,7 +39,8 @@
         server.UpdateUserInternalData({
             PlayFabId: playerId,
             Data: {
-                [USER_DATA_INTERNAL_SEASON_DATA]: JSON.stringify(season)
+                [USER_DATA_INTERNAL_SEASON_DATA]: JSON.stringify(season),
+                [USER_DATA_INTERNAL_HISTORY_MATCH] : JSON.stringify([])
             }
         });
 
