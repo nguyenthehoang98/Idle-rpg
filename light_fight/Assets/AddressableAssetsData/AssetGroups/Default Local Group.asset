@@ -20,11 +20,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 19e4703174dc4eb43a8ae97684f1f063
-    m_Address: LevelSpawner_001
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 538d34d2bf82f4d42a5cc181a7fe39d6
     m_Address: MonsterConfig
     m_ReadOnly: 0
@@ -50,8 +45,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ef48401d3a812c34ca0a106cbc3f2be6
+    m_Address: LevelConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f7b12e2a973d18943ae564838a102d3a
     m_Address: Projectile_Bullet_Goose
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f8b6ba07e97b3c740a0f4bb11dff3c9d
+    m_Address: LevelDesign_001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

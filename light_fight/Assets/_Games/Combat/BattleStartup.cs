@@ -2,6 +2,7 @@ using _Games.Combat.EntityComponentSystem;
 using _Games.Combat.Event;
 using _Games.Combat.Level;
 using _Games.Combat.Model;
+using _Games.Config;
 using _KIT.Checker;
 using _KIT.Config;
 using _KIT.Event;
@@ -25,11 +26,17 @@ namespace _Games.Combat
         
         private async void Start()
         {
-            LevelSpawnSO levelSpawn = await LevelSpawnSO.LoadSpawn(1);
-            levelDesign = Instantiate(levelSpawn.design);
+            int levelId = 1;
+            LevelConfig levelConfig = KitConfigManager.Get<LevelConfig>();
+            bool foundLevelData = levelConfig.FindData(levelId, out var levelData);
+            if(!foundLevelData) Debug.LogError("Not found level data with levelId: " + levelId);
+            bool foundSpawnData = levelConfig.FindSpawn(levelId, out var dictionary);
+            if(!foundSpawnData) Debug.LogError("Not found spawn data with levelId: " + levelId);
+            GameObject go = await KitLoaded.LoadAsync<GameObject>(levelData.LevelDesign);
+            levelDesign = Instantiate(go).GetComponent<LevelDesign>();
             Entity player = ECSFactory.BuildPlayer(levelDesign);
             healthUI.Initialize(player);
-            shareData = new ShareData(levelSpawn);
+            shareData = new ShareData(dictionary, levelDesign);
             spawnLogic = new SpawnLogic(shareData);
             weaponLogic = new TriggerWeaponLogic(levelDesign);
             levelDesign.OnTriggerWeapon += weaponLogic.Trigger;

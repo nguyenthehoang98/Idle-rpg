@@ -1,19 +1,20 @@
-﻿using _Games.Combat.Level;
+﻿using System.Collections.Generic;
+using _Games.Combat.Level;
+using _Games.Config;
 using UnityEngine;
 
 namespace _Games.Combat.Model
 {
     public class ShareData
     {
-        public ShareData(LevelSpawnSO levelSpawn)
+        public ShareData(IReadOnlyDictionary<Vector2Int, LevelBatch> levelSpawn, LevelDesign levelDesign)
         {
             LevelSpawn = levelSpawn;
-            var design = levelSpawn.design;
-            BoxSize = CalculateBounds(design.LoopPoints(), design.CellSize);
+            BoxSize = CalculateBounds(levelDesign.LoopPoints(), levelDesign.CellSize);
             RadiusBonus = Mathf.Max(BoxSize.x, BoxSize.y) / 2f;
         }
 
-        public LevelSpawnSO LevelSpawn { get; }
+        public IReadOnlyDictionary<Vector2Int, LevelBatch> LevelSpawn { get; }
         public Vector2 BoxSize { get; }
         public float RadiusBonus { get; }
         public int TotalCurrentMonsterAlive { get; set; }

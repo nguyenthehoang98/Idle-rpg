@@ -31,6 +31,7 @@ namespace _Games.Entry
             {
                 "MonsterConfig",
                 "SkillConfig",
+                "LevelConfig",
             });
 
             ChangeSceneAsync("GameplayScene");
