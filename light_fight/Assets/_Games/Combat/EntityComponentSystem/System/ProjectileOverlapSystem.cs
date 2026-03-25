@@ -1,4 +1,5 @@
 ﻿using _Games.Combat.EntityComponentSystem.Data;
+using _Games.Combat.EntityComponentSystem.Model;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -9,6 +10,8 @@ namespace _Games.Combat.EntityComponentSystem.System
 {
     [BurstCompile]
     [UpdateAfter(typeof(SpatialGridSystem))]
+    [UpdateInGroup(typeof(SimulationGroup))]
+    [RequireMatchingQueriesForUpdate]
     public partial struct ProjectileOverlapSystem : ISystem
     {
         ComponentLookup<ProjectileSkillData> projectileSkillDataLookup;

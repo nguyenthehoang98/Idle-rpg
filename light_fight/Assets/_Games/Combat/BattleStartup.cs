@@ -1,4 +1,5 @@
 using _Games.Combat.EntityComponentSystem;
+using _Games.Combat.EntityComponentSystem.Model;
 using _Games.Combat.Equipment;
 using _Games.Combat.Event;
 using _Games.Combat.Level;
@@ -29,6 +30,12 @@ namespace _Games.Combat
         
         private async void Start()
         {
+            var world = World.DefaultGameObjectInjectionWorld;
+            var simGroup = world.GetExistingSystemManaged<SimulationGroup>();
+#if TEST_MODE
+            simGroup.Iterations = KitEntryScene.Instance.GameplayScaleTime;
+#endif
+            simGroup.TimeStep = 1f/ KitEntryScene.Instance.GameplayFrameRate;
             EventBus.Instance.Publish(new OpenWeaponSelectPopupEvent());
             int levelId = 1;
             LevelConfig levelConfig = KitConfigManager.Get<LevelConfig>();

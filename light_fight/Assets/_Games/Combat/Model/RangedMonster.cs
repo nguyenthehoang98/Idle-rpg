@@ -1,5 +1,4 @@
-﻿using System;
-using _Games.Combat.EntityComponentSystem.View;
+﻿using _Games.Combat.EntityComponentSystem.Model;
 using _Games.Config;
 using Unity.Entities;
 using Unity.Transforms;
@@ -24,7 +23,7 @@ namespace _Games.Combat.Model
             LocalTransform transform = manager.GetComponentData<LocalTransform>(Entity);
             bool flip = transform.Rotation.value.y != 0;
             int offset = flip ? -1 : 1;
-            EntityCastSkillManager.Instance.Trigger(Entity, muzzleOffset * offset);
+            RangedMonsterCastSkillManager.Instance.Trigger(Entity, muzzleOffset * offset);
         }
     }
 }

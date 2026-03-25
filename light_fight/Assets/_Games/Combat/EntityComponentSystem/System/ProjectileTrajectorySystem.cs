@@ -1,4 +1,5 @@
 ﻿using _Games.Combat.EntityComponentSystem.Data;
+using _Games.Combat.EntityComponentSystem.Model;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -7,6 +8,8 @@ using Unity.Transforms;
 namespace _Games.Combat.EntityComponentSystem.System
 {
     [BurstCompile]
+    [UpdateInGroup(typeof(SimulationGroup))]
+    [RequireMatchingQueriesForUpdate]
     public partial struct ProjectileTrajectorySystem : ISystem
     {
         [BurstCompile]

@@ -335,6 +335,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableDebug: 1
+  enableTestMode: 1
+  gameplayScaleTime: 10
+  gameplayFrameRate: 30
   container: {fileID: 64959147}
 --- !u!1 &959653745
 GameObject:

@@ -1,4 +1,5 @@
 ﻿using _Games.Combat.EntityComponentSystem.Data;
+using _Games.Combat.EntityComponentSystem.Model;
 using _Games.Combat.Model;
 using Unity.Burst;
 using Unity.Entities;
@@ -11,6 +12,8 @@ namespace _Games.Combat.EntityComponentSystem.System
     [BurstCompile]
     [UpdateAfter(typeof(ProjectileDamageMonsterSystem))]
     [UpdateAfter(typeof(ProjectileDamagePlayerSystem))]
+    [UpdateInGroup(typeof(SimulationGroup))]
+    [RequireMatchingQueriesForUpdate]
     public partial struct ProjectileCleanupSystem : ISystem
     {
         ComponentLookup<ProjectileDestroyTag> ProjectileDeadTagEvents;

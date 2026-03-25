@@ -1,4 +1,5 @@
 ﻿using _Games.Combat.EntityComponentSystem.Data;
+using _Games.Combat.EntityComponentSystem.Model;
 using _Games.Combat.Event;
 using _Games.Utils;
 using _KIT.Event;
@@ -9,6 +10,8 @@ namespace _Games.Combat.EntityComponentSystem.System
 {
     [BurstCompile]
     [UpdateAfter(typeof(ProjectileOverlapSystem))]
+    [UpdateInGroup(typeof(SimulationGroup))]
+    [RequireMatchingQueriesForUpdate]
     public partial struct ProjectileDamagePlayerSystem : ISystem
     {
         ComponentLookup<HealthData> healthDataLookup;

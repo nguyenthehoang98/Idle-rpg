@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 using UnityEngine;
 
-namespace _Games.Combat.EntityComponentSystem.View
+namespace _Games.Combat.EntityComponentSystem.Model
 {
     public class EntityView : MonoBehaviour
     {

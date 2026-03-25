@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using _Games.Combat.EntityComponentSystem.Data;
-using _Games.Combat.EntityComponentSystem.View;
 using _Games.Combat.Level;
 using _Games.Combat.Model;
 using _Games.Combat.SkillSystem.Config;

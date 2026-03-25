@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using _Games.Combat.EntityComponentSystem.Data;
-using _Games.Combat.EntityComponentSystem.Model;
 using _Games.Combat.SkillSystem;
 using _Games.Combat.SkillSystem.Model;
 using _Games.Config;
@@ -10,14 +9,14 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace _Games.Combat.EntityComponentSystem.View
+namespace _Games.Combat.EntityComponentSystem.Model
 {
-    public class EntityCastSkillManager : MonoBehaviour
+    public class RangedMonsterCastSkillManager : MonoBehaviour
     {
         private Dictionary<int, RangedCastSkillData> container = new Dictionary<int, RangedCastSkillData>();
         private Queue<RangedCastSkillData> queue = new Queue<RangedCastSkillData>();
 
-        public static EntityCastSkillManager Instance {get; private set;}
+        public static RangedMonsterCastSkillManager Instance {get; private set;}
 
         private EntityManager manager;
         private MonsterConfig monsterConfig;

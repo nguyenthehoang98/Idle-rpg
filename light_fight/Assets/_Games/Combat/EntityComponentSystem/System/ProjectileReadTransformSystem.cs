@@ -1,4 +1,5 @@
 ﻿using _Games.Combat.EntityComponentSystem.Data;
+using _Games.Combat.EntityComponentSystem.Model;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -9,9 +10,9 @@ using UnityEngine.Jobs;
 namespace _Games.Combat.EntityComponentSystem.System
 {
     [BurstCompile]
-    [RequireMatchingQueriesForUpdate]
-    [UpdateInGroup(typeof(SimulationSystemGroup), OrderLast = true)]
     [UpdateAfter(typeof(ProjectileTrajectorySystem))]
+    [UpdateInGroup(typeof(SimulationGroup))]
+    [RequireMatchingQueriesForUpdate]
     public partial struct ProjectileReadTransformSystem : ISystem
     {
         EntityQuery m_Query;

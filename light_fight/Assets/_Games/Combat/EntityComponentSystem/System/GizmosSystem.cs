@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using _Games.Combat.EntityComponentSystem.Data;
+using _Games.Combat.EntityComponentSystem.Model;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Transforms;
@@ -8,11 +9,13 @@ using UnityEngine;
 namespace _Games.Combat.EntityComponentSystem.System
 {
     [BurstCompile]
+    [UpdateInGroup(typeof(SimulationGroup))]
     [RequireMatchingQueriesForUpdate]
     public partial struct GizmosSystem : ISystem
     {
         public void OnUpdate(ref SystemState state)
         {
+            float deltaTime = state.WorldUnmanaged.Time.DeltaTime * 2;
             foreach (var (transform, buffers, entity) in
                      SystemAPI.Query<RefRO<LocalTransform>, DynamicBuffer<CircleBuffer>>()
                          .WithAll<PlayerTag>()
@@ -23,7 +26,7 @@ namespace _Games.Combat.EntityComponentSystem.System
                 {
                     float radius = buffer.Radius;
                     Vector3 finalPosition = position + (Vector3)buffer.Offset;
-                    DrawCircleDebug(finalPosition, radius, Color.magenta, 12);
+                    DrawCircleDebug(finalPosition, radius, Color.magenta, 12, deltaTime);
                 }
             }
 
@@ -37,7 +40,7 @@ namespace _Games.Combat.EntityComponentSystem.System
                 {
                     float radius = buffer.Radius;
                     Vector3 finalPosition = position + (Vector3)buffer.Offset;
-                    DrawCircleDebug(finalPosition, radius, Color.green, 12);
+                    DrawCircleDebug(finalPosition, radius, Color.green, 12, deltaTime);
                 }
             }
             
@@ -51,12 +54,12 @@ namespace _Games.Combat.EntityComponentSystem.System
                 {
                     float radius = buffer.Radius;
                     Vector3 finalPosition = position + (Vector3)buffer.Offset;
-                    DrawCircleDebug(finalPosition, radius, Color.yellow, 12);
+                    DrawCircleDebug(finalPosition, radius, Color.yellow, 12, deltaTime);
                 }
             }
         }
 
-        void DrawCircleDebug(Vector3 center, float radius, Color color, int segments)
+        static void DrawCircleDebug(Vector3 center, float radius, Color color, int segments, float deltaTime)
         {
             Vector3 prevPoint = center + new Vector3(radius, 0, 0);
             for (int i = 1; i <= segments; i++)
@@ -66,7 +69,7 @@ namespace _Games.Combat.EntityComponentSystem.System
                 Vector3 newPoint = center + new Vector3(
                     Mathf.Cos(rad) * radius,
                     Mathf.Sin(rad) * radius, 0);
-                Debug.DrawLine(prevPoint, newPoint, color);
+                Debug.DrawLine(prevPoint, newPoint, color, deltaTime);
                 prevPoint = newPoint;
             }
         }

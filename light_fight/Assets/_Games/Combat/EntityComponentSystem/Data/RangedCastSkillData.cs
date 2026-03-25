@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Mathematics;
 
-namespace _Games.Combat.EntityComponentSystem.Model
+namespace _Games.Combat.EntityComponentSystem.Data
 {
     public struct RangedCastSkillData
     {

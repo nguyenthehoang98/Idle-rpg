@@ -1,4 +1,5 @@
 ﻿using _Games.Combat.EntityComponentSystem.Data;
+using _Games.Combat.EntityComponentSystem.Model;
 using ProjectDawn.Navigation;
 using Unity.Burst;
 using Unity.Collections;
@@ -10,6 +11,8 @@ namespace _Games.Combat.EntityComponentSystem.System
 {
     [BurstCompile]
     [UpdateBefore(typeof(ProjectileTrajectorySystem))]
+    [UpdateInGroup(typeof(SimulationGroup))]
+    [RequireMatchingQueriesForUpdate]
     public partial struct SpatialGridSystem : ISystem
     {
         public NativeParallelMultiHashMap<int2, Entity> Grid;

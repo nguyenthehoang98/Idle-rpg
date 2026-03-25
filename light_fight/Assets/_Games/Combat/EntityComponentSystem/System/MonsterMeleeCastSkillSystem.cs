@@ -1,4 +1,5 @@
 ﻿using _Games.Combat.EntityComponentSystem.Data;
+using _Games.Combat.EntityComponentSystem.Model;
 using _Games.Combat.Model;
 using ProjectDawn.Navigation;
 using Unity.Entities;
@@ -8,6 +9,7 @@ using UnityEngine;
 
 namespace _Games.Combat.EntityComponentSystem.System
 {
+    [UpdateInGroup(typeof(SimulationGroup))]
     [RequireMatchingQueriesForUpdate]
     public partial struct MonsterMeleeCastSkillSystem : ISystem
     {
