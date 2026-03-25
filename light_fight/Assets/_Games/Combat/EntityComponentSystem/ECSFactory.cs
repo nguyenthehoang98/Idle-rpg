@@ -154,7 +154,7 @@ namespace _Games.Combat.EntityComponentSystem
             float rad = Mathf.Atan2(direction.y, direction.x);
             quaternion rotation = quaternion.Euler(0, 0, rad);
             
-            ProjectileAuthoring authoring;
+            ProjectileAuthoring authoring = null;
             Entity entity;
 #if !TEST_MODE
             authoring = KitPool.Instantiate(skill.projectile.prefab).GetComponent<ProjectileAuthoring>();
@@ -162,6 +162,8 @@ namespace _Games.Combat.EntityComponentSystem
             authoring.transform.rotation = rotation;
             EntityView view = authoring.GetComponent<EntityView>();
             entity = view.GetOrCreateEntity();
+#else
+            entity = manager.CreateEntity();  
 #endif
             Projectile projectile = new Projectile(authoring);
             manager.AddComponentData(entity, new ProjectileTag());
@@ -213,15 +215,15 @@ namespace _Games.Combat.EntityComponentSystem
             );
 
             manager.AddComponentObject(entity, projectile);
+            manager.SetEnabled(entity, true);
 #if !TEST_MODE
             manager.AddComponentObject(entity, view.transform);
+            view.gameObject.SendMessage("Initialize", entity);
 #endif
-#if UNITY_EDITOR
+#if UNITY_EDITOR && !TEST_MODE
             manager.SetName(entity, authoring.name + "#" + entity.GetHashCode());
             view.name = authoring.name + "#" + entity.GetHashCode();
 #endif
-            manager.SetEnabled(entity, true);
-            view.gameObject.SendMessage("Initialize", entity);
         }
 
         public static async UniTask BuildMonster(Entity player, int monsterID, float bonusRange, float3 position)
@@ -244,13 +246,16 @@ namespace _Games.Combat.EntityComponentSystem
             }
 #endif
             
-            MonsterAuthoring authoring;
+            EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            MonsterAuthoring authoring = null;
             Entity entity;
 #if !TEST_MODE
             EntityView view = KitPool.Instantiate(go.GetComponent<EntityView>());
             view.transform.position = position;
             authoring = view.GetComponent<MonsterAuthoring>();
             entity = view.GetOrCreateEntity();
+#else
+            entity = manager.CreateEntity();
 #endif
             Monster monster;
             if (authoringPrefab is RangedMonsterAuthoring rangedAuthoring)
@@ -261,7 +266,6 @@ namespace _Games.Combat.EntityComponentSystem
                     monsterData.SkillId, monsterData.SkillLevel, monsterConfig, skillConfig, authoringPrefab.DelayExecuteAttack);
             
             float radius = authoringPrefab.Radius;
-            EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
             DynamicBuffer<CircleBuffer> circleBuffers = manager.AddBuffer<CircleBuffer>(entity);
             circleBuffers.Add(new CircleBuffer(radius, float3.zero, false, 0));
             manager.AddComponentData(entity, new MonsterTag());
@@ -327,15 +331,15 @@ namespace _Games.Combat.EntityComponentSystem
             else
                 manager.AddComponentData(entity, new MonsterMeleeTag());
             manager.AddComponentObject(entity, monster);
+            manager.SetEnabled(entity, true);
 #if !TEST_MODE
             manager.AddComponentObject(entity, authoring.transform);
+            view.gameObject.SendMessage("Initialize", entity);
 #endif
-#if UNITY_EDITOR
+#if UNITY_EDITOR && !TEST_MODE
             manager.SetName(entity, go.name + "#" + entity.GetHashCode());
             view.name = go.name + "#" + entity.GetHashCode();
 #endif
-            manager.SetEnabled(entity, true);
-            view.gameObject.SendMessage("Initialize", entity);
             await UniTask.CompletedTask;
         }
 

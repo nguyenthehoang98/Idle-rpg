@@ -9,6 +9,7 @@ namespace _KIT.Utils
         public static KitEntryScene Instance { get; private set; }
 
         [SerializeField] protected bool enableDebug = true;
+        [SerializeField] protected bool enableTestMode = true;
 
         private AsyncOperation asyncOperation;
         private bool isLoading;
@@ -27,12 +28,12 @@ namespace _KIT.Utils
         private void OnValidate()
         {
 #if UNITY_EDITOR
-            string develop_mode = "DEVELOP_MODE";
-            if (!enableDebug && DefineSymbolUtils.Has(develop_mode))
+            string develop_mode = "TEST_MODE";
+            if (!enableTestMode && DefineSymbolUtils.Has(develop_mode))
             {
                 DefineSymbolUtils.Remove(develop_mode);
             }
-            else if (enableDebug && !DefineSymbolUtils.Has(develop_mode))
+            else if (enableTestMode && !DefineSymbolUtils.Has(develop_mode))
             {
                 DefineSymbolUtils.Add(develop_mode);
             }
