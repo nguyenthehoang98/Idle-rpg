@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using _KIT.Config;
 using _KIT.Config.ExcelExtension.Runtime;
 using UnityEngine;
@@ -10,9 +11,21 @@ namespace _Games.Config
         ConfigPath = "Assets/_Sources/Configs/WeaponConfig.asset")]
     public class WeaponConfig : KitBaseConfig
     {
+        [SerializeField] private List<WeaponData> weapons = new List<WeaponData>();
+        private Dictionary<int, WeaponData> cacheWeaponData;
+    
         public override void OnMapValue()
         {
-            
+            cacheWeaponData = new Dictionary<int, WeaponData>();
+            foreach (var m in weapons)
+            {
+                cacheWeaponData.Add(m.SkillId, m);
+            }
+        }
+        
+        public bool Find(int skillId, out WeaponData skill)
+        {
+            return cacheWeaponData.TryGetValue(skillId, out skill);
         }
     }
 
@@ -22,5 +35,17 @@ namespace _Games.Config
         [SerializeField] private int weaponId;
         [SerializeField] private string weaponName;
         [SerializeField] private int skillId;
+        [SerializeField] private float baseAttack;
+        [SerializeField] private float attackBonusLevel;
+        [SerializeField] private float basePrice;
+        [SerializeField] private float priceBonusLevel;
+        [SerializeField] private string[] jsonUnlocks;
+
+        public int WeaponId => weaponId;
+        public string WeaponName => weaponName;
+        public int SkillId => skillId;
+        public float Attack(int level) => baseAttack + attackBonusLevel * level;
+        public float Price(int level) => basePrice + priceBonusLevel * level;
+        public string[] Unlocks => jsonUnlocks;
     }
 }
