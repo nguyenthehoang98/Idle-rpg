@@ -150,16 +150,20 @@ namespace _Games.Combat.EntityComponentSystem
             float3 startPosition, float3 endPosition,
             Skill skill, SkillData skillData, int level)
         {
-            GameObject go = KitPool.Instantiate(skill.projectile.prefab);
-            go.transform.position = startPosition;
-            
             float3 direction = endPosition - startPosition;
             float rad = Mathf.Atan2(direction.y, direction.x);
             quaternion rotation = quaternion.Euler(0, 0, rad);
-            go.transform.rotation = rotation;
             
-            EntityView view = go.GetComponent<EntityView>();
-            Entity entity = view.GetOrCreateEntity();
+            ProjectileAuthoring authoring;
+            Entity entity;
+#if !TEST_MODE
+            authoring = KitPool.Instantiate(skill.projectile.prefab).GetComponent<ProjectileAuthoring>();
+            authoring.transform.position = startPosition;
+            authoring.transform.rotation = rotation;
+            EntityView view = authoring.GetComponent<EntityView>();
+            entity = view.GetOrCreateEntity();
+#endif
+            Projectile projectile = new Projectile(authoring);
             manager.AddComponentData(entity, new ProjectileTag());
             manager.AddBuffer<CollisionBuffer>(entity);
             manager.AddComponentData(entity, new LocalTransform
@@ -207,38 +211,57 @@ namespace _Games.Combat.EntityComponentSystem
                     main.maxHitCount, main.collisionResetInterval,
                     skillData.FlatDamage(level), skillData.ScaleDamage(level))
             );
-            
+
+            manager.AddComponentObject(entity, projectile);
+#if !TEST_MODE
             manager.AddComponentObject(entity, view.transform);
+#endif
 #if UNITY_EDITOR
-            manager.SetName(entity, go.name + "#" + entity.GetHashCode());
-            view.name = go.name + "#" + entity.GetHashCode();
+            manager.SetName(entity, authoring.name + "#" + entity.GetHashCode());
+            view.name = authoring.name + "#" + entity.GetHashCode();
 #endif
             manager.SetEnabled(entity, true);
             view.gameObject.SendMessage("Initialize", entity);
         }
 
-        public static async UniTask BuildMonster(int monsterID, float bonusRange,
-            float3 position)
+        public static async UniTask BuildMonster(Entity player, int monsterID, float bonusRange, float3 position)
         {
             Vector3 destination = float3.zero;
-            bool foundMonsterData = KitConfigManager.Get<MonsterConfig>().Find(monsterID, out var monsterData);
+            SkillConfig skillConfig = KitConfigManager.Get<SkillConfig>();
+            MonsterConfig monsterConfig = KitConfigManager.Get<MonsterConfig>();
+            bool foundMonsterData = monsterConfig.Find(monsterID, out var monsterData);
 #if DEBUG
             if(!foundMonsterData) Debug.LogError("Not found monster data: " + monsterID);
 #endif
             if (!foundMonsterData) return;
             
             GameObject go = await KitLoaded.LoadAsync<GameObject>(monsterData.MonsterObjectId);
+            MonsterAuthoring authoringPrefab = go.GetComponent<MonsterAuthoring>();
+#if !TEST_MODE
             if (monstersPath.Add(monsterData.MonsterObjectId))
             {
                 KitPool.RegisterPool(go, true);
             }
+#endif
+            
+            MonsterAuthoring authoring;
+            Entity entity;
+#if !TEST_MODE
             EntityView view = KitPool.Instantiate(go.GetComponent<EntityView>());
             view.transform.position = position;
-            Monster monster = view.GetComponent<Monster>();
-            float radius = monster.Radius;
+            authoring = view.GetComponent<MonsterAuthoring>();
+            entity = view.GetOrCreateEntity();
+#endif
+            Monster monster;
+            if (authoringPrefab is RangedMonsterAuthoring rangedAuthoring)
+                monster = new RangedMonster(authoring, rangedAuthoring.MuzzleOffset, entity, player, monsterID,
+                    monsterData.SkillId, monsterData.SkillLevel, monsterConfig, skillConfig, authoringPrefab.DelayExecuteAttack);
+            else
+                monster = new Monster(authoring, entity, player, monsterID,
+                    monsterData.SkillId, monsterData.SkillLevel, monsterConfig, skillConfig, authoringPrefab.DelayExecuteAttack);
             
+            float radius = authoringPrefab.Radius;
             EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            Entity entity = view.GetOrCreateEntity();
             DynamicBuffer<CircleBuffer> circleBuffers = manager.AddBuffer<CircleBuffer>(entity);
             circleBuffers.Add(new CircleBuffer(radius, float3.zero, false, 0));
             manager.AddComponentData(entity, new MonsterTag());
@@ -303,7 +326,10 @@ namespace _Games.Combat.EntityComponentSystem
                 manager.AddComponentData(entity, new MonsterRangedTag());
             else
                 manager.AddComponentData(entity, new MonsterMeleeTag());
-            manager.AddComponentObject(entity, view.transform);
+            manager.AddComponentObject(entity, monster);
+#if !TEST_MODE
+            manager.AddComponentObject(entity, authoring.transform);
+#endif
 #if UNITY_EDITOR
             manager.SetName(entity, go.name + "#" + entity.GetHashCode());
             view.name = go.name + "#" + entity.GetHashCode();

@@ -1,115 +1,79 @@
 ﻿using System;
+using System.Threading;
 using _Games.Combat.EntityComponentSystem.Data;
 using _Games.Combat.Event;
 using _Games.Config;
 using _Games.Utils;
-using _KIT.Config;
 using _KIT.Event;
-using _KIT.Utils;
-using Animancer;
+using Cysharp.Threading.Tasks;
 using Unity.Entities;
-using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace _Games.Combat.Model
 {
-    [RequireComponent(typeof(AnimancerComponent))]
-    [RequireComponent(typeof(Animator))]
-    public class Monster : MonoBehaviour, IAuthoring
+    public class Monster : UnityEngine.Object, IDisposable
     {
-        [Header("Renderer")]
-        [SerializeField] private SortingGroup sortingGroup;
-        [Header("Collider")]
-        [SerializeField] private float radius;
-        [Header("Animations")] 
-        [SerializeField] private AnimationData[] clips;
-
-        private AnimancerComponent animancerComponent;
-        private MeleeAttackRequest meleeAttackRequest;
-        private Coroutine attackCoroutine;
+        private Entity player;
+        protected readonly Entity Entity;
+        private MonsterAuthoring authoring;
         private MonsterConfig monsterConfig;
         private SkillConfig skillConfig;
-        protected Entity Entity { get; private set; }
-        
-        public float Radius => radius;
+        private int monsterId;
+        private int skillId;
+        private int skillLevel;
+        private float delayExecuteAttack;
+        private CancellationTokenSource cts;
 
-        private void Awake()
+        public Monster(MonsterAuthoring authoring, Entity entity, Entity player, 
+            int monsterId, int skillId, int skillLevel,
+            MonsterConfig monsterConfig, SkillConfig skillConfig,
+            float delayExecuteAttack)
         {
-            monsterConfig = KitConfigManager.Get<MonsterConfig>();
-            skillConfig = KitConfigManager.Get<SkillConfig>();
-            animancerComponent = GetComponent<AnimancerComponent>();
+            this.authoring = authoring;
+            this.Entity = entity;
+            this.delayExecuteAttack = delayExecuteAttack;
+            this.monsterConfig = monsterConfig;
+            this.skillConfig = skillConfig;
+            this.player = player;
+            this.monsterId = monsterId;
+            this.skillId = skillId;
+            this.skillLevel = skillLevel;
         }
 
-        private void Start()
+        public async void Attack()
         {
-            Debug.Log(@"Tạo 1 monster chỉ chứa logic. Monster này sẽ chuyển thành monster view để có thể xử lý strest test.
-Phần callback OnAttack sẽ chuyển sang invoke theo thời gian, config với mỗi monster");
+            cts = new CancellationTokenSource();
+            await UniTask.Delay(TimeSpan.FromSeconds(delayExecuteAttack), cancellationToken: cts.Token);
+            OnAttack();
         }
 
-        public void Initialize(Entity entity)
+        protected virtual void OnAttack()
         {
-            Entity = entity;
-            PlayAnimation(AnimationName.Move);
-            this.WhileInvoke(1, () =>
-            {
-                sortingGroup.sortingOrder = -(int)(transform.position.y * 10);
-            });
+            EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            HealthData playerHealthData = manager.GetComponentData<HealthData>(player);
+            monsterConfig.Find(monsterId, out var monsterData);
+            skillConfig.Find(skillId, out var skillData);
+            playerHealthData.Health -= FormulaUtils.Output(monsterData.Attack, skillData, skillLevel, 0, 0, 0);
+            manager.SetComponentData(player, playerHealthData);     
+            EventBus.Instance.Publish(new PlayerOnDamageEvent());
         }
 
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(transform.position, radius);
-        }
-        
-        public virtual void OnAttack()
-        {
-            if (meleeAttackRequest.IsValid)
-            {
-                var manager = World.DefaultGameObjectInjectionWorld.EntityManager;
-                HealthData player = manager.GetComponentData<HealthData>(meleeAttackRequest.Target);
-                monsterConfig.Find(meleeAttackRequest.MonsterId, out var monsterData);
-                skillConfig.Find(meleeAttackRequest.SkillId, out var skillData);
-                player.Health -= FormulaUtils.Output(monsterData.Attack, skillData, meleeAttackRequest.SkillLevel, 0, 0, 0);
-                manager.SetComponentData(meleeAttackRequest.Target, player);     
-                EventBus.Instance.Publish(new PlayerOnDamageEvent());
-                
-                meleeAttackRequest = MeleeAttackRequest.None();
-            }
-        }
-
-        public virtual void OnDeath()
+        public void Death()
         {
         }
 
-        public void InjectMeleeAttack(MeleeAttackRequest request)
+        public void PlayAnimation(AnimationName animationName)
         {
-            meleeAttackRequest = request;
+            if (authoring != null) authoring.PlayAnimation(animationName);
         }
 
-        public AnimancerState PlayAnimation(AnimationName animationName)
+        public void PlayAttackAnimation()
         {
-            foreach (var data in clips)
-            {
-                if (data.name == animationName)
-                    return animancerComponent.Play(data.transition);
-            }
-
-            return null;
+            if (authoring != null) authoring.PlayAttackAnimation();
         }
 
-        public virtual void PlayAttackAnimation()
+        public virtual void Dispose()
         {
-            if (attackCoroutine != null) StopCoroutine(attackCoroutine);
-            AnimancerState state = PlayAnimation(AnimationName.Attack);
-            attackCoroutine = this.WaitInvoke(state.Duration, () => PlayAnimation(AnimationName.Idle));
-        }
-
-        [Serializable]
-        class AnimationData
-        {
-            public AnimationName name;
-            public ClipTransition transition;
+            cts?.Cancel();
         }
     }
 }

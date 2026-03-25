@@ -41,7 +41,7 @@ namespace _Games.Combat
             Entity player = ECSFactory.BuildPlayer(levelDesign);
             healthUI.Initialize(player);
             shareData = new ShareData(dictionary, levelDesign);
-            spawnLogic = new SpawnLogic(shareData);
+            spawnLogic = new SpawnLogic(shareData, player);
             equipmentManager = new EquipmentManager(levelDesign);
             levelDesign.OnTriggerWeapon += equipmentManager.Trigger;
             

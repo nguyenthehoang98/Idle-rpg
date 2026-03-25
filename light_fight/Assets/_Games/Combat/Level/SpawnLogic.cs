@@ -30,6 +30,7 @@ namespace _Games.Combat.Level
         private readonly ShareData shareData;
         private readonly MonsterConfig monsterConfig;
         private readonly SkillConfig skillConfig;
+        private readonly Entity player;
 
         private Batch[] batches;
         private int currentWave;
@@ -41,10 +42,10 @@ namespace _Games.Combat.Level
         private bool waiting = false;
         private EntityQuery query;
 
-        public SpawnLogic(ShareData shareData)
+        public SpawnLogic(ShareData shareData, Entity player)
         {
-            Debug.Log(@"Sẽ tính từng wave 1 để giảm việc cấp phát bộ nhớ ban đầu");
             this.shareData = shareData;
+            this.player = player;
             this.monsterConfig = KitConfigManager.Get<MonsterConfig>();
             this.skillConfig = KitConfigManager.Get<SkillConfig>();
             
@@ -110,7 +111,7 @@ namespace _Games.Combat.Level
                     var keys = batch.monsters.Keys.ToList();
                     int random = RandomUtils.Range(0, keys.Count);
                     int monsterID = keys[random];
-                    await ECSFactory.BuildMonster(monsterID, shareData.RadiusBonus, position);
+                    await ECSFactory.BuildMonster(player, monsterID, shareData.RadiusBonus, position);
                     spawnTime -= batch.interval;
 
                     batch.monsters[monsterID]--;

@@ -596,6 +596,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sortingGroup: {fileID: 8257959080249546853}
   radius: 0.35
+  delayExecuteAttack: 0.05
   clips:
   - name: 0
     transition:

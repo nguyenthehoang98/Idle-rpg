@@ -1,43 +1,30 @@
-﻿using _Games.Combat.EntityComponentSystem.View;
-using _KIT.Utils;
-using Animancer;
+﻿using System;
+using _Games.Combat.EntityComponentSystem.View;
+using _Games.Config;
+using Unity.Entities;
+using Unity.Transforms;
 using UnityEngine;
 
 namespace _Games.Combat.Model
 {
     public class RangedMonster : Monster
     {
-        [SerializeField] private bool shouldRecovery;
-        [SerializeField] private Vector3 muzzleOffset;
-        
-        private Coroutine attackCoroutine;
-        private Coroutine recoverCoroutine;
-        
-        public override void OnAttack()
+        private Vector3 muzzleOffset;
+
+        public RangedMonster(MonsterAuthoring authoring, Vector3 muzzleOffset,
+            Entity entity, Entity player, int monsterId, int skillId, int skillLevel, MonsterConfig monsterConfig, SkillConfig skillConfig, float delayExecuteAttack) : base(authoring, entity, player, monsterId, skillId, skillLevel, monsterConfig, skillConfig, delayExecuteAttack)
         {
-            bool flip = transform.localRotation.eulerAngles.y != 0;
-            int offset = flip ? -1 : 1;
-            EntityCastSkillManager.Instance.Trigger(Entity, muzzleOffset * offset);
+            this.muzzleOffset = muzzleOffset;
         }
 
-        public override void PlayAttackAnimation()
+        protected override void OnAttack()
         {
-            if (attackCoroutine != null) StopCoroutine(attackCoroutine);
-            if (recoverCoroutine != null) StopCoroutine(recoverCoroutine);
-            
-            AnimancerState attack = PlayAnimation(AnimationName.Attack);
-            attackCoroutine = this.WaitInvoke(attack.Duration, () =>
-            {
-                if(shouldRecovery)
-                {
-                    AnimancerState recovery = PlayAnimation(AnimationName.Recovery);
-                    recoverCoroutine = this.WaitInvoke(recovery.Duration, () => { PlayAnimation(AnimationName.Idle); });
-                }
-                else
-                {
-                    PlayAnimation(AnimationName.Idle);
-                }
-            });
+            base.OnAttack();
+            EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            LocalTransform transform = manager.GetComponentData<LocalTransform>(Entity);
+            bool flip = transform.Rotation.value.y != 0;
+            int offset = flip ? -1 : 1;
+            EntityCastSkillManager.Instance.Trigger(Entity, muzzleOffset * offset);
         }
     }
 }

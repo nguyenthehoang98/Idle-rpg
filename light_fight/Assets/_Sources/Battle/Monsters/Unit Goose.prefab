@@ -108,7 +108,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sortingGroup: {fileID: 8595171745948838959}
   radius: 0.35
-  offset: {x: 0, y: 0, z: 0}
+  delayExecuteAttack: 0.16666667
   clips:
   - name: 0
     transition:

@@ -38,31 +38,23 @@ namespace _Games.Combat.EntityComponentSystem.System
                 if (data.AnimationName == AnimationName.Move && math.lengthsq(body.ValueRO.Velocity) < THRESHOLD)
                 {
                     data.AnimationName = AnimationName.Idle;
-
-                    Transform go = state.EntityManager.GetComponentObject<Transform>(entity);
-                    Monster monster = go.GetComponent<Monster>();
+                    RangedMonster monster = state.EntityManager.GetComponentObject<RangedMonster>(entity);
                     monster.PlayAnimation(AnimationName.Idle);
                 }
                 
                 if (data.AnimationName == AnimationName.Idle && math.lengthsq(body.ValueRO.Velocity) > THRESHOLD)
                 {
                     data.AnimationName = AnimationName.Move;
-                    
-                    Transform go = state.EntityManager.GetComponentObject<Transform>(entity);
-                    Monster monster = go.GetComponent<Monster>();
+                    RangedMonster monster = state.EntityManager.GetComponentObject<RangedMonster>(entity);
                     monster.PlayAnimation(AnimationName.Move);
                 }
                 
                 if (data.IsLastTriggerSkill)
                 {
                     data.IsLastTriggerSkill = false;
-                    
-                    Transform go = state.EntityManager.GetComponentObject<Transform>(entity);
-                    Monster monster = go.GetComponent<Monster>();
-                    Entity player = SystemAPI.GetSingletonEntity<PlayerTag>();
-                    monster.InjectMeleeAttack(new MeleeAttackRequest(player, data.MonsterId, data.SkillId, data.SkillLevel));
+                    RangedMonster monster = state.EntityManager.GetComponentObject<RangedMonster>(entity);
+                    monster.Attack();
                     monster.PlayAttackAnimation();
-
                     EntityCastSkillManager.Instance.QueueSkill(
                         new RangedCastSkillData(entity, local.ValueRO.Position, body.ValueRO.Destination)
                     );

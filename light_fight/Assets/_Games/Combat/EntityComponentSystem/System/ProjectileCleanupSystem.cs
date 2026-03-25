@@ -1,4 +1,5 @@
 ﻿using _Games.Combat.EntityComponentSystem.Data;
+using _Games.Combat.Model;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -69,9 +70,9 @@ namespace _Games.Combat.EntityComponentSystem.System
                     {
                         CastHitEffect(skillData.ValueRO.SkillId, transform.ValueRO.Position);
                     }
-                    
-                    Transform go = state.EntityManager.GetComponentObject<Transform>(entity);
-                    go.GetComponent<Projectile>().DestroyProjectile();
+
+                    Projectile projectile = state.EntityManager.GetComponentObject<Projectile>(entity);
+                    projectile.Destroy();
                     ecb.DestroyEntity(entity);
                 }
             }
