@@ -17,26 +17,26 @@ namespace _Games.Combat.Level
         private Color highlightBorderColor = new Color(1f, 1f, 0f, 200f / 255f);
         private Tween tween;
 
-        public SlotItem Item { get; private set; }
+        public WeaponItemView ItemView { get; private set; }
 
-        public bool IsEquipped => Item != null;
+        public bool IsEquipped => ItemView != null;
 
-        public void Equip(SlotItem item)
+        public void Equip(WeaponItemView itemView)
         {
             body.color = Color.black;
 
-            Item = item;
-            RectTransform rect = item.GetComponent<RectTransform>();
+            ItemView = itemView;
+            RectTransform rect = itemView.GetComponent<RectTransform>();
             Vector2 scale = new Vector2(slotSize.x / rect.rect.width, slotSize.y / rect.rect.height);
-            item.transform.SetParent(canvas.transform);
-            item.transform.localPosition = Vector3.zero;
-            item.transform.localScale = scale;
+            itemView.transform.SetParent(canvas.transform);
+            itemView.transform.localPosition = Vector3.zero;
+            itemView.transform.localScale = scale;
         }
 
         public void UnEquip()
         {
             body.color = Color.gray;
-            Item = null;
+            ItemView = null;
         }
 
         public void SetOrderCanvas(int order)
@@ -51,7 +51,7 @@ namespace _Games.Combat.Level
         public void Rotation(float rad, float time)
         {
             tween.Stop();
-            Transform target = Item.Icon;
+            Transform target = ItemView.Icon;
             tween = Tween.LocalRotation(target, quaternion.Euler(0, 0, rad), time)
                 .OnUpdate(target, (trans, t) =>
                 {

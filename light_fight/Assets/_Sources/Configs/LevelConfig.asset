@@ -24,13 +24,13 @@ MonoBehaviour:
     isBoss: 0
     delayTime: 0
     duration: 10
-    power: 50
+    power: 400
     data:
-    - 10010_3
-    - 10000_1
+    - 10010_1
+    - 10000_3
     weights:
-    - {x: 10010, y: 3}
-    - {x: 10000, y: 1}
+    - {x: 10010, y: 1}
+    - {x: 10000, y: 3}
   - levelId: 1
     waveId: 1
     batchId: 2

@@ -1,7 +1,10 @@
 using _Games.Combat.EntityComponentSystem;
+using _Games.Combat.Equipment;
 using _Games.Combat.Event;
 using _Games.Combat.Level;
 using _Games.Combat.Model;
+using _Games.Combat.SkillSystem;
+using _Games.Combat.SkillSystem.Model;
 using _Games.Config;
 using _KIT.Checker;
 using _KIT.Config;
@@ -21,6 +24,7 @@ namespace _Games.Combat
         private ShareData shareData;
         private SpawnLogic spawnLogic;
         private LevelDesign levelDesign;
+        private EquipmentManager equipmentManager;
         private bool isRunning = false;
         
         private async void Start()
@@ -37,13 +41,15 @@ namespace _Games.Combat
             healthUI.Initialize(player);
             shareData = new ShareData(dictionary, levelDesign);
             spawnLogic = new SpawnLogic(shareData);
+            equipmentManager = new EquipmentManager(levelDesign);
+            levelDesign.OnTriggerWeapon += equipmentManager.Trigger;
             
             // todo: close loading scene
             KitEntryScene.Instance.CloseLoadingScene();
 #if DEVELOP_MODE
             gameObject.AddComponent<CpuFrame>();
 #endif
-            isRunning = true;
+            EventBus.Instance.Publish(new WaveSelectWeaponEvent(0, new Vector3(0, -1, -60)));
             Debug.Log(@"Tạo level config -> spawn level theo wave/batch...");
             Debug.Log(@"Phần tường raào mà monster stop & tấn công được nên có 1 cái fx như shield của BagMaster");
         }
@@ -74,17 +80,13 @@ namespace _Games.Combat
                 SlotView slot = levelDesign.Slots[i];
                 if (slot.IsEquipped)
                 {
-                    /*WeaponData weaponData = slot.View.WeaponData;
-                    int weaponLevel = slot.View.WeaponLevel;
-                    if (skillConfig.Find(weaponData.SkillId, weaponLevel, out var skillData))
+                    if (skillConfig.Find(slot.ItemView.WeaponData.SkillId, out SkillData skillData))
                     {
-                        AbilitySO ability = await KitLoaded.LoadAsync<AbilitySO>(skillData.SkillPath, true);
-                        if (ability.core.hitEffectPrefab != null)
-                        {
-                            KitPool.RegisterPool(ability.core.hitEffectPrefab, true);
-                        }
+                        Skill skill = await SkillFactory.CreateSkill(skillData);
+                        if (skill.projectile.hitEffectPrefab != null)
+                            KitPool.RegisterPool(skill.projectile.hitEffectPrefab, true);
                     }
-                    weaponLogic.Equip(i, weaponData, weaponLevel);*/
+                    equipmentManager.Equip(i, slot.ItemView.WeaponData, slot.ItemView.WeaponLevel);
                 }
             }
             EventBus.Instance.Publish(new BattleResumeEvent());
@@ -95,6 +97,7 @@ namespace _Games.Combat
             if (!isRunning) return;
             float deltaTime = Time.deltaTime;
             spawnLogic.Update(deltaTime);
+            equipmentManager.Update();
         }
     }
 }

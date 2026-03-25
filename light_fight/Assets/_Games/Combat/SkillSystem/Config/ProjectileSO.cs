@@ -6,5 +6,6 @@ namespace _Games.Combat.SkillSystem.Config
     public class ProjectileSO : ScriptableObject
     {
         public GameObject prefab;
+        public GameObject hitEffectPrefab;
     }
 }
