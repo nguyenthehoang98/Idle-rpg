@@ -79,7 +79,7 @@ namespace _Games.Combat.EntityComponentSystem.System
 
         async void CastHitEffect(int skillId, float3 position)
         {
-            Debug.Log($"CastHitEffect: skillId={skillId}, position={position}");
+            Debug.LogWarning($"CastHitEffect: skillId={skillId}, position={position}");
         }
 
         partial struct ResetHitBufferJob : IJobEntity

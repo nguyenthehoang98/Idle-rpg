@@ -6,6 +6,7 @@ using _Games.Combat.Level;
 using _Games.Combat.Model;
 using _Games.Combat.SkillSystem.Config;
 using _Games.Combat.SkillSystem.Model;
+using _Games.Config;
 using _KIT.Config;
 using _KIT.Pool;
 using _KIT.Resource;
@@ -41,12 +42,11 @@ namespace _Games.Combat.EntityComponentSystem
         }
 
         public static async void BuildProjectile(EntityManager manager, Entity source,
-            float3 startPosition, float3 endPosition,
-            Skill skill, SkillStatData statData)
+            float3 startPosition, float3 endPosition, Skill skill, SkillData skillData, int level)
         {
             if (skill.behaviors.Length == 0)
             {
-                BuildProjectileInternal(manager, source, startPosition, endPosition, skill, statData);
+                BuildProjectileInternal(manager, source, startPosition, endPosition, skill, skillData, level);
             }
             else
             {
@@ -98,14 +98,14 @@ namespace _Games.Combat.EntityComponentSystem
                                             startPosition, direction, i, spread.count, spread.angleStep, distance
                                         );
                                     }
-                                    BuildProjectileInternal(manager, source, startPosition, newEndPosition, skill, statData);
+                                    BuildProjectileInternal(manager, source, startPosition, newEndPosition, skill, skillData, level);
                                 }
                                 else
                                 {
                                     Vector3 newEndPosition = GetSpreadEndPosition(
                                         startPosition, direction, i, spread.count, spread.angleStep, distance
                                     );
-                                    BuildProjectileInternal(manager, source, startPosition, newEndPosition, skill, statData);
+                                    BuildProjectileInternal(manager, source, startPosition, newEndPosition, skill, skillData, level);
                                 }
                             }
 
@@ -121,13 +121,13 @@ namespace _Games.Combat.EntityComponentSystem
                                 float rad = math.radians(dropStrike.angle);
                                 float3 dir = math.normalize(new float3(math.sin(rad), -math.cos(rad), 0));
                                 float3 finalStartPosition = finalEndPosition - dir * dropStrike.height;
-                                BuildProjectileInternal(manager, source, finalStartPosition, finalEndPosition, skill, statData);
+                                BuildProjectileInternal(manager, source, finalStartPosition, finalEndPosition, skill, skillData, level);
                             }
                             break;
                         default:
                             if (shouldDefaultBuildProjectile)
                             {
-                                BuildProjectileInternal(manager, source, startPosition, endPosition, skill, statData);
+                                BuildProjectileInternal(manager, source, startPosition, endPosition, skill, skillData, level);
                             }
                             break;
                     }
@@ -148,7 +148,7 @@ namespace _Games.Combat.EntityComponentSystem
 
         static void BuildProjectileInternal(EntityManager manager, Entity source,
             float3 startPosition, float3 endPosition,
-            Skill skill, SkillStatData statData)
+            Skill skill, SkillData skillData, int level)
         {
             GameObject go = KitPool.Instantiate(skill.projectile.prefab);
             go.transform.position = startPosition;
@@ -205,7 +205,7 @@ namespace _Games.Combat.EntityComponentSystem
             manager.AddComponentData(entity,
                 new ProjectileSkillData(source, skill.Id, lifeTime, main.castTime,
                     main.maxHitCount, main.collisionResetInterval,
-                    statData.BaseDamage, statData.ScaleDamage)
+                    skillData.FlatDamage(level), skillData.ScaleDamage(level))
             );
             
             manager.AddComponentObject(entity, view.transform);

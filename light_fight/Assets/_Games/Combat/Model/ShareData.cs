@@ -17,7 +17,6 @@ namespace _Games.Combat.Model
         public IReadOnlyDictionary<Vector2Int, LevelBatch> LevelSpawn { get; }
         public Vector2 BoxSize { get; }
         public float RadiusBonus { get; }
-        public int TotalCurrentMonsterAlive { get; set; }
         
         static Vector2 CalculateBounds(Vector2[] points, Vector2 cellSize)
         {

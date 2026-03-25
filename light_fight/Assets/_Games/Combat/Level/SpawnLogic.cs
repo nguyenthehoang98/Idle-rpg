@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using _Games.Combat.EntityComponentSystem;
+using _Games.Combat.EntityComponentSystem.Data;
 using _Games.Combat.Event;
 using _Games.Combat.Model;
 using _Games.Combat.SkillSystem;
@@ -14,7 +15,9 @@ using _KIT.Pool;
 using _KIT.Resource;
 using _KIT.Utils;
 using Cysharp.Threading.Tasks;
+using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -36,6 +39,7 @@ namespace _Games.Combat.Level
         private int spawnCount;
         private bool paused = true;
         private bool waiting = false;
+        private EntityQuery query;
 
         public SpawnLogic(ShareData shareData)
         {
@@ -43,6 +47,11 @@ namespace _Games.Combat.Level
             this.shareData = shareData;
             this.monsterConfig = KitConfigManager.Get<MonsterConfig>();
             this.skillConfig = KitConfigManager.Get<SkillConfig>();
+            
+            var world = World.DefaultGameObjectInjectionWorld;
+            var manager = world.EntityManager;
+            query = manager.CreateEntityQuery(typeof(MonsterTag));
+            
             ReloadData(1);
         }
 
@@ -81,7 +90,7 @@ namespace _Games.Combat.Level
 
         public async void Update(float dt)
         {
-            if (!paused) return;
+            if (paused) return;
             if (currentBatch < batches.Length)
             {
                 waitTime -= dt;
@@ -118,7 +127,7 @@ namespace _Games.Combat.Level
                 }
             }
 
-            if (waiting && shareData.TotalCurrentMonsterAlive == 0)
+            if (waiting && query.CalculateEntityCount() == 0)
             {
                 waiting = false;
                 EventBus.Instance.Publish(new WaveCompleteEvent(currentWave));
@@ -185,49 +194,36 @@ namespace _Games.Combat.Level
             for (int i = 0; i < result.Length; i++)
             {
                 LevelBatch batch = batches[i];
-
-                int totalWeight = 0;
                 List<int> monsters = new List<int>();
-                foreach (var w in batch.Weights)
-                {
-                    totalWeight += w.y;
-                }
-                
+                List<int> bag = CreateRandomBag(batch.Weights);
+                int bagIndex = 0;
                 int powerBudget = batch.Power;
                 int safe = 0;
                 while (powerBudget > 0 && safe < 10)
                 {
                     safe++;
-                    int rand = RandomUtils.Range(0, totalWeight);
-                    int indexSelect = batch.Weights.Length - 1;
-                    for (int t = 0; t < batch.Weights.Length; t++)
+                    if (bagIndex >= bag.Count)
                     {
-                        rand -= batch.Weights[t].y;
-                        if (rand < 0)
-                        {
-                            indexSelect = t;
-                            break;
-                        }
+                        CollectionUtils.Shuffle(ref bag);
+                        bagIndex = 0;
                     }
                     
-                    int enemyId = batch.Weights[indexSelect].x;
-                    if (!monsterConfig.Find(enemyId, out MonsterData monsterData))
-                    {
+                    int enemyId = bag[bagIndex];
+                    bagIndex++;
+
+                    bool foundMonster = monsterConfig.Find(enemyId, out MonsterData monsterData);
 #if UNITY_EDITOR
-                        Debug.LogError("Not found monster: " + enemyId);
+                    if (!foundMonster) Debug.LogError("Not found monster: " + enemyId);
 #endif
-                        break;
-                    }
-                    
-                    if (!skillConfig.Find(monsterData.SkillId, monsterData.SkillLevel, out var skillStatData))
-                    {
+                    if (!foundMonster) break;
+
+                    bool foundSkill = skillConfig.Find(monsterData.SkillId, out var skillData);
 #if UNITY_EDITOR
-                        Debug.LogError("Not found skill stat: " + monsterData.SkillId + ", level: " + monsterData.SkillLevel);
+                    if (!foundSkill) Debug.LogError("Not found skill: " + monsterData.SkillId);
 #endif
-                        break;
-                    }
+                    if (!foundSkill) break;
                     
-                    int power = FormulaUtils.PowerMonster(monsterData, skillStatData);
+                    int power = FormulaUtils.PowerMonster(monsterData, skillData, monsterData.SkillLevel);
                     if (power <= 0 || power > powerBudget)
                         continue;
                     powerBudget -= power;
@@ -243,20 +239,38 @@ namespace _Games.Combat.Level
                 }
                 else
                 {
-                    Debug.Log($"Build total {monsters.Count} monsters");
+                    Debug.Log($"Build total {monsters.Count} monsters: " + string.Join(',', monsters));
                 }
 #endif
                 result[i] = new Batch
                 {
                     duration = batch.Duration,
                     interval = batch.Duration / monsters.Count,
-                    total = monsters.Count,
                     monsters = monsters.ToArray(),
                     waitTime = batch.DelayTime
                 };
             }
 
             return result;
+        }
+        
+        private static List<int> CreateRandomBag(Vector2Int[] weights)
+        {
+            List<int> bag = new List<int>();
+
+            foreach (var w in weights)
+            {
+                int id = w.x;
+                int weight = w.y;
+
+                for (int i = 0; i < weight; i++)
+                {
+                    bag.Add(id);
+                }
+            }
+
+            CollectionUtils.Shuffle(ref bag);
+            return bag;
         }
     }
     
@@ -268,7 +282,6 @@ namespace _Games.Combat.Level
             public float waitTime;
             public float interval;
             public int[] monsters;
-            public int total;
         }
     }
 }

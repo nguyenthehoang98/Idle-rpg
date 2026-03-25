@@ -47,8 +47,8 @@ namespace _Games.Combat.EntityComponentSystem.System
                             DefaultStatData statData = state.EntityManager.GetComponentData<DefaultStatData>(skillData.ValueRO.Parent);
                             
                             HealthData healthData = healthDataLookup[unit];
-                            healthData.Health -= FormulaUtils.Output(statData.Attack, skillDataRO.SkillBaseDamage,
-                                skillDataRO.SkillScaleDamage, 0, 0, 0
+                            healthData.Health -= FormulaUtils.Output(statData.Attack, skillDataRO.FlatDamage,
+                                skillDataRO.ScaleDamage, 0, 0, 0
                             );
                             healthDataLookup[unit] = healthData;
                             EventBus.Instance.Publish(new PlayerOnDamageEvent());

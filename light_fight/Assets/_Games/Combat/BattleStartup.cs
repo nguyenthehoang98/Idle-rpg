@@ -21,7 +21,6 @@ namespace _Games.Combat
         private ShareData shareData;
         private SpawnLogic spawnLogic;
         private LevelDesign levelDesign;
-        private TriggerWeaponLogic weaponLogic;
         private bool isRunning = false;
         
         private async void Start()
@@ -38,8 +37,6 @@ namespace _Games.Combat
             healthUI.Initialize(player);
             shareData = new ShareData(dictionary, levelDesign);
             spawnLogic = new SpawnLogic(shareData);
-            weaponLogic = new TriggerWeaponLogic(levelDesign);
-            levelDesign.OnTriggerWeapon += weaponLogic.Trigger;
             
             // todo: close loading scene
             KitEntryScene.Instance.CloseLoadingScene();
@@ -96,10 +93,8 @@ namespace _Games.Combat
         private void Update()
         {
             if (!isRunning) return;
-            
             float deltaTime = Time.deltaTime;
             spawnLogic.Update(deltaTime);
-            weaponLogic.Update();
         }
     }
 }

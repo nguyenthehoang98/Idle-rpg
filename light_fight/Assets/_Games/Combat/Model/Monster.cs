@@ -1,6 +1,7 @@
 ﻿using System;
 using _Games.Combat.EntityComponentSystem.Data;
 using _Games.Combat.Event;
+using _Games.Config;
 using _Games.Utils;
 using _KIT.Config;
 using _KIT.Event;
@@ -68,8 +69,8 @@ Phần callback OnAttack sẽ chuyển sang invoke theo thời gian, config v
                 var manager = World.DefaultGameObjectInjectionWorld.EntityManager;
                 HealthData player = manager.GetComponentData<HealthData>(meleeAttackRequest.Target);
                 monsterConfig.Find(meleeAttackRequest.MonsterId, out var monsterData);
-                skillConfig.Find(meleeAttackRequest.SkillId, meleeAttackRequest.SkillLevel, out var skillData);
-                player.Health -= FormulaUtils.Output(monsterData.Attack, skillData, 0, 0, 0);
+                skillConfig.Find(meleeAttackRequest.SkillId, out var skillData);
+                player.Health -= FormulaUtils.Output(monsterData.Attack, skillData, meleeAttackRequest.SkillLevel, 0, 0, 0);
                 manager.SetComponentData(meleeAttackRequest.Target, player);     
                 EventBus.Instance.Publish(new PlayerOnDamageEvent());
                 

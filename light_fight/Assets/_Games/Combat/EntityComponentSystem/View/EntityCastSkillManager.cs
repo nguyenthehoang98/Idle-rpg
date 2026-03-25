@@ -4,6 +4,7 @@ using _Games.Combat.EntityComponentSystem.Data;
 using _Games.Combat.EntityComponentSystem.Model;
 using _Games.Combat.SkillSystem;
 using _Games.Combat.SkillSystem.Model;
+using _Games.Config;
 using _KIT.Config;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -49,11 +50,10 @@ namespace _Games.Combat.EntityComponentSystem.View
                     MonsterSkillData data = manager.GetComponentData<MonsterSkillData>(item.Entity);
                     monsterConfig.Find(data.MonsterId, out MonsterData monsterData);
                     skillConfig.Find(monsterData.SkillId, out SkillData skillData);
-                    skillConfig.Find(monsterData.SkillId, monsterData.SkillLevel, out var skillStatData);
                     Skill skill = await SkillFactory.CreateSkill(skillData);
                     ECSFactory.BuildProjectile(manager, item.Entity,
                         item.StartPosition, item.EndPosition,
-                        skill, skillStatData
+                        skill, skillData, monsterData.SkillLevel
                     );
                 }
             }

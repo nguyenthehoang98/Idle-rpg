@@ -1,4 +1,5 @@
 using _Games.Combat.SkillSystem.Model;
+using _Games.Config;
 using _KIT.Utils;
 using Unity.Mathematics;
 using UnityEngine;
@@ -29,12 +30,12 @@ namespace _Games.Utils
     {
         private const float DEFENSE_K = 1000;
 
-        public static int PowerMonster(MonsterData monsterData, SkillStatData skillStatData)
+        public static int PowerMonster(MonsterData monsterData, SkillData skillData, int level)
         {
             int attack = monsterData.Attack;
             int defense = 0;
             int health = monsterData.Health;
-            float skillDamage = SkillDamage(attack, skillStatData.ScaleDamage, skillStatData.BaseDamage);
+            float skillDamage = SkillDamage(attack, skillData.ScaleDamage(level), skillData.FlatDamage(level));
             float dps = DPS(skillDamage, 0, 0);
             float effectiveHp = health * (defense + DEFENSE_K) / DEFENSE_K;
             float power = dps * effectiveHp;
@@ -77,21 +78,21 @@ namespace _Games.Utils
         /// Tính sát thương của kĩ năng
         /// </summary>
         /// <param name="attack"></param>
-        /// <param name="skillScaleDamage"></param>
-        /// <param name="skillFlatDamage"></param>
+        /// <param name="scaleDamage"></param>
+        /// <param name="flatDamage"></param>
         /// <returns></returns>
-        public static int SkillDamage(int attack, float skillScaleDamage, float skillFlatDamage)
+        public static int SkillDamage(int attack, float scaleDamage, float flatDamage)
         {
-            return (int)(attack * skillScaleDamage + skillFlatDamage);
+            return (int)(attack * scaleDamage + flatDamage);
         }
         
         /// <summary>
         /// Hàm tính sát thương -> kẻ dịch
         /// </summary>
-        public static int Output(int attack, SkillStatData skillStatData,
+        public static int Output(int attack, SkillData skillData, int level,
             float criticalRate, float criticalDmg, float defense)
         {
-            float dmg = SkillDamage(attack, skillStatData.ScaleDamage, skillStatData.BaseDamage);
+            float dmg = SkillDamage(attack, skillData.ScaleDamage(level), skillData.FlatDamage(level));
             bool crit = criticalRate >= RandomUtils.Value;
             float totalDmg = crit ? dmg * (1 + math.max(0, criticalDmg)) : dmg;
 

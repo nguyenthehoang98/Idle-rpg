@@ -9,6 +9,10 @@ namespace _Games.Combat.SkillSystem.Model
         [SerializeField] private string skillName;
         [SerializeField] private float lifeTime;
         [SerializeField] private float castTime;
+        [SerializeField] private float baseFlatDamage;
+        [SerializeField] private float flatDamageBonusLevel;
+        [SerializeField] private float baseScaleDamage;
+        [SerializeField] private float scaleDamageBonusLevel;
         [SerializeField] private FindTargetType type;
         [SerializeField] private int needTargetToCast;
         [SerializeField] private float maxTargetRange;
@@ -34,19 +38,8 @@ namespace _Games.Combat.SkillSystem.Model
         public string TrajectoryId => trajectoryId;
         public string[] ModifiersId => modifiersId;
         public string[] BehaviorsId => behaviorsId;
-    }
-
-    [System.Serializable]
-    public class SkillStatData
-    {
-        [SerializeField] private int skillId;
-        [SerializeField] private int skillLevel;
-        [SerializeField] private float baseDamage;
-        [SerializeField] private float scaleDamage;
-
-        public int SkillId => skillId;
-        public int SkillLevel => skillLevel;
-        public float BaseDamage => baseDamage;
-        public float ScaleDamage => scaleDamage;
+        
+        public float FlatDamage(int level) => baseFlatDamage + level * flatDamageBonusLevel;
+        public float ScaleDamage(int level) => baseScaleDamage + level * scaleDamageBonusLevel;
     }
 }
