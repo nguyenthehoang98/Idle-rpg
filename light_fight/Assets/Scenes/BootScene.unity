@@ -334,9 +334,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14c1b7b96a6a5e54fa89eea35bdf53ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebug: 1
-  enableTestMode: 1
-  gameplayScaleTime: 10
+  enableDebug: 0
+  enableTestMode: 0
+  gamePlayIterationsUpdate: 5
+  gameplayScaleTime: 1
   gameplayFrameRate: 30
   container: {fileID: 64959147}
 --- !u!1 &959653745

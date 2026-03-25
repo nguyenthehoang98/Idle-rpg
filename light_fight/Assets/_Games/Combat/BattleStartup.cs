@@ -22,6 +22,7 @@ namespace _Games.Combat
     {
         [SerializeField] private PlayerHealthUI healthUI;
 
+        public static float BattleIterationsUpdate { get; private set; }
         public static float BattleScaleTime { get;  private set; }
         public static float BattleTimeStep { get; protected set; }
         
@@ -35,6 +36,7 @@ namespace _Games.Combat
         {
             BattleScaleTime = KitEntryScene.Instance.GameplayScaleTime;
             BattleTimeStep = 1f / KitEntryScene.Instance.GameplayFrameRate;
+            BattleIterationsUpdate = KitEntryScene.Instance.GamePlayIterationsUpdate;
             EventBus.Instance.Publish(new OpenWeaponSelectPopupEvent());
             int levelId = 1;
             LevelConfig levelConfig = KitConfigManager.Get<LevelConfig>();

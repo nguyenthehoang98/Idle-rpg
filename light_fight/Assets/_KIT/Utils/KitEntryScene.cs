@@ -10,12 +10,14 @@ namespace _KIT.Utils
 
         [SerializeField] protected bool enableDebug = true;
         [SerializeField] protected bool enableTestMode = true;
+        [SerializeField] private float gamePlayIterationsUpdate = 1f;
         [SerializeField] private float gameplayScaleTime = 1f;
         [SerializeField] private int gameplayFrameRate = 60;
 
         private AsyncOperation asyncOperation;
         private bool isLoading;
 
+        public float GamePlayIterationsUpdate => gamePlayIterationsUpdate;
         public float GameplayScaleTime => gameplayScaleTime;
         public int GameplayFrameRate => gameplayFrameRate;
 

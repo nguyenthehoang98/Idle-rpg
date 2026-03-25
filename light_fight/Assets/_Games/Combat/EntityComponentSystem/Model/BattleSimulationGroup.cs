@@ -1,7 +1,6 @@
-﻿using Unity.Entities;
+﻿using Unity.Core;
+using Unity.Entities;
 using Unity.Mathematics;
-using UnityEngine.Scripting;
-
 namespace _Games.Combat.EntityComponentSystem.Model
 {
     public partial class BattleSimulationGroup : ComponentSystemGroup
@@ -10,8 +9,16 @@ namespace _Games.Combat.EntityComponentSystem.Model
 
         protected override void OnUpdate()
         {
-            var iterations = BattleStartup.BattleScaleTime;
+            float timeScale = BattleStartup.BattleScaleTime;
             var timeStep = BattleStartup.BattleTimeStep;
+            var iterations = BattleStartup.BattleIterationsUpdate;
+            TimeData worldTime = World.Time;
+            TimeData scaledTime = new TimeData(
+                worldTime.ElapsedTime,
+                worldTime.DeltaTime * timeScale
+            );
+            World.Time = scaledTime;
+            
             float dt = World.Time.DeltaTime;
             accumulator += dt * iterations;
             int maxSteps = 20;
@@ -22,6 +29,8 @@ namespace _Games.Combat.EntityComponentSystem.Model
                 accumulator -= timeStep;
                 step++;
             }
+            
+            World.Time = worldTime;
             accumulator = math.min(accumulator, timeStep * maxSteps);
         }
     }
