@@ -5,6 +5,7 @@ namespace _Games.Misc
 {
     public abstract class DragAndDropBehavior : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
+        [SerializeField] private Vector2 anchoredPositionOffset = new Vector2(0, 70);
         private RectTransform rectTransform;
         private Canvas canvas;
         private Vector2 offset;
@@ -21,7 +22,7 @@ namespace _Games.Misc
                 eventData.position,
                 eventData.pressEventCamera, 
                 out Vector2 localPoint);
-            offset = rectTransform.anchoredPosition - localPoint;
+            offset = rectTransform.anchoredPosition - localPoint + anchoredPositionOffset;
         }
 
         public virtual void OnDrag(PointerEventData eventData)

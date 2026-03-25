@@ -28,9 +28,9 @@ MonoBehaviour:
     maxTargetRange: 0
     maxHitCount: 1
     collisionResetInterval: 999
-    projectileId: 
-    colliderId: 
-    trajectoryId: 
+    projectileId: Projectile_Empty
+    colliderId: Collider_Empty
+    trajectoryId: Trajectory_Empty
     modifiersId: []
     behaviorsId: []
   - skillId: 100010

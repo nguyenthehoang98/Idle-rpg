@@ -2,7 +2,7 @@
 
 namespace _Games.Combat.SkillSystem.Config
 {
-    [CreateAssetMenu(fileName = "Behavior", menuName = "Game/Skill/Behavior-Spread")]
+    [CreateAssetMenu(fileName = "Behavior", menuName = "Game-Skill/Behavior-Spread")]
     public class SpreadBehaviourSO : BaseBehaviorSO
     {
         public int count;

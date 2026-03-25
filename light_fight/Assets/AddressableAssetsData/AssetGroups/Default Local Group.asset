@@ -30,6 +30,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 59b0e16615751d74c8c7fecf129944d4
+    m_Address: Collider_Empty
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6db32a13468162e4eb40d4d7ba46c169
+    m_Address: Projectile_Empty
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6df4697394718324fac8c2e3eddd93a8
     m_Address: WeaponConfig
     m_ReadOnly: 0
@@ -47,6 +57,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9c8a4ee2d729d7e4aaa7714da3b17cd1
     m_Address: Unit Cowboy
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a432ba70af158c34b9dba3aba2e07e4a
+    m_Address: Trajectory_Empty
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

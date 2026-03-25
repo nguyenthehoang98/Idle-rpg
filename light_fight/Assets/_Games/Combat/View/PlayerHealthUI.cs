@@ -1,6 +1,7 @@
 using _Games.Combat.EntityComponentSystem.Data;
 using _Games.Combat.Event;
 using _KIT.Event;
+using PrimeTween;
 using TMPro;
 using Unity.Entities;
 using UnityEngine;
@@ -15,6 +16,7 @@ public class PlayerHealthUI : MonoBehaviour
 
     private void OnEnable()
     {
+        transform.localScale = Vector3.one;
         EventBus.Instance.Subscribe<PlayerOnDamageEvent>(OnPlayerOnDamage);
     }
 

@@ -32,6 +32,7 @@ namespace _Games.Combat.View
         private readonly List<WeaponData> allData = new List<WeaponData>();
         private Camera mainCamera;
         private Vector3 prevCameraPosition;
+        private float prevCameraOrtho;
         private bool canClickButton;
         
         private void Awake()
@@ -60,8 +61,8 @@ namespace _Games.Combat.View
             int[] weaponIds = new int[] { 2001, 2002, 2003, 2010 };
             foreach (var id in weaponIds)
             {
-                weaponConfig.Find(id, out WeaponData weaponData);
-                allData.Add(weaponData);
+                if(weaponConfig.Find(id, out WeaponData weaponData))
+                    allData.Add(weaponData);
             }
         }
 
@@ -86,6 +87,7 @@ namespace _Games.Combat.View
         {
             float duration = e.Duration;
             prevCameraPosition = mainCamera.transform.position;
+            prevCameraOrtho = mainCamera.orthographicSize;
             onStartOpen?.Invoke();
 
             if (Mathf.Abs(duration) > 0)
@@ -94,13 +96,14 @@ namespace _Games.Combat.View
 
                 TweenSettings setting = new TweenSettings(duration, Ease.OutSine);
                 Tween.Position(mainCamera.transform, new (e.CameraPosition, setting));
+                Tween.CameraOrthographicSize(mainCamera, new (e.CameraOrtho, setting));
                 Tween.UIAnchoredPositionY(content, new(0, setting));
                 Tween.Delay(duration, () => { canClickButton = true; });
             }
             else
             {
                 content.gameObject.SetActive(true);
-                
+                mainCamera.orthographicSize = e.CameraOrtho;
                 mainCamera.transform.position = e.CameraPosition;
                 content.anchoredPosition3D = Vector3.zero;
                 canClickButton = true;
@@ -113,6 +116,7 @@ namespace _Games.Combat.View
             onStartClose?.Invoke();
 
             TweenSettings setting = new TweenSettings(duration, Ease.OutSine);
+            Tween.CameraOrthographicSize(mainCamera, new (prevCameraOrtho, setting));
             Tween.Position(mainCamera.transform, new (prevCameraPosition, setting));
             Tween.UIAnchoredPositionY(content, new(yStartPosition, setting));
             Tween.Delay(duration, () =>

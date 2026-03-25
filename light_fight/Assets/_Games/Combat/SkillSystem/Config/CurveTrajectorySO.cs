@@ -2,7 +2,7 @@
 
 namespace _Games.Combat.SkillSystem.Config
 {
-    [CreateAssetMenu(fileName = "Curve", menuName = "Game/Skill/Trajectory-Curve")]
+    [CreateAssetMenu(fileName = "Curve", menuName = "Game-Skill/Trajectory-Curve")]
     public class CurveTrajectorySO : BaseTrajectorySO
     {
         public AnimationCurve curve;

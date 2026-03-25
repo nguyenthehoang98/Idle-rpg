@@ -37,7 +37,6 @@ namespace _Games.Combat.Level
         private float waitTime;
         private float elapsedTime;
         private float spawnTime;
-        private int spawnCount;
         private bool paused = true;
         private bool waiting = false;
         private EntityQuery query;
@@ -100,23 +99,32 @@ namespace _Games.Combat.Level
                 var batch = batches[currentBatch];
                 elapsedTime += dt;
                 spawnTime += dt;
-                
+
+                int remain = 0;
                 while (true)
                 {
                     Vector3 position = RandomPointBetweenRects_NoLoop(
                         new Vector2(12, 22), new Vector2(14, 24), Vector2.zero
                     );
-                    await ECSFactory.BuildMonster(batch.monsters[spawnCount], shareData.RadiusBonus, position);
-                    spawnCount++;
+                    
+                    var keys = batch.monsters.Keys.ToList();
+                    int random = RandomUtils.Range(0, keys.Count);
+                    int monsterID = keys[random];
+                    await ECSFactory.BuildMonster(monsterID, shareData.RadiusBonus, position);
                     spawnTime -= batch.interval;
 
-                    if (spawnCount < 0 || spawnCount >= batch.total) break;
+                    batch.monsters[monsterID]--;
+                    if (batch.monsters.Count <= 0)
+                        batch.monsters.Remove(monsterID);
+                    
+                    foreach (var pair in batch.monsters)
+                        remain += pair.Value;
+                    if (spawnTime < 0 || remain == 0) break;
                 }
 
-                if (spawnCount >= batch.total || elapsedTime >= batch.duration)
+                if (remain == 0 || elapsedTime >= batch.duration)
                 {
                     currentBatch++;
-                    spawnCount = 0;
                     elapsedTime = waitTime = spawnTime = 0;
                     if (currentBatch < batches.Length) waitTime = batches[currentBatch].waitTime;
                 }
@@ -214,13 +222,13 @@ namespace _Games.Combat.Level
                     bagIndex++;
 
                     bool foundMonster = monsterConfig.Find(enemyId, out MonsterData monsterData);
-#if UNITY_EDITOR
+#if DEBUG
                     if (!foundMonster) Debug.LogError("Not found monster: " + enemyId);
 #endif
                     if (!foundMonster) break;
 
                     bool foundSkill = skillConfig.Find(monsterData.SkillId, out var skillData);
-#if UNITY_EDITOR
+#if DEBUG
                     if (!foundSkill) Debug.LogError("Not found skill: " + monsterData.SkillId);
 #endif
                     if (!foundSkill) break;
@@ -246,16 +254,11 @@ namespace _Games.Combat.Level
                     Debug.Log($"Build total {monsters.Count} monsters: " + string.Join(',', monsters));
                 }
 #endif
-                int total = 0;
-                foreach (KeyValuePair<int, int> monster in monsters)
-                    total += monster.Value;
-                
                 result[i] = new Batch
                 {
                     duration = batch.Duration,
                     interval = batch.Duration / monsters.Count,
                     monsters = monsters,
-                    total = total,
                     waitTime = batch.DelayTime
                 };
             }
@@ -290,7 +293,6 @@ namespace _Games.Combat.Level
             public float duration;
             public float waitTime;
             public float interval;
-            public int total;
             public Dictionary<int, int> monsters;
         }
     }

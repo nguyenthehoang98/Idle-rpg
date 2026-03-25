@@ -221,7 +221,12 @@ namespace _Games.Combat.EntityComponentSystem
             float3 position)
         {
             Vector3 destination = float3.zero;
-            KitConfigManager.Get<MonsterConfig>().Find(monsterID, out var monsterData);
+            bool foundMonsterData = KitConfigManager.Get<MonsterConfig>().Find(monsterID, out var monsterData);
+#if DEBUG
+            if(!foundMonsterData) Debug.LogError("Not found monster data: " + monsterID);
+#endif
+            if (!foundMonsterData) return;
+            
             GameObject go = await KitLoaded.LoadAsync<GameObject>(monsterData.MonsterObjectId);
             if (monstersPath.Add(monsterData.MonsterObjectId))
             {
