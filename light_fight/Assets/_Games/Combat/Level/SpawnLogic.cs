@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using _Games.Combat.EntityComponentSystem;
 using _Games.Combat.EntityComponentSystem.Data;
@@ -70,8 +71,8 @@ namespace _Games.Combat.Level
             HashSet<int> monsters = new HashSet<int>();
             foreach (var batch in batches)
             {
-                foreach (var monster in batch.monsters)
-                    monsters.Add(monster);
+                var keys = batch.monsters.Keys.ToList();
+                foreach (var key in keys) monsters.Add(key);
             }
             
             foreach (var monster in monsters)
@@ -99,19 +100,20 @@ namespace _Games.Combat.Level
                 var batch = batches[currentBatch];
                 elapsedTime += dt;
                 spawnTime += dt;
-
-                while (spawnTime > 0 && spawnCount < batch.monsters.Length)
+                
+                while (true)
                 {
-                    int monster = batch.monsters[spawnCount];
                     Vector3 position = RandomPointBetweenRects_NoLoop(
                         new Vector2(12, 22), new Vector2(14, 24), Vector2.zero
                     );
-                    await ECSFactory.BuildMonster(monster, shareData.RadiusBonus, position);
+                    await ECSFactory.BuildMonster(batch.monsters[spawnCount], shareData.RadiusBonus, position);
                     spawnCount++;
                     spawnTime -= batch.interval;
+
+                    if (spawnCount < 0 || spawnCount >= batch.total) break;
                 }
 
-                if (spawnCount >= batch.monsters.Length || elapsedTime >= batch.duration)
+                if (spawnCount >= batch.total || elapsedTime >= batch.duration)
                 {
                     currentBatch++;
                     spawnCount = 0;
@@ -194,7 +196,7 @@ namespace _Games.Combat.Level
             for (int i = 0; i < result.Length; i++)
             {
                 LevelBatch batch = batches[i];
-                List<int> monsters = new List<int>();
+                Dictionary<int, int> monsters = new Dictionary<int, int>();
                 List<int> bag = CreateRandomBag(batch.Weights);
                 int bagIndex = 0;
                 int powerBudget = batch.Power;
@@ -227,7 +229,9 @@ namespace _Games.Combat.Level
                     if (power <= 0 || power > powerBudget)
                         continue;
                     powerBudget -= power;
-                    monsters.Add(enemyId);
+                    if (monsters.TryGetValue(enemyId, out int count))
+                        monsters[enemyId] = count + 1;
+                    else monsters.Add(enemyId, 1);
                     safe = 0;
                 }
                 
@@ -242,11 +246,16 @@ namespace _Games.Combat.Level
                     Debug.Log($"Build total {monsters.Count} monsters: " + string.Join(',', monsters));
                 }
 #endif
+                int total = 0;
+                foreach (KeyValuePair<int, int> monster in monsters)
+                    total += monster.Value;
+                
                 result[i] = new Batch
                 {
                     duration = batch.Duration,
                     interval = batch.Duration / monsters.Count,
-                    monsters = monsters.ToArray(),
+                    monsters = monsters,
+                    total = total,
                     waitTime = batch.DelayTime
                 };
             }
@@ -276,12 +285,13 @@ namespace _Games.Combat.Level
     
     public partial class SpawnLogic
     {
-        struct Batch
+        class Batch
         {
             public float duration;
             public float waitTime;
             public float interval;
-            public int[] monsters;
+            public int total;
+            public Dictionary<int, int> monsters;
         }
     }
 }

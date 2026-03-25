@@ -60,7 +60,7 @@ namespace _Games.Combat.View
             int[] weaponIds = new int[] { 2001, 2002, 2003, 2010 };
             foreach (var id in weaponIds)
             {
-                weaponConfig.Find(id, out var weaponData);
+                weaponConfig.Find(id, out WeaponData weaponData);
                 allData.Add(weaponData);
             }
         }
@@ -127,15 +127,10 @@ namespace _Games.Combat.View
         {
             // Lấy weapon từ pool: vũ khí, máu, giáp ...
             // Random level dựa trên wave hiện tại và level hiện tại
-            List<WeaponData> list = new List<WeaponData>(allData.Count);
-            foreach (var data in allData)
+            int length = Mathf.Min(weapons.Length, allData.Count);
+            for (int i = 0; i < length; i++)
             {
-                list.Add(data);
-            }
-
-            for (int i = 0; i < weapons.Length; i++)
-            {
-                WeaponData weaponData = list[i];
+                WeaponData weaponData = allData[i];
                 int level = FormulaUtils.RandomEquipmentLevel(1, 1, 1);
                 Data data = weapons[i];
                 data.textPrice.SetText("X" + weaponData.Price(level));

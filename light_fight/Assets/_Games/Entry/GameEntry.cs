@@ -32,6 +32,7 @@ namespace _Games.Entry
                 "MonsterConfig",
                 "SkillConfig",
                 "LevelConfig",
+                "WeaponConfig",
             });
 
             ChangeSceneAsync("GameplayScene");

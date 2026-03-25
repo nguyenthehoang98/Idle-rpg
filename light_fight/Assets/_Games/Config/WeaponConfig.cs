@@ -19,13 +19,13 @@ namespace _Games.Config
             cacheWeaponData = new Dictionary<int, WeaponData>();
             foreach (var m in weapons)
             {
-                cacheWeaponData.Add(m.SkillId, m);
+                cacheWeaponData.Add(m.WeaponId, m);
             }
         }
         
-        public bool Find(int skillId, out WeaponData skill)
+        public bool Find(int weaponId, out WeaponData skill)
         {
-            return cacheWeaponData.TryGetValue(skillId, out skill);
+            return cacheWeaponData.TryGetValue(weaponId, out skill);
         }
     }
 
