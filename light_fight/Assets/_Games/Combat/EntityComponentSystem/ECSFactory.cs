@@ -291,7 +291,9 @@ namespace _Games.Combat.EntityComponentSystem
             });
             manager.AddComponentData(entity, new AgentLocomotion
             {
-                Speed = monsterData.MoveSpeed, Acceleration = monsterData.MoveSpeed, AngularSpeed = 0,
+                Speed = monsterData.MoveSpeed,
+                Acceleration = monsterData.MoveSpeed, 
+                AngularSpeed = 0,
                 StoppingDistance = bonusRange + monsterData.StopMoveDistance + radius,
                 AutoBreaking = true,
             });

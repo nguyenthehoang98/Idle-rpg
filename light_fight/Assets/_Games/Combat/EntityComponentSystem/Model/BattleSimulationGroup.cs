@@ -4,25 +4,25 @@ using UnityEngine.Scripting;
 
 namespace _Games.Combat.EntityComponentSystem.Model
 {
-    public partial class SimulationGroup : ComponentSystemGroup
+    public partial class BattleSimulationGroup : ComponentSystemGroup
     {
-        public float Iterations = 1;
-        public float TimeStep = 1 / 30f;
         private float accumulator;
 
         protected override void OnUpdate()
         {
+            var iterations = BattleStartup.BattleScaleTime;
+            var timeStep = BattleStartup.BattleTimeStep;
             float dt = World.Time.DeltaTime;
-            accumulator += dt * Iterations;
+            accumulator += dt * iterations;
             int maxSteps = 20;
             int step = 0;
-            while (accumulator >= TimeStep && step < maxSteps)
+            while (accumulator >= timeStep && step < maxSteps)
             {
                 base.OnUpdate();
-                accumulator -= TimeStep;
+                accumulator -= timeStep;
                 step++;
             }
-            accumulator = math.min(accumulator, TimeStep * maxSteps);
+            accumulator = math.min(accumulator, timeStep * maxSteps);
         }
     }
 }

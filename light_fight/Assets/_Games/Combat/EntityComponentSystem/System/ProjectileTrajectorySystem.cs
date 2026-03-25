@@ -8,7 +8,7 @@ using Unity.Transforms;
 namespace _Games.Combat.EntityComponentSystem.System
 {
     [BurstCompile]
-    [UpdateInGroup(typeof(SimulationGroup))]
+    [UpdateInGroup(typeof(BattleSimulationGroup))]
     [RequireMatchingQueriesForUpdate]
     public partial struct ProjectileTrajectorySystem : ISystem
     {

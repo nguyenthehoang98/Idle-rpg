@@ -673,7 +673,7 @@ PlayerSettings:
   webGLCloseOnQuit: 0
   webWasm2023: 0
   scriptingDefineSymbols:
-    Standalone: DEVELOP_MODE;MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
+    Standalone: DEVELOP_MODE;MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED;TEST_MODE
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

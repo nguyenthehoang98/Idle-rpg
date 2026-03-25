@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace _Games.Combat.EntityComponentSystem.System
 {
-    [UpdateInGroup(typeof(SimulationGroup))]
+    [UpdateInGroup(typeof(BattleSimulationGroup))]
     [RequireMatchingQueriesForUpdate]
     public partial struct MonsterMeleeCastSkillSystem : ISystem
     {

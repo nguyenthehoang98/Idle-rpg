@@ -9,7 +9,7 @@ using UnityEngine;
 namespace _Games.Combat.EntityComponentSystem.System
 {
     [BurstCompile]
-    [UpdateInGroup(typeof(SimulationGroup))]
+    [UpdateInGroup(typeof(BattleSimulationGroup))]
     [RequireMatchingQueriesForUpdate]
     public partial struct GizmosSystem : ISystem
     {

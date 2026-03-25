@@ -11,7 +11,7 @@ namespace _Games.Combat.EntityComponentSystem.System
 {
     [BurstCompile]
     [UpdateBefore(typeof(ProjectileTrajectorySystem))]
-    [UpdateInGroup(typeof(SimulationGroup))]
+    [UpdateInGroup(typeof(BattleSimulationGroup))]
     [RequireMatchingQueriesForUpdate]
     public partial struct SpatialGridSystem : ISystem
     {

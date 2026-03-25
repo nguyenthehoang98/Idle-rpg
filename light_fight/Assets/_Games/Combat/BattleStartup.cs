@@ -21,6 +21,9 @@ namespace _Games.Combat
     public class BattleStartup : MonoBehaviour
     {
         [SerializeField] private PlayerHealthUI healthUI;
+
+        public static float BattleScaleTime { get;  private set; }
+        public static float BattleTimeStep { get; protected set; }
         
         private ShareData shareData;
         private SpawnLogic spawnLogic;
@@ -30,12 +33,8 @@ namespace _Games.Combat
         
         private async void Start()
         {
-            var world = World.DefaultGameObjectInjectionWorld;
-            var simGroup = world.GetExistingSystemManaged<SimulationGroup>();
-#if TEST_MODE
-            simGroup.Iterations = KitEntryScene.Instance.GameplayScaleTime;
-#endif
-            simGroup.TimeStep = 1f/ KitEntryScene.Instance.GameplayFrameRate;
+            BattleScaleTime = KitEntryScene.Instance.GameplayScaleTime;
+            BattleTimeStep = 1f / KitEntryScene.Instance.GameplayFrameRate;
             EventBus.Instance.Publish(new OpenWeaponSelectPopupEvent());
             int levelId = 1;
             LevelConfig levelConfig = KitConfigManager.Get<LevelConfig>();

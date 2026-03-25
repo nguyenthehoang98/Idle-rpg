@@ -11,7 +11,7 @@ namespace _Games.Combat.EntityComponentSystem.System
 {
     [BurstCompile]
     [UpdateAfter(typeof(ProjectileTrajectorySystem))]
-    [UpdateInGroup(typeof(SimulationGroup))]
+    [UpdateInGroup(typeof(BattleSimulationGroup))]
     [RequireMatchingQueriesForUpdate]
     public partial struct ProjectileReadTransformSystem : ISystem
     {

@@ -10,7 +10,7 @@ namespace _Games.Combat.EntityComponentSystem.System
 {
     [BurstCompile]
     [UpdateAfter(typeof(ProjectileOverlapSystem))]
-    [UpdateInGroup(typeof(SimulationGroup))]
+    [UpdateInGroup(typeof(BattleSimulationGroup))]
     [RequireMatchingQueriesForUpdate]
     public partial struct ProjectileDamagePlayerSystem : ISystem
     {
