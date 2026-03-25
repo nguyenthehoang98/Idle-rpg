@@ -29,6 +29,7 @@ namespace _Games.Combat
         
         private async void Start()
         {
+            EventBus.Instance.Publish(new OpenWeaponSelectPopupEvent());
             int levelId = 1;
             LevelConfig levelConfig = KitConfigManager.Get<LevelConfig>();
             bool foundLevelData = levelConfig.FindData(levelId, out var levelData);
@@ -49,7 +50,6 @@ namespace _Games.Combat
 #if DEVELOP_MODE
             gameObject.AddComponent<CpuFrame>();
 #endif
-            EventBus.Instance.Publish(new WaveSelectWeaponEvent(0, 5, new Vector3(0, -1, -10)));
             Debug.Log(@"Tạo level config -> spawn level theo wave/batch...");
             Debug.Log(@"Phần tường raào mà monster stop & tấn công được nên có 1 cái fx như shield của BagMaster");
         }

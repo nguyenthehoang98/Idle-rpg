@@ -37,19 +37,19 @@ namespace _Games.Combat.Level
         
         private void OnEnable()
         {
-            EventBus.Instance.Subscribe<WaveSelectWeaponEvent>(OnWaveSelectWeapon);
+            EventBus.Instance.Subscribe<OpenWeaponSelectPopupEvent>(OnWaveSelectWeapon);
             EventBus.Instance.Subscribe<WaveResumeEvent>(OnWaveResume);
         } 
 
         private void OnDisable()
         {
-            EventBus.Instance.Unsubscribe<WaveSelectWeaponEvent>(OnWaveSelectWeapon);
+            EventBus.Instance.Unsubscribe<OpenWeaponSelectPopupEvent>(OnWaveSelectWeapon);
             EventBus.Instance.Unsubscribe<WaveResumeEvent>(OnWaveResume);
         }
         
         private void OnWaveResume(WaveResumeEvent e) => container.gameObject.SetActive(false);
 
-        private void OnWaveSelectWeapon(WaveSelectWeaponEvent e) => container.gameObject.SetActive(true);
+        private void OnWaveSelectWeapon(OpenWeaponSelectPopupEvent e) => container.gameObject.SetActive(true);
 
          public async void Initialize(WeaponData weaponData, int level, Action pickEquipmentCallback)
         {

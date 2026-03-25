@@ -6,10 +6,10 @@ using _Games.Config;
 using _Games.Utils;
 using _KIT.Config;
 using _KIT.Event;
-using PrimeTween;
+using _KIT.Utils;
+using MoreMountains.Feedbacks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace _Games.Combat.View
@@ -19,40 +19,25 @@ namespace _Games.Combat.View
         [SerializeField] private WeaponItemView itemViewPrefab;
         [SerializeField] private RectTransform content;
         [SerializeField] private Data[] weapons;
-        
-        [Header("Tween")]
-        [SerializeField] private float yStartPosition;
-        [SerializeField] private float closeDuration = 0.3f;
-        [SerializeField] private UnityEvent onStartOpen;
-        [SerializeField] private UnityEvent onStartClose;
+
+        [Header("Tween")] 
+        [SerializeField] private MMF_Player openFeedback;
+        [SerializeField] private MMF_Player closeFeedback;
         
         [Header("Button")]
         [SerializeField] private Button btnResume;
         
-        private readonly List<WeaponData> allData = new List<WeaponData>();
-        private Camera mainCamera;
-        private Vector3 prevCameraPosition;
-        private float prevCameraOrtho;
-        private bool canClickButton;
-        
+        private readonly List<WeaponData> allData = new List<WeaponData>();        
         private void Awake()
         {
-            mainCamera = Camera.main;
             btnResume.onClick.AddListener(() =>
             {
-                if (canClickButton)
+                EventBus.Instance.Publish(new CloseWeaponSelectPopupEvent());
+                Close(() =>
                 {
-                    canClickButton = false;
-                    Close(() =>
-                    {
-                        EventBus.Instance.Publish(new WaveResumeEvent());                        
-                    });
-                }
+                    EventBus.Instance.Publish(new WaveResumeEvent());                        
+                });
             });
-            Vector3 anchoredPosition = content.anchoredPosition3D;
-            anchoredPosition.y = yStartPosition;
-            content.anchoredPosition3D = anchoredPosition;
-            content.gameObject.SetActive(false);
         }
         
         private void Start()
@@ -68,61 +53,28 @@ namespace _Games.Combat.View
 
         private void OnEnable()
         {
-            EventBus.Instance.Subscribe<WaveSelectWeaponEvent>(OnWaveSelectWeapon);
+            EventBus.Instance.Subscribe<OpenWeaponSelectPopupEvent>(OpenPopup);
         }
 
         private void OnDisable()
         {
-            EventBus.Instance.Unsubscribe<WaveSelectWeaponEvent>(OnWaveSelectWeapon);
+            EventBus.Instance.Unsubscribe<OpenWeaponSelectPopupEvent>(OpenPopup);
         }
         
-        private void OnWaveSelectWeapon(WaveSelectWeaponEvent e)
+        private void OpenPopup(OpenWeaponSelectPopupEvent e)
         {
             // tính toán dữ liệu & fill vào data (weapons)
             PickWeapon();
-            Open(e);
-        }
-        
-        private void Open(WaveSelectWeaponEvent e)
-        {
-            float duration = e.Duration;
-            prevCameraPosition = mainCamera.transform.position;
-            prevCameraOrtho = mainCamera.orthographicSize;
-            onStartOpen?.Invoke();
-
-            if (Mathf.Abs(duration) > 0)
-            {
-                content.gameObject.SetActive(true);
-
-                TweenSettings setting = new TweenSettings(duration, Ease.OutSine);
-                Tween.Position(mainCamera.transform, new (e.CameraPosition, setting));
-                Tween.CameraOrthographicSize(mainCamera, new (e.CameraOrtho, setting));
-                Tween.UIAnchoredPositionY(content, new(0, setting));
-                Tween.Delay(duration, () => { canClickButton = true; });
-            }
-            else
-            {
-                content.gameObject.SetActive(true);
-                mainCamera.orthographicSize = e.CameraOrtho;
-                mainCamera.transform.position = e.CameraPosition;
-                content.anchoredPosition3D = Vector3.zero;
-                canClickButton = true;
-            }
+            openFeedback.PlayFeedbacks();;
         }
 
         private void Close(Action onClosed)
         {
-            float duration = closeDuration;
-            onStartClose?.Invoke();
-
-            TweenSettings setting = new TweenSettings(duration, Ease.OutSine);
-            Tween.CameraOrthographicSize(mainCamera, new (prevCameraOrtho, setting));
-            Tween.Position(mainCamera.transform, new (prevCameraPosition, setting));
-            Tween.UIAnchoredPositionY(content, new(yStartPosition, setting));
-            Tween.Delay(duration, () =>
+            closeFeedback.PlayFeedbacks();
+            this.WaitInvoke(closeFeedback.TotalDuration, () =>
             {
                 ReturnPool();
-                onClosed?.Invoke(); 
+                onClosed?.Invoke();
                 content.gameObject.SetActive(false);
             });
         }
