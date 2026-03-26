@@ -1,10 +1,12 @@
-﻿namespace _Games.Combat.Model
+﻿using UnityEngine;
+
+namespace _Games.Combat.Model
 {
-    public class Projectile : UnityEngine.Object
+    public class Projectile : ScriptableObject
     {
         private ProjectileAuthoring authoring;
 
-        public Projectile(ProjectileAuthoring authoring)
+        public void Init(ProjectileAuthoring authoring)
         {
             this.authoring = authoring;
         }
@@ -12,6 +14,7 @@
         public void Destroy()
         {
             if(authoring != null) authoring.Destroy();
+            Destroy(this);
         }
     }
 }

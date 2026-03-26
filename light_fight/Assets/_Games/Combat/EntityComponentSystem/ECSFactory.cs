@@ -41,6 +41,135 @@ namespace _Games.Combat.EntityComponentSystem
             return entity;
         }
 
+        public static async UniTask BuildMonster(Entity player, int monsterID, float bonusRange, float3 position)
+        {
+            Vector3 destination = float3.zero;
+            SkillConfig skillConfig = KitConfigManager.Get<SkillConfig>();
+            MonsterConfig monsterConfig = KitConfigManager.Get<MonsterConfig>();
+            bool foundMonsterData = monsterConfig.Find(monsterID, out var monsterData);
+#if DEBUG
+            if(!foundMonsterData) Debug.LogError("Not found monster data: " + monsterID);
+#endif
+            if (!foundMonsterData) return;
+            
+            GameObject go = await KitLoaded.LoadAsync<GameObject>(monsterData.MonsterObjectId);
+            MonsterAuthoring authoringPrefab = go.GetComponent<MonsterAuthoring>();
+#if !TEST_MODE
+            if (monstersPath.Add(monsterData.MonsterObjectId))
+            {
+                KitPool.RegisterPool(go, true);
+            }
+#endif
+            
+            EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            MonsterAuthoring authoring = null;
+            Entity entity;
+#if !TEST_MODE
+            EntityView view = KitPool.Instantiate(go.GetComponent<EntityView>());
+            view.transform.position = position;
+            authoring = view.GetComponent<MonsterAuthoring>();
+            entity = view.GetOrCreateEntity();
+#else
+            entity = manager.CreateEntity();
+#endif
+            Monster monster = null;
+            RangedMonsterAuthoring rangedMonsterAuthoring = authoringPrefab.GetComponent<RangedMonsterAuthoring>();
+            if (rangedMonsterAuthoring != null)
+            {
+                RangedMonster rangedMonster = ScriptableObject.CreateInstance<RangedMonster>();
+                rangedMonster.Init(authoring, rangedMonsterAuthoring.MuzzleOffset, entity, player, monsterID,
+                    monsterData.SkillId, monsterData.SkillLevel, monsterConfig, skillConfig, authoringPrefab.DelayExecuteAttack);
+                monster = rangedMonster;
+            }
+            else
+            {
+                monster = ScriptableObject.CreateInstance<Monster>();
+                monster.Init(authoring, entity, player, monsterID,
+                    monsterData.SkillId, monsterData.SkillLevel, monsterConfig, skillConfig, authoringPrefab.DelayExecuteAttack);
+            }
+
+            if (monster == null) Debug.LogError("Monster undefined " + monsterData.MonsterObjectId);
+            
+            float radius = authoringPrefab.Radius;
+            DynamicBuffer<CircleBuffer> circleBuffers = manager.AddBuffer<CircleBuffer>(entity);
+            circleBuffers.Add(new CircleBuffer(radius, float3.zero, false, 0));
+            manager.AddComponentData(entity, new MonsterTag());
+            manager.AddComponentData(entity, new MonsterFlipData
+            {
+                Changed = true,
+                FacingRight = position.x >= destination.x,
+            });
+            manager.AddComponentData(entity, new LocalTransform
+            {
+                Position = position, Rotation = quaternion.identity, Scale = 1
+            });
+            manager.AddComponentData(entity, new Agent
+            {
+                Layers = monsterData.IsRanged ? NavigationLayers.Layer1 : NavigationLayers.Default
+            });
+            manager.AddComponentData(entity, new AgentBody
+            {
+                Destination = destination
+            });
+            manager.AddComponentData(entity, new AgentCollider
+            {
+                Layers = monsterData.IsRanged ? NavigationLayers.Layer1 : NavigationLayers.Default
+            });
+            manager.AddComponentData(entity, new AgentLocomotion
+            {
+                Speed = monsterData.MoveSpeed,
+                Acceleration = monsterData.MoveSpeed, 
+                AngularSpeed = 0,
+                StoppingDistance = bonusRange + monsterData.StopMoveDistance + radius,
+                AutoBreaking = true,
+            });
+            manager.AddComponentData(entity, new AgentSeparation
+            {
+                Radius = radius, Weight = 1,
+                Layers = monsterData.IsRanged ? NavigationLayers.Layer1 : NavigationLayers.Default
+            });
+            manager.AddComponentData(entity, new AgentShape
+            {
+                Radius = radius, Type = ShapeType.Circle,
+            });
+            manager.AddComponentData(entity, new AgentSonarAvoid
+            {
+                Radius = radius * 2,
+                Mode = SonarAvoidMode.IgnoreBehindAgents,
+                MaxAngle = math.radians(360),
+                Angle = math.radians(180),
+                BlockedStop = true,
+                Layers = monsterData.IsRanged ? NavigationLayers.Default : NavigationLayers.Layer1
+            });
+            manager.AddComponentData(entity,
+                new DefaultStatData(monsterData.MoveSpeed, monsterData.Attack, monsterData.Health)
+            );
+            manager.AddComponentData(entity, new HealthData
+            {
+                Health = monsterData.Health,
+                MaxHealth = monsterData.Health,
+            });
+            manager.AddComponentData(entity,
+                new MonsterSkillData(monsterID, monsterData.SkillId, monsterData.SkillLevel,
+                    monsterData.SkillCooldown, bonusRange + monsterData.AttackDistance + radius, 1)
+            );
+            if (monsterData.IsRanged)
+                manager.AddComponentData(entity, new MonsterRangedTag());
+            else
+                manager.AddComponentData(entity, new MonsterMeleeTag());
+            manager.AddComponentObject(entity, monster);
+            manager.SetEnabled(entity, true);
+#if !TEST_MODE
+            manager.AddComponentObject(entity, authoring.transform);
+            view.gameObject.SendMessage("Initialize", entity);
+#endif
+#if UNITY_EDITOR && !TEST_MODE
+            manager.SetName(entity, go.name + "#" + entity.GetHashCode());
+            view.name = go.name + "#" + entity.GetHashCode();
+#endif
+            await UniTask.CompletedTask;
+        }
+        
         public static async void BuildProjectile(EntityManager manager, Entity source,
             float3 startPosition, float3 endPosition, Skill skill, SkillData skillData, int level)
         {
@@ -135,7 +264,7 @@ namespace _Games.Combat.EntityComponentSystem
             }
         }
         
-        static Vector3 GetSpreadEndPosition(Vector3 startPosition, Vector3 direction, int index, int total, float angle, float distance)
+        private static Vector3 GetSpreadEndPosition(Vector3 startPosition, Vector3 direction, int index, int total, float angle, float distance)
         {
             float angleStep = (index - (total - 1) * 0.5f) * angle;
 
@@ -146,7 +275,7 @@ namespace _Games.Combat.EntityComponentSystem
             return startPosition + dir * distance;
         }
 
-        static void BuildProjectileInternal(EntityManager manager, Entity source,
+        private static void BuildProjectileInternal(EntityManager manager, Entity source,
             float3 startPosition, float3 endPosition,
             Skill skill, SkillData skillData, int level)
         {
@@ -175,7 +304,8 @@ namespace _Games.Combat.EntityComponentSystem
 #else
             entity = manager.CreateEntity();  
 #endif
-            Projectile projectile = new Projectile(authoring);
+            Projectile projectile = ScriptableObject.CreateInstance<Projectile>();
+            projectile.Init(authoring);
             manager.AddComponentData(entity, new ProjectileTag());
             manager.AddBuffer<CollisionBuffer>(entity);
             manager.AddComponentData(entity, new LocalTransform
@@ -235,126 +365,7 @@ namespace _Games.Combat.EntityComponentSystem
             view.name = authoring.name + "#" + entity.GetHashCode();
 #endif
         }
-
-        public static async UniTask BuildMonster(Entity player, int monsterID, float bonusRange, float3 position)
-        {
-            Vector3 destination = float3.zero;
-            SkillConfig skillConfig = KitConfigManager.Get<SkillConfig>();
-            MonsterConfig monsterConfig = KitConfigManager.Get<MonsterConfig>();
-            bool foundMonsterData = monsterConfig.Find(monsterID, out var monsterData);
-#if DEBUG
-            if(!foundMonsterData) Debug.LogError("Not found monster data: " + monsterID);
-#endif
-            if (!foundMonsterData) return;
-            
-            GameObject go = await KitLoaded.LoadAsync<GameObject>(monsterData.MonsterObjectId);
-            MonsterAuthoring authoringPrefab = go.GetComponent<MonsterAuthoring>();
-#if !TEST_MODE
-            if (monstersPath.Add(monsterData.MonsterObjectId))
-            {
-                KitPool.RegisterPool(go, true);
-            }
-#endif
-            
-            EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            MonsterAuthoring authoring = null;
-            Entity entity;
-#if !TEST_MODE
-            EntityView view = KitPool.Instantiate(go.GetComponent<EntityView>());
-            view.transform.position = position;
-            authoring = view.GetComponent<MonsterAuthoring>();
-            entity = view.GetOrCreateEntity();
-#else
-            entity = manager.CreateEntity();
-#endif
-            Monster monster;
-            if (authoringPrefab is RangedMonsterAuthoring rangedAuthoring)
-                monster = new RangedMonster(authoring, rangedAuthoring.MuzzleOffset, entity, player, monsterID,
-                    monsterData.SkillId, monsterData.SkillLevel, monsterConfig, skillConfig, authoringPrefab.DelayExecuteAttack);
-            else
-                monster = new Monster(authoring, entity, player, monsterID,
-                    monsterData.SkillId, monsterData.SkillLevel, monsterConfig, skillConfig, authoringPrefab.DelayExecuteAttack);
-            
-            float radius = authoringPrefab.Radius;
-            DynamicBuffer<CircleBuffer> circleBuffers = manager.AddBuffer<CircleBuffer>(entity);
-            circleBuffers.Add(new CircleBuffer(radius, float3.zero, false, 0));
-            manager.AddComponentData(entity, new MonsterTag());
-            manager.AddComponentData(entity, new MonsterFlipData
-            {
-                Changed = true,
-                FacingRight = position.x >= destination.x,
-            });
-            manager.AddComponentData(entity, new LocalTransform
-            {
-                Position = position, Rotation = quaternion.identity, Scale = 1
-            });
-            manager.AddComponentData(entity, new Agent
-            {
-                Layers = monsterData.IsRanged ? NavigationLayers.Layer1 : NavigationLayers.Default
-            });
-            manager.AddComponentData(entity, new AgentBody
-            {
-                Destination = destination
-            });
-            manager.AddComponentData(entity, new AgentCollider
-            {
-                Layers = monsterData.IsRanged ? NavigationLayers.Layer1 : NavigationLayers.Default
-            });
-            manager.AddComponentData(entity, new AgentLocomotion
-            {
-                Speed = monsterData.MoveSpeed,
-                Acceleration = monsterData.MoveSpeed, 
-                AngularSpeed = 0,
-                StoppingDistance = bonusRange + monsterData.StopMoveDistance + radius,
-                AutoBreaking = true,
-            });
-            manager.AddComponentData(entity, new AgentSeparation
-            {
-                Radius = radius, Weight = 1,
-                Layers = monsterData.IsRanged ? NavigationLayers.Layer1 : NavigationLayers.Default
-            });
-            manager.AddComponentData(entity, new AgentShape
-            {
-                Radius = radius, Type = ShapeType.Circle,
-            });
-            manager.AddComponentData(entity, new AgentSonarAvoid
-            {
-                Radius = radius * 2,
-                Mode = SonarAvoidMode.IgnoreBehindAgents,
-                MaxAngle = math.radians(360),
-                Angle = math.radians(180),
-                BlockedStop = true,
-                Layers = monsterData.IsRanged ? NavigationLayers.Default : NavigationLayers.Layer1
-            });
-            manager.AddComponentData(entity,
-                new DefaultStatData(monsterData.MoveSpeed, monsterData.Attack, monsterData.Health)
-            );
-            manager.AddComponentData(entity, new HealthData
-            {
-                Health = monsterData.Health,
-                MaxHealth = monsterData.Health,
-            });
-            manager.AddComponentData(entity,
-                new MonsterSkillData(monsterID, monsterData.SkillId, monsterData.SkillLevel,
-                    monsterData.SkillCooldown, bonusRange + monsterData.AttackDistance + radius, 1)
-            );
-            if (monsterData.IsRanged)
-                manager.AddComponentData(entity, new MonsterRangedTag());
-            else
-                manager.AddComponentData(entity, new MonsterMeleeTag());
-            manager.AddComponentObject(entity, monster);
-            manager.SetEnabled(entity, true);
-#if !TEST_MODE
-            manager.AddComponentObject(entity, authoring.transform);
-            view.gameObject.SendMessage("Initialize", entity);
-#endif
-#if UNITY_EDITOR && !TEST_MODE
-            manager.SetName(entity, go.name + "#" + entity.GetHashCode());
-            view.name = go.name + "#" + entity.GetHashCode();
-#endif
-            await UniTask.CompletedTask;
-        }
-
+        
         public static void UnloadAll()
         {
             foreach (var path in monstersPath)

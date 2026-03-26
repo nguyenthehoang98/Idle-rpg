@@ -1,4 +1,5 @@
 ﻿using System;
+using _KIT.Pool;
 using _KIT.Utils;
 using Animancer;
 using Unity.Entities;
@@ -43,6 +44,15 @@ namespace _Games.Combat.Model
         {
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(transform.position, radius);
+        }
+
+        public void ShowTextDamage(int damage, Vector3 position)
+        {
+        }
+
+        public void Destroy()
+        {
+            KitPool.Destroy(gameObject);
         }
 
         public AnimancerState PlayAnimation(AnimationName animationName)

@@ -10,8 +10,7 @@ using UnityEngine;
 namespace _Games.Combat.EntityComponentSystem.System
 {
     [BurstCompile]
-    [UpdateAfter(typeof(ProjectileDamageMonsterSystem))]
-    [UpdateAfter(typeof(ProjectileDamagePlayerSystem))]
+    [UpdateAfter(typeof(ProjectileDamageSystem))]
     [UpdateInGroup(typeof(BattleSimulationGroup))]
     [RequireMatchingQueriesForUpdate]
     public partial struct ProjectileCleanupSystem : ISystem

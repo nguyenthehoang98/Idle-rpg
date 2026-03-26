@@ -27,9 +27,9 @@ MonoBehaviour:
     power: 51
     spawnId: Spawn_Random
     data:
-    - 10000_3
+    - 10000_1
     weights:
-    - {x: 10000, y: 3}
+    - {x: 10000, y: 1}
   - levelId: 1
     waveId: 2
     batchId: 1

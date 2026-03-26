@@ -5,15 +5,18 @@ using _Games.Combat.Event;
 using _Games.Config;
 using _Games.Utils;
 using _KIT.Event;
+using _KIT.Pool;
 using Cysharp.Threading.Tasks;
 using Unity.Entities;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace _Games.Combat.Model
 {
-    public class Monster : UnityEngine.Object, IDisposable
+    public class Monster : ScriptableObject
     {
         private Entity player;
-        protected readonly Entity Entity;
+        protected Entity Entity;
         private MonsterAuthoring authoring;
         private MonsterConfig monsterConfig;
         private SkillConfig skillConfig;
@@ -23,7 +26,7 @@ namespace _Games.Combat.Model
         private float delayExecuteAttack;
         private CancellationTokenSource cts;
 
-        public Monster(MonsterAuthoring authoring, Entity entity, Entity player, 
+        public void Init(MonsterAuthoring authoring, Entity entity, Entity player,
             int monsterId, int skillId, int skillLevel,
             MonsterConfig monsterConfig, SkillConfig skillConfig,
             float delayExecuteAttack)
@@ -59,6 +62,13 @@ namespace _Games.Combat.Model
 
         public void Death()
         {
+            if(authoring != null) authoring.Destroy();
+            Destroy(this);
+        }
+
+        public void TakeDamage(int damage, Vector3 position)
+        {
+            if(authoring != null) authoring.ShowTextDamage(damage, position);
         }
 
         public void PlayAnimation(AnimationName animationName)
@@ -71,9 +81,14 @@ namespace _Games.Combat.Model
             if (authoring != null) authoring.PlayAttackAnimation();
         }
 
-        public virtual void Dispose()
+        private void OnDisable()
         {
             cts?.Cancel();
+        }
+
+        private void OnDestroy()
+        {
+            cts?.Cancel();            
         }
     }
 }

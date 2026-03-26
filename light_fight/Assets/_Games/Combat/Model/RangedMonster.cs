@@ -9,11 +9,15 @@ namespace _Games.Combat.Model
     public class RangedMonster : Monster
     {
         private Vector3 muzzleOffset;
-
-        public RangedMonster(MonsterAuthoring authoring, Vector3 muzzleOffset,
-            Entity entity, Entity player, int monsterId, int skillId, int skillLevel, MonsterConfig monsterConfig, SkillConfig skillConfig, float delayExecuteAttack) : base(authoring, entity, player, monsterId, skillId, skillLevel, monsterConfig, skillConfig, delayExecuteAttack)
+        
+        public void Init(MonsterAuthoring authoring, Vector3 muzzleOffset,
+            Entity entity, Entity player,
+            int monsterId, int skillId, int skillLevel,
+            MonsterConfig monsterConfig, SkillConfig skillConfig,
+            float delayExecuteAttack)
         {
             this.muzzleOffset = muzzleOffset;
+            Init(authoring, entity, player, monsterId, skillId, skillLevel, monsterConfig, skillConfig, delayExecuteAttack);
         }
 
         protected override void OnAttack()

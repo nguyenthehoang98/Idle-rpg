@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Weapon_2002
   m_EditorClassIdentifier: 
   datas:
-  - icon: {fileID: 21300000, guid: 48c33b1daa875a340900b1b6cc9b0ec1, type: 3}
+  - icon: {fileID: 21300000, guid: da065246b48da9740b39a452beb99117, type: 3}
     levelRange: {x: 0, y: 5}
