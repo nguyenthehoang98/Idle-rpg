@@ -338,7 +338,7 @@ MonoBehaviour:
   enableTestMode: 0
   gamePlayIterationsUpdate: 1
   gameplayScaleTime: 1
-  gameplayFrameRate: 30
+  gameplayFrameRate: 60
   container: {fileID: 64959147}
 --- !u!1 &959653745
 GameObject:

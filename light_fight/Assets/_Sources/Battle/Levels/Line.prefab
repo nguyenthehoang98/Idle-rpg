@@ -90,26 +90,17 @@ LineRenderer:
         time: 0
         value: 0.25
         inSlope: 0.09035638
-        outSlope: 0.09035638
-        tangentMode: 0
+        outSlope: 0.20544556
+        tangentMode: 69
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.4662284
       - serializedVersion: 3
-        time: 0.89423645
-        value: 0.3993435
-        inSlope: 0.15248781
-        outSlope: 0.15248781
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.21619573
-        outWeight: 1
-      - serializedVersion: 3
-        time: 0.9931318
-        value: 1
-        inSlope: -Infinity
+        time: 1
+        value: 0.45544556
+        inSlope: 0.20544556
         outSlope: -Infinity
-        tangentMode: 0
+        tangentMode: 69
         weightedMode: 0
         inWeight: 0
         outWeight: 0
@@ -118,8 +109,8 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 0.8211998, b: 0, a: 1}
+      key0: {r: 1, g: 1, b: 1, a: 0.78431374}
+      key1: {r: 1, g: 0.8211998, b: 0, a: 0.39215687}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}

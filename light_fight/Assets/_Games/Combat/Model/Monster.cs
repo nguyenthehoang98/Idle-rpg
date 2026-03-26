@@ -63,6 +63,7 @@ namespace _Games.Combat.Model
         public void Death()
         {
             if(authoring != null) authoring.Destroy();
+            cts?.Cancel();
             Destroy(this);
         }
 
@@ -79,16 +80,6 @@ namespace _Games.Combat.Model
         public void PlayAttackAnimation()
         {
             if (authoring != null) authoring.PlayAttackAnimation();
-        }
-
-        private void OnDisable()
-        {
-            cts?.Cancel();
-        }
-
-        private void OnDestroy()
-        {
-            cts?.Cancel();            
         }
     }
 }
