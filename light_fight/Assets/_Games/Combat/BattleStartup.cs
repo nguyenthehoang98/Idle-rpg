@@ -35,7 +35,8 @@ namespace _Games.Combat
             var group = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<CustomSimulationGroup>();
             group.Iterations = KitEntryScene.Instance.GamePlayIterationsUpdate;
             group.TimeStep = 1f / KitEntryScene.Instance.GameplayFrameRate;
-            battleScaleTime = group.TimeScale = KitEntryScene.Instance.GameplayScaleTime;
+            battleScaleTime = KitEntryScene.Instance.GameplayScaleTime;
+            group.TimeScale = 0;
             EventBus.Instance.Publish(new OpenWeaponSelectPopupEvent());
             int levelId = 1;
             LevelConfig levelConfig = KitConfigManager.Get<LevelConfig>();
@@ -73,10 +74,20 @@ namespace _Games.Combat
             EventBus.Instance.Unsubscribe<BattlePauseEvent>(OnBattlePause);
             EventBus.Instance.Unsubscribe<BattleResumeEvent>(OnBattleResume);
         }
-        
-        private void OnBattleResume(BattleResumeEvent e) => isRunning = true;
 
-        private void OnBattlePause(BattlePauseEvent e) => isRunning = false;
+        private void OnBattleResume(BattleResumeEvent e)
+        {
+            isRunning = true;
+            var group = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<CustomSimulationGroup>();
+            group.TimeScale = battleScaleTime;
+        }
+
+        private void OnBattlePause(BattlePauseEvent e)
+        { 
+            isRunning = false;
+            var group = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<CustomSimulationGroup>();
+            group.TimeScale = 0;
+        }
 
         private async void OnWaveResume(WaveResumeEvent e)
         {
