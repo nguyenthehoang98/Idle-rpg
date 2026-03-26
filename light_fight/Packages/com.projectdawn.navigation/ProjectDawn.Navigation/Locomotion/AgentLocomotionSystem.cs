@@ -1,4 +1,3 @@
-using _Games.Combat.EntityComponentSystem.Model;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Burst;
@@ -8,7 +7,7 @@ namespace ProjectDawn.Navigation
 {
     [BurstCompile]
     [RequireMatchingQueriesForUpdate]
-    [UpdateInGroup(typeof(BattleSimulationGroup))]
+    [UpdateInGroup(typeof(AgentLocomotionSystemGroup))]
     public partial struct AgentLocomotionSystem : ISystem
     {
         [BurstCompile]

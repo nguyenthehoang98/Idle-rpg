@@ -45,8 +45,15 @@ namespace _Games.Combat.Model
         public async void Attack()
         {
             cts = new CancellationTokenSource();
-            await UniTask.Delay(TimeSpan.FromSeconds(delayExecuteAttack), cancellationToken: cts.Token);
-            OnAttack();
+            try
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(delayExecuteAttack), cancellationToken: cts.Token);
+                OnAttack();
+            }
+            catch (OperationCanceledException)
+            {
+                // bị cancel là bình thường → ignore
+            }
         }
 
         protected virtual void OnAttack()

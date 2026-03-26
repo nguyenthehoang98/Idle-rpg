@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68338d15ee43475984b497bcb41345fe, type: 3}
-  m_Name: Trajectory_Curve_7
+  m_Name: Trajectory_Curve_9
   m_EditorClassIdentifier: 
   curve:
     serializedVersion: 2
@@ -36,4 +36,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  value: 10
+  value: 9

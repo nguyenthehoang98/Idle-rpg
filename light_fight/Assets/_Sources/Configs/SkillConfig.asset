@@ -48,6 +48,6 @@ MonoBehaviour:
     collisionResetInterval: 999
     projectileId: Projectile_Bullet_Goose
     colliderId: Collider_Circle_0.2
-    trajectoryId: Trajectory_Curve_7
+    trajectoryId: Trajectory_Curve_9
     modifiersId: []
     behaviorsId: []
