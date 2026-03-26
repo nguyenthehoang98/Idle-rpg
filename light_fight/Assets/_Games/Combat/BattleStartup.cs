@@ -58,7 +58,6 @@ namespace _Games.Combat
 #if DEVELOP_MODE
             gameObject.AddComponent<CpuFrame>();
 #endif
-            Debug.Log(@"Tạo level config -> spawn level theo wave/batch...");
             Debug.Log(@"Phần tường raào mà monster stop & tấn công được nên có 1 cái fx như shield của BagMaster");
         }
         
@@ -103,7 +102,7 @@ namespace _Games.Combat
         private void Update()
         {
             if (!isRunning) return;
-            float deltaTime = Time.deltaTime;
+            float deltaTime = Time.deltaTime * BattleScaleTime;
             spawnLogic.Update(deltaTime);
             equipmentManager.Update();
         }

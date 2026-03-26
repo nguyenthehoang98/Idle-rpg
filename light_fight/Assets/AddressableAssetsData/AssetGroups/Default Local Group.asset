@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 182c2e5dcfcf0b447ba2bbf87be52287
+    m_Address: Spawn_Circle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3f9021f59aa5d4240a9f5c9f0ba6eb11
     m_Address: 2001
     m_ReadOnly: 0
@@ -62,6 +67,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a432ba70af158c34b9dba3aba2e07e4a
     m_Address: Trajectory_Empty
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bf40bd6ff03fadb49b6e35d341ac3ab2
+    m_Address: Spawn_Random
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

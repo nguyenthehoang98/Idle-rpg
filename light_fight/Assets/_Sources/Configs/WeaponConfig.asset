@@ -17,7 +17,7 @@ MonoBehaviour:
   weapons:
   - weaponId: 2001
     weaponName: 'Bow '
-    skillId: 100000
+    skillId: 100010
     baseAttack: 20
     attackBonusLevel: 5
     basePrice: 1
@@ -33,7 +33,7 @@ MonoBehaviour:
     jsonUnlocks: []
   - weaponId: 2003
     weaponName: 'Arrow '
-    skillId: 100000
+    skillId: 100010
     baseAttack: 20
     attackBonusLevel: 7
     basePrice: 1

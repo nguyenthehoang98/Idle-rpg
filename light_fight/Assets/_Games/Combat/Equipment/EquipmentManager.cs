@@ -50,7 +50,6 @@ namespace _Games.Combat.Equipment
         public async void Trigger(int slotIndex)
         {
             Vector3 position = levelDesign.Slots[slotIndex].transform.position;
-
             if (!container.ContainsKey(slotIndex))
                 return; // ko có vũ khí
             Data data = container.GetValueOrDefault(slotIndex);
@@ -126,7 +125,8 @@ namespace _Games.Combat.Equipment
             nearestIndex.Dispose();
             farthestIndex.Dispose();
 
-            if (!found && skill.main.needTargetToCast) return;
+            if (!found && skill.main.needTargetToCast)
+                return;
 
             float delay = 0.2f;
             Vector3 direction = endPosition - position;

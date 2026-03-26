@@ -155,13 +155,23 @@ namespace _Games.Combat.EntityComponentSystem
             quaternion rotation = quaternion.Euler(0, 0, rad);
             
             ProjectileAuthoring authoring = null;
+            EntityView view = null;
             Entity entity;
 #if !TEST_MODE
-            authoring = KitPool.Instantiate(skill.projectile.prefab).GetComponent<ProjectileAuthoring>();
-            authoring.transform.position = startPosition;
-            authoring.transform.rotation = rotation;
-            EntityView view = authoring.GetComponent<EntityView>();
-            entity = view.GetOrCreateEntity();
+            if (skill.projectile.prefab != null)
+            {
+                authoring = KitPool.Instantiate(skill.projectile.prefab).GetComponent<ProjectileAuthoring>();
+                authoring.transform.position = startPosition;
+                authoring.transform.rotation = rotation;
+                view = authoring.GetComponent<EntityView>();
+                entity = view.GetOrCreateEntity();
+            }
+            else
+            {
+                Debug.LogError("Skill projectile prefab is null: " + skillData.SkillId);
+                return;
+            }
+
 #else
             entity = manager.CreateEntity();  
 #endif
@@ -209,7 +219,7 @@ namespace _Games.Combat.EntityComponentSystem
                 new ProjectileTrajectory(startPosition, math.normalizesafe(direction))
             );
             manager.AddComponentData(entity,
-                new ProjectileSkillData(source, skill.Id, lifeTime, main.castTime,
+                new ProjectileSkillData(source, skill.Id, lifeTime,
                     main.maxHitCount, main.collisionResetInterval,
                     skillData.FlatDamage(level), skillData.ScaleDamage(level))
             );

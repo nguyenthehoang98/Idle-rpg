@@ -45,9 +45,10 @@ namespace _Games.Combat.EntityComponentSystem.System
                         b.OnTrigger = true;
                         buffers[i] = b;
                         Entity unit = b.Entity;
-                        if (state.EntityManager.HasComponent<PlayerTag>(unit))
+                        Entity parent = skillData.ValueRO.Parent;
+                        if (state.EntityManager.HasComponent<PlayerTag>(unit) && parent != Entity.Null)
                         {
-                            DefaultStatData statData = state.EntityManager.GetComponentData<DefaultStatData>(skillData.ValueRO.Parent);
+                            DefaultStatData statData = state.EntityManager.GetComponentData<DefaultStatData>(parent);
                             
                             HealthData healthData = healthDataLookup[unit];
                             healthData.Health -= FormulaUtils.Output(statData.Attack, skillDataRO.FlatDamage,

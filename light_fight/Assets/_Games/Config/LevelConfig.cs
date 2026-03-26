@@ -86,6 +86,7 @@ namespace _Games.Config
         [SerializeField] private float delayTime;
         [SerializeField] private float duration;
         [SerializeField] private int power;
+        [SerializeField] private string spawnId;
         [SerializeField] private string[] data;
         [SerializeField] private Vector2Int[] weights;
 

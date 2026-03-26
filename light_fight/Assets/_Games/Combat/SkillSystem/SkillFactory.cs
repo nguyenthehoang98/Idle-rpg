@@ -24,10 +24,9 @@ namespace _Games.Combat.SkillSystem
             SkillMainModule main = new SkillMainModule
             {
                 lifeTime = data.LifeTime,
-                castTime = data.CastTime,
                 type = data.Type,
                 needTargetToCast = data.NeedTargetToCast,
-                maxTargetRange = data.MaxTargetRange,
+                maxTargetRange = data.MaxFindTargetRange,
                 maxHitCount = data.MaxHitCount,
                 collisionResetInterval = data.CollisionResetInterval
             };

@@ -24,12 +24,11 @@ MonoBehaviour:
     isBoss: 0
     delayTime: 0
     duration: 10
-    power: 400
+    power: 51
+    spawnId: Spawn_Random
     data:
-    - 10010_1
     - 10000_3
     weights:
-    - {x: 10010, y: 1}
     - {x: 10000, y: 3}
   - levelId: 1
     waveId: 1
@@ -38,6 +37,7 @@ MonoBehaviour:
     delayTime: 0
     duration: 10
     power: 51
+    spawnId: Spawn_Random
     data:
     - 10010_3
     - 10000_1
@@ -51,6 +51,7 @@ MonoBehaviour:
     delayTime: 0
     duration: 10
     power: 52
+    spawnId: Spawn_Random
     data:
     - 10010_3
     - 10000_1
@@ -64,6 +65,7 @@ MonoBehaviour:
     delayTime: 0
     duration: 10
     power: 53
+    spawnId: Spawn_Random
     data:
     - 10010_3
     - 10000_1
@@ -77,6 +79,7 @@ MonoBehaviour:
     delayTime: 0
     duration: 10
     power: 54
+    spawnId: Spawn_Random
     data:
     - 10010_3
     - 10000_1
@@ -90,6 +93,7 @@ MonoBehaviour:
     delayTime: 0
     duration: 10
     power: 55
+    spawnId: Spawn_Random
     data:
     - 10010_3
     - 10000_1
@@ -103,6 +107,7 @@ MonoBehaviour:
     delayTime: 0
     duration: 10
     power: 56
+    spawnId: Spawn_Random
     data:
     - 10010_3
     - 10000_1
@@ -116,6 +121,7 @@ MonoBehaviour:
     delayTime: 0
     duration: 10
     power: 57
+    spawnId: Spawn_Random
     data:
     - 10010_3
     - 10000_1
@@ -129,6 +135,7 @@ MonoBehaviour:
     delayTime: 0
     duration: 10
     power: 58
+    spawnId: Spawn_Random
     data:
     - 10010_3
     - 10000_1
@@ -142,6 +149,7 @@ MonoBehaviour:
     delayTime: 0
     duration: 10
     power: 59
+    spawnId: Spawn_Random
     data:
     - 10010_3
     - 10000_1
@@ -155,6 +163,7 @@ MonoBehaviour:
     delayTime: 0
     duration: 10
     power: 60
+    spawnId: Spawn_Random
     data:
     - 10010_3
     - 10000_1
@@ -168,6 +177,7 @@ MonoBehaviour:
     delayTime: 0
     duration: 10
     power: 61
+    spawnId: Spawn_Random
     data:
     - 10010_3
     - 10000_1

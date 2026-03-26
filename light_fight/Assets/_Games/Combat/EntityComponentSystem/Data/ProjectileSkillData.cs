@@ -6,7 +6,6 @@ namespace _Games.Combat.EntityComponentSystem.Data
     {
         public readonly Entity Parent;
         public readonly int SkillId;
-        public readonly float CastTime;
         public readonly float LifeTime;
         public readonly int MaximumHits;
         public readonly float CollisionResetInterval;
@@ -17,13 +16,12 @@ namespace _Games.Combat.EntityComponentSystem.Data
         public double ElapsedLifeTime;
         public double ElapsedCollisionResetTime;
         
-        public ProjectileSkillData(Entity parent, int skillId, float lifeTime, float castTime,
+        public ProjectileSkillData(Entity parent, int skillId, float lifeTime,
             int maximumHits, float collisionResetInterval, float flatDamage, float scaleDamage)
         {
             Parent = parent;
             SkillId = skillId;
             LifeTime = lifeTime;
-            CastTime = castTime;
             MaximumHits = maximumHits;
             CollisionResetInterval = collisionResetInterval;
             FlatDamage = flatDamage;

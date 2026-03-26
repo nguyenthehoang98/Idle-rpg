@@ -97,12 +97,11 @@ namespace _Games.Combat.Level
                 waitTime -= dt;
                 if (waitTime > 0) return;
                 
-                var batch = batches[currentBatch];
+                Batch batch = batches[currentBatch];
                 elapsedTime += dt;
                 spawnTime += dt;
 
-                int remain = 0;
-                while (true)
+                while (spawnTime > batch.interval)
                 {
                     Vector3 position = RandomPointBetweenRects_NoLoop(
                         new Vector2(12, 22), new Vector2(14, 24), Vector2.zero
@@ -112,18 +111,15 @@ namespace _Games.Combat.Level
                     int random = RandomUtils.Range(0, keys.Count);
                     int monsterID = keys[random];
                     await ECSFactory.BuildMonster(player, monsterID, shareData.RadiusBonus, position);
-                    spawnTime -= batch.interval;
 
                     batch.monsters[monsterID]--;
-                    if (batch.monsters.Count <= 0)
+                    if (batch.monsters[monsterID] <= 0)
                         batch.monsters.Remove(monsterID);
-                    
-                    foreach (var pair in batch.monsters)
-                        remain += pair.Value;
-                    if (spawnTime < 0 || remain == 0) break;
+
+                    spawnTime -= batch.interval;
                 }
 
-                if (remain == 0 || elapsedTime >= batch.duration)
+                if (batch.monsters.Count == 0 || elapsedTime >= batch.duration)
                 {
                     currentBatch++;
                     elapsedTime = waitTime = spawnTime = 0;
@@ -244,6 +240,16 @@ namespace _Games.Combat.Level
                     safe = 0;
                 }
                 
+                int total = 0;
+                foreach (KeyValuePair<int, int> monster in monsters) 
+                    total += monster.Value;
+                result[i] = new Batch
+                {
+                    duration = batch.Duration,
+                    interval = batch.Duration / total,
+                    monsters = monsters,
+                    waitTime = batch.DelayTime
+                };
                 
 #if DEVELOP_MODE || COMBAT_FULL_LOG
                 if (monsters.Count == 0)
@@ -252,16 +258,10 @@ namespace _Games.Combat.Level
                 }
                 else
                 {
-                    Debug.Log($"Build total {monsters.Count} monsters: " + string.Join(',', monsters));
+                    Debug.Log($"Build total {monsters.Count} monsters: " + string.Join(',', monsters) +
+                              $", duration: {batch.Duration}, interval: {batch.Duration / total}");
                 }
 #endif
-                result[i] = new Batch
-                {
-                    duration = batch.Duration,
-                    interval = batch.Duration / monsters.Count,
-                    monsters = monsters,
-                    waitTime = batch.DelayTime
-                };
             }
 
             return result;

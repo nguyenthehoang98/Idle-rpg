@@ -24,8 +24,8 @@ MonoBehaviour:
     baseScaleDamage: 1
     scaleDamageBonusLevel: 0
     type: 0
-    needTargetToCast: 1
-    maxTargetRange: 0
+    needTargetToCast: 0
+    maxFindTargetRange: 8
     maxHitCount: 1
     collisionResetInterval: 999
     projectileId: Projectile_Empty
@@ -42,8 +42,8 @@ MonoBehaviour:
     baseScaleDamage: 1
     scaleDamageBonusLevel: 0
     type: 0
-    needTargetToCast: 1
-    maxTargetRange: 0
+    needTargetToCast: 0
+    maxFindTargetRange: 8
     maxHitCount: 1
     collisionResetInterval: 999
     projectileId: Projectile_Bullet_Goose
