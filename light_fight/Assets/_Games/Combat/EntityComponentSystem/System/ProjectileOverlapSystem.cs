@@ -16,11 +16,15 @@ namespace _Games.Combat.EntityComponentSystem.System
     {
         ComponentLookup<ProjectileSkillData> projectileSkillDataLookup;
         ComponentLookup<LocalTransform> localTransformLookup;
+        ComponentLookup<PlayerTag> playerTagLookup;
+        ComponentLookup<MonsterTag> monsterTagLookup;
         BufferLookup<CircleBuffer> circleBufferLookup;
 
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
+            monsterTagLookup = state.GetComponentLookup<MonsterTag>();
+            playerTagLookup = state.GetComponentLookup<PlayerTag>();
             localTransformLookup = state.GetComponentLookup<LocalTransform>();
             circleBufferLookup = state.GetBufferLookup<CircleBuffer>();
             projectileSkillDataLookup = state.GetComponentLookup<ProjectileSkillData>();
@@ -29,6 +33,8 @@ namespace _Games.Combat.EntityComponentSystem.System
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
+            monsterTagLookup.Update(ref state);
+            playerTagLookup.Update(ref state);
             localTransformLookup.Update(ref state);
             circleBufferLookup.Update(ref state);
             projectileSkillDataLookup.Update(ref state);
@@ -42,6 +48,8 @@ namespace _Games.Combat.EntityComponentSystem.System
                 Grid = grid,
                 LocalTransformLookup = localTransformLookup,
                 CircleBufferLookup = circleBufferLookup,
+                PlayerTagLookup = playerTagLookup,
+                MonsterTagLookup = monsterTagLookup,
             };
             state.Dependency = job.ScheduleParallel(state.Dependency);
             state.CompleteDependency();
@@ -52,6 +60,8 @@ namespace _Games.Combat.EntityComponentSystem.System
         {
             [ReadOnly] public NativeParallelMultiHashMap<int2, Entity> Grid;
             [ReadOnly] public ComponentLookup<LocalTransform> LocalTransformLookup;
+            [ReadOnly] public ComponentLookup<PlayerTag> PlayerTagLookup;
+            [ReadOnly] public ComponentLookup<MonsterTag> MonsterTagLookup;
             [NativeDisableParallelForRestriction]
             public BufferLookup<CircleBuffer> CircleBufferLookup;
 
@@ -88,7 +98,10 @@ namespace _Games.Combat.EntityComponentSystem.System
                                         continue;
                                     if (!CircleBufferLookup.TryGetBuffer(unit, out DynamicBuffer<CircleBuffer> otherBuffers))
                                         continue;
-
+                                    if (skillData.IsSourcePlayer() && PlayerTagLookup.HasComponent(unit))
+                                        continue;
+                                    if (skillData.IsSourceMonster() && MonsterTagLookup.HasComponent(unit))
+                                        continue;
                                     float2 monsterPosition = LocalTransformLookup[unit].Position.xy;
                                     foreach (var circleBuffer in otherBuffers)
                                     {

@@ -15,6 +15,9 @@ namespace _Games.Combat.EntityComponentSystem.Data
         public int TotalUnitBeHit;
         public double ElapsedLifeTime;
         public double ElapsedCollisionResetTime;
+
+        public bool IsSourceMonster() => Parent != Entity.Null;
+        public bool IsSourcePlayer() => Parent == Entity.Null;
         
         public ProjectileSkillData(Entity parent, int skillId, float lifeTime,
             int maximumHits, float collisionResetInterval, float flatDamage, float scaleDamage)

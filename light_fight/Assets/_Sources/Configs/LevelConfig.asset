@@ -31,48 +31,6 @@ MonoBehaviour:
     weights:
     - {x: 10000, y: 3}
   - levelId: 1
-    waveId: 1
-    batchId: 2
-    isBoss: 0
-    delayTime: 0
-    duration: 10
-    power: 51
-    spawnId: Spawn_Random
-    data:
-    - 10010_3
-    - 10000_1
-    weights:
-    - {x: 10010, y: 3}
-    - {x: 10000, y: 1}
-  - levelId: 1
-    waveId: 1
-    batchId: 3
-    isBoss: 0
-    delayTime: 0
-    duration: 10
-    power: 52
-    spawnId: Spawn_Random
-    data:
-    - 10010_3
-    - 10000_1
-    weights:
-    - {x: 10010, y: 3}
-    - {x: 10000, y: 1}
-  - levelId: 1
-    waveId: 1
-    batchId: 4
-    isBoss: 0
-    delayTime: 0
-    duration: 10
-    power: 53
-    spawnId: Spawn_Random
-    data:
-    - 10010_3
-    - 10000_1
-    weights:
-    - {x: 10010, y: 3}
-    - {x: 10000, y: 1}
-  - levelId: 1
     waveId: 2
     batchId: 1
     isBoss: 0
