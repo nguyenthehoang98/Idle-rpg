@@ -1,6 +1,6 @@
 ﻿#if UNITY_EDITOR
 using _Games.Combat.EntityComponentSystem.Data;
-using _Games.Combat.EntityComponentSystem.Model;
+using ProjectDawn.Custom;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Transforms;
@@ -9,7 +9,7 @@ using UnityEngine;
 namespace _Games.Combat.EntityComponentSystem.System
 {
     [BurstCompile]
-    [UpdateInGroup(typeof(BattleSimulationGroup))]
+    [UpdateInGroup(typeof(CustomSimulationGroup))]
     [RequireMatchingQueriesForUpdate]
     public partial struct GizmosSystem : ISystem
     {

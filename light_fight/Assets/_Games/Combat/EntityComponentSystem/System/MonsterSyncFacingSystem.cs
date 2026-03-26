@@ -1,5 +1,5 @@
 ﻿using _Games.Combat.EntityComponentSystem.Data;
-using _Games.Combat.EntityComponentSystem.Model;
+using ProjectDawn.Custom;
 using ProjectDawn.Navigation;
 using Unity.Burst;
 using Unity.Collections;
@@ -10,7 +10,7 @@ using Unity.Transforms;
 namespace _Games.Combat.EntityComponentSystem.System
 {
     [BurstCompile]
-    [UpdateInGroup(typeof(BattleSimulationGroup))]
+    [UpdateInGroup(typeof(CustomSimulationGroup))]
     [RequireMatchingQueriesForUpdate]
     public partial struct MonsterSyncFacingSystem : ISystem
     {

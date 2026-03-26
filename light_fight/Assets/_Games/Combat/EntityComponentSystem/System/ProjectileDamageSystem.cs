@@ -1,9 +1,9 @@
 ﻿using _Games.Combat.EntityComponentSystem.Data;
-using _Games.Combat.EntityComponentSystem.Model;
 using _Games.Combat.Event;
 using _Games.Combat.Model;
 using _Games.Utils;
 using _KIT.Event;
+using ProjectDawn.Custom;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Transforms;
@@ -13,7 +13,7 @@ namespace _Games.Combat.EntityComponentSystem.System
 {
     [BurstCompile]
     [UpdateAfter(typeof(ProjectileOverlapSystem))]
-    [UpdateInGroup(typeof(BattleSimulationGroup))]
+    [UpdateInGroup(typeof(CustomSimulationGroup))]
     [RequireMatchingQueriesForUpdate]
     public partial struct ProjectileDamageSystem : ISystem
     {

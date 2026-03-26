@@ -13,6 +13,7 @@ using UnityEngine;
 using static Unity.Entities.SystemAPI;
 using static Unity.Mathematics.math;
 using ProjectDawn.Collections;
+using ProjectDawn.Custom;
 using ProjectDawn.Navigation.LowLevel.Unsafe;
 
 namespace ProjectDawn.Navigation
@@ -23,7 +24,7 @@ namespace ProjectDawn.Navigation
     /// </summary>
     [BurstCompile]
     [RequireMatchingQueriesForUpdate]
-    [UpdateInGroup(typeof(AgentSpatialSystemGroup))]
+    [UpdateInGroup(typeof(CustomSimulationGroup))]
     public unsafe partial struct AgentSpatialPartitioningSystem : ISystem
     {
         internal const int InitialCapacity = 256;

@@ -1,5 +1,5 @@
 ﻿using _Games.Combat.EntityComponentSystem.Data;
-using _Games.Combat.EntityComponentSystem.Model;
+using ProjectDawn.Custom;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -11,7 +11,7 @@ namespace _Games.Combat.EntityComponentSystem.System
 {
     [BurstCompile]
     [UpdateAfter(typeof(ProjectileTrajectorySystem))]
-    [UpdateInGroup(typeof(BattleSimulationGroup))]
+    [UpdateInGroup(typeof(CustomSimulationGroup))]
     [RequireMatchingQueriesForUpdate]
     public partial struct ProjectileReadTransformSystem : ISystem
     {

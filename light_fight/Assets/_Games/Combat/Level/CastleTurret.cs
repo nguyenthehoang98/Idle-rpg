@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using _Games.Combat.Event;
 using _KIT.Event;
+using _KIT.Utils;
 using UnityEngine;
 
 namespace _Games.Combat.Level
@@ -23,10 +24,13 @@ namespace _Games.Combat.Level
         private Action<int> onTrigger;
         private float rotateSpeed = 100;
         private float angle;
+        private float timeScale = 1;
+        private float accumulator;
         private bool isRunning;
         
         public void Init(int totalRay, Transform[] slots, Action<int> onTrigger)
         {
+            this.timeScale = KitEntryScene.Instance.GameplayScaleTime;
             this.onTrigger = onTrigger;
             this.slots = slots;
             for (int i = 0; i < totalRay; i++)
@@ -77,29 +81,36 @@ namespace _Games.Combat.Level
         private void Update()
         {
             if (!isRunning) return;
-            
-            float delta = rotateSpeed * Time.deltaTime;
-            angle += delta;
-            turretTransform.Rotate(0, 0, delta);
-            int count = allLines.Count;
-            Vector3 origin = turretTransform.position;
-            for (var i = 0; i < count; i++)
+
+            var dt = Time.deltaTime;
+            accumulator += dt * timeScale;
+            while (accumulator >= dt)
             {
-                LineRenderer line = allLines[i];
-                Vector3 direction = GetDirection(i, count, angle);
-                line.SetPosition(0, direction * 0.225f);
-                line.SetPosition(1, direction * distance);
-                RaycastHit2D hit = Physics2D.Raycast(origin, direction, 10);
-                if (hit.collider != null)
+                float delta = rotateSpeed * Time.deltaTime;
+                angle += delta;
+                turretTransform.Rotate(0, 0, delta);
+                int count = allLines.Count;
+                Vector3 origin = turretTransform.position;
+                for (var i = 0; i < count; i++)
                 {
-                    LineData data = allLinesData[i];
-                    Transform target = hit.collider.transform;
-                    int index = Array.IndexOf(slots, target);
-                    if (index >= 0 && target != data.current)
+                    LineRenderer line = allLines[i];
+                    Vector3 direction = GetDirection(i, count, angle);
+                    line.SetPosition(0, direction * 0.225f);
+                    line.SetPosition(1, direction * distance);
+                    RaycastHit2D hit = Physics2D.Raycast(origin, direction, 10);
+                    if (hit.collider != null)
                     {
-                        Trigger(target, data, index);
+                        LineData data = allLinesData[i];
+                        Transform target = hit.collider.transform;
+                        int index = Array.IndexOf(slots, target);
+                        if (index >= 0 && target != data.current)
+                        {
+                            Trigger(target, data, index);
+                        }
                     }
                 }
+                
+                accumulator -= dt;
             }
         }
 

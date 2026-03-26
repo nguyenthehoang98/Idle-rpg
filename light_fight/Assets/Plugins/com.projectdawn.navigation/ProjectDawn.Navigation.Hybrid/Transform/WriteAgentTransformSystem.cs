@@ -1,3 +1,4 @@
+using ProjectDawn.Custom;
 using Unity.Entities;
 using Unity.Transforms;
 using Unity.Burst;
@@ -10,7 +11,7 @@ namespace ProjectDawn.Navigation.Hybrid
 {
     [BurstCompile]
     [RequireMatchingQueriesForUpdate]
-    [UpdateInGroup(typeof(SimulationSystemGroup), OrderFirst = true)]
+    [UpdateInGroup(typeof(CustomSimulationGroup), OrderFirst = true)]
     [UpdateBefore(typeof(FixedStepSimulationSystemGroup))]
     public partial struct WriteAgentTransformSystem : ISystem
     {

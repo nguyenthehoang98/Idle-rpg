@@ -13,6 +13,7 @@ using _KIT.Event;
 using _KIT.Pool;
 using _KIT.Resource;
 using _KIT.Utils;
+using ProjectDawn.Custom;
 using Unity.Entities;
 using UnityEngine;
 
@@ -21,22 +22,20 @@ namespace _Games.Combat
     public class BattleStartup : MonoBehaviour
     {
         [SerializeField] private PlayerHealthUI healthUI;
-
-        public static float BattleIterationsUpdate { get; private set; }
-        public static float BattleScaleTime { get;  private set; }
-        public static float BattleTimeStep { get; protected set; }
         
         private ShareData shareData;
         private SpawnLogic spawnLogic;
         private LevelDesign levelDesign;
         private EquipmentManager equipmentManager;
+        private float battleScaleTime;
         private bool isRunning = false;
         
         private async void Start()
         {
-            BattleScaleTime = KitEntryScene.Instance.GameplayScaleTime;
-            BattleTimeStep = 1f / KitEntryScene.Instance.GameplayFrameRate;
-            BattleIterationsUpdate = KitEntryScene.Instance.GamePlayIterationsUpdate;
+            var group = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<CustomSimulationGroup>();
+            group.Iterations = KitEntryScene.Instance.GamePlayIterationsUpdate;
+            group.TimeStep = 1f / KitEntryScene.Instance.GameplayFrameRate;
+            battleScaleTime = group.TimeScale = KitEntryScene.Instance.GameplayScaleTime;
             EventBus.Instance.Publish(new OpenWeaponSelectPopupEvent());
             int levelId = 1;
             LevelConfig levelConfig = KitConfigManager.Get<LevelConfig>();
@@ -102,7 +101,7 @@ namespace _Games.Combat
         private void Update()
         {
             if (!isRunning) return;
-            float deltaTime = Time.deltaTime * BattleScaleTime;
+            float deltaTime = Time.deltaTime * battleScaleTime;
             spawnLogic.Update(deltaTime);
             equipmentManager.Update();
         }
