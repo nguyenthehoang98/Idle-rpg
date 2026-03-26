@@ -1,10 +1,5 @@
 ﻿namespace _Games.CloudAPI.Model
 {
-    public interface IObjectData
-    {
-        public string Name();
-    }
-
     // protected this class
     internal class DefaultObjectData : IObjectData
     {

@@ -15,7 +15,7 @@ namespace _Games.CloudAPI.Model
     public class LeaderboardResult
     {
         public LeaderboardEntry[] Entries;
-        public DateTime? NextTimeReset;
+        public long NextTimeResetUnixtime;
     }
 
     [Serializable]

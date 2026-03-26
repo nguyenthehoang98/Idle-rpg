@@ -11,7 +11,7 @@ namespace _Games.CloudAPI.PlayFab
 {
     public class PlayFabLeaderboard : ILeaderboard
     {
-        public async UniTask<(RequestResult result, PlayerRankResult rankResult)> SubmitResultBattle(LoginSessionResult session, MatchingSubmitRequest submitRequest)
+        public async UniTask<(RequestResult result, PlayerRankResult rankResult)> SubmitResultBattle(LoginSessionResult session, MatchingSubmitRequest[] requests)
         {
             var result = new RequestResult();
             if (session.Context is PlayFabAuthenticationContext context)
@@ -25,11 +25,7 @@ namespace _Games.CloudAPI.PlayFab
                 return (result, new PlayerRankResult());
             }
 
-            var execute = await ExecuteScript("submitResult", new Dictionary<string, object>
-            {
-                { "MatchId", submitRequest.MatchId },
-                { "Result", submitRequest.IsWin }
-            });
+            var execute = await ExecuteScript("submitResult", null);
             if (execute.Item1.success)
             {
                 try
@@ -140,7 +136,7 @@ namespace _Games.CloudAPI.PlayFab
             return tcs.Task;
         }
 
-        public async UniTask<(RequestResult result, FindOpponentResult opponent)> FindOpponent(LoginSessionResult session)
+        public async UniTask<(RequestResult result, FindOpponentResult[] opponents)> FindOpponent(LoginSessionResult session)
         {
             var result = new RequestResult();
             if (session.Context is PlayFabAuthenticationContext context)
@@ -159,9 +155,9 @@ namespace _Games.CloudAPI.PlayFab
             {
                 try
                 {
-                    FindOpponentResult opponentResult = JsonUtility.FromJson<FindOpponentResult>(execute.Item2.ToString());
+                    FindOpponentResultContainer container = JsonUtility.FromJson<FindOpponentResultContainer>(execute.Item2.ToString());
                     result.success = true;
-                    return (result, opponentResult);
+                    return (result, container.results);
                 }
                 catch (Exception e)
                 {
@@ -211,6 +207,12 @@ namespace _Games.CloudAPI.PlayFab
                 });
 
             return tcs.Task;
+        }
+
+        [Serializable]
+        class FindOpponentResultContainer
+        {
+            public FindOpponentResult[] results;
         }
     }
 }

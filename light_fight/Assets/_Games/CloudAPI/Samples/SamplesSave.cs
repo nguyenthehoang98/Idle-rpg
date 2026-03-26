@@ -24,7 +24,7 @@ namespace _Games.CloudAPI.Samples
             {
                 equipments = new List<int> { 2, 3, 5, 6, 7 }
             };
-            var saveResult = await CloudAPIUtils.SaveData(progressData, equipmentData);
+            var saveResult = await CloudAPIUtils.SaveData( progressData, equipmentData);
             if (saveResult.success)
             {
                 Debug.Log("save data success");

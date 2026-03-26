@@ -19,5 +19,7 @@ namespace _Games.CloudAPI
 
             return false;
         }
+        
+        public static string FormatClientKey(string key) => "BagMasterUnity_" + key;
     }
 }
