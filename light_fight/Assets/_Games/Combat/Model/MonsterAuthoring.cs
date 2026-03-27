@@ -18,7 +18,6 @@ namespace _Games.Combat.Model
         [Header("Renderer")]
         [SerializeField] private SortingGroup sortingGroup;
         [SerializeField] private SpriteRenderer[] parts;
-        [SerializeField] private Vector3 offsetTextDamage = new Vector3(0.4f, 0.3f, 0);
         [Header("Collider")]
         [SerializeField] private float radius;
         [Header("Animations")] 
@@ -61,9 +60,7 @@ namespace _Games.Combat.Model
 
         public void ShowTextDamage(int damage, Vector3 position)
         {
-            float x = Mathf.Abs(offsetTextDamage.x);
-            Vector3 finalPosition = position + new Vector3(RandomUtils.Range(-x, x), offsetTextDamage.y, 0);
-            EventBus.Instance.Publish(new SpawnTextDamageEvent(TextDamageType.Normal, damage, finalPosition));
+            EventBus.Instance.Publish(new SpawnTextDamageEvent(TextDamageType.Normal, damage, position));
         }
 
         public void Behit()

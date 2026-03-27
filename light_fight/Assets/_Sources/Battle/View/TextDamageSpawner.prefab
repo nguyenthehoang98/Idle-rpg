@@ -104,13 +104,13 @@ MonoBehaviour:
   NestWaitingPool: 1
   MutualizeWaitingPools: 1
   PoolCanExpand: 1
-  Lifetime: {x: 1, y: 1}
-  SpawnOffsetMin: {x: 0, y: 0, z: 0}
-  SpawnOffsetMax: {x: 0, y: 0, z: 0}
+  Lifetime: {x: 0.5, y: 0.7}
+  SpawnOffsetMin: {x: 0.3, y: 0.3, z: 0}
+  SpawnOffsetMax: {x: 0.3, y: 0.5, z: 0}
   AnimateMovement: 1
-  AnimateX: 0
+  AnimateX: 1
   RemapXZero: {x: -0.2, y: 0.2}
-  RemapXOne: {x: -0.2, y: 0.2}
+  RemapXOne: {x: -1, y: 1}
   AnimateXCurve:
     serializedVersion: 2
     m_Curve:
@@ -137,7 +137,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   AnimateY: 1
   RemapYZero: {x: 0, y: 0}
-  RemapYOne: {x: 0.15, y: 0.25}
+  RemapYOne: {x: 0.25, y: 0.5}
   AnimateYCurve:
     serializedVersion: 2
     m_Curve:
