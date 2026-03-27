@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using _Games.Combat.EntityComponentSystem.Data;
 using _Games.Combat.SkillSystem;
 using _Games.Combat.SkillSystem.Model;
@@ -17,15 +16,16 @@ namespace _Games.Combat.EntityComponentSystem.Model
         private Queue<RangedCastSkillData> queue = new Queue<RangedCastSkillData>();
 
         public static RangedMonsterCastSkillManager Instance {get; private set;}
+        
+        public static async void Instantiate(Transform parent)
+        {
+            Instance = new GameObject("RangedMonsterCastSkillManager")
+                .AddComponent<RangedMonsterCastSkillManager>();
+        }
 
         private EntityManager manager;
         private MonsterConfig monsterConfig;
         private SkillConfig skillConfig;
-        
-        private void Awake()
-        {
-            Instance = this;
-        }
 
         private void Start()
         {

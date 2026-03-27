@@ -5,11 +5,9 @@ using _Games.Combat.Event;
 using _Games.Config;
 using _Games.Utils;
 using _KIT.Event;
-using _KIT.Pool;
 using Cysharp.Threading.Tasks;
 using Unity.Entities;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace _Games.Combat.Model
 {

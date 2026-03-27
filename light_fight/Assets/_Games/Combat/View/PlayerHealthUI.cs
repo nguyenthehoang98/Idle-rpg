@@ -1,7 +1,7 @@
 using _Games.Combat.EntityComponentSystem.Data;
 using _Games.Combat.Event;
 using _KIT.Event;
-using PrimeTween;
+using _KIT.Resource;
 using TMPro;
 using Unity.Entities;
 using UnityEngine;
@@ -13,6 +13,14 @@ public class PlayerHealthUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI healthText;
     
     private Entity entity;
+    
+    public static async void Instantiate(Transform parent, Entity entity)
+    {
+        GameObject go = await KitLoaded.LoadAsync<GameObject>("PlayerHealthUI");
+        PlayerHealthUI instance = Instantiate(go, parent).GetComponent<PlayerHealthUI>();
+        instance.entity = entity;
+        instance.UpdateHealth();
+    }
 
     private void OnEnable()
     {
@@ -24,13 +32,7 @@ public class PlayerHealthUI : MonoBehaviour
     {
         EventBus.Instance.Unsubscribe<PlayerOnDamageEvent>(OnPlayerOnDamage);
     }
-
-    public void Initialize(Entity entity)
-    {
-        this.entity = entity;
-        UpdateHealth();
-    }
-
+    
     private void OnPlayerOnDamage(PlayerOnDamageEvent e)
     {
         UpdateHealth();

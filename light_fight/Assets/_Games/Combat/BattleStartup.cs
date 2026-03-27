@@ -6,6 +6,7 @@ using _Games.Combat.Level;
 using _Games.Combat.Model;
 using _Games.Combat.SkillSystem;
 using _Games.Combat.SkillSystem.Model;
+using _Games.Combat.View;
 using _Games.Config;
 using _KIT.Checker;
 using _KIT.Config;
@@ -21,7 +22,7 @@ namespace _Games.Combat
 {
     public class BattleStartup : MonoBehaviour
     {
-        [SerializeField] private PlayerHealthUI healthUI;
+        [SerializeField] private Canvas canvas;
         
         private ShareData shareData;
         private SpawnLogic spawnLogic;
@@ -37,17 +38,30 @@ namespace _Games.Combat
             group.TimeStep = 1f / KitEntryScene.Instance.GameplayFrameRate;
             battleScaleTime = KitEntryScene.Instance.GameplayScaleTime;
             group.TimeScale = 0;
-            EventBus.Instance.Publish(new OpenWeaponSelectPopupEvent());
+
+            // todo: validate data
             int levelId = 1;
             LevelConfig levelConfig = KitConfigManager.Get<LevelConfig>();
             bool foundLevelData = levelConfig.FindData(levelId, out var levelData);
             if(!foundLevelData) Debug.LogError("Not found level data with levelId: " + levelId);
             bool foundSpawnData = levelConfig.FindSpawn(levelId, out var dictionary);
             if(!foundSpawnData) Debug.LogError("Not found spawn data with levelId: " + levelId);
+            
+            EventBus.Instance.Publish(new OpenWeaponSelectPopupEvent());
+            
+            // todo: init level spawn
             GameObject go = await KitLoaded.LoadAsync<GameObject>(levelData.LevelDesign);
             levelDesign = Instantiate(go).GetComponent<LevelDesign>();
             Entity player = ECSFactory.BuildPlayer(levelDesign);
-            healthUI.Initialize(player);
+
+            // todo: init object
+            PlayerHealthUI.Instantiate(canvas.transform, player);
+            TextDamageSpawner.Instantiate(transform);
+            RangedMonsterCastSkillManager.Instantiate(transform);
+            GameTimeUI.Instantiate(canvas.transform);
+            WeaponSelectPopup.Instantiate(canvas.transform);
+            
+            // todo: register object
             shareData = new ShareData(dictionary, levelDesign);
             spawnLogic = new SpawnLogic(shareData, player);
             equipmentManager = new EquipmentManager(levelDesign);

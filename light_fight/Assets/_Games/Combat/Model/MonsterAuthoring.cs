@@ -1,4 +1,6 @@
 ﻿using System;
+using _Games.Combat.Event;
+using _KIT.Event;
 using _KIT.Pool;
 using _KIT.Utils;
 using Animancer;
@@ -14,6 +16,8 @@ namespace _Games.Combat.Model
     {
         [Header("Renderer")]
         [SerializeField] private SortingGroup sortingGroup;
+        [SerializeField] private float offsetYTextDamage = 0.2f;
+        [SerializeField] private float offsetXTextDamage = 0.2f;
         [Header("Collider")]
         [SerializeField] private float radius;
         [Header("Animations")] 
@@ -48,6 +52,9 @@ namespace _Games.Combat.Model
 
         public void ShowTextDamage(int damage, Vector3 position)
         {
+            float x = Mathf.Abs(offsetXTextDamage);
+            Vector3 finalPosition = position + new Vector3(RandomUtils.Range(-x, x), offsetYTextDamage, 10);
+            EventBus.Instance.Publish(new SpawnTextDamageEvent(TextDamageType.Normal, damage, finalPosition));
         }
 
         public void Destroy()

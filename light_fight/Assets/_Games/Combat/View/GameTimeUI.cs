@@ -1,5 +1,5 @@
 ﻿using _Games.Combat.Data;
-using _Games.Combat.System;
+using _KIT.Resource;
 using _KIT.Utils;
 using TMPro;
 using Unity.Entities;
@@ -7,9 +7,15 @@ using UnityEngine;
 
 namespace _Games.Combat.View
 {
-    public class GameTimeView : MonoBehaviour
+    public class GameTimeUI : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI textTime;
+    
+        public static async void Instantiate(Transform parent)
+        {
+            GameObject go = await KitLoaded.LoadAsync<GameObject>("GameTimeUI");
+            Instantiate(go, parent).GetComponent<GameTimeUI>();
+        }
 
         private void Start()
         {

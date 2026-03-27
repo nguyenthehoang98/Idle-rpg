@@ -6,11 +6,13 @@ using _Games.Config;
 using _Games.Utils;
 using _KIT.Config;
 using _KIT.Event;
+using _KIT.Resource;
 using _KIT.Utils;
 using MoreMountains.Feedbacks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using OpenWeaponSelectPopupEvent = _Games.Combat.Event.OpenWeaponSelectPopupEvent;
 
 namespace _Games.Combat.View
 {
@@ -28,6 +30,16 @@ namespace _Games.Combat.View
         [SerializeField] private Button btnResume;
         
         private readonly List<WeaponData> allData = new List<WeaponData>();        
+        
+        public static async void Instantiate(Transform parent)
+        {
+            // Sau sửa lại vào base popup
+            GameObject go = await KitLoaded.LoadAsync<GameObject>("WeaponSelectPopup");
+            var instance = Instantiate(go, parent).GetComponent<WeaponSelectPopup>();
+            instance.Reload();
+            instance.OpenPopup(new OpenWeaponSelectPopupEvent());
+        }
+        
         private void Awake()
         {
             btnResume.onClick.AddListener(() =>
@@ -39,8 +51,8 @@ namespace _Games.Combat.View
                 });
             });
         }
-        
-        private void Start()
+
+        public void Reload()
         {
             WeaponConfig weaponConfig = KitConfigManager.Get<WeaponConfig>();
             int[] weaponIds = new int[] { 2001, 2002, 2003, 2010 };
@@ -50,7 +62,7 @@ namespace _Games.Combat.View
                     allData.Add(weaponData);
             }
         }
-
+        
         private void OnEnable()
         {
             EventBus.Instance.Subscribe<OpenWeaponSelectPopupEvent>(OpenPopup);
@@ -63,6 +75,7 @@ namespace _Games.Combat.View
         
         private void OpenPopup(OpenWeaponSelectPopupEvent e)
         {
+            Debug.Log("Open popup");
             // tính toán dữ liệu & fill vào data (weapons)
             PickWeapon();
             openFeedback.PlayFeedbacks();;
