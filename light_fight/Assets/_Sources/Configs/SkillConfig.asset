@@ -17,7 +17,7 @@ MonoBehaviour:
   skills:
   - skillId: 100000
     skillName: 
-    lifeTime: 1
+    lifeTime: 0.5
     castTime: 0
     baseFlatDamage: 0
     flatDamageBonusLevel: 0
@@ -35,7 +35,7 @@ MonoBehaviour:
     behaviorsId: []
   - skillId: 100010
     skillName: 
-    lifeTime: 1
+    lifeTime: 0.5
     castTime: 0.2
     baseFlatDamage: 0
     flatDamageBonusLevel: 0
@@ -48,6 +48,6 @@ MonoBehaviour:
     collisionResetInterval: 999
     projectileId: Projectile_Bullet_Goose
     colliderId: Collider_Circle_0.2
-    trajectoryId: Trajectory_Curve_11
+    trajectoryId: Trajectory_Curve_9
     modifiersId: []
     behaviorsId: []

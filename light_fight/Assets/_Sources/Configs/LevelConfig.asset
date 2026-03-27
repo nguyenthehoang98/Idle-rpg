@@ -23,13 +23,15 @@ MonoBehaviour:
     batchId: 1
     isBoss: 0
     delayTime: 0
-    duration: 10
-    power: 51
+    duration: 100
+    power: 1000
     spawnId: Spawn_Random
     data:
-    - 10000_1
+    - 10000_10
+    - 10010_2
     weights:
-    - {x: 10000, y: 1}
+    - {x: 10000, y: 10}
+    - {x: 10010, y: 2}
   - levelId: 1
     waveId: 2
     batchId: 1

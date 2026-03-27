@@ -51,7 +51,8 @@ namespace _Games.Combat.EntityComponentSystem.System
                     Entity parent = skillData.ValueRO.Parent;
                     
                     // todo: on dmg player
-                    if (!b.OnTrigger && state.EntityManager.HasComponent<PlayerTag>(entity) && parent != Entity.Null)
+                    if (!b.OnTrigger && state.EntityManager.HasComponent<PlayerTag>(entity) && parent != Entity.Null &&
+                        state.EntityManager.HasComponent<MonsterTag>(parent))
                     {
                         DefaultStatData statData = state.EntityManager.GetComponentData<DefaultStatData>(parent);
                             

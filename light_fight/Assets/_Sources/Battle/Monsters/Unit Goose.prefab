@@ -107,8 +107,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sortingGroup: {fileID: 8595171745948838959}
-  offsetYTextDamage: 0.4
-  offsetXTextDamage: 0.3
+  parts:
+  - {fileID: 212975930770168787}
+  - {fileID: 212847830664225712}
+  - {fileID: 212852565331993432}
+  - {fileID: 212794901542184798}
+  - {fileID: 212339266162806434}
+  offsetTextDamage: {x: 0.4, y: 0.3, z: 0}
   radius: 0.35
   delayExecuteAttack: 0.16666667
   clips:

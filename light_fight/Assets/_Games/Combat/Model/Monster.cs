@@ -74,7 +74,11 @@ namespace _Games.Combat.Model
 
         public void TakeDamage(int damage, Vector3 position)
         {
-            if(authoring != null) authoring.ShowTextDamage(damage, position);
+            if(authoring != null)
+            {
+                authoring.Behit();
+                authoring.ShowTextDamage(damage, position);
+            }
         }
 
         public void PlayAnimation(AnimationName animationName)
