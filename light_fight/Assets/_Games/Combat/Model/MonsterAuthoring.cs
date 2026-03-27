@@ -5,7 +5,6 @@ using _KIT.Pool;
 using _KIT.Utils;
 using Animancer;
 using MoreMountains.Feedbacks;
-using MoreMountains.Tools;
 using PrimeTween;
 using Unity.Entities;
 using UnityEngine;
@@ -20,12 +19,16 @@ namespace _Games.Combat.Model
         [Header("Renderer")]
         [SerializeField] private SortingGroup sortingGroup;
         [SerializeField] private SpriteRenderer[] parts;
-        [Header("Collider")]
+        [Header("Combat")]
         [SerializeField] private float radius;
+        [SerializeField, Tooltip("Thời gian chờ tính từ khi play animation Attack")]
+        private float delayExecuteAttack;
         [Header("Animations")] 
-        [SerializeField] private MMF_Player takeDamageFeedback;
-        [SerializeField] private float delayExecuteAttack;
         [SerializeField] private AnimationData[] clips;
+        [Header("Feedback & Effects")] 
+        [SerializeField] private bool shouldPlayDeathAnimation;
+        [SerializeField] private BaseDeathEffect deathEffect;
+        [SerializeField] private MMF_Player takeDamageFeedback;
 
         private AnimancerComponent animancerComponent;
         private Coroutine attackCoroutine;
@@ -39,6 +42,7 @@ namespace _Games.Combat.Model
 
         private MaterialPropertyBlock mpb;
         private Sequence sequence;
+        private bool died;
 
         private void Awake()
         {
@@ -48,6 +52,7 @@ namespace _Games.Combat.Model
 
         public void Initialize(Entity entity)
         {
+            died = true;
             PlayAnimation(AnimationName.Move);
             this.WhileInvoke(1, () =>
             {
@@ -94,8 +99,23 @@ namespace _Games.Combat.Model
 
         public void Destroy()
         {
-            sequence.Stop();
-            KitPool.Destroy(gameObject);
+            if (attackCoroutine != null) StopCoroutine(attackCoroutine);
+            sequence.Complete();
+
+            Action playEffectAction = () =>
+            {
+                deathEffect.Play(() => { KitPool.Destroy(gameObject); });
+            };
+
+            if (shouldPlayDeathAnimation)
+            {
+                AnimancerState state = PlayAnimation(AnimationName.Death);
+                this.WaitInvoke(state.Duration - deathEffect.EarlyPlayTime, playEffectAction);
+            }
+            else
+            {
+                playEffectAction();
+            }
         }
 
         public AnimancerState PlayAnimation(AnimationName animationName)

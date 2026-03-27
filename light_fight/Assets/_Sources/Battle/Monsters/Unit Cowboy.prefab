@@ -341,7 +341,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4056336476640730}
   - component: {fileID: 8257959080249546853}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -473,7 +473,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4612659469061279}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Flipper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -510,7 +510,7 @@ GameObject:
   - component: {fileID: 8042110051396971615}
   - component: {fileID: 7008929035813307589}
   - component: {fileID: 7475142600504432082}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Unit Cowboy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -532,6 +532,7 @@ Transform:
   m_Children:
   - {fileID: 4612659469061279}
   - {fileID: 7548077102176882003}
+  - {fileID: 3880223376245871558}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
 --- !u!114 &2503884441304153070
@@ -604,7 +605,6 @@ MonoBehaviour:
   - {fileID: 212119033538333866}
   - {fileID: 212804501577251269}
   radius: 0.35
-  takeDamageFeedback: {fileID: 829532394974169068}
   delayExecuteAttack: 0.05
   clips:
   - name: 0
@@ -657,6 +657,9 @@ MonoBehaviour:
         _Names: []
       _Clip: {fileID: 7400000, guid: f5243ab14ee402e439b6d76af4ecbadd, type: 2}
       _NormalizedStartTime: NaN
+  shouldPlayDeathAnimation: 0
+  deathEffect: {fileID: 5550556520203460951}
+  takeDamageFeedback: {fileID: 829532394974169068}
   shouldRecovery: 1
   muzzleOffset: {x: -0.7, y: 0, z: 0}
   references:
@@ -5776,7 +5779,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4661453471659626}
   - component: {fileID: 212724875570822563}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: HitFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5863,7 +5866,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7548077102176882003}
   - component: {fileID: 829532394974169068}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: HitFeedback
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6400,3 +6403,80 @@ MonoBehaviour:
         StateOnSkip: 1
         SetStateOnPlayerComplete: 0
         StateOnPlayerComplete: 1
+--- !u!1001 &4117910453636342867
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4065861066938827}
+    m_Modifications:
+    - target: {fileID: 935784619835520917, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 935784619835520917, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 935784619835520917, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 935784619835520917, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 935784619835520917, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 935784619835520917, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 935784619835520917, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 935784619835520917, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 935784619835520917, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 935784619835520917, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6421781559401549054, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
+      propertyPath: m_Name
+      value: DeathEffect Cowboy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8368330232404903172, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
+      propertyPath: visual
+      value: 
+      objectReference: {fileID: 4612659469061279}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
+--- !u!4 &3880223376245871558 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 935784619835520917, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
+  m_PrefabInstance: {fileID: 4117910453636342867}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5550556520203460951 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8368330232404903172, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
+  m_PrefabInstance: {fileID: 4117910453636342867}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 761a0482df9c4cb185d2d9a0fb8e7585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

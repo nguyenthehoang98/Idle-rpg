@@ -67,6 +67,8 @@ namespace _Games.Combat.EntityComponentSystem
 #if !TEST_MODE
             EntityView view = KitPool.Instantiate(go.GetComponent<EntityView>());
             view.transform.position = position;
+            view.transform.localRotation = Quaternion.Euler(0, 0, 0);
+            view.transform.localScale = Vector3.one;
             authoring = view.GetComponent<MonsterAuthoring>();
             entity = view.GetOrCreateEntity();
 #else

@@ -41,10 +41,7 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Level
-    uniqueID: 3614552633
-    locked: 0
-  - name: VFXUI
+  - name: GameVFXUI
     uniqueID: 2668121005
     locked: 0
   m_RenderingLayers:

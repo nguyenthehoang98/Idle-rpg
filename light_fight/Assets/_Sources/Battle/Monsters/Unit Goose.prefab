@@ -81,6 +81,7 @@ Transform:
   m_Children:
   - {fileID: 4821352908150431}
   - {fileID: 2874202772555079681}
+  - {fileID: 3823140209625254604}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
 --- !u!114 &8095982201206625075
@@ -115,7 +116,6 @@ MonoBehaviour:
   - {fileID: 212794901542184798}
   - {fileID: 212339266162806434}
   radius: 0.35
-  takeDamageFeedback: {fileID: 5756302000052263300}
   delayExecuteAttack: 0.16666667
   clips:
   - name: 0
@@ -158,6 +158,9 @@ MonoBehaviour:
         _Names: []
       _Clip: {fileID: 7400000, guid: 454ebaccfeec6aa419a135ea331d9b7b, type: 2}
       _NormalizedStartTime: NaN
+  shouldPlayDeathAnimation: 0
+  deathEffect: {fileID: 2512349976440227521}
+  takeDamageFeedback: {fileID: 5756302000052263300}
   references:
     version: 2
     RefIds: []
@@ -1423,3 +1426,80 @@ MonoBehaviour:
         StateOnSkip: 1
         SetStateOnPlayerComplete: 0
         StateOnPlayerComplete: 1
+--- !u!1001 &817565727678081016
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4274639666438931}
+    m_Modifications:
+    - target: {fileID: 2991862727274094905, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
+      propertyPath: visual
+      value: 
+      objectReference: {fileID: 4821352908150431}
+    - target: {fileID: 4491802354344062260, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491802354344062260, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491802354344062260, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491802354344062260, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491802354344062260, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491802354344062260, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491802354344062260, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491802354344062260, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491802354344062260, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491802354344062260, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8201472551628965842, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
+      propertyPath: m_Name
+      value: DeathEffect Goose
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
+--- !u!114 &2512349976440227521 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2991862727274094905, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
+  m_PrefabInstance: {fileID: 817565727678081016}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 761a0482df9c4cb185d2d9a0fb8e7585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &3823140209625254604 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4491802354344062260, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
+  m_PrefabInstance: {fileID: 817565727678081016}
+  m_PrefabAsset: {fileID: 0}
