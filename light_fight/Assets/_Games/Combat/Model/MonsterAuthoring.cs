@@ -4,6 +4,8 @@ using _KIT.Event;
 using _KIT.Pool;
 using _KIT.Utils;
 using Animancer;
+using MoreMountains.Feedbacks;
+using MoreMountains.Tools;
 using PrimeTween;
 using Unity.Entities;
 using UnityEngine;
@@ -21,6 +23,7 @@ namespace _Games.Combat.Model
         [Header("Collider")]
         [SerializeField] private float radius;
         [Header("Animations")] 
+        [SerializeField] private MMF_Player takeDamageFeedback;
         [SerializeField] private float delayExecuteAttack;
         [SerializeField] private AnimationData[] clips;
 
@@ -65,6 +68,8 @@ namespace _Games.Combat.Model
 
         public void Behit()
         {
+            if (takeDamageFeedback.IsPlaying) takeDamageFeedback.StopFeedbacks();
+            takeDamageFeedback.PlayFeedbacks();
             if (sequence.isAlive) 
                 return;
             sequence = Sequence.Create();
