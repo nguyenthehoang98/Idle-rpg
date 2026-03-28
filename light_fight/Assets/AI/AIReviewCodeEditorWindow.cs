@@ -38,15 +38,11 @@ public class AIReviewCodeEditorWindow : AIBash
 
     #endregion
 
-    #region Menu
-
     [MenuItem("Tools/AI/Review code")]
     public static void ShowWindow()
     {
         GetWindow<AIReviewCodeEditorWindow>("Review code");
     }
-
-    #endregion
 
     #region GUI
 
