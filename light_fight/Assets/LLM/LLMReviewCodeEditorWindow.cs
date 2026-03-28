@@ -19,6 +19,8 @@ public class LLMReviewCodeEditorWindow : EditorWindow
     private string selectedFile = "";
     private string fixInstruction = "";
     private Vector2 scrollFix;
+    float fakeProgress = 0f;
+    double lastTime;
     private MonoScript selectedScript = null;
     private EditorCoroutine coroutine;
 
@@ -66,17 +68,25 @@ public class LLMReviewCodeEditorWindow : EditorWindow
         
         if (isRunning)
         {
+            double time = EditorApplication.timeSinceStartup;
+            double delta = time - lastTime;
+            lastTime = time;
+
+            // tốc độ animation (tùy chỉnh)
+            fakeProgress += (float)(delta * 0.5f);
+
+            if (fakeProgress > 1f)
+                fakeProgress = 0f;
+
             EditorGUILayout.HelpBox(
                 $"Analyzing {currentFileIndex}/{totalFiles}\n{currentFileName}",
                 MessageType.Info
             );
 
-            float progress = (float)currentFileIndex / totalFiles;
-            EditorGUI.ProgressBar(
-                GUILayoutUtility.GetRect(200, 20),
-                progress,
-                $"{Mathf.RoundToInt(progress * 100)}%"
-            );
+            Rect rect = GUILayoutUtility.GetRect(200, 20);
+            EditorGUI.ProgressBar(rect, fakeProgress, "Processing...");
+    
+            Repaint(); // ⚠️ rất quan trọng để animate
         }
         
         GUILayout.Space(10);
@@ -119,7 +129,7 @@ public class LLMReviewCodeEditorWindow : EditorWindow
         }
         GUI.enabled = true;
         
-        GUI.enabled = !string.IsNullOrEmpty(fixInstruction);
+        GUI.enabled = !string.IsNullOrEmpty(fixInstruction) && !isRunning;
         
         if (GUILayout.Button("Fix This File"))
         {
