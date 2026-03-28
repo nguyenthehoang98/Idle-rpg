@@ -24,7 +24,8 @@ public class LLMReviewCodeEditorWindow : EditorWindow
     private MonoScript selectedScript = null;
     private EditorCoroutine coroutine;
 
-    private const string URL = "http://127.0.0.1:1234/v1/chat/completions";
+    private const string IP = "100.100.181.25";
+    private const string MODEL = "qwen2.5-coder:7b";
 
     [MenuItem("Tools/LMM/Review code")]
     public static void ShowWindow()
@@ -176,7 +177,9 @@ public class LLMReviewCodeEditorWindow : EditorWindow
         {
             if (GUILayout.Button("Stop"))
             {
+                isRunning = false;
                 if(coroutine != null) EditorCoroutineUtility.StopCoroutine(coroutine);
+                Repaint();
             }
         }
 
@@ -278,10 +281,10 @@ public class LLMReviewCodeEditorWindow : EditorWindow
     
     IEnumerator SendFixRequest(string prompt, Action onComplete)
     {
-        RequestData data = new RequestData(prompt);
+        RequestData data = new RequestData(prompt, MODEL);
         string json = JsonUtility.ToJson(data);
-
-        using (UnityWebRequest req = new UnityWebRequest(URL, "POST"))
+        string url = $"http://{IP}:11434/api/generate";
+        using (UnityWebRequest req = new UnityWebRequest(url, "POST"))
         {
             byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
 
@@ -294,13 +297,19 @@ public class LLMReviewCodeEditorWindow : EditorWindow
 
             if (req.result == UnityWebRequest.Result.Success)
             {
-                var res = JsonUtility.FromJson<ResponseData>(req.downloadHandler.text);
-
-                response = res.choices[0].message.content;
+                try
+                {
+                    var res = JsonUtility.FromJson<ResponseData>(req.downloadHandler.text);
+                    response = res.response;
+                }
+                catch
+                {
+                    response = "Parse error:\n" + req.downloadHandler.text;
+                }
             }
             else
             {
-                response += "\nFix Error: " + req.error;
+                response = "Error: " + req.error;
             }
 
             Repaint();
@@ -376,10 +385,11 @@ public class LLMReviewCodeEditorWindow : EditorWindow
     
     IEnumerator SendToLLMAppend(string prompt)
     {
-        RequestData data = new RequestData(prompt);
+        RequestData data = new RequestData(prompt, MODEL);
         string json = JsonUtility.ToJson(data);
-
-        using (UnityWebRequest req = new UnityWebRequest(URL, "POST"))
+        string url = $"http://{IP}:11434/api/generate";
+        Debug.Log(json);
+        using (UnityWebRequest req = new UnityWebRequest(url, "POST"))
         {
             byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
 
@@ -394,10 +404,9 @@ public class LLMReviewCodeEditorWindow : EditorWindow
             if (req.result == UnityWebRequest.Result.Success)
             {
                 var res = JsonUtility.FromJson<ResponseData>(req.downloadHandler.text);
-
-                if (res != null && res.choices != null && res.choices.Length > 0)
+                if (res != null)
                 {
-                    response += FormatRichText(res.choices[0].message.content) + "\n";
+                    response = FormatRichText(res.response) + "\n";
                 }
                 else
                 {
@@ -425,50 +434,24 @@ public class LLMReviewCodeEditorWindow : EditorWindow
     [Serializable]
     public class RequestData
     {
-        public string model = "nvidia/nemotron-3-nano-4b";
-        public Message[] messages;
-        public float temperature = 0.7f;
+        public string model;
+        public string prompt;
+        public bool stream;
 
         public RequestData()
         {
         }
         
-        public RequestData(string userPrompt)
+        public RequestData(string userPrompt, string model)
         {
-            messages = new Message[]
-            {
-                new Message("system", "You are a helpful assistant"),
-                new Message("user", userPrompt)
-            };
-        }
-    }
-
-    [System.Serializable]
-    public class Message
-    {
-        public string role;
-        public string content;
-
-        public Message()
-        {
-        }
-        
-        public Message(string role, string content)
-        {
-            this.role = role;
-            this.content = content;
+            this.model = model;
+            this.prompt = userPrompt;
         }
     }
 
     [System.Serializable]
     public class ResponseData
     {
-        public Choice[] choices;
-    }
-
-    [System.Serializable]
-    public class Choice
-    {
-        public Message message;
+        public string response;
     }
 }
