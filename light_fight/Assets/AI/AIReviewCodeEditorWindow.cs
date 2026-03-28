@@ -3,21 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using AI;
 using Unity.EditorCoroutines.Editor;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class LLMReviewCodeEditorWindow : EditorWindow
+public class AIReviewCodeEditorWindow : AIBash
 {
-    #region Constants
-
     private const string DEFAULT_FOLDER = "Assets/";
-    private const string API_URL = "http://{0}:11434/api/generate";
-    private const string MODEL = "qwen2.5-coder:7b";
-    private const string IP = "100.100.181.25";
-
-    #endregion
 
     #region State
 
@@ -46,10 +40,10 @@ public class LLMReviewCodeEditorWindow : EditorWindow
 
     #region Menu
 
-    [MenuItem("Tools/LMM/Review code")]
+    [MenuItem("Tools/AI/Review code")]
     public static void ShowWindow()
     {
-        GetWindow<LLMReviewCodeEditorWindow>("Review code");
+        GetWindow<AIReviewCodeEditorWindow>("Review code");
     }
 
     #endregion
@@ -232,7 +226,17 @@ public class LLMReviewCodeEditorWindow : EditorWindow
 
         var prompt = BuildReviewPrompt(file, code);
 
-        yield return SendRequest(prompt, true);
+        yield return SendRequest(prompt, tuple =>
+        {
+            if (tuple.success)
+            {
+                response += FormatRichText(tuple.response) + "\n";
+            }
+            else
+            {
+                response += tuple.response + "\n";
+            }
+        });
 
         response += "\n\n";
         onComplete?.Invoke();
@@ -277,44 +281,6 @@ Code:
 
     #endregion
 
-    #region Networking
-
-    private IEnumerator SendRequest(string prompt, bool append)
-    {
-        var data = new RequestData(prompt, MODEL);
-        var json = JsonUtility.ToJson(data);
-        var url = string.Format(API_URL, IP);
-
-        using var req = new UnityWebRequest(url, "POST");
-
-        req.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
-        req.downloadHandler = new DownloadHandlerBuffer();
-        req.SetRequestHeader("Content-Type", "application/json");
-        req.timeout = 120;
-
-        yield return req.SendWebRequest();
-
-        if (req.result == UnityWebRequest.Result.Success)
-        {
-            var res = JsonUtility.FromJson<ResponseData>(req.downloadHandler.text);
-
-            if (res != null)
-                response += append
-                    ? FormatRichText(res.response) + "\n"
-                    : res.response;
-            else
-                response += "Parse error\n";
-        }
-        else
-        {
-            response += $"Error: {req.error}\n";
-        }
-
-        Repaint();
-    }
-
-    #endregion
-
     #region Helpers
 
     private void UpdateFakeProgress()
@@ -341,27 +307,5 @@ Code:
 
     #endregion
 
-    #region DTO
-
-    [Serializable]
-    public class RequestData
-    {
-        public string model;
-        public string prompt;
-        public bool stream;
-
-        public RequestData(string prompt, string model)
-        {
-            this.prompt = prompt;
-            this.model = model;
-        }
-    }
-
-    [Serializable]
-    public class ResponseData
-    {
-        public string response;
-    }
-
-    #endregion
+    protected override string Model => "qwen2.5-coder:7b";
 }
