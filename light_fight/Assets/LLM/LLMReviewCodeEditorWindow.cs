@@ -1,31 +1,50 @@
 using System;
-using UnityEngine;
-using UnityEditor;
-using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Unity.EditorCoroutines.Editor;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.Networking;
 
 public class LLMReviewCodeEditorWindow : EditorWindow
 {
-    private string prompt = "Say hello from Unity Editor";
-    private string response = "";
-    private bool isRunning = false;
-    private int currentFileIndex = 0;
-    private int totalFiles = 0;
-    private string currentFileName = "";
+    #region Constants
+
+    private const string DEFAULT_FOLDER = "Assets/";
+    private const string API_URL = "http://{0}:11434/api/generate";
+    private const string MODEL = "qwen2.5-coder:7b";
+    private const string IP = "100.100.181.25";
+
+    #endregion
+
+    #region State
+
+    private string folderPath = DEFAULT_FOLDER;
+    private string response = string.Empty;
+
+    private bool isRunning;
+    private int currentFileIndex;
+    private int totalFiles;
+    private string currentFileName;
+
+    private float fakeProgress;
+    private double fakeProgressLastTime;
+
+    private double currentTime;
+    private double runningLastTime;
+
     private Vector2 scrollPos;
-    private string selectedFile = "";
-    private string fixInstruction = "";
-    private Vector2 scrollFix;
-    float fakeProgress = 0f;
-    double lastTime;
-    private MonoScript selectedScript = null;
+
+    private MonoScript selectedScript;
+    private string selectedFile;
+
     private EditorCoroutine coroutine;
 
-    private const string IP = "100.100.181.25";
-    private const string MODEL = "qwen2.5-coder:7b";
+    #endregion
+
+    #region Menu
 
     [MenuItem("Tools/LMM/Review code")]
     public static void ShowWindow()
@@ -33,65 +52,72 @@ public class LLMReviewCodeEditorWindow : EditorWindow
         GetWindow<LLMReviewCodeEditorWindow>("Review code");
     }
 
-    private string folderPath = "Assets/";
+    #endregion
 
-    void OnGUI()
+    #region GUI
+
+    private void OnGUI()
     {
-        GUILayout.Label("=== REVIEW FOLDER CODE ===", EditorStyles.boldLabel);
+        DrawFolderSection();
+        DrawFileSection();
+        DrawProgress();
 
+        if (isRunning && GUILayout.Button("Stop"))
+            StopProcess();
+        DrawResponse();
+    }
+
+    private void DrawFolderSection()
+    {
         EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Folder Path:", GUILayout.Width(100));
         folderPath = EditorGUILayout.TextField(folderPath);
         EditorGUILayout.EndHorizontal();
 
         GUI.enabled = !isRunning;
-        
+
         EditorGUILayout.BeginHorizontal();
-        
+
         if (GUILayout.Button("Select Folder"))
         {
-            string path = EditorUtility.OpenFolderPanel("Select Folder", "Assets", "");
-            if (!string.IsNullOrEmpty(path))
-            {
-                folderPath = path;
-            }
+            var path = EditorUtility.OpenFolderPanel("Select Folder", "Assets", "");
+            if (!string.IsNullOrEmpty(path)) folderPath = path;
         }
 
         if (GUILayout.Button("Analyze Files"))
         {
-            if (coroutine != null) EditorCoroutineUtility.StopCoroutine(coroutine); 
-            coroutine = EditorCoroutineUtility.StartCoroutineOwnerless(AnalyzeFiles());
+            StartCoroutine(AnalyzeFiles());
         }
-        
+
         EditorGUILayout.EndHorizontal();
-
         GUI.enabled = true;
-        
-        if (isRunning)
-        {
-            double time = EditorApplication.timeSinceStartup;
-            double delta = time - lastTime;
-            lastTime = time;
+    }
 
-            // tốc độ animation (tùy chỉnh)
-            fakeProgress += (float)(delta * 0.5f);
-
-            if (fakeProgress > 1f)
-                fakeProgress = 0f;
-
-            EditorGUILayout.HelpBox(
-                $"Analyzing {currentFileIndex}/{totalFiles}\n{currentFileName}",
-                MessageType.Info
-            );
-
-            Rect rect = GUILayoutUtility.GetRect(200, 20);
-            EditorGUI.ProgressBar(rect, fakeProgress, "Processing...");
-    
-            Repaint(); // ⚠️ rất quan trọng để animate
-        }
-        
+    private void DrawProgress()
+    {
         GUILayout.Space(10);
-        GUILayout.Label("=== REVIEW FIX CODE ===", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("Last time running: " + TimeSpan.FromSeconds(currentTime - runningLastTime));
+        
+        if (!isRunning) return;
+
+        currentTime= EditorApplication.timeSinceStartup;
+        
+        UpdateFakeProgress();
+
+        EditorGUILayout.HelpBox(
+            $"Analyzing {currentFileIndex}/{totalFiles}\n{currentFileName}",
+            MessageType.Info
+        );
+
+        var rect = GUILayoutUtility.GetRect(200, 20);
+        EditorGUI.ProgressBar(rect, fakeProgress, "Processing...");
+
+        Repaint();
+    }
+
+    private void DrawFileSection()
+    {
+        GUILayout.Space(10);
 
         selectedScript = (MonoScript)EditorGUILayout.ObjectField(
             "C# File",
@@ -101,335 +127,221 @@ public class LLMReviewCodeEditorWindow : EditorWindow
         );
 
         if (selectedScript != null)
-        {
             selectedFile = AssetDatabase.GetAssetPath(selectedScript);
-        }
 
-        fixInstruction = EditorGUILayout.TextField("Instruction:", fixInstruction);
+        GUI.enabled = selectedScript != null && !isRunning;
 
-        GUI.enabled = !isRunning;
-        
-        EditorGUILayout.BeginHorizontal();
-        
         if (GUILayout.Button("Review This File"))
-        {
-            if (coroutine != null) EditorCoroutineUtility.StopCoroutine(coroutine); 
-
-            isRunning = true;
-            response = string.Empty;
-            totalFiles = 1;
-            currentFileIndex = 0;
-            
-            coroutine = EditorCoroutineUtility.StartCoroutineOwnerless(AnalyzeFile(selectedFile, () =>
-            {
-                currentFileIndex++;
-                isRunning = false;
-                currentFileName = "";
-                response += "\nDone!";
-            }));
-        }
-        GUI.enabled = true;
-        
-        GUI.enabled = !string.IsNullOrEmpty(fixInstruction) && !isRunning;
-        
-        if (GUILayout.Button("Fix This File"))
-        {
-            if (coroutine != null) EditorCoroutineUtility.StopCoroutine(coroutine); 
-            
-            isRunning = true;
-            coroutine = EditorCoroutineUtility.StartCoroutineOwnerless(FixFile(() =>
-            {
-                isRunning = false;
-            }));
-            
-            Repaint();
-        }
-        
-        GUI.enabled = true;
-        
-        GUI.enabled = !isRunning;
-        
-        if (GUILayout.Button("Apply Fix"))
-        {
-            System.IO.File.WriteAllText(selectedFile, response);
-            AssetDatabase.Refresh();
-
-            response += "\nApplied fix to: " + selectedFile;
-        }
-        
-        EditorGUILayout.EndHorizontal();
+            StartSingleFileReview();
 
         GUI.enabled = true;
+    }
 
-        if (!isRunning)
-        {
-            var bugs = ExtractBugs(response);
-            foreach (var bug in bugs)
-            {
-                if (GUILayout.Button("Issuie: " + bug))
-                {
-                    fixInstruction = "Fix this issue: " + bug;
-                }
-            }
-        }
-        
-        if (isRunning)
-        {
-            if (GUILayout.Button("Stop"))
-            {
-                isRunning = false;
-                if(coroutine != null) EditorCoroutineUtility.StopCoroutine(coroutine);
-                Repaint();
-            }
-        }
-
+    private void DrawResponse()
+    {
         GUILayout.Label("Response:");
-        
-        scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Height(500));
-        
-        GUIStyle style = new GUIStyle(EditorStyles.textArea);
-        style.wordWrap = true;
-        style.richText = true;
+
+        scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Height(Screen.height - 200));
+
+        var style = new GUIStyle(EditorStyles.textArea)
+        {
+            wordWrap = true,
+            richText = true
+        };
 
         response = EditorGUILayout.TextArea(response, style, GUILayout.ExpandHeight(true));
 
         EditorGUILayout.EndScrollView();
     }
-    
-    string ExtractBugBlock(string text)
+
+    #endregion
+
+    #region Actions
+
+    private void StartCoroutine(IEnumerator routine)
     {
-        int scoreIndex = text.IndexOf("[SCORE]");
-        int perfIndex = text.IndexOf("[PERFORMANCE]");
-
-        if (scoreIndex == -1 || perfIndex == -1 || perfIndex <= scoreIndex)
-            return "";
-
-        // lấy đoạn giữa SCORE và PERFORMANCE
-        string block = text.Substring(scoreIndex, perfIndex - scoreIndex);
-
-        // tìm vị trí [BUG] trong block
-        int bugIndex = block.IndexOf("[BUG]");
-        if (bugIndex == -1)
-            return "";
-
-        // chỉ lấy phần sau [BUG]
-        return block.Substring(bugIndex + "[BUG]".Length);
-    }
-    
-    List<string> ParseBugLines(string bugBlock)
-    {
-        List<string> bugs = new List<string>();
-
-        var lines = bugBlock.Split('\n');
-
-        foreach (var raw in lines)
-        {
-            string line = raw.Trim();
-
-            if (line.StartsWith("-"))
-            {
-                bugs.Add(line.Substring(1).Trim());
-            }
-        }
-
-        return bugs;
-    }
-    
-    List<string> ExtractBugs(string text)
-    {
-        string bugBlock = ExtractBugBlock(text);
-        return ParseBugLines(bugBlock);
-    }
-    
-    IEnumerator FixFile(Action onComplete)
-    {
-        string code = System.IO.File.ReadAllText(selectedFile);
-
-        string prompt =
-            "You are a senior Unity developer.\n" +
-            "Fix the following C# code.\n\n" +
-
-            "Instruction:\n" + fixInstruction + "\n\n" +
-
-            "Constraints:\n" +
-            "- Keep original behavior unless fixing bug\n" +
-            "- Do not remove important logic\n" +
-            "- Keep code clean and readable\n\n" +
-
-            "Output:\n" +
-            "- Return FULL updated code only\n" +
-            "- No explanation\n\n" +
-
-            "Code:\n" + code;
-
-        yield return SendFixRequest(prompt, onComplete);
-        
-        fixInstruction = String.Empty;
-    }
-    
-    string FormatRichText(string input)
-    {
-        input = input.Replace("[BUG]", "<color=red>[BUG]</color>");
-        input = input.Replace("[GOOD]", "<color=green>[GOOD]</color>");
-        input = input.Replace("[PERFORMANCE]", "<color=orange>[PERFORMANCE]</color>");
-        input = input.Replace("[ARCHITECTURE]", "<color=cyan>[ARCHITECTURE]</color>");
-        input = input.Replace("[SUGGESTIONS]", "<color=yellow>[SUGGESTIONS]</color>");
-        input = input.Replace("[SCORE]", "<color=lime>[SCORE]</color>");
-
-        return input;
-    }
-    
-    IEnumerator SendFixRequest(string prompt, Action onComplete)
-    {
-        RequestData data = new RequestData(prompt, MODEL);
-        string json = JsonUtility.ToJson(data);
-        string url = $"http://{IP}:11434/api/generate";
-        using (UnityWebRequest req = new UnityWebRequest(url, "POST"))
-        {
-            byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
-
-            req.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            req.downloadHandler = new DownloadHandlerBuffer();
-
-            req.SetRequestHeader("Content-Type", "application/json");
-
-            yield return req.SendWebRequest();
-
-            if (req.result == UnityWebRequest.Result.Success)
-            {
-                try
-                {
-                    var res = JsonUtility.FromJson<ResponseData>(req.downloadHandler.text);
-                    response = res.response;
-                }
-                catch
-                {
-                    response = "Parse error:\n" + req.downloadHandler.text;
-                }
-            }
-            else
-            {
-                response = "Error: " + req.error;
-            }
-
-            Repaint();
-            onComplete?.Invoke();
-        }
+        StopCurrentCoroutine();
+        coroutine = EditorCoroutineUtility.StartCoroutineOwnerless(routine);
     }
 
-    IEnumerator AnalyzeFile(string file, Action onComplete)
+    private void StopCurrentCoroutine()
     {
-        string code = System.IO.File.ReadAllText(file);
-
-        // limit mỗi file để tránh overload
-        if (code.Length > 4000)
-            code = code.Substring(0, 4000);
-
-        string prompt =
-            "You are a senior Unity developer.\n" +
-            "Review this C# file.\n\n" +
-
-            "Requirements:\n" +
-            "- DO NOT return JSON\n" +
-            "- Write like a debug report\n" +
-            "- Be concise\n" +
-            "- Use simple Vietnamese\n\n" +
-
-            "Scoring:\n" +
-            "- Overall score: X/10\n\n" +
-
-            "Format:\n" +
-            "[FILE]: " + file + "\n" +
-            "[SCORE]: X/10\n\n" +
-
-            "[BUG]\n- ...\n\n" +
-            "[PERFORMANCE]\n- ...\n\n" +
-            "[ARCHITECTURE]\n- ...\n\n" +
-            "[GOOD]\n- ...\n\n" +
-            "[SUGGESTIONS]\n- ...\n\n" +
-
-            "Important:\n" +
-            "- Prefix issues with [BUG]\n" +
-            "- Prefix good parts with [GOOD]\n" +
-            "- Keep it short\n\n" +
-
-            "Code:\n" + code;
-
-        yield return SendToLLMAppend(prompt);
-
-        response += "\n----------------------------------------\n";
-        
-        onComplete?.Invoke();
+        if (coroutine != null)
+            EditorCoroutineUtility.StopCoroutine(coroutine);
     }
-    
-    IEnumerator AnalyzeFiles()
+
+    private void StopProcess()
     {
-        string[] files = System.IO.Directory.GetFiles(folderPath, "*.cs", System.IO.SearchOption.AllDirectories);
+        isRunning = false;
+        StopCurrentCoroutine();
+        Repaint();
+    }
+
+    private void StartSingleFileReview()
+    {
         isRunning = true;
+        runningLastTime = EditorApplication.timeSinceStartup;
+        response = string.Empty;
+        totalFiles = 1;
+        currentFileIndex = 0;
+
+        StartCoroutine(AnalyzeFile(selectedFile, () =>
+        {
+            currentFileIndex++;
+            isRunning = false;
+            currentFileName = string.Empty;
+            response += "\nDone!";
+        }));
+    }
+
+    #endregion
+
+    #region Core Logic
+
+    private IEnumerator AnalyzeFiles()
+    {
+        var files = Directory.GetFiles(folderPath, "*.cs", SearchOption.AllDirectories);
+
+        isRunning = true;
+        runningLastTime = EditorApplication.timeSinceStartup;
         response = string.Empty;
         totalFiles = files.Length;
         currentFileIndex = 0;
-        
+
         foreach (var file in files)
         {
-            currentFileIndex++;
-            currentFileName = file;
-            yield return AnalyzeFile(file, null);
+            if(File.Exists(file))
+            {
+                currentFileName = file;
+                currentFileIndex++;
+                yield return AnalyzeFile(file, null);
+            }
             Repaint();
         }
 
         isRunning = false;
-        currentFileName = "";
+        currentFileName = string.Empty;
         response += "\nDone!";
     }
-    
-    IEnumerator SendToLLMAppend(string prompt)
+
+    private IEnumerator AnalyzeFile(string file, Action onComplete)
     {
-        RequestData data = new RequestData(prompt, MODEL);
-        string json = JsonUtility.ToJson(data);
-        string url = $"http://{IP}:11434/api/generate";
-        Debug.Log(json);
-        using (UnityWebRequest req = new UnityWebRequest(url, "POST"))
+        var code = File.ReadAllText(file);
+        if (code.Length > 4000)
+            code = code.Substring(0, 4000);
+
+        var prompt = BuildReviewPrompt(file, code);
+
+        yield return SendRequest(prompt, true);
+
+        response += "\n\n";
+        onComplete?.Invoke();
+    }
+
+    #endregion
+
+    #region Prompt Builders
+
+    private string BuildReviewPrompt(string file, string code)
+    {
+        return $@"You are a senior Unity developer.
+Review this C# file.
+
+Requirements:
+- DO NOT return JSON
+- Write like a debug report
+- Use simple Vietnamese
+
+Format:
+[FILE]: {file}
+[SCORE]: X/10
+
+[BUG]
+- ...
+
+[PERFORMANCE]
+- ...
+
+[ARCHITECTURE]
+- ...
+
+[GOOD]
+- ...
+
+[SUGGESTIONS]
+- ...
+
+Code:
+{code}";
+    }
+
+    #endregion
+
+    #region Networking
+
+    private IEnumerator SendRequest(string prompt, bool append)
+    {
+        var data = new RequestData(prompt, MODEL);
+        var json = JsonUtility.ToJson(data);
+        var url = string.Format(API_URL, IP);
+
+        using var req = new UnityWebRequest(url, "POST");
+
+        req.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
+        req.downloadHandler = new DownloadHandlerBuffer();
+        req.SetRequestHeader("Content-Type", "application/json");
+        req.timeout = 120;
+
+        yield return req.SendWebRequest();
+
+        if (req.result == UnityWebRequest.Result.Success)
         {
-            byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
+            var res = JsonUtility.FromJson<ResponseData>(req.downloadHandler.text);
 
-            req.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            req.downloadHandler = new DownloadHandlerBuffer();
-
-            req.SetRequestHeader("Content-Type", "application/json");
-            req.timeout = 120;
-
-            yield return req.SendWebRequest();
-
-            if (req.result == UnityWebRequest.Result.Success)
-            {
-                var res = JsonUtility.FromJson<ResponseData>(req.downloadHandler.text);
-                if (res != null)
-                {
-                    response = FormatRichText(res.response) + "\n";
-                }
-                else
-                {
-                    response += "Parse error\n";
-                }
-            }
+            if (res != null)
+                response += append
+                    ? FormatRichText(res.response) + "\n"
+                    : res.response;
             else
-            {
-                response += "Error: " + req.error + "\n";
-            }
-
-            Repaint();
+                response += "Parse error\n";
         }
+        else
+        {
+            response += $"Error: {req.error}\n";
+        }
+
+        Repaint();
     }
 
-    // ===== DATA =====
+    #endregion
 
-    [Serializable]
-    class BugItem
+    #region Helpers
+
+    private void UpdateFakeProgress()
     {
-        public string file;
-        public string message;
+        var time = EditorApplication.timeSinceStartup;
+        var delta = time - fakeProgressLastTime;
+        fakeProgressLastTime = time;
+
+        fakeProgress += (float)(delta * 0.5f);
+        if (fakeProgress > 1f) fakeProgress = 0f;
     }
+
+    private string FormatRichText(string input)
+    {
+        return input
+            .Replace("[FILE]", "<color=magenta>[FILE]</color>")
+            .Replace("[BUG]", "<color=red>[BUG]</color>")
+            .Replace("[GOOD]", "<color=green>[GOOD]</color>")
+            .Replace("[PERFORMANCE]", "<color=orange>[PERFORMANCE]</color>")
+            .Replace("[ARCHITECTURE]", "<color=cyan>[ARCHITECTURE]</color>")
+            .Replace("[SUGGESTIONS]", "<color=yellow>[SUGGESTIONS]</color>")
+            .Replace("[SCORE]", "<color=lime>[SCORE]</color>");
+    }
+
+    #endregion
+
+    #region DTO
 
     [Serializable]
     public class RequestData
@@ -438,20 +350,18 @@ public class LLMReviewCodeEditorWindow : EditorWindow
         public string prompt;
         public bool stream;
 
-        public RequestData()
+        public RequestData(string prompt, string model)
         {
-        }
-        
-        public RequestData(string userPrompt, string model)
-        {
+            this.prompt = prompt;
             this.model = model;
-            this.prompt = userPrompt;
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     public class ResponseData
     {
         public string response;
     }
+
+    #endregion
 }

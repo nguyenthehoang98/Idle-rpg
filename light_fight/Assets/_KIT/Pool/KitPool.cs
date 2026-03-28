@@ -1,3 +1,4 @@
+
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -23,8 +24,14 @@ namespace _KIT.Pool
             {
                 if (instance == null)
                 {
-                    instance = new GameObject("KitPool").AddComponent<KitPool>();
-                    DontDestroyOnLoad(instance.gameObject);
+                    KitPool kitPoolObject = GameObject.FindObjectOfType<KitPool>();
+                    if (kitPoolObject == null)
+                    {
+                        kitPoolObject = new GameObject("KitPool").AddComponent<KitPool>();
+                    }
+
+                    instance = kitPoolObject;
+                    DontDestroyOnLoad(kitPoolObject);
                 }
 
                 return instance;
@@ -43,16 +50,10 @@ namespace _KIT.Pool
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            List<string> keys = dictionary.Keys.ToList();
-            foreach (var key in keys)
+            foreach (var kvp in dictionary.Where(kvp => kvp.Value.IsDestroyIfChangeScene).ToList())
             {
-                Pool pool = dictionary[key];
-                if (pool.IsDestroyIfChangeScene)
-                {
-                    pool.Dispose();
-                    // phải lưu cả object ko ở trong pool
-                    dictionary.Remove(key);
-                }
+                kvp.Value.Dispose();
+                dictionary.Remove(kvp.Key);
             }
         }
 
@@ -60,13 +61,7 @@ namespace _KIT.Pool
 
         public static void RegisterPool(GameObject ins, bool isDestroyIfChangeScene)
         {
-            if (ins == null)
-            {
-#if UNITY_EDITOR
-                Debug.LogError("register pool ins is null");
-#endif
-                return;
-            }
+            if (ins == null) return;
 
             string code = ins.name;
             if (!dictionary.ContainsKey(code))
@@ -102,66 +97,17 @@ namespace _KIT.Pool
             return o.GetComponent<T>();
         }
 
-        public static T Instantiate<T>(T ins, bool active) where T : Component
-        {
-            GameObject o = Instantiate(ins.gameObject, active);
-            return o.GetComponent<T>();
-        }
-
-        public static GameObject Instantiate(GameObject ins, bool active)
-        {
-            string code = ins.name;
-            if (dictionary.TryGetValue(code, out Pool pool))
-            {
-                GameObject o = pool.Reuse();
-                if (active) o.SetActive(true);
-                return o;
-            }
-
-            GameObject obj = UnityEngine.Object.Instantiate(ins);
-            obj.name = ins.name;
-            return obj;
-        }
-
         public static GameObject Instantiate(GameObject ins)
         {
             string code = ins.name;
             if (dictionary.TryGetValue(code, out Pool pool))
             {
-                GameObject o = pool.Reuse();
-                o.SetActive(true);
-                return o;
+                return pool.Reuse();
             }
 
             GameObject obj = UnityEngine.Object.Instantiate(ins);
             obj.name = ins.name;
             return obj;
-        }
-
-        public static T Instantiate<T>(GameObject ins) where T : Component
-        {
-            GameObject obj = Instantiate(ins);
-            if (obj == null)
-            {
-#if UNITY_EDITOR
-                Debug.LogError($"Error instantiate {typeof(T)} from Object: " + ins);
-#endif
-                return null;
-            }
-
-            T component = obj.GetComponent<T>();
-#if UNITY_EDITOR
-            if (component == null) Debug.LogError($"Error parse to {typeof(T)} from Object: {obj.name}");
-#endif
-            return obj.GetComponent<T>();
-        }
-
-        public static async Task<T> Instantiate<T>(string path) where T : Component
-        {
-            GameObject obj = await KitLoaded.LoadAsync<GameObject>(path);
-            if (obj == null)
-                return null;
-            return Instantiate<T>(obj);
         }
 
         #endregion
@@ -169,6 +115,7 @@ namespace _KIT.Pool
         public static void Destroy(GameObject ins)
         {
             if (ins == null) return;
+
             string code = ins.name;
             if (dictionary.TryGetValue(code, out Pool pool))
             {
@@ -180,7 +127,7 @@ namespace _KIT.Pool
             }
         }
     }
-    
+
 #if UNITY_EDITOR
     public partial class KitPool
     {
