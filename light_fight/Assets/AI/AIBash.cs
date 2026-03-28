@@ -30,14 +30,23 @@ namespace AI
 
             if (req.result == UnityWebRequest.Result.Success)
             {
-                var res = JsonUtility.FromJson<ResponseData>(req.downloadHandler.text);
-                if (res != null)
+                try
                 {
-                    callback?.Invoke((true, res.response));
+                    var res = JsonUtility.FromJson<ResponseData>(req.downloadHandler.text);
+                    if (res != null)
+                    {
+                        callback?.Invoke((true, res.response));
+                    }
+                    else
+                    {
+                        callback?.Invoke((false, "Parse error"));
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    callback?.Invoke((false, "Parse error"));
+                    callback?.Invoke((false, "Parse error: " + e.Message));
+                    Debug.Log(req.downloadHandler.text);
+                    Debug.LogError(e);
                 }
             }
             else

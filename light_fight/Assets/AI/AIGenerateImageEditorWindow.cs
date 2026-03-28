@@ -44,6 +44,14 @@ namespace AI
         {
             DrawInputSection();
             DrawProgress();
+            if (isRunning)
+            {
+                if (GUILayout.Button("Stop"))
+                {
+                    isRunning = false;
+                    if (coroutine != null) StopCurrentCoroutine();
+                }
+            }
             DrawButtons();
             DrawResponses();
         }
@@ -89,7 +97,7 @@ namespace AI
             GUILayout.Space(10);
 
             GUI.enabled = !isRunning;
-
+            EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Generate Prompt"))
             {
                 StartCoroutine(GeneratePrompt());
@@ -101,6 +109,7 @@ namespace AI
             {
                 GenerateAllImages();
             }
+            EditorGUILayout.EndHorizontal();
 
             GUI.enabled = true;
         }
@@ -137,11 +146,12 @@ namespace AI
             GUILayout.Space(10);
             GUILayout.Label("Responses:");
 
+            int width = Screen.width - 150;
             scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 
             for (int i = 0; i < responses.Count; i++)
             {
-                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.BeginHorizontal(GUILayout.Width(width));
 
                 // LEFT: PROMPT
                 EditorGUILayout.BeginVertical();
@@ -220,6 +230,7 @@ namespace AI
                         {
                             responses.Add(line);
                             generatedImages.Add(null);
+                            Repaint();
                         }
                     }
                 }
