@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using _KIT.Utils;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Object = UnityEngine.Object;
 
 public class CodeBuddyWindow : EditorWindow
 {
@@ -26,13 +26,8 @@ public class CodeBuddyWindow : EditorWindow
     private bool isHistoryOpen = false;
     private bool isRunning = false;
 
-    private List<string> messages = new List<string>()
-    {
-        "Hello 👋",
-        "How can I help you?",
-        "This is a test message",
-        "UI Toolkit is working 🚀"
-    };
+    private ChatDatabase chatDatabase;
+    private ChatConversation currentConversation;
 
     [MenuItem("Tools/CodeBuddy Window")]
     public static void ShowWindow()
@@ -69,11 +64,13 @@ public class CodeBuddyWindow : EditorWindow
         attachmentList = root.Q<ListView>("m_attachmentList");
         stopButton = root.Q<Button>("m_stopButton");
         sendButton = root.Q<Button>("m_sendButton");
-
-        SetupListView();
-        BindEvents();
         
-        root.RegisterCallback<GeometryChangedEvent>(evt => InitLayout());
+        root.RegisterCallback<GeometryChangedEvent>(evt =>
+        {
+            InitLayout();
+            SetupListView();
+            BindEvents();
+        });
     }
 
     private void SetupListView()
@@ -81,18 +78,27 @@ public class CodeBuddyWindow : EditorWindow
         // todo: messagesList
         messagesList.makeItem = () =>
         {
+            var container = new VisualElement();
+
             var label = new Label();
+            label.name = "content"; // 👈 BẮT BUỘC phải có
             label.AddToClassList("chat-message");
+            container.Add(label);
+
             return label;
         };
 
         messagesList.bindItem = (element, index) =>
         {
-            var label = element as Label;
-            label.text = messages[index];
+            var msg = currentConversation.messages[index];
+            var label = element.Q<Label>("content");
+            if (msg != null && label != null)
+            {
+                label.text = msg.content;
+                element.EnableInClassList("user", msg.role == "user");
+                element.EnableInClassList("assistant", msg.role == "assistant");
+            }
         };
-
-        messagesList.itemsSource = messages;
         
         // todo: attachmentList
         attachmentList.makeItem = () =>
@@ -140,9 +146,12 @@ public class CodeBuddyWindow : EditorWindow
     {
         newChatButton.clicked += () =>
         {
-            messages.Clear();
-            messages.Add("New chat started ✨");
-            messagesList.Rebuild();
+            currentConversation = new ChatConversation(TimeUtils.GetUnixTime(TimeUtils.Now));
+            
+            chatDatabase.conversations.Add(currentConversation.id);
+
+            SaveChatConversation(currentConversation);
+            SaveChatDatabase(chatDatabase);
         };
 
         historyButton.clicked += () =>
@@ -163,13 +172,14 @@ public class CodeBuddyWindow : EditorWindow
         sendButton.clicked += () =>
         {
             isRunning = true;
-            UpdateButtonStatus();
+            SendMessage(requestField.text);
+            RefreshUI();
         };
 
         stopButton.clicked += () =>
         {
             isRunning = false;
-            UpdateButtonStatus();
+            RefreshUI();
         };
         
         requestField.RegisterCallback<DragUpdatedEvent>(evt =>
@@ -218,19 +228,137 @@ public class CodeBuddyWindow : EditorWindow
     private void InitLayout()
     {
         float width = historyPanel.resolvedStyle.width;
-        historyPanel.style.left = -width; 
-        
+        historyPanel.style.left = -width;
+
         var root = rootVisualElement;
         float height = root.resolvedStyle.height;
         mainAreaPanel.style.height = height - 100;
 
-        UpdateButtonStatus();
+        chatDatabase = GetChatDatabase();
+        if (chatDatabase.conversations.Count > 0)
+        {
+            long last = chatDatabase.conversations.Last();
+            currentConversation = GetChatConversation(last);
+            if (currentConversation.messages.Count == 0)
+            {
+                SaveChatConversation(currentConversation);
+                SaveChatDatabase(chatDatabase);
+            }
+        }
+        else
+        {
+            currentConversation = new ChatConversation(TimeUtils.GetUnixTime(TimeUtils.Now));
+            chatDatabase.conversations.Add(currentConversation.id);
+            SaveChatConversation(currentConversation);
+            SaveChatDatabase(chatDatabase);
+        }
+
+        RefreshUI();
     }
 
-    private void UpdateButtonStatus()
+    private void RefreshUI()
     {
         stopButton.SetEnabled(isRunning);
         sendButton.SetEnabled(!isRunning);
         requestField.SetEnabled(!isRunning);
+        
+        messagesList.itemsSource = currentConversation.messages;
+        messagesList.Rebuild();
+
+        attachmentList.itemsSource = attachments;
+        attachmentList.Rebuild();
+    }
+    
+    private void OnAIResponse(string response)
+    {
+        var msg = new ChatMessage
+        {
+            role = "assistant",
+            content = response,
+            timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+        };
+
+        currentConversation.messages.Add(msg);
+        SaveChatConversation(currentConversation);
+        RefreshUI();
+    }
+    
+    private void SendMessage(string text)
+    {
+        var msg = new ChatMessage
+        {
+            role = "user",
+            content = text,
+            timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+        };
+
+        currentConversation.messages.Add(msg);
+        SaveChatConversation(currentConversation);
+        RefreshUI();
+    }
+    
+    void SaveDatabase(object o, string fileName)
+    {
+        string path = Application.dataPath + $"/Ai/{fileName}.json";
+        string json = JsonUtility.ToJson(o, true);
+        System.IO.File.WriteAllText(path, json);
+    }
+    
+    (bool success, T data) LoadDatabase<T>(string fileName)
+    {
+        string path = Application.dataPath + $"/Ai/{fileName}.json";
+        Debug.Log("Load: " + path);
+        if (System.IO.File.Exists(path))
+        {
+            string json = System.IO.File.ReadAllText(path);
+            return (true, JsonUtility.FromJson<T>(json));
+        }
+
+        return (false, default);
+    }
+
+    ChatDatabase GetChatDatabase()
+    {
+        (bool success, ChatDatabase data) = LoadDatabase<ChatDatabase>("chat_database");
+        return success ? data : new ChatDatabase();
+    }
+    
+    void SaveChatDatabase(ChatDatabase database) => SaveDatabase(database, "chat_database");
+
+    ChatConversation GetChatConversation(long id)
+    {
+        (bool success, ChatConversation data) = LoadDatabase<ChatConversation>("chat_" + id);
+        return success ? data : new ChatConversation(id);
+    }
+    
+    void SaveChatConversation(ChatConversation conversation) => SaveDatabase(conversation, "chat_" + conversation.id);
+    
+    [Serializable]
+    public class ChatMessage
+    {
+        public string role; // "user" | "assistant"
+        public string content;
+        public long timestamp;
+    }
+    
+    [Serializable]
+    public class ChatConversation
+    {
+        public long id;
+        public string title;
+        public string summary;
+        public List<ChatMessage> messages = new List<ChatMessage>();
+
+        public ChatConversation(long id)
+        {
+            this.id = id;
+            Debug.Log("id: " + id);
+        }
+    }
+    
+    [Serializable]
+    public class ChatDatabase
+    {
+        public List<long> conversations = new List<long>();
     }
 }
