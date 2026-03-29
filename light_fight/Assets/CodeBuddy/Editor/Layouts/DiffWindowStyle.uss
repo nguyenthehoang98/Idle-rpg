@@ -1,0 +1,47 @@
+/* Container for the text fields and button at the top */
+.input-container {
+    flex-direction: row;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    min-height: 35px;
+}
+
+.input-container.button {
+    margin-right: 10px;
+}
+
+/* Style for the multiline text input fields */
+.input-field {
+    flex-grow: 1;
+}
+
+.split-container {
+    flex-direction: row;
+}
+
+.split-pane {
+    background-color: #2A2A2A;
+}
+
+/* General style for all lines in the diff view */
+Label {
+    min-height: 18px;
+    white-space: no-wrap; /* Prevents text from wrapping */
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+/* Style for added lines (greenish background) */
+.added {
+    background-color: rgba(63, 138, 59, 0.4);
+}
+
+/* Style for removed lines (reddish background) */
+.removed {
+    background-color: rgba(203, 56, 55, 0.4);
+}
+
+/* Style for placeholder lines used for alignment */
+.placeholder {
+    background-color: rgba(60, 60, 60, 0.5);
+}

@@ -1,0 +1,33 @@
+// ChatMessageStyles.uss
+.chat-message {
+    padding: 10px;
+    border-width: 1px;
+    border-color: #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.chat-message label {
+    margin-bottom: 5px;
+}
+
+.chat-message .unity-button {
+    margin-top: 5px;
+}
+
+.message-link {
+    cursor: link;
+    color: #7eaaff;
+}
+
+#m_historyPanel {
+    position: absolute;
+    left: -300px;
+    top: 0;
+    bottom: 0;
+    width: 300px;
+
+    transition-property: left;
+    transition-duration: 0.25s;
+    transition-timing-function: ease;
+}
