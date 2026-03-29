@@ -4,7 +4,6 @@
         <ui:VisualElement name="m_header" style="flex-grow: 1; flex-direction: row; align-items: stretch; align-self: flex-start; justify-content: flex-start; border-bottom-width: 1px; height: 24px; width: 100%; position: relative; border-bottom-color: rgb(21, 21, 21); max-height: 24px; border-left-color: rgb(21, 21, 21); border-right-color: rgb(21, 21, 21); border-top-color: rgb(21, 21, 21); min-height: 24px;">
             <ui:Button text="+" parse-escape-sequences="true" display-tooltip-when-elided="true" name="m_newChatButton" tooltip="Start new chat" />
             <ui:Button text="History" parse-escape-sequences="true" display-tooltip-when-elided="true" name="m_historyButton" tooltip="Show/hide history" />
-            <ui:Label tabindex="1" text="Chat name" parse-escape-sequences="true" display-tooltip-when-elided="true" name="m_chatNameLabel" binding-path="ChatName" focusable="true" style="-unity-text-align: middle-center; height: 24px; transform-origin: left; align-self: stretch; flex-direction: row; padding-left: 10px; align-items: auto;" />
         </ui:VisualElement>
         <ui:VisualElement name="m_mainAreaPanel" style="flex-grow: 1; height: 100%;">
             <ui:ListView picking-mode="Ignore" name="m_messagesList" selection-type="None" virtualization-method="DynamicHeight" show-add-remove-footer="false" show-bound-collection-size="false" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.25); color: rgb(210, 210, 210);" />
@@ -12,17 +11,19 @@
                 <ui:ListView show-border="false" name="m_chatsList" show-bound-collection-size="false" style="align-items: stretch; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; border-left-color: rgba(0, 0, 0, 0.25); border-right-color: rgba(0, 0, 0, 0.25); border-top-color: rgba(0, 0, 0, 0.25); border-bottom-color: rgba(0, 0, 0, 0.25); border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; justify-content: space-around; background-color: rgba(0, 0, 0, 0);" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="m_attachmentPanel" style="flex-grow: 1; flex-direction: row; margin-top: 3px; margin-right: 3px; margin-bottom: 3px; margin-left: 3px; justify-content: flex-start; flex-wrap: wrap;">
+        <ui:VisualElement name="m_attachmentPanel" style="flex-grow: 1; flex-direction: row; margin-top: 4px; margin-right: 4px; margin-bottom: 0; margin-left: 4px; justify-content: flex-start; flex-wrap: wrap; max-height: 60px;">
             <ui:ListView name="m_attachmentList" virtualization-method="FixedHeight" selection-type="None" show-bound-collection-size="false" show-add-remove-footer="false" horizontal-scrolling="true" focusable="false" style="flex-wrap: wrap; flex-direction: row; flex-grow: 1; align-items: auto; align-self: auto; justify-content: flex-start; min-height: 0;" />
         </ui:VisualElement>
         <ui:VisualElement name="m_sendPanel" focusable="true" style="flex-direction: row; align-items: flex-end; padding-bottom: 3px; flex-shrink: 0;">
             <ui:ScrollView vertical-scroller-visibility="Auto" name="m_requestScroll" style="flex-grow: 1; justify-content: flex-end;">
-                <ui:TextField multiline="true" name="m_requestField" binding-path="RequestMessage" focusable="true" style="flex-grow: 1; min-height: 27px; white-space: normal;" />
+                <ui:TextField multiline="true" name="m_requestField" binding-path="RequestMessage" focusable="true" style="flex-grow: 1; min-height: 27px; white-space: normal; max-height: none; height: 70px; margin-top: 4px; margin-right: 4px; margin-bottom: 4px; margin-left: 4px;" />
             </ui:ScrollView>
-            <ui:VisualElement style="flex-direction: row; flex-shrink: 0; align-items: center; margin-left: 5px;">
-                <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="m_attachButton" tooltip="Add attachment" class="attach-button" style="position: relative; transform-origin: left bottom; min-width: 22px; -unity-background-image-tint-color: rgba(255, 255, 255, 0.65); color: rgb(238, 238, 238); min-height: 20px; margin-right: 5px;" />
-                <ui:Button text="Send" parse-escape-sequences="true" display-tooltip-when-elided="true" name="m_sendButton" style="width: 90px; min-width: 90px;" />
-                <ui:Button text="Stop" parse-escape-sequences="true" display-tooltip-when-elided="true" name="m_stopButton" style="width: 90px; display: none; min-width: 90px;" />
+            <ui:VisualElement style="flex-direction: column; flex-shrink: 0; align-items: center; margin-left: 0; align-content: auto; justify-content: center; height: 70px; width: 130px; flex-wrap: wrap; align-self: center;">
+                <ui:VisualElement style="flex-grow: 1; height: auto; align-self: center; flex-direction: row; align-items: center; justify-content: center; width: auto; left: -5px;">
+                    <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="m_attachButton" tooltip="Add attachment" enabled="true" class="attach-button" style="position: relative; transform-origin: left bottom; min-width: 22px; -unity-background-image-tint-color: rgba(255, 255, 255, 0.65); color: rgb(238, 238, 238); min-height: 20px; margin-right: 0; margin-top: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+                    <ui:Button text="Send" parse-escape-sequences="true" display-tooltip-when-elided="true" name="m_sendButton" style="width: auto; min-width: 90px; min-height: 27px; max-height: 40px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; left: 7.5px;" />
+                </ui:VisualElement>
+                <ui:Button text="Stop" parse-escape-sequences="true" display-tooltip-when-elided="true" name="m_stopButton" style="width: 120px; min-width: 90px; min-height: 27px; max-height: 40px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="m_chatPanel" focusable="true" style="flex-grow: 1; max-height: none; min-height: 27px; flex-shrink: 1; flex-direction: column; justify-content: space-between; align-items: stretch; align-self: auto; margin-top: 0; padding-top: 3px; padding-bottom: 0; margin-bottom: 5px; display: none;" />

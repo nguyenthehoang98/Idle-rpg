@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -12,11 +14,17 @@ public class CodeBuddyWindow : EditorWindow
     private ListView messagesList;
     private Button newChatButton;
     private Button historyButton;
-    private Label chatNameLabel;
+    private Button stopButton;
+    private Button attachButton;
+    private Button sendButton;
+    private List<string> attachments = new List<string>();
 
+    private ListView attachmentList;
+    private TextField requestField;
     private VisualElement mainAreaPanel;
     private VisualElement historyPanel;
     private bool isHistoryOpen = false;
+    private bool isRunning = false;
 
     private List<string> messages = new List<string>()
     {
@@ -55,10 +63,13 @@ public class CodeBuddyWindow : EditorWindow
         messagesList = root.Q<ListView>("m_messagesList");
         newChatButton = root.Q<Button>("m_newChatButton");
         historyButton = root.Q<Button>("m_historyButton");
-        chatNameLabel = root.Q<Label>("m_chatNameLabel");
-        
         mainAreaPanel = root.Q<VisualElement>("m_mainAreaPanel");
-        historyPanel = mainAreaPanel.Q<VisualElement>("m_historyPanel");
+        historyPanel = root.Q<VisualElement>("m_historyPanel");
+        requestField = root.Q<TextField>("m_requestField");
+        attachmentList = root.Q<ListView>("m_attachmentList");
+        stopButton = root.Q<Button>("m_stopButton");
+        sendButton = root.Q<Button>("m_sendButton");
+        attachButton = root.Q<Button>("m_attachButton");
 
         SetupListView();
         BindEvents();
@@ -68,6 +79,7 @@ public class CodeBuddyWindow : EditorWindow
 
     private void SetupListView()
     {
+        // todo: messagesList
         messagesList.makeItem = () =>
         {
             var label = new Label();
@@ -82,6 +94,47 @@ public class CodeBuddyWindow : EditorWindow
         };
 
         messagesList.itemsSource = messages;
+        
+        // todo: attachmentList
+        attachmentList.makeItem = () =>
+        {
+            var container = new VisualElement();
+            container.style.flexDirection = FlexDirection.Row;
+            container.style.position = Position.Relative;
+            container.AddToClassList("attachment-item");
+
+            var label = new Label();
+            label.name = "name";
+
+            var removeBtn = new Button(() => { });
+            removeBtn.style.position = Position.Absolute;
+            removeBtn.style.right = 4;
+            removeBtn.style.top = 2;
+            removeBtn.text = "X";
+            removeBtn.name = "remove";
+
+            container.Add(label);
+            container.Add(removeBtn);
+
+            return container;
+        };
+        
+        attachmentList.bindItem = (element, index) =>
+        {
+            Label label = element.Q<Label>("name");
+            label.text = attachments[index];
+
+            Button removeBtn = element.Q<Button>("remove");
+            int capturedIndex = index;
+            
+            removeBtn.clicked += () =>
+            {
+                attachments.RemoveAt(capturedIndex);
+                attachmentList.Rebuild();
+            };
+        };
+        
+        attachmentList.itemsSource = attachments;
     }
 
     private void BindEvents()
@@ -99,14 +152,69 @@ public class CodeBuddyWindow : EditorWindow
 
             if (isHistoryOpen)
             {
-                historyPanel.style.left = 0; 
+                historyPanel.style.left = 0;
             }
             else
             {
                 float width = historyPanel.resolvedStyle.width;
-                historyPanel.style.left = -width; 
+                historyPanel.style.left = -width;
             }
         };
+
+        sendButton.clicked += () =>
+        {
+            isRunning = true;
+            UpdateButtonStatus();
+        };
+
+        stopButton.clicked += () =>
+        {
+            isRunning = false;
+            UpdateButtonStatus();
+        };
+
+        requestField.RegisterCallback<DragUpdatedEvent>(evt =>
+        {
+            DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+        });
+
+        requestField.RegisterCallback<DragPerformEvent>(evt =>
+        {
+            DragAndDrop.AcceptDrag();
+
+            foreach (var obj in DragAndDrop.objectReferences)
+            {
+                string path = AssetDatabase.GetAssetPath(obj);
+
+                if (AssetDatabase.IsValidFolder(path))
+                {
+                    // 👉 Folder → lấy toàn bộ file bên trong
+                    string[] guids = AssetDatabase.FindAssets("", new[] { path });
+
+                    foreach (var guid in guids)
+                    {
+                        string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+                        AddAttachment(assetPath);
+                    }
+                }
+                else
+                {
+                    AddAttachment(path);
+                }
+            }
+
+            attachmentList.Rebuild();
+        });
+    }
+    
+    void AddAttachment(string path)
+    {
+        string ext = System.IO.Path.GetExtension(path).ToLower();
+        if (ext == ".cs" || ext == ".asset")
+        {
+            if (attachments.Any(a => a == path)) return;
+            attachments.Add(path);
+        }
     }
 
     private void InitLayout()
@@ -117,5 +225,15 @@ public class CodeBuddyWindow : EditorWindow
         var root = rootVisualElement;
         float height = root.resolvedStyle.height;
         mainAreaPanel.style.height = height - 100;
+
+        UpdateButtonStatus();
+    }
+
+    private void UpdateButtonStatus()
+    {
+        stopButton.SetEnabled(isRunning);
+        sendButton.SetEnabled(!isRunning);
+        attachButton.SetEnabled(!isRunning);
+        requestField.SetEnabled(!isRunning);
     }
 }
