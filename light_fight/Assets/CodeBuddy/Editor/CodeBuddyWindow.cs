@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 public class CodeBuddyWindow : EditorWindow
 {
@@ -15,7 +16,6 @@ public class CodeBuddyWindow : EditorWindow
     private Button newChatButton;
     private Button historyButton;
     private Button stopButton;
-    private Button attachButton;
     private Button sendButton;
     private List<string> attachments = new List<string>();
 
@@ -69,7 +69,6 @@ public class CodeBuddyWindow : EditorWindow
         attachmentList = root.Q<ListView>("m_attachmentList");
         stopButton = root.Q<Button>("m_stopButton");
         sendButton = root.Q<Button>("m_sendButton");
-        attachButton = root.Q<Button>("m_attachButton");
 
         SetupListView();
         BindEvents();
@@ -172,7 +171,7 @@ public class CodeBuddyWindow : EditorWindow
             isRunning = false;
             UpdateButtonStatus();
         };
-
+        
         requestField.RegisterCallback<DragUpdatedEvent>(evt =>
         {
             DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
@@ -185,7 +184,6 @@ public class CodeBuddyWindow : EditorWindow
             foreach (var obj in DragAndDrop.objectReferences)
             {
                 string path = AssetDatabase.GetAssetPath(obj);
-
                 if (AssetDatabase.IsValidFolder(path))
                 {
                     // 👉 Folder → lấy toàn bộ file bên trong
@@ -233,7 +231,6 @@ public class CodeBuddyWindow : EditorWindow
     {
         stopButton.SetEnabled(isRunning);
         sendButton.SetEnabled(!isRunning);
-        attachButton.SetEnabled(!isRunning);
         requestField.SetEnabled(!isRunning);
     }
 }

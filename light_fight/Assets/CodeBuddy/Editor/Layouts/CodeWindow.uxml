@@ -18,11 +18,8 @@
             <ui:ScrollView vertical-scroller-visibility="Auto" name="m_requestScroll" style="flex-grow: 1; justify-content: flex-end;">
                 <ui:TextField multiline="true" name="m_requestField" binding-path="RequestMessage" focusable="true" style="flex-grow: 1; min-height: 27px; white-space: normal; max-height: none; height: 70px; margin-top: 4px; margin-right: 4px; margin-bottom: 4px; margin-left: 4px;" />
             </ui:ScrollView>
-            <ui:VisualElement style="flex-direction: column; flex-shrink: 0; align-items: center; margin-left: 0; align-content: auto; justify-content: center; height: 70px; width: 130px; flex-wrap: wrap; align-self: center;">
-                <ui:VisualElement style="flex-grow: 1; height: auto; align-self: center; flex-direction: row; align-items: center; justify-content: center; width: auto; left: -5px;">
-                    <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="m_attachButton" tooltip="Add attachment" enabled="true" class="attach-button" style="position: relative; transform-origin: left bottom; min-width: 22px; -unity-background-image-tint-color: rgba(255, 255, 255, 0.65); color: rgb(238, 238, 238); min-height: 20px; margin-right: 0; margin-top: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
-                    <ui:Button text="Send" parse-escape-sequences="true" display-tooltip-when-elided="true" name="m_sendButton" style="width: auto; min-width: 90px; min-height: 27px; max-height: 40px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; left: 7.5px;" />
-                </ui:VisualElement>
+            <ui:VisualElement style="flex-direction: column; flex-shrink: 0; align-items: center; margin-left: 0; align-content: auto; justify-content: center; height: 70px; width: 130px; flex-wrap: wrap; align-self: center; padding-top: 5px; padding-bottom: 5px;">
+                <ui:Button text="Send" parse-escape-sequences="true" display-tooltip-when-elided="true" name="m_sendButton" style="width: 120px; min-width: 90px; min-height: 27px; max-height: 40px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
                 <ui:Button text="Stop" parse-escape-sequences="true" display-tooltip-when-elided="true" name="m_stopButton" style="width: 120px; min-width: 90px; min-height: 27px; max-height: 40px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
             </ui:VisualElement>
         </ui:VisualElement>
