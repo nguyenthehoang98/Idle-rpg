@@ -19,23 +19,3 @@
     cursor: link;
     color: #7eaaff;
 }
-
-#m_historyPanel {
-    position: absolute;
-    left: -300px;
-    top: 0;
-    bottom: 0;
-    width: 300px;
-
-    transition-property: left;
-    transition-duration: 0.25s;
-    transition-timing-function: ease;
-}
-
-.attachment-item {
-    flex-direction: row;
-    padding: 4px;
-    background-color: #2a2a2a;
-    margin-bottom: 2px;
-    border-radius: 4px;
-}
