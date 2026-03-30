@@ -3,7 +3,7 @@
     "title": "AI Assistant",
     "desc": "Trợ lý ảo ứng dụng trí tuệ nhân tạo",
     "icon": "bot",
-    "href": "/chat"
+    "href": "/assistant"
   },
   {
     "title": "AI Generate Image",
