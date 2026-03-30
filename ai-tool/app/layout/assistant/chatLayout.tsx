@@ -1,9 +1,9 @@
 "use client";
 
-import Sidebar from "@/app/assistant/sidebar";
-import ChatHeader from "@/app/assistant/chatHeader";
-import MessageList from "@/app/assistant/messageList";
-import ChatInput from "@/app/assistant/chatInput";
+import Sidebar from "@/app/layout/assistant/sidebar";
+import ChatHeader from "@/app/layout/assistant/chatHeader";
+import MessageList from "@/app/layout/assistant/messageList";
+import ChatInput from "@/app/layout/assistant/chatInput";
 
 export default function ChatLayout({
   openSidebar,
