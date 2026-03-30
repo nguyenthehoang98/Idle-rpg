@@ -6,11 +6,13 @@ export default function Sidebar({
   onNewChat,
   openSidebar,
   setOpenSidebar,
+  selectedChatId,
 }: any) {
   const baseBtn =
     "flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-200 transition";
 
-  const textClass = `whitespace-nowrap overflow-hidden transition-all duration-300`;
+  const textClass =
+    "whitespace-nowrap overflow-hidden transition-all duration-300";
 
   const textState = openSidebar
     ? "opacity-100 translate-x-0 ml-2 max-w-[200px]"
@@ -55,7 +57,9 @@ export default function Sidebar({
         <div
           onClick={onNewChat}
           title="New Chat"
-          className={baseBtn}
+          className={`${baseBtn} ${
+            !selectedChatId ? "bg-gray-200 font-semibold" : ""
+          }`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -79,35 +83,44 @@ export default function Sidebar({
 
         {/* Chat list */}
         <div className="pt-2 space-y-1">
-          {chats.map((c: any) => (
-            <div
-              key={c.id}
-              onClick={() => onSelect(c.id)}
-              className={baseBtn}
-              title={c.title || "New Chat"}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-4 h-4 text-gray-500 shrink-0"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.77 9.77 0 01-4-.8L3 20l1.8-3.2A7.96 7.96 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                />
-              </svg>
+          {chats.map((c: any) => {
+            const isActive =
+              String(c.id) === String(selectedChatId);
 
-              <span
-                className={`text-sm truncate ${textClass} ${textState}`}
+            return (
+              <div
+                key={c.id}
+                onClick={() => onSelect(c.id)}
+                className={`${baseBtn} ${
+                  isActive ? "bg-gray-200 font-semibold" : ""
+                }`}
+                title={c.title || "New Chat"}
               >
-                {c.title || "New Chat"}
-              </span>
-            </div>
-          ))}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`w-4 h-4 shrink-0 ${
+                    isActive ? "text-blue-600" : "text-gray-500"
+                  }`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.77 9.77 0 01-4-.8L3 20l1.8-3.2A7.96 7.96 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                  />
+                </svg>
+
+                <span
+                  className={`text-sm truncate ${textClass} ${textState}`}
+                >
+                  {c.title || "New Chat"}
+                </span>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

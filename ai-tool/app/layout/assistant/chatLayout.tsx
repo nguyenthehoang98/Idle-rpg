@@ -142,6 +142,7 @@ export default function ChatLayout() {
     <div className="flex h-screen">
       <div className="relative w-64">
         <Sidebar
+          selectedChatId={selectedChatId}
           chats={chats}
           onSelect={(id: any) => {
             console.log("SELECT CHAT:", id);
