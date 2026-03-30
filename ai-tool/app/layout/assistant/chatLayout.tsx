@@ -11,6 +11,8 @@ export default function ChatLayout() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [chats, setChats] = useState<any[]>([]);
   const [selectedChatId, setSelectedChatId] = useState<any>(null);
+  const [messages, setMessages] = useState<any[]>([]);
+  const [isTyping, setIsTyping] = useState(false);
 
   // load history
   useEffect(() => {
@@ -30,10 +32,10 @@ export default function ChatLayout() {
   const handleSend = async (message: string) => {
     if (!message) return;
 
-    try {
-      let chatId = selectedChatId;
+    let chatId = selectedChatId;
 
-      // 👉 nếu chưa có chat → tạo
+    try {
+      // 👉 tạo chat nếu chưa có
       if (!chatId) {
         const res = await fetch("/api/assistant/create", {
           method: "POST",
@@ -48,11 +50,23 @@ export default function ChatLayout() {
         setChats((prev: any[]) => [newChat, ...prev]);
         setSelectedChatId(newChat.id);
 
-        chatId = newChat.id; // 🔥 dùng biến này ngay
+        chatId = newChat.id;
       }
 
-      // 👉 gửi message (LUÔN chạy, kể cả lần đầu)
-      const res = await fetch(`/api/assistant/message?chatId=${chatId}`, {
+      // ✅ 1. optimistic UI (hiện message ngay)
+      const tempUserMessage = {
+        id: Date.now(),
+        role: "user",
+        content: message,
+      };
+
+      setMessages((prev) => [...prev, tempUserMessage]);
+
+      // 👉 show typing
+      setIsTyping(true);
+
+      // ✅ 2. call API
+      const res = await fetch(`/api/assistant/message`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -60,13 +74,44 @@ export default function ChatLayout() {
         body: JSON.stringify({
           chatId,
           content: message,
-          role: "user",
         }),
       });
 
-      setRefreshKey((prev) => prev + 1); // 🔥 update UI
+      const data = await res.json();
+
+      // ✅ 3. add assistant message (typing animation)
+      const aiMsg = data.assistantMessage;
+
+      await typeMessage(aiMsg);
+
+      setIsTyping(false);
     } catch (err) {
       console.error(err);
+      setIsTyping(false);
+    }
+  };
+
+  const typeMessage = async (msg: any) => {
+    let current = "";
+
+    const newMsg = {
+      id: msg.id,
+      role: "assistant",
+      content: "",
+    };
+
+    setMessages((prev) => [...prev, newMsg]);
+
+    for (let i = 0; i < msg.content.length; i++) {
+      current += msg.content[i];
+
+      await new Promise((r) => setTimeout(r, 15)); // tốc độ gõ
+
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === msg.id ? { ...m, content: current } : m
+        )
+      );
     }
   };
 
@@ -89,7 +134,7 @@ export default function ChatLayout() {
 `}
       >
         <div className="flex-1 overflow-auto">
-          <MessageList chatId={selectedChatId} refreshKey={refreshKey} />
+         <MessageList messages={messages} isTyping={isTyping} />
         </div>
 
         <div className="border-t p-2">
