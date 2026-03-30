@@ -13,6 +13,7 @@ export default function ChatLayout() {
   const [selectedChatId, setSelectedChatId] = useState<any>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [isTyping, setIsTyping] = useState(false);
+  const [loadingMessages, setLoadingMessages] = useState(false);
 
   // load history
   useEffect(() => {
@@ -27,6 +28,26 @@ export default function ChatLayout() {
       })
       .catch(() => setChats([]));
   }, []);
+
+  useEffect(() => {
+    if (!selectedChatId) return;
+
+    setLoadingMessages(true);
+
+   fetch(`/api/assistant/message?chatId=${selectedChatId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setMessages(data || []);
+      })
+      .finally(() => setLoadingMessages(false));
+  }, [selectedChatId]);
+
+  const handleNewChat = () => {
+    setSelectedChatId(null);   // ❗ reset chat
+    setMessages([]);           // ❗ clear UI
+    setIsTyping(false);        // ❗ reset typing
+  };
+  
 
   // handle send
   const handleSend = async (message: string) => {
@@ -120,8 +141,12 @@ export default function ChatLayout() {
       <div className="relative w-64">
         <Sidebar
           chats={chats}
-          onSelect={setSelectedChatId}
-          onNewChat={() => setSelectedChatId(null)}
+          onSelect={(id: any) => {
+            console.log("SELECT CHAT:", id); 
+            setSelectedChatId(id);
+            setMessages([]); // 👉 tránh dính chat cũ
+          }}
+          onNewChat={handleNewChat}
           openSidebar={openSidebar}
           setOpenSidebar={setOpenSidebar}
         />
@@ -134,7 +159,7 @@ export default function ChatLayout() {
 `}
       >
         <div className="flex-1 overflow-auto">
-         <MessageList messages={messages} isTyping={isTyping} />
+          <MessageList messages={messages} isTyping={isTyping} />
         </div>
 
         <div className="border-t p-2">

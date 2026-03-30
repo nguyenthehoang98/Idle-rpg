@@ -13,3 +13,5 @@ export type Chat = {
   messages: Message[];
   createdAt?: string;
 };
+
+export const db: Record<string, Message[]> = {};
