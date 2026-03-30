@@ -17,18 +17,31 @@ export default function ChatLayout() {
 
   // load history
   useEffect(() => {
-    fetch("/api/assistant/history")
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setChats(data);
-        } else {
-          setChats([]);
-        }
-      })
-      .catch(() => setChats([]));
-  }, []);
+  // ✅ 1. load cache trước (instant)
+  const cached = localStorage.getItem("chat_history");
 
+  if (cached) {
+    try {
+      setChats(JSON.parse(cached));
+      return;
+    } catch {}
+  }
+
+  // ✅ 2. fetch lại để sync (background)
+  fetch("/api/assistant/history")
+    .then((res) => res.json())
+    .then((data) => {
+      if (Array.isArray(data)) {
+        setChats(data);
+
+        // ✅ save lại cache
+        localStorage.setItem("chat_history", JSON.stringify(data));
+      }
+    })
+    .catch(() => {});
+}, []);
+
+  // seect chat
   useEffect(() => {
     if (!selectedChatId) return;
 
@@ -70,7 +83,11 @@ export default function ChatLayout() {
 
         const newChat = await res.json();
 
-        setChats((prev: any[]) => [newChat, ...prev]);
+        setChats((prev: any[]) => {
+          const updated = [newChat, ...prev];
+          localStorage.setItem("chat_history", JSON.stringify(updated));
+          return updated;
+        });
         setSelectedChatId(newChat.id);
 
         chatId = newChat.id;
