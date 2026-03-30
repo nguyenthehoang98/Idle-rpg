@@ -32,9 +32,11 @@ export default function ChatLayout() {
   useEffect(() => {
     if (!selectedChatId) return;
 
+    if (messages.length > 0) return;
+
     setLoadingMessages(true);
 
-   fetch(`/api/assistant/message?chatId=${selectedChatId}`)
+    fetch(`/api/assistant/message?chatId=${selectedChatId}`)
       .then((res) => res.json())
       .then((data) => {
         setMessages(data || []);
@@ -47,7 +49,7 @@ export default function ChatLayout() {
     setMessages([]);           // ❗ clear UI
     setIsTyping(false);        // ❗ reset typing
   };
-  
+
 
   // handle send
   const handleSend = async (message: string) => {
@@ -142,7 +144,7 @@ export default function ChatLayout() {
         <Sidebar
           chats={chats}
           onSelect={(id: any) => {
-            console.log("SELECT CHAT:", id); 
+            console.log("SELECT CHAT:", id);
             setSelectedChatId(id);
             setMessages([]); // 👉 tránh dính chat cũ
           }}
