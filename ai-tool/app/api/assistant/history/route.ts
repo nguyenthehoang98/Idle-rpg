@@ -1,21 +1,20 @@
-// /app/api/chat/list/route.ts
 import fs from "fs";
 import path from "path";
 
 export async function GET() {
   const dir = path.join(process.cwd(), "data/chats");
 
+  // 👉 đảm bảo folder tồn tại
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+
   const files = fs.readdirSync(dir);
 
   const chats = files.map((file) => {
-    const data = JSON.parse(
-      fs.readFileSync(path.join(dir, file), "utf-8")
-    );
-
-    return {
-      id: data.id,
-      title: data.title,
-    };
+    const filePath = path.join(dir, file);
+    const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+    return data;
   });
 
   return Response.json(chats);

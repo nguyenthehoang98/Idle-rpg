@@ -23,3 +23,14 @@ export async function POST(req: Request) {
 
   return Response.json(data);
 }
+
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const chatId = searchParams.get("chatId");
+
+  // fake data tạm
+  return Response.json([
+    { role: "user", content: "Hello " + chatId },
+    { role: "assistant", content: "Hi there!" },
+  ]);
+}

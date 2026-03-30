@@ -1,41 +1,75 @@
 "use client";
 
-import Sidebar from "@/app/layout/assistant/sidebar";
-import ChatHeader from "@/app/layout/assistant/chatHeader";
-import MessageList from "@/app/layout/assistant/messageList";
-import ChatInput from "@/app/layout/assistant/chatInput";
+import { useEffect, useState } from "react";
+import Sidebar from "./sidebar";
+import ChatInput from "./chatInput";
+import MessageList from "./messageList";
 
-export default function ChatLayout({
-  openSidebar,
-  setOpenSidebar,
-}: any) {
+export default function ChatLayout() {
+  // 👉 bỏ generic để tránh lỗi type
+  const [chats, setChats] = useState<any[]>([]);
+  const [selectedChatId, setSelectedChatId] = useState<any>(null);
+
+  // load history
+  useEffect(() => {
+    fetch("/api/assistant/history")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setChats(data);
+        } else {
+          setChats([]);
+        }
+      })
+      .catch(() => setChats([]));
+  }, []);
+
+  // handle send
+  const handleSend = async (message: string) => {
+    if (!message) return;
+
+    try {
+      const res = await fetch("/api/assistant/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message }),
+      });
+
+      const newChat = await res.json();
+      console.log("RAW RESPONSE:", newChat);
+
+      // tránh crash nếu API lỗi
+      if (!newChat?.id) return;
+
+      setChats((prev: any[]) => [newChat, ...prev]);
+
+      setSelectedChatId(newChat.id);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
-    <div className="flex h-screen overflow-hidden">
-
+    <div className="flex h-screen">
       {/* Sidebar */}
-      <div
-        className={`absolute left-0 top-0 h-full w-64 bg-gray-100 transition-transform duration-300 z-20 ${
-          openSidebar ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        <Sidebar onClose={() => setOpenSidebar(false)} />
+      <div className="w-64 border-r">
+        <Sidebar chats={chats} onSelect={(id: any) => setSelectedChatId(id)} />
       </div>
-
-      {/* Overlay */}
-      {openSidebar && (
-        <div
-          className="fixed inset-0 bg-black/20 z-10"
-          onClick={() => setOpenSidebar(false)}
-        />
-      )}
 
       {/* Main */}
       <div className="flex-1 flex flex-col">
-        <ChatHeader onOpen={() => setOpenSidebar(true)} />
+        {/* Message List */}
+        <div className="flex-1 overflow-auto">
+          {/* 👉 tránh lỗi undefined */}
+          {selectedChatId && <MessageList chatId={selectedChatId} />}
+        </div>
 
-        <MessageList />
-
-        <ChatInput />
+        {/* Input */}
+        <div className="border-t p-2">
+          <ChatInput onSend={handleSend} />
+        </div>
       </div>
     </div>
   );

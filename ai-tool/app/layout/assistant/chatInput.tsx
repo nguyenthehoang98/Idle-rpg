@@ -1,36 +1,35 @@
+"use client";
+
 import { useState } from "react";
 
-export default function ChatInput({ chatId, onNewMessage }: any) {
-  const [text, setText] = useState("");
+export default function ChatInput({ onSend }: any) {
+  const [input, setInput] = useState("");
 
-  const send = async () => {
-    if (!text) return;
+  const handleClick = () => {
+    if (!input.trim()) return;
 
-    const message = {
-      role: "user",
-      content: text,
-    };
+    console.log("SEND:", input); // 👉 debug xem có chạy không
 
-    const res = await fetch("/api/chat/message", {
-      method: "POST",
-      body: JSON.stringify({ chatId, message }),
-    });
+    onSend(input); // 🔥 QUAN TRỌNG
 
-    const data = await res.json();
-
-    onNewMessage(data.messages); // update UI
-
-    setText("");
+    setInput("");
   };
 
   return (
-    <div className="p-3 border-t flex gap-2">
+    <div className="flex gap-2">
       <input
-        className="flex-1 border rounded px-3 py-2"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
+        className="flex-1 border p-2 rounded"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Type message..."
       />
-      <button onClick={send}>Send</button>
+
+      <button
+        onClick={handleClick}
+        className="px-4 py-2 bg-blue-500 text-white rounded"
+      >
+        Send
+      </button>
     </div>
   );
 }
