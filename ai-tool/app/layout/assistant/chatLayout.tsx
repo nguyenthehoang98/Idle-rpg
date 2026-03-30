@@ -72,35 +72,22 @@ export default function ChatLayout() {
 
   return (
     <div className="flex h-screen">
-      <div
-        className={`border-r transition-all duration-300 overflow-hidden ${openSidebar ? "w-64" : "w-0"
-          }`}
-      >
-        <Sidebar chats={chats} onSelect={(id: any) => setSelectedChatId(id)} />
-        <button
-          onClick={() => setOpenSidebar(!openSidebar)}
-          className="absolute top-2 left-2 z-10 
-             bg-white border rounded-lg p-2 
-             shadow hover:bg-gray-100 transition"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className={`w-5 h-5 transition-transform ${openSidebar ? "" : "rotate-180"
-              }`}
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
+      <div className="relative w-64">
+        <Sidebar
+          chats={chats}
+          onSelect={setSelectedChatId}
+          onNewChat={() => setSelectedChatId(null)}
+          openSidebar={openSidebar}
+          setOpenSidebar={setOpenSidebar}
+        />
       </div>
 
       {/* Main */}
-      <div className="flex-1 flex flex-col relative">
-        {/* Toggle button */}
-
+      <div
+        className={`flex-1 flex flex-col relative transition-all duration-300
+  ${openSidebar ? "ml-0" : "-ml-[12rem]"}
+`}
+      >
         <div className="flex-1 overflow-auto">
           <MessageList chatId={selectedChatId} refreshKey={refreshKey} />
         </div>
