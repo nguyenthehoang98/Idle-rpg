@@ -1,0 +1,20 @@
+[
+  {
+    "title": "AI Assistant",
+    "desc": "Trợ lý ảo ứng dụng trí tuệ nhân tạo",
+    "icon": "bot",
+    "href": "/chat"
+  },
+  {
+    "title": "AI Generate Image",
+    "desc": "Tạo ảnh bằng AI",
+    "icon": "image",
+    "href": "/image"
+  },
+  {
+    "title": "AI Review Code",
+    "desc": "Phân tích code Unity",
+    "icon": "code",
+    "href": "/review"
+  }
+]
