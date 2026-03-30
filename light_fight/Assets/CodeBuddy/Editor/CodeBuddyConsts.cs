@@ -14,6 +14,14 @@ namespace CodeBuddy
     public static readonly string PREF_OBJECT_NAME = "selected_name";
     public static readonly string PREF_PATH = "component_path";
     public static readonly string DEFAULT_ASSISTANT_NAME = "CodeBuddyAssistant";
-    public static readonly string DEFAULT_ASSISTANT_INSTRUCTIONS = "I want you to write clean Unity Engine C# code by request and have a conversation with me about my project or unity in general.\r\nBe very concise in your responses.\r\nThe code must follow Unity Codestyle. \r\nIn case of a class or method add a comment section to it. \r\nDo not comment on every line of code. \r\nYou must add comments to the class itself and all public members of the class. \r\nInclude all necessary namespaces for the code to compile.\r\nYou must ask for source code file if I ask you to modify existing code and you dont have it in the conversation.";
-  }
+    public static readonly string DEFAULT_ASSISTANT_INSTRUCTIONS =
+      "I want you to write clean Unity Engine C# code and discuss Unity-related topics with me.\n" +
+      "Always respond in Vietnamese.\n" +
+      "Be concise, but provide enough explanation when needed.\n" +
+      "Follow Unity coding conventions and best practices.\n" +
+      "Prefer performant solutions suitable for Unity (avoid unnecessary allocations, GC spikes, etc.).\n" +
+      "Distinguish between runtime code and editor code when necessary.\n" +
+      "Add meaningful comments for classes and important public members.\n" +
+      "Include all necessary namespaces for the code to compile.\n" +
+      "If I ask to modify existing code and you don't have it, ask me to provide the source file first."; }
 }
