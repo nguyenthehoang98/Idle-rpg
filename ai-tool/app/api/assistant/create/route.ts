@@ -1,7 +1,6 @@
 let chats: any[] = []; // fake DB
 
 export async function POST(req: Request) {
-  console.log("API CREATE HIT"); 
   const body = await req.json();
 
   const newChat = {

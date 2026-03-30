@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from "react";
 
-export default function MessageList({ chatId }: any) {
+export default function MessageList({ chatId, refreshKey }: any) {
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // 👉 nếu chưa chọn chat thì clear
     if (!chatId) {
       setMessages([]);
       return;
@@ -20,11 +19,7 @@ export default function MessageList({ chatId }: any) {
         const res = await fetch(`/api/assistant/message?chatId=${chatId}`);
         const data = await res.json();
 
-        if (Array.isArray(data)) {
-          setMessages(data);
-        } else {
-          setMessages([]);
-        }
+        setMessages(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error(err);
         setMessages([]);
@@ -34,7 +29,7 @@ export default function MessageList({ chatId }: any) {
     };
 
     fetchMessages();
-  }, [chatId]);
+  }, [chatId, refreshKey]); // 🔥 THÊM refreshKey
 
   return (
     <div className="p-4 space-y-2">
@@ -50,11 +45,10 @@ export default function MessageList({ chatId }: any) {
       {messages.map((m: any, index: number) => (
         <div
           key={index}
-          className={`p-2 rounded max-w-[70%] ${
-            m.role === "user"
-              ? "bg-blue-500 text-white ml-auto"
-              : "bg-gray-200 text-black"
-          }`}
+          className={`p-2 rounded max-w-[70%] ${m.role === "user"
+            ? "bg-blue-500 text-white ml-auto"
+            : "bg-gray-200 text-black"
+            }`}
         >
           {m.content}
         </div>

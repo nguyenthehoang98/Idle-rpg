@@ -7,6 +7,7 @@ import MessageList from "./messageList";
 
 export default function ChatLayout() {
   // 👉 bỏ generic để tránh lỗi type
+  const [refreshKey, setRefreshKey] = useState(0);
   const [chats, setChats] = useState<any[]>([]);
   const [selectedChatId, setSelectedChatId] = useState<any>(null);
 
@@ -29,23 +30,40 @@ export default function ChatLayout() {
     if (!message) return;
 
     try {
-      const res = await fetch("/api/assistant/create", {
+      let chatId = selectedChatId;
+
+      // 👉 nếu chưa có chat → tạo
+      if (!chatId) {
+        const res = await fetch("/api/assistant/create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ message }),
+        });
+
+        const newChat = await res.json();
+
+        setChats((prev: any[]) => [newChat, ...prev]);
+        setSelectedChatId(newChat.id);
+
+        chatId = newChat.id; // 🔥 dùng biến này ngay
+      }
+
+      // 👉 gửi message (LUÔN chạy, kể cả lần đầu)
+      const res = await fetch(`/api/assistant/message?chatId=${chatId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message }),
+        body: JSON.stringify({
+          chatId,
+          content: message,
+          role: "user",
+        }),
       });
 
-      const newChat = await res.json();
-      console.log("RAW RESPONSE:", newChat);
-
-      // tránh crash nếu API lỗi
-      if (!newChat?.id) return;
-
-      setChats((prev: any[]) => [newChat, ...prev]);
-
-      setSelectedChatId(newChat.id);
+      setRefreshKey((prev) => prev + 1); // 🔥 update UI
     } catch (err) {
       console.error(err);
     }
@@ -65,7 +83,10 @@ export default function ChatLayout() {
           {/* 👉 tránh lỗi undefined */}
           {selectedChatId && <MessageList chatId={selectedChatId} />}
         </div>
-
+        <div>
+          {" "}
+          <MessageList chatId={selectedChatId} refreshKey={refreshKey} />
+        </div>
         {/* Input */}
         <div className="border-t p-2">
           <ChatInput onSend={handleSend} />
