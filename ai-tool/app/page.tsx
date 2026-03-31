@@ -1,7 +1,7 @@
 import tools from "@/app/configs/dashboard.json";
 import { iconMap } from "@/app/lib/iconMap";
 import Link from "next/link";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@/app/components/ui/card";
 
 export default function Dashboard() {
   return (

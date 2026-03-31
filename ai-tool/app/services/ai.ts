@@ -8,12 +8,16 @@ type Message = {
 export function buildPrompt(messages: Message[]) {
   return `
 You are a helpful AI assistant.
+Always format your response using Markdown.
+- Use bullet points
+- Use headings
+- Use code blocks when needed
 
 ${messages
   .map((m) => `${m.role === "user" ? "User" : "AI"}: ${m.content}`)
   .join("\n")}
 
-AI:
+Answer is Vietnamese:
 `;
 }
 
