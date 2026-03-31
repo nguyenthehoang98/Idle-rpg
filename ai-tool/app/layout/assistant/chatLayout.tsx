@@ -17,29 +17,29 @@ export default function ChatLayout() {
 
   // load history
   useEffect(() => {
-  // ✅ 1. load cache trước (instant)
-  const cached = localStorage.getItem("chat_history");
+    const cached = localStorage.getItem("chat_history");
 
-  if (cached) {
-    try {
-      setChats(JSON.parse(cached));
-      return;
-    } catch {}
-  }
+    let localData: any[] = [];
 
-  // ✅ 2. fetch lại để sync (background)
-  fetch("/api/assistant/history")
-    .then((res) => res.json())
-    .then((data) => {
-      if (Array.isArray(data)) {
-        setChats(data);
+    if (cached) {
+      try {
+        localData = JSON.parse(cached);
+        console.log("💾 LOCAL:", localData.map((c) => c.id));
+      } catch { }
+    }
 
-        // ✅ save lại cache
-        localStorage.setItem("chat_history", JSON.stringify(data));
-      }
+    fetch("/api/assistant/history", {
+      method: "POST",
+      body: JSON.stringify({ local: localData }),
     })
-    .catch(() => {});
-}, []);
+      .then((res) => res.json())
+      .then((final) => {
+        console.log("✅ FINAL:", final.map((c: any) => c.id));
+
+        setChats(final);
+        localStorage.setItem("chat_history", JSON.stringify(final));
+      });
+  }, []);
 
   // seect chat
   useEffect(() => {

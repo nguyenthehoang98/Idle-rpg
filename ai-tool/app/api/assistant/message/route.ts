@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { callAI, buildPrompt } from "@/app/services/ai";
 import fs from "fs";
 import path from "path";
 
@@ -28,12 +29,6 @@ function loadFromFile(chatId: string) {
   return JSON.parse(fs.readFileSync(filePath, "utf-8"));
 }
 
-// 👉 fake AI
-async function fakeAIResponse(text: string) {
-  await new Promise((r) => setTimeout(r, 600));
-  return `AI trả lời: ${text}`;
-}
-
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -50,7 +45,7 @@ export async function POST(req: NextRequest) {
       messages = db[chatId];
     }
 
-    // 👉 user
+    // 👉 user message
     const userMessage = {
       id: Date.now() + "_user",
       role: "user",
@@ -60,9 +55,19 @@ export async function POST(req: NextRequest) {
 
     messages.push(userMessage);
 
-    // 👉 AI
-    const aiContent = await fakeAIResponse(content);
+    // 👉 build prompt từ history
+    const prompt = buildPrompt(messages);
 
+    // 👉 call AI thật
+    let aiContent = "";
+    try {
+      aiContent = await callAI(prompt);
+    } catch (e: any) {
+      console.error("AI ERROR:", e);
+      aiContent = "⚠️ AI đang lỗi, thử lại sau nhé";
+    }
+
+    // 👉 assistant message
     const assistantMessage = {
       id: Date.now() + "_assistant",
       role: "assistant",
