@@ -673,7 +673,7 @@ PlayerSettings:
   webGLCloseOnQuit: 0
   webWasm2023: 0
   scriptingDefineSymbols:
-    Standalone: DEVELOP_MODE;MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
+    Standalone: DEVELOP_MODE;MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED;NODECANVAS
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
@@ -782,6 +782,6 @@ PlayerSettings:
   hmiLoadingImage: {fileID: 0}
   platformRequiresReadableAssets: 0
   virtualTexturingSupportEnabled: 0
-  insecureHttpOption: 0
+  insecureHttpOption: 2
   androidVulkanDenyFilterList: []
   androidVulkanAllowFilterList: []

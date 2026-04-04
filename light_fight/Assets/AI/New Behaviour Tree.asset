@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a686a47eee2fa44cb0a34b5d86e4d5e, type: 3}
+  m_Name: New Behaviour Tree
+  m_EditorClassIdentifier: 
+  _serializedGraph: '{"type":"NodeCanvas.BehaviourTrees.BehaviourTree","nodes":[{"repeatTimes":{"_value":1},"_position":{"x":586.4841,"y":183.6912},"$type":"NodeCanvas.BehaviourTrees.Repeater","$id":"0"},{"policy":1,"_position":{"x":592.017,"y":331.9722},"$type":"NodeCanvas.BehaviourTrees.Parallel","$id":"1"},{"_position":{"x":64.18127,"y":535.5817},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"2"},{"_condition":{"valueA":{"_name":"REQUEST_URL_COMPLETED","_targetVariableID":"203ef231-4015-439c-a94f-e034169c1cf4"},"valueB":{},"$type":"NodeCanvas.Tasks.Conditions.CheckBoolean"},"_position":{"x":-242.3397,"y":616.3616},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"3"},{"_action":{"boolVariable":{"_name":"REQUEST_URL_COMPLETED","_targetVariableID":"203ef231-4015-439c-a94f-e034169c1cf4"},"$type":"NodeCanvas.Tasks.Actions.SetBoolean"},"_position":{"x":-39.83664,"y":729.2321},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"4"},{"_action":{"url":{"_name":"URL","_targetVariableID":"3a891b1a-da9c-43ed-b086-60bd8ce3f7c7"},"method":{"_value":"POST"},"body":{"_value":"{  
+    \"username\": \"jdoe\",   \"password\": \"123456\" }"},"contentType":{"_value":"application/json"},"timeout":{"_value":10},"response":{"_name":"RESPONE_JSON","_targetVariableID":"849b8e3c-6f86-45f7-96a9-938930fb276e"},"error":{"_name":"RESPONE_ERROR","_targetVariableID":"c0ac29f6-8e46-40cc-a8d1-33f57acc903e"},"statusCode":{},"$type":"HttpRequestAction"},"_position":{"x":295.4552,"y":648.4521},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"5"},{"_position":{"x":721.6902,"y":485.9901},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"6"},{"_condition":{"valueA":{"_name":"RESPONE_URL_COMPLETED","_targetVariableID":"3471e7ee-0e8d-4e7e-b747-26e818067d3c"},"valueB":{"_value":true},"$type":"NodeCanvas.Tasks.Conditions.CheckBoolean"},"_position":{"x":438.2032,"y":590.9106},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"7"},{"_condition":{"valueA":{"_name":"COMPLETED","_targetVariableID":"155d8245-c0e9-4fb3-8c5f-7f7207ef4cc8"},"valueB":{},"$type":"NodeCanvas.Tasks.Conditions.CheckBoolean"},"_position":{"x":630.9512,"y":659.7223},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"8"},{"_action":{"boolVariable":{"_name":"COMPLETED","_targetVariableID":"155d8245-c0e9-4fb3-8c5f-7f7207ef4cc8"},"$type":"NodeCanvas.Tasks.Actions.SetBoolean"},"_position":{"x":785.8716,"y":712.8377},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"9"},{"_action":{"log":{"_name":"RESPONE_STRING","_targetVariableID":"cd62de31-6459-4df6-a6d6-344a0a42abf6"},"$type":"NodeCanvas.Tasks.Actions.DebugLogText"},"_position":{"x":932.8417,"y":634.0669},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"10"},{"_action":{"ip":{"_name":"URL","_targetVariableID":"3a891b1a-da9c-43ed-b086-60bd8ce3f7c7"},"prompt":{"_value":"Player
+    HP: 50 Enemy HP: 30 Player Damage: 20 Enemy Damage: 15 Available actions: attack,
+    heal, run"},"systemPrompt":{"_value":"You are a game AI.  Rules: - Always return
+    ONLY valid JSON - No explanation - Choose best action  JSON format: {   \"action\":
+    \"attack | heal | run\",   \"target\": \"enemy | self\",   \"value\": number
+    }"},"format":{"_value":"{   \"action\": \"string\",   \"target\": \"string\",  
+    \"value\": \"number\" }"},"timeout":{},"boolVariable":{"_name":"RESPONE_URL_COMPLETED","_targetVariableID":"3471e7ee-0e8d-4e7e-b747-26e818067d3c"},"response":{"_name":"RESPONE_STRING","_targetVariableID":"cd62de31-6459-4df6-a6d6-344a0a42abf6"},"error":{"_name":"RESPONE_ERROR","_targetVariableID":"c0ac29f6-8e46-40cc-a8d1-33f57acc903e"},"jsonRaw":{"_name":"RESPONE_JSON","_targetVariableID":"849b8e3c-6f86-45f7-96a9-938930fb276e"},"$type":"AIRequestAction"},"_position":{"x":350.9881,"y":767.0597},"$type":"NodeCanvas.BehaviourTrees.ActionNode"}],"connections":[{"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"2"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"6"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"3"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"4"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"5"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"6"},"_targetNode":{"$ref":"7"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"6"},"_targetNode":{"$ref":"8"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"6"},"_targetNode":{"$ref":"9"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"6"},"_targetNode":{"$ref":"10"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}},"derivedData":{"repeat":true,"$type":"NodeCanvas.BehaviourTrees.BehaviourTree+DerivedSerializationData"}}'
+  _objectReferences: []
+  _graphSource:
+    _version: 3.26
+    _category: 
+    _comments: 
+    _translation: {x: 220, y: -112}
+    _zoomFactor: 0.9036903
+  _haltSerialization: 0
