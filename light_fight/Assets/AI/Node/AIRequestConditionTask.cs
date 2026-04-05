@@ -1,36 +1,44 @@
+﻿using System;
+using System.Collections;
 using NodeCanvas.Framework;
 using ParadoxNotion.Design;
 using UnityEngine;
-using System.Collections;
 using UnityEngine.Networking;
-using System;
 
-[Category("AI")]
+[Category("API")]
 [Description("Send request to AI with system + prompt + format (structured output)")]
-public class AIRequestAction : ActionTask
+public class AIRequestConditionTask : ConditionTask
 {
-    // ===== INPUT =====
+    [ParadoxNotion.Design.Header("Input")]
     public BBParameter<string> ip;
     public BBParameter<string> prompt;
     public BBParameter<string> systemPrompt;
+    public BBParameter<string> format;
 
-    public BBParameter<string> format; // JSON schema (optional)
-    public BBParameter<int> timeout = 10;
-
-    // ===== OUTPUT =====
-    public BBParameter<bool> boolVariable;
+    [ParadoxNotion.Design.Header("Output")]
     public BBParameter<string> response;
-    public BBParameter<string> error;
+    
+    private Coroutine coroutine;
+    private bool isTaskCompleted = false;
 
-    // Optional parsed JSON
-    public BBParameter<string> jsonRaw;
-
-    protected override void OnExecute()
+    protected override void OnEnable()
     {
-        StartCoroutine(RequestAI());
+        base.OnEnable();
+        coroutine = StartCoroutine(SendRequest());
     }
 
-    IEnumerator RequestAI()
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        if (coroutine != null) StopCoroutine(coroutine);
+    }
+
+    protected override bool OnCheck()
+    {
+        return isTaskCompleted;
+    }
+
+    IEnumerator SendRequest()
     {
         string url = ip.value;
 
@@ -51,7 +59,6 @@ public class AIRequestAction : ActionTask
             req.downloadHandler = new DownloadHandlerBuffer();
 
             req.SetRequestHeader("Content-Type", "application/json");
-            req.timeout = timeout.value;
 
             yield return req.SendWebRequest();
 
@@ -63,20 +70,19 @@ public class AIRequestAction : ActionTask
 
                 // ===== TRY PARSE JSON =====
                 TryParseJson(result);
-
-                EndAction(true);
+                EndAction();
             }
             else
             {
-                error.value = req.error;
-                Debug.LogError($"[AIRequest] Error: {req.error}");
-                Debug.LogError(url);
-
-                EndAction(false);
+                response.value = req.error;
+                EndAction();
             }
-
-            boolVariable.value = true;
         }
+    }
+
+    void EndAction()
+    {
+        isTaskCompleted = true;
     }
 
     void TryParseJson(string text)
@@ -89,7 +95,7 @@ public class AIRequestAction : ActionTask
         if ((text.StartsWith("{") && text.EndsWith("}")) ||
             (text.StartsWith("[") && text.EndsWith("]")))
         {
-            jsonRaw.value = text;
+            response.value = text;
         }
         else
         {
@@ -100,14 +106,14 @@ public class AIRequestAction : ActionTask
             if (start >= 0 && end > start)
             {
                 string sub = text.Substring(start, end - start + 1);
-                jsonRaw.value = sub;
+                response.value = sub;
             }
         }
     }
 
     // ===== DATA STRUCT =====
     [Serializable]
-    class AIRequestData
+    struct AIRequestData
     {
         public string system;
         public string prompt;
