@@ -6,10 +6,10 @@ using UnityEngine.Networking;
 
 public abstract class BaseAPIConditionTask<T> : ConditionTask where T : IAPIResponse
 {
-    [ParadoxNotion.Design.Header("API-Response")] 
-    public BBParameter<string> response;
-    public BBParameter<string> error;
-    public BBParameter<bool> result;
+    [ParadoxNotion.Design.Header("API-Response")]
+    public BBParameter<string> success = new BBParameter<string>() { name = "RESPONSE_SUCCESS" };
+    public BBParameter<string> error = new BBParameter<string>() { name = "RESPONSE_ERROR" };
+    public BBParameter<bool> result = new BBParameter<bool>() { name = "RESPONSE_RESULT" };
     
     private Coroutine coroutine;
     private bool isTaskCompleted;
@@ -20,7 +20,7 @@ public abstract class BaseAPIConditionTask<T> : ConditionTask where T : IAPIResp
         coroutine = StartCoroutine(SendRequest(Url, Json, RequestType));
         result.value = false;
         error.value = String.Empty;
-        response.value = String.Empty;
+        success.value = String.Empty;
     }
 
     protected override void OnDisable()
@@ -59,7 +59,7 @@ public abstract class BaseAPIConditionTask<T> : ConditionTask where T : IAPIResp
                 var data = JsonUtility.FromJson<T>(req.downloadHandler.text);
                 if (data != null)
                 {
-                    response.value = data.Content;
+                    success.value = data.Content;
                     result.value = true;
                 }
                 else
@@ -69,7 +69,7 @@ public abstract class BaseAPIConditionTask<T> : ConditionTask where T : IAPIResp
             }
             else
             {
-                response.value = string.Format("<color=green>[Done] {0}", name);
+                success.value = string.Format("<color=green>[Done] {0}", name);
                 result.value = true;
             }
         }

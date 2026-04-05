@@ -7,7 +7,7 @@ using UnityEngine;
 public class DiscordPostConditionTask : BaseAPIConditionTask<DiscordPostConditionTask.ResponseData>
 {
     public BBParameter<string> webhook;
-    public BBParameter<string> content;
+    public BBParameter<string> content = new BBParameter<string>() { name = "RESPONSE_SUCCESS" };
 
     protected override string Url
     {
