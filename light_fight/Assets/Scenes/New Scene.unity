@@ -257,37 +257,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _parentBlackboard: {fileID: 0}
-  _serializedBlackboard: '{"_variables":{"URL":{"_value":"https://postman-echo.com/post","_name":"URL","_id":"3a891b1a-da9c-43ed-b086-60bd8ce3f7c7","$type":"NodeCanvas.Framework.Variable`1[[System.String,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"RESPONE_STRING":{"_name":"RESPONE_STRING","_id":"cd62de31-6459-4df6-a6d6-344a0a42abf6","$type":"NodeCanvas.Framework.Variable`1[[System.String,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"RESPONE_ERROR":{"_name":"RESPONE_ERROR","_id":"c0ac29f6-8e46-40cc-a8d1-33f57acc903e","$type":"NodeCanvas.Framework.Variable`1[[System.String,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"RESPONE_JSON":{"_name":"RESPONE_JSON","_id":"849b8e3c-6f86-45f7-96a9-938930fb276e","$type":"NodeCanvas.Framework.Variable`1[[System.String,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"RESPONE_URL_COMPLETED":{"_name":"RESPONE_URL_COMPLETED","_id":"3471e7ee-0e8d-4e7e-b747-26e818067d3c","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"REQUEST_URL_COMPLETED":{"_name":"REQUEST_URL_COMPLETED","_id":"203ef231-4015-439c-a94f-e034169c1cf4","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"COMPLETED":{"_name":"COMPLETED","_id":"155d8245-c0e9-4fb3-8c5f-7f7207ef4cc8","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}}}'
+  _serializedBlackboard: '{"_variables":{}}'
   _objectReferences: []
-  _serializedVariables:
-  - _json: '{"_value":"https://postman-echo.com/post","_name":"URL","_id":"3a891b1a-da9c-43ed-b086-60bd8ce3f7c7","$type":"NodeCanvas.Framework.Variable`1[[System.String,
-      mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
-    _references: []
-  - _json: '{"_name":"RESPONE_STRING","_id":"cd62de31-6459-4df6-a6d6-344a0a42abf6","$type":"NodeCanvas.Framework.Variable`1[[System.String,
-      mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
-    _references: []
-  - _json: '{"_name":"RESPONE_ERROR","_id":"c0ac29f6-8e46-40cc-a8d1-33f57acc903e","$type":"NodeCanvas.Framework.Variable`1[[System.String,
-      mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
-    _references: []
-  - _json: '{"_name":"RESPONE_JSON","_id":"849b8e3c-6f86-45f7-96a9-938930fb276e","$type":"NodeCanvas.Framework.Variable`1[[System.String,
-      mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
-    _references: []
-  - _json: '{"_name":"RESPONE_URL_COMPLETED","_id":"3471e7ee-0e8d-4e7e-b747-26e818067d3c","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
-      mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
-    _references: []
-  - _json: '{"_name":"REQUEST_URL_COMPLETED","_id":"203ef231-4015-439c-a94f-e034169c1cf4","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
-      mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
-    _references: []
-  - _json: '{"_name":"COMPLETED","_id":"155d8245-c0e9-4fb3-8c5f-7f7207ef4cc8","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
-      mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
-    _references: []
+  _serializedVariables: []
 --- !u!114 &1706476586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -315,7 +287,7 @@ MonoBehaviour:
   _lockBoundGraphPrefabOverrides: 1
   _preInitializeSubGraphs: 0
   _updateMode: 0
-  _graph: {fileID: 11400000, guid: 85141456c61b33343b336e966fd877ad, type: 2}
+  _graph: {fileID: 11400000, guid: 3546fd07741634a46997a037268bd91b, type: 2}
   _blackboard: {fileID: 1706476585}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
