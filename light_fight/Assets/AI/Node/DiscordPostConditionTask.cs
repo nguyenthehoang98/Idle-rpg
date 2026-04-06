@@ -6,20 +6,17 @@ using UnityEngine;
 [Category("API")]
 public class DiscordPostConditionTask : BaseAPIConditionTask<DiscordPostConditionTask.ResponseData>
 {
-    public BBParameter<string> webhook;
+    public BBParameter<string> webhook = new BBParameter<string>() { name = "DISCORD_WEBHOOK" };
     public BBParameter<string> content = new BBParameter<string>() { name = "RESPONSE_SUCCESS" };
 
     protected override string Url
     {
-        get => webhook.value;
+        get => $"https://discord.com/api/webhooks/{webhook.value}";
     }
 
     protected override string Json
     {
-        get => JsonUtility.ToJson(new RequestData
-        {
-            content = content.value,
-        });
+        get => JsonUtility.ToJson(new RequestData { content = content.value });
     }
 
     protected override bool IsJsonResponse => false;

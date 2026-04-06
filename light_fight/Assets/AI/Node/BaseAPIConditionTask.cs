@@ -17,7 +17,7 @@ public abstract class BaseAPIConditionTask<T> : ConditionTask where T : IAPIResp
     protected override void OnEnable()
     {
         base.OnEnable();
-        coroutine = StartCoroutine(SendRequest(Url, Json, RequestType));
+        coroutine = StartCoroutine(SendRequest());
         result.value = false;
         error.value = String.Empty;
         success.value = String.Empty;
@@ -42,10 +42,10 @@ public abstract class BaseAPIConditionTask<T> : ConditionTask where T : IAPIResp
         get => true;
     }
     
-    private IEnumerator SendRequest(string url, string json, UnityWebRequestType requestType)
+    private IEnumerator SendRequest()
     {
-        using UnityWebRequest req = new UnityWebRequest(url, requestType.ToString());
-        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
+        using UnityWebRequest req = new UnityWebRequest(Url, RequestType.ToString());
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(Json);
         req.uploadHandler = new UploadHandlerRaw(bodyRaw);
         req.downloadHandler = new DownloadHandlerBuffer();
         req.SetRequestHeader("Content-Type", "application/json");

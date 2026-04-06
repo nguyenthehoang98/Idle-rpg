@@ -29,15 +29,10 @@ namespace NodeCanvas.Editor
 
         void ShowAssetBlackboardGUI()
         {
-            SerializedProperty property = serializedObject.FindProperty("assetBlackboard");
-            object pre = property.boxedValue;
-            EditorGUILayout.PropertyField(property);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("assetBlackboard"));
             serializedObject.ApplyModifiedProperties();
             serializedObject.Update();
-            if (pre != property.boxedValue)
-            {
-                graph.ValidateBlackboard();
-            }
+            graph.ValidateBlackboard();
         }
 
         //name, description, edit button

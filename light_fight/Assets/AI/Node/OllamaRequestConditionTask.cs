@@ -7,14 +7,14 @@ using UnityEngine;
 public class OllamaRequestConditionTask : BaseAPIConditionTask<OllamaRequestConditionTask.ResponseData>
 {
     [ParadoxNotion.Design.Header("Input")] 
-    public BBParameter<string> ip;
-    public BBParameter<string> model;
+    public BBParameter<string> host = new BBParameter<string>() { name = "AI_HOST" };
+    public BBParameter<string> model = new BBParameter<string>() { name = "AI_MODEL" };
     public BBParameter<string> prompt;
     public BBParameter<string> systemPrompt;
 
     protected override string Url
     {
-        get => ip.value + "/api/chat";
+        get => host.value + "/api/chat";
     }
 
     protected override string Json
