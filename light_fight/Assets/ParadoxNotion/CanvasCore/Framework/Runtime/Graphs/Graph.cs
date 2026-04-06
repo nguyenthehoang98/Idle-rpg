@@ -26,7 +26,7 @@ namespace NodeCanvas.Framework
         }
 
         ///----------------------------------------------------------------------------------------------
-
+        [SerializeField] private AssetBlackboard assetBlackboard;
         //the json graph
         [SerializeField] private string _serializedGraph;
         //the unity references used for json graph
@@ -722,8 +722,29 @@ namespace NodeCanvas.Framework
         virtual protected void OnGraphObjectDisable() { }
         ///<summary>Called when the unity object graph is destroyed</summary>
         virtual protected void OnGraphObjectDestroy() { }
+
         ///<summary>Use this for derived graph Validation</summary>
         virtual protected void OnGraphValidate() { }
+
+        public void ValidateBlackboard()
+        {
+            if (assetBlackboard != null)
+            {
+                foreach (var variable in assetBlackboard.GetVariables())
+                {
+                    if(blackboard.GetVariable(variable.name) == null)
+                    {
+                        if (variable.varType == typeof(string) && string.IsNullOrEmpty((string)variable.value))
+                        {
+                            blackboard.SetVariableValue(variable.name, string.Empty);
+                            continue;
+                        }
+                        
+                        blackboard.SetVariableValue(variable.name, variable.value);
+                    }
+                }
+            }
+        }
 
         ///----------------------------------------------------------------------------------------------
 

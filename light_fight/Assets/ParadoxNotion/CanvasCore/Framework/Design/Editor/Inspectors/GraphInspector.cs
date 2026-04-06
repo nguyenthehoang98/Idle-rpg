@@ -18,6 +18,8 @@ namespace NodeCanvas.Editor
 
         public override void OnInspectorGUI() {
             UndoUtility.CheckUndo(this, "Graph Inspector");
+            ShowAssetBlackboardGUI();
+            EditorUtils.Separator();
             ShowBasicGUI();
             EditorUtils.Separator();
             ShowBlackboardGUI();
@@ -25,9 +27,23 @@ namespace NodeCanvas.Editor
             UndoUtility.CheckDirty(this);
         }
 
+        void ShowAssetBlackboardGUI()
+        {
+            SerializedProperty property = serializedObject.FindProperty("assetBlackboard");
+            object pre = property.boxedValue;
+            EditorGUILayout.PropertyField(property);
+            serializedObject.ApplyModifiedProperties();
+            serializedObject.Update();
+            if (pre != property.boxedValue)
+            {
+                graph.ValidateBlackboard();
+            }
+        }
+
         //name, description, edit button
         void ShowBasicGUI() {
             GUILayout.Space(10);
+            
             graph.category = GUILayout.TextField(graph.category);
             EditorUtils.CommentLastTextField(graph.category, "Category...");
 

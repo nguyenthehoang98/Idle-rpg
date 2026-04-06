@@ -16,7 +16,6 @@ namespace NodeCanvas.BehaviourTrees
     [CreateAssetMenu(menuName = "ParadoxNotion/NodeCanvas/Behaviour Tree Asset")]
     public class BehaviourTree : Graph
     {
-
         ///----------------------------------------------------------------------------------------------
         [System.Serializable]
         class DerivedSerializationData
