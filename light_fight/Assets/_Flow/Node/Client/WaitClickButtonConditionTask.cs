@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using _Flow.Model;
 using NodeCanvas.Framework;
 using ParadoxNotion.Design;
 using TMPro;
@@ -10,7 +11,7 @@ using Object = UnityEngine.Object;
 [Category("Client")]
 public class WaitClickButtonConditionTask : ConditionTask
 {
-    public BBParameter<string> buttonTitleName;
+    public BBParameter<string> buttonText;
     public BBParameter<float> interval = new BBParameter<float>(2);
     public BBParameter<int> timeout = new BBParameter<int>(30);
     public BBParameter<bool> result = new BBParameter<bool>() { name = "CLICK_BUTTON_RESULT" };
@@ -54,11 +55,14 @@ public class WaitClickButtonConditionTask : ConditionTask
             foreach (var btn in buttons)
             {
                 TMP_Text tmp = btn.GetComponentInChildren<TMP_Text>();
-                if (tmp.text.Equals(buttonTitleName.value, StringComparison.OrdinalIgnoreCase))
+                if (tmp != null && tmp.text.Equals(buttonText.value, StringComparison.OrdinalIgnoreCase))
                 {
-                    btn.onClick.Invoke();
-                    result.value = true;
-                    isClicked = true;
+                    if (UISimulator.Click(btn.GetComponent<RectTransform>()))
+                    {
+                        result.value = true;
+                        isClicked = true;                        
+                        break;
+                    }
                 }
             }
         }
