@@ -37,6 +37,7 @@ public abstract class BaseAPIConditionTask<T> : ConditionTask where T : IAPIResp
     protected abstract string Url { get; }
     protected abstract string Json { get; }
     protected abstract UnityWebRequestType RequestType { get; }
+    protected virtual void OnExecute(T response){}
     protected virtual bool IsJsonResponse
     {
         get => true;
@@ -44,11 +45,17 @@ public abstract class BaseAPIConditionTask<T> : ConditionTask where T : IAPIResp
     
     private IEnumerator SendRequest()
     {
-        using UnityWebRequest req = new UnityWebRequest(Url, RequestType.ToString());
-        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(Json);
-        req.uploadHandler = new UploadHandlerRaw(bodyRaw);
-        req.downloadHandler = new DownloadHandlerBuffer();
-        req.SetRequestHeader("Content-Type", "application/json");
+        Debug.Log(Url);
+        using UnityWebRequest req = new UnityWebRequest(Url, RequestType.ToString())
+        {
+            downloadHandler = new DownloadHandlerBuffer()
+        };
+        if(RequestType == UnityWebRequestType.POST)
+        {
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(Json);
+            req.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            req.SetRequestHeader("Content-Type", "application/json");
+        }
         
         yield return req.SendWebRequest();
 
@@ -56,11 +63,12 @@ public abstract class BaseAPIConditionTask<T> : ConditionTask where T : IAPIResp
         {
             if (IsJsonResponse)
             {
-                var data = JsonUtility.FromJson<T>(req.downloadHandler.text);
+                T data = JsonUtility.FromJson<T>(req.downloadHandler.text);
                 if (data != null)
                 {
                     success.value = data.Content;
                     result.value = true;
+                    OnExecute(data);
                 }
                 else
                 {
@@ -85,6 +93,7 @@ public abstract class BaseAPIConditionTask<T> : ConditionTask where T : IAPIResp
 public enum UnityWebRequestType
 {
     POST,
+    GET,
 }
 
 public interface IAPIResponse

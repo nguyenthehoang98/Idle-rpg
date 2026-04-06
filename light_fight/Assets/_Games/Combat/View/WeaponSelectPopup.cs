@@ -75,7 +75,6 @@ namespace _Games.Combat.View
         
         private void OpenPopup(OpenWeaponSelectPopupEvent e)
         {
-            Debug.Log("Open popup");
             // tính toán dữ liệu & fill vào data (weapons)
             PickWeapon();
             openFeedback.PlayFeedbacks();;

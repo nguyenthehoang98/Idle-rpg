@@ -20,6 +20,7 @@ MonoBehaviour:
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"DISCORD_WEBHOOK":{"_value":"1488539363846394087/CDjFh948dAvOwi_toMCQNYiNjD_i2W81mztOHKeF2_b3hG3CqsOxZXQ-DH8RU73ec4Kb","_name":"DISCORD_WEBHOOK","_id":"3f9dd78c-e006-47e0-8fe4-7170b514f548","$type":"NodeCanvas.Framework.Variable`1[[System.String,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"TELEGRAM_WEBHOOK":{"_value":"8628259951:AAGBjgl_Xoasnqsj4zfWLpu5lwE0dXan0Qk","_name":"TELEGRAM_WEBHOOK","_id":"d7144878-a46f-43ad-b5df-aa10d59b61e6","$type":"NodeCanvas.Framework.Variable`1[[System.String,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"TELEGRAM_CHAT_ID":{"_value":"5717602601","_name":"TELEGRAM_CHAT_ID","_id":"65a55ce1-5271-4494-8711-f8ef15074a26","$type":"NodeCanvas.Framework.Variable`1[[System.String,
+    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"CLICK_BUTTON_RESULT":{"_name":"CLICK_BUTTON_RESULT","_id":"a8cfd62f-922d-48cc-ac5b-38fd0ad0664a","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}}}'
   _objectReferences: []
   _UID: 22e0eab9-1a8e-4c21-bae3-e2f8ed9c4954
