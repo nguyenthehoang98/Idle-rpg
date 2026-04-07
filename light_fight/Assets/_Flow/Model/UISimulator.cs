@@ -6,41 +6,39 @@ namespace _Flow.Model
 {
     public class UISimulator
     {
-        public static void Drag(RectTransform rect, Vector2 from, Vector2 to, Camera cam = null)
+        public static Vector2 GetScreenPointFromRect(RectTransform rect)
+        {
+            return RectTransformUtility.WorldToScreenPoint(Camera.main, rect.position);
+        }
+
+        public static Vector2 GetScreenPointFromSprite(SpriteRenderer sprite)
+        {
+            return Camera.main.WorldToScreenPoint(sprite.transform.position);
+        }
+
+        public static Vector2 GetScreenPointFromWorldPosition(Vector3 worldPosition)
+        {
+            return Camera.main.WorldToScreenPoint(worldPosition);
+        }
+        
+        public static void Drag(RectTransform rect, Vector2 from, Vector2 to)
         {
             var eventData = new PointerEventData(EventSystem.current);
 
-            // START position
+            var target = rect.gameObject;
+
             eventData.position = from;
+            eventData.pointerPress = target;
+            eventData.pointerDrag = target;
 
-            // Raycast lấy object
-            var results = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(eventData, results);
-
-            if (results.Count == 0) return;
-
-            var target = results[0].gameObject;
-
-            // Pointer Down
             ExecuteEvents.Execute(target, eventData, ExecuteEvents.pointerDownHandler);
-
-            // Begin Drag
             ExecuteEvents.Execute(target, eventData, ExecuteEvents.beginDragHandler);
 
-            // Drag (giả lập nhiều bước cho mượt)
-            int steps = 10;
-            for (int i = 1; i <= steps; i++)
-            {
-                Vector2 pos = Vector2.Lerp(from, to, i / (float)steps);
-                eventData.position = pos;
+            // drag
+            eventData.position = to;
+            ExecuteEvents.Execute(target, eventData, ExecuteEvents.dragHandler);
 
-                ExecuteEvents.Execute(target, eventData, ExecuteEvents.dragHandler);
-            }
-
-            // End Drag
             ExecuteEvents.Execute(target, eventData, ExecuteEvents.endDragHandler);
-
-            // Pointer Up
             ExecuteEvents.Execute(target, eventData, ExecuteEvents.pointerUpHandler);
         }
         

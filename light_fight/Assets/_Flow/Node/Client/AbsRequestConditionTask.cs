@@ -3,7 +3,7 @@ using NodeCanvas.Framework;
 using ParadoxNotion.Design;
 using UnityEngine;
 
-public abstract class AbsRequestInGameplayConditionTask : ConditionTask
+public abstract class AbsRequestConditionTask : ConditionTask
 {
     [ParadoxNotion.Design.Header("Input")] 
     public BBParameter<float> interval = new BBParameter<float>(2);
@@ -41,10 +41,16 @@ public abstract class AbsRequestInGameplayConditionTask : ConditionTask
 
     protected abstract void DoAction();
 
-    protected void Complete()
+    protected void Completed()
     {
         hasSent = true;
         result.value = true;
+    }
+
+    protected void Failed()
+    {
+        hasSent = true;
+        result.value = false;
     }
     
     IEnumerator SendRequest()

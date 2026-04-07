@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 [Category("Client")]
-public class RequestClickButtonConditionTask : AbsRequestInGameplayConditionTask
+public class WaitClickButtonConditionTask : AbsRequestConditionTask
 {
     [ParadoxNotion.Design.Header("Content")] 
     public string buttonTitleText;
@@ -24,7 +24,7 @@ public class RequestClickButtonConditionTask : AbsRequestInGameplayConditionTask
             {
                 if (UISimulator.Click(btn.GetComponent<RectTransform>()))
                 {
-                    Complete();                
+                    Completed();                
                     break;
                 }
             }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEngine;
 
 namespace ParadoxNotion.Design
 {
@@ -118,6 +119,7 @@ namespace ParadoxNotion.Design
             .ThenBy(s => s.originalName)
             .ToList();
             cachedInfos[baseType] = infosResult;
+            Debug.Log(string.Join(',', infosResult.Select(s => s.originalCategory)));
             return infosResult;
         }
 

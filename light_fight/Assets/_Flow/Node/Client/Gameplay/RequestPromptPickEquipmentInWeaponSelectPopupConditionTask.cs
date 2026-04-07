@@ -4,21 +4,8 @@ using NodeCanvas.Framework;
 using ParadoxNotion.Design;
 using UnityEngine;
 
-
-/*{
-           "system": "You are a game AI. Choose the best item.",
-           "user": {
-               "items": [
-               { "id": "bow", "name": "Bow", "count": 2 },
-               { "id": "cannon", "name": "Cannon", "count": 2 },
-               { "id": "arrow", "name": "Arrow", "count": 2 }
-               ],
-               "goal": "choose best weapon for long range"
-           }
-       }*/
-
 [Category("Gameplay")]
-public class RequestPromptPickEquipmentInWeaponSelectPopupConditionTask : AbsRequestInGameplayConditionTask
+public class RequestPromptPickEquipmentInWeaponSelectPopupConditionTask : AbsRequestConditionTask
 {
     [ParadoxNotion.Design.Header("Content")]
     public string promptContent = "Choose the best weapon based on highest power and lowest price. Use power/price ratio as main metric";
@@ -44,7 +31,7 @@ public class RequestPromptPickEquipmentInWeaponSelectPopupConditionTask : AbsReq
             
             systemPrompt.value = string.Format(SYSTEM_PROMPT, promptContent);
             prompt.value = string.Format(PROMT,sb);
-            Complete();
+            Completed();
         }
     }
 }

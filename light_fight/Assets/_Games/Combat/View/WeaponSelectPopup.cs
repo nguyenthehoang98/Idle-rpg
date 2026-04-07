@@ -33,6 +33,20 @@ namespace _Games.Combat.View
         private readonly List<Data> currentWeapons = new List<Data>();
         
         public IReadOnlyList<Data> CurrentWeapons() => currentWeapons;
+
+        public bool FindWeaponButton(int weaponId, out RectTransform rect)
+        {
+            foreach (var o in weapons)
+            {
+                if (o.WeaponItemView != null && o.WeaponItemView.WeaponData.WeaponId == weaponId)
+                {
+                    rect = o.WeaponItemView.GetComponent<RectTransform>();
+                    return true;
+                }
+            }
+            rect = null;
+            return false;
+        }
         
         public static async void Instantiate(Transform parent)
         {
