@@ -42,6 +42,14 @@ namespace _Games.Utils
             return (int)math.sqrt(power);
         }
 
+        public static int PowerWeapon(WeaponData weaponData, SkillData skillData, int level)
+        {
+            float skillDamage = SkillDamage(weaponData.Attack(level), skillData.ScaleDamage(level), skillData.FlatDamage(level));
+            float dps = DPS(skillDamage, 0, 0);
+            float power = dps;
+            return (int)math.sqrt(power);
+        }
+
         /*
          *  Early game: gần như tuyến tính
          *  Mid game: bắt đầu cong lên
@@ -131,14 +139,6 @@ namespace _Games.Utils
         }
         
         // =================================================================== //
-        
-        /// <summary>
-        /// Tính giá mỗi lần mua trang bị
-        /// </summary>
-        public static int Price(int level, int basePrice, int priceLinear)
-        {
-            return basePrice + level * priceLinear;
-        }
 
         public static int RandomEquipmentLevel(int playerLevel, int currentWave, float bonusRate)
         {

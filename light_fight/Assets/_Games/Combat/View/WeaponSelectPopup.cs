@@ -20,7 +20,7 @@ namespace _Games.Combat.View
     {
         [SerializeField] private WeaponItemView itemViewPrefab;
         [SerializeField] private RectTransform content;
-        [SerializeField] private Data[] weapons;
+        [SerializeField] private Object[] weapons;
 
         [Header("Tween")] 
         [SerializeField] private MMF_Player openFeedback;
@@ -29,7 +29,10 @@ namespace _Games.Combat.View
         [Header("Button")]
         [SerializeField] private Button btnResume;
         
-        private readonly List<WeaponData> allData = new List<WeaponData>();        
+        private readonly List<WeaponData> allData = new List<WeaponData>();       
+        private readonly List<Data> currentWeapons = new List<Data>();
+        
+        public IReadOnlyList<Data> CurrentWeapons() => currentWeapons;
         
         public static async void Instantiate(Transform parent)
         {
@@ -76,6 +79,7 @@ namespace _Games.Combat.View
         private void OpenPopup(OpenWeaponSelectPopupEvent e)
         {
             // tính toán dữ liệu & fill vào data (weapons)
+            currentWeapons.Clear();
             PickWeapon();
             openFeedback.PlayFeedbacks();;
         }
@@ -93,29 +97,41 @@ namespace _Games.Combat.View
         
         private void PickWeapon()
         {
+            SkillConfig skillConfig = KitConfigManager.Get<SkillConfig>();
             // Lấy weapon từ pool: vũ khí, máu, giáp ...
             // Random level dựa trên wave hiện tại và level hiện tại
             int length = Mathf.Min(weapons.Length, allData.Count);
             for (int i = 0; i < length; i++)
             {
                 WeaponData weaponData = allData[i];
+                skillConfig.Find(weaponData.SkillId, out var skillData);
                 int level = FormulaUtils.RandomEquipmentLevel(1, 1, 1);
-                Data data = weapons[i];
-                data.textPrice.SetText("X" + weaponData.Price(level));
-                data.textTitle.SetText(weaponData.WeaponName);
-
-                if (data.WeaponItemView == null)
+                int price = weaponData.Price(level);
+                int power = FormulaUtils.PowerWeapon(weaponData, skillData, level);
+                Object @object = weapons[i];
+                @object.textPrice.SetText("X" + weaponData.Price(level));
+                @object.textTitle.SetText(weaponData.WeaponName);
+                
+                currentWeapons.Add(new Data
                 {
-                    var instance = Instantiate(itemViewPrefab, data.container);
+                    weaponId = weaponData.WeaponId,
+                    weaponLevel = level,
+                    price = price,
+                    power = power,
+                });
+
+                if (@object.WeaponItemView == null)
+                {
+                    var instance = Instantiate(itemViewPrefab, @object.container);
                     instance.transform.SetAsFirstSibling();
                     instance.GetComponent<RectTransform>().anchoredPosition3D = Vector3.zero;
-                    data.WeaponItemView = instance;
+                    @object.WeaponItemView = instance;
                 }
                 
-                data.WeaponItemView.Initialize(weaponData, level, () =>
+                @object.WeaponItemView.Initialize(weaponData, level, () =>
                 {
-                    data.textPrice.SetText(String.Empty);
-                    data.textTitle.SetText(String.Empty);
+                    @object.textPrice.SetText(String.Empty);
+                    @object.textTitle.SetText(String.Empty);
                 });
             }
         }
@@ -136,13 +152,22 @@ namespace _Games.Combat.View
     public partial class WeaponSelectPopup
     {
         [Serializable]
-        class Data
+        class Object
         {
             public Transform container;
             public TextMeshProUGUI textTitle;
             public TextMeshProUGUI textPrice;
             public WeaponItemView WeaponItemView { get; set; }
             public int Price { get; set; }
+        }
+        
+        [Serializable]
+        public struct Data
+        {
+            public int weaponId;
+            public int weaponLevel;
+            public int price;
+            public int power;
         }
     }
 }

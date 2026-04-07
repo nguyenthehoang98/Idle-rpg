@@ -17,10 +17,12 @@ MonoBehaviour:
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"RESPONSE_RESULT":{"_name":"RESPONSE_RESULT","_id":"b0145b1f-53c5-4aa7-80ff-104c16bf0155","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"AI_HOST":{"_value":"http://100.100.181.25:11434","_name":"AI_HOST","_id":"96637b1d-031a-4c25-84a9-23e5d22bcf16","$type":"NodeCanvas.Framework.Variable`1[[System.String,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"AI_MODEL":{"_value":"qwen3:4b","_name":"AI_MODEL","_id":"29abced3-c766-4c37-9fe6-897d4a22c781","$type":"NodeCanvas.Framework.Variable`1[[System.String,
+    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"AI_PROMPT_TEMP":{"_name":"AI_PROMPT_TEMP","_id":"d648e0a2-0715-43a5-81bd-be08f744adc5","$type":"NodeCanvas.Framework.Variable`1[[System.String,
+    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"AI_SYSTEM_PROMPT_TEMP":{"_name":"AI_SYSTEM_PROMPT_TEMP","_id":"80551f1b-cdb1-46bd-a2aa-5a6717ca6c4d","$type":"NodeCanvas.Framework.Variable`1[[System.String,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"DISCORD_WEBHOOK":{"_value":"1488539363846394087/CDjFh948dAvOwi_toMCQNYiNjD_i2W81mztOHKeF2_b3hG3CqsOxZXQ-DH8RU73ec4Kb","_name":"DISCORD_WEBHOOK","_id":"3f9dd78c-e006-47e0-8fe4-7170b514f548","$type":"NodeCanvas.Framework.Variable`1[[System.String,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"TELEGRAM_WEBHOOK":{"_value":"8628259951:AAGBjgl_Xoasnqsj4zfWLpu5lwE0dXan0Qk","_name":"TELEGRAM_WEBHOOK","_id":"d7144878-a46f-43ad-b5df-aa10d59b61e6","$type":"NodeCanvas.Framework.Variable`1[[System.String,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"TELEGRAM_CHAT_ID":{"_value":"5717602601","_name":"TELEGRAM_CHAT_ID","_id":"65a55ce1-5271-4494-8711-f8ef15074a26","$type":"NodeCanvas.Framework.Variable`1[[System.String,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"CLICK_BUTTON_RESULT":{"_name":"CLICK_BUTTON_RESULT","_id":"a8cfd62f-922d-48cc-ac5b-38fd0ad0664a","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
+    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"GAMEPLAY_REQUEST_RESULT":{"_name":"GAMEPLAY_REQUEST_RESULT","_id":"582656e5-f3de-4e2e-9ba7-cc3245276bcc","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}}}'
   _objectReferences: []
   _UID: 22e0eab9-1a8e-4c21-bae3-e2f8ed9c4954

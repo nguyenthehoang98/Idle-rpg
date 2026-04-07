@@ -45,7 +45,6 @@ public abstract class BaseAPIConditionTask<T> : ConditionTask where T : IAPIResp
     
     private IEnumerator SendRequest()
     {
-        Debug.Log(Url);
         using UnityWebRequest req = new UnityWebRequest(Url, RequestType.ToString())
         {
             downloadHandler = new DownloadHandlerBuffer()

@@ -7,10 +7,10 @@ using UnityEngine;
 public class OllamaRequestConditionTask : BaseAPIConditionTask<OllamaRequestConditionTask.ResponseData>
 {
     [ParadoxNotion.Design.Header("Input")] 
-    public BBParameter<string> host = new BBParameter<string>() { name = "AI_HOST" };
-    public BBParameter<string> model = new BBParameter<string>() { name = "AI_MODEL" };
-    public BBParameter<string> prompt;
-    public BBParameter<string> systemPrompt;
+    public BBParameter<string> host = new BBParameter<string> { name = "AI_HOST" };
+    public BBParameter<string> model = new BBParameter<string> { name = "AI_MODEL" };
+    public BBParameter<string> prompt = new BBParameter<string>{ name = "AI_PROMPT_TEMP" };
+    public BBParameter<string> systemPrompt = new BBParameter<string> { name = "AI_SYSTEM_PROMPT_TEMP" };
 
     protected override string Url
     {
@@ -61,5 +61,6 @@ public class OllamaRequestConditionTask : BaseAPIConditionTask<OllamaRequestCond
         public string role;
         public string content;
         public string thinking;
+        public string format = "json";
     }
 }

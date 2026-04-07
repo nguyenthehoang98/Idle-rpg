@@ -44,8 +44,8 @@ namespace _Games.Config
         public int WeaponId => weaponId;
         public string WeaponName => weaponName;
         public int SkillId => skillId;
-        public float Attack(int level) => baseAttack + attackBonusLevel * level;
-        public float Price(int level) => basePrice + priceBonusLevel * level;
+        public int Attack(int level) => (int)(baseAttack + attackBonusLevel * level);
+        public int Price(int level) => (int)(basePrice + priceBonusLevel * level);
         public string[] Unlocks => jsonUnlocks;
     }
 }
