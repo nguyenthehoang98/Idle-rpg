@@ -15,8 +15,6 @@ namespace _Games.Combat.Level
 
         public event Action<int> OnTriggerWeapon;
 
-        public AgentCircleShapeAuthoring ShapeAuthoring => shapeAuthoring;
-
         private void Start()
         {
             Transform[] temps = new Transform[slots.Length];
@@ -33,12 +31,14 @@ namespace _Games.Combat.Level
 
         private void OnDrawGizmos()
         {
-            float radius = 0.5f;
+            float r = 0.5f;
             Vector3 center = Vector3.zero;
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(center + new Vector3(-radius, radius), center + new Vector3(radius, -radius));
-            Gizmos.DrawLine(center + new Vector3(-radius, -radius), center + new Vector3(radius, radius));
+            Gizmos.DrawLine(center + new Vector3(-r, r), center + new Vector3(r, -r));
+            Gizmos.DrawLine(center + new Vector3(-r, -r), center + new Vector3(r, r));
         }
+
+        public float Radius => shapeAuthoring.Radius;
 
         public Vector2 CellSize => cellSize;
 

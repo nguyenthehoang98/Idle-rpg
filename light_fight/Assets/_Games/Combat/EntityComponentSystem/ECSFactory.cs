@@ -30,7 +30,7 @@ namespace _Games.Combat.EntityComponentSystem
             EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
             Entity entity = manager.CreateEntity();
             DynamicBuffer<CircleBuffer> circleBuffers = manager.AddBuffer<CircleBuffer>(entity);
-            circleBuffers.Add(new CircleBuffer(levelDesign.ShapeAuthoring.Radius, float3.zero, false, 0));
+            circleBuffers.Add(new CircleBuffer(levelDesign.Radius, float3.zero, false, 0));
             manager.AddComponentData(entity, new PlayerTag());
             manager.AddComponentData(entity, new LocalTransform { Position = float3.zero });
             
@@ -136,7 +136,7 @@ namespace _Games.Combat.EntityComponentSystem
             });
             manager.AddComponentData(entity, new AgentSonarAvoid
             {
-                Radius = radius * 2,
+                Radius = radius * 5,
                 Mode = SonarAvoidMode.IgnoreBehindAgents,
                 MaxAngle = math.radians(360),
                 Angle = math.radians(180),

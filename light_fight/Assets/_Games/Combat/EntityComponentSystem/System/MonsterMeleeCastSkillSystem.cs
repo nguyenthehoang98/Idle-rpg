@@ -34,14 +34,14 @@ namespace _Games.Combat.EntityComponentSystem.System
                          .WithEntityAccess())
             {
                 MonsterSkillData data = skillData.ValueRO;
-                if (data.AnimationName == AnimationName.Move && math.lengthsq(body.ValueRO.Velocity) < THRESHOLD)
+                if (data.AnimationName == AnimationName.Move && (math.lengthsq(body.ValueRO.Velocity) < THRESHOLD || body.ValueRO.IsStopped))
                 {
                     data.AnimationName = AnimationName.Idle;
                     Monster monster = state.EntityManager.GetComponentObject<Monster>(entity);
                     monster.PlayAnimation(AnimationName.Idle);
                 }
                 
-                if (data.AnimationName == AnimationName.Idle && math.lengthsq(body.ValueRO.Velocity) > THRESHOLD)
+                if (data.AnimationName == AnimationName.Idle && math.lengthsq(body.ValueRO.Velocity) > THRESHOLD && !body.ValueRO.IsStopped)
                 {
                     data.AnimationName = AnimationName.Move;
                     Monster monster = state.EntityManager.GetComponentObject<Monster>(entity);

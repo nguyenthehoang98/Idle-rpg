@@ -11,7 +11,7 @@ namespace _Games.Combat.Model
         {
             LevelSpawn = levelSpawn;
             BoxSize = CalculateBounds(levelDesign.LoopPoints(), levelDesign.CellSize);
-            RadiusBonus = Mathf.Max(BoxSize.x, BoxSize.y) / 2f;
+            RadiusBonus = levelDesign.Radius;
         }
 
         public IReadOnlyDictionary<WaveIdData, LevelBatch> LevelSpawn { get; }

@@ -14,6 +14,8 @@ namespace _Games.Combat.EntityComponentSystem.System
     [RequireMatchingQueriesForUpdate]
     public partial struct MonsterSyncFacingSystem : ISystem
     {
+        const float VELOCITY_FACING_CHANGED_THRESHOLD = 0.01f;
+        
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
@@ -47,7 +49,8 @@ namespace _Games.Combat.EntityComponentSystem.System
             public void Execute(in Entity entity, in MonsterTag tag, [ReadOnly] in AgentBody body,
                 ref MonsterFlipData flip)
             {
-                if (math.lengthsq(body.Velocity.xy) < 0.5f) return;
+                if (math.lengthsq(body.Velocity) < VELOCITY_FACING_CHANGED_THRESHOLD) return;
+               
                 bool facing = body.Velocity.x < 0;
                 if (flip.FacingRight != facing)
                 {
