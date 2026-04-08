@@ -34,7 +34,7 @@ namespace _Games.Combat.EntityComponentSystem
             manager.AddComponentData(entity, new PlayerTag());
             manager.AddComponentData(entity, new LocalTransform { Position = float3.zero });
             
-            manager.AddComponentData(entity, new HealthData { Health = 100000, MaxHealth = 100000 });
+            manager.AddComponentData(entity, new HealthData { Health = 300, MaxHealth = 300 });
 #if UNITY_EDITOR
             manager.SetName(entity, "Player");
 #endif
@@ -96,14 +96,10 @@ namespace _Games.Combat.EntityComponentSystem
             DynamicBuffer<CircleBuffer> circleBuffers = manager.AddBuffer<CircleBuffer>(entity);
             circleBuffers.Add(new CircleBuffer(radius, float3.zero, false, 0));
             manager.AddComponentData(entity, new MonsterTag());
-            manager.AddComponentData(entity, new MonsterFlipData
-            {
-                Changed = true,
-                FacingRight = position.x >= destination.x,
-            });
+            manager.AddComponentData(entity, new MonsterFlipData());
             manager.AddComponentData(entity, new LocalTransform
             {
-                Position = position, Rotation = quaternion.identity, Scale = 1
+                Position = position, Rotation = quaternion.RotateY(math.radians(position.x < destination.x ? 0 : 180)), Scale = 1
             });
             manager.AddComponentData(entity, new Agent
             {
@@ -127,7 +123,7 @@ namespace _Games.Combat.EntityComponentSystem
             });
             manager.AddComponentData(entity, new AgentSeparation
             {
-                Radius = radius, Weight = 1,
+                Radius = radius, Weight = 10,
                 Layers = monsterData.IsRanged ? NavigationLayers.Layer1 : NavigationLayers.Default
             });
             manager.AddComponentData(entity, new AgentShape

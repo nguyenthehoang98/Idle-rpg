@@ -1,4 +1,4 @@
-using _KIT.Event;
+﻿using _KIT.Event;
 
 namespace _Games.Combat.Event
 {

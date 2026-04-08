@@ -44,13 +44,13 @@ namespace _Games.Combat.Level
 
         private void OnEnable()
         {
-            EventBus.Instance.Subscribe<WaveCompleteEvent>(OnWaveComplete);
+            EventBus.Instance.Subscribe<WavePauseEvent>(OnWavePause);
             EventBus.Instance.Subscribe<WaveContinueEvent>(OnWaveContinue);
         }
 
         private void OnDisable()
         {
-            EventBus.Instance.Unsubscribe<WaveCompleteEvent>(OnWaveComplete);
+            EventBus.Instance.Unsubscribe<WavePauseEvent>(OnWavePause);
             EventBus.Instance.Unsubscribe<WaveContinueEvent>(OnWaveContinue);
         }
 
@@ -66,7 +66,7 @@ namespace _Games.Combat.Level
             }
         }
 
-        private void OnWaveComplete(WaveCompleteEvent e)
+        private void OnWavePause(WavePauseEvent e)
         {
             isRunning = false;
             

@@ -42,6 +42,11 @@ public class PlayerHealthUI : MonoBehaviour
     {
         var component = World.DefaultGameObjectInjectionWorld.EntityManager.GetComponentData<HealthData>(entity);
         healthFill.fillAmount = component.Health / (float)component.MaxHealth;
-        healthText.SetText(component.Health.ToString());
+        healthText.SetText(Mathf.Max(component.Health, 0).ToString());
+
+        if (component.Health <= 0)
+        {
+            EventBus.Instance.Publish(new WaveLoseEvent());
+        }
     }
 }

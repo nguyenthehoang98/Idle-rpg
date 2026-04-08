@@ -78,30 +78,56 @@ namespace _Games.Combat
         
         private void OnEnable()
         {
-            EventBus.Instance.Subscribe<WaveContinueEvent>(OnWaveContinue);
+            EventBus.Instance.Subscribe<WaveLoseEvent>(OnWaveLose);
             EventBus.Instance.Subscribe<WaveCompleteEvent>(OnWaveComplete);
+            EventBus.Instance.Subscribe<WaveContinueEvent>(OnWaveContinue);
+            EventBus.Instance.Subscribe<WavePauseEvent>(OnWavePause);
         } 
 
         private void OnDisable()
         {
-            EventBus.Instance.Unsubscribe<WaveContinueEvent>(OnWaveContinue);
+            EventBus.Instance.Unsubscribe<WaveLoseEvent>(OnWaveLose);
             EventBus.Instance.Unsubscribe<WaveCompleteEvent>(OnWaveComplete);
+            EventBus.Instance.Unsubscribe<WaveContinueEvent>(OnWaveContinue);
+            EventBus.Instance.Unsubscribe<WavePauseEvent>(OnWavePause);
+        }
+
+        private void OnWaveLose(WaveLoseEvent e)
+        {
+            if(isRunning)
+            {
+                Debug.LogError("lose game");
+                isRunning = false;
+                EventBus.Instance.Publish(new WavePauseEvent());
+                
+                MonsterAuthoring[] monsters = GameObject.FindObjectsByType<MonsterAuthoring>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+                foreach (var monster in monsters)
+                {
+                    monster.PlayAnimation(AnimationName.Idle);
+                }
+            }
         }
 
         private void OnWaveComplete(WaveCompleteEvent e)
         {
             if (e.CurrentWave > e.TotalWave)
             {
-                Debug.LogError("end game");
+                Debug.LogError("win game");
+                EventBus.Instance.Publish(new WavePauseEvent());
             }
             else
             {
                 this.WaitInvoke(1, () =>
                 {
-                    Pause(); // Sau thêm biến source pause để check với trường hợp khi người chơi bấm pause
+                    EventBus.Instance.Publish(new WavePauseEvent());
                     EventBus.Instance.Publish(new OpenWeaponSelectPopupEvent());
                 });                
             }
+        }
+
+        private void OnWavePause(WavePauseEvent e)
+        {
+            Pause(); // Sau thêm biến source pause để check với trường hợp khi người chơi bấm pause
         }
 
         private void Resume()

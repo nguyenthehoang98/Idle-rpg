@@ -6,6 +6,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
 
 namespace _Games.Combat.EntityComponentSystem.System
 {
@@ -16,7 +17,7 @@ namespace _Games.Combat.EntityComponentSystem.System
     {
         const float VELOCITY_FACING_CHANGED_THRESHOLD = 0.01f;
         
-        [BurstCompile]
+        //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             state.Dependency = new FlipFacingJob().ScheduleParallel(state.Dependency);
@@ -38,6 +39,7 @@ namespace _Games.Combat.EntityComponentSystem.System
                     
                     flipData.Changed = false;
                     flip.ValueRW = flipData;
+                    Debug.LogError("flip: " + flipData.FacingRight + ", entity: " + entity);
                 }
             }
         }
