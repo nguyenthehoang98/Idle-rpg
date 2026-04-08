@@ -4,11 +4,13 @@ namespace _Games.Combat.Event
 {
     public readonly struct WaveCompleteEvent : IEvent
     {
-        public readonly int WaveIndex;
+        public readonly int CurrentWave;
+        public readonly int TotalWave;
 
-        public WaveCompleteEvent(int waveIndex)
+        public WaveCompleteEvent(int currentWave, int totalWave)
         {
-            WaveIndex = waveIndex;
+            CurrentWave = currentWave;
+            TotalWave = totalWave;
         }
     }
 }

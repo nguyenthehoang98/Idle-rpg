@@ -2,7 +2,7 @@
 
 namespace _Games.Combat.Event
 {
-    public struct WaveResumeEvent : IEvent
+    public struct WaveContinueEvent : IEvent
     {
     }
 }

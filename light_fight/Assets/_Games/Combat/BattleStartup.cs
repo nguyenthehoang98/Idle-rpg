@@ -17,6 +17,7 @@ using _KIT.Utils;
 using ProjectDawn.Custom;
 using Unity.Entities;
 using UnityEngine;
+using NotImplementedException = System.NotImplementedException;
 
 namespace _Games.Combat
 {
@@ -77,33 +78,47 @@ namespace _Games.Combat
         
         private void OnEnable()
         {
-            EventBus.Instance.Subscribe<WaveResumeEvent>(OnWaveResume);
-            EventBus.Instance.Subscribe<BattlePauseEvent>(OnBattlePause);
-            EventBus.Instance.Subscribe<BattleResumeEvent>(OnBattleResume);
+            EventBus.Instance.Subscribe<WaveContinueEvent>(OnWaveContinue);
+            EventBus.Instance.Subscribe<WaveCompleteEvent>(OnWaveComplete);
         } 
 
         private void OnDisable()
         {
-            EventBus.Instance.Unsubscribe<WaveResumeEvent>(OnWaveResume);
-            EventBus.Instance.Unsubscribe<BattlePauseEvent>(OnBattlePause);
-            EventBus.Instance.Unsubscribe<BattleResumeEvent>(OnBattleResume);
+            EventBus.Instance.Unsubscribe<WaveContinueEvent>(OnWaveContinue);
+            EventBus.Instance.Unsubscribe<WaveCompleteEvent>(OnWaveComplete);
         }
 
-        private void OnBattleResume(BattleResumeEvent e)
+        private void OnWaveComplete(WaveCompleteEvent e)
+        {
+            if (e.CurrentWave > e.TotalWave)
+            {
+                Debug.LogError("end game");
+            }
+            else
+            {
+                this.WaitInvoke(1, () =>
+                {
+                    Pause(); // Sau thêm biến source pause để check với trường hợp khi người chơi bấm pause
+                    EventBus.Instance.Publish(new OpenWeaponSelectPopupEvent());
+                });                
+            }
+        }
+
+        private void Resume()
         {
             isRunning = true;
             var group = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<CustomSimulationGroup>();
             group.TimeScale = battleScaleTime;
         }
 
-        private void OnBattlePause(BattlePauseEvent e)
+        private void Pause()
         { 
             isRunning = false;
             var group = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<CustomSimulationGroup>();
             group.TimeScale = 0;
         }
 
-        private async void OnWaveResume(WaveResumeEvent e)
+        private async void OnWaveContinue(WaveContinueEvent e)
         {
             SkillConfig skillConfig = KitConfigManager.Get<SkillConfig>();
             for (int i = 0; i < levelDesign.Slots.Length; i++)
@@ -120,12 +135,16 @@ namespace _Games.Combat
                     equipmentManager.Equip(i, slot.ItemView.WeaponData, slot.ItemView.WeaponLevel);
                 }
             }
-            EventBus.Instance.Publish(new BattleResumeEvent());
+
+            spawnLogic.NextWaveSpawn();
+            Resume();
         }
         
         private void Update()
         {
-            if (!isRunning) return;
+            if (!isRunning)
+                return;
+            
             float deltaTime = Time.deltaTime * battleScaleTime;
             spawnLogic.Update(deltaTime);
             equipmentManager.Update();

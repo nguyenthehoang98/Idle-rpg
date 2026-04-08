@@ -15,7 +15,7 @@ namespace _Games.Config
         [SerializeField] private List<LevelBatch> spawns = new List<LevelBatch>();
 
         private Dictionary<int, LevelData> cacheData;
-        private Dictionary<int, IReadOnlyDictionary<Vector2Int, LevelBatch>> cacheSpawns;
+        private Dictionary<int, IReadOnlyDictionary<WaveIdData, LevelBatch>> cacheSpawns;
         
         public override void OnMapValue()
         {
@@ -25,22 +25,22 @@ namespace _Games.Config
                 cacheData.Add(data.LevelId, data);
             }
             
-            Dictionary<int, Dictionary<Vector2Int, LevelBatch>> temp = new Dictionary<int, Dictionary<Vector2Int, LevelBatch>>();
+            Dictionary<int, Dictionary<WaveIdData, LevelBatch>> temp = new Dictionary<int, Dictionary<WaveIdData, LevelBatch>>();
             foreach (var data in spawns)
             {
                 if (temp.TryGetValue(data.LevelId, out var dictionary))
                 {
-                    dictionary.Add(new Vector2Int(data.WaveId, data.BatchId), data);
+                    dictionary.Add(new WaveIdData(data.WaveId, data.BatchId), data);
                 }
                 else
                 {
-                    dictionary = new Dictionary<Vector2Int, LevelBatch>();
-                    dictionary.Add(new Vector2Int(data.WaveId, data.BatchId), data);
+                    dictionary = new Dictionary<WaveIdData, LevelBatch>();
+                    dictionary.Add(new WaveIdData(data.WaveId, data.BatchId), data);
                     temp.Add(data.LevelId, dictionary);
                 }
             }
 
-            cacheSpawns = new Dictionary<int, IReadOnlyDictionary<Vector2Int, LevelBatch>>();
+            cacheSpawns = new Dictionary<int, IReadOnlyDictionary<WaveIdData, LevelBatch>>();
             foreach (var pair in temp)
             {
                 cacheSpawns.Add(pair.Key, pair.Value);
@@ -60,7 +60,7 @@ namespace _Games.Config
             return cacheData.TryGetValue(levelID, out levelData);
         }
 
-        public bool FindSpawn(int levelID, out IReadOnlyDictionary<Vector2Int, LevelBatch> dictionary)
+        public bool FindSpawn(int levelID, out IReadOnlyDictionary<WaveIdData, LevelBatch> dictionary)
         {
             return cacheSpawns.TryGetValue(levelID, out dictionary);
         }
@@ -74,6 +74,19 @@ namespace _Games.Config
 
         public int LevelId => levelId;
         public string LevelDesign => levelDesign;
+    }
+
+    [Serializable]
+    public class WaveIdData
+    {
+        public readonly int WaveId;
+        public readonly int BatchId;
+
+        public WaveIdData(int waveId, int batchId)
+        {
+            WaveId = waveId;
+            BatchId = batchId;
+        }
     }
     
     [Serializable]

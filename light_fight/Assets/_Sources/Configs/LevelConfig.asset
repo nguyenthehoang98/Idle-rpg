@@ -23,8 +23,8 @@ MonoBehaviour:
     batchId: 1
     isBoss: 0
     delayTime: 0
-    duration: 100
-    power: 1000
+    duration: 10
+    power: 50
     spawnId: Spawn_Random
     data:
     - 10000_10

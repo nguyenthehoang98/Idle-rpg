@@ -38,16 +38,16 @@ namespace _Games.Combat.Level
         private void OnEnable()
         {
             EventBus.Instance.Subscribe<OpenWeaponSelectPopupEvent>(OnWaveSelectWeapon);
-            EventBus.Instance.Subscribe<WaveResumeEvent>(OnWaveResume);
+            EventBus.Instance.Subscribe<WaveContinueEvent>(OnWaveContinue);
         } 
 
         private void OnDisable()
         {
             EventBus.Instance.Unsubscribe<OpenWeaponSelectPopupEvent>(OnWaveSelectWeapon);
-            EventBus.Instance.Unsubscribe<WaveResumeEvent>(OnWaveResume);
+            EventBus.Instance.Unsubscribe<WaveContinueEvent>(OnWaveContinue);
         }
         
-        private void OnWaveResume(WaveResumeEvent e) => container.gameObject.SetActive(false);
+        private void OnWaveContinue(WaveContinueEvent e) => container.gameObject.SetActive(false);
 
         private void OnWaveSelectWeapon(OpenWeaponSelectPopupEvent e) => container.gameObject.SetActive(true);
 

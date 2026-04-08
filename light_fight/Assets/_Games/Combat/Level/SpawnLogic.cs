@@ -33,7 +33,8 @@ namespace _Games.Combat.Level
         private readonly Entity player;
 
         private Batch[] batches;
-        private int currentWave;
+        private int totalWave;
+        private int currentWave = 1;
         private int currentBatch;
         private float waitTime;
         private float elapsedTime;
@@ -52,8 +53,11 @@ namespace _Games.Combat.Level
             var world = World.DefaultGameObjectInjectionWorld;
             var manager = world.EntityManager;
             query = manager.CreateEntityQuery(typeof(MonsterTag));
-            
-            ReloadData(1);
+
+            foreach (var pair in shareData.LevelSpawn)
+            {
+                totalWave = Mathf.Max(pair.Key.WaveId, totalWave);
+            }
         }
 
         private async void ReloadData(int wave)
@@ -61,11 +65,11 @@ namespace _Games.Combat.Level
             List<LevelBatch> values = new List<LevelBatch>();
             foreach (var pair in shareData.LevelSpawn)
             {
-                if (pair.Key.x == wave) values.Add(pair.Value);
+                if (pair.Key.WaveId == wave) values.Add(pair.Value);
             }
 
+            Debug.Log("start wave: " + wave);
             currentBatch = 0;
-            currentWave = wave;
             batches = CreateBatches(values, monsterConfig, skillConfig);
             
             HashSet<int> monsters = new HashSet<int>();
@@ -89,7 +93,28 @@ namespace _Games.Combat.Level
             paused = false;
         }
 
-        public async void Update(float dt)
+        public void NextWaveSpawn()
+        {
+            ReloadData(currentWave);
+            paused = false;
+        }
+
+        public void Update(float dt)
+        {
+            SpawnExecute(dt);
+            WaitCompleteWave();
+        }
+
+        private void WaitCompleteWave()
+        {
+            if (waiting && query.CalculateEntityCount() == 0)
+            {
+                waiting = false;
+                EventBus.Instance.Publish(new WaveCompleteEvent(currentWave, totalWave));
+            }
+        }
+
+        private async void SpawnExecute(float dt)
         {
             if (paused) return;
             if (currentBatch < batches.Length)
@@ -132,12 +157,6 @@ namespace _Games.Combat.Level
                     currentWave++;
                     waiting = true;
                 }
-            }
-
-            if (waiting && query.CalculateEntityCount() == 0)
-            {
-                waiting = false;
-                EventBus.Instance.Publish(new WaveCompleteEvent(currentWave));
             }
         }
 

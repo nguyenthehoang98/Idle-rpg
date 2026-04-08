@@ -337,7 +337,7 @@ MonoBehaviour:
   enableDebug: 1
   enableTestMode: 0
   gamePlayIterationsUpdate: 1
-  gameplayScaleTime: 1
+  gameplayScaleTime: 5
   gameplayFrameRate: 45
   container: {fileID: 64959147}
 --- !u!1 &959653745
@@ -507,120 +507,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 984887774}
   m_CullTransparentMesh: 1
---- !u!1001 &940138148971794290
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 935784619835520917, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 935784619835520917, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 935784619835520917, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 935784619835520917, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 935784619835520917, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 935784619835520917, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 935784619835520917, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 935784619835520917, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 935784619835520917, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 935784619835520917, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6421781559401549054, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
-      propertyPath: m_Name
-      value: DeathEffect Cowboy
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 7dc7bb38374e61a46b58b7db7fd62159, type: 3}
---- !u!1001 &4500027225951889192
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4491802354344062260, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4491802354344062260, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4491802354344062260, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4491802354344062260, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4491802354344062260, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4491802354344062260, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4491802354344062260, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4491802354344062260, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4491802354344062260, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4491802354344062260, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8201472551628965842, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
-      propertyPath: m_Name
-      value: DeathEffect Goose
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e4f85c4bd7571c74088afa551b4ea5a1, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -628,5 +514,3 @@ SceneRoots:
   - {fileID: 959653748}
   - {fileID: 253410029}
   - {fileID: 70558356}
-  - {fileID: 4500027225951889192}
-  - {fileID: 940138148971794290}

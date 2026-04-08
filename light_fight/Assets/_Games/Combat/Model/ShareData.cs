@@ -7,14 +7,14 @@ namespace _Games.Combat.Model
 {
     public class ShareData
     {
-        public ShareData(IReadOnlyDictionary<Vector2Int, LevelBatch> levelSpawn, LevelDesign levelDesign)
+        public ShareData(IReadOnlyDictionary<WaveIdData, LevelBatch> levelSpawn, LevelDesign levelDesign)
         {
             LevelSpawn = levelSpawn;
             BoxSize = CalculateBounds(levelDesign.LoopPoints(), levelDesign.CellSize);
             RadiusBonus = Mathf.Max(BoxSize.x, BoxSize.y) / 2f;
         }
 
-        public IReadOnlyDictionary<Vector2Int, LevelBatch> LevelSpawn { get; }
+        public IReadOnlyDictionary<WaveIdData, LevelBatch> LevelSpawn { get; }
         public Vector2 BoxSize { get; }
         public float RadiusBonus { get; }
         

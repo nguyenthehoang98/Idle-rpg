@@ -64,7 +64,7 @@ namespace _Games.Combat.View
                 EventBus.Instance.Publish(new CloseWeaponSelectPopupEvent());
                 Close(() =>
                 {
-                    EventBus.Instance.Publish(new WaveResumeEvent());                        
+                    EventBus.Instance.Publish(new WaveContinueEvent());                        
                 });
             });
         }
