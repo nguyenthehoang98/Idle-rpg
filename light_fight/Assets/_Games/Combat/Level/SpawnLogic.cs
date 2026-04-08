@@ -68,7 +68,6 @@ namespace _Games.Combat.Level
                 if (pair.Key.WaveId == wave) values.Add(pair.Value);
             }
 
-            Debug.Log("start wave: " + wave);
             currentBatch = 0;
             batches = CreateBatches(values, monsterConfig, skillConfig);
             

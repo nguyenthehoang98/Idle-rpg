@@ -76,6 +76,12 @@ namespace _Games.Combat.Level
                 LineRenderer line = allLines[i];
                 line.positionCount = 0;
             }
+
+            for (int i = 0; i < slots.Length; i++)
+            {
+                SlotView sl = slots[i].GetComponent<SlotView>();
+                sl.Reset();
+            }
         }
 
         private void Update()

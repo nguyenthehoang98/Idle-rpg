@@ -1,3 +1,4 @@
+using System;
 using PrimeTween;
 using Unity.Mathematics;
 using UnityEngine;
@@ -47,6 +48,18 @@ namespace _Games.Combat.Level
         public void Trigger() => border.color = highlightBorderColor;
 
         public void UnTrigger() => border.color = originalBorderColor;
+
+        public void Reset()
+        {
+            tween.Stop();
+            UnTrigger();
+            if (ItemView != null)
+            {
+                Transform target = ItemView.Icon;
+                target.rotation = Quaternion.Euler(0, 0, 0);
+                target.localScale = Vector3.one;
+            }
+        }
 
         public void Rotation(float rad, float time)
         {
