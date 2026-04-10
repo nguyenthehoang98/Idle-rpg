@@ -96,7 +96,6 @@ namespace _Games.Combat.EntityComponentSystem
             DynamicBuffer<CircleBuffer> circleBuffers = manager.AddBuffer<CircleBuffer>(entity);
             circleBuffers.Add(new CircleBuffer(radius, float3.zero, false, 0));
             manager.AddComponentData(entity, new MonsterTag());
-            manager.AddComponentData(entity, new MonsterFlipData());
             manager.AddComponentData(entity, new LocalTransform
             {
                 Position = position, Rotation = quaternion.RotateY(math.radians(position.x < destination.x ? 0 : 180)), Scale = 1

@@ -2,11 +2,9 @@
 using ProjectDawn.Custom;
 using ProjectDawn.Navigation;
 using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
 
 namespace _Games.Combat.EntityComponentSystem.System
 {
@@ -15,50 +13,37 @@ namespace _Games.Combat.EntityComponentSystem.System
     [RequireMatchingQueriesForUpdate]
     public partial struct MonsterSyncFacingSystem : ISystem
     {
-        const float VELOCITY_FACING_CHANGED_THRESHOLD = 0.01f;
-        
-        //[BurstCompile]
-        public void OnUpdate(ref SystemState state)
+        private float rad0;
+        private float rad180;
+
+        public void OnCreate(ref SystemState state)
         {
-            state.Dependency = new FlipFacingJob().ScheduleParallel(state.Dependency);
-            state.Dependency.Complete();
-            
-            foreach (var (flip, transform, entity) in SystemAPI
-                         .Query<RefRW<MonsterFlipData>, RefRW<LocalTransform>>()
-                         .WithAll<MonsterTag>()
-                         .WithNone<MonsterDeadTag, MonsterBlockMovementTag>()
-                         .WithEntityAccess())
-            {
-                MonsterFlipData flipData = flip.ValueRO;
-                if (flipData.Changed)
-                {
-                    float angle = flipData.FacingRight ? 0 : 180;
-                    LocalTransform t = transform.ValueRW;
-                    t.Rotation = quaternion.RotateY(math.radians(angle));
-                    transform.ValueRW = t;
-                    
-                    flipData.Changed = false;
-                    flip.ValueRW = flipData;
-                    Debug.LogError("flip: " + flipData.FacingRight + ", entity: " + entity);
-                }
-            }
+            rad0 = math.radians(0);
+            rad180 = math.radians(180);
         }
 
         [BurstCompile]
+        public void OnUpdate(ref SystemState state)
+        {
+            state.Dependency = new FlipFacingJob
+            {
+                rad0 = rad0,
+                rad180 = rad180
+            }.Schedule(state.Dependency);
+        }
+
+        [BurstCompile]
+        [WithAll(typeof(MonsterTag))]
         [WithNone(typeof(MonsterDeadTag), typeof(MonsterBlockMovementTag))]
         partial struct FlipFacingJob : IJobEntity
         {
-            public void Execute(in Entity entity, in MonsterTag tag, [ReadOnly] in AgentBody body,
-                ref MonsterFlipData flip)
-            {
-                if (math.lengthsq(body.Velocity) < VELOCITY_FACING_CHANGED_THRESHOLD) return;
-               
-                bool facing = body.Velocity.x < 0;
-                if (flip.FacingRight != facing)
-                {
-                    flip.FacingRight = facing;
-                    flip.Changed = true;
-                }
+            public float rad0;
+            public float rad180;
+            
+            public void Execute(ref LocalTransform transform)
+            { 
+                float rad = transform.Position.x < 0 ? rad180 : rad0;
+                transform.Rotation = quaternion.RotateY(rad);
             }
         }
     }
