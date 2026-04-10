@@ -9,6 +9,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Action = System.Action;
 
 namespace _Games.Combat.Level
 {
@@ -37,21 +38,17 @@ namespace _Games.Combat.Level
         
         private void OnEnable()
         {
-            EventBus.Instance.Subscribe<OpenWeaponSelectPopupEvent>(OnWaveSelectWeapon);
             EventBus.Instance.Subscribe<WaveContinueEvent>(OnWaveContinue);
         } 
 
         private void OnDisable()
         {
-            EventBus.Instance.Unsubscribe<OpenWeaponSelectPopupEvent>(OnWaveSelectWeapon);
             EventBus.Instance.Unsubscribe<WaveContinueEvent>(OnWaveContinue);
         }
         
         private void OnWaveContinue(WaveContinueEvent e) => container.gameObject.SetActive(false);
 
-        private void OnWaveSelectWeapon(OpenWeaponSelectPopupEvent e) => container.gameObject.SetActive(true);
-
-         public async void Initialize(WeaponData weaponData, int level, Action pickEquipmentCallback)
+        public async void Initialize(WeaponData weaponData, int level, Action pickEquipmentCallback)
         {
             WeaponSO so = await KitLoaded.LoadAsync<WeaponSO>(weaponData.WeaponId.ToString());
 

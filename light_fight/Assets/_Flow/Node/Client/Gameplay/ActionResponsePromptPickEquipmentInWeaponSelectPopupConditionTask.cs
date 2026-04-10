@@ -27,7 +27,7 @@ public class ActionResponsePromptPickEquipmentInWeaponSelectPopupConditionTask :
             try
             {
                 Data data = JsonUtility.FromJson<Data>(response.value);
-                if (popup.FindWeaponButton(data.weaponId, out var rect))
+                if (popup.AIFindWeaponButton(data.weaponId, out var rect))
                 {
                     Vector2 from = UISimulator.GetScreenPointFromRect(rect);
                     Vector2 to = UISimulator.GetScreenPointFromWorldPosition(levelDesign.LoopPoints()[0]);

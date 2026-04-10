@@ -85,29 +85,12 @@ namespace _KIT.Resource
         {
             if (dictionary.TryGetValue(path, out var entry))
             {
-                Addressables.Release(entry.Handle);
                 dictionary.Remove(path);
+                Addressables.Release(entry.Handle);
 #if UNITY_EDITOR
                 Debug.Log($"[KitLoaded] Uncached asset: {path}");
 #endif
             }
-        }
-
-        /// <summary>
-        /// Release all cached assets safely.
-        /// </summary>
-        public static void ClearCache()
-        {
-            foreach (var kv in dictionary)
-            {
-                Addressables.Release(kv.Value.Handle);
-            }
-
-            dictionary.Clear();
-
-#if UNITY_EDITOR
-            Debug.Log("[KitLoaded] Cleared all cached assets.");
-#endif
         }
 
         /// <summary>

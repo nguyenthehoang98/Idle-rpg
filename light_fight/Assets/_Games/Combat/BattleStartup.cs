@@ -12,18 +12,22 @@ using _KIT.Checker;
 using _KIT.Config;
 using _KIT.Event;
 using _KIT.Pool;
+using _KIT.Popup;
 using _KIT.Resource;
 using _KIT.Utils;
+using MoreMountains.Feedbacks;
 using ProjectDawn.Custom;
 using Unity.Entities;
 using UnityEngine;
-using NotImplementedException = System.NotImplementedException;
 
 namespace _Games.Combat
 {
     public class BattleStartup : MonoBehaviour
     {
         [SerializeField] private Canvas canvas;
+        [Header("Feedbacks")]
+        [SerializeField] private MMF_Player zoomInCameraFeedback;
+        [SerializeField] private MMF_Player zoomOutCameraFeedback;
         
         private ShareData shareData;
         private SpawnLogic spawnLogic;
@@ -47,8 +51,10 @@ namespace _Games.Combat
             if(!foundLevelData) Debug.LogError("Not found level data with levelId: " + levelId);
             bool foundSpawnData = levelConfig.FindSpawn(levelId, out var dictionary);
             if(!foundSpawnData) Debug.LogError("Not found spawn data with levelId: " + levelId);
-            
-            EventBus.Instance.Publish(new OpenWeaponSelectPopupEvent());
+           
+            var popup = await PopupManager.Instance.Push<WeaponSelectPopup>();
+            popup.ClosedCallback += () => zoomOutCameraFeedback.PlayFeedbacks();
+            zoomInCameraFeedback.PlayFeedbacks();
             
             // todo: init level spawn
             GameObject go = await KitLoaded.LoadAsync<GameObject>(levelData.LevelDesign);
@@ -60,7 +66,6 @@ namespace _Games.Combat
             TextDamageSpawner.Instantiate(transform);
             RangedMonsterCastSkillManager.Instantiate(transform);
             GameTimeUI.Instantiate(canvas.transform);
-            WeaponSelectPopup.Instantiate(canvas.transform);
             
             // todo: register object
             shareData = new ShareData(dictionary, levelDesign);
@@ -117,11 +122,15 @@ namespace _Games.Combat
             }
             else
             {
-                this.WaitInvoke(1, () =>
+                async void Action()
                 {
                     EventBus.Instance.Publish(new WavePauseEvent());
-                    EventBus.Instance.Publish(new OpenWeaponSelectPopupEvent());
-                });                
+                    var popup = await PopupManager.Instance.Push<WeaponSelectPopup>();
+                    popup.ClosedCallback += () => zoomOutCameraFeedback.PlayFeedbacks();
+                    zoomInCameraFeedback.PlayFeedbacks();
+                }
+
+                this.WaitInvoke(1, Action);
             }
         }
 

@@ -6,70 +6,30 @@ using _Games.Config;
 using _Games.Utils;
 using _KIT.Config;
 using _KIT.Event;
-using _KIT.Resource;
-using _KIT.Utils;
-using MoreMountains.Feedbacks;
+using _KIT.Popup;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using OpenWeaponSelectPopupEvent = _Games.Combat.Event.OpenWeaponSelectPopupEvent;
 
 namespace _Games.Combat.View
 {
-    public partial class WeaponSelectPopup : MonoBehaviour
+    public partial class WeaponSelectPopup : PopupBase
     {
         [SerializeField] private WeaponItemView itemViewPrefab;
         [SerializeField] private RectTransform content;
         [SerializeField] private Object[] weapons;
-
-        [Header("Tween")] 
-        [SerializeField] private MMF_Player openFeedback;
-        [SerializeField] private MMF_Player closeFeedback;
-        
         [Header("Button")]
         [SerializeField] private Button btnResume;
         
         private readonly List<WeaponData> allData = new List<WeaponData>();       
         private readonly List<Data> currentWeapons = new List<Data>();
         
-        public IReadOnlyList<Data> CurrentWeapons() => currentWeapons;
-
-        public bool FindWeaponButton(int weaponId, out RectTransform rect)
-        {
-            foreach (var o in weapons)
-            {
-                if (o.WeaponItemView != null && o.WeaponItemView.WeaponData.WeaponId == weaponId)
-                {
-                    rect = o.WeaponItemView.GetComponent<RectTransform>();
-                    return true;
-                }
-            }
-            rect = null;
-            return false;
-        }
-        
-        public static async void Instantiate(Transform parent)
-        {
-            // Sau sửa lại vào base popup
-            GameObject go = await KitLoaded.LoadAsync<GameObject>("WeaponSelectPopup");
-            var instance = Instantiate(go, parent).GetComponent<WeaponSelectPopup>();
-            instance.Reload();
-            instance.OpenPopup(new OpenWeaponSelectPopupEvent());
-        }
-        
         private void Awake()
         {
-            btnResume.onClick.AddListener(() =>
-            {
-                EventBus.Instance.Publish(new CloseWeaponSelectPopupEvent());
-                Close(() =>
-                {
-                    EventBus.Instance.Publish(new WaveContinueEvent());                        
-                });
-            });
+            btnResume.onClick.AddListener(Close);
         }
 
-        public void Reload()
+        protected override void OnOpen()
         {
             WeaponConfig weaponConfig = KitConfigManager.Get<WeaponConfig>();
             int[] weaponIds = new int[] { 2001, 2002, 2003, 2010 };
@@ -78,35 +38,18 @@ namespace _Games.Combat.View
                 if(weaponConfig.Find(id, out WeaponData weaponData))
                     allData.Add(weaponData);
             }
-        }
-        
-        private void OnEnable()
-        {
-            EventBus.Instance.Subscribe<OpenWeaponSelectPopupEvent>(OpenPopup);
-        }
-
-        private void OnDisable()
-        {
-            EventBus.Instance.Unsubscribe<OpenWeaponSelectPopupEvent>(OpenPopup);
-        }
-        
-        private void OpenPopup(OpenWeaponSelectPopupEvent e)
-        {
+            
             // tính toán dữ liệu & fill vào data (weapons)
             currentWeapons.Clear();
             PickWeapon();
-            openFeedback.PlayFeedbacks();;
         }
 
-        private void Close(Action onClosed)
+        protected override void OnClosed()
         {
-            closeFeedback.PlayFeedbacks();
-            this.WaitInvoke(closeFeedback.TotalDuration, () =>
-            {
-                ReturnPool();
-                onClosed?.Invoke();
-                content.gameObject.SetActive(false);
-            });
+            base.OnClosed();
+            ReturnPool();
+            content.gameObject.SetActive(false);
+            EventBus.Instance.Publish(new WaveContinueEvent()); 
         }
         
         private void PickWeapon()
@@ -160,6 +103,22 @@ namespace _Games.Combat.View
                     weapons[i].WeaponItemView = null;
                 }
             }
+        }
+        
+        public IReadOnlyList<Data> AIGetCurrentWeapons() => currentWeapons;
+
+        public bool AIFindWeaponButton(int weaponId, out RectTransform rect)
+        {
+            foreach (var o in weapons)
+            {
+                if (o.WeaponItemView != null && o.WeaponItemView.WeaponData.WeaponId == weaponId)
+                {
+                    rect = o.WeaponItemView.GetComponent<RectTransform>();
+                    return true;
+                }
+            }
+            rect = null;
+            return false;
         }
     }
     

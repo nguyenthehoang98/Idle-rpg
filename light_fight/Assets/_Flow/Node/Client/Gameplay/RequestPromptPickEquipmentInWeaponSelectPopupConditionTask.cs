@@ -24,7 +24,7 @@ public class RequestPromptPickEquipmentInWeaponSelectPopupConditionTask : AbsReq
         if (popup != null)
         {
             StringBuilder sb = new StringBuilder();
-            foreach (var data in popup.CurrentWeapons())
+            foreach (var data in popup.AIGetCurrentWeapons())
             {
                 sb.AppendLine(JsonUtility.ToJson(data));
             }

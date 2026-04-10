@@ -665,6 +665,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccda1a0257054efb8eb3d7891db81e2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  openFeedback: {fileID: 4539474477903318517}
+  closeFeedback: {fileID: 7035387000291279121}
+  blockInput: {fileID: 2411918001748918511}
   itemViewPrefab: {fileID: 653987477836745896, guid: c8986b21ea1a9ce49825ecba2ffc7823, type: 3}
   content: {fileID: 5430559657678466198}
   weapons:
@@ -677,8 +680,6 @@ MonoBehaviour:
   - container: {fileID: 5697990493335503007}
     textTitle: {fileID: 5898398852021464252}
     textPrice: {fileID: 7823312071318001629}
-  openFeedback: {fileID: 4539474477903318517}
-  closeFeedback: {fileID: 7035387000291279121}
   btnResume: {fileID: 3716642180042844389}
 --- !u!1 &358411487571288896
 GameObject:
