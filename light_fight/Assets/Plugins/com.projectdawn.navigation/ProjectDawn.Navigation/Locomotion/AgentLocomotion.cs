@@ -9,6 +9,7 @@ namespace ProjectDawn.Navigation
     /// </summary>
     public struct AgentLocomotion : IComponentData
     {
+        public float BaseSpeed;
         /// <summary>
         /// Maximum movement speed when moving to destination.
         /// </summary>

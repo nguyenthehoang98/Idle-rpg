@@ -5,6 +5,7 @@ using ProjectDawn.Navigation;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
 
 namespace _Games.Combat.EntityComponentSystem.System
 {
@@ -13,6 +14,7 @@ namespace _Games.Combat.EntityComponentSystem.System
     public partial struct MonsterMeleeCastSkillSystem : ISystem
     {
         const float THRESHOLD = 1f;
+        private int tick;
 
         public void OnCreate(ref SystemState state)
         {
@@ -21,6 +23,7 @@ namespace _Games.Combat.EntityComponentSystem.System
 
         public void OnUpdate(ref SystemState state)
         {
+            tick++;
             state.Dependency = new CastSkillJob
             {
                 ElapsedTime = state.WorldUnmanaged.Time.ElapsedTime,

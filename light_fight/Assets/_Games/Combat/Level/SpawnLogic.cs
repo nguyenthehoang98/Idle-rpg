@@ -37,7 +37,6 @@ namespace _Games.Combat.Level
         private int currentWave = 1;
         private int currentBatch;
         private float waitTime;
-        private float elapsedTime;
         private float spawnTime;
         private bool paused = true;
         private bool waiting = false;
@@ -122,7 +121,6 @@ namespace _Games.Combat.Level
                 if (waitTime > 0) return;
                 
                 Batch batch = batches[currentBatch];
-                elapsedTime += dt;
                 spawnTime += dt;
 
                 while (spawnTime > batch.interval)
@@ -131,9 +129,8 @@ namespace _Games.Combat.Level
                         new Vector2(12, 22), new Vector2(14, 24), Vector2.zero
                     );
                     
-                    var keys = batch.monsters.Keys.ToList();
-                    int random = RandomUtils.Range(0, keys.Count);
-                    int monsterID = keys[random];
+                    int randomIndex = RandomUtils.Range(0, batch.monsters.Count);
+                    int monsterID = batch.monsters.ElementAt(randomIndex).Key;
                     await ECSFactory.BuildMonster(player, monsterID, shareData.RadiusBonus, position);
 
                     batch.monsters[monsterID]--;
@@ -141,12 +138,12 @@ namespace _Games.Combat.Level
                         batch.monsters.Remove(monsterID);
 
                     spawnTime -= batch.interval;
+                    batch.time -= batch.interval;
                 }
 
-                if (batch.monsters.Count == 0 || elapsedTime >= batch.duration)
+                if (batch.monsters.Count == 0 || batch.time <= 0)
                 {
                     currentBatch++;
-                    elapsedTime = waitTime = spawnTime = 0;
                     if (currentBatch < batches.Length) waitTime = batches[currentBatch].waitTime;
                 }
 
@@ -263,7 +260,7 @@ namespace _Games.Combat.Level
                     total += monster.Value;
                 result[i] = new Batch
                 {
-                    duration = batch.Duration,
+                    time = batch.Duration,
                     interval = batch.Duration / total,
                     monsters = monsters,
                     waitTime = batch.DelayTime
@@ -309,7 +306,7 @@ namespace _Games.Combat.Level
     {
         class Batch
         {
-            public float duration;
+            public float time;
             public float waitTime;
             public float interval;
             public Dictionary<int, int> monsters;

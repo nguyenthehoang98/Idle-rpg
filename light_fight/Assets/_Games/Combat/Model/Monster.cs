@@ -45,7 +45,7 @@ namespace _Games.Combat.Model
             cts = new CancellationTokenSource();
             try
             {
-                await UniTask.Delay(TimeSpan.FromSeconds(delayExecuteAttack), cancellationToken: cts.Token);
+                await UniTask.Delay(TimeSpan.FromSeconds(delayExecuteAttack / BattleTime.ScaleTime), cancellationToken: cts.Token);
                 OnAttack();
             }
             catch (OperationCanceledException)

@@ -110,7 +110,8 @@ namespace _Games.Combat.Model
             if (shouldPlayDeathAnimation)
             {
                 AnimancerState state = PlayAnimation(AnimationName.Death);
-                this.WaitInvoke(state.Duration - deathEffect.EarlyPlayTime, playEffectAction);
+                float duration = state.Duration - deathEffect.EarlyPlayTime;
+                this.WaitInvoke(duration / BattleTime.ScaleTime, playEffectAction);
             }
             else
             {
@@ -122,7 +123,12 @@ namespace _Games.Combat.Model
         {
             foreach (var data in clips)
             {
-                if (data.name == animationName) return animancerComponent.Play(data.transition);
+                if (data.name == animationName)
+                {
+                    AnimancerState state = animancerComponent.Play(data.transition);
+                    state.Speed = BattleTime.ScaleTime * data.transition.Speed;
+                    return state;
+                }
             }
 
             return null;
@@ -132,7 +138,8 @@ namespace _Games.Combat.Model
         {
             if (attackCoroutine != null) StopCoroutine(attackCoroutine);
             AnimancerState state = PlayAnimation(AnimationName.Attack);
-            attackCoroutine = this.WaitInvoke(state.Duration, () => PlayAnimation(AnimationName.Idle));
+            float duration = state.Duration;
+            attackCoroutine = this.WaitInvoke(duration / BattleTime.ScaleTime, () => PlayAnimation(AnimationName.Idle));
         }
 
         [Serializable]

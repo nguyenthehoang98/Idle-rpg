@@ -17,6 +17,7 @@ using _KIT.Resource;
 using _KIT.Utils;
 using MoreMountains.Feedbacks;
 using ProjectDawn.Custom;
+using Unity.Core;
 using Unity.Entities;
 using UnityEngine;
 
@@ -33,16 +34,17 @@ namespace _Games.Combat
         private SpawnLogic spawnLogic;
         private LevelDesign levelDesign;
         private EquipmentManager equipmentManager;
-        private float battleScaleTime;
-        private bool isRunning = false;
         
         private async void Start()
         {
-            var group = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<CustomSimulationGroup>();
+            // todo: init time
+            CustomSimulationGroup group = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<CustomSimulationGroup>();
             group.Iterations = KitEntryScene.Instance.GamePlayIterationsUpdate;
-            group.TimeStep = 1f / KitEntryScene.Instance.GameplayFrameRate;
-            battleScaleTime = KitEntryScene.Instance.GameplayScaleTime;
-            group.TimeScale = 0;
+            BattleTime.DeltaTime = group.TimeStep = 1f / KitEntryScene.Instance.GameplayFrameRate;
+            BattleTime.ScaleTime = group.TimeScale = KitEntryScene.Instance.GameplayScaleTime;
+            BattleTime.Time = 0;
+            World.DefaultGameObjectInjectionWorld.Time = new TimeData(0, 0);
+            Pause();
 
             // todo: validate data
             int levelId = 1;
@@ -99,11 +101,10 @@ namespace _Games.Combat
 
         private void OnWaveLose(WaveLoseEvent e)
         {
-            if(isRunning)
+            if(BattleTime.IsRunning)
             {
                 PopupManager.Instance.Push<LosePopup>();
-                
-                isRunning = false;
+                Pause();
                 EventBus.Instance.Publish(new WavePauseEvent());
                 
                 MonsterAuthoring[] monsters = GameObject.FindObjectsByType<MonsterAuthoring>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
@@ -142,16 +143,14 @@ namespace _Games.Combat
 
         private void Resume()
         {
-            isRunning = true;
-            var group = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<CustomSimulationGroup>();
-            group.TimeScale = battleScaleTime;
+            BattleTime.IsRunning = true;
+            World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<CustomSimulationGroup>().TimeScale = BattleTime.ScaleTime;
         }
 
         private void Pause()
         { 
-            isRunning = false;
-            var group = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<CustomSimulationGroup>();
-            group.TimeScale = 0;
+            BattleTime.IsRunning = false;
+            World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<CustomSimulationGroup>().TimeScale = 0;
         }
 
         private async void OnWaveContinue(WaveContinueEvent e)
@@ -178,10 +177,11 @@ namespace _Games.Combat
         
         private void Update()
         {
-            if (!isRunning)
+            if (!BattleTime.IsRunning)
                 return;
             
-            float deltaTime = Time.deltaTime * battleScaleTime;
+            float deltaTime = Time.deltaTime * BattleTime.ScaleTime;
+            BattleTime.Time += deltaTime;
             spawnLogic.Update(deltaTime);
             equipmentManager.Update();
         }

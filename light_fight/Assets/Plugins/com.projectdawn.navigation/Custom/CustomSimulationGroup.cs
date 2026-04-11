@@ -1,41 +1,42 @@
 ﻿using Unity.Core;
 using Unity.Entities;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace ProjectDawn.Custom
 {
     public partial class CustomSimulationGroup : SimulationSystemGroup
     {
-        public float Iterations = 1;
-        public float TimeScale = 1;
-        public float TimeStep = 0.0166667f;
-        
+        public float Iterations { get; set; } = 1;
+        public float TimeScale { get; set; } = 1;
+        public float TimeStep { get; set; } = 0.0166667f;
+
+        private float elapsedTime;
         private float accumulator;
 
         protected override void OnUpdate()
         {
-            float timeScale = TimeScale;
-            var timeStep = TimeStep;
-            var iterations = Iterations;
-            TimeData worldTime = World.Time;
-            TimeData scaledTime = new TimeData(
-                worldTime.ElapsedTime,
-                worldTime.DeltaTime * timeScale
-            );
-            World.Time = scaledTime;
-            
-            float dt = World.Time.DeltaTime;
-            accumulator += dt * iterations;
+            float timeStep = TimeStep;
+
+            float f1 = timeStep * TimeScale;
+            float f2 = f1 * Iterations;
+            accumulator += f2;
+
             int maxSteps = 20;
             int step = 0;
             while (accumulator >= timeStep && step < maxSteps)
             {
                 base.OnUpdate();
                 accumulator -= timeStep;
+                elapsedTime += timeStep;
                 step++;
             }
             
+            TimeData worldTime = new TimeData(
+                elapsedTime, f1
+            );
             World.Time = worldTime;
+
             accumulator = math.min(accumulator, timeStep * maxSteps);
         }
     }
