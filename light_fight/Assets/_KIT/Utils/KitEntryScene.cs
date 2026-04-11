@@ -107,7 +107,16 @@ namespace _KIT.Utils
             };
         }
 
-        public virtual void CloseLoadingScene()
+        public void LoadScene(string sceneName)
+        {
+            SceneManager.LoadScene(sceneName);
+        }
+
+        public virtual void HideLoadingScene()
+        {
+        }
+
+        public virtual void ShowLoadingScene()
         {
         }
     }

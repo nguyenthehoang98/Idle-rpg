@@ -339,7 +339,7 @@ MonoBehaviour:
   gamePlayIterationsUpdate: 1
   gameplayScaleTime: 3
   gameplayFrameRate: 45
-  container: {fileID: 64959147}
+  loadingScene: {fileID: 64959147}
 --- !u!1 &747405619
 GameObject:
   m_ObjectHideFlags: 0
@@ -422,7 +422,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 50
   m_TargetDisplay: 0
 --- !u!224 &747405623
 RectTransform:

@@ -1,6 +1,7 @@
 using _KIT.Config;
 using _KIT.Utils;
 using UnityEngine;
+using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor.SceneManagement;
 using UnityEditor;
@@ -13,7 +14,7 @@ namespace _Games.Entry
         private float elapsed = 1;
         private bool isLoadingScene = false;
         
-        [SerializeField] private GameObject container;
+        [SerializeField] private GameObject loadingScene;
         
         protected override void OnNewGame()
         {
@@ -53,11 +54,19 @@ namespace _Games.Entry
             }
         }
 
-        public override void CloseLoadingScene()
+        public override void HideLoadingScene()
         {
-            if (container != null && container.activeInHierarchy)
+            if (loadingScene != null && loadingScene.activeInHierarchy)
             {
-                container.gameObject.SetActive(false);
+                loadingScene.gameObject.SetActive(false);
+            }
+        }
+
+        public override void ShowLoadingScene()
+        {
+            if (loadingScene != null && loadingScene.activeInHierarchy)
+            {
+                loadingScene.gameObject.SetActive(true);
             }
         }
 

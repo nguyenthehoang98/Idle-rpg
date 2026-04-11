@@ -55,7 +55,12 @@ namespace _KIT.Popup
             return count;
         }
 
-        public async UniTask<T> Push<T>(bool destroyOnLoadScene = true) where T : PopupBase
+        public async void Push<T>(bool destroyOnLoadScene = true) where T : PopupBase
+        {
+            await PushAsync<T>(destroyOnLoadScene);
+        }
+
+        public async UniTask<T> PushAsync<T>(bool destroyOnLoadScene = true) where T : PopupBase
         {
             if (TryGetPopup(out T popup))
             {

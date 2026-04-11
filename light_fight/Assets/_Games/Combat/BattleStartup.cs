@@ -52,7 +52,7 @@ namespace _Games.Combat
             bool foundSpawnData = levelConfig.FindSpawn(levelId, out var dictionary);
             if(!foundSpawnData) Debug.LogError("Not found spawn data with levelId: " + levelId);
            
-            var popup = await PopupManager.Instance.Push<WeaponSelectPopup>();
+            var popup = await PopupManager.Instance.PushAsync<WeaponSelectPopup>();
             popup.ClosedCallback += () => zoomOutCameraFeedback.PlayFeedbacks();
             zoomInCameraFeedback.PlayFeedbacks();
             
@@ -74,7 +74,7 @@ namespace _Games.Combat
             levelDesign.OnTriggerWeapon += equipmentManager.Trigger;
             
             // todo: close loading scene
-            KitEntryScene.Instance.CloseLoadingScene();
+            KitEntryScene.Instance.HideLoadingScene();
 #if DEVELOP_MODE
             gameObject.AddComponent<CpuFrame>();
 #endif
@@ -101,7 +101,8 @@ namespace _Games.Combat
         {
             if(isRunning)
             {
-                Debug.LogError("lose game");
+                PopupManager.Instance.Push<LosePopup>();
+                
                 isRunning = false;
                 EventBus.Instance.Publish(new WavePauseEvent());
                 
@@ -125,7 +126,7 @@ namespace _Games.Combat
                 async void Action()
                 {
                     EventBus.Instance.Publish(new WavePauseEvent());
-                    var popup = await PopupManager.Instance.Push<WeaponSelectPopup>();
+                    var popup = await PopupManager.Instance.PushAsync<WeaponSelectPopup>();
                     popup.ClosedCallback += () => zoomOutCameraFeedback.PlayFeedbacks();
                     zoomInCameraFeedback.PlayFeedbacks();
                 }
