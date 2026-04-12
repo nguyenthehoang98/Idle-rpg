@@ -603,11 +603,13 @@ namespace NodeCanvas.Framework
                 MonoManager.current.RemoveUpdateCall((MonoManager.UpdateMode)updateMode, UpdateGraph);
             }
 
+            bool end = parentGraph == null;
             for ( var i = 0; i < allNodes.Count; i++ ) {
                 var node = allNodes[i];
                 //try stop subgraphs first
                 if ( node is IGraphAssignable ) { ( node as IGraphAssignable ).TryStopSubGraph(); }
-                node.Stop();
+                if(end) node.Stop();
+                else node.Reset(false);
                 node.OnGraphStoped();
             }
 

@@ -314,12 +314,21 @@ namespace NodeCanvas.Framework
             isChecked = false;
         }
 
-        public void Stop()
-        {
+        ///<summary>Recursively reset the node and child nodes if it's not Resting already</summary>
+        public void Stop(bool recursively = true) {
+
             if ( status == Status.Resting || isChecked ) {
                 return;
             }
+
+            //OnReset();
+            //status = Status.Resting;
+
             isChecked = true;
+            for ( var i = 0; i < outConnections.Count; i++ ) {
+                //outConnections[i].Reset(recursively);
+            }
+            isChecked = false;
         }
 
         ///----------------------------------------------------------------------------------------------
