@@ -15,7 +15,7 @@ namespace _Games.Combat.View
             {
                 Close();
                 KitEntryScene.Instance.ShowLoadingScene();
-                KitEntryScene.Instance.LoadScene("GameplayScene");
+                KitEntryScene.Instance.LoadScene("HomeScene");
             });
         }
     }

@@ -36,7 +36,7 @@ namespace _Games.Entry
                 "WeaponConfig",
             });
 
-            ChangeSceneAsync("GameplayScene");
+            ChangeSceneAsync("HomeScene");
             
             isLoadingScene = true;
         }

@@ -57,7 +57,7 @@ namespace _Games.Combat.Level
             WeaponData = weaponData;
 
             imgIcon.sprite = so.GetIcon(level);
-            textLevel.SetText(level.ToString());
+            textLevel.text = level.ToString();
         }
 
         public override void OnDrag(PointerEventData eventData)

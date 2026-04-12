@@ -7,6 +7,7 @@ using _Games.Utils;
 using _KIT.Config;
 using _KIT.Event;
 using _KIT.Popup;
+using _KIT.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,7 +42,8 @@ namespace _Games.Combat.View
             
             // tính toán dữ liệu & fill vào data (weapons)
             currentWeapons.Clear();
-            PickWeapon();
+            
+            this.WaitNextFrame(PickWeapon);
         }
 
         protected override void OnClosed()
@@ -66,8 +68,8 @@ namespace _Games.Combat.View
                 int price = weaponData.Price(level);
                 int power = FormulaUtils.PowerWeapon(weaponData, skillData, level);
                 Object @object = weapons[i];
-                @object.textPrice.SetText("X" + weaponData.Price(level));
-                @object.textTitle.SetText(weaponData.WeaponName);
+                @object.textPrice.text = "X" + weaponData.Price(level);
+                @object.textTitle.text = weaponData.WeaponName;
                 
                 currentWeapons.Add(new Data
                 {
@@ -87,8 +89,8 @@ namespace _Games.Combat.View
                 
                 @object.WeaponItemView.Initialize(weaponData, level, () =>
                 {
-                    @object.textPrice.SetText(String.Empty);
-                    @object.textTitle.SetText(String.Empty);
+                    @object.textPrice.text = String.Empty;
+                    @object.textTitle.text = String.Empty;
                 });
             }
         }

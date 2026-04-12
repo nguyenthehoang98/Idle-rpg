@@ -22,7 +22,7 @@ namespace _Games.Combat.View
             this.WhileInvoke(0.5f, () =>
             {
                 string engineTime = TimeUtils.FormatSecondAsTime_HHMMSS((int)world.Time.ElapsedTime);
-                textTime.SetText(engineTime);
+                textTime.text = engineTime;
             });
         }
     }

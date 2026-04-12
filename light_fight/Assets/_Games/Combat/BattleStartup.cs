@@ -1,3 +1,4 @@
+using System;
 using _Games.Combat.EntityComponentSystem;
 using _Games.Combat.EntityComponentSystem.Model;
 using _Games.Combat.Equipment;
@@ -38,6 +39,7 @@ namespace _Games.Combat
         private async void Start()
         {
             // todo: init time
+            Debug.LogError(World.DefaultGameObjectInjectionWorld.IsCreated);
             CustomSimulationGroup group = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<CustomSimulationGroup>();
             group.Iterations = KitEntryScene.Instance.GamePlayIterationsUpdate;
             BattleTime.DeltaTime = group.TimeStep = 1f / KitEntryScene.Instance.GameplayFrameRate;
@@ -68,6 +70,9 @@ namespace _Games.Combat
             TextDamageSpawner.Instantiate(transform);
             RangedMonsterCastSkillManager.Instantiate(transform);
             GameTimeUI.Instantiate(canvas.transform);
+            GameObject rmcsm = new GameObject("RangedMonsterCastSkillManager");
+            rmcsm.AddComponent<RangedMonsterCastSkillManager>();
+            rmcsm.transform.SetParent(transform);
             
             // todo: register object
             shareData = new ShareData(dictionary, levelDesign);
@@ -76,7 +81,6 @@ namespace _Games.Combat
             levelDesign.OnTriggerWeapon += equipmentManager.Trigger;
             
             // todo: close loading scene
-            KitEntryScene.Instance.HideLoadingScene();
 #if DEVELOP_MODE
             gameObject.AddComponent<CpuFrame>();
 #endif
@@ -184,6 +188,11 @@ namespace _Games.Combat
             BattleTime.Time += deltaTime;
             spawnLogic.Update(deltaTime);
             equipmentManager.Update();
+        }
+
+        private void OnDestroy()
+        {
+            World.DefaultGameObjectInjectionWorld.Dispose();
         }
     }
 }
