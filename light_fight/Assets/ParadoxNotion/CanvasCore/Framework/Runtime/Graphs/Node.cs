@@ -314,6 +314,14 @@ namespace NodeCanvas.Framework
             isChecked = false;
         }
 
+        public void Stop()
+        {
+            if ( status == Status.Resting || isChecked ) {
+                return;
+            }
+            isChecked = true;
+        }
+
         ///----------------------------------------------------------------------------------------------
 
         ///<summary>Helper for breakpoints</summary>

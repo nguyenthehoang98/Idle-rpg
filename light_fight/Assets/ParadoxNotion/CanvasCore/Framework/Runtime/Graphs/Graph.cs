@@ -607,7 +607,7 @@ namespace NodeCanvas.Framework
                 var node = allNodes[i];
                 //try stop subgraphs first
                 if ( node is IGraphAssignable ) { ( node as IGraphAssignable ).TryStopSubGraph(); }
-                node.Reset(false);
+                node.Stop();
                 node.OnGraphStoped();
             }
 

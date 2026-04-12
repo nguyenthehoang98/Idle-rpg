@@ -57,7 +57,7 @@ namespace NodeCanvas.BehaviourTrees
                 case RepeaterMode.RepeatTimes:
 
                     if ( currentIteration >= repeatTimes.value ) {
-                        return status;
+                        return Status.Success;
                     }
 
                     currentIteration++;

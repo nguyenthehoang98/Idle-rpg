@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using NodeCanvas.Framework;
 using ParadoxNotion.Design;
@@ -17,8 +18,10 @@ public abstract class AbsRequestConditionTask : ConditionTask
     protected override void OnEnable()
     {
         base.OnEnable();
+        hasSent = false;
         startTriggerTime = Time.time;
         result.value = false;
+        if(coroutine != null) StopCoroutine(coroutine);
         coroutine = StartCoroutine(SendRequest());
     }
 
@@ -26,6 +29,7 @@ public abstract class AbsRequestConditionTask : ConditionTask
     {
         base.OnDisable();
         if(coroutine != null) StopCoroutine(coroutine);
+        hasSent = false;
     }
     
     protected override bool OnCheck()
