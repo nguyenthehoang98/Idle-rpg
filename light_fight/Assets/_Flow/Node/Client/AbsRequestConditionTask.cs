@@ -21,22 +21,32 @@ public abstract class AbsRequestConditionTask : ConditionTask
         hasSent = false;
         startTriggerTime = Time.time;
         result.value = false;
-        if(coroutine != null) StopCoroutine(coroutine);
+        Reset();
         coroutine = StartCoroutine(SendRequest());
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
-        if(coroutine != null) StopCoroutine(coroutine);
         hasSent = false;
     }
-    
+
+    void Reset()
+    {
+        if(coroutine != null) StopCoroutine(coroutine);
+    }
+
     protected override bool OnCheck()
     {
-        if (hasSent) return true;
+        if (hasSent)
+        {
+            Reset();
+            return true;
+        }
+
         if (startTriggerTime + timeout.value < Time.time)
         {
+            Reset();
             return true;
         }
 

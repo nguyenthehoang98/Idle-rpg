@@ -578,7 +578,9 @@ namespace NodeCanvas.Framework
             OnGraphStarted();
 
             for ( var i = 0; i < allNodes.Count; i++ ) {
-                allNodes[i].OnGraphStarted();
+                var node = allNodes[i];
+                node.Reset();
+                node.OnGraphStarted();
             }
 
             for ( var i = 0; i < allNodes.Count; i++ ) {
@@ -603,13 +605,11 @@ namespace NodeCanvas.Framework
                 MonoManager.current.RemoveUpdateCall((MonoManager.UpdateMode)updateMode, UpdateGraph);
             }
 
-            bool end = parentGraph == null;
             for ( var i = 0; i < allNodes.Count; i++ ) {
                 var node = allNodes[i];
                 //try stop subgraphs first
                 if ( node is IGraphAssignable ) { ( node as IGraphAssignable ).TryStopSubGraph(); }
-                if(end) node.Stop();
-                else node.Reset(false);
+                node.Stop();
                 node.OnGraphStoped();
             }
 
