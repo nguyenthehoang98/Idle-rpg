@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using _Games.Combat.EntityComponentSystem;
 using _Games.Combat.EntityComponentSystem.Model;
 using _Games.Combat.Equipment;
@@ -38,8 +39,8 @@ namespace _Games.Combat
         
         private async void Start()
         {
-            // todo: init time
-            Debug.LogError(World.DefaultGameObjectInjectionWorld.IsCreated);
+            // todo: init world
+            DefaultWorldInitialization.Initialize("GameWorld", false);
             CustomSimulationGroup group = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<CustomSimulationGroup>();
             group.Iterations = KitEntryScene.Instance.GamePlayIterationsUpdate;
             BattleTime.DeltaTime = group.TimeStep = 1f / KitEntryScene.Instance.GameplayFrameRate;
@@ -192,7 +193,7 @@ namespace _Games.Combat
 
         private void OnDestroy()
         {
-            World.DefaultGameObjectInjectionWorld.Dispose();
+            if(World.DefaultGameObjectInjectionWorld != null) World.DefaultGameObjectInjectionWorld.Dispose();
         }
     }
 }
