@@ -30,4 +30,6 @@ public class WaitClickButtonConditionTask : AbsRequestConditionTask
             }
         }
     }
+
+    protected override string info => $"click button '{buttonTitleText}'";
 }

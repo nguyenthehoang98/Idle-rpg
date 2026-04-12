@@ -103,6 +103,17 @@ namespace _Games.Entry
 
             EditorSceneManager.OpenScene("Assets/Scenes/GamePlayScene.unity");
         }
+
+        [MenuItem("Tools/Scenes/Automatic Scene %4")]
+        private static void LoadAutomaticScene()
+        {
+            if (EditorApplication.isPlaying)
+            {
+                return;
+            }
+
+            EditorSceneManager.OpenScene("Assets/Scenes/AutomaticScene.unity");
+        }
 #endif 
     }
 }
