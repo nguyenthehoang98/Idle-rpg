@@ -16,7 +16,7 @@ MonoBehaviour:
   m_GUID: 76d65641e328c7b4283cc48663488ed5
   m_SerializeEntries:
   - m_GUID: 132d4d65777c454448c174f201e9fae1
-    m_Address: Unit Goose
+    m_Address: monster_10000
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -91,7 +91,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9c8a4ee2d729d7e4aaa7714da3b17cd1
-    m_Address: Unit Cowboy
+    m_Address: monster_10010
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -117,6 +117,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: de16f2d80ad248f47b20a374769a0357
     m_Address: SkillConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed44ce3b61f78ed40aa254c8fb7f87db
+    m_Address: weapon_item_2001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

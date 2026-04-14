@@ -60,7 +60,7 @@ GameObject:
   - component: {fileID: 5499414122142379415}
   - component: {fileID: 4986759943751735561}
   m_Layer: 11
-  m_Name: Unit Goose
+  m_Name: 10000 Goose
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1,29 +1,23 @@
 using UnityEngine;
-using System;
 namespace _Games.Config
 {
     [CreateAssetMenu(menuName = "Weapon SO")]
     public class WeaponSO : ScriptableObject
     {
-        [SerializeField] private Data[] datas;
+        [SerializeField] private Sprite iconLevel1, iconLevel2, iconLevel3, iconLevel4, iconLevel5;
 
         public Sprite GetIcon(int level)
         {
-            for (int i = 0; i < datas.Length; i++)
+            switch (level)
             {
-                Data data = datas[i];
-                if (data.levelRange.x <= level && data.levelRange.y > level)
-                    return data.icon;
+                case 1: return iconLevel1;
+                case 2: return iconLevel2;
+                case 3: return iconLevel3;
+                case 4: return iconLevel4;
+                case 5: return iconLevel5;
             }
 
             return null;
-        }
-
-        [Serializable]
-        struct Data
-        {
-            public Sprite icon;
-            public Vector2Int levelRange;
         }
     }
 }

@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebe52c4b46a64ce4ca240ce2b78ff667, type: 3}
   m_Name: weapon_so_2003
   m_EditorClassIdentifier: 
-  datas:
-  - icon: {fileID: 21300000, guid: 4d19561b3730c9748afc120be7504eff, type: 3}
-    levelRange: {x: 0, y: 5}
+  iconLevel1: {fileID: 21300000, guid: 11d11127b0c66b543a93d923cc96c046, type: 3}
+  iconLevel2: {fileID: 21300000, guid: 11d11127b0c66b543a93d923cc96c046, type: 3}
+  iconLevel3: {fileID: 21300000, guid: 11d11127b0c66b543a93d923cc96c046, type: 3}
+  iconLevel4: {fileID: 21300000, guid: 11d11127b0c66b543a93d923cc96c046, type: 3}
+  iconLevel5: {fileID: 21300000, guid: 11d11127b0c66b543a93d923cc96c046, type: 3}
