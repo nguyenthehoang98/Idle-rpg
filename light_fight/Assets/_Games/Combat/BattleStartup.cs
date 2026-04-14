@@ -188,7 +188,6 @@ namespace _Games.Combat
             float deltaTime = Time.deltaTime * BattleTime.ScaleTime;
             BattleTime.Time += deltaTime;
             spawnLogic.Update(deltaTime);
-            equipmentManager.Update();
         }
 
         private void OnDestroy()

@@ -18,7 +18,7 @@ namespace _Games.Combat.View
 {
     public partial class WeaponSelectPopup : PopupBase
     {
-        [SerializeField] private WeaponItemView itemViewPrefab;
+        [FormerlySerializedAs("itemViewPrefab")] [SerializeField] private UIWeaponItemDragDrop itemDragDropPrefab;
         [SerializeField] private RectTransform content;
         [SerializeField] private Object[] weapons;
         [Header("Button")]
@@ -32,7 +32,7 @@ namespace _Games.Combat.View
         {
             if (registerPrefab)
             {
-                KitPool.RegisterPool(itemViewPrefab.gameObject, true);
+                KitPool.RegisterPool(itemDragDropPrefab.gameObject, true);
                 registerPrefab = true;
             }
             btnResume.onClick.AddListener(Close);
@@ -87,15 +87,15 @@ namespace _Games.Combat.View
                     power = power,
                 });
 
-                if (@object.WeaponItemView == null)
+                if (@object.UIWeaponItemDragDrop == null)
                 {
-                    var instance = KitPool.Instantiate(itemViewPrefab, @object.container);
+                    var instance = KitPool.Instantiate(itemDragDropPrefab, @object.container);
                     instance.transform.SetAsFirstSibling();
                     instance.GetComponent<RectTransform>().anchoredPosition3D = Vector3.zero;
-                    @object.WeaponItemView = instance;
+                    @object.UIWeaponItemDragDrop = instance;
                 }
                 
-                @object.WeaponItemView.Initialize(weaponData, level, () =>
+                @object.UIWeaponItemDragDrop.Initialize(weaponData, level, () =>
                 {
                     @object.textPrice.text = String.Empty;
                     @object.textTitle.text = String.Empty;
@@ -108,9 +108,9 @@ namespace _Games.Combat.View
             for (int i = 0; i < weapons.Length; i++)
             {
                 var eqm = weapons[i];
-                if (eqm.WeaponItemView == null || eqm.WeaponItemView.transform.parent != eqm.container)
+                if (eqm.UIWeaponItemDragDrop == null || eqm.UIWeaponItemDragDrop.transform.parent != eqm.container)
                 {
-                    weapons[i].WeaponItemView = null;
+                    weapons[i].UIWeaponItemDragDrop = null;
                 }
             }
         }
@@ -121,9 +121,9 @@ namespace _Games.Combat.View
         {
             foreach (var o in weapons)
             {
-                if (o.WeaponItemView != null && o.WeaponItemView.WeaponData.WeaponId == weaponId)
+                if (o.UIWeaponItemDragDrop != null && o.UIWeaponItemDragDrop.IsEqual(weaponId))
                 {
-                    rect = o.WeaponItemView.GetComponent<RectTransform>();
+                    rect = o.UIWeaponItemDragDrop.GetComponent<RectTransform>();
                     return true;
                 }
             }
@@ -140,7 +140,7 @@ namespace _Games.Combat.View
             public Transform container;
             public TextMeshProUGUI textTitle;
             public TextMeshProUGUI textPrice;
-            public WeaponItemView WeaponItemView { get; set; }
+            public UIWeaponItemDragDrop UIWeaponItemDragDrop { get; set; }
             public int Price { get; set; }
         }
         

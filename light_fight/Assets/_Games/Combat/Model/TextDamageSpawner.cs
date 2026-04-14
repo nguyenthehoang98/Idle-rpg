@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using _Games.Combat.Event;
+using _Games.Utils;
 using _KIT.Event;
 using _KIT.Resource;
 using MoreMountains.Feedbacks;
@@ -14,7 +15,7 @@ namespace _Games.Combat.Model
 
         public static async void Instantiate(Transform parent)
         {
-            GameObject go = await KitLoaded.LoadAsync<GameObject>("TextDamageSpawner");
+            GameObject go = await KitLoaded.LoadAsync<GameObject>(GlobalsPath.TextDamageSpawner);
             Instantiate(go, parent).GetComponent<TextDamageSpawner>();
         }
         

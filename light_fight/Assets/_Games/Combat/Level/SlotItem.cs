@@ -1,26 +1,22 @@
+using System;
+using _Games.Combat.Equipment;
 using _Games.Config;
 using MoreMountains.Feedbacks;
 using PrimeTween;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace _Games.Combat.Level
 {
     public class SlotItem : MonoBehaviour
     {
-        [Header("Setting")] 
-        [SerializeField] private SortingGroup sortingGroup;
         [SerializeField] private Transform parent;
         [Header("Feel")] 
         [SerializeField] private MMF_Player equipFeedback;
-        [Header("Sprite")]
-        [SerializeField] private SpriteRenderer border;
-        [SerializeField] private SpriteRenderer body;
+        [SerializeField] private MMF_Player triggerFeedback;
+        [SerializeField] private MMF_Player untriggerFeedback;
 
-        private Color originalBorderColor = new Color(51f / 255f, 51f / 255f, 51f / 255f, 128f / 255f);
-        private Color highlightBorderColor = new Color(1f, 1f, 0f, 200f / 255f);
-        private Tween tween;
+        private Tween rotationTween;
 
         public WeaponData WeaponData { get; private set; }
         public int WeaponLevel {get; private set;}
@@ -35,28 +31,16 @@ namespace _Games.Combat.Level
             WeaponLevel = weaponLevel; 
             equipFeedback.PlayFeedbacks();
             Item = await WeaponItem.Build(parent, weaponData, weaponLevel);
+            Debug.Log(@"Bắn 1 cái vfx hình vuông ở item");
         }
 
-        // Game ko cho unequip
-        public void UnEquip()
-        {
-            body.color = Color.gray;
-            if (Item != null)
-            {
-                Object.Destroy(Item.gameObject);
-                Item = null;
-            }
-        }
+        public void Trigger() => triggerFeedback.PlayFeedbacks();
 
-        public void SetSortingOrder(int order) => sortingGroup.sortingOrder = order;
-
-        public void Trigger() => border.color = highlightBorderColor;
-
-        public void UnTrigger() => border.color = originalBorderColor;
+        public void UnTrigger() => untriggerFeedback.PlayFeedbacks();
 
         public void Reset()
         {
-            tween.Stop();
+            rotationTween.Stop();
             UnTrigger();
 
             // reset về idle
@@ -68,11 +52,11 @@ namespace _Games.Combat.Level
             }
         }
 
-        public void Rotation(float rad, float time)
+        public void Rotation(float rad, float time, Action onComplete)
         {
-            tween.Stop();
+            rotationTween.Stop();
             Transform target = Item.transform;
-            tween = Tween.LocalRotation(target, quaternion.Euler(0, 0, rad), time)
+            rotationTween = Tween.LocalRotation(target, quaternion.Euler(0, 0, rad), time)
                 .OnUpdate(target, (trans, t) =>
                 {
                     float currentAngle = trans.localEulerAngles.z;
@@ -80,6 +64,10 @@ namespace _Games.Combat.Level
                         currentAngle -= 360;
                     bool needFlip = currentAngle > 90 || currentAngle < -90;
                     target.localScale = new Vector3(1, needFlip ? -1 : 1, 1);
+                })
+                .OnComplete(() =>
+                {
+                    Item.Execute(onComplete);
                 });
         }
     }

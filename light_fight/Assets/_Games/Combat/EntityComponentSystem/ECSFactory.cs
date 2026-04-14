@@ -7,6 +7,7 @@ using _Games.Combat.Model;
 using _Games.Combat.SkillSystem.Config;
 using _Games.Combat.SkillSystem.Model;
 using _Games.Config;
+using _Games.Utils;
 using _KIT.Config;
 using _KIT.Pool;
 using _KIT.Resource;
@@ -51,11 +52,12 @@ namespace _Games.Combat.EntityComponentSystem
             if(!foundMonsterData) Debug.LogError("Not found monster data: " + monsterID);
 #endif
             if (!foundMonsterData) return;
-            
-            GameObject go = await KitLoaded.LoadAsync<GameObject>(monsterData.MonsterObjectId);
+
+            string path = GlobalsPath.GetMonsterPath(monsterData.MonsterId);
+            GameObject go = await KitLoaded.LoadAsync<GameObject>(path);
             MonsterAuthoring authoringPrefab = go.GetComponent<MonsterAuthoring>();
 #if !TEST_MODE
-            if (monstersPath.Add(monsterData.MonsterObjectId))
+            if (monstersPath.Add(path))
             {
                 KitPool.RegisterPool(go, true);
             }
@@ -90,7 +92,7 @@ namespace _Games.Combat.EntityComponentSystem
                     monsterData.SkillId, monsterData.SkillLevel, monsterConfig, skillConfig, authoringPrefab.DelayExecuteAttack);
             }
 
-            if (monster == null) Debug.LogError("Monster undefined " + monsterData.MonsterObjectId);
+            if (monster == null) Debug.LogError("Monster undefined " + monsterData.MonsterId);
             
             float radius = authoringPrefab.Radius;
             DynamicBuffer<CircleBuffer> circleBuffers = manager.AddBuffer<CircleBuffer>(entity);

@@ -61,7 +61,6 @@ namespace _Games.Config
 
         public int MonsterId => monsterId;
         public string MonsterName => monsterName;
-        public string MonsterObjectId => monsterObjectId;
         public bool IsRanged => isRanged == 1;
         public int SkillId => skillId;
         public int SkillLevel => skillLevel;

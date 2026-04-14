@@ -91,9 +91,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 726015bbb9aa40f68a23e60e1849ca2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  btnInfo: {fileID: 6294014112528772238}
+  anchoredPositionOffset: {x: 0, y: 70}
   imgIcon: {fileID: 4112492168303252707}
-  container: {fileID: 199682707359079274}
   textLevel: {fileID: 6186483776190274427}
 --- !u!114 &6294014112528772238
 MonoBehaviour:
@@ -227,7 +226,7 @@ GameObject:
   - component: {fileID: 1286903100000370148}
   - component: {fileID: 6186483776190274427}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: level_text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

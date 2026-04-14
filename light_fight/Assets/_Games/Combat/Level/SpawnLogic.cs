@@ -80,7 +80,8 @@ namespace _Games.Combat.Level
             foreach (var monster in monsters)
             {
                 monsterConfig.Find(monster, out var monsterData);
-                await KitLoaded.LoadAsync<GameObject>(monsterData.MonsterObjectId, true);
+                string path = GlobalsPath.GetMonsterPath(monsterData.MonsterId);
+                await KitLoaded.LoadAsync<GameObject>(path, true);
                 if (!monsterData.IsRanged) continue;
                 skillConfig.Find(monsterData.SkillId, out var skillData);
                 Skill skill = await SkillFactory.CreateSkill(skillData);

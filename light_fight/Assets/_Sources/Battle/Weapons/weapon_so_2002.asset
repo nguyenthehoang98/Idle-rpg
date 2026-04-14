@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ebe52c4b46a64ce4ca240ce2b78ff667, type: 3}
-  m_Name: Weapon_2010
+  m_Name: weapon_so_2002
   m_EditorClassIdentifier: 
   datas:
-  - icon: {fileID: 21300000, guid: d8b3e800a155bc34bb4457e610021536, type: 3}
+  - icon: {fileID: 21300000, guid: da065246b48da9740b39a452beb99117, type: 3}
     levelRange: {x: 0, y: 5}

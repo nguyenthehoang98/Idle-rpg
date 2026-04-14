@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using _Games.Combat.EntityComponentSystem;
 using _Games.Combat.EntityComponentSystem.Data;
 using _Games.Combat.Level;
@@ -8,7 +6,6 @@ using _Games.Combat.SkillSystem;
 using _Games.Combat.SkillSystem.Model;
 using _Games.Config;
 using _KIT.Config;
-using _KIT.Resource;
 using _KIT.Utils;
 using Unity.Burst;
 using Unity.Collections;
@@ -22,12 +19,11 @@ namespace _Games.Combat.Equipment
 {
     public class EquipmentManager
     {
-        LevelDesign levelDesign;
-        Dictionary<int, Data> container = new Dictionary<int, Data>();
-        Queue<Action> queueBuffer = new Queue<Action>();
-        SkillConfig skillConfig;
-        EntityManager manager;
-        EntityQuery query;
+        private LevelDesign levelDesign;
+        private Dictionary<int, Data> container = new Dictionary<int, Data>();
+        private SkillConfig skillConfig;
+        private EntityManager manager;
+        private EntityQuery query;
         
         public EquipmentManager(LevelDesign levelDesign)
         {
@@ -128,28 +124,13 @@ namespace _Games.Combat.Equipment
             if (!found && skill.main.needTargetToCast)
                 return;
 
-            float delay = 0.2f;
+            float delay = 0.2f / BattleTime.ScaleTime;
             Vector3 direction = endPosition - position;
             float rad = Mathf.Atan2(direction.y, direction.x);
-            levelDesign.Slots[slotIndex].Rotation(rad, delay);
-            levelDesign.StartCoroutine(Push(() =>
+            levelDesign.Slots[slotIndex].Rotation(rad, delay, () =>
             {
                 ECSFactory.BuildProjectile(manager, Entity.Null, position, endPosition, skill, skillData, data.Level);
-            }, delay));
-        }
-
-        public void Update()
-        {
-            while (queueBuffer.Count > 0)
-            {
-                queueBuffer.Dequeue().Invoke();
-            }
-        }
-        
-        IEnumerator Push(Action action, float delay)
-        {
-            yield return new WaitForSeconds(delay);
-            queueBuffer.Enqueue(action);
+            });
         }
         
         [BurstCompile]
