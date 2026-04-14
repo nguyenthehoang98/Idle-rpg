@@ -8,7 +8,7 @@ namespace _Games.Combat.Level
     {
         [SerializeField] private AgentCircleShapeAuthoring shapeAuthoring;
         [SerializeField, Tooltip("Các ví trí để đặt vũ khí")] 
-        private SlotView[] slots;
+        private SlotItem[] slots;
         [SerializeField, Tooltip("Kích thước của từng ô")]
         private Vector2 cellSize = new Vector2(1f, 1f);
         [SerializeField] private CastleTurret turret;
@@ -54,6 +54,6 @@ namespace _Games.Combat.Level
             return points;
         }
 
-        public SlotView[] Slots => slots;
+        public SlotItem[] Slots => slots;
     }
 }

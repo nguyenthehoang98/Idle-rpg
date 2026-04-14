@@ -6,10 +6,12 @@ using _Games.Config;
 using _Games.Utils;
 using _KIT.Config;
 using _KIT.Event;
+using _KIT.Pool;
 using _KIT.Popup;
 using _KIT.Utils;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace _Games.Combat.View
@@ -24,9 +26,15 @@ namespace _Games.Combat.View
         
         private readonly List<WeaponData> allData = new List<WeaponData>();       
         private readonly List<Data> currentWeapons = new List<Data>();
+        private static bool registerPrefab;
         
         private void Awake()
         {
+            if (registerPrefab)
+            {
+                KitPool.RegisterPool(itemViewPrefab.gameObject, true);
+                registerPrefab = true;
+            }
             btnResume.onClick.AddListener(Close);
         }
 
@@ -81,7 +89,7 @@ namespace _Games.Combat.View
 
                 if (@object.WeaponItemView == null)
                 {
-                    var instance = Instantiate(itemViewPrefab, @object.container);
+                    var instance = KitPool.Instantiate(itemViewPrefab, @object.container);
                     instance.transform.SetAsFirstSibling();
                     instance.GetComponent<RectTransform>().anchoredPosition3D = Vector3.zero;
                     @object.WeaponItemView = instance;

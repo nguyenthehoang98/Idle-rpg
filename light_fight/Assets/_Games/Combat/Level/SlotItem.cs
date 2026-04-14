@@ -1,15 +1,19 @@
-using System;
+using _Games.Config;
+using MoreMountains.Feedbacks;
 using PrimeTween;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace _Games.Combat.Level
 {
-    public class SlotView : MonoBehaviour
+    public class SlotItem : MonoBehaviour
     {
         [Header("Setting")] 
-        [SerializeField] private Canvas canvas;
-        [SerializeField] private Vector2 slotSize = new Vector2(80, 80);
+        [SerializeField] private SortingGroup sortingGroup;
+        [SerializeField] private Transform parent;
+        [Header("Feel")] 
+        [SerializeField] private MMF_Player equipFeedback;
         [Header("Sprite")]
         [SerializeField] private SpriteRenderer border;
         [SerializeField] private SpriteRenderer body;
@@ -18,32 +22,33 @@ namespace _Games.Combat.Level
         private Color highlightBorderColor = new Color(1f, 1f, 0f, 200f / 255f);
         private Tween tween;
 
-        public WeaponItemView ItemView { get; private set; }
+        public WeaponData WeaponData { get; private set; }
+        public int WeaponLevel {get; private set;}
 
-        public bool IsEquipped => ItemView != null;
+        private WeaponItem Item { get; set; }
 
-        public void Equip(WeaponItemView itemView)
+        public bool IsEquipped => Item != null;
+
+        public async void Equip(WeaponData weaponData, int weaponLevel)
         {
-            body.color = Color.black;
-
-            ItemView = itemView;
-            RectTransform rect = itemView.GetComponent<RectTransform>();
-            Vector2 scale = new Vector2(slotSize.x / rect.rect.width, slotSize.y / rect.rect.height);
-            itemView.transform.SetParent(canvas.transform);
-            itemView.transform.localPosition = Vector3.zero;
-            itemView.transform.localScale = scale;
+            WeaponData = weaponData;
+            WeaponLevel = weaponLevel; 
+            equipFeedback.PlayFeedbacks();
+            Item = await WeaponItem.Build(parent, weaponData, weaponLevel);
         }
 
+        // Game ko cho unequip
         public void UnEquip()
         {
             body.color = Color.gray;
-            ItemView = null;
+            if (Item != null)
+            {
+                Object.Destroy(Item.gameObject);
+                Item = null;
+            }
         }
 
-        public void SetOrderCanvas(int order)
-        {
-            canvas.sortingOrder = order;
-        }
+        public void SetSortingOrder(int order) => sortingGroup.sortingOrder = order;
 
         public void Trigger() => border.color = highlightBorderColor;
 
@@ -53,9 +58,11 @@ namespace _Games.Combat.Level
         {
             tween.Stop();
             UnTrigger();
-            if (ItemView != null)
+
+            // reset về idle
+            if (Item != null)
             {
-                Transform target = ItemView.Icon;
+                Transform target = Item.transform;
                 target.rotation = Quaternion.Euler(0, 0, 0);
                 target.localScale = Vector3.one;
             }
@@ -64,7 +71,7 @@ namespace _Games.Combat.Level
         public void Rotation(float rad, float time)
         {
             tween.Stop();
-            Transform target = ItemView.Icon;
+            Transform target = Item.transform;
             tween = Tween.LocalRotation(target, quaternion.Euler(0, 0, rad), time)
                 .OnUpdate(target, (trans, t) =>
                 {

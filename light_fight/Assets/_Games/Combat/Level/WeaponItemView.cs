@@ -4,6 +4,7 @@ using _Games.Combat.Event;
 using _Games.Config;
 using _Games.Misc;
 using _KIT.Event;
+using _KIT.Pool;
 using _KIT.Resource;
 using TMPro;
 using UnityEngine;
@@ -20,11 +21,10 @@ namespace _Games.Combat.Level
         [SerializeField] private Transform container;
         [SerializeField] private TextMeshProUGUI textLevel;
         
-        public Transform Icon => imgIcon.transform;
         public WeaponData WeaponData { get; private set; }
         public int WeaponLevel {get; private set;}
         
-        private SlotView view;
+        private SlotItem slotItem;
         private List<RaycastResult> results = new List<RaycastResult>();
         private Action onPickWeapon;
         
@@ -63,7 +63,7 @@ namespace _Games.Combat.Level
         public override void OnDrag(PointerEventData eventData)
         {
             base.OnDrag(eventData);
-            if (view != null) view.SetOrderCanvas(10);
+            if (slotItem != null) slotItem.SetSortingOrder(10);
         }
 
         protected override bool EndDrop(PointerEventData eventData)
@@ -81,8 +81,8 @@ namespace _Games.Combat.Level
                         onPickWeapon?.Invoke();
                         onPickWeapon = null;
                         
-                        if (view != null) view.SetOrderCanvas(0);
-                        Destroy(gameObject);
+                        if (slotItem != null) slotItem.SetSortingOrder(0);
+                        KitPool.Destroy(gameObject);
                         
                         return true;
                     }
@@ -95,12 +95,12 @@ namespace _Games.Combat.Level
             RaycastHit2D hit = Physics2D.BoxCast(worldPos, new Vector2(0.5f, 0.5f), 0, Vector2.zero);
             if (hit.collider != null)
             {
-                SlotView sqv = hit.collider.gameObject.GetComponent<SlotView>();
+                SlotItem sqv = hit.collider.gameObject.GetComponent<SlotItem>();
                 if (sqv != null && !sqv.IsEquipped)
                 {
-                    view = sqv;
-                    sqv.Equip(this);
-                    
+                    slotItem = sqv;
+                    sqv.Equip(WeaponData, WeaponLevel);
+                    KitPool.Destroy(gameObject);
                     onPickWeapon?.Invoke();
                     onPickWeapon = null;
                     return true;

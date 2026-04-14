@@ -79,7 +79,7 @@ namespace _Games.Combat.Level
 
             for (int i = 0; i < slots.Length; i++)
             {
-                SlotView sl = slots[i].GetComponent<SlotView>();
+                SlotItem sl = slots[i].GetComponent<SlotItem>();
                 sl.Reset();
             }
         }
@@ -122,15 +122,15 @@ namespace _Games.Combat.Level
 
         void Trigger(Transform newTarget, LineData data, int index)
         {
-            SlotView view;
+            SlotItem item;
             if (data.current != null)
             {
-                view = data.current.GetComponent<SlotView>();
-                if (view != null) view.UnTrigger();
+                item = data.current.GetComponent<SlotItem>();
+                if (item != null) item.UnTrigger();
             }
             
-            view = newTarget.GetComponent<SlotView>();
-            if (view != null) view.Trigger();
+            item = newTarget.GetComponent<SlotItem>();
+            if (item != null) item.Trigger();
             
             data.current = newTarget;
             onTrigger?.Invoke(index);

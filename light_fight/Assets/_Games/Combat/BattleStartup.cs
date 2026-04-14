@@ -163,16 +163,16 @@ namespace _Games.Combat
             SkillConfig skillConfig = KitConfigManager.Get<SkillConfig>();
             for (int i = 0; i < levelDesign.Slots.Length; i++)
             {
-                SlotView slot = levelDesign.Slots[i];
+                SlotItem slot = levelDesign.Slots[i];
                 if (slot.IsEquipped)
                 {
-                    if (skillConfig.Find(slot.ItemView.WeaponData.SkillId, out SkillData skillData))
+                    if (skillConfig.Find(slot.WeaponData.SkillId, out SkillData skillData))
                     {
                         Skill skill = await SkillFactory.CreateSkill(skillData);
                         if (skill.projectile.hitEffectPrefab != null)
                             KitPool.RegisterPool(skill.projectile.hitEffectPrefab, true);
                     }
-                    equipmentManager.Equip(i, slot.ItemView.WeaponData, slot.ItemView.WeaponLevel);
+                    equipmentManager.Equip(i, slot.WeaponData, slot.WeaponLevel);
                 }
             }
 
