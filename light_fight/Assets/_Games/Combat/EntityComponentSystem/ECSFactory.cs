@@ -34,7 +34,7 @@ namespace _Games.Combat.EntityComponentSystem
             circleBuffers.Add(new CircleBuffer(levelDesign.Radius, float3.zero, false, 0));
             manager.AddComponentData(entity, new PlayerTag());
             manager.AddComponentData(entity, new LocalTransform { Position = float3.zero });
-            int health = 50;
+            int health = 500;
             manager.AddComponentData(entity, new HealthData { Health = health, MaxHealth = health });
 #if UNITY_EDITOR
             manager.SetName(entity, "Player");

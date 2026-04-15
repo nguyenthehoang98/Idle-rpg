@@ -21,7 +21,7 @@ namespace _Games.Combat.Level
         public WeaponData WeaponData { get; private set; }
         public int WeaponLevel {get; private set;}
 
-        private WeaponItem Item { get; set; }
+        private BaseWeaponItem Item { get; set; }
 
         public bool IsEquipped => Item != null;
 
@@ -30,7 +30,7 @@ namespace _Games.Combat.Level
             WeaponData = weaponData;
             WeaponLevel = weaponLevel; 
             equipFeedback.PlayFeedbacks();
-            Item = await WeaponItem.Build(parent, weaponData, weaponLevel);
+            Item = await BaseWeaponItem.Build(parent, weaponData, weaponLevel);
             Debug.Log(@"Bắn 1 cái vfx hình vuông ở item");
         }
 
