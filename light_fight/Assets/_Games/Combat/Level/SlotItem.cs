@@ -3,12 +3,12 @@ using _Games.Combat.Equipment;
 using _Games.Config;
 using _Games.Misc.Model;
 using _Games.Utils;
+using _KIT.Pool;
 using _KIT.Resource;
 using MoreMountains.Feedbacks;
 using PrimeTween;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace _Games.Combat.Level
 {
@@ -38,6 +38,7 @@ namespace _Games.Combat.Level
             
             RaritySO raritySo = await KitLoaded.LoadAsync<RaritySO>(GlobalsPath.RARITY_SO);
             spBody.sprite = raritySo.GetBorderRarity(weaponRarity);
+            if (Item != null) KitPool.Destroy(Item.gameObject);
             Item = await BaseWeaponItem.Build(parent, weaponData, weaponRarity);
             Debug.Log(@"Bắn 1 cái vfx hình vuông ở item");
         }

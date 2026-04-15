@@ -5,6 +5,7 @@ using _Games.Misc.Model;
 using _Games.Utils;
 using _KIT.Pool;
 using _KIT.Resource;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -42,38 +43,45 @@ namespace _Games.Combat.Level
         protected override bool EndDrop(PointerEventData eventData)
         {
             EventSystem.current.RaycastAll(eventData, results);
-            foreach (RaycastResult r in results)
+            
+            Vector2 worldPos = Camera.main.ScreenToWorldPoint(eventData.position);
+            var hits = Physics2D.BoxCastAll(worldPos, new Vector2(1f, 1f), 0, Vector2.zero);
+            SlotItem result = null;
+            float distance = float.MaxValue;
+            foreach (var hit in hits)
             {
-                if (r.gameObject == gameObject) continue;
-                var item = r.gameObject.GetComponent<UIWeaponItemDragDrop>();
-                if (item != null)
+                if (hit.collider != null)
                 {
-                    if (item.weaponData.WeaponId == weaponData.WeaponId && item.weaponRarity == weaponRarity && weaponRarity < RarityMethod.MaxRarity)
-                    {
-                        item.Initialize(weaponData, RarityMethod.IncreaseRarity(weaponRarity), null);
-                        onPickWeapon?.Invoke();
-                        onPickWeapon = null;
-                        KitPool.Destroy(gameObject);
-                        return true;
+                    SlotItem sl = hit.collider.gameObject.GetComponent<SlotItem>();
+                    if (sl != null)
+                    {                   
+                        Vector2 position = sl.transform.position;
+                        float d = math.distancesq(worldPos, position);
+                        if (d < distance)
+                        {
+                            distance = d;
+                            result = sl;
+                        }
                     }
-
-                    return false;
                 }
             }
 
-            Vector2 worldPos = Camera.main.ScreenToWorldPoint(eventData.position);
-            RaycastHit2D hit = Physics2D.BoxCast(worldPos, new Vector2(0.5f, 0.5f), 0, Vector2.zero);
-            if (hit.collider != null)
+            if (result != null && !result.IsEquipped)
             {
-                SlotItem sqv = hit.collider.gameObject.GetComponent<SlotItem>();
-                if (sqv != null && !sqv.IsEquipped)
-                {
-                    sqv.Equip(weaponData, weaponRarity);
-                    KitPool.Destroy(gameObject);
-                    onPickWeapon?.Invoke();
-                    onPickWeapon = null;
-                    return true;
-                }
+                result.Equip(weaponData, weaponRarity);
+                KitPool.Destroy(gameObject);
+                onPickWeapon?.Invoke();
+                onPickWeapon = null;
+                return true;
+            }
+            else if (result != null && result.IsEquipped && result.WeaponData.WeaponId == weaponData.WeaponId
+                     && result.WeaponRarity == weaponRarity && weaponRarity < RarityMethod.MaxRarity)
+            {
+                result.Equip(weaponData, RarityMethod.IncreaseRarity(weaponRarity));
+                KitPool.Destroy(gameObject);
+                onPickWeapon?.Invoke();
+                onPickWeapon = null;
+                return true;
             }
 
             return false;

@@ -2,6 +2,7 @@
 using _Games.Config;
 using _Games.Misc.Model;
 using _Games.Utils;
+using _KIT.Pool;
 using _KIT.Resource;
 using _KIT.Utils;
 using Cysharp.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace _Games.Combat.Equipment
         {
             WeaponSO so = await KitLoaded.LoadAsync<WeaponSO>(GlobalsPath.GetWeaponSOPath(weaponData.WeaponId));
             GameObject go = await KitLoaded.LoadAsync<GameObject>(GlobalsPath.GetWeaponItemPath(weaponData.WeaponId), true);
-            BaseWeaponItem wi = Object.Instantiate(go).GetComponent<BaseWeaponItem>();
+            BaseWeaponItem wi = KitPool.Instantiate(go).GetComponent<BaseWeaponItem>();
             wi.transform.SetParent(parent);
             wi.transform.localPosition = Vector3.zero;
             wi.transform.localScale = Vector3.one;
