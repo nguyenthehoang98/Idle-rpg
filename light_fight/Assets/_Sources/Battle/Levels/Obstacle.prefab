@@ -218,9 +218,9 @@ MonoBehaviour:
           ButtonText: 
         Owner: {fileID: 6125238127678889819}
         DebugActive: 0
-        BoundSpriteRenderer: {fileID: 107324016219604233}
+        BoundSpriteRenderer: {fileID: 883747577146680264}
         Mode: 0
-        Duration: 0.9
+        Duration: 0.2
         StartsOff: 0
         ResetShakerValuesAfterShake: 1
         ResetTargetValuesAfterShake: 1
@@ -232,7 +232,7 @@ MonoBehaviour:
         ModifyColor: 1
         ColorOverTime:
           serializedVersion: 2
-          key0: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+          key0: {r: 0.23921569, g: 0.23921569, b: 0.23921569, a: 1}
           key1: {r: 0.38679248, g: 0.38679248, b: 0.38679248, a: 1}
           key2: {r: 0.8773585, g: 0.7178533, b: 0.0041384934, a: 0}
           key3: {r: 0.8773585, g: 0.7178533, b: 0.0041384934, a: 0}
@@ -539,9 +539,9 @@ MonoBehaviour:
           ButtonText: 
         Owner: {fileID: 2190739698163895735}
         DebugActive: 0
-        BoundSpriteRenderer: {fileID: 107324016219604233}
+        BoundSpriteRenderer: {fileID: 883747577146680264}
         Mode: 0
-        Duration: 0.9
+        Duration: 0.2
         StartsOff: 0
         ResetShakerValuesAfterShake: 1
         ResetTargetValuesAfterShake: 1
@@ -555,7 +555,7 @@ MonoBehaviour:
           serializedVersion: 2
           key0: {r: 0.8784314, g: 0.7176471, b: 0.003921569, a: 1}
           key1: {r: 0.38679248, g: 0.38679248, b: 0.38679248, a: 1}
-          key2: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 0}
+          key2: {r: 0.23921569, g: 0.23921569, b: 0.23921569, a: 0}
           key3: {r: 0, g: 0, b: 0, a: 0}
           key4: {r: 0, g: 0, b: 0, a: 0}
           key5: {r: 0, g: 0, b: 0, a: 0}
@@ -1290,5 +1290,5 @@ BoxCollider2D:
     drawMode: 1
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.6, y: 0.6}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0

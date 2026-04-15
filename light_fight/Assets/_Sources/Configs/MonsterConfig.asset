@@ -17,7 +17,7 @@ MonoBehaviour:
   monsters:
   - monsterId: 10000
     monsterName: Goose
-    monsterObjectId: Unit Goose
+    monsterObjectId: 
     isRanged: 0
     skillId: 100000
     skillLevel: 1
@@ -29,7 +29,7 @@ MonoBehaviour:
     health: 20
   - monsterId: 10010
     monsterName: Cowboy
-    monsterObjectId: Unit Cowboy
+    monsterObjectId: 
     isRanged: 1
     skillId: 100010
     skillLevel: 1

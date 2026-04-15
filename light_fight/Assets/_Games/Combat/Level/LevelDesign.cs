@@ -23,7 +23,7 @@ namespace _Games.Combat.Level
                 temps[i] = slots[i].transform;
             }
 
-            turret.Init(6, temps, slot =>
+            turret.Init(1, temps, slot =>
             {
                 OnTriggerWeapon?.Invoke(slot);
             });
