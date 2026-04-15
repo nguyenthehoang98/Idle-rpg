@@ -1,11 +1,11 @@
 ﻿using _Games.Combat.EntityComponentSystem.Data;
-using _Games.Combat.Model;
 using ProjectDawn.Custom;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
+using Projectile = _Games.Combat.Model.Projectile;
 
 namespace _Games.Combat.EntityComponentSystem.System
 {

@@ -14,11 +14,11 @@ using _KIT.Resource;
 using _KIT.Utils;
 using Cysharp.Threading.Tasks;
 using ProjectDawn.Navigation;
-using ProjectDawn.Navigation.Hybrid;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
+using Projectile = _Games.Combat.Model.Projectile;
 
 namespace _Games.Combat.EntityComponentSystem
 {
