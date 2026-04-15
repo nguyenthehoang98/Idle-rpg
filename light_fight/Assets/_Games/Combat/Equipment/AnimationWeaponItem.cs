@@ -14,11 +14,15 @@ namespace _Games.Combat.Equipment
         {
             if (animancerComponent == null) 
                 animancerComponent = GetComponent<AnimancerComponent>();
+            
             AnimancerState state = animancerComponent.Play(clip);
             state.Time = 0;
             state.Speed = timeScale;
-            particleSystem.main
+            
+            ParticleSystem.MainModule main = particleSystem.main;
+            main.simulationSpeed = timeScale;
             particleSystem.Play();
+           
             return delayCastProjectileTime / timeScale;
         }
     }

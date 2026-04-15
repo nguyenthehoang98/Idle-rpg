@@ -16,13 +16,12 @@ namespace _Games.Combat.Level
 
         [SerializeField] private LineRenderer lineRendererPrefab;
         [SerializeField] private Transform turretTransform;
-        [SerializeField] private float distance = 1;
+        [SerializeField] private float rotateSpeed = 100;
 
         private Transform[] slots;
         private List<LineRenderer> allLines = new List<LineRenderer>();
         private List<LineData> allLinesData = new List<LineData>();
         private Action<int> onTrigger;
-        private float rotateSpeed = 100;
         private float angle;
         private float timeScale = 1;
         private float accumulator;
@@ -101,8 +100,8 @@ namespace _Games.Combat.Level
                 {
                     LineRenderer line = allLines[i];
                     Vector3 direction = GetDirection(i, count, angle);
-                    line.SetPosition(0, direction * 0.225f);
-                    line.SetPosition(1, direction * distance);
+                    line.SetPosition(0, direction * 0.1f);
+                    line.SetPosition(1, direction * 1.5f);
                     RaycastHit2D hit = Physics2D.Raycast(origin, direction, 10);
                     if (hit.collider != null)
                     {
