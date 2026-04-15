@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using _KIT.Config;
 using _KIT.Config.ExcelExtension.Runtime;
 using UnityEngine;
 using _Games.Combat.SkillSystem.Model;
+using _Games.Utils;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -15,7 +15,7 @@ namespace _Games.Config
     [ExcelAsset(
         ExcelPath = "Assets/Excels/WeaponConfig.xlsx",
         ConfigPath = "Assets/_Sources/Configs/WeaponConfig.asset")]
-    public class WeaponConfig : KitBaseConfig
+    public class WeaponConfig : BaseConfig
     {
         [SerializeField] private List<WeaponData> weapons = new List<WeaponData>();
         private Dictionary<int, WeaponData> cacheWeaponData;
@@ -29,9 +29,9 @@ namespace _Games.Config
             }
         }
 
+#if UNITY_EDITOR
         public override void OnPostImported()
         {
-            #if UNITY_EDITOR
             SkillConfig config = AssetDatabase.LoadAssetAtPath<SkillConfig>("Assets/_Sources/Configs/SkillConfig.asset");
             var field = config.GetType().GetField("skills", BindingFlags.Default | BindingFlags.Instance | BindingFlags.NonPublic);
             var list = field.GetValue(config) as List<SkillData>;
@@ -40,9 +40,11 @@ namespace _Games.Config
                 bool exists = list.Any(a => a.SkillId == weapon.SkillId);
                 if (!exists)
                     Debug.LogError($"[WeaponConfig] Not found skill '{weapon.SkillId}' at weapon '{weapon.WeaponId}'");
+                Load<GameObject>(GlobalsPath.GetWeaponItemPath(weapon.WeaponId));
+                Load<ScriptableObject>(GlobalsPath.GetWeaponSOPath(weapon.WeaponId));
             }
-            #endif
         }
+#endif
 
         public bool Find(int weaponId, out WeaponData skill)
         {

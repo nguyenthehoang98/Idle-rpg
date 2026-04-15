@@ -21,7 +21,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 132d4d65777c454448c174f201e9fae1
-    m_Address: 10000_Monster
+    m_Address: 10001_Monster
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -40,8 +40,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1cb1a30b733f1884fbc465d794e7d547
+    m_Address: 20004_Weapon_Item
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1d65dd7595f891d49b201de2eb4a24df
     m_Address: 120010_Collider
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 233bcfd1cd853424f8e35ab006f1b698
+    m_Address: 20002_Weapon_Item
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -56,7 +66,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3f9021f59aa5d4240a9f5c9f0ba6eb11
-    m_Address: 2001_Weapon_SO
+    m_Address: 20001_Weapon_SO
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -72,11 +82,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 538d34d2bf82f4d42a5cc181a7fe39d6
     m_Address: MonsterConfig
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5e885ed3b85ff2e4ab1b9b27cb1002ab
-    m_Address: WeaponItem
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -106,12 +111,12 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 93749b1ae2d4a6f4095bde6940ac74c1
-    m_Address: 2010_Weapon_SO
+    m_Address: 20004_Weapon_SO
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9c8a4ee2d729d7e4aaa7714da3b17cd1
-    m_Address: 10010_Monster
+    m_Address: 10011_Monster
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -127,6 +132,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a19e29e0364437e4a86b726fd4259ef0
     m_Address: WeaponSelectPopup
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a3de8af4e6f72a549a2ba03fdb4dec90
+    m_Address: 20003_Weapon_Item
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -146,7 +156,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d6a94ea90ad17c94f941263cd5b3b138
-    m_Address: 2002_Weapon_SO
+    m_Address: 20002_Weapon_SO
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -161,7 +171,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ed44ce3b61f78ed40aa254c8fb7f87db
-    m_Address: 2001_Weapon_Item
+    m_Address: 20001_Weapon_Item
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -191,7 +201,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fa8c47bb4cdab9142b50174fbcd6535c
-    m_Address: 2003_Weapon_SO
+    m_Address: 20003_Weapon_SO
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

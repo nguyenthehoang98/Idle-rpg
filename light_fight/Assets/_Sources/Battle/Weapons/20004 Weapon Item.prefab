@@ -19604,7 +19604,7 @@ GameObject:
   - component: {fileID: 7450730348559483821}
   - component: {fileID: 9047199438043358258}
   m_Layer: 0
-  m_Name: 2001 Weapon Item
+  m_Name: 20004 Weapon Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

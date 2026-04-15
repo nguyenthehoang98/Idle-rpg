@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using _KIT.Config;
 using _KIT.Config.ExcelExtension.Runtime;
 using UnityEngine;
+#if UNITY_EDITOR
+using _Games.Utils;
+using UnityEditor;
+#endif
 
 namespace _Games.Config
 {
     [ExcelAsset(
         ExcelPath = "Assets/Excels/LevelConfig.xlsx",
         ConfigPath = "Assets/_Sources/Configs/LevelConfig.asset")]
-    public class LevelConfig : KitBaseConfig
+    public class LevelConfig : BaseConfig
     {
         [SerializeField] private List<LevelBatch> spawns = new List<LevelBatch>();
 
@@ -39,13 +42,19 @@ namespace _Games.Config
             }
         }
 
+#if UNITY_EDITOR
         public override void OnPostImported()
         {
             for (int i = 0; i < spawns.Count; i++)
             {
                 spawns[i].Validate();
+                foreach (var weight in spawns[i].Weights)
+                {
+                    Load<GameObject>(GlobalsPath.GetMonsterPath(weight.x));
+                }
             }
         }
+#endif
 
         public bool FindSpawn(int levelID, out IReadOnlyDictionary<WaveIdData, LevelBatch> dictionary)
         {

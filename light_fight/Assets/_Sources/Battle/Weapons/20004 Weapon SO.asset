@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ebe52c4b46a64ce4ca240ce2b78ff667, type: 3}
-  m_Name: 2001 Weapon SO
+  m_Name: 20004 Weapon SO
   m_EditorClassIdentifier: 
   icons:
   - rarity: 0
-    icon: {fileID: 21300000, guid: cb23ee4a2dc861449aed7406d790b0f1, type: 3}
+    icon: {fileID: 21300000, guid: da065246b48da9740b39a452beb99117, type: 3}
   - rarity: 1
-    icon: {fileID: 21300000, guid: cb23ee4a2dc861449aed7406d790b0f1, type: 3}
+    icon: {fileID: 21300000, guid: da065246b48da9740b39a452beb99117, type: 3}
   - rarity: 2
-    icon: {fileID: 21300000, guid: cb23ee4a2dc861449aed7406d790b0f1, type: 3}
+    icon: {fileID: 21300000, guid: da065246b48da9740b39a452beb99117, type: 3}
   - rarity: 3
-    icon: {fileID: 21300000, guid: cb23ee4a2dc861449aed7406d790b0f1, type: 3}
+    icon: {fileID: 21300000, guid: da065246b48da9740b39a452beb99117, type: 3}
   - rarity: 4
-    icon: {fileID: 21300000, guid: cb23ee4a2dc861449aed7406d790b0f1, type: 3}
+    icon: {fileID: 21300000, guid: da065246b48da9740b39a452beb99117, type: 3}

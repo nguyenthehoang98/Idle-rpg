@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using _Games.Combat.SkillSystem.Model;
-using _KIT.Config;
 using _KIT.Config.ExcelExtension.Runtime;
 using UnityEngine;
 #if UNITY_EDITOR
+using _Games.Utils;
 using UnityEditor;
 #endif
 
@@ -15,7 +15,7 @@ namespace _Games.Config
     [ExcelAsset(
         ExcelPath = "Assets/Excels/MonsterConfig.xlsx",
         ConfigPath = "Assets/_Sources/Configs/MonsterConfig.asset")]
-    public class MonsterConfig : KitBaseConfig
+    public class MonsterConfig : BaseConfig
     {
         [SerializeField] private List<MonsterData> monsters = new List<MonsterData>();
     
@@ -30,9 +30,9 @@ namespace _Games.Config
             }
         }
 
+#if UNITY_EDITOR
         public override void OnPostImported()
         {
-#if UNITY_EDITOR
             SkillConfig config = AssetDatabase.LoadAssetAtPath<SkillConfig>("Assets/_Sources/Configs/SkillConfig.asset");
             var field = config.GetType().GetField("skills", BindingFlags.Default | BindingFlags.Instance | BindingFlags.NonPublic);
             var list = field.GetValue(config) as List<SkillData>;
@@ -41,9 +41,10 @@ namespace _Games.Config
                 bool exists = list.Any(a => a.SkillId == monster.SkillId);
                 if (!exists)
                     Debug.LogError($"[MonsterConfig] Not found skill '{monster.SkillId}' at monster '{monster.MonsterId}'");
+                Load<GameObject>(GlobalsPath.GetMonsterPath(monster.MonsterId));
             }
-#endif
         }
+#endif
 
         public bool Find(int monsterId, out MonsterData skill)
         {

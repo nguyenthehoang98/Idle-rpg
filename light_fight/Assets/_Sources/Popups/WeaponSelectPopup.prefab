@@ -668,7 +668,7 @@ MonoBehaviour:
   openFeedback: {fileID: 4539474477903318517}
   closeFeedback: {fileID: 7035387000291279121}
   blockInput: {fileID: 2411918001748918511}
-  itemViewPrefab: {fileID: 653987477836745896, guid: c8986b21ea1a9ce49825ecba2ffc7823, type: 3}
+  itemDragDropPrefab: {fileID: 653987477836745896, guid: c8986b21ea1a9ce49825ecba2ffc7823, type: 3}
   content: {fileID: 5430559657678466198}
   weapons:
   - container: {fileID: 5957291373011331449}

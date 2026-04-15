@@ -1,18 +1,14 @@
-using System;
 using System.Collections.Generic;
 using _Games.Combat.SkillSystem.Model;
-using _KIT.Config;
 using _KIT.Config.ExcelExtension.Runtime;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace _Games.Config
 {
     [ExcelAsset(
         ExcelPath = "Assets/Excels/SkillConfig.xlsx",
         ConfigPath = "Assets/_Sources/Configs/SkillConfig.asset")]
-    public class SkillConfig : KitBaseConfig
+    public class SkillConfig : BaseConfig
     {
         [SerializeField] private List<SkillData> skills = new List<SkillData>();
         private Dictionary<int, SkillData> cacheSkillData;
@@ -26,6 +22,7 @@ namespace _Games.Config
             }
         }
 
+#if UNITY_EDITOR
         public override void OnPostImported()
         {
             HashSet<string> keys = new HashSet<string>();
@@ -55,26 +52,10 @@ namespace _Games.Config
 
             foreach (var pair in keyValuePairs)
             {
-                Load(pair.Item1, pair.Item2);
+                Load<ScriptableObject>(pair.Item1);
             }
         }
-
-        private void Load(string path, string type)
-        {
-            if (string.IsNullOrEmpty(path)) return;
-            try
-            {
-                Addressables.LoadAssetAsync<ScriptableObject>(path).Completed += handle =>
-                {
-                    if (handle.Status != AsyncOperationStatus.Succeeded)
-                        Debug.LogError($"[SkillConfig] Not found [{type.ToUpper()}] with '{path}'");
-                };
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"[SkillConfig] Not found [{type.ToUpper()}] with '{path}'");
-            }
-        }
+#endif
 
         public bool Find(int skillId, out SkillData skill)
         {

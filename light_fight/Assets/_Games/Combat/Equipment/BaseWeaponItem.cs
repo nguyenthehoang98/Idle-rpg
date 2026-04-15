@@ -7,7 +7,6 @@ using _KIT.Resource;
 using _KIT.Utils;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace _Games.Combat.Equipment
 {

@@ -12,14 +12,13 @@ using _KIT.Popup;
 using _KIT.Utils;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace _Games.Combat.View
 {
     public partial class WeaponSelectPopup : PopupBase
     {
-        [FormerlySerializedAs("itemViewPrefab")] [SerializeField] private UIWeaponItemDragDrop itemDragDropPrefab;
+        [SerializeField] private UIWeaponItemDragDrop itemDragDropPrefab;
         [SerializeField] private RectTransform content;
         [SerializeField] private Object[] weapons;
         [Header("Button")]
@@ -42,11 +41,12 @@ namespace _Games.Combat.View
         protected override void OnOpen()
         {
             WeaponConfig weaponConfig = KitConfigManager.Get<WeaponConfig>();
-            int[] weaponIds = new int[] { 2001, 2002, 2003, 2010 };
+            int[] weaponIds = new int[] { 20001, 20002, 20003, 20004 };
             foreach (var id in weaponIds)
             {
                 if(weaponConfig.Find(id, out WeaponData weaponData))
                     allData.Add(weaponData);
+                else Debug.LogError($"Not found weapon data '{id}'");
             }
             
             // tính toán dữ liệu & fill vào data (weapons)
