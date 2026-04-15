@@ -29,8 +29,8 @@ namespace _Games.Combat.Level
 
         public async void Initialize(WeaponData weaponData, Rarity weaponRarity, Action pickEquipmentCallback)
         {
-            WeaponSO weaponSo = await KitLoaded.LoadAsync<WeaponSO>(GlobalsPath.GetWeaponSOPath(weaponData.WeaponId));
-            RaritySO raritySo = await KitLoaded.LoadAsync<RaritySO>(GlobalsPath.RARITY_SO);
+            WeaponSO weaponSo = await KitLoaded.LoadAsync<WeaponSO>(GlobalsPath.GetWeaponSOPath(weaponData.WeaponId), true);
+            RaritySO raritySo = await KitLoaded.LoadAsync<RaritySO>(GlobalsPath.RARITY_SO, true);
 
             this.weaponRarity = weaponRarity;
             this.weaponData = weaponData;

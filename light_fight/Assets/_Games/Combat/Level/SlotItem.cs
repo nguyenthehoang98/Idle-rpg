@@ -2,15 +2,19 @@ using System;
 using _Games.Combat.Equipment;
 using _Games.Config;
 using _Games.Misc.Model;
+using _Games.Utils;
+using _KIT.Resource;
 using MoreMountains.Feedbacks;
 using PrimeTween;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace _Games.Combat.Level
 {
     public class SlotItem : MonoBehaviour
     {
+        [SerializeField] private SpriteRenderer spBody;
         [SerializeField] private Transform parent;
         [Header("Feel")] 
         [SerializeField] private MMF_Player equipFeedback;
@@ -31,6 +35,9 @@ namespace _Games.Combat.Level
             WeaponData = weaponData;
             WeaponRarity = weaponRarity; 
             equipFeedback.PlayFeedbacks();
+            
+            RaritySO raritySo = await KitLoaded.LoadAsync<RaritySO>(GlobalsPath.RARITY_SO);
+            spBody.sprite = raritySo.GetBorderRarity(weaponRarity);
             Item = await BaseWeaponItem.Build(parent, weaponData, weaponRarity);
             Debug.Log(@"Bắn 1 cái vfx hình vuông ở item");
         }

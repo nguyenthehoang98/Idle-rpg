@@ -1044,7 +1044,7 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
         RemapOrthographicSizeZero: 5
-        RemapOrthographicSizeOne: 15
+        RemapOrthographicSizeOne: 12
 --- !u!1 &1971474663
 GameObject:
   m_ObjectHideFlags: 0
@@ -1587,7 +1587,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-        RemapOrthographicSizeZero: 15
+        RemapOrthographicSizeZero: 12
         RemapOrthographicSizeOne: 5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
