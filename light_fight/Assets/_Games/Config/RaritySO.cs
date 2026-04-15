@@ -1,37 +1,38 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using _Games.Misc.Model;
 using UnityEngine;
+
 namespace _Games.Config
 {
-    [CreateAssetMenu(menuName = "Weapon SO")]
-    public class WeaponSO : ScriptableObject
+    [CreateAssetMenu(menuName = "Rarity SO")]
+    public class RaritySO : ScriptableObject
     {
-        [SerializeField] private Data[] icons;
-
+        [SerializeField] private Data[] rarities;
+        
         private Dictionary<Rarity, Data> dict;
 
-        public Sprite GetIconRarity(Rarity rarity)
+        public Sprite GetBorderRarity(Rarity rarity)
         {
             if (dict == null)
             {
                 dict = new Dictionary<Rarity, Data>();
-                foreach (var icon in icons)
+                foreach (var icon in rarities)
                 {
                     dict.Add(icon.rarity, icon);
                 }
             }
             
             if (dict.TryGetValue(rarity, out Data data))
-                return data.icon;
-            throw new NullReferenceException($"GetIconRarity error '{name}', Rarity '{rarity}' not found.");
+                return data.border;
+            throw new NullReferenceException($"GetBorderRarity error '{name}', Rarity '{rarity}' not found.");
         }
 
         [Serializable]
         class Data
         {
             public Rarity rarity;
-            public Sprite icon;
+            public Sprite border;
         }
     }
 }

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using _Games.Config;
 using _Games.Misc;
+using _Games.Misc.Model;
 using _Games.Utils;
 using _KIT.Pool;
 using _KIT.Resource;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -14,28 +14,29 @@ namespace _Games.Combat.Level
 {
     public class UIWeaponItemDragDrop : DragAndDropBehavior
     {
+        [SerializeField] private Image imgBorder;
         [SerializeField] private Image imgIcon;
-        [SerializeField] private TextMeshProUGUI textLevel;
 
         private List<RaycastResult> results = new List<RaycastResult>();
         private WeaponData weaponData;
-        private int weaponLevel;
+        private Rarity weaponRarity;
         private Action onPickWeapon;
 
         public bool IsEqual(int weaponId)
         {
-            return weaponData != null && weaponData.WeaponId == weaponLevel;
+            return weaponData != null && weaponData.WeaponId == weaponId;
         }
 
-        public async void Initialize(WeaponData weaponData, int weaponLevel, Action pickEquipmentCallback)
+        public async void Initialize(WeaponData weaponData, Rarity weaponRarity, Action pickEquipmentCallback)
         {
-            WeaponSO so = await KitLoaded.LoadAsync<WeaponSO>(GlobalsPath.GetWeaponSOPath(weaponData.WeaponId));
+            WeaponSO weaponSo = await KitLoaded.LoadAsync<WeaponSO>(GlobalsPath.GetWeaponSOPath(weaponData.WeaponId));
+            RaritySO raritySo = await KitLoaded.LoadAsync<RaritySO>(GlobalsPath.RARITY_SO);
 
-            this.weaponLevel = weaponLevel;
+            this.weaponRarity = weaponRarity;
             this.weaponData = weaponData;
             onPickWeapon = pickEquipmentCallback;
-            imgIcon.sprite = so.GetIcon(weaponLevel);
-            textLevel.text = weaponLevel.ToString();
+            imgIcon.sprite = weaponSo.GetIconRarity(weaponRarity);
+            imgBorder.sprite = raritySo.GetBorderRarity(weaponRarity);
         }
 
         protected override bool EndDrop(PointerEventData eventData)
@@ -47,9 +48,9 @@ namespace _Games.Combat.Level
                 var item = r.gameObject.GetComponent<UIWeaponItemDragDrop>();
                 if (item != null)
                 {
-                    if (item.weaponData.WeaponId == weaponData.WeaponId && item.weaponLevel == weaponLevel)
+                    if (item.weaponData.WeaponId == weaponData.WeaponId && item.weaponRarity == weaponRarity && weaponRarity < RarityMethod.MaxRarity)
                     {
-                        item.Initialize(weaponData, weaponLevel + 1, null);
+                        item.Initialize(weaponData, RarityMethod.IncreaseRarity(weaponRarity), null);
                         onPickWeapon?.Invoke();
                         onPickWeapon = null;
                         KitPool.Destroy(gameObject);
@@ -67,7 +68,7 @@ namespace _Games.Combat.Level
                 SlotItem sqv = hit.collider.gameObject.GetComponent<SlotItem>();
                 if (sqv != null && !sqv.IsEquipped)
                 {
-                    sqv.Equip(weaponData, weaponLevel);
+                    sqv.Equip(weaponData, weaponRarity);
                     KitPool.Destroy(gameObject);
                     onPickWeapon?.Invoke();
                     onPickWeapon = null;

@@ -10,6 +10,7 @@ using _Games.Combat.SkillSystem;
 using _Games.Combat.SkillSystem.Model;
 using _Games.Combat.View;
 using _Games.Config;
+using _Games.Misc.Model;
 using _KIT.Checker;
 using _KIT.Config;
 using _KIT.Event;
@@ -172,7 +173,7 @@ namespace _Games.Combat
                         if (skill.projectile.hitEffectPrefab != null)
                             KitPool.RegisterPool(skill.projectile.hitEffectPrefab, true);
                     }
-                    equipmentManager.Equip(i, slot.WeaponData, slot.WeaponLevel);
+                    equipmentManager.Equip(i, slot.WeaponData, RarityMethod.ParseLevel(slot.WeaponRarity));
                 }
             }
 

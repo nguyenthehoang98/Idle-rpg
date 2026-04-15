@@ -1,6 +1,7 @@
 using System;
 using _Games.Combat.Equipment;
 using _Games.Config;
+using _Games.Misc.Model;
 using MoreMountains.Feedbacks;
 using PrimeTween;
 using Unity.Mathematics;
@@ -19,18 +20,18 @@ namespace _Games.Combat.Level
         private Tween rotationTween;
 
         public WeaponData WeaponData { get; private set; }
-        public int WeaponLevel {get; private set;}
+        public Rarity WeaponRarity {get; private set;}
 
         private BaseWeaponItem Item { get; set; }
 
         public bool IsEquipped => Item != null;
 
-        public async void Equip(WeaponData weaponData, int weaponLevel)
+        public async void Equip(WeaponData weaponData, Rarity weaponRarity)
         {
             WeaponData = weaponData;
-            WeaponLevel = weaponLevel; 
+            WeaponRarity = weaponRarity; 
             equipFeedback.PlayFeedbacks();
-            Item = await BaseWeaponItem.Build(parent, weaponData, weaponLevel);
+            Item = await BaseWeaponItem.Build(parent, weaponData, weaponRarity);
             Debug.Log(@"Bắn 1 cái vfx hình vuông ở item");
         }
 

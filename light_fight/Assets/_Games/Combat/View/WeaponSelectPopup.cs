@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using _Games.Combat.Event;
 using _Games.Combat.Level;
 using _Games.Config;
+using _Games.Misc.Model;
 using _Games.Utils;
 using _KIT.Config;
 using _KIT.Event;
@@ -73,6 +74,7 @@ namespace _Games.Combat.View
                 WeaponData weaponData = allData[i];
                 skillConfig.Find(weaponData.SkillId, out var skillData);
                 int level = FormulaUtils.RandomEquipmentLevel(1, 1, 1);
+                Rarity rarity = RarityMethod.ParseRarity(level);
                 int price = weaponData.Price(level);
                 int power = FormulaUtils.PowerWeapon(weaponData, skillData, level);
                 Object @object = weapons[i];
@@ -82,7 +84,7 @@ namespace _Games.Combat.View
                 currentWeapons.Add(new Data
                 {
                     weaponId = weaponData.WeaponId,
-                    weaponLevel = level,
+                    rarity = rarity,
                     price = price,
                     power = power,
                 });
@@ -95,7 +97,7 @@ namespace _Games.Combat.View
                     @object.UIWeaponItemDragDrop = instance;
                 }
                 
-                @object.UIWeaponItemDragDrop.Initialize(weaponData, level, () =>
+                @object.UIWeaponItemDragDrop.Initialize(weaponData, rarity, () =>
                 {
                     @object.textPrice.text = String.Empty;
                     @object.textTitle.text = String.Empty;
@@ -148,7 +150,7 @@ namespace _Games.Combat.View
         public struct Data
         {
             public int weaponId;
-            public int weaponLevel;
+            public Rarity rarity;
             public int price;
             public int power;
         }

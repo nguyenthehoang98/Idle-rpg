@@ -16,7 +16,7 @@ MonoBehaviour:
   m_GUID: 76d65641e328c7b4283cc48663488ed5
   m_SerializeEntries:
   - m_GUID: 132d4d65777c454448c174f201e9fae1
-    m_Address: monster_10000
+    m_Address: Monster_10000
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -36,7 +36,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3f9021f59aa5d4240a9f5c9f0ba6eb11
-    m_Address: weapon_so_2001
+    m_Address: Weapon_SO_2001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -86,12 +86,17 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 93749b1ae2d4a6f4095bde6940ac74c1
-    m_Address: weapon_so_2010
+    m_Address: Weapon_SO_2010
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9c8a4ee2d729d7e4aaa7714da3b17cd1
-    m_Address: monster_10010
+    m_Address: Monster_10010
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9dd5a8f80b768db4aa2200af5a76eb82
+    m_Address: Rarity_SO
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -111,7 +116,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d6a94ea90ad17c94f941263cd5b3b138
-    m_Address: weapon_so_2002
+    m_Address: Weapon_SO_2002
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -121,7 +126,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ed44ce3b61f78ed40aa254c8fb7f87db
-    m_Address: weapon_item_2001
+    m_Address: Weapon_Item_2001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -151,7 +156,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fa8c47bb4cdab9142b50174fbcd6535c
-    m_Address: weapon_so_2003
+    m_Address: Weapon_SO_2003
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
