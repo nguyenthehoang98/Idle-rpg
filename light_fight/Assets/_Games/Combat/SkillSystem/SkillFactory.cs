@@ -31,12 +31,27 @@ namespace _Games.Combat.SkillSystem
                 collisionResetInterval = data.CollisionResetInterval
             };
 
-            ProjectileSO projectile = await KitLoaded.LoadAsync<ProjectileSO>(data.ProjectileId, true);
-            cache.Add(data.ProjectileId);
-            BaseColliderSO collider = await KitLoaded.LoadAsync<BaseColliderSO>(data.ColliderId, true);
-            cache.Add(data.ColliderId);
-            BaseTrajectorySO trajectory = await KitLoaded.LoadAsync<BaseTrajectorySO>(data.TrajectoryId, true);
-            cache.Add(data.TrajectoryId);
+            ProjectileSO projectile = null;
+            if(!string.IsNullOrEmpty(data.ProjectileId))
+            {
+                projectile = await KitLoaded.LoadAsync<ProjectileSO>(data.ProjectileId, true);
+                cache.Add(data.ProjectileId);
+            }
+
+            BaseColliderSO collider = null;
+            if (!string.IsNullOrEmpty(data.ColliderId))
+            {
+                collider = await KitLoaded.LoadAsync<BaseColliderSO>(data.ColliderId, true);
+                cache.Add(data.ColliderId);    
+            }
+
+            BaseTrajectorySO trajectory = null;
+            if (!string.IsNullOrEmpty(data.TrajectoryId))
+            {
+                trajectory = await KitLoaded.LoadAsync<BaseTrajectorySO>(data.TrajectoryId, true);
+                cache.Add(data.TrajectoryId);                
+            }
+
             BaseModifierSO[] modifiers = new BaseModifierSO[data.ModifiersId.Length];
             for (int i = 0; i < data.ModifiersId.Length; i++)
             {

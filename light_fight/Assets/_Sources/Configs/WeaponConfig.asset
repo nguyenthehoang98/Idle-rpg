@@ -15,33 +15,33 @@ MonoBehaviour:
   fileUrl: 
   enable: 1
   weapons:
-  - weaponId: 2001
-    weaponName: 'Bow '
-    skillId: 100010
+  - weaponId: 20001
+    weaponName: 'Blunderbuss '
+    skillId: 120010
     baseAttack: 20
     attackBonusLevel: 5
     basePrice: 1
     priceBonusLevel: 1
     jsonUnlocks: []
-  - weaponId: 2002
-    weaponName: 'Cannon '
-    skillId: 100010
+  - weaponId: 20002
+    weaponName: 20002
+    skillId: 120020
     baseAttack: 20
     attackBonusLevel: 6
     basePrice: 1
     priceBonusLevel: 1
     jsonUnlocks: []
-  - weaponId: 2003
-    weaponName: 'Arrow '
-    skillId: 100010
+  - weaponId: 20003
+    weaponName: 20003
+    skillId: 120030
     baseAttack: 20
     attackBonusLevel: 7
     basePrice: 1
     priceBonusLevel: 1
     jsonUnlocks: []
-  - weaponId: 2010
-    weaponName: Gun
-    skillId: 100010
+  - weaponId: 20004
+    weaponName: 20004
+    skillId: 120040
     baseAttack: 20
     attackBonusLevel: 8
     basePrice: 1

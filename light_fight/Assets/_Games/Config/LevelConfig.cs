@@ -11,20 +11,12 @@ namespace _Games.Config
         ConfigPath = "Assets/_Sources/Configs/LevelConfig.asset")]
     public class LevelConfig : KitBaseConfig
     {
-        [SerializeField] private List<LevelData> datas = new List<LevelData>();
         [SerializeField] private List<LevelBatch> spawns = new List<LevelBatch>();
 
-        private Dictionary<int, LevelData> cacheData;
         private Dictionary<int, IReadOnlyDictionary<WaveIdData, LevelBatch>> cacheSpawns;
         
         public override void OnMapValue()
         {
-            cacheData = new Dictionary<int, LevelData>();
-            foreach (var data in datas)
-            {
-                cacheData.Add(data.LevelId, data);
-            }
-            
             Dictionary<int, Dictionary<WaveIdData, LevelBatch>> temp = new Dictionary<int, Dictionary<WaveIdData, LevelBatch>>();
             foreach (var data in spawns)
             {
@@ -55,25 +47,10 @@ namespace _Games.Config
             }
         }
 
-        public bool FindData(int levelID, out LevelData levelData)
-        {
-            return cacheData.TryGetValue(levelID, out levelData);
-        }
-
         public bool FindSpawn(int levelID, out IReadOnlyDictionary<WaveIdData, LevelBatch> dictionary)
         {
             return cacheSpawns.TryGetValue(levelID, out dictionary);
         }
-    }
-
-    [Serializable]
-    public class LevelData
-    {
-        [SerializeField] private int levelId;
-        [SerializeField] private string levelDesign;
-
-        public int LevelId => levelId;
-        public string LevelDesign => levelDesign;
     }
 
     [Serializable]

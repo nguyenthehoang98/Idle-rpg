@@ -1,4 +1,7 @@
+using _Games.Config;
+using _Games.Utils;
 using _KIT.Config;
+using _KIT.Resource;
 using _KIT.Utils;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -35,6 +38,8 @@ namespace _Games.Entry
                 "LevelConfig",
                 "WeaponConfig",
             });
+
+            await KitLoaded.LoadAsync<RaritySO>(GlobalsPath.RARITY_SO, true);
 
             ChangeSceneAsync("HomeScene");
             

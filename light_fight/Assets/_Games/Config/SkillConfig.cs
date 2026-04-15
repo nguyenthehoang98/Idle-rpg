@@ -35,13 +35,18 @@ namespace _Games.Config
             List<(string, string)> keyValuePairs = new List<(string, string)>();
             foreach (var skillData in skills)
             {
-                if (keys.Add(skillData.ProjectileId)) keyValuePairs.Add((skillData.ProjectileId, "projectile"));
-                if (keys.Add(skillData.ColliderId)) keyValuePairs.Add((skillData.ColliderId, "collider"));
-                if (keys.Add(skillData.TrajectoryId)) keyValuePairs.Add((skillData.TrajectoryId, "trajectory"));
+                if (!string.IsNullOrEmpty(skillData.ProjectileId) && keys.Add(skillData.ProjectileId))
+                    keyValuePairs.Add((skillData.ProjectileId, "projectile"));
+                if (!string.IsNullOrEmpty(skillData.ColliderId) && keys.Add(skillData.ColliderId))
+                    keyValuePairs.Add((skillData.ColliderId, "collider"));
+                if (!string.IsNullOrEmpty(skillData.TrajectoryId) && keys.Add(skillData.TrajectoryId))
+                    keyValuePairs.Add((skillData.TrajectoryId, "trajectory"));
+                
                 foreach (var m in skillData.ModifiersId)
                 {
                     if (keys.Add(m)) keyValuePairs.Add((m, "modifier"));
                 }
+
                 foreach (var b in skillData.BehaviorsId)
                 {
                     if (keys.Add(b)) keyValuePairs.Add((b, "behavior"));
@@ -62,12 +67,12 @@ namespace _Games.Config
                 Addressables.LoadAssetAsync<ScriptableObject>(path).Completed += handle =>
                 {
                     if (handle.Status != AsyncOperationStatus.Succeeded)
-                        Debug.LogError($"[SkillConfig] Not found [{type.ToUpper()}] with name: " + path);
+                        Debug.LogError($"[SkillConfig] Not found [{type.ToUpper()}] with '{path}'");
                 };
             }
             catch (Exception e)
             {
-                Debug.LogError($"[SkillConfig] Not found [{type.ToUpper()}] with name: " + path);
+                Debug.LogError($"[SkillConfig] Not found [{type.ToUpper()}] with '{path}'");
             }
         }
 

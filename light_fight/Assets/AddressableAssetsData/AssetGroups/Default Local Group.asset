@@ -15,8 +15,13 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 76d65641e328c7b4283cc48663488ed5
   m_SerializeEntries:
+  - m_GUID: 0825f11642ae05646b2a23828a244509
+    m_Address: 120020_Trajectory
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 132d4d65777c454448c174f201e9fae1
-    m_Address: Monster_10000
+    m_Address: 10000_Monster
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -26,7 +31,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 17a4987547a6c0845b600865872b9eaa
-    m_Address: TextDamageSpawner
+    m_Address: FloatingTextDamageSpawner
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -35,8 +40,33 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1d65dd7595f891d49b201de2eb4a24df
+    m_Address: 120010_Collider
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 241e9028db92a3f4b99235bcc8bbee79
+    m_Address: 120030_Trajectory
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 30646e07a56e16a40af0a489f52f504c
+    m_Address: 120020_Collider
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3f9021f59aa5d4240a9f5c9f0ba6eb11
-    m_Address: Weapon_SO_2001
+    m_Address: 2001_Weapon_SO
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 50a1c41ebeaffd14e857c1323e166476
+    m_Address: 120030_Collider
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 51b72f1966a1e6e479d1e1f04de2092f
+    m_Address: 120040_Collider
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -45,23 +75,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 59b0e16615751d74c8c7fecf129944d4
-    m_Address: Collider_Empty
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5e885ed3b85ff2e4ab1b9b27cb1002ab
     m_Address: WeaponItem
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 66943c7ee4add164ba44498a88d9e3dc
-    m_Address: Trajectory_Curve_11
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6db32a13468162e4eb40d4d7ba46c169
-    m_Address: Projectile_Empty
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -70,13 +85,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 78cbe2550c524de4ea086c24bcf988ac
+    m_Address: 110020_Collider
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7edffb0de0f2fb54bb7e20fac837d4af
     m_Address: PlayerHealthUI
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8e12be267797a9f4a99e2f7d22b3a1b2
-    m_Address: Collider_Circle_0.2
+  - m_GUID: 8bd606533bc98e9468a2bee457898fd0
+    m_Address: 120040_Trajectory
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -86,12 +106,12 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 93749b1ae2d4a6f4095bde6940ac74c1
-    m_Address: Weapon_SO_2010
+    m_Address: 2010_Weapon_SO
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9c8a4ee2d729d7e4aaa7714da3b17cd1
-    m_Address: Monster_10010
+    m_Address: 10010_Monster
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -100,13 +120,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a161349de24052649ae28ebf9a65f386
+    m_Address: 120040_Projectile
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a19e29e0364437e4a86b726fd4259ef0
     m_Address: WeaponSelectPopup
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a432ba70af158c34b9dba3aba2e07e4a
-    m_Address: Trajectory_Empty
+  - m_GUID: b7f3834a6cf4715438ff8ebdecd8ea10
+    m_Address: 120010_Trajectory
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -115,8 +140,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d23e1d92fb9ff394598bff3e9107e52f
+    m_Address: 120020_Projectile
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d6a94ea90ad17c94f941263cd5b3b138
-    m_Address: Weapon_SO_2002
+    m_Address: 2002_Weapon_SO
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -125,13 +155,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e749a7a5f6dac3c4984f0a720d104e36
+    m_Address: 120030_Projectile
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ed44ce3b61f78ed40aa254c8fb7f87db
-    m_Address: Weapon_Item_2001
+    m_Address: 2001_Weapon_Item
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: eda77aa656e14d043a1724659ea6f8ba
-    m_Address: Trajectory_Curve_9
+    m_Address: 110020_Trajectory
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -140,23 +175,23 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f13143e528c3ec545a685a097a21c10e
-    m_Address: Trajectory_Curve_10
+  - m_GUID: ef554a27ef2e0d44b853eacc78709845
+    m_Address: 120010_Projectile
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f7b12e2a973d18943ae564838a102d3a
-    m_Address: Projectile_Bullet_Goose
+    m_Address: 110020_Projectile
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f8b6ba07e97b3c740a0f4bb11dff3c9d
-    m_Address: LevelDesign_001
+    m_Address: 1_Level_Design
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fa8c47bb4cdab9142b50174fbcd6535c
-    m_Address: Weapon_SO_2003
+    m_Address: 2003_Weapon_SO
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

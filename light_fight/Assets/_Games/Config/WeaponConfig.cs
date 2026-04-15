@@ -1,8 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using _KIT.Config;
 using _KIT.Config.ExcelExtension.Runtime;
 using UnityEngine;
+using _Games.Combat.SkillSystem.Model;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace _Games.Config
 {
@@ -22,7 +28,22 @@ namespace _Games.Config
                 cacheWeaponData.Add(m.WeaponId, m);
             }
         }
-        
+
+        public override void OnPostImported()
+        {
+            #if UNITY_EDITOR
+            SkillConfig config = AssetDatabase.LoadAssetAtPath<SkillConfig>("Assets/_Sources/Configs/SkillConfig.asset");
+            var field = config.GetType().GetField("skills", BindingFlags.Default | BindingFlags.Instance | BindingFlags.NonPublic);
+            var list = field.GetValue(config) as List<SkillData>;
+            foreach (var weapon in weapons)
+            {
+                bool exists = list.Any(a => a.SkillId == weapon.SkillId);
+                if (!exists)
+                    Debug.LogError($"[WeaponConfig] Not found skill '{weapon.SkillId}' at weapon '{weapon.WeaponId}'");
+            }
+            #endif
+        }
+
         public bool Find(int weaponId, out WeaponData skill)
         {
             return cacheWeaponData.TryGetValue(weaponId, out skill);

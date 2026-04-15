@@ -11,6 +11,7 @@ using _Games.Combat.SkillSystem.Model;
 using _Games.Combat.View;
 using _Games.Config;
 using _Games.Misc.Model;
+using _Games.Utils;
 using _KIT.Checker;
 using _KIT.Config;
 using _KIT.Event;
@@ -53,8 +54,6 @@ namespace _Games.Combat
             // todo: validate data
             int levelId = 1;
             LevelConfig levelConfig = KitConfigManager.Get<LevelConfig>();
-            bool foundLevelData = levelConfig.FindData(levelId, out var levelData);
-            if(!foundLevelData) Debug.LogError("Not found level data with levelId: " + levelId);
             bool foundSpawnData = levelConfig.FindSpawn(levelId, out var dictionary);
             if(!foundSpawnData) Debug.LogError("Not found spawn data with levelId: " + levelId);
            
@@ -63,13 +62,13 @@ namespace _Games.Combat
             zoomInCameraFeedback.PlayFeedbacks();
             
             // todo: init level spawn
-            GameObject go = await KitLoaded.LoadAsync<GameObject>(levelData.LevelDesign);
+            GameObject go = await KitLoaded.LoadAsync<GameObject>(GlobalsPath.GetLevelDesignPath(levelId));
             levelDesign = Instantiate(go).GetComponent<LevelDesign>();
             Entity player = ECSFactory.BuildPlayer(levelDesign);
 
             // todo: init object
             PlayerHealthUI.Instantiate(canvas.transform, player);
-            TextDamageSpawner.Instantiate(transform);
+            FloatingTextDamageSpawner.Instantiate(transform);
             RangedMonsterCastSkillManager.Instantiate(transform);
             GameTimeUI.Instantiate(canvas.transform);
             GameObject rmcsm = new GameObject("RangedMonsterCastSkillManager");

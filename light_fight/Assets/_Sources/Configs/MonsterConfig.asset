@@ -15,11 +15,11 @@ MonoBehaviour:
   fileUrl: 
   enable: 1
   monsters:
-  - monsterId: 10000
+  - monsterId: 10001
     monsterName: Goose
     monsterObjectId: 
     isRanged: 0
-    skillId: 100000
+    skillId: 110010
     skillLevel: 1
     skillCooldown: 3
     moveSpeed: 3
@@ -27,11 +27,11 @@ MonoBehaviour:
     attackDistance: 1.2
     attack: 1
     health: 20
-  - monsterId: 10010
+  - monsterId: 10002
     monsterName: Cowboy
     monsterObjectId: 
     isRanged: 1
-    skillId: 100010
+    skillId: 110020
     skillLevel: 1
     skillCooldown: 3
     moveSpeed: 2.25

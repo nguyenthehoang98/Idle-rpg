@@ -15,7 +15,7 @@ MonoBehaviour:
   fileUrl: 
   enable: 1
   skills:
-  - skillId: 100000
+  - skillId: 110010
     skillName: 
     lifeTime: 0.5
     castTime: 0
@@ -28,12 +28,12 @@ MonoBehaviour:
     maxFindTargetRange: 10
     maxHitCount: 1
     collisionResetInterval: 999
-    projectileId: Projectile_Empty
-    colliderId: Collider_Empty
-    trajectoryId: Trajectory_Empty
+    projectileId: 
+    colliderId: 
+    trajectoryId: 
     modifiersId: []
     behaviorsId: []
-  - skillId: 100010
+  - skillId: 110020
     skillName: 
     lifeTime: 0.5
     castTime: 0.2
@@ -46,8 +46,80 @@ MonoBehaviour:
     maxFindTargetRange: 10
     maxHitCount: 1
     collisionResetInterval: 999
-    projectileId: Projectile_Bullet_Goose
-    colliderId: Collider_Circle_0.2
-    trajectoryId: Trajectory_Curve_9
+    projectileId: 110020_Projectile
+    colliderId: 110020_Collider
+    trajectoryId: 110020_Trajectory
+    modifiersId: []
+    behaviorsId: []
+  - skillId: 120010
+    skillName: 
+    lifeTime: 0.5
+    castTime: 0.2
+    baseFlatDamage: 0
+    flatDamageBonusLevel: 0
+    baseScaleDamage: 1
+    scaleDamageBonusLevel: 0
+    type: 0
+    needTargetToCast: 1
+    maxFindTargetRange: 12
+    maxHitCount: 1
+    collisionResetInterval: 999
+    projectileId: 120010_Projectile
+    colliderId: 120010_Collider
+    trajectoryId: 120010_Trajectory
+    modifiersId: []
+    behaviorsId: []
+  - skillId: 120020
+    skillName: 
+    lifeTime: 0.5
+    castTime: 0.2
+    baseFlatDamage: 0
+    flatDamageBonusLevel: 0
+    baseScaleDamage: 1
+    scaleDamageBonusLevel: 0
+    type: 0
+    needTargetToCast: 1
+    maxFindTargetRange: 12
+    maxHitCount: 1
+    collisionResetInterval: 999
+    projectileId: 120020_Projectile
+    colliderId: 120020_Collider
+    trajectoryId: 120020_Trajectory
+    modifiersId: []
+    behaviorsId: []
+  - skillId: 120030
+    skillName: 
+    lifeTime: 0.5
+    castTime: 0.2
+    baseFlatDamage: 0
+    flatDamageBonusLevel: 0
+    baseScaleDamage: 1
+    scaleDamageBonusLevel: 0
+    type: 0
+    needTargetToCast: 1
+    maxFindTargetRange: 12
+    maxHitCount: 1
+    collisionResetInterval: 999
+    projectileId: 120030_Projectile
+    colliderId: 120030_Collider
+    trajectoryId: 120030_Trajectory
+    modifiersId: []
+    behaviorsId: []
+  - skillId: 120040
+    skillName: 
+    lifeTime: 0.5
+    castTime: 0.2
+    baseFlatDamage: 0
+    flatDamageBonusLevel: 0
+    baseScaleDamage: 1
+    scaleDamageBonusLevel: 0
+    type: 0
+    needTargetToCast: 1
+    maxFindTargetRange: 12
+    maxHitCount: 1
+    collisionResetInterval: 999
+    projectileId: 120040_Projectile
+    colliderId: 120040_Collider
+    trajectoryId: 120040_Trajectory
     modifiersId: []
     behaviorsId: []

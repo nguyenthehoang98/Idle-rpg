@@ -14,9 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fileUrl: 
   enable: 1
-  datas:
-  - levelId: 1
-    levelDesign: LevelDesign_001
   spawns:
   - levelId: 1
     waveId: 1

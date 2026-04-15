@@ -40,7 +40,7 @@ namespace _Games.Combat.Level
             spBody.sprite = raritySo.GetBorderRarity(weaponRarity);
             if (Item != null) KitPool.Destroy(Item.gameObject);
             Item = await BaseWeaponItem.Build(parent, weaponData, weaponRarity);
-            Debug.Log(@"Bắn 1 cái vfx hình vuông ở item");
+            Debug.Log(@"Bắn 1 cái vfx hình vuông ở item: " + JsonUtility.ToJson(weaponData));
         }
 
         public void Trigger() => triggerFeedback.PlayFeedbacks();
