@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - FX
+  - World
+  - Target
   layers:
   - Default
   - TransparentFX
@@ -43,6 +46,9 @@ TagManager:
     locked: 0
   - name: Weapons
     uniqueID: 2668121005
+    locked: 0
+  - name: Effects
+    uniqueID: 4058680765
     locked: 0
   m_RenderingLayers:
   - Default

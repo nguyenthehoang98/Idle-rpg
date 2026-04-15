@@ -7,6 +7,8 @@ namespace _Games.Combat.Equipment
     {
         public AnimationClip clip;
         public AnimancerComponent animancerComponent;
+        public float delayCastProjectileTime;
+        public ParticleSystem particleSystem;
         
         protected override float OnExecuteDelay(float timeScale)
         {
@@ -15,7 +17,9 @@ namespace _Games.Combat.Equipment
             AnimancerState state = animancerComponent.Play(clip);
             state.Time = 0;
             state.Speed = timeScale;
-            return state.Duration / timeScale;
+            particleSystem.main
+            particleSystem.Play();
+            return delayCastProjectileTime / timeScale;
         }
     }
 }
