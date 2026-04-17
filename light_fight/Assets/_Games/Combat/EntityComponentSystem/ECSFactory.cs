@@ -197,6 +197,20 @@ namespace _Games.Combat.EntityComponentSystem
                 {
                     switch (behavior.Type)
                     {
+                        case BehaviourType.Parallel:
+                            Vector2 perp = new Vector2(-direction.y, direction.x);
+                            ParallelBehaviourSO parallel = behavior as ParallelBehaviourSO;
+                            int count = parallel.count;
+                            float t = (count - 1) * 0.5f;
+                            for (int i = 0; i < count; i++)
+                            {
+                                float f = i - t;
+                                Vector3 shift = perp * (f * parallel.distanceBetween) + parallel.centerOffset;
+                                float3 offset = new float3(shift.x, shift.y, 0);
+                                BuildProjectileInternal(manager, source, startPosition + offset, endPosition + offset, skill, skillData, level);
+                            }
+
+                            break;
                         case BehaviourType.Spread:
                             SpreadBehaviourSO spread = behavior as SpreadBehaviourSO;
                             List<int> randomList = null;

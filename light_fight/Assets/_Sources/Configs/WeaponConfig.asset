@@ -24,7 +24,7 @@ MonoBehaviour:
     priceBonusLevel: 1
     jsonUnlocks: []
   - weaponId: 20002
-    weaponName: 20002
+    weaponName: 'Double Barrel '
     skillId: 120020
     baseAttack: 20
     attackBonusLevel: 6

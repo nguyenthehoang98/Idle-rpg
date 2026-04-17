@@ -86,7 +86,8 @@ MonoBehaviour:
     colliderId: 120020_Collider
     trajectoryId: 120020_Trajectory
     modifiersId: []
-    behaviorsId: []
+    behaviorsId:
+    - 120020_Behavior
   - skillId: 120030
     skillName: 
     lifeTime: 0.5

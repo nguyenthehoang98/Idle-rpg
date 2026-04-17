@@ -10,6 +10,6 @@ namespace _Games.Combat.SkillSystem.Config
 
     public enum BehaviourType
     {
-        Spread, DropStrike, Explosion, Piercing
+        Spread, DropStrike, Explosion, Piercing, Parallel
     }
 }
