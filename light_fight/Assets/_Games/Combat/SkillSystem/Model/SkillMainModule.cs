@@ -7,7 +7,6 @@
         public FindTargetType type;
         public bool needTargetToCast;
         public float maxTargetRange;
-        public int maxHitCount;
         public float collisionResetInterval;
     }
 }

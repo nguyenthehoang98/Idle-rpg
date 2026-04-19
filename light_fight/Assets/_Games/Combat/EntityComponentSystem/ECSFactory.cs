@@ -358,13 +358,25 @@ namespace _Games.Combat.EntityComponentSystem
                     Debug.LogError("Invalid collider type " + skill.collider.Type);
                     break;
             }
+            
+            int piercing = 1;
+            foreach (var behavior in skill.behaviors)
+            {
+                switch (behavior.Type)
+                {
+                    case BehaviourType.Piercing:
+                        PiercingBehaviourSO piercingSo = behavior as PiercingBehaviourSO;
+                        piercing += Mathf.Max(0, piercingSo.count);
+                        break;
+                }
+            }
 
             manager.AddComponentData(entity,
                 new ProjectileTrajectory(startPosition, math.normalizesafe(direction))
             );
             manager.AddComponentData(entity,
                 new ProjectileSkillData(source, skill.Id, lifeTime,
-                    main.maxHitCount, main.collisionResetInterval,
+                    piercing, main.collisionResetInterval,
                     skillData.FlatDamage(level), skillData.ScaleDamage(level))
             );
 

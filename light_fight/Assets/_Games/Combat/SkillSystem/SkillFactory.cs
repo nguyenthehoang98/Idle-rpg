@@ -27,7 +27,6 @@ namespace _Games.Combat.SkillSystem
                 type = data.Type,
                 needTargetToCast = data.NeedTargetToCast,
                 maxTargetRange = data.MaxFindTargetRange,
-                maxHitCount = data.MaxHitCount,
                 collisionResetInterval = data.CollisionResetInterval
             };
 

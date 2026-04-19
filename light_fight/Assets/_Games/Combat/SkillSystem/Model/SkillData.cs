@@ -16,7 +16,6 @@ namespace _Games.Combat.SkillSystem.Model
         [SerializeField] private FindTargetType type;
         [SerializeField] private int needTargetToCast;
         [SerializeField] private float maxFindTargetRange;
-        [SerializeField] private int maxHitCount;
         [SerializeField] private float collisionResetInterval;
         [SerializeField] private string projectileId;
         [SerializeField] private string colliderId;
@@ -31,7 +30,6 @@ namespace _Games.Combat.SkillSystem.Model
         public FindTargetType Type => type;
         public bool NeedTargetToCast => needTargetToCast == 1;
         public float MaxFindTargetRange => maxFindTargetRange;
-        public int MaxHitCount => maxHitCount;
         public float CollisionResetInterval => collisionResetInterval;
         public string ProjectileId => projectileId;
         public string ColliderId => colliderId;

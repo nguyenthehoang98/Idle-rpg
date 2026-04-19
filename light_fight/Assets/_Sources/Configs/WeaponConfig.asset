@@ -26,7 +26,7 @@ MonoBehaviour:
   - weaponId: 20002
     weaponName: 'Double Barrel '
     skillId: 120020
-    baseAttack: 20
+    baseAttack: 12
     attackBonusLevel: 6
     basePrice: 1
     priceBonusLevel: 1
