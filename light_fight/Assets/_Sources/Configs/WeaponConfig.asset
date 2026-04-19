@@ -32,7 +32,7 @@ MonoBehaviour:
     priceBonusLevel: 1
     jsonUnlocks: []
   - weaponId: 20003
-    weaponName: 20003
+    weaponName: Brick
     skillId: 120030
     baseAttack: 20
     attackBonusLevel: 7

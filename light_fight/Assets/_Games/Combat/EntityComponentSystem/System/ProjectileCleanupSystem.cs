@@ -32,6 +32,7 @@ namespace _Games.Combat.EntityComponentSystem.System
                 .WithAll<ProjectileSkillData>()
                 .WithNone<ProjectileDestroyTag>()
                 .Build();
+            Debug.Log("Lỗi ở đây vì bỏ qua filter nổ");
         }
 
         public void OnUpdate(ref SystemState state)

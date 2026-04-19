@@ -42,6 +42,7 @@ namespace _Games.Combat
         private async void Start()
         {
             // todo: init world
+            if(World.DefaultGameObjectInjectionWorld != null) World.DefaultGameObjectInjectionWorld.Dispose();
             DefaultWorldInitialization.Initialize("GameWorld", false);
             CustomSimulationGroup group = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<CustomSimulationGroup>();
             group.Iterations = KitEntryScene.Instance.GamePlayIterationsUpdate;

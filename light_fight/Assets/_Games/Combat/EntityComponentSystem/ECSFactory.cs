@@ -358,7 +358,18 @@ namespace _Games.Combat.EntityComponentSystem
                     Debug.LogError("Invalid collider type " + skill.collider.Type);
                     break;
             }
-            
+
+            float explosionDuration = 0;
+            foreach (var behavior in skill.behaviors)
+            {
+                switch (behavior.Type)
+                {
+                    case BehaviourType.DropStrike:
+                        explosionDuration = lifeTime;
+                        break;
+                }
+            }
+
             int piercing = 1;
             foreach (var behavior in skill.behaviors)
             {
@@ -367,6 +378,12 @@ namespace _Games.Combat.EntityComponentSystem
                     case BehaviourType.Piercing:
                         PiercingBehaviourSO piercingSo = behavior as PiercingBehaviourSO;
                         piercing += Mathf.Max(0, piercingSo.count);
+                        break;
+                    case BehaviourType.Explosion:
+                        ExplosionBehaviourSO explosionSo = behavior as ExplosionBehaviourSO;
+                        manager.AddComponentData(entity,
+                            new ProjectileExplosion(explosionSo.radius, explosionSo.offset, explosionDuration)
+                        );
                         break;
                 }
             }
