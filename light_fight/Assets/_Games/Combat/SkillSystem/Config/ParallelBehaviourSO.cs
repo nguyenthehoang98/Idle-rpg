@@ -2,7 +2,7 @@
 
 namespace _Games.Combat.SkillSystem.Config
 {
-    [CreateAssetMenu(fileName = "Behavior", menuName = "Game-Skill/Behavior-Parallel")]
+    [CreateAssetMenu(fileName = "Behavior", menuName = "Game-Skill/Behavior/Parallel")]
     public class ParallelBehaviourSO : BaseBehaviorSO
     {
         public int count;

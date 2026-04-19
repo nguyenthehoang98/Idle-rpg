@@ -8,6 +8,7 @@ namespace _Games.Combat.Equipment
         public AnimationClip clip;
         public AnimancerComponent animancerComponent;
         public float delayCastProjectileTime;
+        [Header("Can Null")]
         public ParticleSystem particleSystem;
         
         protected override float OnExecuteDelay(float timeScale)
@@ -19,9 +20,12 @@ namespace _Games.Combat.Equipment
             state.Time = 0;
             state.Speed = timeScale;
             
-            ParticleSystem.MainModule main = particleSystem.main;
-            main.simulationSpeed = timeScale;
-            particleSystem.Play();
+            if(particleSystem != null)
+            {
+                ParticleSystem.MainModule main = particleSystem.main;
+                main.simulationSpeed = timeScale;
+                particleSystem.Play();
+            }
            
             return delayCastProjectileTime / timeScale;
         }

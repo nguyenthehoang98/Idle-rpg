@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace _Games.Combat.SkillSystem.Config
 {
-    [CreateAssetMenu(fileName = "Circle", menuName = "Game-Skill/Collider-Circle")]
+    [CreateAssetMenu(fileName = "Circle", menuName = "Game-Skill/Collider/Circle")]
     public class CircleColliderSO : BaseColliderSO
     {
         public List<Circle> list = new List<Circle>();

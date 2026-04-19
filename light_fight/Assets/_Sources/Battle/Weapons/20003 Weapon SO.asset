@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icons:
   - rarity: 0
-    icon: {fileID: 21300000, guid: d8b3e800a155bc34bb4457e610021536, type: 3}
+    icon: {fileID: 21300000, guid: 011c44ba16cea6e4991c6049afe826b9, type: 3}
   - rarity: 1
-    icon: {fileID: 21300000, guid: d8b3e800a155bc34bb4457e610021536, type: 3}
+    icon: {fileID: 21300000, guid: 011c44ba16cea6e4991c6049afe826b9, type: 3}
   - rarity: 2
-    icon: {fileID: 21300000, guid: d8b3e800a155bc34bb4457e610021536, type: 3}
+    icon: {fileID: 21300000, guid: 011c44ba16cea6e4991c6049afe826b9, type: 3}
   - rarity: 3
-    icon: {fileID: 21300000, guid: d8b3e800a155bc34bb4457e610021536, type: 3}
+    icon: {fileID: 21300000, guid: 011c44ba16cea6e4991c6049afe826b9, type: 3}
   - rarity: 4
-    icon: {fileID: 21300000, guid: d8b3e800a155bc34bb4457e610021536, type: 3}
+    icon: {fileID: 21300000, guid: 011c44ba16cea6e4991c6049afe826b9, type: 3}

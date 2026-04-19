@@ -145,6 +145,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a368e74a2ce92e146abcb156ac4be11d
+    m_Address: 120030_Behavior
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a3de8af4e6f72a549a2ba03fdb4dec90
     m_Address: 20003_Weapon_Item
     m_ReadOnly: 0

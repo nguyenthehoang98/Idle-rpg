@@ -26,7 +26,6 @@ MonoBehaviour:
     type: 0
     needTargetToCast: 1
     maxFindTargetRange: 10
-    maxHitCount: 1
     collisionResetInterval: 999
     projectileId: 
     colliderId: 
@@ -44,7 +43,6 @@ MonoBehaviour:
     type: 0
     needTargetToCast: 1
     maxFindTargetRange: 10
-    maxHitCount: 1
     collisionResetInterval: 999
     projectileId: 110020_Projectile
     colliderId: 110020_Collider
@@ -62,7 +60,6 @@ MonoBehaviour:
     type: 0
     needTargetToCast: 1
     maxFindTargetRange: 12
-    maxHitCount: 1
     collisionResetInterval: 999
     projectileId: 120010_Projectile
     colliderId: 120010_Collider
@@ -81,7 +78,6 @@ MonoBehaviour:
     type: 0
     needTargetToCast: 1
     maxFindTargetRange: 12
-    maxHitCount: 1
     collisionResetInterval: 999
     projectileId: 120020_Projectile
     colliderId: 120020_Collider
@@ -100,13 +96,13 @@ MonoBehaviour:
     type: 0
     needTargetToCast: 1
     maxFindTargetRange: 12
-    maxHitCount: 1
     collisionResetInterval: 999
     projectileId: 120030_Projectile
     colliderId: 120030_Collider
     trajectoryId: 120030_Trajectory
     modifiersId: []
-    behaviorsId: []
+    behaviorsId:
+    - 120030_Behavior
   - skillId: 120040
     skillName: 
     lifeTime: 0.5
@@ -118,7 +114,6 @@ MonoBehaviour:
     type: 0
     needTargetToCast: 1
     maxFindTargetRange: 12
-    maxHitCount: 1
     collisionResetInterval: 999
     projectileId: 120040_Projectile
     colliderId: 120040_Collider

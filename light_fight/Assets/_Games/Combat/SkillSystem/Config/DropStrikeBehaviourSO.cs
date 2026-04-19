@@ -2,7 +2,7 @@
 
 namespace _Games.Combat.SkillSystem.Config
 {
-    [CreateAssetMenu(fileName = "Behavior", menuName = "Game-Skill/Behavior-DropStrike")]
+    [CreateAssetMenu(fileName = "Behavior", menuName = "Game-Skill/Behavior/DropStrike")]
     public class DropStrikeBehaviourSO : BaseBehaviorSO
     {
         public int count;
