@@ -53,15 +53,16 @@ namespace _Games.Combat.EntityComponentSystem.System
             }.ScheduleParallel(state.Dependency);
             state.CompleteDependency();
             
-            /*state.Dependency = new ProjectileExplosionJob
+            state.Dependency = new ProjectileExplosionJob
             {
                 Grid = grid,
                 LocalTransformLookup = localTransformLookup,
                 CircleBufferLookup = circleBufferLookup,
                 PlayerTagLookup = playerTagLookup,
                 MonsterTagLookup = monsterTagLookup,
+                DeltaTime = state.WorldUnmanaged.Time.DeltaTime,
             }.ScheduleParallel(state.Dependency);
-            state.CompleteDependency();*/
+            state.CompleteDependency();
         }
         
         [BurstCompile]
@@ -140,18 +141,19 @@ namespace _Games.Combat.EntityComponentSystem.System
          [BurstCompile]
         partial struct ProjectileExplosionJob : IJobEntity
         {
+            [ReadOnly] public float DeltaTime;
             [ReadOnly] public NativeParallelMultiHashMap<int2, Entity> Grid;
             [ReadOnly] public ComponentLookup<LocalTransform> LocalTransformLookup;
             [ReadOnly] public ComponentLookup<PlayerTag> PlayerTagLookup;
             [ReadOnly] public ComponentLookup<MonsterTag> MonsterTagLookup;
             [NativeDisableParallelForRestriction]
             public BufferLookup<CircleBuffer> CircleBufferLookup;
-            
-            void Execute([ChunkIndexInQuery] int chunkIndex, 
-                in Entity entity, in LocalTransform transform, in ProjectileTrajectory trajectory,
+
+            void Execute(in Entity entity, in LocalTransform transform, in ProjectileTrajectory trajectory,
                 ref ProjectileExplosion explosion, ref ProjectileSkillData skillData,
                 ref DynamicBuffer<CollisionBuffer> buffers)
             {
+                explosion.ElapsedTime += DeltaTime;
                 if (buffers.Length == 0 || explosion.OnTriggerModifier || explosion.ElapsedTime < explosion.Duration) return;
 
                 explosion.OnTriggerModifier = true;
@@ -162,52 +164,55 @@ namespace _Games.Combat.EntityComponentSystem.System
                 float2 max = position + radius;
                 int2 minCell = (int2)math.floor(min);
                 int2 maxCell = (int2)math.floor(max);
-                
-                NativeParallelHashSet<Entity> copy = new NativeParallelHashSet<Entity>(buffers.Capacity, Allocator.Temp);
-                    foreach (var collisionBuffer in buffers)
-                    {
-                        copy.Add(collisionBuffer.Entity);
-                    }
 
-                    for (int x = minCell.x; x <= maxCell.x; x++)
+                NativeParallelHashSet<Entity> copy = new NativeParallelHashSet<Entity>(buffers.Capacity, Allocator.Temp);
+                foreach (var collisionBuffer in buffers)
+                {
+                    copy.Add(collisionBuffer.Entity);
+                }
+
+                for (int x = minCell.x; x <= maxCell.x; x++)
+                {
+                    for (int y = minCell.y; y <= maxCell.y; y++)
                     {
-                        for (int y = minCell.y; y <= maxCell.y; y++)
+                        int2 cell = new int2(x, y);
+                        if (Grid.TryGetFirstValue(cell, out var unit, out var iterator))
                         {
-                            int2 cell = new int2(x, y);
-                            if (Grid.TryGetFirstValue(cell, out var unit, out var iterator))
+                            do
                             {
-                                do
+                                if (!LocalTransformLookup.HasComponent(unit))
+                                    continue;
+                                if(!CircleBufferLookup.TryGetBuffer(unit, out DynamicBuffer<CircleBuffer> otherBuffers)) 
+                                    continue;
+                                if (skillData.IsSourcePlayer() && PlayerTagLookup.HasComponent(unit))
+                                    continue;
+                                if (skillData.IsSourceMonster() && MonsterTagLookup.HasComponent(unit))
+                                    continue;
+                                float2 monsterPosition = LocalTransformLookup[unit].Position.xy;
+                                foreach (var circleBuffer in otherBuffers)
                                 {
-                                    if (!LocalTransformLookup.HasComponent(unit))
-                                        continue;
-                                    if (!CircleBufferLookup.TryGetBuffer(unit, out DynamicBuffer<CircleBuffer> otherBuffers))
-                                        continue;
-                                    if (skillData.IsSourcePlayer() && PlayerTagLookup.HasComponent(unit))
-                                        continue;
-                                    if (skillData.IsSourceMonster() && MonsterTagLookup.HasComponent(unit))
-                                        continue;
-                                    float2 monsterPosition = LocalTransformLookup[unit].Position.xy;
-                                    foreach (var circleBuffer in otherBuffers)
+                                    float bufferRadius = circleBuffer.Radius;
+                                    float totalRadius = bufferRadius + radius;
+                                    float distanceSq = math.distancesq(monsterPosition, position);
+                                    if (distanceSq <= totalRadius * totalRadius)
                                     {
-                                        float bufferRadius = circleBuffer.Radius;
-                                        float totalRadius = bufferRadius + radius;
-                                        float distanceSq = math.distancesq(monsterPosition, position);
-                                        if (distanceSq <= totalRadius * totalRadius)
+                                        if (copy.Add(unit))
                                         {
-                                            if (copy.Add(unit) && skillData.TotalUnitBeHit < skillData.MaximumHits)
-                                            {
-                                                skillData.TotalUnitBeHit++;
-                                                buffers.Add(new CollisionBuffer(unit));                                                
-                                                break;
-                                            }
+                                            skillData.TotalUnitBeHit++;
+                                            buffers.Add(new CollisionBuffer(unit));
+                                            break;
                                         }
                                     }
-                                } while (Grid.TryGetNextValue(out unit, ref iterator));
-                            }
+                                }
+                            } while (Grid.TryGetNextValue(out unit, ref iterator));
                         }
                     }
+                }
 
-                    copy.Dispose();
+                copy.Dispose();
+
+                // todo: force destroy
+                skillData.ElapsedLifeTime = skillData.LifeTime;
             }
         }
     }

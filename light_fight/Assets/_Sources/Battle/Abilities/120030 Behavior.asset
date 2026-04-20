@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35fbde2a2c39472d96967011bbeed3a0, type: 3}
   m_Name: 120030 Behavior
   m_EditorClassIdentifier: 
-  radius: 2
+  radius: 1
   offset: {x: 0, y: 0, z: 0}
