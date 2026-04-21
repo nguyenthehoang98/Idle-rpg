@@ -170,7 +170,7 @@ namespace _Games.Combat.EntityComponentSystem
             await UniTask.CompletedTask;
         }
         
-        public static async void BuildProjectile(EntityManager manager, Entity source,
+        public static async void BuildProjectile(EntityManager manager, Entity source, Entity target,
             float3 startPosition, float3 endPosition, Skill skill, SkillData skillData, int level)
         {
             if (skill.behaviors.Length == 0)
@@ -330,7 +330,6 @@ namespace _Games.Combat.EntityComponentSystem
             });
 
             SkillMainModule main = skill.main;
-            float distance = math.distance(startPosition, endPosition);
             float lifeTime = main.lifeTime;
             switch (skill.trajectory.Type)
             {
@@ -342,6 +341,8 @@ namespace _Games.Combat.EntityComponentSystem
                     break;
                 case TrajectoryType.Parabolic:
                     ParabolicTrajectorySO parabolic = skill.trajectory as ParabolicTrajectorySO;
+                    Debug.LogError(@"Phải tính lại distance theo công thức Parabol");
+                    float distance = math.distance(startPosition, endPosition);
                     lifeTime = distance / parabolic.speed;
                     manager.AddComponentData(entity,
                         new ProjectileParabolicTrajectory(parabolic.curve, parabolic.height, lifeTime)

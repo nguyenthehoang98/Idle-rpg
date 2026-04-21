@@ -57,16 +57,9 @@ namespace _Games.Combat.EntityComponentSystem.System
             {
                 trajectory.ElapsedTime += DeltaTime;
                 float timeT = (float)math.clamp(trajectory.ElapsedTime / parabolic.Duration, 0, 1);
-                float heightT = parabolic.HeightEvaluate(timeT);
-                float height = math.lerp(0, parabolic.MaxHeight, heightT);
+                float height = math.lerp(0, parabolic.MaxHeight, parabolic.HeightEvaluate(timeT));
                 float3 position = math.lerp(trajectory.StartPosition, trajectory.EndPosition, timeT);
                 transform.Position = position  + new float3(0, height, 0);
-
-                parabolic.time = (float)trajectory.ElapsedTime;
-                parabolic.timeNor = timeT;
-                parabolic.height = height;
-                parabolic.heightNor = heightT;
-                parabolic.position = position;
             }
         }
     }
