@@ -330,13 +330,21 @@ namespace _Games.Combat.EntityComponentSystem
             });
 
             SkillMainModule main = skill.main;
+            float distance = math.distance(startPosition, endPosition);
             float lifeTime = main.lifeTime;
             switch (skill.trajectory.Type)
             {
                 case TrajectoryType.Curve:
                     CurveTrajectorySO curve = skill.trajectory as CurveTrajectorySO;
                     manager.AddComponentData(entity,
-                        new ProjectileCurveTrajectory(curve.curve, curve.value, lifeTime)
+                        new ProjectileCurveTrajectory(curve.curve, curve.maxSpeed, lifeTime)
+                    );
+                    break;
+                case TrajectoryType.Parabolic:
+                    ParabolicTrajectorySO parabolic = skill.trajectory as ParabolicTrajectorySO;
+                    lifeTime = distance / parabolic.speed;
+                    manager.AddComponentData(entity,
+                        new ProjectileParabolicTrajectory(parabolic.curve, parabolic.height, lifeTime)
                     );
                     break;
                 default:
@@ -389,7 +397,7 @@ namespace _Games.Combat.EntityComponentSystem
             }
 
             manager.AddComponentData(entity,
-                new ProjectileTrajectory(startPosition, math.normalizesafe(direction))
+                new ProjectileTrajectory(startPosition, endPosition, math.normalizesafe(direction))
             );
             manager.AddComponentData(entity,
                 new ProjectileSkillData(source, skill.Id, lifeTime,

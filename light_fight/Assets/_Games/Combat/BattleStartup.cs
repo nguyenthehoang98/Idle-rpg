@@ -41,6 +41,8 @@ namespace _Games.Combat
         
         private async void Start()
         {
+            Debug.LogError(@"Nên tạo 1 scene test có thể keo thả vị trí quái. chọn vũ khí, level vũ khí để test các tường hợp nó kích hoạt thì như nào");
+            
             // todo: init world
             if(World.DefaultGameObjectInjectionWorld != null) World.DefaultGameObjectInjectionWorld.Dispose();
             DefaultWorldInitialization.Initialize("GameWorld", false);

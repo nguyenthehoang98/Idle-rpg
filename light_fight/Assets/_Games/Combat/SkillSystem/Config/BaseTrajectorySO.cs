@@ -10,6 +10,7 @@ namespace _Games.Combat.SkillSystem.Config
 
     public enum TrajectoryType
     {
-        Curve, Path
+        Curve, Path,
+        Parabolic,
     }
 }

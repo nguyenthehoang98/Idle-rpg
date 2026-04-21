@@ -5,9 +5,9 @@ namespace _Games.Combat.EntityComponentSystem.Data
 {
     public struct ProjectileCurveTrajectory : IComponentData
     {
-        public BlobAssetReference<CurveBlob> Blob;
-        public readonly float Duration;
-        public readonly float MaxValue;
+        private BlobAssetReference<CurveBlob> Blob;
+        private readonly float Duration;
+        private readonly float MaxValue;
 
         public ProjectileCurveTrajectory(AnimationCurve curve, float maxValue, float duration)
         {
@@ -16,7 +16,7 @@ namespace _Games.Combat.EntityComponentSystem.Data
             Duration = duration;
         } 
         
-        public float Evaluate(float time)
+        public float DistanceEvaluate(float time)
         {
             return CurveBlob.Evaluate(ref Blob.Value, Mathf.Clamp(time / Duration, 0f, 0.9999f)) * MaxValue;
         }

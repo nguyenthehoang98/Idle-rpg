@@ -60,11 +60,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 241e9028db92a3f4b99235bcc8bbee79
-    m_Address: 120030_Trajectory
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 30646e07a56e16a40af0a489f52f504c
     m_Address: 120020_Collider
     m_ReadOnly: 0
@@ -72,6 +67,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3f9021f59aa5d4240a9f5c9f0ba6eb11
     m_Address: 20001_Weapon_SO
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4d4e83ca5671a2d4bbf3a647837e0b7f
+    m_Address: 120030_Trajectory
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -25,6 +25,10 @@ namespace _Games.Combat.EntityComponentSystem.System
             {
                 DeltaTime = state.WorldUnmanaged.Time.DeltaTime
             }.ScheduleParallel(state.Dependency);
+            state.Dependency = new ProjectileParabolicJob
+            {
+                DeltaTime = state.WorldUnmanaged.Time.DeltaTime
+            }.ScheduleParallel(state.Dependency);
         }
         
         [BurstCompile]
@@ -37,9 +41,32 @@ namespace _Games.Combat.EntityComponentSystem.System
             {
                 trajectory.ElapsedTime += DeltaTime;
                 float t = (float)trajectory.ElapsedTime;
-                double d = curve.Evaluate(t);
+                double d = curve.DistanceEvaluate(t);
                 float3 position = (float)d * trajectory.Direction + trajectory.StartPosition;
                 transform.Position = position;
+            }
+        }
+        
+        [BurstCompile]
+        partial struct ProjectileParabolicJob : IJobEntity
+        {
+            public double DeltaTime;
+
+            public void Execute(ref ProjectileParabolicTrajectory parabolic,
+                ref ProjectileTrajectory trajectory, ref LocalTransform transform)
+            {
+                trajectory.ElapsedTime += DeltaTime;
+                float timeT = (float)math.clamp(trajectory.ElapsedTime / parabolic.Duration, 0, 1);
+                float heightT = parabolic.HeightEvaluate(timeT);
+                float height = math.lerp(0, parabolic.MaxHeight, heightT);
+                float3 position = math.lerp(trajectory.StartPosition, trajectory.EndPosition, timeT);
+                transform.Position = position  + new float3(0, height, 0);
+
+                parabolic.time = (float)trajectory.ElapsedTime;
+                parabolic.timeNor = timeT;
+                parabolic.height = height;
+                parabolic.heightNor = heightT;
+                parabolic.position = position;
             }
         }
     }
