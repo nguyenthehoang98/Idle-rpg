@@ -44,23 +44,29 @@ namespace _Games.Combat.EntityComponentSystem
 
         public static async UniTask BuildMonster(Entity player, int monsterID, float bonusRange, float3 position)
         {
+            MonsterConfig monsterConfig = KitConfigManager.Get<MonsterConfig>();
+            if (!monsterConfig.Find(monsterID, out var monsterData))
+            {
+                UniTask.FromException(new KeyNotFoundException("Monster not found: " + monsterID));
+            }
+            else
+            {
+                await BuildMonster(player, monsterData, bonusRange, position);                
+            }
+        }
+
+        public static async UniTask BuildMonster(Entity player, MonsterData monsterData, float bonusRange, float3 position)
+        {
+            int monsterID = monsterData.MonsterId;
             Vector3 destination = float3.zero;
             SkillConfig skillConfig = KitConfigManager.Get<SkillConfig>();
             MonsterConfig monsterConfig = KitConfigManager.Get<MonsterConfig>();
-            bool foundMonsterData = monsterConfig.Find(monsterID, out var monsterData);
-#if DEBUG
-            if(!foundMonsterData) Debug.LogError("Not found monster data: " + monsterID);
-#endif
-            if (!foundMonsterData) return;
-
+            
             string path = GlobalsPath.GetMonsterPath(monsterData.MonsterId);
             GameObject go = await KitLoaded.LoadAsync<GameObject>(path);
             MonsterAuthoring authoringPrefab = go.GetComponent<MonsterAuthoring>();
 #if !TEST_MODE
-            if (monstersPath.Add(path))
-            {
-                KitPool.RegisterPool(go, true);
-            }
+            if (monstersPath.Add(path)) KitPool.RegisterPool(go, true);
 #endif
             
             EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;

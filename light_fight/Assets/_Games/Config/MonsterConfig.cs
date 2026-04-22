@@ -79,5 +79,25 @@ namespace _Games.Config
         public float AttackDistance => attackDistance;
         public int Attack => attack;
         public int Health => health;
+
+        public MonsterData Clone(int newHealth)
+        {
+            MonsterData a = this;
+            return new MonsterData
+            {
+                monsterId = a.monsterId,
+                monsterName = a.monsterName,
+                monsterObjectId = a.monsterObjectId,
+                isRanged = a.isRanged,
+                skillId = a.skillId,
+                skillLevel = a.skillLevel,
+                skillCooldown = a.skillCooldown,
+                moveSpeed = a.moveSpeed,
+                stopMoveDistance = a.stopMoveDistance,
+                attackDistance = a.attackDistance,
+                attack = a.attack,
+                health = newHealth,
+            };
+        }
     }
 }
