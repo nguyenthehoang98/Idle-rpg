@@ -169,13 +169,13 @@ namespace _Games.Combat.EntityComponentSystem
 #endif
             await UniTask.CompletedTask;
         }
-        
+
         public static async void BuildProjectile(EntityManager manager, Entity source, Entity target,
             float3 startPosition, float3 endPosition, Skill skill, SkillData skillData, int level)
         {
             if (skill.behaviors.Length == 0)
             {
-                BuildProjectileInternal(manager, source, startPosition, endPosition, skill, skillData, level);
+                BuildProjectileInternal(manager, source, target, startPosition, endPosition, skill, skillData, level);
             }
             else
             {
@@ -207,7 +207,8 @@ namespace _Games.Combat.EntityComponentSystem
                                 float f = i - t;
                                 Vector3 shift = perp * (f * parallel.distanceBetween) + parallel.centerOffset;
                                 float3 offset = new float3(shift.x, shift.y, 0);
-                                BuildProjectileInternal(manager, source, startPosition + offset, endPosition + offset, skill, skillData, level);
+                                BuildProjectileInternal(manager, source, target, startPosition + offset,
+                                    endPosition + offset, skill, skillData, level);
                             }
 
                             break;
@@ -241,14 +242,17 @@ namespace _Games.Combat.EntityComponentSystem
                                             startPosition, direction, i, spread.count, spread.angleStep, distance
                                         );
                                     }
-                                    BuildProjectileInternal(manager, source, startPosition, newEndPosition, skill, skillData, level);
+
+                                    BuildProjectileInternal(manager, source, target, startPosition, newEndPosition,
+                                        skill, skillData, level);
                                 }
                                 else
                                 {
                                     Vector3 newEndPosition = GetSpreadEndPosition(
                                         startPosition, direction, i, spread.count, spread.angleStep, distance
                                     );
-                                    BuildProjectileInternal(manager, source, startPosition, newEndPosition, skill, skillData, level);
+                                    BuildProjectileInternal(manager, source, target, startPosition, newEndPosition,
+                                        skill, skillData, level);
                                 }
                             }
 
@@ -264,20 +268,24 @@ namespace _Games.Combat.EntityComponentSystem
                                 float rad = math.radians(dropStrike.angle);
                                 float3 dir = math.normalize(new float3(math.sin(rad), -math.cos(rad), 0));
                                 float3 finalStartPosition = finalEndPosition - dir * dropStrike.height;
-                                BuildProjectileInternal(manager, source, finalStartPosition, finalEndPosition, skill, skillData, level);
+                                BuildProjectileInternal(manager, source, target, finalStartPosition, finalEndPosition,
+                                    skill, skillData, level);
                             }
+
                             break;
                         default:
                             if (shouldDefaultBuildProjectile)
                             {
-                                BuildProjectileInternal(manager, source, startPosition, endPosition, skill, skillData, level);
+                                BuildProjectileInternal(manager, source, target, startPosition, endPosition, skill,
+                                    skillData, level);
                             }
+
                             break;
                     }
                 }
             }
         }
-        
+
         private static Vector3 GetSpreadEndPosition(Vector3 startPosition, Vector3 direction, int index, int total, float angle, float distance)
         {
             float angleStep = (index - (total - 1) * 0.5f) * angle;
@@ -289,7 +297,7 @@ namespace _Games.Combat.EntityComponentSystem
             return startPosition + dir * distance;
         }
 
-        private static void BuildProjectileInternal(EntityManager manager, Entity source,
+        private static void BuildProjectileInternal(EntityManager manager, Entity source, Entity target,
             float3 startPosition, float3 endPosition,
             Skill skill, SkillData skillData, int level)
         {
@@ -398,7 +406,7 @@ namespace _Games.Combat.EntityComponentSystem
             }
 
             manager.AddComponentData(entity,
-                new ProjectileTrajectory(startPosition, endPosition, math.normalizesafe(direction))
+                new ProjectileTrajectory(target, startPosition, endPosition, math.normalizesafe(direction))
             );
             manager.AddComponentData(entity,
                 new ProjectileSkillData(source, skill.Id, lifeTime,

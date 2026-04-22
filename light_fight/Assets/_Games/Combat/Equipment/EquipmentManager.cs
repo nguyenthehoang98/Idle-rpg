@@ -60,6 +60,7 @@ namespace _Games.Combat.Equipment
 
             // todo: query
             bool found = false;
+            var entities = query.ToEntityArray(Allocator.TempJob);
             var transforms = query.ToComponentDataArray<LocalTransform>(Allocator.TempJob);
             var healths = query.ToComponentDataArray<HealthData>(Allocator.TempJob);
             var nearestIndex = new NativeReference<int>(-1, Allocator.TempJob);
@@ -93,11 +94,13 @@ namespace _Games.Combat.Equipment
             }
 
             Vector3 endPosition = Vector3.zero;
+            Entity target = Entity.Null;
             switch (skill.main.type)
             {
                 case FindTargetType.Farthest:
                     if (farthestIndex.Value >= 0)
                     {
+                        target = entities[farthestIndex.Value];
                         endPosition = transforms[farthestIndex.Value].Position;
                         found = true;
                     }
@@ -108,6 +111,7 @@ namespace _Games.Combat.Equipment
                 case FindTargetType.Nearest:
                     if (nearestIndex.Value >= 0)
                     {
+                        target = entities[nearestIndex.Value];
                         endPosition = transforms[nearestIndex.Value].Position;
                         found = true;
                     }
@@ -129,7 +133,9 @@ namespace _Games.Combat.Equipment
             float rad = Mathf.Atan2(direction.y, direction.x);
             levelDesign.Slots[slotIndex].Rotation(rad, delay, () =>
             {
-                ECSFactory.BuildProjectile(manager, Entity.Null, position, endPosition, skill, skillData, data.Level);
+                ECSFactory.BuildProjectile(manager, Entity.Null, target,
+                    position, endPosition, skill, skillData, data.Level
+                );
             });
         }
         

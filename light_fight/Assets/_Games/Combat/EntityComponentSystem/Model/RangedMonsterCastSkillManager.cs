@@ -50,7 +50,7 @@ namespace _Games.Combat.EntityComponentSystem.Model
                     monsterConfig.Find(data.MonsterId, out MonsterData monsterData);
                     skillConfig.Find(monsterData.SkillId, out SkillData skillData);
                     Skill skill = await SkillFactory.CreateSkill(skillData);
-                    ECSFactory.BuildProjectile(manager, item.Entity,
+                    ECSFactory.BuildProjectile(manager, item.Entity, Entity.Null,
                         item.StartPosition, item.EndPosition,
                         skill, skillData, monsterData.SkillLevel
                     );
