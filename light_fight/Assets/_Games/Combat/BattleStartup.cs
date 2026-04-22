@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using _Games.Combat.EntityComponentSystem;
 using _Games.Combat.EntityComponentSystem.Model;
@@ -57,7 +56,7 @@ namespace _Games.Combat
             // todo: validate data
             int levelId = 1;
             LevelConfig levelConfig = KitConfigManager.Get<LevelConfig>();
-            bool foundSpawnData = levelConfig.FindSpawn(levelId, out var dictionary);
+            bool foundSpawnData = levelConfig.FindSpawn(levelId, out IReadOnlyDictionary<WaveIdData, LevelBatch> dictionary);
             if(!foundSpawnData) Debug.LogError("Not found spawn data with levelId: " + levelId);
            
             var popup = await PopupManager.Instance.PushAsync<WeaponSelectPopup>();
@@ -67,6 +66,7 @@ namespace _Games.Combat
             // todo: init level spawn
             GameObject go = await KitLoaded.LoadAsync<GameObject>(GlobalsPath.GetLevelDesignPath(levelId));
             levelDesign = Instantiate(go).GetComponent<LevelDesign>();
+            levelDesign.Initialize(1);
             Entity player = ECSFactory.BuildPlayer(levelDesign);
 
             // todo: init object

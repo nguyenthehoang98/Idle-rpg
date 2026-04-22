@@ -27,7 +27,7 @@ namespace _Games.Combat.Level
         private float accumulator;
         private bool isRunning;
         
-        public void Init(int totalRay, Transform[] slots, Action<int> onTrigger)
+        public void Initialize(int totalRay, Transform[] slots, Action<int> onTrigger)
         {
             this.timeScale = KitEntryScene.Instance.GameplayScaleTime;
             this.onTrigger = onTrigger;

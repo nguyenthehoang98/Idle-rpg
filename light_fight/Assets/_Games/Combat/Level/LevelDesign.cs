@@ -15,7 +15,7 @@ namespace _Games.Combat.Level
 
         public event Action<int> OnTriggerWeapon;
 
-        private void Start()
+        public void Initialize(int totalRotate)
         {
             Transform[] temps = new Transform[slots.Length];
             for (int i = 0; i < slots.Length; i++)
@@ -23,7 +23,7 @@ namespace _Games.Combat.Level
                 temps[i] = slots[i].transform;
             }
 
-            turret.Init(1, temps, slot =>
+            turret.Initialize(totalRotate, temps, slot =>
             {
                 OnTriggerWeapon?.Invoke(slot);
             });
