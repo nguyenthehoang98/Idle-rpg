@@ -344,16 +344,15 @@ namespace _Games.Combat.EntityComponentSystem
                 case TrajectoryType.Curve:
                     CurveTrajectorySO curve = skill.trajectory as CurveTrajectorySO;
                     manager.AddComponentData(entity,
-                        new ProjectileCurveTrajectory(curve.curve, curve.maxSpeed, lifeTime)
+                        new ProjectileCurveTrajectory(CurveBlob.CreateCurveBlob(curve.curve), curve.maxSpeed, lifeTime)
                     );
                     break;
                 case TrajectoryType.Parabolic:
                     ParabolicTrajectorySO parabolic = skill.trajectory as ParabolicTrajectorySO;
-                    Debug.LogError(@"Phải tính lại distance theo công thức Parabol");
-                    float distance = math.distance(startPosition, endPosition);
-                    lifeTime = distance / parabolic.speed;
+                    BlobAssetReference<CurveBlob> blobCurve = CurveBlob.CreateCurveBlob(parabolic.curve);
+                    lifeTime = CurveBlob.EstimateLength(parabolic.curve, startPosition, endPosition, parabolic.height) / parabolic.speed;
                     manager.AddComponentData(entity,
-                        new ProjectileParabolicTrajectory(parabolic.curve, parabolic.height, lifeTime)
+                        new ProjectileParabolicTrajectory(blobCurve, parabolic.height, lifeTime)
                     );
                     break;
                 default:

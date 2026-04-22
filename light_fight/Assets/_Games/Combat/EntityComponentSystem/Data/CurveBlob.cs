@@ -8,7 +8,27 @@ namespace _Games.Combat.EntityComponentSystem.Data
     public struct CurveBlob
     {
         public BlobArray<float> Samples;
-        
+
+        public static float EstimateLength(AnimationCurve curve, float3 startPosition, float3 endPosition,
+            float maxHeight, int steps = 20)
+        {
+            float length = 0f;
+            float3 prev = startPosition;
+            for (int i = 1; i <= steps; i++)
+            {
+                float t = i / (float)steps;
+
+                float3 pos = math.lerp(startPosition, endPosition, t);
+                float height = curve.Evaluate(t) * maxHeight;
+                pos.y += height;
+
+                length += math.distance(prev, pos);
+                prev = pos;
+            }
+
+            return length;
+        }
+
         public static float Evaluate(ref CurveBlob blob, float t)
         {
             ref BlobArray<float> samples = ref blob.Samples;

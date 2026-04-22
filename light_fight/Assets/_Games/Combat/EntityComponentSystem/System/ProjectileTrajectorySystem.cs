@@ -70,7 +70,7 @@ namespace _Games.Combat.EntityComponentSystem.System
                 float3 endPosition = trajectory.EndPosition;
                 if (trajectory.Target != Entity.Null && LocalTransformLookup.HasComponent(trajectory.Target))
                 {
-                    endPosition = LocalTransformLookup.GetRefRO(trajectory.Target).ValueRO.Position;
+                     endPosition = LocalTransformLookup.GetRefRO(trajectory.Target).ValueRO.Position;
                 }
                 float3 position = math.lerp(trajectory.StartPosition, endPosition, timeT);
 

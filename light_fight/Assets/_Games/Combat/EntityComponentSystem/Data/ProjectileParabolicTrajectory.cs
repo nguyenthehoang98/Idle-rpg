@@ -7,12 +7,12 @@ namespace _Games.Combat.EntityComponentSystem.Data
     public struct ProjectileParabolicTrajectory : IComponentData
     {
         public readonly float MaxHeight;
-        private BlobAssetReference<CurveBlob> Blob;
         public readonly float Duration;
+        private readonly BlobAssetReference<CurveBlob> Blob;
 
-        public ProjectileParabolicTrajectory(AnimationCurve curve, float maxHeight, float duration)
+        public ProjectileParabolicTrajectory(BlobAssetReference<CurveBlob> blob, float maxHeight, float duration)
         {
-            Blob = CurveBlob.CreateCurveBlob(curve);
+            Blob = blob;
             Duration = duration;
             MaxHeight = maxHeight;
         } 
