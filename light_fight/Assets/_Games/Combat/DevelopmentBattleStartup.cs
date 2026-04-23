@@ -4,6 +4,7 @@ using _Games.Combat.EntityComponentSystem.Data;
 using _Games.Combat.Equipment;
 using _Games.Combat.Event;
 using _Games.Combat.Level;
+using _Games.Combat.Model;
 using _Games.Config;
 using _Games.Misc.Model;
 using _Games.Utils;
@@ -126,6 +127,28 @@ namespace _Games.Combat
                 MonsterConfig monsterConfig = KitConfigManager.Get<MonsterConfig>();
                 if (monsterConfig.Find(value, out MonsterData monsterData))
                 {
+                    
+                    EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+                    EntityQuery query = manager.CreateEntityQuery(typeof(MonsterTag));
+                    NativeArray<Entity> entities = query.ToEntityArray(Allocator.Temp);
+                    for (int i = 0; i < entities.Length; i++)
+                    {
+                        Entity entity = entities[i];
+                        Monster monster = null;
+                        if (manager.HasComponent<MonsterRangedTag>(entity))
+                        {
+                            monster = manager.GetComponentObject<RangedMonster>(entity);
+                        }
+                        else if (manager.HasComponent<MonsterMeleeTag>(entity))
+                        {
+                            monster = manager.GetComponentObject<Monster>(entity);
+                        }
+
+                        if (monster != null) monster.Death();
+                    }
+
+                    manager.DestroyEntity(query);
+                    
                     float3 position = new float3(
                         RandomUtils.Value > 0.5f ? RandomUtils.Range(-12f, -9f) : RandomUtils.Range(9f, 12f),
                         RandomUtils.Value > 0.5f ? RandomUtils.Range(-12f, -9f) : RandomUtils.Range(9f, 12f),
