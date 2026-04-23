@@ -5,6 +5,7 @@ using _Games.Combat.Equipment;
 using _Games.Combat.Event;
 using _Games.Combat.Level;
 using _Games.Combat.Model;
+using _Games.Combat.SkillSystem;
 using _Games.Config;
 using _Games.Misc.Model;
 using _Games.Utils;
@@ -32,6 +33,7 @@ namespace _Games.Combat
         public Button buttonSpawnMonster;
         public Button buttonMonsterPause;
         public Button buttonWeaponPause;
+        public Button buttonResetSkill;
 
         private Entity player;
         private LevelDesign levelDesign;
@@ -45,6 +47,7 @@ namespace _Games.Combat
             buttonSpawnMonster.onClick.AddListener(SpawnMonster);
             buttonMonsterPause.onClick.AddListener(MonsterPause);
             buttonWeaponPause.onClick.AddListener(WeaponPause);
+            buttonResetSkill.onClick.AddListener(ResetSkill);
 
             MonsterPause();
             WeaponPause();
@@ -107,6 +110,8 @@ namespace _Games.Combat
             agentBody.Dispose();
         }
 
+        void ResetSkill() => SkillFactory.UnloadAll();
+
         void WeaponPause()
         {
             isWeaponPaused = !isWeaponPaused;
@@ -127,6 +132,7 @@ namespace _Games.Combat
                 MonsterConfig monsterConfig = KitConfigManager.Get<MonsterConfig>();
                 if (monsterConfig.Find(value, out MonsterData monsterData))
                 {
+                    if (isMonsterPaused) MonsterPause();
                     
                     EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
                     EntityQuery query = manager.CreateEntityQuery(typeof(MonsterTag));

@@ -10,11 +10,6 @@ namespace _Games.Combat.SkillSystem
     {
         static Dictionary<int, Skill> container = new Dictionary<int, Skill>();
         static HashSet<string> cache = new HashSet<string>();
-
-        public static bool FindSkill(int skillID, out Skill skill)
-        {
-            return container.TryGetValue(skillID, out skill);
-        }
         
         public static async UniTask<Skill> CreateSkill(SkillData data)
         {
