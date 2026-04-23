@@ -15,33 +15,33 @@ MonoBehaviour:
   fileUrl: 
   enable: 1
   weapons:
-  - weaponId: 20001
+  - weaponId: 2001
     weaponName: 'Blunderbuss '
-    skillId: 120010
+    skillId: 2001
     baseAttack: 20
     attackBonusLevel: 5
     basePrice: 1
     priceBonusLevel: 1
     jsonUnlocks: []
-  - weaponId: 20002
+  - weaponId: 2002
     weaponName: 'Double Barrel '
-    skillId: 120020
+    skillId: 2002
     baseAttack: 12
     attackBonusLevel: 6
     basePrice: 1
     priceBonusLevel: 1
     jsonUnlocks: []
-  - weaponId: 20003
+  - weaponId: 2003
     weaponName: Brick
-    skillId: 120030
+    skillId: 2003
     baseAttack: 20
     attackBonusLevel: 7
     basePrice: 1
     priceBonusLevel: 1
     jsonUnlocks: []
-  - weaponId: 20004
+  - weaponId: 2004
     weaponName: 20004
-    skillId: 120040
+    skillId: 2004
     baseAttack: 20
     attackBonusLevel: 8
     basePrice: 1

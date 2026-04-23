@@ -15,7 +15,7 @@ MonoBehaviour:
   fileUrl: 
   enable: 1
   skills:
-  - skillId: 110010
+  - skillId: 1001
     skillName: 
     lifeTime: 0.5
     castTime: 0
@@ -32,7 +32,7 @@ MonoBehaviour:
     trajectoryId: 
     modifiersId: []
     behaviorsId: []
-  - skillId: 110020
+  - skillId: 1002
     skillName: 
     lifeTime: 0.5
     castTime: 0.2
@@ -44,12 +44,12 @@ MonoBehaviour:
     needTargetToCast: 1
     maxFindTargetRange: 10
     collisionResetInterval: 999
-    projectileId: 110020_Projectile
-    colliderId: 110020_Collider
-    trajectoryId: 110020_Trajectory
+    projectileId: 1002_Projectile
+    colliderId: 1002_Collider
+    trajectoryId: 1002_Trajectory
     modifiersId: []
     behaviorsId: []
-  - skillId: 120010
+  - skillId: 2001
     skillName: 
     lifeTime: 0.5
     castTime: 0.2
@@ -61,13 +61,13 @@ MonoBehaviour:
     needTargetToCast: 1
     maxFindTargetRange: 12
     collisionResetInterval: 999
-    projectileId: 120010_Projectile
-    colliderId: 120010_Collider
-    trajectoryId: 120010_Trajectory
+    projectileId: 2001_Projectile
+    colliderId: 2001_Collider
+    trajectoryId: 2001_Trajectory
     modifiersId: []
     behaviorsId:
-    - 120010_Behavior
-  - skillId: 120020
+    - 2001_Behavior
+  - skillId: 2002
     skillName: 
     lifeTime: 0.5
     castTime: 0.2
@@ -79,13 +79,13 @@ MonoBehaviour:
     needTargetToCast: 1
     maxFindTargetRange: 12
     collisionResetInterval: 999
-    projectileId: 120020_Projectile
-    colliderId: 120020_Collider
-    trajectoryId: 120020_Trajectory
+    projectileId: 2002_Projectile
+    colliderId: 2002_Collider
+    trajectoryId: 2002_Trajectory
     modifiersId: []
     behaviorsId:
-    - 120020_Behavior
-  - skillId: 120030
+    - 2002_Behavior
+  - skillId: 2003
     skillName: 
     lifeTime: 0.5
     castTime: 0.2
@@ -97,13 +97,13 @@ MonoBehaviour:
     needTargetToCast: 1
     maxFindTargetRange: 12
     collisionResetInterval: 999
-    projectileId: 120030_Projectile
-    colliderId: 120030_Collider
-    trajectoryId: 120030_Trajectory
+    projectileId: 2003_Projectile
+    colliderId: 2003_Collider
+    trajectoryId: 2003_Trajectory
     modifiersId: []
     behaviorsId:
-    - 120030_Behavior
-  - skillId: 120040
+    - 2003_Behavior
+  - skillId: 2004
     skillName: 
     lifeTime: 0.5
     castTime: 0.2
@@ -115,8 +115,8 @@ MonoBehaviour:
     needTargetToCast: 1
     maxFindTargetRange: 12
     collisionResetInterval: 999
-    projectileId: 120040_Projectile
-    colliderId: 120040_Collider
-    trajectoryId: 120040_Trajectory
+    projectileId: 2004_Projectile
+    colliderId: 2004_Collider
+    trajectoryId: 2004_Trajectory
     modifiersId: []
     behaviorsId: []
