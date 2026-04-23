@@ -27,14 +27,17 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 0
-      inSlope: -5.3452783
-      outSlope: -5.3452783
+      inSlope: -1.3507121
+      outSlope: -1.3507121
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.022568226
+      inWeight: 0.06072872
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  height: 0.6
-  speed: 7
+  minHeight: 1
+  maxHeight: 6
+  minDistance: 1
+  maxDistance: 10
+  speed: 9

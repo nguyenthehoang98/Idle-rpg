@@ -7,7 +7,10 @@ namespace _Games.Combat.SkillSystem.Config
     {
         [Tooltip("Curve thể hiện cho việc thay đổi độ cao vật thể bay")]
         public AnimationCurve curve;
-        public float height;
+        public float minHeight;
+        public float maxHeight;
+        public float minDistance;
+        public float maxDistance;
         public float speed;
         
         public override TrajectoryType Type => TrajectoryType.Parabolic;
