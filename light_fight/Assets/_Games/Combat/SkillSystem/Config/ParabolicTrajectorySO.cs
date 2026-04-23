@@ -11,7 +11,8 @@ namespace _Games.Combat.SkillSystem.Config
         public float maxHeight;
         public float minDistance;
         public float maxDistance;
-        public float speed;
+        public float minSpeed;
+        public float maxSpeed;
         
         public override TrajectoryType Type => TrajectoryType.Parabolic;
     }

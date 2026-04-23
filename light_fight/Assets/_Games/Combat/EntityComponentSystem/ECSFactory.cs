@@ -355,12 +355,13 @@ namespace _Games.Combat.EntityComponentSystem
                     );
                     break;
                 case TrajectoryType.Parabolic:
-                    Debug.LogError(@"Khá oke rồi nhưng đoạn ban đầu speed bị nhảnh nhanh quá");
                     ParabolicTrajectorySO parabolic = skill.trajectory as ParabolicTrajectorySO;
                     BlobAssetReference<CurveBlob> blobCurve = CurveBlob.CreateCurveBlob(parabolic.curve);
                     float t = Mathf.InverseLerp(parabolic.minDistance, parabolic.maxDistance, distance);
                     float height = Mathf.Lerp(parabolic.minHeight, parabolic.maxHeight, t);
-                    lifeTime = CurveBlob.EstimateLength(parabolic.curve, startPosition, endPosition, height) / parabolic.speed;
+                    float speed = Mathf.Lerp(parabolic.minSpeed, parabolic.maxSpeed, t);
+                    float length = CurveBlob.EstimateLength(parabolic.curve, startPosition, endPosition, height);
+                    lifeTime = length / speed;
                     manager.AddComponentData(entity,
                         new ProjectileParabolicTrajectory(blobCurve, height, lifeTime)
                     );
