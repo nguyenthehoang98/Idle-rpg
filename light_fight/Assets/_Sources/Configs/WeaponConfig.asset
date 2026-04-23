@@ -40,7 +40,7 @@ MonoBehaviour:
     priceBonusLevel: 1
     jsonUnlocks: []
   - weaponId: 2004
-    weaponName: 20004
+    weaponName: Ghost Flint
     skillId: 2004
     baseAttack: 20
     attackBonusLevel: 8

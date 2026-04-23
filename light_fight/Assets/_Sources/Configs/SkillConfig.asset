@@ -105,7 +105,7 @@ MonoBehaviour:
     - 2003_Behavior
   - skillId: 2004
     skillName: 
-    lifeTime: 0.5
+    lifeTime: 1.5
     castTime: 0.2
     baseFlatDamage: 0
     flatDamageBonusLevel: 0

@@ -38,7 +38,12 @@ namespace _Games.Combat.Level
             
             RaritySO raritySo = await KitLoaded.LoadAsync<RaritySO>(GlobalsPath.RARITY_SO);
             spBody.sprite = raritySo.GetBorderRarity(weaponRarity);
-            if (Item != null) KitPool.Destroy(Item.gameObject);
+            if (Item != null)
+            {
+                KitPool.Destroy(Item.gameObject);
+                Item.gameObject.SetActive(false);
+                Item = null;
+            }
             Item = await BaseWeaponItem.Build(parent, weaponData, weaponRarity);
             Debug.Log(@"Bắn 1 cái vfx hình vuông ở item: " + JsonUtility.ToJson(weaponData));
         }

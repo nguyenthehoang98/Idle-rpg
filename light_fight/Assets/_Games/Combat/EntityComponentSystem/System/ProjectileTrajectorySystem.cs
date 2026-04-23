@@ -53,6 +53,22 @@ namespace _Games.Combat.EntityComponentSystem.System
                 transform.Position = position;
             }
         }
+
+        [BurstCompile]
+        partial struct ProjectileBoomerangeJob : IJobEntity
+        {
+            public double DeltaTime;
+            
+            public void Execute(ref ProjectileBoomerangTrajectory boomerang,
+                ref ProjectileTrajectory trajectory, ref LocalTransform transform)
+            {
+                trajectory.ElapsedTime += DeltaTime;
+                float t = (float)trajectory.ElapsedTime;
+                double d = curve.DistanceEvaluate(t);
+                float3 position = (float)d * trajectory.Direction + trajectory.StartPosition;
+                transform.Position = position;
+            }
+        }
         
         [BurstCompile]
         partial struct ProjectileParabolicJob : IJobEntity

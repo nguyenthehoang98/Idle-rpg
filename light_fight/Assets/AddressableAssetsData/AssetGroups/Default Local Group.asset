@@ -121,7 +121,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 93749b1ae2d4a6f4095bde6940ac74c1
-    m_Address: 20004_Weapon_SO
+    m_Address: 2004_Weapon_SO
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

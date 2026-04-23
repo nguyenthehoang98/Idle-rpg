@@ -366,6 +366,16 @@ namespace _Games.Combat.EntityComponentSystem
                         new ProjectileParabolicTrajectory(blobCurve, height, lifeTime)
                     );
                     break;
+                case TrajectoryType.Boomerang:
+                    BoomerangTrajectorySO boomerang = skill.trajectory as BoomerangTrajectorySO;
+                    BlobAssetReference<CurveBlob> castBlobCurve = CurveBlob.CreateCurveBlob(boomerang.castPhase);
+                    BlobAssetReference<CurveBlob> returnBlobCurve = CurveBlob.CreateCurveBlob(boomerang.returnPhase);
+                    float duration = lifeTime / 2;
+                    manager.AddComponentData(entity,
+                        new ProjectileBoomerangTrajectory(castBlobCurve, boomerang.castMaxSpeed, returnBlobCurve,
+                            boomerang.returnMaxSpeed, duration)
+                    );
+                    break;
                 default:
                     Debug.LogError("Invalid trajectory type " + skill.trajectory.Type);
                     break;

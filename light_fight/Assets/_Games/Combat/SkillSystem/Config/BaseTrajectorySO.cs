@@ -11,6 +11,6 @@ namespace _Games.Combat.SkillSystem.Config
     public enum TrajectoryType
     {
         Curve, Path,
-        Parabolic,
+        Parabolic, Boomerang
     }
 }

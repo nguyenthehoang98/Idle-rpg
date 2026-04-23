@@ -7,18 +7,18 @@ namespace _Games.Combat.EntityComponentSystem.Data
     {
         private BlobAssetReference<CurveBlob> Blob;
         private readonly float Duration;
-        private readonly float MaxValue;
+        private readonly float Speed;
 
-        public ProjectileCurveTrajectory(BlobAssetReference<CurveBlob> blob, float maxValue, float duration)
+        public ProjectileCurveTrajectory(BlobAssetReference<CurveBlob> blob, float speed, float duration)
         {
             Blob = blob;
-            MaxValue = maxValue;
+            Speed = speed;
             Duration = duration;
         } 
         
         public float DistanceEvaluate(float time)
         {
-            return CurveBlob.Evaluate(ref Blob.Value, Mathf.Clamp(time / Duration, 0f, 0.9999f)) * MaxValue;
+            return CurveBlob.Evaluate(ref Blob.Value, Mathf.Clamp(time / Duration, 0f, 0.9999f)) * Speed;
         }
     }
 }
