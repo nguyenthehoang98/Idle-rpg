@@ -17,7 +17,7 @@ using UnityEngine;
 
 namespace _Games.Combat.Equipment
 {
-    public class EquipmentManager
+    public class WeaponManager
     {
         private LevelDesign levelDesign;
         private Dictionary<int, Data> container = new Dictionary<int, Data>();
@@ -25,7 +25,7 @@ namespace _Games.Combat.Equipment
         private EntityManager manager;
         private EntityQuery query;
         
-        public EquipmentManager(LevelDesign levelDesign)
+        public WeaponManager(LevelDesign levelDesign)
         {
             skillConfig = KitConfigManager.Get<SkillConfig>();
             this.levelDesign = levelDesign;

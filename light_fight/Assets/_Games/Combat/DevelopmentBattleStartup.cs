@@ -11,7 +11,6 @@ using _KIT.Config;
 using _KIT.Event;
 using _KIT.Resource;
 using _KIT.Utils;
-using NUnit.Framework;
 using ProjectDawn.Navigation;
 using TMPro;
 using Unity.Burst;
@@ -19,7 +18,6 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
-using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,7 +34,7 @@ namespace _Games.Combat
 
         private Entity player;
         private LevelDesign levelDesign;
-        private EquipmentManager equipmentManager;
+        private WeaponManager _weaponManager;
         private bool isMonsterPaused = true;
         private bool isWeaponPaused = true;
 
@@ -75,8 +73,8 @@ namespace _Games.Combat
             // todo: register object
             //shareData = new ShareData(dictionary, levelDesign);
             //spawnLogic = new SpawnLogic(shareData, player);
-            equipmentManager = new EquipmentManager(levelDesign);
-            levelDesign.OnTriggerWeapon += equipmentManager.Trigger;
+            _weaponManager = new WeaponManager(levelDesign);
+            levelDesign.OnTriggerWeapon += _weaponManager.Trigger;
             
             EventBus.Instance.Publish(new WaveContinueEvent());
         }
@@ -90,12 +88,22 @@ namespace _Games.Combat
 
             EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
             EntityQuery query = manager.CreateEntityQuery(typeof(MonsterTag), typeof(AgentBody));
-            var agentBody = query.ToComponentDataArray<AgentBody>(Allocator.TempJob);
-            new PauseUnPauseMonsterJob
+            NativeArray<Entity> entities = query.ToEntityArray(Allocator.TempJob);
+            NativeArray<AgentBody> agentBody = query.ToComponentDataArray<AgentBody>(Allocator.TempJob);
+
+            JobHandle handle = new PauseUnpauseMonsterJob
             {
                 AgentBody = agentBody,
                 IsRunning = !isMonsterPaused
             }.Schedule();
+            handle.Complete();
+            
+            for (int i = 0; i < agentBody.Length; i++)
+            {
+                manager.SetComponentData(entities[i], agentBody[i]);
+            }
+
+            agentBody.Dispose();
         }
 
         void WeaponPause()
@@ -124,7 +132,6 @@ namespace _Games.Combat
                         0);
                     MonsterData clone = monsterData.Clone(10000000);
                     await ECSFactory.BuildMonster(player, clone, levelDesign.Radius, position);
-                    Debug.Log("build complete: " + clone.MonsterId);
                 }
                 else
                 {
@@ -140,11 +147,11 @@ namespace _Games.Combat
             if (int.TryParse(inputFieldPickWeapon.text, out int value))
             {
                 WeaponConfig weaponConfig = KitConfigManager.Get<WeaponConfig>();
-                if (weaponConfig.Find(value, out var weaponData))
+                if (weaponConfig.Find(value, out WeaponData weaponData))
                 {
                     SlotItem slotItem = levelDesign.Slots[slot];
                     slotItem.Equip(weaponData, rarity);
-                    equipmentManager.Equip(slot, weaponData, RarityMethod.ParseLevel(rarity));
+                    _weaponManager.Equip(slot, weaponData, RarityMethod.ParseLevel(rarity));
                 }
                 else
                 {
@@ -156,18 +163,21 @@ namespace _Games.Combat
     }
 
     [BurstCompile]
-    [WithAll(typeof(MonsterTag))]
-    struct PauseUnPauseMonsterJob : IJob
+    struct PauseUnpauseMonsterJob : IJob
     {
-        [ReadOnly] public NativeArray<AgentBody> AgentBody;
+        public NativeArray<AgentBody> AgentBody;
         public bool IsRunning;
         
         public void Execute()
         {
             for (int i = 0; i < AgentBody.Length; i++)
             {
-                if (IsRunning) AgentBody[i].SetDestination(float3.zero);
-                else AgentBody[i].Stop();
+                AgentBody agent = AgentBody[i];
+                if (IsRunning)
+                    agent.SetDestination(float3.zero);
+                else
+                    agent.Stop();
+                AgentBody[i] = agent;
             }
         }
     }

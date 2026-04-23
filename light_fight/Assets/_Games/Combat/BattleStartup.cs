@@ -36,7 +36,7 @@ namespace _Games.Combat
         private ShareData shareData;
         private SpawnLogic spawnLogic;
         private LevelDesign levelDesign;
-        private EquipmentManager equipmentManager;
+        private WeaponManager weaponManager;
         
         private async void Start()
         {
@@ -81,8 +81,8 @@ namespace _Games.Combat
             // todo: register object
             shareData = new ShareData(dictionary, levelDesign);
             spawnLogic = new SpawnLogic(shareData, player);
-            equipmentManager = new EquipmentManager(levelDesign);
-            levelDesign.OnTriggerWeapon += equipmentManager.Trigger;
+            weaponManager = new WeaponManager(levelDesign);
+            levelDesign.OnTriggerWeapon += weaponManager.Trigger;
             
             // todo: close loading scene
 #if DEVELOP_MODE
@@ -175,7 +175,7 @@ namespace _Games.Combat
                         if (skill.projectile.hitEffectPrefab != null)
                             KitPool.RegisterPool(skill.projectile.hitEffectPrefab, true);
                     }
-                    equipmentManager.Equip(i, slot.WeaponData, RarityMethod.ParseLevel(slot.WeaponRarity));
+                    weaponManager.Equip(i, slot.WeaponData, RarityMethod.ParseLevel(slot.WeaponRarity));
                 }
             }
 
