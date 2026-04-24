@@ -119,4 +119,5 @@ MonoBehaviour:
     colliderId: 2004_Collider
     trajectoryId: 2004_Trajectory
     modifiersId: []
-    behaviorsId: []
+    behaviorsId:
+    - 2004_Behavior

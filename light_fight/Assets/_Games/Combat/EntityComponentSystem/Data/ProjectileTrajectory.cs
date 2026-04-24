@@ -6,7 +6,7 @@ namespace _Games.Combat.EntityComponentSystem.Data
     public struct ProjectileTrajectory : IComponentData
     {
         public readonly Entity Target;
-        public readonly float3 StartPosition;
+        public float3 StartPosition;
         public readonly float3 EndPosition;
         public readonly float3 Direction;
         public double ElapsedTime;

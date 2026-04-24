@@ -36,6 +36,10 @@ namespace _Games.Combat.EntityComponentSystem.System
                 LocalTransformLookup = localTransformLookup,
                 DeltaTime = state.WorldUnmanaged.Time.DeltaTime
             }.ScheduleParallel(state.Dependency);
+            state.Dependency = new ProjectileBoomerangJob
+            {
+                DeltaTime = state.WorldUnmanaged.Time.DeltaTime
+            }.ScheduleParallel(state.Dependency);
         }
         
         [BurstCompile]
@@ -55,18 +59,30 @@ namespace _Games.Combat.EntityComponentSystem.System
         }
 
         [BurstCompile]
-        partial struct ProjectileBoomerangeJob : IJobEntity
+        partial struct ProjectileBoomerangJob : IJobEntity
         {
             public double DeltaTime;
             
             public void Execute(ref ProjectileBoomerangTrajectory boomerang,
                 ref ProjectileTrajectory trajectory, ref LocalTransform transform)
             {
+                bool isCastingPhase = boomerang.IsCastingPhase;
                 trajectory.ElapsedTime += DeltaTime;
                 float t = (float)trajectory.ElapsedTime;
-                double d = curve.DistanceEvaluate(t);
-                float3 position = (float)d * trajectory.Direction + trajectory.StartPosition;
+                double d = isCastingPhase ? boomerang.CastDistanceEvaluate(t) : boomerang.ReturnDistanceEvaluate(t);
+                float3 direction = isCastingPhase ? trajectory.Direction : -trajectory.Direction;
+                float3 position = (float)d * direction + trajectory.StartPosition;
                 transform.Position = position;
+
+                if (isCastingPhase && trajectory.ElapsedTime >= boomerang.Duration)
+                {
+                    trajectory.ElapsedTime = 0;
+                    boomerang.IsCastingPhase = false;
+                    trajectory.StartPosition = position;
+                   
+                    var deltaRot = quaternion.RotateZ(math.radians(180f));
+                    transform.Rotation = math.mul(transform.Rotation, deltaRot);
+                }
             }
         }
         

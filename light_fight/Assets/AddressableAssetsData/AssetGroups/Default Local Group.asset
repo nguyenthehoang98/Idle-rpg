@@ -145,6 +145,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1c4184fe4c51854b9211042f5976b1a
+    m_Address: 2004_Behavior
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a368e74a2ce92e146abcb156ac4be11d
     m_Address: 2003_Behavior
     m_ReadOnly: 0
