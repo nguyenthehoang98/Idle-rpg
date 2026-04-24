@@ -264,6 +264,7 @@ namespace _Games.Combat.EntityComponentSystem
 
                             break;
                         case BehaviourType.DropStrike:
+                            Debug.LogError(@"Sưửa lại DropStrike thành instance đạn tại chỗ, việc đạn bay thì do fx. delay collsion là đc");
                             DropStrikeBehaviourSO dropStrike = behavior as DropStrikeBehaviourSO;
                             float3 center = dropStrike.overrideCenter ? float3.zero : endPosition;
                             for (int i = 0; i < dropStrike.count; i++)
