@@ -65,8 +65,7 @@ MonoBehaviour:
     colliderId: 2001_Collider
     trajectoryId: 2001_Trajectory
     modifiersId: []
-    behaviorsId:
-    - 2001_Behavior
+    behaviorsId: []
   - skillId: 2002
     skillName: 
     lifeTime: 0.5
@@ -121,3 +120,20 @@ MonoBehaviour:
     modifiersId: []
     behaviorsId:
     - 2004_Behavior
+  - skillId: 2005
+    skillName: 
+    lifeTime: 1.5
+    castTime: 0.2
+    baseFlatDamage: 0
+    flatDamageBonusLevel: 0
+    baseScaleDamage: 1
+    scaleDamageBonusLevel: 0
+    type: 4
+    needTargetToCast: 0
+    maxFindTargetRange: 12
+    collisionResetInterval: 999
+    projectileId: 2005_Projectile
+    colliderId: 2005_Collider
+    trajectoryId: 2005_Trajectory
+    modifiersId: []
+    behaviorsId: []

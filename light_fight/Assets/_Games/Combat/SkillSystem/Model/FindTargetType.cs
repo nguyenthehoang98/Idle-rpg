@@ -6,5 +6,6 @@
         Farthest,
         HighestWeight,
         LowestWeight,
+        Random,
     }
 }

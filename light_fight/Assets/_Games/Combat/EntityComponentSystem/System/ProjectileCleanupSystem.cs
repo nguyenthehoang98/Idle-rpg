@@ -68,23 +68,17 @@ namespace _Games.Combat.EntityComponentSystem.System
                     destroyRo.IsTrigger = true;
                     dead.ValueRW = destroyRo;
 
+                    Projectile projectile = state.EntityManager.GetComponentObject<Projectile>(entity);
+                    
                     if (destroyRo.Reason == ProjectileDeadReason.Hit)
                     {
-                        CastHitEffect(skillData.ValueRO.SkillId, transform.ValueRO.Position);
+                        projectile.Hit(skillData.ValueRO.SkillId, transform.ValueRO.Position);
                     }
-
-                    Projectile projectile = state.EntityManager.GetComponentObject<Projectile>(entity);
+                    
                     projectile.Destroy();
                     ecb.DestroyEntity(entity);
                 }
             }
-        }
-
-        async void CastHitEffect(int skillId, float3 position)
-        {
-#if UNITY_EDITOR
-            Debug.LogWarning($"CastHitEffect: skillId={skillId}, position={position}");
-#endif
         }
 
         partial struct ResetHitBufferJob : IJobEntity

@@ -4,6 +4,7 @@ using _Games.Combat.EntityComponentSystem.Data;
 using _Games.Combat.EntityComponentSystem.Model;
 using _Games.Combat.Level;
 using _Games.Combat.Model;
+using _Games.Combat.SkillSystem;
 using _Games.Combat.SkillSystem.Config;
 using _Games.Combat.SkillSystem.Model;
 using _Games.Config;
@@ -14,7 +15,10 @@ using _KIT.Resource;
 using _KIT.Utils;
 using Cysharp.Threading.Tasks;
 using ProjectDawn.Navigation;
+using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
+using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
@@ -174,6 +178,99 @@ namespace _Games.Combat.EntityComponentSystem
             view.name = go.name + "#" + entity.GetHashCode();
 #endif
             await UniTask.CompletedTask;
+        }
+
+        public static async void PrepareProjectileBuild(EntityQuery query, int skillId, Vector3 position,
+            Action<(Entity target, float3 targetPosition, Skill skill, SkillData skillData)> result)
+        {
+            SkillConfig skillConfig = KitConfigManager.Get<SkillConfig>();
+            bool foundSkill = skillConfig.Find(skillId, out var skillData);
+            if (!foundSkill)
+            {
+                Debug.LogError("Not found skill: " + skillId);
+                return;
+            }
+            
+            Skill skill = await SkillFactory.CreateSkill(skillData);
+
+            if (skill.main.type == FindTargetType.Random)
+            {
+                result((Entity.Null, position + new Vector3(RandomUtils.Value, RandomUtils.Value, 0).normalized *
+                        skill.main.maxTargetRange, skill, skillData)
+                );
+                return;
+            }
+
+            bool found = false;
+            var entities = query.ToEntityArray(Allocator.TempJob);
+            var transforms = query.ToComponentDataArray<LocalTransform>(Allocator.TempJob);
+            var healths = query.ToComponentDataArray<HealthData>(Allocator.TempJob);
+            var nearestIndex = new NativeReference<int>(-1, Allocator.TempJob);
+            var farthestIndex = new NativeReference<int>(-1, Allocator.TempJob);
+
+            float thresholdDistance = float.MaxValue;
+            switch (skill.main.type)
+            {
+                case FindTargetType.Farthest:
+                case FindTargetType.Nearest:
+                    thresholdDistance = skill.main.maxTargetRange;
+                    break;
+            }
+
+            switch (skill.main.type)
+            {
+                case FindTargetType.Farthest:
+                case FindTargetType.Nearest:
+                    var job = new QueryMonsterJob
+                    {
+                        ThresholdDistanceSq = thresholdDistance * thresholdDistance,
+                        TargetPoint = position,
+                        Transforms = transforms,
+                        Healths = healths,
+                        FarthestIndex = farthestIndex,
+                        NearestIndex = nearestIndex,
+                    };
+                    var handle = job.Schedule();
+                    handle.Complete();
+                    break;
+            }
+
+            Vector3 endPosition = Vector3.zero;
+            Entity target = Entity.Null;
+            switch (skill.main.type)
+            {
+                case FindTargetType.Farthest:
+                    if (farthestIndex.Value >= 0)
+                    {
+                        target = entities[farthestIndex.Value];
+                        endPosition = transforms[farthestIndex.Value].Position;
+                        found = true;
+                    }
+                    else
+                        endPosition = position + new Vector3(RandomUtils.Range(-5, 5), RandomUtils.Range(-5, 5), 0f);
+
+                    break;
+                case FindTargetType.Nearest:
+                    if (nearestIndex.Value >= 0)
+                    {
+                        target = entities[nearestIndex.Value];
+                        endPosition = transforms[nearestIndex.Value].Position;
+                        found = true;
+                    }
+                    else
+                        endPosition = position + new Vector3(RandomUtils.Range(-5, 5), 0f, 0f);
+
+                    break;
+            }
+
+            transforms.Dispose();
+            nearestIndex.Dispose();
+            farthestIndex.Dispose();
+
+            if (!found && skill.main.needTargetToCast)
+                return;
+            
+            result((target, endPosition, skill, skillData));
         }
 
         public static async void BuildProjectile(EntityManager manager, Entity source, Entity target,
@@ -455,6 +552,48 @@ namespace _Games.Combat.EntityComponentSystem
             }
             
             monstersPath.Clear();
+        }
+        
+        [BurstCompile]
+        struct QueryMonsterJob : IJob
+        {
+            [ReadOnly] public NativeArray<LocalTransform> Transforms;
+            [ReadOnly] public NativeArray<HealthData> Healths;
+            [ReadOnly] public float3 TargetPoint;
+            [ReadOnly] public float ThresholdDistanceSq;
+
+            public NativeReference<int> NearestIndex;
+            public NativeReference<int> FarthestIndex;
+
+            public void Execute()
+            {
+                float maxDist = float.MinValue;
+                float minDist = float.MaxValue;
+                int nearest = -1;
+                int farthest = -1;
+
+                for (int i = 0; i < Transforms.Length; i++)
+                {
+                    if (Healths[i].Health <= 0) continue;
+                    float3 pos = Transforms[i].Position;
+                    float dist = math.distancesq(pos, TargetPoint);
+                    if (dist > ThresholdDistanceSq) continue;
+                    if (dist < minDist)
+                    {
+                        minDist = dist;
+                        nearest = i;
+                    }
+
+                    if (dist > maxDist)
+                    {
+                        maxDist = dist;
+                        farthest = i;
+                    }
+                }
+
+                FarthestIndex.Value = farthest;
+                NearestIndex.Value = nearest;
+            }
         }
     }
 }

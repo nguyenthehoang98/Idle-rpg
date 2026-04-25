@@ -70,8 +70,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4523e52abef673044a3fdb6fbf3ad7b9
+    m_Address: 2005_Collider
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4d4e83ca5671a2d4bbf3a647837e0b7f
     m_Address: 2003_Trajectory
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e010605803b77d4c9ec94d00d764e45
+    m_Address: 2005_Projectile
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -167,6 +177,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bf40bd6ff03fadb49b6e35d341ac3ab2
     m_Address: Spawn_Random
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c7f5362302efd21489535d14b364dec5
+    m_Address: 2005_Trajectory
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
