@@ -24,9 +24,7 @@ namespace _KITSystem.Movement
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3 EvaluateVelocity(float deltaTime)
         {
-            Vector3 vel = direction * speed * deltaTime;
-            Debug.Log(vel);
-            return vel;
+            return direction * speed * deltaTime;
         }
 
         public void OnStart(Vector3 startPos)

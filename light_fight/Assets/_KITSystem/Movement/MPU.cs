@@ -37,7 +37,7 @@ namespace _KITSystem.Movement
         // Cờ id cho phần thêm, xóa modifier
         private int nextUniqueModifierId = 1;
         // Danh sách các cờ modifier được lưu ở đây. Map [uniqueId]->[globalid] giúp tìm modifier trực tiếp
-        private Dictionary<int, int> handleToGlobalIndex = new Dictionary<int, int>();
+        private Dictionary<int, int> mapModifierIdToIndex = new Dictionary<int, int>();
         // Hàng chờ các command, tránh conflic data
         private Queue<Action> pendingCommands = new Queue<Action>();
 
@@ -66,17 +66,17 @@ namespace _KITSystem.Movement
                 isInitialized = true;
             }
         }
-        
+
         public void Tick(float deltaTime)
         {
             if (!isInitialized) return;
-            
+
             // Apply pending commands
             while (pendingCommands.Count > 0)
             {
                 pendingCommands.Dequeue().Invoke();
             }
-            
+
             // Update modifier
             int startVersion = version;
             for (int i = 0; i < activeModifiers.Count; i++)
@@ -92,26 +92,27 @@ namespace _KITSystem.Movement
                 }
 #endif
             }
-            
+
             // Resolve movement (unit-centric)
             for (int unitId = 0; unitId < positions.Count; unitId++)
             {
                 if (!alives[unitId])
                     continue;
-                if (!unitModifiers.TryGetValue(unitId, out var mods))
+                if (!unitModifiers.TryGetValue(unitId, out var list)) // modifiers list
                     continue;
                 Vector3 desiredVelocity = Vector3.zero;
-                for (int i = 0; i < mods.Count; i++)
+                for (int i = 0; i < list.Count; i++)
                 {
-                    int modIndex = mods[i];
-                    ModifierRuntime m = activeModifiers[modIndex];
+                    int idx = list[i];
+                    if(idx >= activeModifiers.Count) Debug.LogError($"{idx}//{activeModifiers.Count} :: {string.Join(',', list)}");
+                    ModifierRuntime m = activeModifiers[idx];
                     desiredVelocity += m.Modifier.EvaluateVelocity(deltaTime);
                 }
 
                 positions[unitId] += desiredVelocity;
             }
         }
-        
+
         public void RequestAddUnit(Vector3 position, Action<int> callback)
         {
             pendingCommands.Enqueue(() => { callback.Invoke(AddUnit_Internal(position)); });
@@ -199,7 +200,7 @@ namespace _KITSystem.Movement
 
                     if (!IsValidModifierIndex(idx)) continue;
 
-                    handles.Add(activeModifiers[idx].UniqueModifierId);
+                    handles.Add(activeModifiers[idx].ModifierId);
                 }
                 
                 // remove bằng handle (an toàn)
@@ -263,7 +264,7 @@ namespace _KITSystem.Movement
 
                     if (modifier.Priority > m.Modifier.Priority)
                     {
-                        RemoveModifier_Internal(m.UniqueModifierId);
+                        RemoveModifier_Internal(m.ModifierId);
                     }
                 }
             }
@@ -271,40 +272,27 @@ namespace _KITSystem.Movement
             // ~ start ->
             modifier.OnStart(positions[unitId]);
             
-            int globalIndex = activeModifiers.Count;
-            int uniqueModifierId = nextUniqueModifierId++;
+            int modifierIndex = activeModifiers.Count;
+            int modifierId = nextUniqueModifierId++;
             
             // Add modifier vào hệ thống
             ModifierRuntime runtime = new ModifierRuntime
             {
                 UnitId = unitId,
                 Modifier = modifier,
-                ModifierGlobalIndex = globalIndex,
-                UniqueModifierId = uniqueModifierId
+                ModifierIndex = modifierIndex,
+                ModifierId = modifierId
             };
 
             activeModifiers.Add(runtime);
 
-            list.Add(globalIndex);
+            list.Add(modifierIndex);
             
-            handleToGlobalIndex[uniqueModifierId] = globalIndex;
+            mapModifierIdToIndex[modifierId] = modifierIndex;
 
-            ValidateState();
-            
             version++;
 
-            LogDict();
-            
-            return uniqueModifierId;
-        }
-
-        void LogDict()
-        {
-            Debug.Log($"count: {handleToGlobalIndex.Count}");
-            foreach (var pair in handleToGlobalIndex)
-            {
-                Debug.Log($"[{pair.Key}] Value: {pair.Value}");
-            }
+            return modifierId;
         }
 
         private bool RemoveModifier_Internal(int uniqueId)
@@ -327,32 +315,11 @@ namespace _KITSystem.Movement
             if (!TryGetIndexModifier(uniqueId, out int idx))
                 return false;
             
-            ModifierRuntime runtime = activeModifiers[idx];
-            runtime.Modifier.OnInterrupt();
-
-            // lấy index của modifier bên trong danh sách
-            int lastIdx = activeModifiers.Count - 1;
+            ModifierRuntime removed = activeModifiers[idx];
+            removed .Modifier.OnInterrupt();
             
-            if (idx != lastIdx)
-            {
-                // đảo chỗ phần tử cần xóa cho phần tử cuối -> thay vì xóa ở list (giảm độ phức tạp)
-                ModifierRuntime last = activeModifiers[lastIdx];
-                activeModifiers[idx] = last;
-
-                // cập nhật lại các phần tử
-                handleToGlobalIndex[last.UniqueModifierId] = idx;
-                last.ModifierGlobalIndex = idx;
-                activeModifiers[idx] = last;
-            }
-            
-            // xóa tại index cuối (thay vì xóa ở index nào đó -> phải sort list)
-            activeModifiers.RemoveAt(lastIdx);
-            
-            // xoá mapping của thằng bị remove
-            handleToGlobalIndex.Remove(uniqueId);
-
             // xóa modifier ở danh sách theo unitId
-            if (unitModifiers.TryGetValue(runtime.UnitId, out List<int> list))
+            if (unitModifiers.TryGetValue(removed.UnitId, out List<int> list))
             {
                 for (int i = 0; i < list.Count; i++)
                 {
@@ -365,21 +332,51 @@ namespace _KITSystem.Movement
                 }
 
                 // xóa key nếu ko còn phần tử nào cả
-                if (list.Count == 0) unitModifiers.Remove(runtime.UnitId);
+                if (list.Count == 0)
+                    unitModifiers.Remove(removed.UnitId);
             }
 
-            ValidateState();
-            
-            version++;
+            // lấy index của modifier bên trong danh sách
+            int lastIdx = activeModifiers.Count - 1;
+            if (idx != lastIdx)
+            {
+                // đảo chỗ phần tử cần xóa cho phần tử cuối -> thay vì xóa ở list (giảm độ phức tạp)
+                ModifierRuntime last = activeModifiers[lastIdx];
+                activeModifiers[idx] = last;
 
-            LogDict();
+                // cập nhật lại các phần tử
+                mapModifierIdToIndex[last.ModifierId] = idx;
+                last.ModifierIndex = idx;
+                activeModifiers[idx] = last;
+                
+                // update unitModifiers của thằng bị swap
+                if (unitModifiers.TryGetValue(last.UnitId, out List<int> list2))
+                {
+                    for (int i = 0; i < list2.Count; i++)
+                    {
+                        if (list2[i] == lastIdx)
+                        {
+                            list2[i] = idx;
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            // xóa tại index cuối (thay vì xóa ở index nào đó -> phải sort list)
+            activeModifiers.RemoveAt(lastIdx);
+            
+            // xoá mapping của thằng bị remove
+            mapModifierIdToIndex.Remove(uniqueId);
+
+            version++;
 
             return true;
         }
         
         private bool TryGetIndexModifier(int handle, out int idx)
         {
-            if (!handleToGlobalIndex.TryGetValue(handle, out idx))
+            if (!mapModifierIdToIndex.TryGetValue(handle, out idx))
                 return false;
 
             if (!IsValidModifierIndex(idx)) return false;
@@ -396,13 +393,13 @@ namespace _KITSystem.Movement
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool HasModifier(int handle)
         {
-            return handleToGlobalIndex.ContainsKey(handle);
+            return mapModifierIdToIndex.ContainsKey(handle);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool HasModifier(int handle, out int idx)
         {
-            return handleToGlobalIndex.TryGetValue(handle, out idx);
+            return mapModifierIdToIndex.TryGetValue(handle, out idx);
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -416,27 +413,6 @@ namespace _KITSystem.Movement
         {
             return (uint)idx < (uint)activeModifiers.Count;
         }
-        
-        [Conditional("UNITY_EDITOR")]
-        private void ValidateState()
-        {
-            // mapping ↔ global phải khớp
-            foreach (var kv in handleToGlobalIndex)
-            {
-                int idx = kv.Value;
-
-                if (!IsValidModifierIndex(idx))
-                {
-                    Debug.LogError("Invalid index");
-                    continue;
-                }
-
-                if (activeModifiers[idx].UniqueModifierId != kv.Key)
-                {
-                    Debug.LogError("Mapping mismatch");
-                }
-            }
-        }
     }
     
     public partial class MPU
@@ -447,8 +423,8 @@ namespace _KITSystem.Movement
             public float ElapsedTime;
             public bool MarkedForRemoval;
             public IModifier Modifier;
-            public int ModifierGlobalIndex; // Dùng để xóa ngược lại modifieractives mà ko phải duyệt toàn bộ
-            public int UniqueModifierId; // Dùng lưu để xóa
+            public int ModifierIndex; // Dùng để xóa ngược lại modifieractives mà ko phải duyệt toàn bộ
+            public int ModifierId; // Dùng lưu để xóa
         }
     }
 }
