@@ -13,9 +13,12 @@ namespace _KITSystem.Schedule
 
         public void Run(TickGroup group, float dt)
         {
-            foreach (var tick in ticks[group])
+            if (ticks.TryGetValue(group, out List<ITickable> tickables))
             {
-                tick.Tick(dt);
+                foreach (var tickable in tickables)
+                {
+                    tickable.Tick(dt);
+                }
             }
         }
     }
