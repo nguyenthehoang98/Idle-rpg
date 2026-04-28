@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using UnityEngine;
 
-namespace _KITSystem.Movement
+namespace _KITSystem.Movement.Testing
 {
     public class MPUTesting
     {

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Runtime.CompilerServices;
+using UnityEngine;
 
 namespace _KITSystem.Movement
 {
@@ -20,9 +21,12 @@ namespace _KITSystem.Movement
             IsFinished = false;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3 EvaluateVelocity(float deltaTime)
         {
-            return direction * speed * deltaTime;
+            Vector3 vel = direction * speed * deltaTime;
+            Debug.Log(vel);
+            return vel;
         }
 
         public void OnStart(Vector3 startPos)

@@ -100,14 +100,11 @@ namespace _KITSystem.Movement
                     continue;
                 if (!unitModifiers.TryGetValue(unitId, out var mods))
                     continue;
-                
                 Vector3 desiredVelocity = Vector3.zero;
                 for (int i = 0; i < mods.Count; i++)
                 {
                     int modIndex = mods[i];
-                    if (!handleToGlobalIndex.TryGetValue(modIndex, out int index))
-                        continue;
-                    ModifierRuntime m = activeModifiers[index];
+                    ModifierRuntime m = activeModifiers[modIndex];
                     desiredVelocity += m.Modifier.EvaluateVelocity(deltaTime);
                 }
 
@@ -294,9 +291,20 @@ namespace _KITSystem.Movement
 
             ValidateState();
             
-            version++; 
+            version++;
+
+            LogDict();
             
             return uniqueModifierId;
+        }
+
+        void LogDict()
+        {
+            Debug.Log($"count: {handleToGlobalIndex.Count}");
+            foreach (var pair in handleToGlobalIndex)
+            {
+                Debug.Log($"[{pair.Key}] Value: {pair.Value}");
+            }
         }
 
         private bool RemoveModifier_Internal(int uniqueId)
@@ -362,7 +370,9 @@ namespace _KITSystem.Movement
 
             ValidateState();
             
-            version++; 
+            version++;
+
+            LogDict();
 
             return true;
         }
@@ -378,9 +388,21 @@ namespace _KITSystem.Movement
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Vector3 GetUnitPosition(int unitId)
+        {
+            return positions[unitId];
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool HasModifier(int handle)
         {
             return handleToGlobalIndex.ContainsKey(handle);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool HasModifier(int handle, out int idx)
+        {
+            return handleToGlobalIndex.TryGetValue(handle, out idx);
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
