@@ -1,6 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using _KITSystem.Schedule;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace _KITSystem.Movement
 {
@@ -10,9 +14,12 @@ namespace _KITSystem.Movement
         [SerializeField, Tooltip("Các modifier có kiểu khác danh sách này sẽ không được thêm vào hệ thống")]
         private ModifierName[] flagModifiers;
 
+        // Đánh version giúp kiểm tra debug
+        private int version;
+        // biến kiểm tra đã khởi tạo chưa
         private bool isInitialized = false;
+        // Kiểu collection khác, giúp kiểm tra nhanh hơn
         private HashSet<ModifierName> flags;
-
         // Danh sách chứa vị trí của các unit. unit id = index
         private List<Vector3> positions = new List<Vector3>();
         // Danh sách đánh dấu unit nào không còn hoạt động.
@@ -30,14 +37,73 @@ namespace _KITSystem.Movement
         private int nextUniqueModifierId = 1;
         // Danh sách các cờ modifier được lưu ở đây. Map [uniqueId]->[globalid] giúp tìm modifier trực tiếp
         private Dictionary<int, int> handleToGlobalIndex = new Dictionary<int, int>();
-        
+        // Hàng chờ các command, tránh conflic data
+        private Queue<Action> pendingCommands = new Queue<Action>();
+
         public void Tick(float deltaTime)
         {
-            Initialize();
+            int startVersion = version;
+
+            for (int i = 0; i < activeModifiers.Count; i++)
+            {
+                var m = activeModifiers[i];
+
+                // update logic...
+
+#if UNITY_EDITOR
+                if (startVersion != version)
+                {
+                    Debug.LogError("❌ State changed during Tick!");
+                    return;
+                }
+#endif
+            }
+
+            while (pendingCommands.Count > 0)
+            {
+                pendingCommands.Dequeue().Invoke();
+            }
         }
 
-        public int AddUnit(Vector3 position)
+        public void Initialize()
         {
+            if (!isInitialized)
+            {
+                flags = new HashSet<ModifierName>();
+                foreach (ModifierName modifierName in flagModifiers)
+                {
+                    flags.Add(modifierName);
+                }
+
+                isInitialized = true;
+            }
+        }
+
+        public void RequestAddUnit(Vector3 position, Action<int> callback)
+        {
+            pendingCommands.Enqueue(() => { callback.Invoke(AddUnit_Internal(position)); });
+        }
+        
+        public void RequestRemoveUnit(int unitId, Action<bool> callback)
+        {
+            pendingCommands.Enqueue(() => { callback.Invoke(RemoveUnit_Internal(unitId)); });
+        }
+
+        public void RequestAddModifier(int unitId, IModifier modifier, Action<int> callback)
+        {
+            pendingCommands.Enqueue(() => { callback.Invoke(AddModifier_Internal(unitId, modifier)); });
+        }
+     
+        public void RequestRemoveModifier(int unitId, Action<bool> callback)
+        {
+            pendingCommands.Enqueue(() => { callback.Invoke(RemoveModifier_Internal(unitId)); });
+        }
+
+        private int AddUnit_Internal(Vector3 position)
+        {
+            if (!isInitialized)
+                return -2;
+            
             int id;
 
             // reuse id nếu có
@@ -56,12 +122,14 @@ namespace _KITSystem.Movement
                 alives.Add(true);
             }
 
+            version++; 
+            
             return id;
         }
 
-        public bool RemoveUnit(int unitId)
+        private bool RemoveUnit_Internal(int unitId)
         {
-            if (!IsValid(unitId))
+            if (!IsValidUnit(unitId)) 
                 return false;
 
             // mark dead
@@ -76,11 +144,10 @@ namespace _KITSystem.Movement
                 for (int i = 0; i < temp.Count; i++)
                 {
                     int idx = temp[i];
+                    
+                    if (!IsValidModifierIndex(idx)) continue;
 
-                    if (idx < activeModifiers.Count)
-                    {
-                        RemoveModifier(activeModifiers[idx].UniqueModifierId);
-                    }
+                    RemoveModifier_Internal(activeModifiers[idx].UniqueModifierId);
                 }
 
                 unitModifiers.Remove(unitId);
@@ -91,19 +158,27 @@ namespace _KITSystem.Movement
             
             // đoạn này đặt về như thế cho dễ debug nếu ần thôi
             positions[unitId] = default;
+            
+            version++; 
 
             return true;
         }
 
-        public int AddModifier(int unitId, IModifier modifier)
+        private int AddModifier_Internal(int unitId, IModifier modifier)
         {
+            if (!isInitialized) 
+                return -2;
+
+            if (!flags.Contains(modifier.Name))
+                return -3;
+            
             /*
              * Ý tưởng khi thêm 1 modifier vào thì kiểm tra nó có override modifier nào ko? có -> xóa
              * Sau đó fill các modifier các đối tượng để lưu trữ
              * Trả về 1 mark, nó sẽ dùng để query nhanh modifier bất kì
              */
             
-            if (!IsValid(unitId))
+            if (!IsValidUnit(unitId))
                 return -1;
             
             // Lấy danh sách modifier của unit
@@ -125,10 +200,12 @@ namespace _KITSystem.Movement
                     if (idx >= activeModifiers.Count) continue;
 
                     var m = activeModifiers[idx];
+                    
+                    if (!IsValidModifierIndex(idx)) continue;
 
                     if (modifier.Priority > m.Modifier.Priority)
                     {
-                        RemoveModifier(m.UniqueModifierId);
+                        RemoveModifier_Internal(m.UniqueModifierId);
                     }
                 }
             }
@@ -154,11 +231,15 @@ namespace _KITSystem.Movement
             list.Add(globalIndex);
             
             handleToGlobalIndex[uniqueModifierId] = globalIndex;
+
+            ValidateState();
+            
+            version++; 
             
             return uniqueModifierId;
         }
 
-        public bool RemoveModifier(int uniqueId)
+        private bool RemoveModifier_Internal(int uniqueId)
         {
             /*
              * Áp dụng kĩ thuật trong môn Thuật toán & ứng dụng
@@ -174,11 +255,10 @@ namespace _KITSystem.Movement
              * Swap + Remove global: 0(1)
              * UpdateUnitModifier O(k) với K là số modifier hiện tại (khá ít) 
              */
-            
-            if (!handleToGlobalIndex.TryGetValue(uniqueId, out int idx))
+
+            if (!TryGetIndexModifier(uniqueId, out int idx))
                 return false;
             
-            // gọi để dừng logic của modifier
             ModifierRuntime runtime = activeModifiers[idx];
             runtime.Modifier.OnInterrupt();
 
@@ -220,25 +300,59 @@ namespace _KITSystem.Movement
                 if (list.Count == 0) unitModifiers.Remove(runtime.UnitId);
             }
 
+            ValidateState();
+            
+            version++; 
+
+            return true;
+        }
+        
+        private bool TryGetIndexModifier(int handle, out int idx)
+        {
+            if (!handleToGlobalIndex.TryGetValue(handle, out idx))
+                return false;
+
+            if (!IsValidModifierIndex(idx)) return false;
+
             return true;
         }
 
-        bool IsValid(int id)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool HasModifier(int handle)
+        {
+            return handleToGlobalIndex.ContainsKey(handle);
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private bool IsValidUnit(int id)
         {
             return id >= 0 && id < alives.Count && alives[id];
         }
         
-        void Initialize()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private bool IsValidModifierIndex(int idx)
         {
-            if (!isInitialized)
+            return (uint)idx < (uint)activeModifiers.Count;
+        }
+        
+        [Conditional("UNITY_EDITOR")]
+        private void ValidateState()
+        {
+            // mapping ↔ global phải khớp
+            foreach (var kv in handleToGlobalIndex)
             {
-                flags = new HashSet<ModifierName>();
-                foreach (ModifierName modifierName in flagModifiers)
+                int idx = kv.Value;
+
+                if (!IsValidModifierIndex(idx))
                 {
-                    flags.Add(modifierName);
+                    Debug.LogError("Invalid index");
+                    continue;
                 }
 
-                isInitialized = true;
+                if (activeModifiers[idx].UniqueModifierId != kv.Key)
+                {
+                    Debug.LogError("Mapping mismatch");
+                }
             }
         }
     }
