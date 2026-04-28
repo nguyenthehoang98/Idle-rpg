@@ -24,5 +24,6 @@ namespace _KITSystem.Movement
     public enum ModifierName
     {
         Default, 
+        Testing,
     }
 }

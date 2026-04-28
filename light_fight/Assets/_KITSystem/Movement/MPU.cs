@@ -8,18 +8,19 @@ using Debug = UnityEngine.Debug;
 
 namespace _KITSystem.Movement
 {
+    [Serializable]
     //~ Movement Processing Unit
     public sealed partial class MPU : ITickable
     {
         [SerializeField, Tooltip("Các modifier có kiểu khác danh sách này sẽ không được thêm vào hệ thống")]
-        private ModifierName[] flagModifiers;
+        private ModifierName[] flagModifiers = new ModifierName[0];
 
         // Đánh version giúp kiểm tra debug
         private int version;
         // biến kiểm tra đã khởi tạo chưa
         private bool isInitialized = false;
         // Kiểu collection khác, giúp kiểm tra nhanh hơn
-        private HashSet<ModifierName> flags;
+        private HashSet<ModifierName> flags = new HashSet<ModifierName>();
         // Danh sách chứa vị trí của các unit. unit id = index
         private List<Vector3> positions = new List<Vector3>();
         // Danh sách đánh dấu unit nào không còn hoạt động.
@@ -40,8 +41,36 @@ namespace _KITSystem.Movement
         // Hàng chờ các command, tránh conflic data
         private Queue<Action> pendingCommands = new Queue<Action>();
 
+        public MPU()
+        {
+        }
+
+        public MPU(params ModifierName[] additionalModifiers)
+        {
+            foreach (var m in additionalModifiers)
+            {
+                flags.Add(m);
+            }
+        }
+
+        public void Initialize()
+        {
+            if (!isInitialized)
+            {
+                flags.Add(ModifierName.Default);
+                foreach (ModifierName modifierName in flagModifiers)
+                {
+                    flags.Add(modifierName);
+                }
+
+                isInitialized = true;
+            }
+        }
+
         public void Tick(float deltaTime)
         {
+            if (!isInitialized) return;
+            
             int startVersion = version;
 
             for (int i = 0; i < activeModifiers.Count; i++)
@@ -65,38 +94,44 @@ namespace _KITSystem.Movement
             }
         }
 
-        public void Initialize()
-        {
-            if (!isInitialized)
-            {
-                flags = new HashSet<ModifierName>();
-                foreach (ModifierName modifierName in flagModifiers)
-                {
-                    flags.Add(modifierName);
-                }
-
-                isInitialized = true;
-            }
-        }
-
         public void RequestAddUnit(Vector3 position, Action<int> callback)
         {
             pendingCommands.Enqueue(() => { callback.Invoke(AddUnit_Internal(position)); });
+        }
+        
+        public void RequestAddUnit(Vector3 position)
+        {
+            pendingCommands.Enqueue(() => { AddUnit_Internal(position); });
         }
         
         public void RequestRemoveUnit(int unitId, Action<bool> callback)
         {
             pendingCommands.Enqueue(() => { callback.Invoke(RemoveUnit_Internal(unitId)); });
         }
+        
+        public void RequestRemoveUnit(int unitId)
+        {
+            pendingCommands.Enqueue(() => { RemoveUnit_Internal(unitId); });
+        }
 
         public void RequestAddModifier(int unitId, IModifier modifier, Action<int> callback)
         {
             pendingCommands.Enqueue(() => { callback.Invoke(AddModifier_Internal(unitId, modifier)); });
         }
+        
+        public void RequestAddModifier(int unitId, IModifier modifier)
+        {
+            pendingCommands.Enqueue(() => { AddModifier_Internal(unitId, modifier); });
+        }
      
         public void RequestRemoveModifier(int unitId, Action<bool> callback)
         {
             pendingCommands.Enqueue(() => { callback.Invoke(RemoveModifier_Internal(unitId)); });
+        }
+     
+        public void RequestRemoveModifier(int unitId)
+        {
+            pendingCommands.Enqueue(() => { RemoveModifier_Internal(unitId); });
         }
 
         private int AddUnit_Internal(Vector3 position)
@@ -138,16 +173,21 @@ namespace _KITSystem.Movement
             // cleanup modifiers của unit này
             if (unitModifiers.TryGetValue(unitId, out List<int> list))
             {
-                // * tạo 1 bản copy đảm bảo ko bị lệch index
-                
-                List<int> temp = new List<int>(list);
-                for (int i = 0; i < temp.Count; i++)
+                List<int> handles = new List<int>(list.Count);
+
+                for (int i = 0; i < list.Count; i++)
                 {
-                    int idx = temp[i];
-                    
+                    int idx = list[i];
+
                     if (!IsValidModifierIndex(idx)) continue;
 
-                    RemoveModifier_Internal(activeModifiers[idx].UniqueModifierId);
+                    handles.Add(activeModifiers[idx].UniqueModifierId);
+                }
+                
+                // remove bằng handle (an toàn)
+                for (int i = 0; i < handles.Count; i++)
+                {
+                    RemoveModifier_Internal(handles[i]);
                 }
 
                 unitModifiers.Remove(unitId);
