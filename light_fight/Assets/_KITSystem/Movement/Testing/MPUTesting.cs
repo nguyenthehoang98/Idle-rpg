@@ -17,7 +17,7 @@ namespace _KITSystem.Movement
 
             Assert.IsTrue(id >= 0);
         }
-        
+
         [Test]
         public void AddModifier_ShouldExistInSystem()
         {
@@ -34,7 +34,7 @@ namespace _KITSystem.Movement
 
             Assert.IsTrue(mpu.HasModifier(handle));
         }
-        
+
         [Test]
         public void RemoveModifier_ShouldRemoveCorrectly()
         {
@@ -54,7 +54,7 @@ namespace _KITSystem.Movement
 
             Assert.IsFalse(mpu.HasModifier(handle));
         }
-        
+
         [Test]
         public void RemoveModifier_ShouldKeepOtherModifiersValid()
         {
@@ -77,7 +77,7 @@ namespace _KITSystem.Movement
             Assert.IsTrue(mpu.HasModifier(h1));
             Assert.IsTrue(mpu.HasModifier(h3));
         }
-        
+
         [Test]
         public void AddModifier_ShouldOverrideLowerPriority()
         {
@@ -99,7 +99,7 @@ namespace _KITSystem.Movement
             Assert.IsFalse(mpu.HasModifier(lowHandle));
             Assert.IsTrue(mpu.HasModifier(highHandle));
         }
-        
+
         [Test]
         public void RemoveUnit_ShouldRemoveAllModifiers()
         {
@@ -117,12 +117,12 @@ namespace _KITSystem.Movement
 
             mpu.RequestRemoveUnit(unitId);
             mpu.Tick(0);
-            
+
             Debug.Log($"RemoveUnit_ShouldRemoveAllModifiers: h1 = {h1}, h2 = {h2}");
             Assert.IsFalse(mpu.HasModifier(h1));
             Assert.IsFalse(mpu.HasModifier(h2));
         }
-        
+
         [Test]
         public void Request_ShouldNotApplyImmediately()
         {
@@ -147,16 +147,13 @@ namespace _KITSystem.Movement
             return mpu;
         }
     }
-    
+
     class DummyModifier : IModifier
     {
         public int Priority { get; }
         public ModifierName Name => ModifierName.Testing;
 
-        public bool IsFinished(float elapsedTime)
-        {
-            return false;
-        }
+        public bool IsFinished => false;
 
         public bool OverrideOthers { get; }
 
@@ -166,17 +163,25 @@ namespace _KITSystem.Movement
             OverrideOthers = overrideOthers;
         }
 
-        public void OnStart(Vector3 pos) { }
-        
-        public Vector3 EvaluatePosition(float elapsedTime)
+        public Vector3 EvaluateVelocity(float deltaTime)
         {
             return Vector3.zero;
+        }
+
+        public void OnStart(Vector3 pos)
+        {
+        }
+
+        public void Tick(float deltaTime)
+        {
         }
 
         public void OnEnd()
         {
         }
 
-        public void OnInterrupt() { }
+        public void OnInterrupt()
+        {
+        }
     }
 }

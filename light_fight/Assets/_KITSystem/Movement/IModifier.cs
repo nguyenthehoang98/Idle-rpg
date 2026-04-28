@@ -9,12 +9,13 @@ namespace _KITSystem.Movement
         
         // ~start/update/stop
         void OnStart(Vector3 startPos);
-        Vector3 EvaluatePosition(float elapsedTime);
+        void Tick(float deltaTime);
         void OnEnd(); //~end lifecycle
         void OnInterrupt(); //~force end
+        Vector3 EvaluateVelocity(float deltaTime);
         
         // ~end cycle?
-        bool IsFinished(float elapsedTime);
+        bool IsFinished { get; }
         /// <summary>
         /// True: sẽ xóa các modifier có priority nhỏ hơn nó
         /// </summary>

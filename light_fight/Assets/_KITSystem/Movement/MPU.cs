@@ -66,19 +66,24 @@ namespace _KITSystem.Movement
                 isInitialized = true;
             }
         }
-
+        
         public void Tick(float deltaTime)
         {
             if (!isInitialized) return;
             
+            // Apply pending commands
+            while (pendingCommands.Count > 0)
+            {
+                pendingCommands.Dequeue().Invoke();
+            }
+            
+            // Update modifier
             int startVersion = version;
-
             for (int i = 0; i < activeModifiers.Count; i++)
             {
-                var m = activeModifiers[i];
-
-                // update logic...
-
+                ModifierRuntime m = activeModifiers[i];
+                m.Modifier.Tick(deltaTime);
+                activeModifiers[i] = m;
 #if UNITY_EDITOR
                 if (startVersion != version)
                 {
@@ -87,13 +92,29 @@ namespace _KITSystem.Movement
                 }
 #endif
             }
-
-            while (pendingCommands.Count > 0)
+            
+            // Resolve movement (unit-centric)
+            for (int unitId = 0; unitId < positions.Count; unitId++)
             {
-                pendingCommands.Dequeue().Invoke();
+                if (!alives[unitId])
+                    continue;
+                if (!unitModifiers.TryGetValue(unitId, out var mods))
+                    continue;
+                
+                Vector3 desiredVelocity = Vector3.zero;
+                for (int i = 0; i < mods.Count; i++)
+                {
+                    int modIndex = mods[i];
+                    if (!handleToGlobalIndex.TryGetValue(modIndex, out int index))
+                        continue;
+                    ModifierRuntime m = activeModifiers[index];
+                    desiredVelocity += m.Modifier.EvaluateVelocity(deltaTime);
+                }
+
+                positions[unitId] += desiredVelocity;
             }
         }
-
+        
         public void RequestAddUnit(Vector3 position, Action<int> callback)
         {
             pendingCommands.Enqueue(() => { callback.Invoke(AddUnit_Internal(position)); });
@@ -124,14 +145,14 @@ namespace _KITSystem.Movement
             pendingCommands.Enqueue(() => { AddModifier_Internal(unitId, modifier); });
         }
      
-        public void RequestRemoveModifier(int unitId, Action<bool> callback)
+        public void RequestRemoveModifier(int uniqueId, Action<bool> callback)
         {
-            pendingCommands.Enqueue(() => { callback.Invoke(RemoveModifier_Internal(unitId)); });
+            pendingCommands.Enqueue(() => { callback.Invoke(RemoveModifier_Internal(uniqueId)); });
         }
      
-        public void RequestRemoveModifier(int unitId)
+        public void RequestRemoveModifier(int uniqueId)
         {
-            pendingCommands.Enqueue(() => { RemoveModifier_Internal(unitId); });
+            pendingCommands.Enqueue(() => { RemoveModifier_Internal(uniqueId); });
         }
 
         private int AddUnit_Internal(Vector3 position)
@@ -261,7 +282,6 @@ namespace _KITSystem.Movement
             {
                 UnitId = unitId,
                 Modifier = modifier,
-                ElapsedTime = 0f,
                 ModifierGlobalIndex = globalIndex,
                 UniqueModifierId = uniqueModifierId
             };
@@ -403,6 +423,7 @@ namespace _KITSystem.Movement
         {
             public int UnitId;
             public float ElapsedTime;
+            public bool MarkedForRemoval;
             public IModifier Modifier;
             public int ModifierGlobalIndex; // Dùng để xóa ngược lại modifieractives mà ko phải duyệt toàn bộ
             public int UniqueModifierId; // Dùng lưu để xóa
