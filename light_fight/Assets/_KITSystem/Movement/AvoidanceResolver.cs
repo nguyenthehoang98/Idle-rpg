@@ -4,15 +4,13 @@ using UnityEngine;
 namespace _KITSystem.Movement
 {
     [System.Serializable]
-    public class AvoidanceResolver : IResolver
+    internal class AvoidanceResolver : IResolver
     {
         private List<Vector3> finalVelocities = new List<Vector3>();
-        private Dictionary<int, List<int>> grid = new Dictionary<int, List<int>>();
-        [SerializeField] private bool debugLine = false;
-        [SerializeField] private float cellSize = 1.5f;
-        [SerializeField] private float avoidRadius = 1.0f;
-        [SerializeField] private float avoidStrength = 2.0f;
-        [SerializeField] private float maxAvoidForce = 1.0f;
+        private NeighborQuery neighborQuery = new NeighborQuery();
+        private float avoidRadius = 1f;
+        private float avoidStrength = 1.5f;
+        private float maxAvoidForce = 3.0f;
 
         public void Initialize()
         {
@@ -20,9 +18,13 @@ namespace _KITSystem.Movement
 
         public List<Vector3> Resolve(List<Vector3> positions, List<bool> alives, List<Vector3> desiredVelocities)
         {
-            BuildGrid(positions, alives);
+            neighborQuery.BuildGrid(positions);
+
+            List<int>[] neighbors = neighborQuery.QueryNeighbors(
+                positions,
+                avoidRadius
+            );
             
-            // xác thực lại size list
             if (finalVelocities.Count < desiredVelocities.Count)
             {
                 finalVelocities.Capacity = desiredVelocities.Count;
@@ -32,95 +34,101 @@ namespace _KITSystem.Movement
                     finalVelocities.Add(Vector3.zero);
                 }
             }
+            
+            int count = positions.Count;
 
-            for (int i = 0; i < positions.Count; i++)
+            float avoidRadiusSq = avoidRadius * avoidRadius;
+
+            for (int i = 0; i < count; i++)
             {
-                if (!alives[i]) continue;
-
                 Vector3 pos = positions[i];
+                Vector3 desiredVel = desiredVelocities[i];
+
+                Vector3 forward = desiredVel.sqrMagnitude > 0.0001f
+                    ? desiredVel.normalized
+                    : Vector3.zero;
+
                 Vector3 avoidance = Vector3.zero;
+                int neighborCount = 0;
 
-                // 🔥 get cell
-                int baseX = Mathf.FloorToInt(pos.x / cellSize);
-                int baseZ = Mathf.FloorToInt(pos.z / cellSize);
-
-                // 🔥 check neighbor cells
-                foreach (var offset in NeighborOffsets)
+                var list = neighbors[i];
+                if (list == null)
                 {
-                    int nx = baseX + offset.x;
-                    int nz = baseZ + offset.y;
+                    finalVelocities[i] = desiredVel;
+                    continue;
+                }
 
-                    int hash = nx * 73856093 ^ nz * 19349663;
+                for (int n = 0; n < list.Count; n++)
+                {
+                    int j = list[n];
+                    if (j == i) continue;
 
-                    if (!grid.TryGetValue(hash, out var list))
+                    Vector3 diff = pos - positions[j];
+                    float distSq = diff.sqrMagnitude;
+
+                    if (distSq > avoidRadiusSq || distSq < 0.00001f)
                         continue;
 
-                    for (int j = 0; j < list.Count; j++)
-                    {
-                        int other = list[j];
-                        if (other == i) continue;
+                    float dist = Mathf.Sqrt(distSq);
+                    Vector3 dir = diff / dist;
 
-                        Vector3 diff = pos - positions[other];
-                        float dist = diff.magnitude;
+                    // -------------------------
+                    // 1. Directional weight
+                    // -------------------------
+                    float dirDot = Vector3.Dot(forward, -dir);
+                    if (dirDot <= 0f) continue; // bỏ phía sau
 
-                        if (dist < avoidRadius && dist > 0.001f)
-                        {
-                            float strength = (avoidRadius - dist) / avoidRadius;
-                            avoidance += diff.normalized * strength;
-                        }
-                    }
+                    float directionalWeight = dirDot * dirDot; // smooth hơn
+
+                    // -------------------------
+                    // 2. Relative velocity check
+                    // -------------------------
+                    Vector3 relativeVel = desiredVel - desiredVelocities[j];
+                    float approaching = Vector3.Dot(relativeVel, diff);
+
+                    if (approaching >= 0f) continue; // không tiến lại gần
+
+                    // -------------------------
+                    // 3. Distance weight
+                    // -------------------------
+                    float distWeight = 1f - (dist / avoidRadius);
+
+                    float weight = directionalWeight * distWeight;
+
+                    avoidance += dir * weight;
+                    neighborCount++;
                 }
 
-                // 🔥 clamp force
-                avoidance = Vector3.ClampMagnitude(avoidance, maxAvoidForce);
-
-                // 🔥 combine
-                finalVelocities[i] = desiredVelocities[i] + avoidance * avoidStrength;
-
-                if (debugLine)
+                // -------------------------
+                // Normalize force
+                // -------------------------
+                if (neighborCount > 0)
                 {
-                    Debug.DrawLine(pos, pos + finalVelocities[i] * 10, Color.green);
+                    avoidance /= neighborCount;
                 }
+
+                // -------------------------
+                // Limit force (tránh giật)
+                // -------------------------
+                if (avoidance.sqrMagnitude > maxAvoidForce * maxAvoidForce)
+                {
+                    avoidance = avoidance.normalized * maxAvoidForce;
+                }
+
+                // -------------------------
+                // Blend với velocity gốc
+                // -------------------------
+                Vector3 targetVelocity = desiredVel + avoidance * avoidStrength;
+
+                // Smooth (rất quan trọng)
+                finalVelocities[i] = Vector3.Lerp(
+                    desiredVel,
+                    targetVelocity,
+                    0.5f // tweak cái này để chỉnh độ "mượt"
+                );
             }
 
             return finalVelocities;
         }
-
-        private void BuildGrid(List<Vector3> positions, List<bool> alives)
-        {
-            grid.Clear();
-
-            for (int i = 0; i < positions.Count; i++)
-            {
-                if (!alives[i]) continue;
-
-                int hash = Hash(positions[i]);
-
-                if (!grid.TryGetValue(hash, out var list))
-                {
-                    list = new List<int>();
-                    grid[hash] = list;
-                }
-
-                list.Add(i);
-            }
-        }
-
-        private int Hash(Vector3 pos)
-        {
-            int x = Mathf.FloorToInt(pos.x / cellSize);
-            int z = Mathf.FloorToInt(pos.z / cellSize);
-
-            return x * 73856093 ^ z * 19349663;
-        }
-
-        private static readonly Vector2Int[] NeighborOffsets =
-        {
-            new Vector2Int(0, 0),
-            new Vector2Int(1, 0), new Vector2Int(-1, 0),
-            new Vector2Int(0, 1), new Vector2Int(0, -1),
-            new Vector2Int(1, 1), new Vector2Int(1, -1),
-            new Vector2Int(-1, 1), new Vector2Int(-1, -1)
-        };
     }
 }

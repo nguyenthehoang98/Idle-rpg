@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using _KITSystem.Movement;
 using _KITSystem.Schedule;
@@ -17,7 +18,22 @@ public class MPUDemo : MonoBehaviour
     {
         owner.TryGetTickable(out mpu);
         mpu.Initialize();
+        StartCoroutine(AutoSpawn());
+    }
 
+    private IEnumerator AutoSpawn()
+    {
+        int i = 3;
+        while ( i > 0)
+        {
+            Spawn();
+            yield return new WaitForSeconds(6);
+            i--;
+        }
+    }
+
+    private void Spawn()
+    {
         List<Vector3> positions = new List<Vector3>
         {
             new Vector3(-4f, 1f, 0),
@@ -67,7 +83,8 @@ public class MPUDemo : MonoBehaviour
 
     private void Update()
     {
-        for (var id = 0; id < unitIds.Count; id++)
+        int count = unitIds.Count;
+        for (var id = 0; id < count; id++)
         {
             units[id].transform.position = mpu.GetUnitPosition(unitIds[id]);
         }
