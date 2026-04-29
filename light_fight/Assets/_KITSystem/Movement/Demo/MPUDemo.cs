@@ -6,8 +6,7 @@ using UnityEngine;
 public class MPUDemo : MonoBehaviour
 {
     [SerializeField] private TickSystemOwner owner;
-    [SerializeField] private GameObject unitA;
-    [SerializeField] private GameObject unitB;
+    [SerializeField] private GameObject unitPreafab;
 
     private MPU mpu;
     private List<GameObject> units = new List<GameObject>();
@@ -21,26 +20,47 @@ public class MPUDemo : MonoBehaviour
 
         List<Vector3> positions = new List<Vector3>
         {
-            new Vector3(-2, 0, 0),
-            new Vector3(2, 0, 0),
+            new Vector3(-4f, 1f, 0),
+            new Vector3(3f, -2f, 0),
+            new Vector3(-2.5f, 2.5f, 0),
+            new Vector3(1.5f, -3f, 0),
+            new Vector3(4f, 0.5f, 0),
+            new Vector3(-3.5f, -1.5f, 0),
+            new Vector3(2f, 3f, 0),
+            new Vector3(-1f, -4f, 0),
+            new Vector3(0.5f, 2f, 0),
+            new Vector3(-2f, -2f, 0),
         };
 
         List<Vector3> directions = new List<Vector3>
         {
-            new Vector3(1, 0, 0),
-            new Vector3(-1, 0, 0),
+            (-positions[0]).normalized,
+            (-positions[1]).normalized,
+            (-positions[2]).normalized,
+            (-positions[3]).normalized,
+            (-positions[4]).normalized,
+            (-positions[5]).normalized,
+            (-positions[6]).normalized,
+            (-positions[7]).normalized,
+            (-positions[8]).normalized,
+            (-positions[9]).normalized,
         };
         
-        units.Add(unitA);
-        units.Add(unitB);
-
-        for (int i = 0; i < 2; i++)
+        int count = Mathf.Min(positions.Count, directions.Count);
+        for (int i = 0; i < count; i++)
+        {
+            var go = Instantiate(unitPreafab, positions[i] * 5, Quaternion.identity);
+            go.SetActive(true);
+            units.Add(go);
+        }
+        
+        for (int i = 0; i < count; i++)
         {
             int index = i;
-            mpu.RequestAddUnit(positions[i], unitId =>
+            mpu.RequestAddUnit(positions[i] * 5, unitId =>
             {
                 unitIds.Add(unitId);
-                mpu.RequestAddModifier(unitId, new RunModifier(directions[index], 5));
+                mpu.RequestAddModifier(unitId, new RunModifier(directions[index], 1, Vector3.zero, 1.5f));
             });
         }
     }

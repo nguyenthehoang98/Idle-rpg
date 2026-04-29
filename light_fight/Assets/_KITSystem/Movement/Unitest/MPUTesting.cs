@@ -176,6 +176,10 @@ namespace _KITSystem.Movement.Testing
         {
         }
 
+        public void ProcessPosition(Vector3 position)
+        {
+        }
+
         public void OnEnd()
         {
         }

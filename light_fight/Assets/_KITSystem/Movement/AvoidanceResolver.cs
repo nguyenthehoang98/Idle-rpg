@@ -8,6 +8,7 @@ namespace _KITSystem.Movement
     {
         private List<Vector3> finalVelocities = new List<Vector3>();
         private Dictionary<int, List<int>> grid = new Dictionary<int, List<int>>();
+        [SerializeField] private bool debugLine = false;
         [SerializeField] private float cellSize = 1.5f;
         [SerializeField] private float avoidRadius = 1.0f;
         [SerializeField] private float avoidStrength = 2.0f;
@@ -75,6 +76,11 @@ namespace _KITSystem.Movement
 
                 // 🔥 combine
                 finalVelocities[i] = desiredVelocities[i] + avoidance * avoidStrength;
+
+                if (debugLine)
+                {
+                    Debug.DrawLine(pos, pos + finalVelocities[i] * 10, Color.green);
+                }
             }
 
             return finalVelocities;
