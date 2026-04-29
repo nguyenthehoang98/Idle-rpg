@@ -23,7 +23,7 @@ public class MPUDemo : MonoBehaviour
 
     private IEnumerator AutoSpawn()
     {
-        int i = 3;
+        int i = 10;
         while ( i > 0)
         {
             Spawn();
@@ -65,18 +65,16 @@ public class MPUDemo : MonoBehaviour
         int count = Mathf.Min(positions.Count, directions.Count);
         for (int i = 0; i < count; i++)
         {
-            var go = Instantiate(unitPreafab, positions[i] * 5, Quaternion.identity);
+            var pos = positions[i] * 5 + new Vector3(Random.value, Random.value, 0) * 2;
+            var go = Instantiate(unitPreafab, pos, Quaternion.identity);
             go.SetActive(true);
             units.Add(go);
-        }
-        
-        for (int i = 0; i < count; i++)
-        {
+            
             int index = i;
-            mpu.RequestAddUnit(positions[i] * 5, unitId =>
+            mpu.RequestAddUnit(pos, unitId =>
             {
                 unitIds.Add(unitId);
-                mpu.RequestAddModifier(unitId, new RunModifier(directions[index], 3));
+                mpu.RequestAddModifier(unitId, new RunModifier(directions[index], 3, Vector3.zero, 2));
             });
         }
     }

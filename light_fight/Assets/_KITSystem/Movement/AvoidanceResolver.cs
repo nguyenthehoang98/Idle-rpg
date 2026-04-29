@@ -41,7 +41,7 @@ namespace _KITSystem.Movement
             float avoidRadiusSq = avoidRadius * avoidRadius;
 
             bool[] isStopped = new bool[positions.Count];
-            ComputeStopState(positions, Vector3.zero, neighbors, isStopped, 2, 0.9f);
+            ComputeStopState(positions, Vector3.zero, neighbors, isStopped, 2, 1.3f);
 
             for (int i = 0; i < count; i++)
             {
@@ -201,7 +201,7 @@ namespace _KITSystem.Movement
 
                     // chỉ propagate về phía sau
                     float dot = Vector3.Dot(forward, dir);
-                    if (dot < 0.6f) continue;
+                    if (dot < 0.7f) continue;
 
                     if (dist < unitSpacing)
                     {
