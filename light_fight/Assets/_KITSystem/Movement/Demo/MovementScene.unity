@@ -267,11 +267,9 @@ MonoBehaviour:
     - rid: 7092729166285242572
       type: {class: AvoidanceResolver, ns: _KITSystem.Movement, asm: KITSystem.Movement}
       data:
-        debugLine: 1
-        cellSize: 1
         avoidRadius: 1.5
         avoidStrength: 2
-        maxAvoidForce: 0.2
+        maxAvoidForce: 3
 --- !u!114 &148477887
 MonoBehaviour:
   m_ObjectHideFlags: 0

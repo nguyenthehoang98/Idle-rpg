@@ -27,7 +27,7 @@ public class MPUDemo : MonoBehaviour
         while ( i > 0)
         {
             Spawn();
-            yield return new WaitForSeconds(6);
+            yield return new WaitForSeconds(3);
             i--;
         }
     }
@@ -76,7 +76,7 @@ public class MPUDemo : MonoBehaviour
             mpu.RequestAddUnit(positions[i] * 5, unitId =>
             {
                 unitIds.Add(unitId);
-                mpu.RequestAddModifier(unitId, new RunModifier(directions[index], 1, Vector3.zero, 1.5f));
+                mpu.RequestAddModifier(unitId, new RunModifier(directions[index], 3));
             });
         }
     }

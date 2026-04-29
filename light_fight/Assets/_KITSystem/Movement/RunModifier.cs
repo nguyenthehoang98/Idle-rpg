@@ -9,9 +9,6 @@ namespace _KITSystem.Movement
         private float speed;
         private bool useLifeTime;
         private float remainingLifeTime;
-        private bool useDestination;
-        private Vector3 destination;
-        private float stopDistanceSqr;
 
         public int Priority => 0;
         public ModifierName Name => ModifierName.Default;
@@ -25,9 +22,6 @@ namespace _KITSystem.Movement
             this.speed = speed;
             this.useLifeTime = false;
             this.remainingLifeTime = 0;
-            this.useDestination = false;
-            this.destination = Vector3.zero;
-            this.stopDistanceSqr = 0;
             IsFinished = false;
         }
 
@@ -37,21 +31,6 @@ namespace _KITSystem.Movement
             this.speed = speed;
             this.useLifeTime = true;
             this.remainingLifeTime = duration;
-            this.useDestination = false;
-            this.destination = Vector3.zero;
-            this.stopDistanceSqr = 0;
-            IsFinished = false;
-        }
-
-        public RunModifier(Vector3 direction, float speed, Vector3 destination, float stopDistance)
-        {
-            this.direction = direction.normalized;
-            this.speed = speed;
-            this.useLifeTime = false;
-            this.remainingLifeTime = 0;
-            this.useDestination = true;
-            this.destination = destination;
-            this.stopDistanceSqr = stopDistance * stopDistance;
             IsFinished = false;
         }
 
@@ -71,18 +50,6 @@ namespace _KITSystem.Movement
             {
                 remainingLifeTime -= deltaTime;
                 if (remainingLifeTime <= 0)
-                {
-                    IsFinished = true;
-                }
-            }
-        }
-
-        public void ProcessPosition(Vector3 position)
-        {
-            if (useDestination && !IsFinished)
-            {
-                float d = (position - destination).sqrMagnitude;
-                if (d <= stopDistanceSqr)
                 {
                     IsFinished = true;
                 }

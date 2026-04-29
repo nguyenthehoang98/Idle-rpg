@@ -8,9 +8,10 @@ namespace _KITSystem.Movement
     {
         private List<Vector3> finalVelocities = new List<Vector3>();
         private NeighborQuery neighborQuery = new NeighborQuery();
-        private float avoidRadius = 1f;
-        private float avoidStrength = 1.5f;
-        private float maxAvoidForce = 3.0f;
+        [Range(0.1f, 0.9f)] public float stopDecelerationNormalize = 0.9f;
+        public float avoidRadius = 1f;
+        public float avoidStrength = 1.5f;
+        public float maxAvoidForce = 3.0f;
 
         public void Initialize()
         {
@@ -39,6 +40,9 @@ namespace _KITSystem.Movement
 
             float avoidRadiusSq = avoidRadius * avoidRadius;
 
+            bool[] isStopped = new bool[positions.Count];
+            ComputeStopState(positions, Vector3.zero, neighbors, isStopped, 2, 0.9f);
+
             for (int i = 0; i < count; i++)
             {
                 Vector3 pos = positions[i];
@@ -54,7 +58,17 @@ namespace _KITSystem.Movement
                 var list = neighbors[i];
                 if (list == null)
                 {
-                    finalVelocities[i] = desiredVel;
+                    finalVelocities[i] = Vector3.MoveTowards(
+                        desiredVelocities[i],
+                        Vector3.zero,
+                        stopDecelerationNormalize
+                    );
+                    continue;
+                }
+
+                if (isStopped[i])
+                {
+                    finalVelocities[i] = Vector3.zero;
                     continue;
                 }
 
@@ -129,6 +143,73 @@ namespace _KITSystem.Movement
             }
 
             return finalVelocities;
+        }
+        
+        public static void ComputeStopState(
+            List<Vector3> positions,
+            Vector3 target,
+            List<int>[] neighbors,
+            bool[] isStopped,
+            float stopDistance,
+            float unitSpacing)
+        {
+            int count = positions.Count;
+
+            Queue<int> queue = new Queue<int>();
+
+            // -------------------------
+            // 1. Seed (gần target)
+            // -------------------------
+            for (int i = 0; i < count; i++)
+            {
+                float dist = (target - positions[i]).sqrMagnitude;
+
+                if (dist < stopDistance * stopDistance)
+                {
+                    isStopped[i] = true;
+                    queue.Enqueue(i);
+                }
+                else
+                {
+                    isStopped[i] = false;
+                }
+            }
+
+            // -------------------------
+            // 2. BFS propagate
+            // -------------------------
+            while (queue.Count > 0)
+            {
+                int j = queue.Dequeue();
+                Vector3 posJ = positions[j];
+
+                var list = neighbors[j];
+                if (list == null) continue;
+
+                for (int n = 0; n < list.Count; n++)
+                {
+                    int i = list[n];
+                    if (isStopped[i]) continue;
+
+                    Vector3 toJ = posJ - positions[i];
+                    float dist = toJ.magnitude;
+
+                    if (dist < 0.0001f) continue;
+
+                    Vector3 forward = (target - positions[i]).normalized;
+                    Vector3 dir = toJ / dist;
+
+                    // chỉ propagate về phía sau
+                    float dot = Vector3.Dot(forward, dir);
+                    if (dot < 0.6f) continue;
+
+                    if (dist < unitSpacing)
+                    {
+                        isStopped[i] = true;
+                        queue.Enqueue(i);
+                    }
+                }
+            }
         }
     }
 }

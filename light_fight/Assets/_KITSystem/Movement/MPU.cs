@@ -90,7 +90,6 @@ namespace _KITSystem.Movement
             for (int i = 0; i < activeModifiers.Count; i++)
             {
                 ModifierRuntime m = activeModifiers[i];
-                m.Modifier.ProcessPosition(positions[m.UnitId]);
                 m.Modifier.Tick(deltaTime);
                 activeModifiers[i] = m;
 

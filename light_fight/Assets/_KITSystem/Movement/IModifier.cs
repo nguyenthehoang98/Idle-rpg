@@ -10,7 +10,6 @@ namespace _KITSystem.Movement
         // ~start/update/stop
         void OnStart(Vector3 startPos);
         void Tick(float deltaTime);
-        void ProcessPosition(Vector3 position);
         void OnEnd(); //~end lifecycle
         void OnInterrupt(); //~force end
         Vector3 EvaluateVelocity(float deltaTime);
