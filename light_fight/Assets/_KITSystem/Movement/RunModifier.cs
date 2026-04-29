@@ -7,6 +7,8 @@ namespace _KITSystem.Movement
     {
         private Vector3 direction;
         private float speed;
+        private bool useLifeTime;
+        private float remainingLifeTime;
 
         public int Priority => 0;
         public ModifierName Name => ModifierName.Default;
@@ -18,6 +20,17 @@ namespace _KITSystem.Movement
         {
             this.direction = direction.normalized;
             this.speed = speed;
+            this.useLifeTime = false;
+            this.remainingLifeTime = 0;
+            IsFinished = false;
+        }
+
+        public RunModifier(Vector3 direction, float speed, float duration)
+        {
+            this.direction = direction.normalized;
+            this.speed = speed;
+            this.useLifeTime = true;
+            this.remainingLifeTime = duration;
             IsFinished = false;
         }
 
@@ -33,6 +46,14 @@ namespace _KITSystem.Movement
 
         public void Tick(float deltaTime)
         {
+            if (useLifeTime && !IsFinished)
+            {
+                remainingLifeTime -= deltaTime;
+                if (remainingLifeTime <= 0)
+                {
+                    IsFinished = true;
+                }
+            }
         }
 
         public void OnEnd()

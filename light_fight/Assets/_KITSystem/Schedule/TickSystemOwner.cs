@@ -44,6 +44,21 @@ namespace _KITSystem.Schedule
             tickSystem.Run(TickGroup.FixedUpdate, Time.fixedDeltaTime);
         }
 
+        public bool TryGetTickable<T>(out T tickable) where T : ITickable
+        {
+            foreach (var dataTemp in list)
+            {
+                if (dataTemp.tickable is T t)
+                {
+                    tickable = t;
+                    return true;
+                }
+            }
+
+            tickable = default;
+            return false;
+        }
+
         [System.Serializable]
         class DataTemp
         {

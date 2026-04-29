@@ -40,6 +40,8 @@ namespace _KITSystem.Movement
         private Dictionary<int, int> mapModifierIdToIndex = new Dictionary<int, int>();
         // Hàng chờ các command, tránh conflic data
         private Queue<Action> pendingCommands = new Queue<Action>();
+        // Danh sách chứa các modifier đã finish để chờ remove.
+        private List<int> pendingModifierRemoved = new List<int>();
 
         public MPU()
         {
@@ -78,12 +80,28 @@ namespace _KITSystem.Movement
             }
 
             // Update modifier
+            int totalModifierFinished = 0;
             int startVersion = version;
             for (int i = 0; i < activeModifiers.Count; i++)
             {
                 ModifierRuntime m = activeModifiers[i];
                 m.Modifier.Tick(deltaTime);
                 activeModifiers[i] = m;
+
+                // Xử lý để giảm việc cấp phát bộ nhớ (clear || new) liên tục
+                if (m.Modifier.IsFinished)
+                {
+                    if (pendingModifierRemoved.Count > totalModifierFinished)
+                    {
+                        pendingModifierRemoved[totalModifierFinished] = m.ModifierId;
+                    }
+                    else
+                    {
+                        pendingModifierRemoved.Add(m.ModifierId);
+                    }
+
+                    totalModifierFinished++;
+                }
 #if UNITY_EDITOR
                 if (startVersion != version)
                 {
@@ -104,12 +122,18 @@ namespace _KITSystem.Movement
                 for (int i = 0; i < list.Count; i++)
                 {
                     int idx = list[i];
-                    if(idx >= activeModifiers.Count) Debug.LogError($"{idx}//{activeModifiers.Count} :: {string.Join(',', list)}");
                     ModifierRuntime m = activeModifiers[idx];
+                    if (m.Modifier.IsFinished) continue;
                     desiredVelocity += m.Modifier.EvaluateVelocity(deltaTime);
                 }
 
                 positions[unitId] += desiredVelocity;
+            }
+
+            // Remove all modifier finished
+            for (int i = 0; i < totalModifierFinished; i++)
+            {
+                RequestRemoveModifier(pendingModifierRemoved[i]);
             }
         }
 
@@ -280,7 +304,6 @@ namespace _KITSystem.Movement
             {
                 UnitId = unitId,
                 Modifier = modifier,
-                ModifierIndex = modifierIndex,
                 ModifierId = modifierId
             };
 
@@ -346,7 +369,6 @@ namespace _KITSystem.Movement
 
                 // cập nhật lại các phần tử
                 mapModifierIdToIndex[last.ModifierId] = idx;
-                last.ModifierIndex = idx;
                 activeModifiers[idx] = last;
                 
                 // update unitModifiers của thằng bị swap
@@ -417,13 +439,15 @@ namespace _KITSystem.Movement
     
     public partial class MPU
     {
+#if UNITY_EDITOR
+        [Serializable]
+#endif
         struct ModifierRuntime
         {
             public int UnitId;
             public float ElapsedTime;
             public bool MarkedForRemoval;
             public IModifier Modifier;
-            public int ModifierIndex; // Dùng để xóa ngược lại modifieractives mà ko phải duyệt toàn bộ
             public int ModifierId; // Dùng lưu để xóa
         }
     }
