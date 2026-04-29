@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using _KITSystem.Schedule;
 using UnityEngine;
@@ -14,6 +13,8 @@ namespace _KITSystem.Movement
     {
         [SerializeField, Tooltip("Các modifier có kiểu khác danh sách này sẽ không được thêm vào hệ thống")]
         private ModifierName[] flagModifiers = new ModifierName[0];
+        [SerializeField, Tooltip("Các phương pháp xử lý vận tốc của unit"), SerializeReference]
+        private IResolver resolver;
 
         // Đánh version giúp kiểm tra debug
         private int version;
@@ -23,6 +24,8 @@ namespace _KITSystem.Movement
         private HashSet<ModifierName> flags = new HashSet<ModifierName>();
         // Danh sách chứa vị trí của các unit. unit id = index
         private List<Vector3> positions = new List<Vector3>();
+        // Tương tự poistions list nhưng lưu vận tốc
+        private List<Vector3> desiredVelocities = new List<Vector3>();
         // Danh sách đánh dấu unit nào không còn hoạt động.
         private List<bool> alives = new List<bool>();
         // Chứa các id (resue), nếu danh sách này trống thì tăng thêm size của positions
@@ -65,6 +68,8 @@ namespace _KITSystem.Movement
                     flags.Add(modifierName);
                 }
 
+                resolver.Initialize();
+                
                 isInitialized = true;
             }
         }
@@ -111,13 +116,18 @@ namespace _KITSystem.Movement
 #endif
             }
 
-            // Resolve movement (unit-centric)
+            // Tính vận tốc của các unit
             for (int unitId = 0; unitId < positions.Count; unitId++)
             {
                 if (!alives[unitId])
                     continue;
+                
                 if (!unitModifiers.TryGetValue(unitId, out var list)) // modifiers list
+                {
+                    desiredVelocities[unitId] = Vector3.zero;
                     continue;
+                }
+
                 Vector3 desiredVelocity = Vector3.zero;
                 for (int i = 0; i < list.Count; i++)
                 {
@@ -127,7 +137,22 @@ namespace _KITSystem.Movement
                     desiredVelocity += m.Modifier.EvaluateVelocity(deltaTime);
                 }
 
-                positions[unitId] += desiredVelocity;
+                desiredVelocities[unitId] = desiredVelocity;
+            }
+
+            // Giải quyết / xử lý va chạm
+            var finalVelocities = resolver.Resolve(
+                positions,
+                alives,
+                desiredVelocities
+            );
+            
+            // tính lại vị trí
+            for (int unitId = 0; unitId < positions.Count; unitId++)
+            {
+                if (!alives[unitId]) continue;
+
+                positions[unitId] += finalVelocities[unitId];
             }
 
             // Remove all modifier finished
@@ -190,6 +215,7 @@ namespace _KITSystem.Movement
                 id = freeIds.Pop();
 
                 positions[id] = position;
+                desiredVelocities[id] = Vector3.zero;
                 alives[id] = true;
             }
             else
@@ -197,6 +223,7 @@ namespace _KITSystem.Movement
                 id = positions.Count;
 
                 positions.Add(position);
+                desiredVelocities.Add(Vector3.zero);
                 alives.Add(true);
             }
 
@@ -241,6 +268,7 @@ namespace _KITSystem.Movement
             
             // đoạn này đặt về như thế cho dễ debug nếu ần thôi
             positions[unitId] = default;
+            desiredVelocities[unitId] = Vector3.zero;
             
             version++; 
 
@@ -410,6 +438,12 @@ namespace _KITSystem.Movement
         public Vector3 GetUnitPosition(int unitId)
         {
             return positions[unitId];
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Vector3 GetUnitVelocity(int unitId)
+        {
+            return desiredVelocities[unitId];
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
