@@ -11,10 +11,10 @@ namespace _KITSystem.Movement.Testing
             var mpu = CreateMPU();
 
             int unitId = -1;
-            mpu.RequestAddUnit(Vector3.zero, unit =>
+            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
             {
                 unitId = unit;
-                mpu.RequestAddModifier(unit,  new RunModifier(Vector3.right, 5f));    
+                mpu.RequestAddModifier(unit, new RunModifier(Vector3.right, 5f));
             });
 
             mpu.Tick(1f); // 1 giây
@@ -23,15 +23,14 @@ namespace _KITSystem.Movement.Testing
 
             Assert.AreEqual(new Vector3(5f, 0f, 0f), pos);
         }
-        
+
         [Test]
-        public void MultipleRunModifier_ShouldSumVelocity()
+        public void RunModifier_ShouldSumVelocity()
         {
-            var mpu = new MPU();
-            mpu.Initialize();
-            
+            var mpu = CreateMPU();
+
             int unitId = -1;
-            mpu.RequestAddUnit(Vector3.zero, unit =>
+            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
             {
                 unitId = unit;
                 mpu.RequestAddModifier(unit, new RunModifier(Vector3.right, 5f));
@@ -44,16 +43,15 @@ namespace _KITSystem.Movement.Testing
 
             Assert.AreEqual(new Vector3(10f, 0f, 10f), pos);
         }
-        
+
         [Test]
-        public void RemoveModifier_ShouldStopMovement()
+        public void RunModifier_ShouldStopMovement()
         {
-            var mpu = new MPU();
-            mpu.Initialize();
+            var mpu = CreateMPU();
 
             int unitId = -1;
             int handle = -1;
-            mpu.RequestAddUnit(Vector3.zero, unit =>
+            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
             {
                 unitId = unit;
                 mpu.RequestAddModifier(unit, new RunModifier(Vector3.right, 5f), i => handle = i);
@@ -70,15 +68,14 @@ namespace _KITSystem.Movement.Testing
             // chỉ move 1 lần
             Assert.AreEqual(new Vector3(5f, 0f, 0f), pos);
         }
-        
+
         [Test]
-        public void RemoveModifier_ShouldKeepOtherModifiersValid()
+        public void RunModifier_ShouldKeepOtherModifiersValid()
         {
-            var mpu = new MPU();
-            mpu.Initialize();
-            
+            var mpu = CreateMPU();
+
             int unitId = -1, h1 = -1, h2 = -1;
-            mpu.RequestAddUnit(Vector3.zero, unit =>
+            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
             {
                 unitId = unit;
                 mpu.RequestAddModifier(unit, new RunModifier(Vector3.right, 5f), i => h1 = i);
@@ -97,17 +94,16 @@ namespace _KITSystem.Movement.Testing
             // frame 2: chỉ còn forward → (0,0,5)
             Assert.AreEqual(new Vector3(5f, 0f, 10f), pos);
         }
-        
+
         [Test]
-        public void RemoveModifier_SameFrame_ShouldNotCrash()
+        public void RunModifier_SameFrame_ShouldNotCrash()
         {
-            var mpu = new MPU();
-            mpu.Initialize();
+            var mpu = CreateMPU();
 
             int unitId = -1;
             int handle = -1;
 
-            mpu.RequestAddUnit(Vector3.zero, unit =>
+            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
             {
                 unitId = unit;
                 mpu.RequestAddModifier(unit, new RunModifier(Vector3.right, 5f), i => handle = i);

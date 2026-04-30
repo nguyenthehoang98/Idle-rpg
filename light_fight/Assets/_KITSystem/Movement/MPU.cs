@@ -24,6 +24,7 @@ namespace _KITSystem.Movement
         private HashSet<ModifierName> flags = new HashSet<ModifierName>();
         // Danh sách chứa vị trí của các unit. unit id = index
         private List<Vector3> positions = new List<Vector3>();
+        private List<Vector3> destinations = new List<Vector3>();
         // Tương tự poistions list nhưng lưu vận tốc
         private List<Vector3> desiredVelocities = new List<Vector3>();
         // Danh sách đánh dấu unit nào không còn hoạt động.
@@ -52,6 +53,7 @@ namespace _KITSystem.Movement
 
         public MPU(params ModifierName[] additionalModifiers)
         {
+            resolver = new AvoidanceResolver();
             foreach (var m in additionalModifiers)
             {
                 flags.Add(m);
@@ -143,9 +145,7 @@ namespace _KITSystem.Movement
 
             // Giải quyết / xử lý va chạm
             var finalVelocities = resolver.Resolve(
-                positions,
-                alives,
-                desiredVelocities
+                positions, destinations, desiredVelocities
             );
             
             // tính lại vị trí
@@ -163,14 +163,14 @@ namespace _KITSystem.Movement
             }
         }
 
-        public void RequestAddUnit(Vector3 position, Action<int> callback)
+        public void RequestAddUnit(Vector3 position, Vector3 destination, Action<int> callback)
         {
-            pendingCommands.Enqueue(() => { callback.Invoke(AddUnit_Internal(position)); });
+            pendingCommands.Enqueue(() => { callback.Invoke(AddUnit_Internal(position, destination)); });
         }
         
-        public void RequestAddUnit(Vector3 position)
+        public void RequestAddUnit(Vector3 position, Vector3 destination)
         {
-            pendingCommands.Enqueue(() => { AddUnit_Internal(position); });
+            pendingCommands.Enqueue(() => { AddUnit_Internal(position, destination); });
         }
         
         public void RequestRemoveUnit(int unitId, Action<bool> callback)
@@ -203,7 +203,7 @@ namespace _KITSystem.Movement
             pendingCommands.Enqueue(() => { RemoveModifier_Internal(uniqueId); });
         }
 
-        private int AddUnit_Internal(Vector3 position)
+        private int AddUnit_Internal(Vector3 position, Vector3 destination)
         {
             if (!isInitialized)
                 return -2;
@@ -216,6 +216,7 @@ namespace _KITSystem.Movement
                 id = freeIds.Pop();
 
                 positions[id] = position;
+                destinations[id] = destination;
                 desiredVelocities[id] = Vector3.zero;
                 alives[id] = true;
             }
@@ -224,6 +225,7 @@ namespace _KITSystem.Movement
                 id = positions.Count;
 
                 positions.Add(position);
+                destinations.Add(destination);
                 desiredVelocities.Add(Vector3.zero);
                 alives.Add(true);
             }

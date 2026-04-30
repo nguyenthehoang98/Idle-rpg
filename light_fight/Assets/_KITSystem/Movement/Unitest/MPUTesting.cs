@@ -12,7 +12,7 @@ namespace _KITSystem.Movement.Testing
 
             int id = -1;
 
-            mpu.RequestAddUnit(Vector3.zero, x => id = x);
+            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => id = x);
             mpu.Tick(0);
 
             Assert.IsTrue(id >= 0);
@@ -26,7 +26,7 @@ namespace _KITSystem.Movement.Testing
             int unitId = -1;
             int handle = -1;
 
-            mpu.RequestAddUnit(Vector3.zero, x => unitId = x);
+            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => unitId = x);
             mpu.Tick(0);
 
             mpu.RequestAddModifier(unitId, new DummyModifier(), h => handle = h);
@@ -43,7 +43,7 @@ namespace _KITSystem.Movement.Testing
             int unitId = -1;
             int handle = -1;
 
-            mpu.RequestAddUnit(Vector3.zero, x => unitId = x);
+            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => unitId = x);
             mpu.Tick(0);
 
             mpu.RequestAddModifier(unitId, new DummyModifier(), h => handle = h);
@@ -63,7 +63,7 @@ namespace _KITSystem.Movement.Testing
             int unitId = -1;
             int h1 = -1, h2 = -1, h3 = -1;
 
-            mpu.RequestAddUnit(Vector3.zero, x => unitId = x);
+            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => unitId = x);
             mpu.Tick(0);
 
             mpu.RequestAddModifier(unitId, new DummyModifier(), h => h1 = h);
@@ -87,7 +87,7 @@ namespace _KITSystem.Movement.Testing
             int lowHandle = -1;
             int highHandle = -1;
 
-            mpu.RequestAddUnit(Vector3.zero, x => unitId = x);
+            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => unitId = x);
             mpu.Tick(0);
 
             mpu.RequestAddModifier(unitId, new DummyModifier(1), h => lowHandle = h);
@@ -108,7 +108,7 @@ namespace _KITSystem.Movement.Testing
             int unitId = -1;
             int h1 = -1, h2 = -1;
 
-            mpu.RequestAddUnit(Vector3.zero, x => unitId = x);
+            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => unitId = x);
             mpu.Tick(0);
 
             mpu.RequestAddModifier(unitId, new DummyModifier(), h => h1 = h);
@@ -118,7 +118,6 @@ namespace _KITSystem.Movement.Testing
             mpu.RequestRemoveUnit(unitId);
             mpu.Tick(0);
 
-            Debug.Log($"RemoveUnit_ShouldRemoveAllModifiers: h1 = {h1}, h2 = {h2}");
             Assert.IsFalse(mpu.HasModifier(h1));
             Assert.IsFalse(mpu.HasModifier(h2));
         }
@@ -130,7 +129,7 @@ namespace _KITSystem.Movement.Testing
 
             int unitId = -1;
 
-            mpu.RequestAddUnit(Vector3.zero, x => unitId = x);
+            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => unitId = x);
 
             // chưa Tick
             Assert.AreEqual(-1, unitId);

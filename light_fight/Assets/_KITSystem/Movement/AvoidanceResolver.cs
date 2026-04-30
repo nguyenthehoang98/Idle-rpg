@@ -9,7 +9,7 @@ namespace _KITSystem.Movement
     {
         public float cellSize = 1f;
         public float avoidRadius = 1.5f;
-        public float avoidStrength = 1.5f;
+        public float avoidStrength = 2f;
         public float maxAvoidForce = 3.0f;
         [Range(0.1f, 0.9f)] public float stopDecelerationNormalize = 0.9f;
         
@@ -25,7 +25,7 @@ namespace _KITSystem.Movement
             maxAvoidForceSqr = maxAvoidForce * maxAvoidForce;
         }
 
-        public List<Vector3> Resolve(List<Vector3> positions, List<bool> alives, List<Vector3> desiredVelocities)
+        public List<Vector3> Resolve(List<Vector3> positions, List<Vector3> destinations, List<Vector3> desiredVelocities)
         {
             neighborQuery.BuildGrid(positions);
 
@@ -51,7 +51,7 @@ namespace _KITSystem.Movement
             if (isStoppedCache.Length != count) 
                 isStoppedCache = new bool[count];
             bool[] isStopped = isStoppedCache;
-            ComputeStopState(positions, Vector3.zero, neighbors, isStopped, 2, 1.3f);
+            ComputeStopState(positions, destinations, neighbors, isStopped, 2, 1.3f);
 
             for (int i = 0; i < count; i++)
             {
@@ -72,12 +72,14 @@ namespace _KITSystem.Movement
                         Vector3.zero,
                         stopDecelerationNormalize
                     );
+                    Debug.Log("2");
                     continue;
                 }
 
                 if (isStopped[i])
                 {
                     finalVelocities[i] = Vector3.zero;
+                    Debug.Log("3");
                     continue;
                 }
 
@@ -156,7 +158,7 @@ namespace _KITSystem.Movement
         
         private void ComputeStopState(
             List<Vector3> positions,
-            Vector3 target,
+            List<Vector3> targets,
             List<int>[] neighbors,
             bool[] isStopped,
             float stopDistance,
@@ -172,7 +174,7 @@ namespace _KITSystem.Movement
             // -------------------------
             for (int i = 0; i < count; i++)
             {
-                float dist = (target - positions[i]).sqrMagnitude;
+                float dist = (targets[i] - positions[i]).sqrMagnitude;
 
                 if (dist < stopDistance * stopDistance)
                 {
@@ -206,7 +208,7 @@ namespace _KITSystem.Movement
                     if (distSq < 0.0001f) continue;
 
                     float dist = Mathf.Sqrt(distSq);
-                    Vector3 toTarget = target - positions[i];
+                    Vector3 toTarget = targets[i] - positions[i];
                     float invLen = 1.0f / Mathf.Sqrt(toTarget.sqrMagnitude + 1e-6f);
                     Vector3 forward = toTarget * invLen;
                     Vector3 dir = toJ / dist;

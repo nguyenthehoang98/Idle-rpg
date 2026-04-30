@@ -61,7 +61,7 @@ public class MPUDemo : MonoBehaviour
             (-positions[8]).normalized,
             (-positions[9]).normalized,
         };
-        
+
         int count = Mathf.Min(positions.Count, directions.Count);
         for (int i = 0; i < count; i++)
         {
@@ -71,10 +71,10 @@ public class MPUDemo : MonoBehaviour
             units.Add(go);
 
             bool isRanged = i % 4 == 0;
-            if(isRanged) go.GetComponent<SpriteRenderer>().color = Color.green;
-            
+            if (isRanged) go.GetComponent<SpriteRenderer>().color = Color.green;
+
             int index = i;
-            mpu.RequestAddUnit(pos, unitId =>
+            mpu.RequestAddUnit(pos, Vector3.zero, unitId =>
             {
                 unitIds.Add(unitId);
                 mpu.RequestAddModifier(unitId,
