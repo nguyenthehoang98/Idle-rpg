@@ -69,12 +69,17 @@ public class MPUDemo : MonoBehaviour
             var go = Instantiate(unitPreafab, pos, Quaternion.identity);
             go.SetActive(true);
             units.Add(go);
+
+            bool isRanged = i % 4 == 0;
+            if(isRanged) go.GetComponent<SpriteRenderer>().color = Color.green;
             
             int index = i;
             mpu.RequestAddUnit(pos, unitId =>
             {
                 unitIds.Add(unitId);
-                mpu.RequestAddModifier(unitId, new RunModifier(directions[index], 3, Vector3.zero, 2));
+                mpu.RequestAddModifier(unitId,
+                    new RunModifier(directions[index], 3, Vector3.zero, isRanged ? 8 : 2)
+                );
             });
         }
     }

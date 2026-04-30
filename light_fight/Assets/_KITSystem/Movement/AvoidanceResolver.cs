@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace _KITSystem.Movement
@@ -6,15 +7,22 @@ namespace _KITSystem.Movement
     [System.Serializable]
     internal class AvoidanceResolver : IResolver
     {
-        private List<Vector3> finalVelocities = new List<Vector3>();
-        private NeighborQuery neighborQuery = new NeighborQuery();
-        [Range(0.1f, 0.9f)] public float stopDecelerationNormalize = 0.9f;
-        public float avoidRadius = 1f;
+        public float cellSize = 1f;
+        public float avoidRadius = 1.5f;
         public float avoidStrength = 1.5f;
         public float maxAvoidForce = 3.0f;
+        [Range(0.1f, 0.9f)] public float stopDecelerationNormalize = 0.9f;
+        
+        private List<Vector3> finalVelocities = new List<Vector3>();
+        private NeighborQuery neighborQuery;
+        private bool[] isStoppedCache = new bool[0];
+        private Queue<int> queueCache = new Queue<int>(256);
+        private float maxAvoidForceSqr;
 
         public void Initialize()
         {
+            neighborQuery = new NeighborQuery(cellSize);
+            maxAvoidForceSqr = maxAvoidForce * maxAvoidForce;
         }
 
         public List<Vector3> Resolve(List<Vector3> positions, List<bool> alives, List<Vector3> desiredVelocities)
@@ -37,10 +45,12 @@ namespace _KITSystem.Movement
             }
             
             int count = positions.Count;
-
             float avoidRadiusSq = avoidRadius * avoidRadius;
-
-            bool[] isStopped = new bool[positions.Count];
+         
+            // resize nếu cần
+            if (isStoppedCache.Length != count) 
+                isStoppedCache = new bool[count];
+            bool[] isStopped = isStoppedCache;
             ComputeStopState(positions, Vector3.zero, neighbors, isStopped, 2, 1.3f);
 
             for (int i = 0; i < count; i++)
@@ -48,9 +58,8 @@ namespace _KITSystem.Movement
                 Vector3 pos = positions[i];
                 Vector3 desiredVel = desiredVelocities[i];
 
-                Vector3 forward = desiredVel.sqrMagnitude > 0.0001f
-                    ? desiredVel.normalized
-                    : Vector3.zero;
+                float velSq = desiredVel.sqrMagnitude;
+                Vector3 forward = velSq > 0.0001f ? desiredVel / Mathf.Sqrt(velSq) : Vector3.zero;
 
                 Vector3 avoidance = Vector3.zero;
                 int neighborCount = 0;
@@ -124,9 +133,9 @@ namespace _KITSystem.Movement
                 // -------------------------
                 // Limit force (tránh giật)
                 // -------------------------
-                if (avoidance.sqrMagnitude > maxAvoidForce * maxAvoidForce)
+                if (avoidance.sqrMagnitude > maxAvoidForceSqr)
                 {
-                    avoidance = avoidance.normalized * maxAvoidForce;
+                    avoidance = NormalizeSafe(avoidance) * maxAvoidForce;
                 }
 
                 // -------------------------
@@ -145,7 +154,7 @@ namespace _KITSystem.Movement
             return finalVelocities;
         }
         
-        public static void ComputeStopState(
+        private void ComputeStopState(
             List<Vector3> positions,
             Vector3 target,
             List<int>[] neighbors,
@@ -155,7 +164,8 @@ namespace _KITSystem.Movement
         {
             int count = positions.Count;
 
-            Queue<int> queue = new Queue<int>();
+            queueCache.Clear();
+            var queue = queueCache;
 
             // -------------------------
             // 1. Seed (gần target)
@@ -192,11 +202,13 @@ namespace _KITSystem.Movement
                     if (isStopped[i]) continue;
 
                     Vector3 toJ = posJ - positions[i];
-                    float dist = toJ.magnitude;
+                    float distSq = toJ.sqrMagnitude;
+                    if (distSq < 0.0001f) continue;
 
-                    if (dist < 0.0001f) continue;
-
-                    Vector3 forward = (target - positions[i]).normalized;
+                    float dist = Mathf.Sqrt(distSq);
+                    Vector3 toTarget = target - positions[i];
+                    float invLen = 1.0f / Mathf.Sqrt(toTarget.sqrMagnitude + 1e-6f);
+                    Vector3 forward = toTarget * invLen;
                     Vector3 dir = toJ / dist;
 
                     // chỉ propagate về phía sau
@@ -210,6 +222,14 @@ namespace _KITSystem.Movement
                     }
                 }
             }
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static Vector3 NormalizeSafe(Vector3 v)
+        {
+            float magSq = v.sqrMagnitude;
+            if (magSq < 1e-6f) return Vector3.zero;
+            return v * (1.0f / Mathf.Sqrt(magSq));
         }
     }
 }

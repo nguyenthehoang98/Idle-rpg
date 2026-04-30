@@ -5,9 +5,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KITSystem.Schedule", "KITSy
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sirenix.OdinInspector.Modules.Unity.Addressables", "Sirenix.OdinInspector.Modules.Unity.Addressables.csproj", "{d7b79347-6909-a157-ce0e-b0ff5b600478}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests.csproj", "{05686f8b-6b57-a281-bcca-74ad4dbf370c}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KITSystem.Movement", "KITSystem.Movement.csproj", "{fafd42fb-103c-d1ca-360f-2ea66d3635d4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests.csproj", "{05686f8b-6b57-a281-bcca-74ad4dbf370c}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sirenix.OdinInspector.Modules.UnityMathematics", "Sirenix.OdinInspector.Modules.UnityMathematics.csproj", "{f7699d49-864a-73fb-a086-5e9388546f1d}"
 EndProject
@@ -24,10 +24,10 @@ Global
 		{eb257209-67d8-6bda-1889-a721aaab15ac}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{d7b79347-6909-a157-ce0e-b0ff5b600478}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{d7b79347-6909-a157-ce0e-b0ff5b600478}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{05686f8b-6b57-a281-bcca-74ad4dbf370c}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{05686f8b-6b57-a281-bcca-74ad4dbf370c}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{fafd42fb-103c-d1ca-360f-2ea66d3635d4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{fafd42fb-103c-d1ca-360f-2ea66d3635d4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05686f8b-6b57-a281-bcca-74ad4dbf370c}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05686f8b-6b57-a281-bcca-74ad4dbf370c}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{f7699d49-864a-73fb-a086-5e9388546f1d}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{f7699d49-864a-73fb-a086-5e9388546f1d}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{cb460509-659a-840b-697e-a33f2bfc7cd7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

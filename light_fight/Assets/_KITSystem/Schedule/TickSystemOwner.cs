@@ -11,7 +11,7 @@ namespace _KITSystem.Schedule
         private void Awake()
         {
             Application.runInBackground = true;
-            Application.targetFrameRate = 60;
+            //Application.targetFrameRate = 60;
             Dictionary<TickGroup, List<ITickable>> ticks = new Dictionary<TickGroup, List<ITickable>>();
             foreach (var dataTemp in list)
             {
