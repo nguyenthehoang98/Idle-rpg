@@ -121,9 +121,28 @@ namespace _KITSystem.Movement.Testing
             Assert.AreEqual(new Vector3(5f, 0f, 0f), pos);
         }
 
+        [Test]
+        public void TeleportModifier_ShouldMoveUnit()
+        {
+            var mpu = CreateMPU();
+
+            int unitId = -1;
+            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
+            {
+                unitId = unit;
+                mpu.RequestAddModifier(unit, new TeleportModifier(new Vector3(33, 0)));
+            });
+
+            mpu.Tick(Random.Range(0.1f, 10f)); // 1 giây
+
+            Vector3 pos = mpu.GetUnitPosition(unitId);
+
+            Assert.AreEqual(new Vector3(33, 0), pos);
+        }
+        
         MPU CreateMPU()
         {
-            var mpu = new MPU(ModifierName.Testing);
+            var mpu = new MPU(ModifierName.Default, ModifierName.Teleport);
             mpu.Initialize();
             return mpu;
         }

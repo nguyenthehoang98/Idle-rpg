@@ -152,6 +152,11 @@ namespace _KITSystem.Movement.Testing
         public int Priority { get; }
         public ModifierName Name => ModifierName.Testing;
 
+        public Vector3 EvaluatePosition(float deltaTime)
+        {
+            return Vector3.zero;
+        }
+
         public bool IsFinished => false;
 
         public bool OverrideOthers { get; }

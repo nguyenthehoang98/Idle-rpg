@@ -16,6 +16,11 @@ namespace _KITSystem.Movement
         public int Priority => 0;
         public ModifierName Name => ModifierName.Default;
 
+        public Vector3 EvaluatePosition(float deltaTime)
+        {
+            return Vector3.zero;
+        }
+
         public bool IsFinished { get; private set; }
         public bool OverrideOthers => false;
 

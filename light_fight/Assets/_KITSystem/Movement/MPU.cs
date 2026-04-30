@@ -131,15 +131,18 @@ namespace _KITSystem.Movement
                     continue;
                 }
 
+                Vector3 desiredPosition = Vector3.zero;
                 Vector3 desiredVelocity = Vector3.zero;
                 for (int i = 0; i < list.Count; i++)
                 {
                     int idx = list[i];
                     ModifierRuntime m = activeModifiers[idx];
                     if (m.Modifier.IsFinished) continue;
+                    desiredPosition += m.Modifier.EvaluatePosition(deltaTime);
                     desiredVelocity += m.Modifier.EvaluateVelocity(deltaTime);
                 }
 
+                positions[unitId] += desiredPosition;
                 desiredVelocities[unitId] = desiredVelocity;
             }
 
@@ -284,7 +287,10 @@ namespace _KITSystem.Movement
                 return -2;
 
             if (!flags.Contains(modifier.Name))
+            {
+                Debug.LogError($"Modifier '{modifier.Name}' is not registered to system.");
                 return -3;
+            }
             
             /*
              * Ý tưởng khi thêm 1 modifier vào thì kiểm tra nó có override modifier nào ko? có -> xóa

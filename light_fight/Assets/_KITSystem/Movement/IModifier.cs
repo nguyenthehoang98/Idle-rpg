@@ -14,6 +14,7 @@ namespace _KITSystem.Movement
         void OnEnd(); //~end lifecycle
         void OnInterrupt(); //~force end
         Vector3 EvaluateVelocity(float deltaTime);
+        Vector3 EvaluatePosition(float deltaTime);
         
         // ~end cycle?
         bool IsFinished { get; }
@@ -25,7 +26,8 @@ namespace _KITSystem.Movement
 
     public enum ModifierName
     {
-        Default, 
+        Default,
         Testing,
+        Teleport,
     }
 }

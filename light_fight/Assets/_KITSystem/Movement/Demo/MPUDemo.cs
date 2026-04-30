@@ -23,7 +23,7 @@ public class MPUDemo : MonoBehaviour
 
     private IEnumerator AutoSpawn()
     {
-        int i = 10;
+        int i = 1;
         while ( i > 0)
         {
             Spawn();
@@ -90,6 +90,15 @@ public class MPUDemo : MonoBehaviour
         for (var id = 0; id < count; id++)
         {
             units[id].transform.position = mpu.GetUnitPosition(unitIds[id]);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            int idx = Random.Range(0, units.Count);
+            units[idx].GetComponent<SpriteRenderer>().color = Color.yellow;
+            mpu.RequestAddModifier(idx,
+                new TeleportModifier(new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), 0))
+            );
         }
     }
 }

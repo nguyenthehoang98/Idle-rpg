@@ -72,14 +72,12 @@ namespace _KITSystem.Movement
                         Vector3.zero,
                         stopDecelerationNormalize
                     );
-                    Debug.Log("2");
                     continue;
                 }
 
                 if (isStopped[i])
                 {
                     finalVelocities[i] = Vector3.zero;
-                    Debug.Log("3");
                     continue;
                 }
 
