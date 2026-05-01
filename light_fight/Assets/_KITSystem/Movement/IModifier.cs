@@ -18,10 +18,18 @@ namespace _KITSystem.Movement
         
         // ~end cycle?
         bool IsFinished { get; }
+        ModifierCompleteReason Reason { get; }
         /// <summary>
         /// True: sẽ xóa các modifier có priority nhỏ hơn nó
         /// </summary>
         bool OverrideOthers { get; } 
+    }
+
+    public enum ModifierCompleteReason
+    {
+        Undefined,
+        EndLifeCycle,
+        Interrupt,
     }
 
     public enum ModifierName

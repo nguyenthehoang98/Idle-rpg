@@ -22,6 +22,7 @@ namespace _KITSystem.Movement
         }
 
         public bool IsFinished { get; private set; }
+        public ModifierCompleteReason Reason { get; private set; }
         public bool OverrideOthers => false;
 
         public RunModifier(Vector3 direction, float speed)
@@ -33,7 +34,8 @@ namespace _KITSystem.Movement
             this.useDestination = false;
             this.destination = Vector3.zero;
             this.stopDistance = 0;
-            IsFinished = false;
+            this.Reason = ModifierCompleteReason.Undefined;
+            this.IsFinished = false;
         }
 
         public RunModifier(Vector3 direction, float speed, float duration)
@@ -45,7 +47,8 @@ namespace _KITSystem.Movement
             this.useDestination = false;
             this.destination = Vector3.zero;
             this.stopDistance = 0;
-            IsFinished = false;
+            this.Reason = ModifierCompleteReason.Undefined;
+            this.IsFinished = false;
         }
 
         public RunModifier(Vector3 direction, float speed, Vector3 destination, float stopDistance)
@@ -57,7 +60,8 @@ namespace _KITSystem.Movement
             this.useDestination = true;
             this.destination = destination;
             this.stopDistance = stopDistance;
-            IsFinished = false;
+            this.Reason = ModifierCompleteReason.Undefined;
+            this.IsFinished = false;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -77,6 +81,7 @@ namespace _KITSystem.Movement
                 remainingLifeTime -= deltaTime;
                 if (remainingLifeTime <= 0)
                 {
+                    Reason = ModifierCompleteReason.EndLifeCycle;
                     IsFinished = true;
                 }
             }
@@ -89,6 +94,7 @@ namespace _KITSystem.Movement
                 direction = (destination - position).normalized;
                 if (Vector3.Distance(destination, position) <= stopDistance)
                 {
+                    Reason = ModifierCompleteReason.EndLifeCycle;
                     IsFinished = true;
                 }
             }
@@ -100,6 +106,7 @@ namespace _KITSystem.Movement
 
         public void OnInterrupt()
         {
+            Reason = ModifierCompleteReason.Interrupt;
             IsFinished = true;
         }
     }

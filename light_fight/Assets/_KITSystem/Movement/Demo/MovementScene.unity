@@ -261,15 +261,17 @@ MonoBehaviour:
     - rid: 7092729166285242554
       type: {class: MPU, ns: _KITSystem.Movement, asm: KITSystem.Movement}
       data:
-        flagModifiers: 00000000
+        flagModifiers: 0000000002000000
         resolver:
           rid: 7092729166285242572
     - rid: 7092729166285242572
       type: {class: AvoidanceResolver, ns: _KITSystem.Movement, asm: KITSystem.Movement}
       data:
+        cellSize: 1
         avoidRadius: 1.5
         avoidStrength: 2
         maxAvoidForce: 3
+        stopDecelerationNormalize: 0.9
 --- !u!114 &148477887
 MonoBehaviour:
   m_ObjectHideFlags: 0

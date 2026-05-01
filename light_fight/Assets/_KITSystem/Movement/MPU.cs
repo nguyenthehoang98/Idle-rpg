@@ -46,6 +46,7 @@ namespace _KITSystem.Movement
         private Queue<Action> pendingCommands = new Queue<Action>();
         // Danh sách chứa các modifier đã finish để chờ remove.
         private List<int> pendingModifierRemoved = new List<int>();
+        private List<ModifierCompleteReason> pendingReasonModifierRemoved = new List<ModifierCompleteReason>();
 
         public MPU()
         {
@@ -101,10 +102,12 @@ namespace _KITSystem.Movement
                 {
                     if (pendingModifierRemoved.Count > totalModifierFinished)
                     {
+                        pendingReasonModifierRemoved[totalModifierFinished] = m.Modifier.Reason;
                         pendingModifierRemoved[totalModifierFinished] = m.ModifierId;
                     }
                     else
                     {
+                        pendingReasonModifierRemoved.Add(m.Modifier.Reason);
                         pendingModifierRemoved.Add(m.ModifierId);
                     }
 
@@ -133,11 +136,31 @@ namespace _KITSystem.Movement
 
                 Vector3 desiredPosition = Vector3.zero;
                 Vector3 desiredVelocity = Vector3.zero;
+                int maxPriority = int.MinValue;
                 for (int i = 0; i < list.Count; i++)
                 {
                     int idx = list[i];
                     ModifierRuntime m = activeModifiers[idx];
+
                     if (m.Modifier.IsFinished) continue;
+                    if (m.Modifier.Priority > maxPriority && m.Modifier.OverrideOthers)
+                    {
+                        maxPriority = m.Modifier.Priority;
+                    }
+                }
+
+                for (int i = 0; i < list.Count; i++)
+                {
+                    int idx = list[i];
+                    ModifierRuntime m = activeModifiers[idx];
+                    
+                    if (m.Modifier.IsFinished) continue;
+                    if (maxPriority != int.MinValue)
+                    {
+                        if (m.Modifier.Priority < maxPriority)
+                            continue;
+                    }
+                    
                     desiredPosition += m.Modifier.EvaluatePosition(deltaTime);
                     desiredVelocity += m.Modifier.EvaluateVelocity(deltaTime);
                 }
@@ -162,7 +185,12 @@ namespace _KITSystem.Movement
             // Remove all modifier finished
             for (int i = 0; i < totalModifierFinished; i++)
             {
-                RequestRemoveModifier(pendingModifierRemoved[i]);
+                ModifierCompleteReason reason = pendingReasonModifierRemoved[i];
+                if (reason == ModifierCompleteReason.EndLifeCycle)
+                    RequestRemoveModifierEndLifeCycle(pendingModifierRemoved[i]);
+                else if (reason == ModifierCompleteReason.Interrupt)
+                    RequestRemoveModifier(pendingModifierRemoved[i]);
+                else Debug.LogError($"Not define reason '{reason}'");
             }
         }
 
@@ -198,12 +226,17 @@ namespace _KITSystem.Movement
      
         public void RequestRemoveModifier(int uniqueId, Action<bool> callback)
         {
-            pendingCommands.Enqueue(() => { callback.Invoke(RemoveModifier_Internal(uniqueId)); });
+            pendingCommands.Enqueue(() => { callback.Invoke(RemoveModifier_Internal(uniqueId, true)); });
         }
      
         public void RequestRemoveModifier(int uniqueId)
         {
-            pendingCommands.Enqueue(() => { RemoveModifier_Internal(uniqueId); });
+            pendingCommands.Enqueue(() => { RemoveModifier_Internal(uniqueId, true); });
+        }
+     
+        private void RequestRemoveModifierEndLifeCycle(int uniqueId)
+        {
+            pendingCommands.Enqueue(() => { RemoveModifier_Internal(uniqueId, false); });
         }
 
         private int AddUnit_Internal(Vector3 position, Vector3 destination)
@@ -263,7 +296,7 @@ namespace _KITSystem.Movement
                 // remove bằng handle (an toàn)
                 for (int i = 0; i < handles.Count; i++)
                 {
-                    RemoveModifier_Internal(handles[i]);
+                    RemoveModifier_Internal(handles[i], true);
                 }
 
                 unitModifiers.Remove(unitId);
@@ -308,28 +341,6 @@ namespace _KITSystem.Movement
                 unitModifiers[unitId] = list;
             }
             
-            // Nếu modifier mới có priority cao hơn → huỷ modifier cũ
-            if (modifier.OverrideOthers && list.Count > 0)
-            {
-                var temp = new List<int>(list);
-                
-                for (int i = 0; i < temp.Count; i++)
-                {
-                    int idx = temp[i];
-
-                    if (idx >= activeModifiers.Count) continue;
-
-                    var m = activeModifiers[idx];
-                    
-                    if (!IsValidModifierIndex(idx)) continue;
-
-                    if (modifier.Priority > m.Modifier.Priority)
-                    {
-                        RemoveModifier_Internal(m.ModifierId);
-                    }
-                }
-            }
-            
             // ~ start ->
             modifier.OnStart(positions[unitId]);
             
@@ -355,7 +366,7 @@ namespace _KITSystem.Movement
             return modifierId;
         }
 
-        private bool RemoveModifier_Internal(int uniqueId)
+        private bool RemoveModifier_Internal(int uniqueId, bool hasInterrupted)
         {
             /*
              * Áp dụng kĩ thuật trong môn Thuật toán & ứng dụng
@@ -376,7 +387,8 @@ namespace _KITSystem.Movement
                 return false;
             
             ModifierRuntime removed = activeModifiers[idx];
-            removed .Modifier.OnInterrupt();
+            if(hasInterrupted) removed.Modifier.OnInterrupt();
+            removed.Modifier.OnEnd();
             
             // xóa modifier ở danh sách theo unitId
             if (unitModifiers.TryGetValue(removed.UnitId, out List<int> list))

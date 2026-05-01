@@ -51,6 +51,7 @@ namespace _KITSystem.Movement
         }
 
         public bool IsFinished { get; private set; }
+        public ModifierCompleteReason Reason => ModifierCompleteReason.EndLifeCycle;
         public bool OverrideOthers => false;
     }
 }

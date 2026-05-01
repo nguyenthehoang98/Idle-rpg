@@ -79,28 +79,6 @@ namespace _KITSystem.Movement.Testing
         }
 
         [Test]
-        public void AddModifier_ShouldOverrideLowerPriority()
-        {
-            var mpu = CreateMPU();
-
-            int unitId = -1;
-            int lowHandle = -1;
-            int highHandle = -1;
-
-            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => unitId = x);
-            mpu.Tick(0);
-
-            mpu.RequestAddModifier(unitId, new DummyModifier(1), h => lowHandle = h);
-            mpu.Tick(0);
-
-            mpu.RequestAddModifier(unitId, new DummyModifier(10, true), h => highHandle = h);
-            mpu.Tick(0);
-
-            Assert.IsFalse(mpu.HasModifier(lowHandle));
-            Assert.IsTrue(mpu.HasModifier(highHandle));
-        }
-
-        [Test]
         public void RemoveUnit_ShouldRemoveAllModifiers()
         {
             var mpu = CreateMPU();
@@ -158,6 +136,7 @@ namespace _KITSystem.Movement.Testing
         }
 
         public bool IsFinished => false;
+        public ModifierCompleteReason Reason => ModifierCompleteReason.EndLifeCycle;
 
         public bool OverrideOthers { get; }
 
