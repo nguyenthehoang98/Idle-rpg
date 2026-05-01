@@ -473,6 +473,20 @@ namespace _KITSystem.Movement
             return mapModifierIdToIndex.ContainsKey(handle);
         }
 
+        public bool HasModifierType(int unitId, ModifierName name)
+        {
+            if (IsValidUnit(unitId) && unitModifiers.TryGetValue(unitId, out var list))
+            {
+                foreach (var idx in list)
+                {
+                    if(IsValidModifierIndex(idx) && activeModifiers[idx].Modifier.Name == name)
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool HasModifier(int handle, out int idx)
         {

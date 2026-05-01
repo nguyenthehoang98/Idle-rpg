@@ -261,7 +261,7 @@ MonoBehaviour:
     - rid: 7092729166285242554
       type: {class: MPU, ns: _KITSystem.Movement, asm: KITSystem.Movement}
       data:
-        flagModifiers: 0000000002000000
+        flagModifiers: 000000000200000003000000
         resolver:
           rid: 7092729166285242572
     - rid: 7092729166285242572

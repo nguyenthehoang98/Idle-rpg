@@ -12,7 +12,7 @@ namespace _KITSystem.Movement
             IsFinished = false;
         }
 
-        public int Priority => 5;
+        public int Priority => PriorityModifierIndex.TELEPORT;
         public ModifierName Name => ModifierName.Teleport;
         public void OnStart(Vector3 startPos)
         {

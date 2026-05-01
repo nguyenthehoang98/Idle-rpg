@@ -37,5 +37,6 @@ namespace _KITSystem.Movement
         Default,
         Testing,
         Teleport,
+        KnockBack,
     }
 }

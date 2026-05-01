@@ -92,12 +92,31 @@ public class MPUDemo : MonoBehaviour
             units[id].transform.position = mpu.GetUnitPosition(unitIds[id]);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             int idx = Random.Range(0, units.Count);
             units[idx].GetComponent<SpriteRenderer>().color = Color.yellow;
             mpu.RequestAddModifier(idx,
                 new TeleportModifier(new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), 0))
+            );
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            int unitId = Random.Range(0, units.Count);
+            bool isRanged = unitId % 4 == 0;
+            Vector3 position = units[unitId].transform.position;
+            units[unitId].GetComponent<SpriteRenderer>().color = Color.magenta;
+            mpu.RequestAddModifier(unitId,
+                new KnockBackModifier(position, 0.4f, 3, () =>
+                {
+                    if (!mpu.HasModifierType(unitId, ModifierName.Default))
+                    {
+                        mpu.RequestAddModifier(unitId,
+                            new RunModifier(-position, 3, Vector3.zero, isRanged ? 8 : 2)
+                        );
+                    }
+                })
             );
         }
     }

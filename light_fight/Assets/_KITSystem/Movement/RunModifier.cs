@@ -13,7 +13,7 @@ namespace _KITSystem.Movement
         private Vector3 destination;
         private float stopDistance;
 
-        public int Priority => 0;
+        public int Priority => PriorityModifierIndex.DEFAULT;
         public ModifierName Name => ModifierName.Default;
 
         public Vector3 EvaluatePosition(float deltaTime)
@@ -67,7 +67,7 @@ namespace _KITSystem.Movement
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3 EvaluateVelocity(float deltaTime)
         {
-            return direction * speed * deltaTime;
+            return direction * (speed * deltaTime);
         }
 
         public void OnStart(Vector3 startPos)
