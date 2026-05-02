@@ -140,9 +140,57 @@ namespace _KITSystem.Movement.Testing
             Assert.AreEqual(new Vector3(33, 0), pos);
         }
         
+        [Test]
+        public void KnockBackModifier_Move_Should_Be_Ignored_When_Knockback_Active()
+        {
+            var mpu = CreateMPU();
+
+            int unitId = -1;
+            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
+            {
+                unitId = unit;
+                mpu.RequestAddModifier(unit, new RunModifier(new Vector3(1, 0, 0), speed: 5f));
+                mpu.RequestAddModifier(unit, new KnockBackModifier(
+                    direction: new Vector3(-1, 0, 0), 2f, 1f, null)
+                );
+            });
+
+            mpu.Tick(1f);
+           
+            Vector3 pos = mpu.GetUnitPosition(unitId);
+
+            // phải bị đẩy ngược, không đi theo move
+            Assert.Less(pos.x, 0f);
+        }
+        
+        [Test]
+        public void KnockBackModifier_Distance()
+        {
+            var mpu = CreateMPU();
+
+            int unitId = -1;
+            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
+            {
+                unitId = unit;
+                mpu.RequestAddModifier(unit, new KnockBackModifier(
+                    direction: new Vector3(-1, 0, 0), 2f, 3f, null)
+                );
+            });
+
+            for (int i = 0; i < 10; i++)
+            {
+                mpu.Tick(0.2f);
+            }
+           
+            Vector3 pos = mpu.GetUnitPosition(unitId);
+
+            // phải bị đẩy ngược, không đi theo move
+            Assert.AreEqual(pos.x, -3f);
+        }
+        
         MPU CreateMPU()
         {
-            var mpu = new MPU(ModifierName.Default, ModifierName.Teleport);
+            var mpu = new MPU(ModifierName.Default, ModifierName.Teleport, ModifierName.KnockBack);
             mpu.Initialize();
             return mpu;
         }

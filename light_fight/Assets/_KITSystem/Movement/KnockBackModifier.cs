@@ -34,7 +34,7 @@ namespace _KITSystem.Movement
             this.duration = duration;
             this.distance = distance;
             this.onComplete = onComplete;
-            this.curve = AnimationCurve.Linear(0, 1, 1, 0);
+            this.curve = AnimationCurve.Linear(0, 0, 1, 1);
             this.IsFinished = false;
             this.elapsedTime = traveled = 0;
             this.Reason = ModifierCompleteReason.Undefined;
@@ -44,17 +44,7 @@ namespace _KITSystem.Movement
         {
         }
 
-        public void Tick(float deltaTime)
-        {
-            elapsedTime += deltaTime;
-            if (elapsedTime > duration && !IsFinished)
-            {
-                Reason = ModifierCompleteReason.EndLifeCycle;
-                IsFinished = true;
-            }
-        }
-
-        public void ProcessPosition(Vector3 position)
+        public void Process(Vector3 position, float deltaTime)
         {
         }
 
@@ -75,18 +65,19 @@ namespace _KITSystem.Movement
 
         public Vector3 EvaluatePosition(float deltaTime)
         {
-            float prev = Mathf.Clamp01(elapsedTime - deltaTime / duration);
-            float curr = Mathf.Clamp01(elapsedTime / duration);
-            float prevStrength = curve.Evaluate(prev);
-            float currStrength = curve.Evaluate(curr);
-            float avgStrength = (prevStrength + currStrength) * 0.5f;
-            float dt = curr - prev;
-            float deltaStrength = avgStrength * dt;
-            float remain = distance - traveled;
-            if (deltaStrength > remain)
-                deltaStrength = remain;
-            traveled += deltaStrength;
-            return direction * deltaStrength;
+            elapsedTime += deltaTime;
+            if (elapsedTime > duration && !IsFinished)
+            {
+                Reason = ModifierCompleteReason.EndLifeCycle;
+                IsFinished = true;
+            }
+            
+            float f = elapsedTime / duration;
+            float p = curve.Evaluate(f);
+            float d = p * distance;
+            float s = d - traveled;
+            traveled = d;
+            return s * direction;
         }
 
         public bool IsFinished { get; private set; }
