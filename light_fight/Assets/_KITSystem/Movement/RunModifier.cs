@@ -74,7 +74,7 @@ namespace _KITSystem.Movement
         {
         }
 
-        public void Tick(float deltaTime)
+        public void Process(Vector3 position, float deltaTime)
         {
             if (useLifeTime && !IsFinished)
             {
@@ -85,10 +85,7 @@ namespace _KITSystem.Movement
                     IsFinished = true;
                 }
             }
-        }
-
-        public void ProcessPosition(Vector3 position)
-        {
+            
             if (useDestination && !IsFinished)
             {
                 direction = (destination - position).normalized;

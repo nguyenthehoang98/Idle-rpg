@@ -155,11 +155,12 @@ namespace _KITSystem.Movement.Testing
         {
         }
 
-        public void Tick(float deltaTime)
+        public void Process(Vector3 position, float deltaTime)
         {
+            
         }
 
-        public void ProcessPosition(Vector3 position)
+        public void Tick(float deltaTime)
         {
         }
 

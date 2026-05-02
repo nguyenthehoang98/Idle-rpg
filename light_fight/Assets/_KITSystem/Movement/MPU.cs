@@ -93,8 +93,7 @@ namespace _KITSystem.Movement
             for (int i = 0; i < activeModifiers.Count; i++)
             {
                 ModifierRuntime m = activeModifiers[i];
-                m.Modifier.ProcessPosition(positions[m.UnitId]);
-                m.Modifier.Tick(deltaTime);
+                m.Modifier.Process(positions[m.UnitId], deltaTime);
                 activeModifiers[i] = m;
 
                 // Xử lý để giảm việc cấp phát bộ nhớ (clear || new) liên tục

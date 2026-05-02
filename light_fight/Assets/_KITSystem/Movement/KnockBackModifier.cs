@@ -13,6 +13,7 @@ namespace _KITSystem.Movement
         private float distance;
         private float elapsedTime;
         private float traveled;
+        private bool shouldFinish;
         private AnimationCurve curve;
         private Action onComplete;
 
@@ -23,7 +24,7 @@ namespace _KITSystem.Movement
             this.distance = distance;
             this.curve = curve;
             this.onComplete = onComplete;
-            this.IsFinished = false;
+            this.IsFinished = shouldFinish = false;
             this.elapsedTime = traveled = 0;
             this.Reason = ModifierCompleteReason.Undefined;
         }
@@ -34,8 +35,8 @@ namespace _KITSystem.Movement
             this.duration = duration;
             this.distance = distance;
             this.onComplete = onComplete;
-            this.curve = AnimationCurve.Linear(0, 0, 1, 1);
-            this.IsFinished = false;
+            this.curve = AnimationCurve.Linear(0, 0, 1, 1);        
+            this.IsFinished = shouldFinish = false;
             this.elapsedTime = traveled = 0;
             this.Reason = ModifierCompleteReason.Undefined;
         }
@@ -46,6 +47,17 @@ namespace _KITSystem.Movement
 
         public void Process(Vector3 position, float deltaTime)
         {
+            if (shouldFinish && !IsFinished)
+            {
+                IsFinished = true;
+            }
+            
+            elapsedTime += deltaTime;
+            if (elapsedTime > duration && !shouldFinish)
+            {
+                shouldFinish = true;
+                Reason = ModifierCompleteReason.EndLifeCycle;
+            }
         }
 
         public void OnEnd()
@@ -65,13 +77,6 @@ namespace _KITSystem.Movement
 
         public Vector3 EvaluatePosition(float deltaTime)
         {
-            elapsedTime += deltaTime;
-            if (elapsedTime > duration && !IsFinished)
-            {
-                Reason = ModifierCompleteReason.EndLifeCycle;
-                IsFinished = true;
-            }
-            
             float f = elapsedTime / duration;
             float p = curve.Evaluate(f);
             float d = p * distance;
