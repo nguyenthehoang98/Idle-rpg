@@ -1,9 +1,7 @@
 {
-    "name": "KITSystem.SkillSystem",
+    "name": "KITSystem.Utils",
     "rootNamespace": "",
-    "references": [
-        "GUID:82d1e9f4e71141c4983602af7fd5f675"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

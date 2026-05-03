@@ -21,37 +21,41 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  trigger:
-    collisionEventId: -1
-    deathEventId: -1
-  projectile:
-    prefab: {fileID: 0}
-    hitEffect: {fileID: 0}
-  collider:
-    rid: 8666060431988097071
-  behaviour:
-    rid: 8666060431988097070
-  modifier:
-    rid: 8666060431988097072
+  skill:
+    rid: -2
+  lifeTimeInSeconds: 1
+  channelingExitTimeInSeconds: 0
+  animationName: 
+  scaleTime: 1
+  isRelativeEventsBySkill: 0
+  events:
+  - triggerType: 0
+    trigger:
+      rid: 7993921300330971234
+    actionType: 0
+    action:
+      rid: 7993921300330971235
   references:
     version: 2
     RefIds:
-    - rid: 8666060431988097070
-      type: {class: DropStrikeBehaviour, ns: _KITSystem.SkillSystem, asm: KITSystem.SkillSystem}
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 7993921300330971234
+      type: {class: TimelineTrigger, ns: _KITSystem.SkillSystem.Trigger, asm: KITSystem.SkillSystem}
       data:
-        count: 0
-        height: 0
-        delayBetween: 0
-        radius: 0
-        overrideCenter: 0
-        angle: 0
-    - rid: 8666060431988097071
-      type: {class: CircleCollider, ns: _KITSystem.SkillSystem, asm: KITSystem.SkillSystem}
+        timer: 0
+    - rid: 7993921300330971235
+      type: {class: CastProjectileAction, ns: _KITSystem.SkillSystem.Action, asm: KITSystem.SkillSystem}
       data:
-        radius: 0
-    - rid: 8666060431988097072
-      type: {class: StatModifier, ns: _KITSystem.SkillSystem, asm: KITSystem.SkillSystem}
+        projectileType: 0
+        projectile:
+          rid: 7993921300330971242
+    - rid: 7993921300330971242
+      type: {class: CastProjectileAction/MeleeProjectile, ns: _KITSystem.SkillSystem.Action, asm: KITSystem.SkillSystem}
       data:
-        stat: 
-        additionValue: 0
-        multiplierValue: 1
+        damageScale: 1
+        isHpPercent: 0
+        damageTickerType: 0
+        damageTickerIntervalInSeconds: 1
+        anchor: 2
+        hitBoxes: []
