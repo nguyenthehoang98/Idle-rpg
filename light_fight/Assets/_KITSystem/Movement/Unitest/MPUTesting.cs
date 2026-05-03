@@ -117,9 +117,9 @@ namespace _KITSystem.Movement.Testing
             Assert.IsTrue(unitId >= 0);
         }
 
-        MPU CreateMPU()
+        Mpu CreateMPU()
         {
-            var mpu = new MPU(ModifierName.Testing);
+            var mpu = new Mpu(ModifierName.Testing);
             mpu.Initialize();
             return mpu;
         }

@@ -1,8 +1,10 @@
 {
-    "name": "KITSystem.Movement",
+    "name": "KITSystem.SkillSystem.Runtime",
     "rootNamespace": "",
     "references": [
-        "GUID:4e70febc7c3ea804584817271583c98c"
+        "GUID:4e70febc7c3ea804584817271583c98c",
+        "GUID:8c2a8055d972e094cb3fd19de779dbc6",
+        "KITSystem.SkillSystem.Config"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

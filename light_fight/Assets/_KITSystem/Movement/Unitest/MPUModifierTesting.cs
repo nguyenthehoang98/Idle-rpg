@@ -188,9 +188,9 @@ namespace _KITSystem.Movement.Testing
             Assert.AreEqual(pos.x, -3f);
         }
         
-        MPU CreateMPU()
+        Mpu CreateMPU()
         {
-            var mpu = new MPU(ModifierName.Default, ModifierName.Teleport, ModifierName.KnockBack);
+            var mpu = new Mpu(ModifierName.Default, ModifierName.Teleport, ModifierName.KnockBack);
             mpu.Initialize();
             return mpu;
         }

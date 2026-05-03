@@ -9,7 +9,7 @@ namespace _KITSystem.Movement
 {
     [Serializable]
     //~ Movement Processing Unit
-    public sealed partial class MPU : ITickable
+    public sealed partial class Mpu : ITickable
     {
         [SerializeField, Tooltip("Các modifier có kiểu khác danh sách này sẽ không được thêm vào hệ thống")]
         private ModifierName[] flagModifiers = new ModifierName[0];
@@ -48,11 +48,11 @@ namespace _KITSystem.Movement
         private List<int> pendingModifierRemoved = new List<int>();
         private List<ModifierCompleteReason> pendingReasonModifierRemoved = new List<ModifierCompleteReason>();
 
-        public MPU()
+        public Mpu()
         {
         }
 
-        public MPU(params ModifierName[] additionalModifiers)
+        public Mpu(params ModifierName[] additionalModifiers)
         {
             resolver = new AvoidanceResolver();
             foreach (var m in additionalModifiers)
@@ -93,21 +93,21 @@ namespace _KITSystem.Movement
             for (int i = 0; i < activeModifiers.Count; i++)
             {
                 ModifierRuntime m = activeModifiers[i];
-                m.Modifier.Process(positions[m.UnitId], deltaTime);
+                m.modifier.Process(positions[m.unitId], deltaTime);
                 activeModifiers[i] = m;
 
                 // Xử lý để giảm việc cấp phát bộ nhớ (clear || new) liên tục
-                if (m.Modifier.IsFinished)
+                if (m.modifier.IsFinished)
                 {
                     if (pendingModifierRemoved.Count > totalModifierFinished)
                     {
-                        pendingReasonModifierRemoved[totalModifierFinished] = m.Modifier.Reason;
-                        pendingModifierRemoved[totalModifierFinished] = m.ModifierId;
+                        pendingReasonModifierRemoved[totalModifierFinished] = m.modifier.Reason;
+                        pendingModifierRemoved[totalModifierFinished] = m.modifierId;
                     }
                     else
                     {
-                        pendingReasonModifierRemoved.Add(m.Modifier.Reason);
-                        pendingModifierRemoved.Add(m.ModifierId);
+                        pendingReasonModifierRemoved.Add(m.modifier.Reason);
+                        pendingModifierRemoved.Add(m.modifierId);
                     }
 
                     totalModifierFinished++;
@@ -141,10 +141,10 @@ namespace _KITSystem.Movement
                     int idx = list[i];
                     ModifierRuntime m = activeModifiers[idx];
 
-                    if (m.Modifier.IsFinished) continue;
-                    if (m.Modifier.Priority > maxPriority && m.Modifier.OverrideOthers)
+                    if (m.modifier.IsFinished) continue;
+                    if (m.modifier.Priority > maxPriority && m.modifier.OverrideOthers)
                     {
-                        maxPriority = m.Modifier.Priority;
+                        maxPriority = m.modifier.Priority;
                     }
                 }
 
@@ -153,15 +153,15 @@ namespace _KITSystem.Movement
                     int idx = list[i];
                     ModifierRuntime m = activeModifiers[idx];
                     
-                    if (m.Modifier.IsFinished) continue;
+                    if (m.modifier.IsFinished) continue;
                     if (maxPriority != int.MinValue)
                     {
-                        if (m.Modifier.Priority < maxPriority)
+                        if (m.modifier.Priority < maxPriority)
                             continue;
                     }
                     
-                    desiredPosition += m.Modifier.EvaluatePosition(deltaTime);
-                    desiredVelocity += m.Modifier.EvaluateVelocity(deltaTime);
+                    desiredPosition += m.modifier.EvaluatePosition(deltaTime);
+                    desiredVelocity += m.modifier.EvaluateVelocity(deltaTime);
                 }
 
                 positions[unitId] += desiredPosition;
@@ -289,7 +289,7 @@ namespace _KITSystem.Movement
 
                     if (!IsValidModifierIndex(idx)) continue;
 
-                    handles.Add(activeModifiers[idx].ModifierId);
+                    handles.Add(activeModifiers[idx].modifierId);
                 }
                 
                 // remove bằng handle (an toàn)
@@ -349,9 +349,9 @@ namespace _KITSystem.Movement
             // Add modifier vào hệ thống
             ModifierRuntime runtime = new ModifierRuntime
             {
-                UnitId = unitId,
-                Modifier = modifier,
-                ModifierId = modifierId
+                unitId = unitId,
+                modifier = modifier,
+                modifierId = modifierId
             };
 
             activeModifiers.Add(runtime);
@@ -386,11 +386,11 @@ namespace _KITSystem.Movement
                 return false;
             
             ModifierRuntime removed = activeModifiers[idx];
-            if(hasInterrupted) removed.Modifier.OnInterrupt();
-            removed.Modifier.OnEnd();
+            if(hasInterrupted) removed.modifier.OnInterrupt();
+            removed.modifier.OnEnd();
             
             // xóa modifier ở danh sách theo unitId
-            if (unitModifiers.TryGetValue(removed.UnitId, out List<int> list))
+            if (unitModifiers.TryGetValue(removed.unitId, out List<int> list))
             {
                 for (int i = 0; i < list.Count; i++)
                 {
@@ -404,7 +404,7 @@ namespace _KITSystem.Movement
 
                 // xóa key nếu ko còn phần tử nào cả
                 if (list.Count == 0)
-                    unitModifiers.Remove(removed.UnitId);
+                    unitModifiers.Remove(removed.unitId);
             }
 
             // lấy index của modifier bên trong danh sách
@@ -416,11 +416,11 @@ namespace _KITSystem.Movement
                 activeModifiers[idx] = last;
 
                 // cập nhật lại các phần tử
-                mapModifierIdToIndex[last.ModifierId] = idx;
+                mapModifierIdToIndex[last.modifierId] = idx;
                 activeModifiers[idx] = last;
                 
                 // update unitModifiers của thằng bị swap
-                if (unitModifiers.TryGetValue(last.UnitId, out List<int> list2))
+                if (unitModifiers.TryGetValue(last.unitId, out List<int> list2))
                 {
                     for (int i = 0; i < list2.Count; i++)
                     {
@@ -478,7 +478,7 @@ namespace _KITSystem.Movement
             {
                 foreach (var idx in list)
                 {
-                    if(IsValidModifierIndex(idx) && activeModifiers[idx].Modifier.Name == name)
+                    if(IsValidModifierIndex(idx) && activeModifiers[idx].modifier.Name == name)
                         return true;
                 }
             }
@@ -505,18 +505,18 @@ namespace _KITSystem.Movement
         }
     }
     
-    public partial class MPU
+    public partial class Mpu
     {
 #if UNITY_EDITOR
         [Serializable]
 #endif
         struct ModifierRuntime
         {
-            public int UnitId;
-            public float ElapsedTime;
-            public bool MarkedForRemoval;
-            public IModifier Modifier;
-            public int ModifierId; // Dùng lưu để xóa
+            public int unitId;
+            public float elapsedTime;
+            public bool markedForRemoval;
+            public IModifier modifier;
+            public int modifierId; // Dùng lưu để xóa
         }
     }
 }

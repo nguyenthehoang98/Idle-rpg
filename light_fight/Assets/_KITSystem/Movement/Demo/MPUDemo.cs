@@ -9,7 +9,7 @@ public class MPUDemo : MonoBehaviour
     [SerializeField] private TickSystemOwner owner;
     [SerializeField] private GameObject unitPreafab;
 
-    private MPU mpu;
+    private Mpu mpu;
     private List<GameObject> units = new List<GameObject>();
     private List<int> unitIds = new List<int>();
     private bool hasInitialized = false;
