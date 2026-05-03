@@ -47,15 +47,37 @@ MonoBehaviour:
     - rid: 7993921300330971235
       type: {class: CastProjectileAction, ns: _KITSystem.SkillSystem.Action, asm: KITSystem.SkillSystem}
       data:
-        projectileType: 0
+        projectileType: 1
         projectile:
-          rid: 7993921300330971242
-    - rid: 7993921300330971242
-      type: {class: CastProjectileAction/MeleeProjectile, ns: _KITSystem.SkillSystem.Action, asm: KITSystem.SkillSystem}
+          rid: 7993921300330971265
+    - rid: 7993921300330971265
+      type: {class: CastProjectileAction/RangerProjectile, ns: _KITSystem.SkillSystem.Action, asm: KITSystem.SkillSystem}
       data:
         damageScale: 1
         isHpPercent: 0
         damageTickerType: 0
         damageTickerIntervalInSeconds: 1
-        anchor: 2
-        hitBoxes: []
+        prefab: {fileID: 0}
+        offsetPivotPosition: {x: 0, y: 0, z: 0}
+        shapeType: 2
+        hitBox:
+          rid: 7993921300330971268
+        trajectoryType: 0
+        trajectory:
+          rid: 7993921300330971269
+    - rid: 7993921300330971268
+      type: {class: CastProjectileAction/CapsuleShape, ns: _KITSystem.SkillSystem.Action, asm: KITSystem.SkillSystem}
+      data:
+        triggerTimeInSeconds: 0
+        relativePositionOfCenter: {x: 0, y: 0, z: 0}
+        radius: 1
+        height: 2
+    - rid: 7993921300330971269
+      type: {class: CastProjectileAction/RangerProjectile/StationaryTrajectory, ns: _KITSystem.SkillSystem.Action, asm: KITSystem.SkillSystem}
+      data:
+        type: 0
+        direction: {x: 0, y: 0, z: 0}
+        angle: 0
+        targetType: 0
+        radiusScanTarget: 0
+        isRequireTarget: 0

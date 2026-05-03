@@ -9,7 +9,7 @@ namespace _KITSystem.SkillSystem.Action
     [Serializable]
     public partial class CastProjectileAction : BaseAction
     {
-        [OnValueChanged("ProjectileTypeChanged")]
+        [GUIColor("GetButtonColor"), OnValueChanged("ProjectileTypeChanged")]
         public BaseProjectile.ProjectileType projectileType;
         [SerializeReference, HideReferenceObjectPicker, HideLabel] public BaseProjectile projectile;
 
@@ -19,7 +19,20 @@ namespace _KITSystem.SkillSystem.Action
         {
             ProjectileTypeChanged();
         }
-        
+
+        private Color GetButtonColor()
+        {
+            switch (projectileType)
+            {
+                case BaseProjectile.ProjectileType.Melee:
+                    return new Color(0, 1, 1);
+                case BaseProjectile.ProjectileType.Ranger:
+                    return new Color(1, 1, 0);
+                default:
+                    return Color.white;
+            }
+        }
+
         private void ProjectileTypeChanged()
         {
             if (projectile == null || projectile.Type != projectileType)
