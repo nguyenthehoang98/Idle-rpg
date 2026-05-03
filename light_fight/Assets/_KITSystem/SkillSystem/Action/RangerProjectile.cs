@@ -114,19 +114,7 @@ namespace _KITSystem.SkillSystem.Action
             [Serializable]
             public abstract class BaseTrajectory
             {
-                [TitleGroup("Direction")]
-                public DirectionRepresentationType directionType;
-                [HideIf("directionType", DirectionRepresentationType.Vector)]
-                public Vector3 vector;
-                [HideIf("directionType", DirectionRepresentationType.Angle)]
-                public float angle;
-                    
-                public enum DirectionRepresentationType
-                {
-                    Vector,
-                    Angle
-                }
-                
+                public bool isRequireTargetToCast;
                 public abstract TrajectoryType Type { get; }
 
                 public enum TrajectoryType
