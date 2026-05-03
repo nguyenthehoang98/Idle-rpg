@@ -49,8 +49,8 @@ MonoBehaviour:
       data:
         projectileType: 1
         projectile:
-          rid: 7993921300330971265
-    - rid: 7993921300330971265
+          rid: 7993921303155834929
+    - rid: 7993921303155834929
       type: {class: CastProjectileAction/RangerProjectile, ns: _KITSystem.SkillSystem.Action, asm: KITSystem.SkillSystem}
       data:
         damageScale: 1
@@ -59,25 +59,46 @@ MonoBehaviour:
         damageTickerIntervalInSeconds: 1
         prefab: {fileID: 0}
         offsetPivotPosition: {x: 0, y: 0, z: 0}
-        shapeType: 2
+        shapeType: 3
         hitBox:
-          rid: 7993921300330971268
-        trajectoryType: 0
+          rid: 7993921303155834935
+        trajectoryType: 3
         trajectory:
-          rid: 7993921300330971269
-    - rid: 7993921300330971268
-      type: {class: CastProjectileAction/CapsuleShape, ns: _KITSystem.SkillSystem.Action, asm: KITSystem.SkillSystem}
+          rid: 7993921303155834936
+    - rid: 7993921303155834935
+      type: {class: CastProjectileAction/ConeShape, ns: _KITSystem.SkillSystem.Action, asm: KITSystem.SkillSystem}
       data:
         triggerTimeInSeconds: 0
-        relativePositionOfCenter: {x: 0, y: 0, z: 0}
-        radius: 1
-        height: 2
-    - rid: 7993921300330971269
-      type: {class: CastProjectileAction/RangerProjectile/StationaryTrajectory, ns: _KITSystem.SkillSystem.Action, asm: KITSystem.SkillSystem}
+        relativePos: {x: 0, y: 0, z: 0}
+        widthTop: 0
+        widthBottom: 0
+        height: 0
+        n: 0
+    - rid: 7993921303155834936
+      type: {class: CastProjectileAction/RangerProjectile/BoomerangTrajectory, ns: _KITSystem.SkillSystem.Action, asm: KITSystem.SkillSystem}
       data:
-        type: 0
-        direction: {x: 0, y: 0, z: 0}
+        directionType: 0
+        vector: {x: 0, y: 0, z: 0}
         angle: 0
-        targetType: 0
-        radiusScanTarget: 0
-        isRequireTarget: 0
+        castPhase:
+          type: 0
+          value: 0
+          curve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+          fromValue: 0
+          toValue: 0
+        returnPhase:
+          type: 1
+          value: 0
+          curve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+          fromValue: 0
+          toValue: 0

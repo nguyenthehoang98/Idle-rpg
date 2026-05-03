@@ -2,6 +2,7 @@
 using _KITSystem.Utils;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _KITSystem.SkillSystem.Action
 {
@@ -9,19 +10,23 @@ namespace _KITSystem.SkillSystem.Action
     {
         public partial class RangerProjectile
         {
-            [TitleGroup("Ranger"), Required]
+            [TitleGroup("Ranger : GameObject")]
+            [Indent]
             public GameObject prefab;
+            [Indent]
             public Vector3 offsetPivotPosition;
             
-            [TitleGroup("Hitbox")]
-            [GUIColor("GetButtonColor"), OnValueChanged("ShapeTypeChanged")]
+            [TitleGroup("Ranger : HitBox")]
+            [GUIColor("GetButtonColor1"), OnValueChanged("ShapeTypeChanged"), Indent]
             public BaseHitBox.ShapeType shapeType;
-            [SerializeReference, HideReferenceObjectPicker, HideLabel] public BaseHitBox hitBox;
+            [SerializeReference, HideReferenceObjectPicker, HideLabel, Indent]
+            public BaseHitBox hitBox;
             
-            [TitleGroup("Trajectory")]
-            [GUIColor("GetButtonColor"), OnValueChanged("TrajectoryTypeChanged")]
+            [TitleGroup("Ranger : Trajectory")]
+            [GUIColor("GetButtonColor2"), OnValueChanged("TrajectoryTypeChanged"), Indent]
             public BaseTrajectory.TrajectoryType trajectoryType; 
-            [SerializeReference, HideReferenceObjectPicker, HideLabel] public BaseTrajectory trajectory;
+            [SerializeReference, HideReferenceObjectPicker, HideLabel, Indent]
+            public BaseTrajectory trajectory;
 
             public RangerProjectile()
             {
@@ -29,7 +34,7 @@ namespace _KITSystem.SkillSystem.Action
                 TrajectoryTypeChanged();
             }
             
-            private Color GetButtonColor()
+            private Color GetButtonColor1()
             {
                 switch (shapeType)
                 {
@@ -41,6 +46,27 @@ namespace _KITSystem.SkillSystem.Action
                         return Color.yellow;
                     case BaseHitBox.ShapeType.Cone:
                         return Color.blue;
+                    default:
+                        return Color.white;
+                }
+            }
+            
+            private Color GetButtonColor2()
+            {
+                switch (trajectoryType)
+                {
+                    case BaseTrajectory.TrajectoryType.Blend:
+                        return Color.green;
+                    case BaseTrajectory.TrajectoryType.Stationary:
+                        return Color.red;
+                    case BaseTrajectory.TrajectoryType.Boomerang:
+                        return Color.yellow;
+                    case BaseTrajectory.TrajectoryType.Parabolic:
+                        return Color.blue;
+                    case BaseTrajectory.TrajectoryType.Bullet:
+                        return Color.cyan;
+                    case BaseTrajectory.TrajectoryType.Cannon:
+                        return Color.magenta;
                     default:
                         return Color.white;
                 }
@@ -88,10 +114,11 @@ namespace _KITSystem.SkillSystem.Action
             [Serializable]
             public abstract class BaseTrajectory
             {
-                public DirectionRepresentationType type;
-                [HideIf("type", DirectionRepresentationType.Vector)]
-                public Vector3 direction;
-                [HideIf("type", DirectionRepresentationType.Angle)]
+                [TitleGroup("Direction")]
+                public DirectionRepresentationType directionType;
+                [HideIf("directionType", DirectionRepresentationType.Vector)]
+                public Vector3 vector;
+                [HideIf("directionType", DirectionRepresentationType.Angle)]
                 public float angle;
                     
                 public enum DirectionRepresentationType
@@ -107,10 +134,9 @@ namespace _KITSystem.SkillSystem.Action
                     Stationary,
                     Bullet,
                     Cannon,
-                    Arrow,
                     Boomerang,
-                    Ball,
-                    JointFollower
+                    Blend,
+                    Parabolic
                 }
             }
         }

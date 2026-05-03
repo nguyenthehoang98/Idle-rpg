@@ -9,7 +9,7 @@ namespace _KITSystem.SkillSystem.Action
     [Serializable]
     public partial class CastProjectileAction : BaseAction
     {
-        [GUIColor("GetButtonColor"), OnValueChanged("ProjectileTypeChanged")]
+        [GUIColor("GetButtonColor"), OnValueChanged("ProjectileTypeChanged"), HideLabel, BoxGroup]
         public BaseProjectile.ProjectileType projectileType;
         [SerializeReference, HideReferenceObjectPicker, HideLabel] public BaseProjectile projectile;
 
@@ -56,7 +56,7 @@ namespace _KITSystem.SkillSystem.Action
         [Serializable]
         public abstract class BaseProjectile
         {
-            [TitleGroup("Default")]
+            [TitleGroup("Projectile : Damage")]
             public float damageScale = 1;
             public bool isHpPercent = false;
             public DamageTickerType damageTickerType = DamageTickerType.None;
@@ -95,9 +95,12 @@ namespace _KITSystem.SkillSystem.Action
         [Serializable]
         public class BoxShape : BaseHitBox
         {
+            [TitleGroup("", "Box")]
             public Vector3 size = new Vector3(1, 1, 1);
+            [TitleGroup("", "Box")]
             public Vector3 pivotRelativePosition;
             public override ShapeType Type => ShapeType.Box;
+            [TitleGroup("", "Box")]
             public PivotType pivotType;
 
             public enum PivotType
@@ -113,7 +116,9 @@ namespace _KITSystem.SkillSystem.Action
         [Serializable]
         public class CircleShape : BaseHitBox
         {
+            [TitleGroup("Circle")]
             public float radius = 1f;
+            [TitleGroup("Circle")]
             public Vector3 relativePositionOfCenter;
             public override ShapeType Type => ShapeType.Circle;
         }
@@ -121,8 +126,11 @@ namespace _KITSystem.SkillSystem.Action
         [Serializable]
         public class CapsuleShape : BaseHitBox
         {
+            [TitleGroup("Capsule")]
             public Vector3 relativePositionOfCenter;
+            [TitleGroup("Capsule")]
             public float radius = 1;
+            [TitleGroup("Capsule")]
             public float height = 2;
             public override ShapeType Type => ShapeType.Capsule;
         }
@@ -130,10 +138,15 @@ namespace _KITSystem.SkillSystem.Action
         [Serializable]
         public class ConeShape : BaseHitBox
         {
+            [TitleGroup("Cone")]
             public Vector3 relativePos;
+            [TitleGroup("Cone")]
             public float widthTop;
+            [TitleGroup("Cone")]
             public float widthBottom;
+            [TitleGroup("Cone")]
             public float height;
+            [TitleGroup("Cone")]
             public int n;
             public override ShapeType Type => ShapeType.Cone;
         }

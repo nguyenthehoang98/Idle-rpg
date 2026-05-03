@@ -10,12 +10,12 @@ namespace _KITSystem.SkillSystem
     [Serializable]
     public class BaseEvent
     {
-        [TabGroup("$triggerType"), OnValueChanged("TriggerTypeChanged")]
+        [TabGroup("$triggerType"), OnValueChanged("TriggerTypeChanged"), HideLabel]
         public BaseTrigger.TriggerType triggerType;
         [TabGroup("$triggerType")]
         [SerializeReference, HideReferenceObjectPicker, HideLabel] public BaseTrigger trigger;
         
-        [TabGroup("$actionType"), OnValueChanged("ActionTypeChanged")]
+        [TabGroup("$actionType"), OnValueChanged("ActionTypeChanged"), HideLabel]
         public BaseAction.ActionType actionType;
         [TabGroup("$actionType")]
         [SerializeReference, HideReferenceObjectPicker, HideLabel] public BaseAction action;

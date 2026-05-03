@@ -1,4 +1,5 @@
 using System;
+using Sirenix.OdinInspector;
 
 namespace _KITSystem.SkillSystem.Action
 {
@@ -9,6 +10,7 @@ namespace _KITSystem.SkillSystem.Action
             [Serializable]
             public class StationaryTrajectory : BaseTrajectory
             {
+                [TitleGroup("Stationary")]
                 public TargetType targetType;
                 public float radiusScanTarget;
                 public bool isRequireTarget;
