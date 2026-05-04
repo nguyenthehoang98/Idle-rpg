@@ -4,6 +4,7 @@ using _KITSystem.SkillSystem.Config.Model;
 using _KITSystem.SkillSystem.Runtime;
 using NUnit.Framework;
 using UnityEngine;
+using CastProjectileAction = _KITSystem.SkillSystem.Config.Action.CastProjectileAction;
 
 namespace _KITSystem.SkillSystem.Unitest
 {

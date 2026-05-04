@@ -14,14 +14,14 @@ namespace _KITSystem.SkillSystem.Runtime
         private bool hasTriggered;
         private float elapsedTime;
 
-        protected BaseAction(Trigger.TriggerType type, int eventId, float timer, bool isMultiplierTrigger,
+        protected BaseAction(Trigger trigger,
             float lifeTime)
         {
             this.lifeTime = lifeTime;
-            this.type = type;
-            this.eventId = eventId;
-            this.timer = timer;
-            this.isMultiplierTrigger = isMultiplierTrigger;
+            this.type = trigger.type;
+            this.eventId = trigger.eventId;
+            this.timer = trigger.timer;
+            this.isMultiplierTrigger = trigger.isMultiplierTrigger;
             this.Reason = ActionCompleteReason.Undefined;
         }
 

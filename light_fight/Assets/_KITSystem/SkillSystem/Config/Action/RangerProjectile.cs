@@ -37,7 +37,7 @@ namespace _KITSystem.SkillSystem.Config.Action
             {
                 switch (shapeType)
                 {
-                    case BaseHitBox.ShapeType.Box:
+                    case BaseHitBox.ShapeType.Square:
                         return Color.green;
                     case BaseHitBox.ShapeType.Capsule:
                         return Color.red;

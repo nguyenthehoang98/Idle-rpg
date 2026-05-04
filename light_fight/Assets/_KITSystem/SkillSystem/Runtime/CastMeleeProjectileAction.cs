@@ -2,9 +2,9 @@
 
 namespace _KITSystem.SkillSystem.Runtime
 {
-    public sealed class CastMeleeProjectileAction : BaseAction
+    internal sealed class CastMeleeProjectileAction : CastProjectileAction
     {
-        public CastMeleeProjectileAction(Trigger.TriggerType type, int eventId, float timer, bool isMultiplierTrigger, float lifeTime) : base(type, eventId, timer, isMultiplierTrigger, lifeTime)
+        internal CastMeleeProjectileAction(BaseHitBoxAction[] hitBoxes, Trigger trigger, float lifeTime) : base(hitBoxes, trigger, lifeTime)
         {
         }
     }

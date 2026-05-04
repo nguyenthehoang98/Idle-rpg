@@ -93,7 +93,7 @@ namespace _KITSystem.SkillSystem.Config.Action
 
             public enum ShapeType
             {
-                Box,
+                Square,
                 Circle,
                 Capsule,
                 Cone
@@ -101,13 +101,13 @@ namespace _KITSystem.SkillSystem.Config.Action
         }
 
         [Serializable]
-        public class BoxShape : BaseHitBox
+        public class SquareShape : BaseHitBox
         {
-            [TitleGroup("", "Box")]
-            public Vector3 size = new Vector3(1, 1, 1);
-            [TitleGroup("", "Box")]
+            [TitleGroup("", "Square")]
+            public Vector2 size = new Vector2(1, 1);
+            [TitleGroup("", "Square")]
             public Vector3 pivotRelativePosition;
-            public override ShapeType Type => ShapeType.Box;
+            public override ShapeType Type => ShapeType.Square;
             [TitleGroup("", "Box")]
             public PivotType pivotType;
 
