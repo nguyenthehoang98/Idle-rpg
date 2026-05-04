@@ -21,7 +21,7 @@ namespace _KITSystem.Movement
             this.Reason = ModifierCompleteReason.Undefined;
         }
 
-        public void OnStart(Vector3 startPos)
+        public void Start(Vector3 startPos)
         {
 
         }
@@ -41,12 +41,12 @@ namespace _KITSystem.Movement
             }
         }
 
-        public void OnEnd()
+        public void Stop()
         {
 
         }
 
-        public void OnInterrupt()
+        public void Interrupt()
         {
 
         }

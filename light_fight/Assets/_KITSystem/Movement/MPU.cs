@@ -9,7 +9,7 @@ namespace _KITSystem.Movement
 {
     [Serializable]
     //~ Movement Processing Unit
-    public sealed partial class Mpu : ITickable
+    public sealed partial class MPU : ITickable
     {
         [SerializeField, Tooltip("Các modifier có kiểu khác danh sách này sẽ không được thêm vào hệ thống")]
         private ModifierName[] flagModifiers = new ModifierName[0];
@@ -48,11 +48,11 @@ namespace _KITSystem.Movement
         private List<int> pendingModifierRemoved = new List<int>();
         private List<ModifierCompleteReason> pendingReasonModifierRemoved = new List<ModifierCompleteReason>();
 
-        public Mpu()
+        public MPU()
         {
         }
 
-        public Mpu(params ModifierName[] additionalModifiers)
+        public MPU(params ModifierName[] additionalModifiers)
         {
             resolver = new AvoidanceResolver();
             foreach (var m in additionalModifiers)
@@ -341,7 +341,7 @@ namespace _KITSystem.Movement
             }
             
             // ~ start ->
-            modifier.OnStart(positions[unitId]);
+            modifier.Start(positions[unitId]);
             
             int modifierIndex = activeModifiers.Count;
             int modifierId = nextUniqueModifierId++;
@@ -386,8 +386,8 @@ namespace _KITSystem.Movement
                 return false;
             
             ModifierRuntime removed = activeModifiers[idx];
-            if(hasInterrupted) removed.modifier.OnInterrupt();
-            removed.modifier.OnEnd();
+            if(hasInterrupted) removed.modifier.Interrupt();
+            removed.modifier.Stop();
             
             // xóa modifier ở danh sách theo unitId
             if (unitModifiers.TryGetValue(removed.unitId, out List<int> list))
@@ -505,7 +505,7 @@ namespace _KITSystem.Movement
         }
     }
     
-    public partial class Mpu
+    public partial class MPU
     {
 #if UNITY_EDITOR
         [Serializable]

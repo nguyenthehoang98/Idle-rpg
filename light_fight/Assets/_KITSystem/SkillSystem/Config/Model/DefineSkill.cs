@@ -1,17 +1,19 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace _KITSystem.SkillSystem.Config.Skill
+namespace _KITSystem.SkillSystem.Config.Model
 {
     [System.Serializable]
     public class DefineSkill
     {
         [Tooltip("Thời gian sống của toàn bộ kĩ năng")]
         public float lifeTimeInSeconds = 1f;
-        [Tooltip("Thời gian khóa hành vi kĩ năng, trong thời gian này kĩ năng được niệm và không nhận input")]
+        
+        // Không dùng cho phiên bản này
+        /*[Tooltip("Thời gian khóa hành vi kĩ năng, trong thời gian này kĩ năng được niệm và không nhận input")]
         public float channelingExitTimeInSeconds = 0f;
         public string animationName;
-        public float scaleTime = 1f;
+        public float scaleTime = 1f;*/
 
         [TitleGroup("Find Target")]
         public TargetType targetType = TargetType.Nearest;

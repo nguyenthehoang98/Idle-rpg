@@ -8,10 +8,10 @@ namespace _KITSystem.Movement
         ModifierName Name { get; }
         
         // ~start/update/stop
-        void OnStart(Vector3 startPos);
+        void Start(Vector3 startPos);
         void Process(Vector3 position, float deltaTime);
-        void OnEnd(); //~end lifecycle
-        void OnInterrupt(); //~force end
+        void Stop(); //~end lifecycle
+        void Interrupt(); //~force end
         Vector3 EvaluateVelocity(float deltaTime);
         Vector3 EvaluatePosition(float deltaTime);
         

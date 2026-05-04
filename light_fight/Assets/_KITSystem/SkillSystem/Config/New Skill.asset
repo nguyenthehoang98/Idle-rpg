@@ -26,19 +26,19 @@ MonoBehaviour:
     rid: 7993921307472297984
   isRelativeEventsBySkill: 0
   events:
-  - triggerType: 0
-    trigger:
-      rid: 7993921300330971234
+  - trigger:
+      type: 1
+      eventId: 0
+      isMultiplierTrigger: 0
+      timer: 0
     actionType: 0
     action:
       rid: 7993921300330971235
   references:
     version: 2
     RefIds:
-    - rid: 7993921300330971234
-      type: {class: TimelineTrigger, ns: _KITSystem.SkillSystem.Trigger, asm: KITSystem.SkillSystem}
-      data:
-        timer: 0
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 7993921300330971235
       type: {class: CastProjectileAction, ns: _KITSystem.SkillSystem.Action, asm: KITSystem.SkillSystem}
       data:

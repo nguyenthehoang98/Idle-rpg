@@ -14,24 +14,20 @@ namespace _KITSystem.SkillSystem.Runtime
     {
         private int version;
         private int nextActionId = 1;
-        private Queue<Action> pendingCommands = new();
+        private Queue<Action> pendingCommands = new Queue<Action>();
 
-        // Map Id -> Skill Instance
-        private Dictionary<int, ISkill> mapSkills = new Dictionary<int, ISkill>();
-
-        // Map Id -> List Action của skill (index activeEvents)
+        // {Key:Value}={SkillId:List_Action_Index->'activeActions'}
         private Dictionary<int, List<int>> mapActionsIndex = new Dictionary<int, List<int>>();
-
-        // Danh sách các action đang được chạy
-        private List<ActionRuntime> activeActions = new List<ActionRuntime>();
-
-        // actionInstanceId -> index trong activeActions
+        // {Key:Value}={ActionId:Action_Index->'activeActions'}
         private Dictionary<int, int> mapActionIdToIndex = new Dictionary<int, int>();
-
-        // Danh sách chứa các action đã finish để chờ remove.
+        // reuse SkillID
+        private Stack<int> freeIds = new Stack<int>();
+        // all action on going
+        private List<ActionRuntime> activeActions = new List<ActionRuntime>();
+        
         private List<int> pendingActionRemoved = new List<int>();
         private List<ActionCompleteReason> pendingReasonActionRemoved = new List<ActionCompleteReason>();
-
+        
         public void Tick(float deltaTime)
         {
             while (pendingCommands.Count > 0)
@@ -87,6 +83,25 @@ namespace _KITSystem.SkillSystem.Runtime
             }
         }
 
+        public int GenerateSkillInstanceId()
+        {
+            int id;
+
+            // reuse id nếu có
+            if (freeIds.Count > 0)
+            {
+                id = freeIds.Pop();
+            }
+            else
+            {
+                id = mapActionIdToIndex.Count;
+            }
+
+            version++; 
+            
+            return id;
+        }
+        
         public void RequestAddAction(int skillId, IAction action, Action<int> callback = null)
         {
             pendingCommands.Enqueue(() =>
@@ -103,6 +118,23 @@ namespace _KITSystem.SkillSystem.Runtime
                 bool result = RemoveAction_Internal(actionId, true);
                 callback?.Invoke(result);
             });
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool HasAction(int actionId)
+        {
+            return mapActionIdToIndex.ContainsKey(actionId);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool HasSkill(int skillId, out List<int> list)
+        {
+            if (mapActionsIndex.TryGetValue(skillId, out list))
+            {
+                return list.Count > 0;
+            }
+
+            return false;
         }
 
         private void RequestRemoveActionEndLifeCycle(int actionId)
@@ -122,8 +154,8 @@ namespace _KITSystem.SkillSystem.Runtime
                 list = new List<int>();
                 mapActionsIndex[skillId] = list;
             }
-
-            action.OnStart();
+            
+            action.Start();
 
             int index = activeActions.Count;
 
@@ -152,10 +184,10 @@ namespace _KITSystem.SkillSystem.Runtime
 
             var removed = activeActions[idx];
 
-            if (interrupted) removed.action.OnInterrupt();
+            if (interrupted) removed.action.Interrupt();
 
-            removed.action.OnEnd();
-
+            removed.action.Stop();
+            
             // remove khỏi skill map
             if (mapActionsIndex.TryGetValue(removed.skillInstanceId, out var list))
             {
@@ -169,9 +201,12 @@ namespace _KITSystem.SkillSystem.Runtime
                 }
 
                 if (list.Count == 0)
+                {
                     mapActionsIndex.Remove(removed.skillInstanceId);
+                    freeIds.Push(removed.skillInstanceId);
+                }
             }
-
+            
             int lastIdx = activeActions.Count - 1;
 
             if (idx != lastIdx)
@@ -194,20 +229,15 @@ namespace _KITSystem.SkillSystem.Runtime
                 }
             }
 
+            
             activeActions.RemoveAt(lastIdx);
             mapActionIdToIndex.Remove(actionId);
 
             version++;
             return true;
         }
-        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool HasAction(int actionId)
-        {
-            return mapActionIdToIndex.ContainsKey(actionId);
-        }
     }
-
+    
     public partial class SPU
     {
 #if UNITY_EDITOR

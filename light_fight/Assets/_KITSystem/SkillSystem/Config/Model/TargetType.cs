@@ -1,4 +1,4 @@
-﻿namespace _KITSystem.SkillSystem.Config.Skill
+﻿namespace _KITSystem.SkillSystem.Config.Model
 {
     public enum TargetType
     {

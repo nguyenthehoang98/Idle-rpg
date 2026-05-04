@@ -117,9 +117,9 @@ namespace _KITSystem.Movement.Unitest
             Assert.IsTrue(unitId >= 0);
         }
 
-        Mpu CreateMPU()
+        MPU CreateMPU()
         {
-            var mpu = new Mpu(ModifierName.Testing);
+            var mpu = new MPU(ModifierName.Testing);
             mpu.Initialize();
             return mpu;
         }
@@ -151,7 +151,7 @@ namespace _KITSystem.Movement.Unitest
             return Vector3.zero;
         }
 
-        public void OnStart(Vector3 pos)
+        public void Start(Vector3 pos)
         {
         }
 
@@ -164,11 +164,11 @@ namespace _KITSystem.Movement.Unitest
         {
         }
 
-        public void OnEnd()
+        public void Stop()
         {
         }
 
-        public void OnInterrupt()
+        public void Interrupt()
         {
         }
     }

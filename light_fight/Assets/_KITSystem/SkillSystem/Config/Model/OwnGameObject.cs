@@ -2,7 +2,7 @@
 
 namespace _KITSystem.SkillSystem.Config.Model
 {
-    public class OwnGameObject
+    public sealed class OwnGameObject
     {
         private GameObject gameObject;
 

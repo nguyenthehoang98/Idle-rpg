@@ -1,6 +1,6 @@
 ﻿using System;
 using _KITSystem.SkillSystem.Config.Action;
-using _KITSystem.SkillSystem.Config.Trigger;
+using _KITSystem.SkillSystem.Config.Model;
 using _KITSystem.Utils;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -10,10 +10,8 @@ namespace _KITSystem.SkillSystem.Config
     [Serializable]
     public class BaseEvent
     {
-        [TabGroup("$triggerType"), OnValueChanged("TriggerTypeChanged"), HideLabel]
-        public BaseTrigger.TriggerType triggerType;
-        [TabGroup("$triggerType")]
-        [SerializeReference, HideReferenceObjectPicker, HideLabel] public BaseTrigger trigger;
+        [TabGroup("$TriggerType"), HideLabel]
+        public Trigger trigger = new Trigger();
         
         [TabGroup("$actionType"), OnValueChanged("ActionTypeChanged"), HideLabel]
         public BaseAction.ActionType actionType;
@@ -23,7 +21,6 @@ namespace _KITSystem.SkillSystem.Config
         public BaseEvent()
         {
             ActionTypeChanged();
-            TriggerTypeChanged();
         }
         
         private void ActionTypeChanged()
@@ -42,22 +39,7 @@ namespace _KITSystem.SkillSystem.Config
                 }
             }
         }
-        
-        private void TriggerTypeChanged()
-        {
-            if (trigger == null || trigger.Type != triggerType)
-            {
-                Type[] types = TypeUtils.GetAllTypeThatImplement<BaseTrigger>();
-                foreach (var type in types)
-                {
-                    BaseTrigger instance = Activator.CreateInstance(type) as BaseTrigger;
-                    if (instance != null && instance.Type == triggerType)
-                    {
-                        trigger = instance;
-                        return;
-                    }
-                }
-            }
-        }
+
+        private string TriggerType => trigger.type.ToString();
     }
 }

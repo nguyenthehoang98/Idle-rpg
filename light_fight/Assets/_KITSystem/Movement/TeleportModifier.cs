@@ -14,7 +14,7 @@ namespace _KITSystem.Movement
 
         public int Priority => PriorityModifierIndex.TELEPORT;
         public ModifierName Name => ModifierName.Teleport;
-        public void OnStart(Vector3 startPos)
+        public void Start(Vector3 startPos)
         {
         }
 
@@ -22,11 +22,11 @@ namespace _KITSystem.Movement
         {
         }
 
-        public void OnEnd()
+        public void Stop()
         {
         }
 
-        public void OnInterrupt()
+        public void Interrupt()
         {
         }
 
