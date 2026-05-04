@@ -1,9 +1,9 @@
 {
-    "name": "KITSystem.SkillSystem.Runtime",
+    "name": "KITSystem.SkillSystem.Unitest",
     "rootNamespace": "",
     "references": [
-        "GUID:4e70febc7c3ea804584817271583c98c",
-        "GUID:8c2a8055d972e094cb3fd19de779dbc6"
+        "GUID:520c142a54137ac4a8cdf3aeeffdc227",
+        "GUID:27619889b8ba8c24980f49ee34dbb44a"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

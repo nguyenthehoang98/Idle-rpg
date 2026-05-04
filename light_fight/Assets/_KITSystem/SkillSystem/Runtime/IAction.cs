@@ -2,7 +2,10 @@
 {
     public interface IAction
     {
+        void OnStart();
         void Tick(float deltaTime);
+        void OnInterrupt();
+        void OnEnd();
        
         bool IsFinished { get; }        
         ActionCompleteReason Reason { get; }

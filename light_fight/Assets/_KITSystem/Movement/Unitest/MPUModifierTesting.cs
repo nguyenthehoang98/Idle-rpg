@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using UnityEngine;
 
-namespace _KITSystem.Movement.Testing
+namespace _KITSystem.Movement.Unitest
 {
     public class MPUModifierTesting
     {
