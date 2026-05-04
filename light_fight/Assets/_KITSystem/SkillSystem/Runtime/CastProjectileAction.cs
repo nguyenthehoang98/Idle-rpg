@@ -1,14 +1,14 @@
-﻿using _KITSystem.SkillSystem.Config.Model;
+﻿using _KITSystem.SkillSystem.Config;
 
 namespace _KITSystem.SkillSystem.Runtime
 {
     internal abstract partial class CastProjectileAction : BaseAction
     {
-        private BaseHitBoxAction[] hitBoxes;
+        private BaseShapeAction[] shapes;
         
-        protected internal CastProjectileAction(BaseHitBoxAction[] hitBoxes, Trigger trigger, float lifeTime) : base(trigger, lifeTime)
+        protected internal CastProjectileAction(BaseShapeAction[] shapes, Trigger trigger, float lifeTime) : base(trigger, lifeTime)
         {
-            this.hitBoxes = hitBoxes;
+            this.shapes = shapes;
         }
     }
 }

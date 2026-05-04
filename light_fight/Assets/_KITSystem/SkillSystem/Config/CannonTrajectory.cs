@@ -1,7 +1,7 @@
 using System;
 using Sirenix.OdinInspector;
 
-namespace _KITSystem.SkillSystem.Config.Action
+namespace _KITSystem.SkillSystem.Config
 {
     public partial class CastProjectileAction
     {

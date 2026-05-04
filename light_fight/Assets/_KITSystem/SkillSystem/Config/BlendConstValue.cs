@@ -1,7 +1,7 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace _KITSystem.SkillSystem.Config.Model
+namespace _KITSystem.SkillSystem.Config
 {
     [System.Serializable]
     public class BlendConstValue

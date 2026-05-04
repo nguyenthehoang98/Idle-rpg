@@ -1,5 +1,5 @@
 using System;
-using _KITSystem.SkillSystem.Config.Model;
+using _KITSystem.SkillSystem.Config;
 using _KITSystem.Utils;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -16,8 +16,8 @@ namespace _KITSystem.SkillSystem.Config
         [FormerlySerializedAs("skill")]
         [Title("Core")]
         [OnValueChanged("SkillTypeChanged"), HideLabel]
-        public SkillType skillType;
-        [SerializeReference, HideReferenceObjectPicker, HideLabel] public DefineSkill defineSkill = new DefineSkill();
+        public DefaultSkill.SkillType skillType;
+        [FormerlySerializedAs("defineSkill")] [SerializeReference, HideReferenceObjectPicker, HideLabel] public DefaultSkill defaultSkill = new DefaultSkill();
         
         [Title("Events")]
         [Tooltip("True: Các events sẽ kết thúc ngay khi skill kết thúc." +
@@ -29,15 +29,15 @@ namespace _KITSystem.SkillSystem.Config
 
         private void SkillTypeChanged()
         {
-            if (defineSkill == null || defineSkill.Type != skillType)
+            if (defaultSkill == null || defaultSkill.Type != skillType)
             {
-                Type[] types = TypeUtils.GetAllTypeThatImplement<DefineSkill>();
+                Type[] types = TypeUtils.GetAllTypeThatImplement<DefaultSkill>();
                 foreach (var type in types)
                 {
-                    DefineSkill instance = Activator.CreateInstance(type) as DefineSkill;
+                    DefaultSkill instance = Activator.CreateInstance(type) as DefaultSkill;
                     if (instance != null && instance.Type == skillType)
                     {
-                        defineSkill = instance;
+                        defaultSkill = instance;
                         return;
                     }
                 }

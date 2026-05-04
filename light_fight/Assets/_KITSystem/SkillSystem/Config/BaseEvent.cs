@@ -1,6 +1,5 @@
 ﻿using System;
-using _KITSystem.SkillSystem.Config.Action;
-using _KITSystem.SkillSystem.Config.Model;
+using _KITSystem.SkillSystem.Config;
 using _KITSystem.Utils;
 using Sirenix.OdinInspector;
 using UnityEngine;

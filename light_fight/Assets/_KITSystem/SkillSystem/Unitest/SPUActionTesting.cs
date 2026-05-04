@@ -1,10 +1,8 @@
 using _KITSystem.SkillSystem.Config;
-using _KITSystem.SkillSystem.Config.Action;
-using _KITSystem.SkillSystem.Config.Model;
 using _KITSystem.SkillSystem.Runtime;
 using NUnit.Framework;
 using UnityEngine;
-using CastProjectileAction = _KITSystem.SkillSystem.Config.Action.CastProjectileAction;
+using CastProjectileAction = _KITSystem.SkillSystem.Config.CastProjectileAction;
 
 namespace _KITSystem.SkillSystem.Unitest
 {
@@ -15,7 +13,7 @@ namespace _KITSystem.SkillSystem.Unitest
         {
             var spu = CreateSPU();
             var skillConfig = ScriptableObject.CreateInstance<SkillConfig>();
-            skillConfig.defineSkill = new DefineSkill
+            skillConfig.defaultSkill = new DefaultSkill
             {
                 lifeTimeInSeconds = 2,
             };
@@ -29,7 +27,7 @@ namespace _KITSystem.SkillSystem.Unitest
                     },
                     action = new CastProjectileAction
                     {
-                        projectile = new CastProjectileAction.MeleeProjectile()
+                        projectile = new MeleeProjectile()
                     }
                 }
             };
@@ -45,7 +43,7 @@ namespace _KITSystem.SkillSystem.Unitest
         {
             var spu = CreateSPU();
             var skillConfig = ScriptableObject.CreateInstance<SkillConfig>();
-            skillConfig.defineSkill = new DefineSkill
+            skillConfig.defaultSkill = new DefaultSkill
             {
                 lifeTimeInSeconds = 2,
             };
@@ -59,7 +57,7 @@ namespace _KITSystem.SkillSystem.Unitest
                     },
                     action = new CastProjectileAction
                     {
-                        projectile = new CastProjectileAction.MeleeProjectile()
+                        projectile = new MeleeProjectile()
                     }
                 }
             };
@@ -75,7 +73,7 @@ namespace _KITSystem.SkillSystem.Unitest
         {
             var spu = CreateSPU();
             var skillConfig = ScriptableObject.CreateInstance<SkillConfig>();
-            skillConfig.defineSkill = new DefineSkill
+            skillConfig.defaultSkill = new DefaultSkill
             {
                 lifeTimeInSeconds = 2,
             };
@@ -89,7 +87,7 @@ namespace _KITSystem.SkillSystem.Unitest
                     },
                     action = new CastProjectileAction
                     {
-                        projectile = new CastProjectileAction.MeleeProjectile()
+                        projectile = new MeleeProjectile()
                     }
                 }
             };

@@ -1,4 +1,4 @@
-﻿using _KITSystem.SkillSystem.Config.Model;
+﻿using _KITSystem.SkillSystem.Config;
 using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Runtime
@@ -34,7 +34,7 @@ namespace _KITSystem.SkillSystem.Runtime
         {
             if (IsFinished) return;
 
-            if (type == Config.Model.Trigger.TriggerType.Event 
+            if (type == Config.Trigger.TriggerType.Event 
                 && eventId == id 
                 && (!hasTriggered || isMultiplierTrigger))
             {
@@ -49,7 +49,7 @@ namespace _KITSystem.SkillSystem.Runtime
 
             elapsedTime += deltaTime;
             
-            if (type == Config.Model.Trigger.TriggerType.Timeline 
+            if (type == Config.Trigger.TriggerType.Timeline 
                 && !hasTriggered 
                 && elapsedTime >= timer)
             {

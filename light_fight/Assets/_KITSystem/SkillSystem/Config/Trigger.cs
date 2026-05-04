@@ -1,7 +1,7 @@
 ﻿using System;
 using Sirenix.OdinInspector;
 
-namespace _KITSystem.SkillSystem.Config.Model
+namespace _KITSystem.SkillSystem.Config
 {
     [Serializable]
     public class Trigger

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace _KITSystem.SkillSystem.Config.Action
+namespace _KITSystem.SkillSystem.Config
 {
     [Serializable]
     public abstract class BaseAction

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace _KITSystem.SkillSystem.Config.Model
+namespace _KITSystem.SkillSystem.Config
 {
     public sealed class OwnGameObject
     {
