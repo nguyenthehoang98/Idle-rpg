@@ -81,11 +81,7 @@ namespace _KITSystem.Movement
         {
             if (!isInitialized) return;
 
-            // Apply pending commands
-            while (pendingCommands.Count > 0)
-            {
-                pendingCommands.Dequeue().Invoke();
-            }
+            FlushCommands();
 
             // Update modifier
             int totalModifierFinished = 0;
@@ -190,6 +186,16 @@ namespace _KITSystem.Movement
                 else if (reason == ModifierCompleteReason.Interrupt)
                     RequestRemoveModifier(pendingModifierRemoved[i]);
                 else Debug.LogError($"Not define reason '{reason}'");
+            }
+
+            FlushCommands();
+        }
+        
+        private void FlushCommands()
+        {
+            while (pendingCommands.Count > 0)
+            {
+                pendingCommands.Dequeue().Invoke();
             }
         }
 

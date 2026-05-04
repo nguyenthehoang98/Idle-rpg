@@ -30,10 +30,7 @@ namespace _KITSystem.SkillSystem.Runtime
         
         public void Tick(float deltaTime)
         {
-            while (pendingCommands.Count > 0)
-            {
-                pendingCommands.Dequeue().Invoke();
-            }
+            FlushCommands();
 
             int startVersion = version;
 
@@ -43,7 +40,7 @@ namespace _KITSystem.SkillSystem.Runtime
                 ActionRuntime a = activeActions[i];
                 a.action.Tick(deltaTime);
                 activeActions[i] = a;
-
+                
                 if (a.action.IsFinished)
                 {
                     if (pendingActionRemoved.Count > totalActionFinished)
@@ -80,6 +77,16 @@ namespace _KITSystem.SkillSystem.Runtime
                 else if (reason == ActionCompleteReason.Interrupt)
                     RequestRemoveAction(pendingActionRemoved[i]);
                 else Debug.LogError($"Not define reason '{reason}'");
+            }
+
+            FlushCommands();
+        }
+        
+        private void FlushCommands()
+        {
+            while (pendingCommands.Count > 0)
+            {
+                pendingCommands.Dequeue().Invoke();
             }
         }
 

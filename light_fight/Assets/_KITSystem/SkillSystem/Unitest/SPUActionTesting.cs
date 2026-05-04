@@ -64,10 +64,39 @@ namespace _KITSystem.SkillSystem.Unitest
             };
 
             int skillId = SkillFactory.Build(spu, skillConfig);
-            spu.Tick(2);
+            spu.Tick(2f);
             bool flag = spu.HasSkill(skillId, out var actions);
-            if (flag) Debug.Log($"Actions:" + string.Join(',', actions));
-            Assert.IsTrue(flag);
+            Assert.IsFalse(flag);
+        }
+        
+        [Test]
+        public void Add_TriggerTimer_None_EndLifeTime()
+        {
+            var spu = CreateSPU();
+            var skillConfig = ScriptableObject.CreateInstance<SkillConfig>();
+            skillConfig.defineSkill = new DefineSkill
+            {
+                lifeTimeInSeconds = 2,
+            };
+            skillConfig.events = new BaseEvent[1]
+            {
+                new BaseEvent
+                {
+                    trigger = new Trigger
+                    {
+                        timer = 0.5f, type = Trigger.TriggerType.Timeline
+                    },
+                    action = new CastProjectileAction
+                    {
+                        projectile = new CastProjectileAction.MeleeProjectile()
+                    }
+                }
+            };
+
+            int skillId = SkillFactory.Build(spu, skillConfig);
+            spu.Tick(1.99f);
+            bool flag = spu.HasSkill(skillId, out var actions);
+            Assert.True(flag);
         }
 
         SPU CreateSPU()
