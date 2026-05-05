@@ -11,5 +11,6 @@ namespace _KITSystem.SkillSystem.Config
         public float acceleration;
                 
         public override TrajectoryType Type => TrajectoryType.Bullet;
+        public override float Duration => 0;
     }
 }

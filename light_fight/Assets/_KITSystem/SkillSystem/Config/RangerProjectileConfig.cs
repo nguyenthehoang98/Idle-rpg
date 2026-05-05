@@ -11,19 +11,19 @@ namespace _KITSystem.SkillSystem.Config
         [TitleGroup("Ranger : GameObject")] [Indent]
         public GameObject prefab;
 
-        [Indent] public Vector3 offsetPivotPosition;
+        [Indent] public Vector3 offsetStartPosition;
 
         [TitleGroup("Ranger : HitBox")] [GUIColor("GetButtonColor1"), OnValueChanged("ShapeTypeChanged"), Indent]
         public BaseShapeConfig.ShapeType shapeType;
 
-        [FormerlySerializedAs("hitBox")] [SerializeReference, HideReferenceObjectPicker, HideLabel, Indent]
+        [SerializeReference, HideReferenceObjectPicker, HideLabel, Indent]
         public BaseShapeConfig shapeConfig;
 
         [TitleGroup("Ranger : Trajectory")]
         [GUIColor("GetButtonColor2"), OnValueChanged("TrajectoryTypeChanged"), Indent]
         public BaseTrajectoryConfig.TrajectoryType trajectoryType;
 
-        [FormerlySerializedAs("trajectory")] [SerializeReference, HideReferenceObjectPicker, HideLabel, Indent]
+        [SerializeReference, HideReferenceObjectPicker, HideLabel, Indent]
         public BaseTrajectoryConfig trajectoryConfig;
 
         public RangerProjectileConfig()
@@ -103,5 +103,16 @@ namespace _KITSystem.SkillSystem.Config
         }
 
         public override ProjectileType Type => ProjectileType.Ranger;
+
+        public override float Duration
+        {
+            get
+            {
+                float max = 0;
+                if (shapeConfig != null) max = Mathf.Max(max, shapeConfig.triggerTimeInSeconds);
+                if (trajectoryConfig != null) max = Mathf.Max(max, trajectoryConfig.Duration);
+                return max;
+            }
+        }
     }
 }

@@ -11,6 +11,8 @@ namespace _KITSystem.SkillSystem.Config
         public BlendConstValue height = new BlendConstValue(BlendConstValue.BlendConstType.Blend);
         [HideLabel, TitleGroup("Parabolic: Distance")]
         public BlendConstValue distance = new BlendConstValue(BlendConstValue.BlendConstType.Blend);
+      
         public override TrajectoryType Type => TrajectoryType.Parabolic;
+        public override float Duration => duration;
     }
 }

@@ -9,6 +9,8 @@ namespace _KITSystem.SkillSystem.Config
         public float duration = 1;
         [HideLabel, TitleGroup("Blend")]
         public BlendConstValue value = new BlendConstValue();
+        
         public override TrajectoryType Type => TrajectoryType.Blend;
+        public override float Duration => duration;
     }
 }

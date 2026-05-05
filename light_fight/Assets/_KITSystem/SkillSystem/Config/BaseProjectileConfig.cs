@@ -26,6 +26,8 @@ namespace _KITSystem.SkillSystem.Config
         public float collisionResetIntervalInSeconds = 1 / 30f;
 
         public abstract ProjectileType Type { get; }
+        
+        public abstract float Duration { get; }
 
         public enum ProjectileType
         {

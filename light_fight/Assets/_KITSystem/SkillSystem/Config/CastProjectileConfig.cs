@@ -12,10 +12,12 @@ namespace _KITSystem.SkillSystem.Config
         [GUIColor("GetButtonColor"), OnValueChanged("ProjectileTypeChanged"), HideLabel, BoxGroup]
         public BaseProjectileConfig.ProjectileType projectileType;
 
-        [FormerlySerializedAs("projectile")] [SerializeReference, HideReferenceObjectPicker, HideLabel]
+        [SerializeReference, HideReferenceObjectPicker, HideLabel]
         public BaseProjectileConfig projectileConfig;
 
         public override ActionType Type => ActionType.CastProjectile;
+        
+        public override float Duration => projectileConfig != null ? projectileConfig.Duration : 0;
 
         public CastProjectileConfig()
         {

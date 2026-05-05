@@ -6,5 +6,6 @@ namespace _KITSystem.SkillSystem.Config
     public class StationaryTrajectoryConfig : BaseTrajectoryConfig
     {
         public override TrajectoryType Type => TrajectoryType.Stationary;
+        public override float Duration => 0;
     }
 }

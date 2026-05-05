@@ -24,7 +24,6 @@ MonoBehaviour:
   skillType: 0
   defaultSkillConfig:
     rid: 7993921337256312910
-  isRelativeEventsBySkill: 0
   events:
   - triggerConfig:
       type: 0
@@ -48,8 +47,8 @@ MonoBehaviour:
       data:
         projectileType: 1
         projectileConfig:
-          rid: 7993921337256312928
-    - rid: 7993921337256312928
+          rid: 7993921337256313128
+    - rid: 7993921337256313128
       type: {class: RangerProjectileConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
         damageScale: 1
@@ -59,25 +58,25 @@ MonoBehaviour:
         maximumCollision: 1
         collisionResetIntervalInSeconds: 0.033333335
         prefab: {fileID: 0}
-        offsetPivotPosition: {x: 0, y: 0, z: 0}
+        offsetStartPosition: {x: 0, y: 0, z: 0}
         shapeType: 0
         shapeConfig:
-          rid: 7993921337256312929
+          rid: 7993921337256313129
         trajectoryType: 2
         trajectoryConfig:
-          rid: 7993921337256313119
-    - rid: 7993921337256312929
+          rid: 7993921337256313132
+    - rid: 7993921337256313129
       type: {class: SquareShapeConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
         triggerTimeInSeconds: 0
         offsetRelativePosition: {x: 0, y: 0}
         size: {x: 1, y: 1}
         pivotType: 0
-    - rid: 7993921337256313119
+    - rid: 7993921337256313132
       type: {class: BoomerangTrajectoryConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
         isRequireTargetToCast: 0
-        castDuration: 0
+        castDuration: 1
         castPhase:
           type: 2
           value: 0
@@ -88,8 +87,8 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
           fromValue: 0
-          toValue: 5
-        returnDuration: 0
+          toValue: 1
+        returnDuration: 1
         returnPhase:
           type: 2
           value: 0
@@ -100,4 +99,4 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
           fromValue: 0
-          toValue: 2
+          toValue: 1

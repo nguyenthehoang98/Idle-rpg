@@ -1,5 +1,6 @@
 using System;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Config
 {
@@ -13,6 +14,8 @@ namespace _KITSystem.SkillSystem.Config
         [TitleGroup("Boomerang: Return phase")]
         public float returnDuration;
         [HideLabel] public BlendConstValue returnPhase = new BlendConstValue(BlendConstValue.BlendConstType.Blend);
+
         public override TrajectoryType Type => TrajectoryType.Boomerang;
+        public override float Duration => castDuration + returnDuration;
     }
 }

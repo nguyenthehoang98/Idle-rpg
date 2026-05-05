@@ -35,7 +35,7 @@ namespace _KITSystem.SkillSystem.Runtime
                             var ranger = cp.projectileConfig as RangerProjectileConfig;
                             if (ranger.trajectoryConfig.isRequireTargetToCast && targetObjectId == -1)
                                 continue;
-                            var trajectory = GetTrajectory(ranger.trajectoryConfig, start, goal);
+                            var trajectory = GetTrajectory(ranger.trajectoryConfig, start + ranger.offsetStartPosition, goal);
                             shapes = new BaseShapeAction[1] { GenerateShape(ranger.shapeConfig) };
                             spu.RequestAddAction(skillId,
                                 new CastRangeProjectileAction(trajectory, shapes, e.triggerConfig, lifeTimeInSeconds)
