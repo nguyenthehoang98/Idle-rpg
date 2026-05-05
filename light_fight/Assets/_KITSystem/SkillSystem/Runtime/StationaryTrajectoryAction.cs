@@ -8,7 +8,7 @@ namespace _KITSystem.SkillSystem.Runtime
         {
         }
 
-        protected override Vector3 OnEvaluatePosition(Vector3 start, Vector3 goal, Vector3 direction, float deltaTime)
+        protected override Vector3 OnEvaluatePosition(float deltaTime)
         {
             return goal;
         }

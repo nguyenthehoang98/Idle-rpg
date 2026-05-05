@@ -4,10 +4,10 @@ namespace _KITSystem.SkillSystem.Runtime
 {
     internal abstract class BaseTrajectoryAction
     {
-        private Vector3 goal;
-        private Vector3 start;
-        private Vector3 direction;
-
+        protected Vector3 goal;
+        protected Vector3 start;
+        protected Vector3 direction;
+        
         protected BaseTrajectoryAction(Vector3 start, Vector3 goal)
         {
             this.goal = goal;
@@ -17,9 +17,9 @@ namespace _KITSystem.SkillSystem.Runtime
 
         public Vector3 EvaluatePosition(float deltaTime)
         {
-            return OnEvaluatePosition(start, goal, direction, deltaTime);
+            return OnEvaluatePosition(deltaTime);
         }
         
-        protected abstract Vector3 OnEvaluatePosition(Vector3 start, Vector3 goal, Vector3 direction, float deltaTime);
+        protected abstract Vector3 OnEvaluatePosition(float deltaTime);
     }
 }

@@ -9,7 +9,7 @@ namespace _KITSystem.SkillSystem.Runtime
         public static int Build(SPU spu, SkillConfig config)
         {
             int skillId = spu.GenerateSkillInstanceId();
-            int targetObjectId = -1;
+            int targetObjectId = 1;
             Vector3 start = Vector3.zero;
             Vector3 goal = new Vector3(2, 0, 0);
             float lifeTimeInSeconds = config.defaultSkillConfig.lifeTimeInSeconds;
@@ -30,14 +30,18 @@ namespace _KITSystem.SkillSystem.Runtime
                                 new CastMeleeProjectileAction(start, goal, shapes, e.triggerConfig, lifeTimeInSeconds)
                             );
                         }
-                        else if(cp.projectileType == BaseProjectileConfig.ProjectileType.Ranger)
+                        else if (cp.projectileType == BaseProjectileConfig.ProjectileType.Ranger)
                         {
                             var ranger = cp.projectileConfig as RangerProjectileConfig;
+                            if (ranger.trajectoryConfig.isRequireTargetToCast && targetObjectId == -1)
+                                continue;
+                            var trajectory = GetTrajectory(ranger.trajectoryConfig, start, goal);
                             shapes = new BaseShapeAction[1] { GenerateShape(ranger.shapeConfig) };
                             spu.RequestAddAction(skillId,
-                                new CastRangeProjectileAction(shapes, e.triggerConfig, lifeTimeInSeconds)
+                                new CastRangeProjectileAction(trajectory, shapes, e.triggerConfig, lifeTimeInSeconds)
                             );
                         }
+
                         break;
                 }
             }

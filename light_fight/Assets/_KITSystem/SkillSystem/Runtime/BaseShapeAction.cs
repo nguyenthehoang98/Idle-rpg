@@ -48,7 +48,7 @@ namespace _KITSystem.SkillSystem.Runtime
 
         protected abstract bool OnHit(Vector3 position, out List<int> hitsId);
 
-        public virtual void Gizmos(Vector3 position, Vector3 goal, Color color, float duration)
+        public virtual void Gizmos(Vector3 position, Color color, float duration)
         {
         }
     }

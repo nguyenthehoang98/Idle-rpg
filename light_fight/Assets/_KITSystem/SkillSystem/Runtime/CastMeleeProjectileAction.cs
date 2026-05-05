@@ -30,7 +30,7 @@ namespace _KITSystem.SkillSystem.Runtime
                 {
                     bool hit = shape.Hit(start, out var list);
 #if UNITY_EDITOR
-                    shape.Gizmos(start, goal, hit ? Color.red : Color.green, deltaTime);
+                    shape.Gizmos(start, hit ? Color.red : Color.green, deltaTime);
 #endif
                     if (hit)
                     {

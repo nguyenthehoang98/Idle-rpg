@@ -46,11 +46,11 @@ MonoBehaviour:
     - rid: 7993921337256312911
       type: {class: CastProjectileActionConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
-        projectileType: 0
+        projectileType: 1
         projectileConfig:
-          rid: 7993921337256312912
-    - rid: 7993921337256312912
-      type: {class: MeleeProjectileConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
+          rid: 7993921337256312913
+    - rid: 7993921337256312913
+      type: {class: RangerProjectileConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
         damageScale: 1
         isHpPercent: 0
@@ -58,4 +58,24 @@ MonoBehaviour:
         damageTickerIntervalInSeconds: 1
         maximumCollision: 1
         collisionResetIntervalInSeconds: 0.033333335
-        hitBoxes: []
+        prefab: {fileID: 0}
+        offsetPivotPosition: {x: 0, y: 0, z: 0}
+        shapeType: 0
+        shapeConfig:
+          rid: 7993921337256312914
+        trajectoryType: 1
+        trajectoryConfig:
+          rid: 7993921337256312916
+    - rid: 7993921337256312914
+      type: {class: SquareShapeConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
+      data:
+        triggerTimeInSeconds: 0
+        offsetRelativePosition: {x: 0, y: 0}
+        size: {x: 1, y: 1}
+        pivotType: 0
+    - rid: 7993921337256312916
+      type: {class: BulletTrajectoryConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
+      data:
+        isRequireTargetToCast: 1
+        initialSpeed: 5
+        acceleration: 0

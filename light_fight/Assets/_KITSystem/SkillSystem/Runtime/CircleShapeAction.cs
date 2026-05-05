@@ -21,7 +21,7 @@ namespace _KITSystem.SkillSystem.Runtime
             return false;
         }
 
-        public override void Gizmos(Vector3 position, Vector3 goal, Color color, float duration)
+        public override void Gizmos(Vector3 position, Color color, float duration)
         {
             Vector3 center = GetPosition(position);
             int segments = 12;
