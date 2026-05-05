@@ -4,8 +4,6 @@
     {
         PreUpdate,
         Update,
-        LateUpdate,
-        FixedUpdate,
         PostUpdate
     }
 }

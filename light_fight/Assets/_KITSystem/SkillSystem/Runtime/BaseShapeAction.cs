@@ -6,40 +6,50 @@ namespace _KITSystem.SkillSystem.Runtime
 {
     internal abstract class BaseShapeAction
     {
-        private readonly BaseShape square;
         private float triggerTimeInSeconds;
         private float elapsed;
-        private bool canTrigger;
-            
-        protected BaseShapeAction(BaseShape square)
+        private Vector3 offsetRelativePosition;
+
+        public bool CanTrigger { get; private set; }
+
+        protected BaseShapeAction(BaseShape shape)
         {
-            this.square = square;
-            triggerTimeInSeconds = square.triggerTimeInSeconds;
+            triggerTimeInSeconds = shape.triggerTimeInSeconds;
+            offsetRelativePosition = shape.offsetRelativePosition;
+        }
+
+        protected Vector3 GetPosition(Vector3 position)
+        {
+            return position + offsetRelativePosition;
         }
 
         public void Tick(float deltaTime)
         {
-            if (canTrigger) return;
+            if (CanTrigger) return;
 
             elapsed += deltaTime;
 
             if (elapsed >= triggerTimeInSeconds)
             {
-                canTrigger = true;
+                CanTrigger = true;
             }
         }
 
-        public bool Hit(Vector3 position, out List<OwnGameObject> targets)
+        public bool Hit(Vector3 position, out List<int> hitsId)
         {
-            if (canTrigger)
+            if (CanTrigger)
             {
-                return OnHit(position, out targets);
+                return OnHit(position, out hitsId);
             }
 
-            targets = null;
+            hitsId = null;
             return false;
         }
 
-        protected abstract bool OnHit(Vector3 position, out List<OwnGameObject> targets);
+        protected abstract bool OnHit(Vector3 position, out List<int> hitsId);
+
+        public virtual void Gizmos(Vector3 position, Vector3 goal, Color color, float duration)
+        {
+        }
     }
 }

@@ -7,10 +7,9 @@ namespace _KITSystem.SkillSystem.Config
     [Serializable]
     public class SquareShape : BaseShape
     {
-        [TitleGroup("", "Square")] public Vector2 size = new Vector2(1, 1);
-        [TitleGroup("", "Square")] public Vector3 pivotRelativePosition;
+        [Indent] public Vector2 size = new Vector2(1, 1);
         public override ShapeType Type => ShapeType.Square;
-        [TitleGroup("", "Box")] public PivotType pivotType;
+        [Indent] public PivotType pivotType;
 
         public enum PivotType
         {

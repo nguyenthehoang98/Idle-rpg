@@ -5,13 +5,18 @@ namespace _KITSystem.Schedule
 {
     public class TickSystemOwner : MonoBehaviour
     {
+        [SerializeField] private int targetFPS = 30;
         [SerializeField] private DataTemp[] list;
         private TickSystem tickSystem;
-
+        private float tickInterval;
+        private float accumulator;
+        
         private void Awake()
         {
             Application.runInBackground = true;
-            //Application.targetFrameRate = 60;
+            Application.targetFrameRate = 60;
+            tickInterval = 1f / targetFPS;
+            
             Dictionary<TickGroup, List<ITickable>> ticks = new Dictionary<TickGroup, List<ITickable>>();
             foreach (var dataTemp in list)
             {
@@ -30,20 +35,18 @@ namespace _KITSystem.Schedule
 
         void Update()
         {
-            float deltaTime = Time.deltaTime;
-            tickSystem.Run(TickGroup.PreUpdate, deltaTime);
-            tickSystem.Run(TickGroup.Update, deltaTime);
-            tickSystem.Run(TickGroup.PostUpdate, deltaTime);
-        }
+            accumulator += Time.deltaTime;
 
-        void LateUpdate()
-        {
-            tickSystem.Run(TickGroup.LateUpdate, Time.deltaTime);
-        }
+            while (accumulator >= tickInterval)
+            {
+                float dt = tickInterval;
 
-        void FixedUpdate()
-        {
-            tickSystem.Run(TickGroup.FixedUpdate, Time.fixedDeltaTime);
+                tickSystem.Run(TickGroup.PreUpdate, dt);
+                tickSystem.Run(TickGroup.Update, dt);
+                tickSystem.Run(TickGroup.PostUpdate, dt);
+
+                accumulator -= tickInterval;
+            }
         }
 
         public bool TryGetTickable<T>(out T tickable) where T : ITickable

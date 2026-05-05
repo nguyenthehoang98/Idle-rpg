@@ -20,7 +20,7 @@ namespace _KITSystem.SkillSystem.Config
         [Tooltip("Giới hạn va chạm của viên đạn, nếu đủ số lần thì đạn sẽ tự hủy")]
         public int maximumCollision = 1;
 
-        [Tooltip(
+        [Indent, Tooltip(
             "Ngưỡng thời gian viên đạn có thể va chạm với 1 Object lần nữa. \n(Ví dụ bãi độc gây sát thương mỗi 0.3s nếu đứng trên nó)")]
         public float collisionResetIntervalInSeconds = 1 / 30f;
 

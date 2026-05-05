@@ -7,25 +7,39 @@ namespace _KITSystem.SkillSystem.Runtime
     internal class SquareShapeAction : BaseShapeAction
     {
         private Vector2 size;
-        private Vector2 pivotRelativePosition;
         SquareShape.PivotType pivotType;
             
-        public SquareShapeAction(SquareShape square) : base(square)
+        public SquareShapeAction(SquareShape shape) : base(shape)
         {
-            size = square.size;
-            pivotType = square.pivotType;
-            pivotRelativePosition = square.pivotRelativePosition;
+            size = shape.size;
+            pivotType = shape.pivotType;
         }
 
-        protected override bool OnHit(Vector3 position, out List<OwnGameObject> targets)
+        protected override bool OnHit(Vector3 position, out List<int> hitsId)
         {
-            Vector2 realPosition = (Vector2)position + pivotRelativePosition + GetPivotToCenterOffset(size, pivotType);
+            Vector3 center = GetPosition(position) - GetPivotToCenterOffset(size, pivotType);
             // todo: scan objects
-            targets = null;
+            hitsId = null;
             return false;
         }
 
-        static Vector2 GetPivotToCenterOffset(Vector2 size, SquareShape.PivotType pivot)
+        public override void Gizmos(Vector3 position, Vector3 goal, Color color, float duration)
+        {
+            Vector3 center = GetPosition(position) - GetPivotToCenterOffset(size, pivotType);
+            Vector2 half = size / 2f;
+            
+            Vector3 topLeft     = center + new Vector3(-half.x,  half.y, 0);
+            Vector3 topRight    = center + new Vector3( half.x,  half.y, 0);
+            Vector3 bottomRight = center + new Vector3( half.x, -half.y, 0);
+            Vector3 bottomLeft  = center + new Vector3(-half.x, -half.y, 0);
+
+            Debug.DrawLine(topLeft, topRight, color, duration);
+            Debug.DrawLine(topRight, bottomRight, color, duration);
+            Debug.DrawLine(bottomRight, bottomLeft, color, duration);
+            Debug.DrawLine(bottomLeft, topLeft, color, duration);
+        }
+
+        static Vector3 GetPivotToCenterOffset(Vector2 size, SquareShape.PivotType pivot)
         {
             Vector2 half = size * 0.5f;
 

@@ -1,11 +1,15 @@
 ﻿using System;
+using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Config
 {
     [Serializable]
     public abstract class BaseShape
     {
-        public float triggerTimeInSeconds;
+        [TitleGroup("$Type")] 
+        [Indent] public float triggerTimeInSeconds;
+        [Indent] public Vector2 offsetRelativePosition;
         public abstract ShapeType Type { get; }
 
         public enum ShapeType

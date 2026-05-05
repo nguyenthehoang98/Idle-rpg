@@ -274,6 +274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 148477886}
+  skillConfig: {fileID: 11400000, guid: 7ec91da5354be0c4ebf5da0d63a67f04, type: 2}
 --- !u!1 &177143862
 GameObject:
   m_ObjectHideFlags: 0
