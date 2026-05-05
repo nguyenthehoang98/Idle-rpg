@@ -6,10 +6,10 @@ using UnityEngine;
 namespace _KITSystem.SkillSystem.Config
 {
     [Serializable]
-    public class MeleeProjectile : BaseProjectile
+    public class MeleeProjectileConfig : BaseProjectileConfig
     {
         [TitleGroup("Melee")]
-        [SerializeReference, HideReferenceObjectPicker] public List<BaseShape> hitBoxes = new List<BaseShape>();
+        [SerializeReference, HideReferenceObjectPicker] public List<BaseShapeConfig> hitBoxes = new List<BaseShapeConfig>();
         public override ProjectileType Type => ProjectileType.Melee;
     }
 }

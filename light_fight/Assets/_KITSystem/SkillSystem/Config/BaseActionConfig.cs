@@ -3,7 +3,7 @@
 namespace _KITSystem.SkillSystem.Config
 {
     [Serializable]
-    public abstract class BaseAction
+    public abstract class BaseActionConfig
     {
         public abstract ActionType Type { get; }
 

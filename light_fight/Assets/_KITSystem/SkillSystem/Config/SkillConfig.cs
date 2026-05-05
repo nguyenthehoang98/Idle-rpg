@@ -1,5 +1,4 @@
 using System;
-using _KITSystem.SkillSystem.Config;
 using _KITSystem.Utils;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -16,8 +15,8 @@ namespace _KITSystem.SkillSystem.Config
         [FormerlySerializedAs("skill")]
         [Title("Core")]
         [OnValueChanged("SkillTypeChanged"), HideLabel]
-        public DefaultSkill.SkillType skillType;
-        [FormerlySerializedAs("defineSkill")] [SerializeReference, HideReferenceObjectPicker, HideLabel] public DefaultSkill defaultSkill = new DefaultSkill();
+        public DefaultSkillConfig.SkillType skillType;
+        [FormerlySerializedAs("defaultSkill")] [FormerlySerializedAs("defineSkill")] [SerializeReference, HideReferenceObjectPicker, HideLabel] public DefaultSkillConfig defaultSkillConfig = new DefaultSkillConfig();
         
         [Title("Events")]
         [Tooltip("True: Các events sẽ kết thúc ngay khi skill kết thúc." +
@@ -25,19 +24,19 @@ namespace _KITSystem.SkillSystem.Config
         public bool isRelativeEventsBySkill = false;
         [Tooltip("Các events được định nghĩa từ skill")]
         [Searchable]
-        public BaseEvent[] events;
+        public BaseEventConfig[] events;
 
         private void SkillTypeChanged()
         {
-            if (defaultSkill == null || defaultSkill.Type != skillType)
+            if (defaultSkillConfig == null || defaultSkillConfig.Type != skillType)
             {
-                Type[] types = TypeUtils.GetAllTypeThatImplement<DefaultSkill>();
+                Type[] types = TypeUtils.GetAllTypeThatImplement<DefaultSkillConfig>();
                 foreach (var type in types)
                 {
-                    DefaultSkill instance = Activator.CreateInstance(type) as DefaultSkill;
+                    DefaultSkillConfig instance = Activator.CreateInstance(type) as DefaultSkillConfig;
                     if (instance != null && instance.Type == skillType)
                     {
-                        defaultSkill = instance;
+                        defaultSkillConfig = instance;
                         return;
                     }
                 }

@@ -7,12 +7,12 @@ namespace _KITSystem.SkillSystem.Runtime
     internal class SquareShapeAction : BaseShapeAction
     {
         private Vector2 size;
-        SquareShape.PivotType pivotType;
+        SquareShapeConfig.PivotType pivotType;
             
-        public SquareShapeAction(SquareShape shape) : base(shape)
+        public SquareShapeAction(SquareShapeConfig shapeConfig) : base(shapeConfig)
         {
-            size = shape.size;
-            pivotType = shape.pivotType;
+            size = shapeConfig.size;
+            pivotType = shapeConfig.pivotType;
         }
 
         protected override bool OnHit(Vector3 position, out List<int> hitsId)
@@ -39,17 +39,17 @@ namespace _KITSystem.SkillSystem.Runtime
             Debug.DrawLine(bottomLeft, topLeft, color, duration);
         }
 
-        static Vector3 GetPivotToCenterOffset(Vector2 size, SquareShape.PivotType pivot)
+        static Vector3 GetPivotToCenterOffset(Vector2 size, SquareShapeConfig.PivotType pivot)
         {
             Vector2 half = size * 0.5f;
 
             switch (pivot)
             {
-                case SquareShape.PivotType.Center: return Vector2.zero;
-                case SquareShape.PivotType.BottomLeft: return new Vector2(half.x, half.y);
-                case SquareShape.PivotType.BottomRight: return new Vector2(-half.x, half.y);
-                case SquareShape.PivotType.TopLeft: return new Vector2(half.x, -half.y);
-                case SquareShape.PivotType.TopRight: return new Vector2(-half.x, -half.y);
+                case SquareShapeConfig.PivotType.Center: return Vector2.zero;
+                case SquareShapeConfig.PivotType.BottomLeft: return new Vector2(half.x, half.y);
+                case SquareShapeConfig.PivotType.BottomRight: return new Vector2(-half.x, half.y);
+                case SquareShapeConfig.PivotType.TopLeft: return new Vector2(half.x, -half.y);
+                case SquareShapeConfig.PivotType.TopRight: return new Vector2(-half.x, -half.y);
             }
 
             return Vector2.zero;

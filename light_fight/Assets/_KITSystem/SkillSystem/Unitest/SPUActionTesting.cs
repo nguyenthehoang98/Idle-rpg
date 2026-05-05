@@ -2,7 +2,6 @@ using _KITSystem.SkillSystem.Config;
 using _KITSystem.SkillSystem.Runtime;
 using NUnit.Framework;
 using UnityEngine;
-using CastProjectileAction = _KITSystem.SkillSystem.Config.CastProjectileAction;
 
 namespace _KITSystem.SkillSystem.Unitest
 {
@@ -13,21 +12,21 @@ namespace _KITSystem.SkillSystem.Unitest
         {
             var spu = CreateSPU();
             var skillConfig = ScriptableObject.CreateInstance<SkillConfig>();
-            skillConfig.defaultSkill = new DefaultSkill
+            skillConfig.defaultSkillConfig = new DefaultSkillConfig
             {
                 lifeTimeInSeconds = 2,
             };
-            skillConfig.events = new BaseEvent[1]
+            skillConfig.events = new BaseEventConfig[1]
             {
-                new BaseEvent
+                new BaseEventConfig
                 {
-                    trigger = new Trigger
+                    triggerConfig = new TriggerConfig
                     {
-                        timer = 0.5f, type = Trigger.TriggerType.Timeline
+                        timer = 0.5f, type = TriggerConfig.TriggerType.Timeline
                     },
-                    action = new CastProjectileAction
+                    actionConfig = new CastProjectileActionConfig
                     {
-                        projectile = new MeleeProjectile()
+                        projectileConfig = new MeleeProjectileConfig()
                     }
                 }
             };
@@ -43,21 +42,21 @@ namespace _KITSystem.SkillSystem.Unitest
         {
             var spu = CreateSPU();
             var skillConfig = ScriptableObject.CreateInstance<SkillConfig>();
-            skillConfig.defaultSkill = new DefaultSkill
+            skillConfig.defaultSkillConfig = new DefaultSkillConfig
             {
                 lifeTimeInSeconds = 2,
             };
-            skillConfig.events = new BaseEvent[1]
+            skillConfig.events = new BaseEventConfig[1]
             {
-                new BaseEvent
+                new BaseEventConfig
                 {
-                    trigger = new Trigger
+                    triggerConfig = new TriggerConfig
                     {
-                        timer = 0.5f, type = Trigger.TriggerType.Timeline
+                        timer = 0.5f, type = TriggerConfig.TriggerType.Timeline
                     },
-                    action = new CastProjectileAction
+                    actionConfig = new CastProjectileActionConfig
                     {
-                        projectile = new MeleeProjectile()
+                        projectileConfig = new MeleeProjectileConfig()
                     }
                 }
             };
@@ -73,21 +72,21 @@ namespace _KITSystem.SkillSystem.Unitest
         {
             var spu = CreateSPU();
             var skillConfig = ScriptableObject.CreateInstance<SkillConfig>();
-            skillConfig.defaultSkill = new DefaultSkill
+            skillConfig.defaultSkillConfig = new DefaultSkillConfig
             {
                 lifeTimeInSeconds = 2,
             };
-            skillConfig.events = new BaseEvent[1]
+            skillConfig.events = new BaseEventConfig[1]
             {
-                new BaseEvent
+                new BaseEventConfig
                 {
-                    trigger = new Trigger
+                    triggerConfig = new TriggerConfig
                     {
-                        timer = 0.5f, type = Trigger.TriggerType.Timeline
+                        timer = 0.5f, type = TriggerConfig.TriggerType.Timeline
                     },
-                    action = new CastProjectileAction
+                    actionConfig = new CastProjectileActionConfig
                     {
-                        projectile = new MeleeProjectile()
+                        projectileConfig = new MeleeProjectileConfig()
                     }
                 }
             };

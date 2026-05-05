@@ -2,21 +2,22 @@
 using _KITSystem.Utils;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _KITSystem.SkillSystem.Config
 {
     [Serializable]
-    public partial class CastProjectileAction : BaseAction
+    public partial class CastProjectileActionConfig : BaseActionConfig
     {
         [GUIColor("GetButtonColor"), OnValueChanged("ProjectileTypeChanged"), HideLabel, BoxGroup]
-        public BaseProjectile.ProjectileType projectileType;
+        public BaseProjectileConfig.ProjectileType projectileType;
 
-        [SerializeReference, HideReferenceObjectPicker, HideLabel]
-        public BaseProjectile projectile;
+        [FormerlySerializedAs("projectile")] [SerializeReference, HideReferenceObjectPicker, HideLabel]
+        public BaseProjectileConfig projectileConfig;
 
         public override ActionType Type => ActionType.CastProjectile;
 
-        public CastProjectileAction()
+        public CastProjectileActionConfig()
         {
             ProjectileTypeChanged();
         }
@@ -25,9 +26,9 @@ namespace _KITSystem.SkillSystem.Config
         {
             switch (projectileType)
             {
-                case BaseProjectile.ProjectileType.Melee:
+                case BaseProjectileConfig.ProjectileType.Melee:
                     return new Color(0, 1, 1);
-                case BaseProjectile.ProjectileType.Ranger:
+                case BaseProjectileConfig.ProjectileType.Ranger:
                     return new Color(1, 1, 0);
                 default:
                     return Color.white;
@@ -36,15 +37,15 @@ namespace _KITSystem.SkillSystem.Config
 
         private void ProjectileTypeChanged()
         {
-            if (projectile == null || projectile.Type != projectileType)
+            if (projectileConfig == null || projectileConfig.Type != projectileType)
             {
-                Type[] types = TypeUtils.GetAllTypeThatImplement<BaseProjectile>();
+                Type[] types = TypeUtils.GetAllTypeThatImplement<BaseProjectileConfig>();
                 foreach (var type in types)
                 {
-                    BaseProjectile instance = Activator.CreateInstance(type) as BaseProjectile;
+                    BaseProjectileConfig instance = Activator.CreateInstance(type) as BaseProjectileConfig;
                     if (instance != null && instance.Type == projectileType)
                     {
-                        projectile = instance;
+                        projectileConfig = instance;
                         return;
                     }
                 }

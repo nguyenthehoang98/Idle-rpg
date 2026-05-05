@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 namespace _KITSystem.SkillSystem.Config
 {
     [Serializable]
-    public class Trigger
+    public class TriggerConfig
     {
         public TriggerType type;
         [ShowIf("type", TriggerType.Event)]

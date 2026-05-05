@@ -5,7 +5,7 @@ using UnityEngine;
 namespace _KITSystem.SkillSystem.Config
 {
     [Serializable]
-    public class SquareShape : BaseShape
+    public class SquareShapeConfig : BaseShapeConfig
     {
         [Indent] public Vector2 size = new Vector2(1, 1);
         public override ShapeType Type => ShapeType.Square;

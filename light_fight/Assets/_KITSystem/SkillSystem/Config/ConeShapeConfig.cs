@@ -1,11 +1,10 @@
 ﻿using System;
 using Sirenix.OdinInspector;
-using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Config
 {
     [Serializable]
-    public class ConeShape : BaseShape
+    public class ConeShapeConfig : BaseShapeConfig
     {
         [Indent] public float widthTop;
         [Indent] public float widthBottom;

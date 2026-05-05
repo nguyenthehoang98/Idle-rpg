@@ -1,11 +1,10 @@
 ﻿using System;
 using Sirenix.OdinInspector;
-using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Config
 {
     [Serializable]
-    public class CapsuleShape : BaseShape
+    public class CapsuleShapeConfig : BaseShapeConfig
     {
         [Indent] public float radius = 1;
         [Indent] public float height = 2;

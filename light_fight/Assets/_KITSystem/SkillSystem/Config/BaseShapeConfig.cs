@@ -5,7 +5,7 @@ using UnityEngine;
 namespace _KITSystem.SkillSystem.Config
 {
     [Serializable]
-    public abstract class BaseShape
+    public abstract class BaseShapeConfig
     {
         [TitleGroup("$Type")] 
         [Indent] public float triggerTimeInSeconds;

@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 namespace _KITSystem.SkillSystem.Config
 {
     [Serializable]
-    public class BoomerangTrajectory : BaseTrajectory
+    public class BoomerangTrajectoryConfig : BaseTrajectoryConfig
     {
         [HideLabel, TitleGroup("Boomerang: Cast phase")]
         public BlendConstValue castPhase = new BlendConstValue();

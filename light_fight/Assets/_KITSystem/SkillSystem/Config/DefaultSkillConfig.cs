@@ -4,7 +4,7 @@ using UnityEngine;
 namespace _KITSystem.SkillSystem.Config
 {
     [System.Serializable]
-    public class DefaultSkill
+    public class DefaultSkillConfig
     {
         [Tooltip("Thời gian sống của toàn bộ kĩ năng")]
         public float lifeTimeInSeconds = 1f;

@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 
 namespace _KITSystem.SkillSystem.Config
 {
-    public class RangerProjectile : BaseProjectile
+    public class RangerProjectileConfig : BaseProjectileConfig
     {
         [TitleGroup("Ranger : GameObject")] [Indent]
         public GameObject prefab;
@@ -14,19 +14,19 @@ namespace _KITSystem.SkillSystem.Config
         [Indent] public Vector3 offsetPivotPosition;
 
         [TitleGroup("Ranger : HitBox")] [GUIColor("GetButtonColor1"), OnValueChanged("ShapeTypeChanged"), Indent]
-        public BaseShape.ShapeType shapeType;
+        public BaseShapeConfig.ShapeType shapeType;
 
         [FormerlySerializedAs("hitBox")] [SerializeReference, HideReferenceObjectPicker, HideLabel, Indent]
-        public BaseShape shape;
+        public BaseShapeConfig shapeConfig;
 
         [TitleGroup("Ranger : Trajectory")]
         [GUIColor("GetButtonColor2"), OnValueChanged("TrajectoryTypeChanged"), Indent]
-        public BaseTrajectory.TrajectoryType trajectoryType;
+        public BaseTrajectoryConfig.TrajectoryType trajectoryType;
 
-        [SerializeReference, HideReferenceObjectPicker, HideLabel, Indent]
-        public BaseTrajectory trajectory;
+        [FormerlySerializedAs("trajectory")] [SerializeReference, HideReferenceObjectPicker, HideLabel, Indent]
+        public BaseTrajectoryConfig trajectoryConfig;
 
-        public RangerProjectile()
+        public RangerProjectileConfig()
         {
             ShapeTypeChanged();
             TrajectoryTypeChanged();
@@ -36,13 +36,13 @@ namespace _KITSystem.SkillSystem.Config
         {
             switch (shapeType)
             {
-                case BaseShape.ShapeType.Square:
+                case BaseShapeConfig.ShapeType.Square:
                     return Color.green;
-                case BaseShape.ShapeType.Capsule:
+                case BaseShapeConfig.ShapeType.Capsule:
                     return Color.red;
-                case BaseShape.ShapeType.Circle:
+                case BaseShapeConfig.ShapeType.Circle:
                     return Color.yellow;
-                case BaseShape.ShapeType.Cone:
+                case BaseShapeConfig.ShapeType.Cone:
                     return Color.blue;
                 default:
                     return Color.white;
@@ -53,17 +53,17 @@ namespace _KITSystem.SkillSystem.Config
         {
             switch (trajectoryType)
             {
-                case BaseTrajectory.TrajectoryType.Blend:
+                case BaseTrajectoryConfig.TrajectoryType.Blend:
                     return Color.green;
-                case BaseTrajectory.TrajectoryType.Stationary:
+                case BaseTrajectoryConfig.TrajectoryType.Stationary:
                     return Color.red;
-                case BaseTrajectory.TrajectoryType.Boomerang:
+                case BaseTrajectoryConfig.TrajectoryType.Boomerang:
                     return Color.yellow;
-                case BaseTrajectory.TrajectoryType.Parabolic:
+                case BaseTrajectoryConfig.TrajectoryType.Parabolic:
                     return Color.blue;
-                case BaseTrajectory.TrajectoryType.Bullet:
+                case BaseTrajectoryConfig.TrajectoryType.Bullet:
                     return Color.cyan;
-                case BaseTrajectory.TrajectoryType.Cannon:
+                case BaseTrajectoryConfig.TrajectoryType.Cannon:
                     return Color.magenta;
                 default:
                     return Color.white;
@@ -72,15 +72,15 @@ namespace _KITSystem.SkillSystem.Config
 
         private void ShapeTypeChanged()
         {
-            if (shape == null || shape.Type != shapeType)
+            if (shapeConfig == null || shapeConfig.Type != shapeType)
             {
-                Type[] types = TypeUtils.GetAllTypeThatImplement<BaseShape>();
+                Type[] types = TypeUtils.GetAllTypeThatImplement<BaseShapeConfig>();
                 foreach (var type in types)
                 {
-                    BaseShape instance = Activator.CreateInstance(type) as BaseShape;
+                    BaseShapeConfig instance = Activator.CreateInstance(type) as BaseShapeConfig;
                     if (instance != null && instance.Type == shapeType)
                     {
-                        shape = instance;
+                        shapeConfig = instance;
                         return;
                     }
                 }
@@ -89,15 +89,15 @@ namespace _KITSystem.SkillSystem.Config
 
         private void TrajectoryTypeChanged()
         {
-            if (trajectory == null || trajectory.Type != trajectoryType)
+            if (trajectoryConfig == null || trajectoryConfig.Type != trajectoryType)
             {
-                Type[] types = TypeUtils.GetAllTypeThatImplement<BaseTrajectory>();
+                Type[] types = TypeUtils.GetAllTypeThatImplement<BaseTrajectoryConfig>();
                 foreach (var type in types)
                 {
-                    BaseTrajectory instance = Activator.CreateInstance(type) as BaseTrajectory;
+                    BaseTrajectoryConfig instance = Activator.CreateInstance(type) as BaseTrajectoryConfig;
                     if (instance != null && instance.Type == trajectoryType)
                     {
-                        trajectory = instance;
+                        trajectoryConfig = instance;
                         return;
                     }
                 }

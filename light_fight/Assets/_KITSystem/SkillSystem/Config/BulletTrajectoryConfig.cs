@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 namespace _KITSystem.SkillSystem.Config
 {
     [Serializable]
-    public class BulletTrajectory : BaseTrajectory
+    public class BulletTrajectoryConfig : BaseTrajectoryConfig
     {
         [TitleGroup("Bullet")]
         public float initialSpeed;

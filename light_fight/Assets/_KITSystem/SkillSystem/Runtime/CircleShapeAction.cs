@@ -8,7 +8,7 @@ namespace _KITSystem.SkillSystem.Runtime
     {
         private float radius;
 
-        public CircleShapeAction(CircleShape circle) : base(circle)
+        public CircleShapeAction(CircleShapeConfig circle) : base(circle)
         {
             radius = circle.radius;
         }

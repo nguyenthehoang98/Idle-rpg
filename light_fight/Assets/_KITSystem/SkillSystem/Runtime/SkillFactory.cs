@@ -12,25 +12,25 @@ namespace _KITSystem.SkillSystem.Runtime
             int targetObjectId = -1;
             Vector3 start = Vector3.zero;
             Vector3 goal = new Vector3(2, 0, 0);
-            float lifeTimeInSeconds = config.defaultSkill.lifeTimeInSeconds;
-            foreach (BaseEvent e in config.events)
+            float lifeTimeInSeconds = config.defaultSkillConfig.lifeTimeInSeconds;
+            foreach (BaseEventConfig e in config.events)
             {
-                switch (e.action.Type)
+                switch (e.actionConfig.Type)
                 {
-                    case Config.BaseAction.ActionType.CastProjectile:
-                        var cp = e.action as Config.CastProjectileAction;
+                    case Config.BaseActionConfig.ActionType.CastProjectile:
+                        var cp = e.actionConfig as Config.CastProjectileActionConfig;
                         BaseShapeAction[] shapes;
-                        if (cp.projectileType == BaseProjectile.ProjectileType.Melee)
+                        if (cp.projectileType == BaseProjectileConfig.ProjectileType.Melee)
                         {
-                            var melee = cp.projectile as MeleeProjectile;
+                            var melee = cp.projectileConfig as MeleeProjectileConfig;
                             shapes = new BaseShapeAction[melee.hitBoxes.Count];
                             for (int i = 0; i < melee.hitBoxes.Count; i++)
                                 shapes[i] = GenerateShape(melee.hitBoxes[i]);
                             spu.RequestAddAction(skillId,
-                                new CastMeleeProjectileAction(start, goal, shapes, e.trigger, lifeTimeInSeconds)
+                                new CastMeleeProjectileAction(start, goal, shapes, e.triggerConfig, lifeTimeInSeconds)
                             );
                         }
-                        else if(cp.projectileType == BaseProjectile.ProjectileType.Ranger)
+                        else if(cp.projectileType == BaseProjectileConfig.ProjectileType.Ranger)
                         {
                         }
                         break;
@@ -40,33 +40,33 @@ namespace _KITSystem.SkillSystem.Runtime
             return skillId;
         }
 
-        static BaseShapeAction GenerateShape(BaseShape shape)
+        static BaseShapeAction GenerateShape(BaseShapeConfig shapeConfig)
         {
-            switch (shape.Type)
+            switch (shapeConfig.Type)
             {
-                case BaseShape.ShapeType.Square:
-                    var square = shape as SquareShape;
+                case BaseShapeConfig.ShapeType.Square:
+                    var square = shapeConfig as SquareShapeConfig;
                     return new SquareShapeAction(square);
-                case BaseShape.ShapeType.Circle:
-                    var circle = shape as CircleShape;
+                case BaseShapeConfig.ShapeType.Circle:
+                    var circle = shapeConfig as CircleShapeConfig;
                     return new CircleShapeAction(circle);
                 default:
-                    Debug.LogError($"Type {shape.Type} is not supported");
+                    Debug.LogError($"Type {shapeConfig.Type} is not supported");
                     return null;
             }
         }
 
-        static BaseTrajectoryAction GetTrajectory(BaseTrajectory trajectory, Vector3 start, Vector3 goal)
+        static BaseTrajectoryAction GetTrajectory(BaseTrajectoryConfig trajectoryConfig, Vector3 start, Vector3 goal)
         {
-            switch (trajectory.Type)
+            switch (trajectoryConfig.Type)
             {
-                case BaseTrajectory.TrajectoryType.Stationary:
+                case BaseTrajectoryConfig.TrajectoryType.Stationary:
                     return new StationaryTrajectoryAction(start, goal);
-                case BaseTrajectory.TrajectoryType.Bullet:
-                    var bullet = trajectory as BulletTrajectory;
+                case BaseTrajectoryConfig.TrajectoryType.Bullet:
+                    var bullet = trajectoryConfig as BulletTrajectoryConfig;
                     return new BulletTrajectoryAction(bullet.initialSpeed, bullet.acceleration, start, goal);
                 default:
-                    Debug.LogError($"Type {trajectory.Type} is not supported");
+                    Debug.LogError($"Type {trajectoryConfig.Type} is not supported");
                     return null;
             }
         }

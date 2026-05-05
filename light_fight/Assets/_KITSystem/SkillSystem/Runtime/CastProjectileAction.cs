@@ -7,7 +7,7 @@ namespace _KITSystem.SkillSystem.Runtime
     {
         protected readonly BaseShapeAction[] shapes;
         
-        protected internal CastProjectileAction(BaseShapeAction[] shapes, Trigger trigger, float lifeTime) : base(trigger, lifeTime)
+        protected internal CastProjectileAction(BaseShapeAction[] shapes, TriggerConfig triggerConfig, float lifeTime) : base(triggerConfig, lifeTime)
         {
             this.shapes = shapes;
         }

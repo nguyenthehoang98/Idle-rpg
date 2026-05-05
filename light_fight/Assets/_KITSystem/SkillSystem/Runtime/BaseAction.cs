@@ -6,7 +6,7 @@ namespace _KITSystem.SkillSystem.Runtime
     public abstract class BaseAction : IAction
     {
         private float lifeTime;
-        private Trigger.TriggerType type;
+        private TriggerConfig.TriggerType type;
         private int eventId;
         private bool isMultiplierTrigger;
         private float timer;
@@ -14,14 +14,14 @@ namespace _KITSystem.SkillSystem.Runtime
         private bool hasTriggered;
         private float elapsedTime;
 
-        protected BaseAction(Trigger trigger,
+        protected BaseAction(TriggerConfig triggerConfig,
             float lifeTime)
         {
             this.lifeTime = lifeTime;
-            this.type = trigger.type;
-            this.eventId = trigger.eventId;
-            this.timer = trigger.timer;
-            this.isMultiplierTrigger = trigger.isMultiplierTrigger;
+            this.type = triggerConfig.type;
+            this.eventId = triggerConfig.eventId;
+            this.timer = triggerConfig.timer;
+            this.isMultiplierTrigger = triggerConfig.isMultiplierTrigger;
             this.Reason = ActionCompleteReason.Undefined;
         }
 
@@ -34,7 +34,7 @@ namespace _KITSystem.SkillSystem.Runtime
         {
             if (IsFinished) return;
 
-            if (type == Config.Trigger.TriggerType.Event 
+            if (type == Config.TriggerConfig.TriggerType.Event 
                 && eventId == id 
                 && (!hasTriggered || isMultiplierTrigger))
             {
@@ -49,7 +49,7 @@ namespace _KITSystem.SkillSystem.Runtime
 
             elapsedTime += deltaTime;
             
-            if (type == Config.Trigger.TriggerType.Timeline 
+            if (type == Config.TriggerConfig.TriggerType.Timeline 
                 && !hasTriggered 
                 && elapsedTime >= timer)
             {

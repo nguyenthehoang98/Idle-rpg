@@ -1,5 +1,4 @@
 ﻿using System;
-using _KITSystem.SkillSystem.Config;
 using _KITSystem.Utils;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -7,38 +6,38 @@ using UnityEngine;
 namespace _KITSystem.SkillSystem.Config
 {
     [Serializable]
-    public class BaseEvent
+    public class BaseEventConfig
     {
         [TabGroup("$TriggerType"), HideLabel]
-        public Trigger trigger = new Trigger();
+        public TriggerConfig triggerConfig = new TriggerConfig();
         
         [TabGroup("$actionType"), OnValueChanged("ActionTypeChanged"), HideLabel]
-        public BaseAction.ActionType actionType;
+        public BaseActionConfig.ActionType actionType;
         [TabGroup("$actionType")]
-        [SerializeReference, HideReferenceObjectPicker, HideLabel] public BaseAction action;
+        [SerializeReference, HideReferenceObjectPicker, HideLabel] public BaseActionConfig actionConfig;
 
-        public BaseEvent()
+        public BaseEventConfig()
         {
             ActionTypeChanged();
         }
         
         private void ActionTypeChanged()
         {
-            if (action == null || action.Type != actionType)
+            if (actionConfig == null || actionConfig.Type != actionType)
             {
-                Type[] types = TypeUtils.GetAllTypeThatImplement<BaseAction>();
+                Type[] types = TypeUtils.GetAllTypeThatImplement<BaseActionConfig>();
                 foreach (var type in types)
                 {
-                    BaseAction instance = Activator.CreateInstance(type) as BaseAction;
+                    BaseActionConfig instance = Activator.CreateInstance(type) as BaseActionConfig;
                     if (instance != null && instance.Type == actionType)
                     {
-                        action = instance;
+                        actionConfig = instance;
                         return;
                     }
                 }
             }
         }
 
-        private string TriggerType => trigger.type.ToString();
+        private string TriggerType => triggerConfig.type.ToString();
     }
 }

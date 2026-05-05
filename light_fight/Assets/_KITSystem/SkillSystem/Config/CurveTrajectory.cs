@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 namespace _KITSystem.SkillSystem.Config
 {
     [Serializable]
-    public class BlendTrajectory : BaseTrajectory
+    public class BlendTrajectoryConfig : BaseTrajectoryConfig
     {
         [HideLabel, TitleGroup("Blend")]
         public BlendConstValue value = new BlendConstValue();

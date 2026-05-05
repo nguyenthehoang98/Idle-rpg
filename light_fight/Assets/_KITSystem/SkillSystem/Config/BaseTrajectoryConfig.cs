@@ -3,7 +3,7 @@
 namespace _KITSystem.SkillSystem.Config
 {
     [Serializable]
-    public abstract class BaseTrajectory
+    public abstract class BaseTrajectoryConfig
     {
         public bool isRequireTargetToCast;
         public abstract TrajectoryType Type { get; }

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace _KITSystem.SkillSystem.Config
 {
     [Serializable]
-    public abstract class BaseProjectile
+    public abstract class BaseProjectileConfig
     {
         [TitleGroup("Projectile : Damage"), Indent]
         public float damageScale = 1;

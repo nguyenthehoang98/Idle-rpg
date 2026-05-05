@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 namespace _KITSystem.SkillSystem.Config
 {
     [Serializable]
-    public class ParabolicTrajectory : BaseTrajectory
+    public class ParabolicTrajectoryConfig : BaseTrajectoryConfig
     {               
         [HideLabel, TitleGroup("Parabolic: Height")]
         public BlendConstValue height = new BlendConstValue();

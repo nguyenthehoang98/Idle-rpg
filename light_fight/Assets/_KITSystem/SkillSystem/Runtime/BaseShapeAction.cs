@@ -12,10 +12,10 @@ namespace _KITSystem.SkillSystem.Runtime
 
         public bool CanTrigger { get; private set; }
 
-        protected BaseShapeAction(BaseShape shape)
+        protected BaseShapeAction(BaseShapeConfig shapeConfig)
         {
-            triggerTimeInSeconds = shape.triggerTimeInSeconds;
-            offsetRelativePosition = shape.offsetRelativePosition;
+            triggerTimeInSeconds = shapeConfig.triggerTimeInSeconds;
+            offsetRelativePosition = shapeConfig.offsetRelativePosition;
         }
 
         protected Vector3 GetPosition(Vector3 position)
