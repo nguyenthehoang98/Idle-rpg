@@ -63,8 +63,6 @@ namespace _KITSystem.SkillSystem.Config
                     return Color.blue;
                 case BaseTrajectoryConfig.TrajectoryType.Bullet:
                     return Color.cyan;
-                case BaseTrajectoryConfig.TrajectoryType.Cannon:
-                    return Color.magenta;
                 default:
                     return Color.white;
             }

@@ -6,22 +6,50 @@ namespace _KITSystem.SkillSystem.Config
     [System.Serializable]
     public class BlendConstValue
     {
-        public BlendConstType type;
-        [HideIf("type", BlendConstType.Random)]
-        public float value;
+        [SerializeField] private BlendConstType type;
+        [HideIf("type", BlendConstType.Blend)]
+        [SerializeField] private float value;
         [ShowIf("type", BlendConstType.Curve)]
-        public AnimationCurve curve;
+        [SerializeField] private AnimationCurve curve;
 
-        [ShowIf("type", BlendConstType.Random)]
-        public float fromValue;
-        [ShowIf("type", BlendConstType.Random)]
-        public float toValue;
+        [ShowIf("type", BlendConstType.Blend)]
+        [SerializeField] private float fromValue;
+        [ShowIf("type", BlendConstType.Blend)]
+        [SerializeField] private float toValue;
+
+        public BlendConstValue()
+        {
+        }
+        
+        public BlendConstValue(BlendConstType type)
+        {
+            this.type = type;
+            this.value = 0;
+            this.fromValue = 0;
+            this.toValue = 1;
+            this.curve = new AnimationCurve();
+        }
+        
+        /// <param name="process">[0:1]</param>
+        /// <returns></returns>
+        public float Evaluate(float process)
+        {
+            switch (type)
+            {
+                case BlendConstType.Curve:
+                    return curve.Evaluate(process) * value;
+                case BlendConstType.Blend:
+                    return Mathf.Lerp(fromValue, toValue, process);
+                default:
+                    return value;
+            }
+        }
 
         public enum BlendConstType
         {
             Constant,
             Curve,
-            Random,
+            Blend,
         }
     }
 }

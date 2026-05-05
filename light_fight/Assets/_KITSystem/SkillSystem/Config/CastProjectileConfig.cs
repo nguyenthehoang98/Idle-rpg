@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 namespace _KITSystem.SkillSystem.Config
 {
     [Serializable]
-    public partial class CastProjectileActionConfig : BaseActionConfig
+    public class CastProjectileConfig : BaseActionConfig
     {
         [GUIColor("GetButtonColor"), OnValueChanged("ProjectileTypeChanged"), HideLabel, BoxGroup]
         public BaseProjectileConfig.ProjectileType projectileType;
@@ -17,7 +17,7 @@ namespace _KITSystem.SkillSystem.Config
 
         public override ActionType Type => ActionType.CastProjectile;
 
-        public CastProjectileActionConfig()
+        public CastProjectileConfig()
         {
             ProjectileTypeChanged();
         }

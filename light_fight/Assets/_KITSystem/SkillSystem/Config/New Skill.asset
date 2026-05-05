@@ -33,7 +33,7 @@ MonoBehaviour:
       timer: 0
     actionType: 0
     actionConfig:
-      rid: 7993921337256312911
+      rid: 7993921337256312919
   references:
     version: 2
     RefIds:
@@ -43,13 +43,13 @@ MonoBehaviour:
         lifeTimeInSeconds: 1
         targetType: 1
         radiusScanTarget: 1
-    - rid: 7993921337256312911
-      type: {class: CastProjectileActionConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
+    - rid: 7993921337256312919
+      type: {class: CastProjectileConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
         projectileType: 1
         projectileConfig:
-          rid: 7993921337256312913
-    - rid: 7993921337256312913
+          rid: 7993921337256312928
+    - rid: 7993921337256312928
       type: {class: RangerProjectileConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
         damageScale: 1
@@ -62,20 +62,68 @@ MonoBehaviour:
         offsetPivotPosition: {x: 0, y: 0, z: 0}
         shapeType: 0
         shapeConfig:
-          rid: 7993921337256312914
-        trajectoryType: 1
+          rid: 7993921337256312929
+        trajectoryType: 4
         trajectoryConfig:
-          rid: 7993921337256312916
-    - rid: 7993921337256312914
+          rid: 7993921337256312931
+    - rid: 7993921337256312929
       type: {class: SquareShapeConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
         triggerTimeInSeconds: 0
         offsetRelativePosition: {x: 0, y: 0}
         size: {x: 1, y: 1}
         pivotType: 0
-    - rid: 7993921337256312916
-      type: {class: BulletTrajectoryConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
+    - rid: 7993921337256312931
+      type: {class: ParabolicTrajectoryConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
-        isRequireTargetToCast: 1
-        initialSpeed: 5
-        acceleration: 0
+        isRequireTargetToCast: 0
+        duration: 1
+        height:
+          type: 1
+          value: 5
+          curve:
+            serializedVersion: 2
+            m_Curve:
+            - serializedVersion: 3
+              time: 0
+              value: 0
+              inSlope: 2
+              outSlope: 2
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            - serializedVersion: 3
+              time: 0.5
+              value: 1
+              inSlope: 0.08324905
+              outSlope: 0.08324905
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0.33333334
+              outWeight: 0.17408907
+            - serializedVersion: 3
+              time: 1
+              value: 0
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+          fromValue: 0
+          toValue: 5
+        distance:
+          type: 2
+          value: 0
+          curve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+          fromValue: 0
+          toValue: 5

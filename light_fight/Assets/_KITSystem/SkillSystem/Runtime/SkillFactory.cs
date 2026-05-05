@@ -13,12 +13,12 @@ namespace _KITSystem.SkillSystem.Runtime
             Vector3 start = Vector3.zero;
             Vector3 goal = new Vector3(2, 0, 0);
             float lifeTimeInSeconds = config.defaultSkillConfig.lifeTimeInSeconds;
-            foreach (BaseEventConfig e in config.events)
+            foreach (EventConfig e in config.events)
             {
                 switch (e.actionConfig.Type)
                 {
                     case BaseActionConfig.ActionType.CastProjectile:
-                        var cp = e.actionConfig as CastProjectileActionConfig;
+                        var cp = e.actionConfig as CastProjectileConfig;
                         BaseShapeAction[] shapes;
                         if (cp.projectileType == BaseProjectileConfig.ProjectileType.Melee)
                         {
@@ -74,6 +74,9 @@ namespace _KITSystem.SkillSystem.Runtime
                 case BaseTrajectoryConfig.TrajectoryType.Bullet:
                     var bullet = trajectoryConfig as BulletTrajectoryConfig;
                     return new BulletTrajectoryAction(bullet.initialSpeed, bullet.acceleration, start, goal);
+                case BaseTrajectoryConfig.TrajectoryType.Parabolic:
+                    var parabolic = trajectoryConfig as ParabolicTrajectoryConfig;
+                    return new ParabolicTrajectoryAction(parabolic.height, parabolic.distance, parabolic.duration, start, goal);
                 default:
                     Debug.LogError($"Type {trajectoryConfig.Type} is not supported");
                     return null;

@@ -16,15 +16,15 @@ namespace _KITSystem.SkillSystem.Unitest
             {
                 lifeTimeInSeconds = 2,
             };
-            skillConfig.events = new BaseEventConfig[1]
+            skillConfig.events = new EventConfig[1]
             {
-                new BaseEventConfig
+                new EventConfig
                 {
                     triggerConfig = new TriggerConfig
                     {
                         timer = 0.5f, type = TriggerConfig.TriggerType.Timeline
                     },
-                    actionConfig = new CastProjectileActionConfig
+                    actionConfig = new CastProjectileConfig
                     {
                         projectileConfig = new MeleeProjectileConfig()
                     }
@@ -46,15 +46,15 @@ namespace _KITSystem.SkillSystem.Unitest
             {
                 lifeTimeInSeconds = 2,
             };
-            skillConfig.events = new BaseEventConfig[1]
+            skillConfig.events = new EventConfig[1]
             {
-                new BaseEventConfig
+                new EventConfig
                 {
                     triggerConfig = new TriggerConfig
                     {
                         timer = 0.5f, type = TriggerConfig.TriggerType.Timeline
                     },
-                    actionConfig = new CastProjectileActionConfig
+                    actionConfig = new CastProjectileConfig
                     {
                         projectileConfig = new MeleeProjectileConfig()
                     }
@@ -76,15 +76,15 @@ namespace _KITSystem.SkillSystem.Unitest
             {
                 lifeTimeInSeconds = 2,
             };
-            skillConfig.events = new BaseEventConfig[1]
+            skillConfig.events = new EventConfig[1]
             {
-                new BaseEventConfig
+                new EventConfig
                 {
                     triggerConfig = new TriggerConfig
                     {
                         timer = 0.5f, type = TriggerConfig.TriggerType.Timeline
                     },
-                    actionConfig = new CastProjectileActionConfig
+                    actionConfig = new CastProjectileConfig
                     {
                         projectileConfig = new MeleeProjectileConfig()
                     }

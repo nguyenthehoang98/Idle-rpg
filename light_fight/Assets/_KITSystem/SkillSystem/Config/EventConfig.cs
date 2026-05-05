@@ -6,7 +6,7 @@ using UnityEngine;
 namespace _KITSystem.SkillSystem.Config
 {
     [Serializable]
-    public class BaseEventConfig
+    public class EventConfig
     {
         [TabGroup("$TriggerType"), HideLabel]
         public TriggerConfig triggerConfig = new TriggerConfig();
@@ -16,7 +16,7 @@ namespace _KITSystem.SkillSystem.Config
         [TabGroup("$actionType")]
         [SerializeReference, HideReferenceObjectPicker, HideLabel] public BaseActionConfig actionConfig;
 
-        public BaseEventConfig()
+        public EventConfig()
         {
             ActionTypeChanged();
         }

@@ -24,7 +24,7 @@ namespace _KITSystem.SkillSystem.Config
         public bool isRelativeEventsBySkill = false;
         [Tooltip("Các events được định nghĩa từ skill")]
         [Searchable]
-        public BaseEventConfig[] events;
+        public EventConfig[] events;
 
         private void SkillTypeChanged()
         {

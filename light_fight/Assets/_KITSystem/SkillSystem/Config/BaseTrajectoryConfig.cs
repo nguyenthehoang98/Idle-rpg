@@ -12,7 +12,6 @@ namespace _KITSystem.SkillSystem.Config
         {
             Stationary,
             Bullet,
-            Cannon,
             Boomerang,
             Blend,
             Parabolic
