@@ -16,7 +16,7 @@ namespace _KITSystem.SkillSystem.Config
         [Title("Core")]
         [OnValueChanged("SkillTypeChanged"), HideLabel]
         public DefaultSkillConfig.SkillType skillType;
-        [FormerlySerializedAs("defaultSkill")] [FormerlySerializedAs("defineSkill")] [SerializeReference, HideReferenceObjectPicker, HideLabel] public DefaultSkillConfig defaultSkillConfig = new DefaultSkillConfig();
+        [SerializeReference, HideReferenceObjectPicker, HideLabel] public DefaultSkillConfig defaultSkillConfig = new DefaultSkillConfig();
         
         [Title("Events")]
         [Tooltip("True: Các events sẽ kết thúc ngay khi skill kết thúc." +

@@ -15,7 +15,8 @@ namespace _KITSystem.SkillSystem.Config
         public string animationName;
         public float scaleTime = 1f;*/
 
-        [TitleGroup("Find Target")] public TargetType targetType = TargetType.Nearest;
+        [TitleGroup("Find Target")] 
+        public TargetType targetType = TargetType.Nearest;
         public float radiusScanTarget = 1;
 
         public virtual SkillType Type => SkillType.Default;

@@ -17,8 +17,8 @@ namespace _KITSystem.SkillSystem.Runtime
             {
                 switch (e.actionConfig.Type)
                 {
-                    case Config.BaseActionConfig.ActionType.CastProjectile:
-                        var cp = e.actionConfig as Config.CastProjectileActionConfig;
+                    case BaseActionConfig.ActionType.CastProjectile:
+                        var cp = e.actionConfig as CastProjectileActionConfig;
                         BaseShapeAction[] shapes;
                         if (cp.projectileType == BaseProjectileConfig.ProjectileType.Melee)
                         {
@@ -32,6 +32,11 @@ namespace _KITSystem.SkillSystem.Runtime
                         }
                         else if(cp.projectileType == BaseProjectileConfig.ProjectileType.Ranger)
                         {
+                            var ranger = cp.projectileConfig as RangerProjectileConfig;
+                            shapes = new BaseShapeAction[1] { GenerateShape(ranger.shapeConfig) };
+                            spu.RequestAddAction(skillId,
+                                new CastRangeProjectileAction(shapes, e.triggerConfig, lifeTimeInSeconds)
+                            );
                         }
                         break;
                 }

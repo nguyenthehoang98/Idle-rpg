@@ -236,10 +236,9 @@ namespace _KITSystem.SkillSystem.Runtime
                 }
             }
 
-            
             activeActions.RemoveAt(lastIdx);
             mapActionIdToIndex.Remove(actionId);
-
+            
             version++;
             return true;
         }

@@ -22,35 +22,35 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   skillType: 0
-  defaultSkill:
-    rid: 7993921337256312883
+  defaultSkillConfig:
+    rid: 7993921337256312910
   isRelativeEventsBySkill: 0
   events:
-  - trigger:
+  - triggerConfig:
       type: 0
       eventId: 0
       isMultiplierTrigger: 0
       timer: 0
     actionType: 0
-    action:
-      rid: 7993921337256312884
+    actionConfig:
+      rid: 7993921337256312911
   references:
     version: 2
     RefIds:
-    - rid: 7993921337256312883
-      type: {class: DefaultSkill, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
+    - rid: 7993921337256312910
+      type: {class: DefaultSkillConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
         lifeTimeInSeconds: 1
         targetType: 1
         radiusScanTarget: 1
-    - rid: 7993921337256312884
-      type: {class: CastProjectileAction, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
+    - rid: 7993921337256312911
+      type: {class: CastProjectileActionConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
         projectileType: 0
-        projectile:
-          rid: 7993921337256312885
-    - rid: 7993921337256312885
-      type: {class: MeleeProjectile, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
+        projectileConfig:
+          rid: 7993921337256312912
+    - rid: 7993921337256312912
+      type: {class: MeleeProjectileConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
         damageScale: 1
         isHpPercent: 0
@@ -58,20 +58,4 @@ MonoBehaviour:
         damageTickerIntervalInSeconds: 1
         maximumCollision: 1
         collisionResetIntervalInSeconds: 0.033333335
-        hitBoxes:
-        - rid: 7993921337256312889
-        - rid: 7993921337256312891
-    - rid: 7993921337256312889
-      type: {class: SquareShape, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
-      data:
-        triggerTimeInSeconds: 0.6
-        offsetRelativePosition: {x: 2, y: 0}
-        size: {x: 2, y: 2}
-        pivotType: 1
-    - rid: 7993921337256312891
-      type: {class: SquareShape, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
-      data:
-        triggerTimeInSeconds: 0.6
-        offsetRelativePosition: {x: 2, y: 0}
-        size: {x: 2, y: 2}
-        pivotType: 0
+        hitBoxes: []
