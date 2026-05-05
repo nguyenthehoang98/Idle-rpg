@@ -63,9 +63,9 @@ MonoBehaviour:
         shapeType: 0
         shapeConfig:
           rid: 7993921337256312929
-        trajectoryType: 4
+        trajectoryType: 2
         trajectoryConfig:
-          rid: 7993921337256312931
+          rid: 7993921337256313119
     - rid: 7993921337256312929
       type: {class: SquareShapeConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
@@ -73,50 +73,12 @@ MonoBehaviour:
         offsetRelativePosition: {x: 0, y: 0}
         size: {x: 1, y: 1}
         pivotType: 0
-    - rid: 7993921337256312931
-      type: {class: ParabolicTrajectoryConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
+    - rid: 7993921337256313119
+      type: {class: BoomerangTrajectoryConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
         isRequireTargetToCast: 0
-        duration: 1
-        height:
-          type: 1
-          value: 5
-          curve:
-            serializedVersion: 2
-            m_Curve:
-            - serializedVersion: 3
-              time: 0
-              value: 0
-              inSlope: 2
-              outSlope: 2
-              tangentMode: 0
-              weightedMode: 0
-              inWeight: 0
-              outWeight: 0
-            - serializedVersion: 3
-              time: 0.5
-              value: 1
-              inSlope: 0.08324905
-              outSlope: 0.08324905
-              tangentMode: 0
-              weightedMode: 0
-              inWeight: 0.33333334
-              outWeight: 0.17408907
-            - serializedVersion: 3
-              time: 1
-              value: 0
-              inSlope: 0
-              outSlope: 0
-              tangentMode: 0
-              weightedMode: 0
-              inWeight: 0
-              outWeight: 0
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-          fromValue: 0
-          toValue: 5
-        distance:
+        castDuration: 0
+        castPhase:
           type: 2
           value: 0
           curve:
@@ -127,3 +89,15 @@ MonoBehaviour:
             m_RotationOrder: 4
           fromValue: 0
           toValue: 5
+        returnDuration: 0
+        returnPhase:
+          type: 2
+          value: 0
+          curve:
+            serializedVersion: 2
+            m_Curve: []
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+          fromValue: 0
+          toValue: 2

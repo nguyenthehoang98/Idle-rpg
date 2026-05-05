@@ -77,6 +77,13 @@ namespace _KITSystem.SkillSystem.Runtime
                 case BaseTrajectoryConfig.TrajectoryType.Parabolic:
                     var parabolic = trajectoryConfig as ParabolicTrajectoryConfig;
                     return new ParabolicTrajectoryAction(parabolic.height, parabolic.distance, parabolic.duration, start, goal);
+               case BaseTrajectoryConfig.TrajectoryType.Blend:
+                   var blend = trajectoryConfig as BlendTrajectoryConfig;
+                   return new BlendTrajectoryAction(blend.value, blend.duration, start, goal);
+               case BaseTrajectoryConfig.TrajectoryType.Boomerang:
+                   var boomerang = trajectoryConfig as BoomerangTrajectoryConfig;
+                   return new BoomerangTrajectoryAction(boomerang.castPhase, boomerang.castDuration,
+                       boomerang.returnPhase, boomerang.returnDuration, start, goal);
                 default:
                     Debug.LogError($"Type {trajectoryConfig.Type} is not supported");
                     return null;

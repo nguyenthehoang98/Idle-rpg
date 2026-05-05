@@ -6,11 +6,13 @@ namespace _KITSystem.SkillSystem.Config
     [Serializable]
     public class BoomerangTrajectoryConfig : BaseTrajectoryConfig
     {
-        [HideLabel, TitleGroup("Boomerang: Cast phase")]
-        public BlendConstValue castPhase = new BlendConstValue();
+        [TitleGroup("Boomerang: Cast phase")]
+        public float castDuration;
+        [HideLabel] public BlendConstValue castPhase = new BlendConstValue(BlendConstValue.BlendConstType.Blend);
               
-        [HideLabel, TitleGroup("Boomerang: Return phase")]
-        public BlendConstValue returnPhase = new BlendConstValue();
+        [TitleGroup("Boomerang: Return phase")]
+        public float returnDuration;
+        [HideLabel] public BlendConstValue returnPhase = new BlendConstValue(BlendConstValue.BlendConstType.Blend);
         public override TrajectoryType Type => TrajectoryType.Boomerang;
     }
 }

@@ -19,9 +19,6 @@ namespace _KITSystem.SkillSystem.Config
         [SerializeReference, HideReferenceObjectPicker, HideLabel] public DefaultSkillConfig defaultSkillConfig = new DefaultSkillConfig();
         
         [Title("Events")]
-        [Tooltip("True: Các events sẽ kết thúc ngay khi skill kết thúc." +
-                 "\nFalse: Các events hoạt động độc lập")]
-        public bool isRelativeEventsBySkill = false;
         [Tooltip("Các events được định nghĩa từ skill")]
         [Searchable]
         public EventConfig[] events;
