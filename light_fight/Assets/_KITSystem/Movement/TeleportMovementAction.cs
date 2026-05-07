@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace _KITSystem.Movement
 {
-    public struct TeleportModifier : IModifier
+    public struct TeleportMovementAction : IMovementAction
     {
         private Vector3 destination;
 
-        public TeleportModifier(Vector3 destination)
+        public TeleportMovementAction(Vector3 destination)
         {
             this.destination = destination;
             IsFinished = false;

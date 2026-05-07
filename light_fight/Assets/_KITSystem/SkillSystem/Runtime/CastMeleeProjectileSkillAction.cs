@@ -3,14 +3,15 @@ using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Runtime
 {
-    internal sealed class CastMeleeProjectileAction : CastProjectileAction
+    internal sealed class CastMeleeProjectileSkillAction : CastProjectileSkillAction
     {
         private bool[] triggered;
         private Vector3 start;
         private Vector3 goal;
 
-        internal CastMeleeProjectileAction(Vector3 start, Vector3 goal, BaseShapeAction[] shapes, TriggerConfig triggerConfig, float lifeTime) 
-            : base(shapes, triggerConfig, lifeTime)
+        internal CastMeleeProjectileSkillAction(Vector3 start, Vector3 goal, BaseShapeAction[] shapes,
+            SPU spu, TriggerConfig triggerConfig, float lifeTime) 
+            : base(shapes, spu, triggerConfig, lifeTime)
         {
             this.goal = goal;
             this.start = start;

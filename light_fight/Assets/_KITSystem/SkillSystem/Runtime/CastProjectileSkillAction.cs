@@ -3,12 +3,15 @@ using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Runtime
 {
-    internal abstract class CastProjectileAction : BaseAction
+    internal abstract class CastProjectileSkillAction : BaseSkillAction
     {
         protected readonly BaseShapeAction[] shapes;
+        protected readonly SPU spu;
         
-        protected internal CastProjectileAction(BaseShapeAction[] shapes, TriggerConfig triggerConfig, float lifeTime) : base(triggerConfig, lifeTime)
+        protected internal CastProjectileSkillAction(BaseShapeAction[] shapes,
+            SPU spu, TriggerConfig triggerConfig, float lifeTime) : base(triggerConfig, lifeTime)
         {
+            this.spu = spu;
             this.shapes = shapes;
         }
 

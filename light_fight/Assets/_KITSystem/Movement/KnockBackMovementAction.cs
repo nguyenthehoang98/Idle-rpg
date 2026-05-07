@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace _KITSystem.Movement
 {
-    public struct KnockBackModifier : IModifier
+    public struct KnockBackMovementAction : IMovementAction
     {
         public int Priority => PriorityModifierIndex.KNOCK_BACK;
         public ModifierName Name => ModifierName.KnockBack;
@@ -17,7 +17,7 @@ namespace _KITSystem.Movement
         private AnimationCurve curve;
         private Action onComplete;
 
-        public KnockBackModifier(Vector3 direction, float duration, float distance, AnimationCurve curve, Action onComplete)
+        public KnockBackMovementAction(Vector3 direction, float duration, float distance, AnimationCurve curve, Action onComplete)
         {
             this.direction = direction.normalized;
             this.duration = duration;
@@ -29,7 +29,7 @@ namespace _KITSystem.Movement
             this.Reason = ModifierCompleteReason.Undefined;
         }
 
-        public KnockBackModifier(Vector3 direction, float duration, float distance, Action onComplete)
+        public KnockBackMovementAction(Vector3 direction, float duration, float distance, Action onComplete)
         {
             this.direction = direction.normalized;
             this.duration = duration;

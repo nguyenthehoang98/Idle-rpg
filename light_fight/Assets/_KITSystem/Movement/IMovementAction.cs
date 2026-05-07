@@ -2,7 +2,7 @@
 
 namespace _KITSystem.Movement
 {
-    public interface IModifier
+    public interface IMovementAction
     {
         int Priority { get; }
         ModifierName Name { get; }

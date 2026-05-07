@@ -12,7 +12,7 @@ namespace _KITSystem.SkillSystem.Runtime
         {
             this.goal = goal;
             this.start = start;
-            this.direction = (goal - start).normalized;
+            direction = (goal - start).normalized;
         }
 
         public Vector3 EvaluatePosition(float deltaTime)

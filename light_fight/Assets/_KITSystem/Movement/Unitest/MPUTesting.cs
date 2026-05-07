@@ -29,7 +29,7 @@ namespace _KITSystem.Movement.Unitest
             mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => unitId = x);
             mpu.Tick(0);
 
-            mpu.RequestAddModifier(unitId, new DummyModifier(), h => handle = h);
+            mpu.RequestAddModifier(unitId, new DummyMovementAction(), h => handle = h);
             mpu.Tick(0);
 
             Assert.IsTrue(mpu.HasModifier(handle));
@@ -46,7 +46,7 @@ namespace _KITSystem.Movement.Unitest
             mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => unitId = x);
             mpu.Tick(0);
 
-            mpu.RequestAddModifier(unitId, new DummyModifier(), h => handle = h);
+            mpu.RequestAddModifier(unitId, new DummyMovementAction(), h => handle = h);
             mpu.Tick(0);
 
             mpu.RequestRemoveModifier(handle);
@@ -66,9 +66,9 @@ namespace _KITSystem.Movement.Unitest
             mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => unitId = x);
             mpu.Tick(0);
 
-            mpu.RequestAddModifier(unitId, new DummyModifier(), h => h1 = h);
-            mpu.RequestAddModifier(unitId, new DummyModifier(), h => h2 = h);
-            mpu.RequestAddModifier(unitId, new DummyModifier(), h => h3 = h);
+            mpu.RequestAddModifier(unitId, new DummyMovementAction(), h => h1 = h);
+            mpu.RequestAddModifier(unitId, new DummyMovementAction(), h => h2 = h);
+            mpu.RequestAddModifier(unitId, new DummyMovementAction(), h => h3 = h);
             mpu.Tick(0);
 
             mpu.RequestRemoveModifier(h2);
@@ -89,8 +89,8 @@ namespace _KITSystem.Movement.Unitest
             mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => unitId = x);
             mpu.Tick(0);
 
-            mpu.RequestAddModifier(unitId, new DummyModifier(), h => h1 = h);
-            mpu.RequestAddModifier(unitId, new DummyModifier(), h => h2 = h);
+            mpu.RequestAddModifier(unitId, new DummyMovementAction(), h => h1 = h);
+            mpu.RequestAddModifier(unitId, new DummyMovementAction(), h => h2 = h);
             mpu.Tick(0);
 
             mpu.RequestRemoveUnit(unitId);
@@ -125,7 +125,7 @@ namespace _KITSystem.Movement.Unitest
         }
     }
 
-    class DummyModifier : IModifier
+    class DummyMovementAction : IMovementAction
     {
         public int Priority { get; }
         public ModifierName Name => ModifierName.Testing;
@@ -140,7 +140,7 @@ namespace _KITSystem.Movement.Unitest
 
         public bool OverrideOthers { get; }
 
-        public DummyModifier(int priority = 0, bool overrideOthers = false)
+        public DummyMovementAction(int priority = 0, bool overrideOthers = false)
         {
             Priority = priority;
             OverrideOthers = overrideOthers;

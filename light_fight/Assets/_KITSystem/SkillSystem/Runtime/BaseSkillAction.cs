@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Runtime
 {
-    public abstract class BaseAction : IAction
+    public abstract class BaseSkillAction : ISkillAction
     {
         private float lifeTime;
         private TriggerConfig.TriggerType type;
@@ -14,15 +14,15 @@ namespace _KITSystem.SkillSystem.Runtime
         private bool hasTriggered;
         private float elapsedTime;
 
-        protected BaseAction(TriggerConfig triggerConfig,
+        protected BaseSkillAction(TriggerConfig triggerConfig,
             float lifeTime)
         {
             this.lifeTime = lifeTime;
-            this.type = triggerConfig.type;
-            this.eventId = triggerConfig.eventId;
-            this.timer = triggerConfig.timer;
-            this.isMultiplierTrigger = triggerConfig.isMultiplierTrigger;
-            this.Reason = ActionCompleteReason.Undefined;
+            type = triggerConfig.type;
+            eventId = triggerConfig.eventId;
+            timer = triggerConfig.timer;
+            isMultiplierTrigger = triggerConfig.isMultiplierTrigger;
+            Reason = ActionCompleteReason.Undefined;
         }
 
         public void Start()
@@ -33,11 +33,12 @@ namespace _KITSystem.SkillSystem.Runtime
         public void Trigger(int id)
         {
             if (IsFinished) return;
-
-            if (type == Config.TriggerConfig.TriggerType.Event 
+            
+            if (type == TriggerConfig.TriggerType.Event 
                 && eventId == id 
                 && (!hasTriggered || isMultiplierTrigger))
             {
+                Debug.LogError("trigger is already triggered " + id);
                 hasTriggered = true;
                 Execute();
             }
@@ -49,7 +50,7 @@ namespace _KITSystem.SkillSystem.Runtime
 
             elapsedTime += deltaTime;
             
-            if (type == Config.TriggerConfig.TriggerType.Timeline 
+            if (type == TriggerConfig.TriggerType.Timeline 
                 && !hasTriggered 
                 && elapsedTime >= timer)
             {

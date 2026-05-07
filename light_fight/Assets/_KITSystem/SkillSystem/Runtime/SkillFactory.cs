@@ -27,7 +27,8 @@ namespace _KITSystem.SkillSystem.Runtime
                             for (int i = 0; i < melee.hitBoxes.Count; i++)
                                 shapes[i] = GenerateShape(melee.hitBoxes[i]);
                             spu.RequestAddAction(skillId,
-                                new CastMeleeProjectileAction(start, goal, shapes, e.triggerConfig, lifeTimeInSeconds)
+                                new CastMeleeProjectileSkillAction(start, goal, shapes, spu,
+                                    e.triggerConfig, lifeTimeInSeconds)
                             );
                         }
                         else if (cp.projectileType == BaseProjectileConfig.ProjectileType.Ranger)
@@ -38,7 +39,8 @@ namespace _KITSystem.SkillSystem.Runtime
                             var trajectory = GetTrajectory(ranger.trajectoryConfig, start + ranger.offsetStartPosition, goal);
                             shapes = new BaseShapeAction[1] { GenerateShape(ranger.shapeConfig) };
                             spu.RequestAddAction(skillId,
-                                new CastRangeProjectileAction(trajectory, shapes, e.triggerConfig, lifeTimeInSeconds)
+                                new CastRangeProjectileSkillAction(trajectory, shapes, spu,
+                                    e.triggerConfig, lifeTimeInSeconds)
                             );
                         }
 

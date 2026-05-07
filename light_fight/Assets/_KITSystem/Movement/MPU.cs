@@ -89,20 +89,20 @@ namespace _KITSystem.Movement
             for (int i = 0; i < activeModifiers.Count; i++)
             {
                 ModifierRuntime m = activeModifiers[i];
-                m.modifier.Process(positions[m.unitId], deltaTime);
+                m.MovementAction.Process(positions[m.unitId], deltaTime);
                 activeModifiers[i] = m;
 
                 // Xử lý để giảm việc cấp phát bộ nhớ (clear || new) liên tục
-                if (m.modifier.IsFinished)
+                if (m.MovementAction.IsFinished)
                 {
                     if (pendingModifierRemoved.Count > totalModifierFinished)
                     {
-                        pendingReasonModifierRemoved[totalModifierFinished] = m.modifier.Reason;
+                        pendingReasonModifierRemoved[totalModifierFinished] = m.MovementAction.Reason;
                         pendingModifierRemoved[totalModifierFinished] = m.modifierId;
                     }
                     else
                     {
-                        pendingReasonModifierRemoved.Add(m.modifier.Reason);
+                        pendingReasonModifierRemoved.Add(m.MovementAction.Reason);
                         pendingModifierRemoved.Add(m.modifierId);
                     }
 
@@ -137,10 +137,10 @@ namespace _KITSystem.Movement
                     int idx = list[i];
                     ModifierRuntime m = activeModifiers[idx];
 
-                    if (m.modifier.IsFinished) continue;
-                    if (m.modifier.Priority > maxPriority && m.modifier.OverrideOthers)
+                    if (m.MovementAction.IsFinished) continue;
+                    if (m.MovementAction.Priority > maxPriority && m.MovementAction.OverrideOthers)
                     {
-                        maxPriority = m.modifier.Priority;
+                        maxPriority = m.MovementAction.Priority;
                     }
                 }
 
@@ -149,15 +149,15 @@ namespace _KITSystem.Movement
                     int idx = list[i];
                     ModifierRuntime m = activeModifiers[idx];
                     
-                    if (m.modifier.IsFinished) continue;
+                    if (m.MovementAction.IsFinished) continue;
                     if (maxPriority != int.MinValue)
                     {
-                        if (m.modifier.Priority < maxPriority)
+                        if (m.MovementAction.Priority < maxPriority)
                             continue;
                     }
                     
-                    desiredPosition += m.modifier.EvaluatePosition(deltaTime);
-                    desiredVelocity += m.modifier.EvaluateVelocity(deltaTime);
+                    desiredPosition += m.MovementAction.EvaluatePosition(deltaTime);
+                    desiredVelocity += m.MovementAction.EvaluateVelocity(deltaTime);
                 }
 
                 positions[unitId] += desiredPosition;
@@ -219,14 +219,14 @@ namespace _KITSystem.Movement
             pendingCommands.Enqueue(() => { RemoveUnit_Internal(unitId); });
         }
 
-        public void RequestAddModifier(int unitId, IModifier modifier, Action<int> callback)
+        public void RequestAddModifier(int unitId, IMovementAction movementAction, Action<int> callback)
         {
-            pendingCommands.Enqueue(() => { callback.Invoke(AddModifier_Internal(unitId, modifier)); });
+            pendingCommands.Enqueue(() => { callback.Invoke(AddModifier_Internal(unitId, movementAction)); });
         }
         
-        public void RequestAddModifier(int unitId, IModifier modifier)
+        public void RequestAddModifier(int unitId, IMovementAction movementAction)
         {
-            pendingCommands.Enqueue(() => { AddModifier_Internal(unitId, modifier); });
+            pendingCommands.Enqueue(() => { AddModifier_Internal(unitId, movementAction); });
         }
      
         public void RequestRemoveModifier(int uniqueId, Action<bool> callback)
@@ -319,14 +319,14 @@ namespace _KITSystem.Movement
             return true;
         }
 
-        private int AddModifier_Internal(int unitId, IModifier modifier)
+        private int AddModifier_Internal(int unitId, IMovementAction movementAction)
         {
             if (!isInitialized) 
                 return -2;
 
-            if (!flags.Contains(modifier.Name))
+            if (!flags.Contains(movementAction.Name))
             {
-                Debug.LogError($"Modifier '{modifier.Name}' is not registered to system.");
+                Debug.LogError($"Modifier '{movementAction.Name}' is not registered to system.");
                 return -3;
             }
             
@@ -347,7 +347,7 @@ namespace _KITSystem.Movement
             }
             
             // ~ start ->
-            modifier.Start(positions[unitId]);
+            movementAction.Start(positions[unitId]);
             
             int modifierIndex = activeModifiers.Count;
             int modifierId = nextUniqueModifierId++;
@@ -356,7 +356,7 @@ namespace _KITSystem.Movement
             ModifierRuntime runtime = new ModifierRuntime
             {
                 unitId = unitId,
-                modifier = modifier,
+                MovementAction = movementAction,
                 modifierId = modifierId
             };
 
@@ -392,8 +392,8 @@ namespace _KITSystem.Movement
                 return false;
             
             ModifierRuntime removed = activeModifiers[idx];
-            if(hasInterrupted) removed.modifier.Interrupt();
-            removed.modifier.Stop();
+            if(hasInterrupted) removed.MovementAction.Interrupt();
+            removed.MovementAction.Stop();
             
             // xóa modifier ở danh sách theo unitId
             if (unitModifiers.TryGetValue(removed.unitId, out List<int> list))
@@ -484,7 +484,7 @@ namespace _KITSystem.Movement
             {
                 foreach (var idx in list)
                 {
-                    if(IsValidModifierIndex(idx) && activeModifiers[idx].modifier.Name == name)
+                    if(IsValidModifierIndex(idx) && activeModifiers[idx].MovementAction.Name == name)
                         return true;
                 }
             }
@@ -521,7 +521,7 @@ namespace _KITSystem.Movement
             public int unitId;
             public float elapsedTime;
             public bool markedForRemoval;
-            public IModifier modifier;
+            public IMovementAction MovementAction;
             public int modifierId; // Dùng lưu để xóa
         }
     }

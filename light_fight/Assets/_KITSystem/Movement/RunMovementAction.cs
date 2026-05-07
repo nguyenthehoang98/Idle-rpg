@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace _KITSystem.Movement
 {
-    public struct RunModifier : IModifier
+    public struct RunMovementAction : IMovementAction
     {
         private Vector3 direction;
         private float speed;
@@ -25,7 +25,7 @@ namespace _KITSystem.Movement
         public ModifierCompleteReason Reason { get; private set; }
         public bool OverrideOthers => false;
 
-        public RunModifier(Vector3 direction, float speed)
+        public RunMovementAction(Vector3 direction, float speed)
         {
             this.direction = direction.normalized;
             this.speed = speed;
@@ -38,7 +38,7 @@ namespace _KITSystem.Movement
             this.IsFinished = false;
         }
 
-        public RunModifier(Vector3 direction, float speed, float duration)
+        public RunMovementAction(Vector3 direction, float speed, float duration)
         {
             this.direction = direction.normalized;
             this.speed = speed;
@@ -51,7 +51,7 @@ namespace _KITSystem.Movement
             this.IsFinished = false;
         }
 
-        public RunModifier(Vector3 direction, float speed, Vector3 destination, float stopDistance)
+        public RunMovementAction(Vector3 direction, float speed, Vector3 destination, float stopDistance)
         {
             this.direction = direction.normalized;
             this.speed = speed;

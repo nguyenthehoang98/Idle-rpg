@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Runtime
 {
-    internal sealed class CastRangeProjectileAction : CastProjectileAction
+    internal sealed class CastRangeProjectileSkillAction : CastProjectileSkillAction
     {
         private BaseTrajectoryAction trajectory;
         
-        internal CastRangeProjectileAction(BaseTrajectoryAction trajectory,
-            BaseShapeAction[] shapes, TriggerConfig triggerConfig, float lifeTime) : base(shapes, triggerConfig, lifeTime)
+        internal CastRangeProjectileSkillAction(BaseTrajectoryAction trajectory, BaseShapeAction[] shapes, 
+            SPU spu, TriggerConfig triggerConfig, float lifeTime) : base(shapes, spu, triggerConfig, lifeTime)
         {
             this.trajectory = trajectory;
         }

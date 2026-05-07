@@ -78,7 +78,7 @@ public class MPUDemo : MonoBehaviour
             {
                 unitIds.Add(unitId);
                 mpu.RequestAddModifier(unitId,
-                    new RunModifier(directions[index], 3, Vector3.zero, isRanged ? 8 : 2)
+                    new RunMovementAction(directions[index], 3, Vector3.zero, isRanged ? 8 : 2)
                 );
             });
         }
@@ -97,7 +97,7 @@ public class MPUDemo : MonoBehaviour
             int idx = Random.Range(0, units.Count);
             units[idx].GetComponent<SpriteRenderer>().color = Color.yellow;
             mpu.RequestAddModifier(idx,
-                new TeleportModifier(new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), 0))
+                new TeleportMovementAction(new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), 0))
             );
         }
 
@@ -108,12 +108,12 @@ public class MPUDemo : MonoBehaviour
             Vector3 position = units[unitId].transform.position;
             units[unitId].GetComponent<SpriteRenderer>().color = Color.magenta;
             mpu.RequestAddModifier(unitId,
-                new KnockBackModifier(position, 0.4f, 3, () =>
+                new KnockBackMovementAction(position, 0.4f, 3, () =>
                 {
                     if (!mpu.HasModifierType(unitId, ModifierName.Default))
                     {
                         mpu.RequestAddModifier(unitId,
-                            new RunModifier(-position, 3, Vector3.zero, isRanged ? 8 : 2)
+                            new RunMovementAction(-position, 3, Vector3.zero, isRanged ? 8 : 2)
                         );
                     }
                 })

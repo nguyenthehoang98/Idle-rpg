@@ -4,7 +4,7 @@ using UnityEngine;
 namespace _KITSystem.Movement
 {
     // Có thể sẽ thêm modifier Unlock Modifier.
-    public struct LockModifier : IModifier
+    public struct LockMovementAction : IMovementAction
     {
         public int Priority => PriorityModifierIndex.LOCK;
         public ModifierName Name => ModifierName.Lock;
@@ -13,7 +13,7 @@ namespace _KITSystem.Movement
         private float elapsedTime;
         private bool shouldFinish;
 
-        public LockModifier(float duration)
+        public LockMovementAction(float duration)
         {
             this.duration = duration;
             this.elapsedTime = 0f;

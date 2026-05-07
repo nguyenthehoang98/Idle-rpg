@@ -1,6 +1,6 @@
 ﻿namespace _KITSystem.SkillSystem.Runtime
 {
-    public interface IAction
+    public interface ISkillAction
     {
         void Start();
         void Trigger(int id);

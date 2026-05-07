@@ -38,19 +38,19 @@ namespace _KITSystem.SkillSystem.Runtime
             for (int i = 0; i < activeActions.Count; i++)
             {
                 ActionRuntime a = activeActions[i];
-                a.action.Tick(deltaTime);
+                a.SkillAction.Tick(deltaTime);
                 activeActions[i] = a;
                 
-                if (a.action.IsFinished)
+                if (a.SkillAction.IsFinished)
                 {
                     if (pendingActionRemoved.Count > totalActionFinished)
                     {
-                        pendingReasonActionRemoved[totalActionFinished] = a.action.Reason;
+                        pendingReasonActionRemoved[totalActionFinished] = a.SkillAction.Reason;
                         pendingActionRemoved[totalActionFinished] = a.actionInstanceId;
                     }
                     else
                     {
-                        pendingReasonActionRemoved.Add(a.action.Reason);
+                        pendingReasonActionRemoved.Add(a.SkillAction.Reason);
                         pendingActionRemoved.Add(a.actionInstanceId);
                     }
 
@@ -108,12 +108,23 @@ namespace _KITSystem.SkillSystem.Runtime
             
             return id;
         }
+
+        public void TriggerEventId(int skillId, int eventId)
+        {
+            if (HasSkill(skillId, out var list))
+            {
+                foreach (var actionId in list)
+                {
+                    if (TryGetAction(actionId, out var action)) action.Trigger(eventId);
+                }
+            }
+        }
         
-        public void RequestAddAction(int skillId, IAction action, Action<int> callback = null)
+        public void RequestAddAction(int skillId, ISkillAction skillAction, Action<int> callback = null)
         {
             pendingCommands.Enqueue(() =>
             {
-                int id = AddAction_Internal(skillId, action);
+                int id = AddAction_Internal(skillId, skillAction);
                 callback?.Invoke(id);
             });
         }
@@ -131,6 +142,21 @@ namespace _KITSystem.SkillSystem.Runtime
         public bool HasAction(int actionId)
         {
             return mapActionIdToIndex.ContainsKey(actionId);
+        }
+
+        public bool TryGetAction(int actionId, out ISkillAction skillAction)
+        {
+            if (mapActionIdToIndex.TryGetValue(actionId, out var index))
+            {
+                if ((uint)index < activeActions.Count)
+                {
+                    skillAction = activeActions[index].SkillAction;
+                    return true;
+                }
+            }
+
+            skillAction = null;
+            return false;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -152,7 +178,7 @@ namespace _KITSystem.SkillSystem.Runtime
             });
         }
 
-        private int AddAction_Internal(int skillId, IAction action)
+        private int AddAction_Internal(int skillId, ISkillAction skillAction)
         {
             int actionId = nextActionId++;
 
@@ -162,7 +188,7 @@ namespace _KITSystem.SkillSystem.Runtime
                 mapActionsIndex[skillId] = list;
             }
             
-            action.Start();
+            skillAction.Start();
 
             int index = activeActions.Count;
 
@@ -170,7 +196,7 @@ namespace _KITSystem.SkillSystem.Runtime
             {
                 skillInstanceId = skillId,
                 actionInstanceId = actionId,
-                action = action
+                SkillAction = skillAction
             };
 
             activeActions.Add(runtime);
@@ -191,9 +217,9 @@ namespace _KITSystem.SkillSystem.Runtime
 
             var removed = activeActions[idx];
 
-            if (interrupted) removed.action.Interrupt();
+            if (interrupted) removed.SkillAction.Interrupt();
 
-            removed.action.Stop();
+            removed.SkillAction.Stop();
             
             // remove khỏi skill map
             if (mapActionsIndex.TryGetValue(removed.skillInstanceId, out var list))
@@ -255,7 +281,7 @@ namespace _KITSystem.SkillSystem.Runtime
             public int actionInstanceId;
             public float elapsedTime;
             public bool markedForRemoval;
-            public IAction action;
+            public ISkillAction SkillAction;
         }
     }
 }
