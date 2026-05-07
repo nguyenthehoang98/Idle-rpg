@@ -14,7 +14,7 @@ namespace _KITSystem.Movement.Unitest
             mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
             {
                 unitId = unit;
-                mpu.RequestAddModifier(unit, new RunMovementAction(Vector3.right, 5f));
+                mpu.RequestAddAction(unit, new RunMovementAction(Vector3.right, 5f));
             });
 
             mpu.Tick(1f); // 1 giây
@@ -33,8 +33,8 @@ namespace _KITSystem.Movement.Unitest
             mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
             {
                 unitId = unit;
-                mpu.RequestAddModifier(unit, new RunMovementAction(Vector3.right, 5f));
-                mpu.RequestAddModifier(unit, new RunMovementAction(Vector3.forward, 5f));
+                mpu.RequestAddAction(unit, new RunMovementAction(Vector3.right, 5f));
+                mpu.RequestAddAction(unit, new RunMovementAction(Vector3.forward, 5f));
             });
 
             mpu.Tick(2f);
@@ -54,12 +54,12 @@ namespace _KITSystem.Movement.Unitest
             mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
             {
                 unitId = unit;
-                mpu.RequestAddModifier(unit, new RunMovementAction(Vector3.right, 5f), i => handle = i);
+                mpu.RequestAddAction(unit, new RunMovementAction(Vector3.right, 5f), i => handle = i);
             });
 
             mpu.Tick(1f);
 
-            mpu.RequestRemoveModifier(handle);
+            mpu.RequestRemoveAction(handle);
 
             mpu.Tick(1f);
 
@@ -78,13 +78,13 @@ namespace _KITSystem.Movement.Unitest
             mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
             {
                 unitId = unit;
-                mpu.RequestAddModifier(unit, new RunMovementAction(Vector3.right, 5f), i => h1 = i);
-                mpu.RequestAddModifier(unit, new RunMovementAction(Vector3.forward, 5f), i => h2 = i);
+                mpu.RequestAddAction(unit, new RunMovementAction(Vector3.right, 5f), i => h1 = i);
+                mpu.RequestAddAction(unit, new RunMovementAction(Vector3.forward, 5f), i => h2 = i);
             });
 
             mpu.Tick(1f);
 
-            mpu.RequestRemoveModifier(h1);
+            mpu.RequestRemoveAction(h1);
 
             mpu.Tick(1f);
 
@@ -106,12 +106,12 @@ namespace _KITSystem.Movement.Unitest
             mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
             {
                 unitId = unit;
-                mpu.RequestAddModifier(unit, new RunMovementAction(Vector3.right, 5f), i => handle = i);
+                mpu.RequestAddAction(unit, new RunMovementAction(Vector3.right, 5f), i => handle = i);
             });
 
             mpu.Tick(1f); // chạy → move
 
-            mpu.RequestRemoveModifier(handle);
+            mpu.RequestRemoveAction(handle);
 
             mpu.Tick(1f); // apply remove
 
@@ -130,7 +130,7 @@ namespace _KITSystem.Movement.Unitest
             mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
             {
                 unitId = unit;
-                mpu.RequestAddModifier(unit, new TeleportMovementAction(new Vector3(33, 0)));
+                mpu.RequestAddAction(unit, new TeleportMovementAction(new Vector3(33, 0)));
             });
 
             mpu.Tick(Random.Range(0.1f, 10f)); // 1 giây
@@ -149,8 +149,8 @@ namespace _KITSystem.Movement.Unitest
             mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
             {
                 unitId = unit;
-                mpu.RequestAddModifier(unit, new RunMovementAction(new Vector3(1, 0, 0), speed: 5f));
-                mpu.RequestAddModifier(unit, new KnockBackMovementAction(
+                mpu.RequestAddAction(unit, new RunMovementAction(new Vector3(1, 0, 0), speed: 5f));
+                mpu.RequestAddAction(unit, new KnockBackMovementAction(
                     direction: new Vector3(-1, 0, 0), 2f, 1f, null)
                 );
             });
@@ -172,7 +172,7 @@ namespace _KITSystem.Movement.Unitest
             mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
             {
                 unitId = unit;
-                mpu.RequestAddModifier(unit, new KnockBackMovementAction(
+                mpu.RequestAddAction(unit, new KnockBackMovementAction(
                     direction: new Vector3(-1, 0, 0), 2f, 3f, null)
                 );
             });

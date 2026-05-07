@@ -34,7 +34,7 @@ namespace _KITSystem.Movement.Unitest
             mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => unitId = x);
             mpu.Tick(0);
 
-            mpu.RequestAddModifier(unitId, new DummyMovementAction(), h => handle = h);
+            mpu.RequestAddAction(unitId, new DummyMovementAction(), h => handle = h);
             mpu.Tick(0);
 
             Assert.IsTrue(mpu.HasModifier(handle));
@@ -49,10 +49,10 @@ namespace _KITSystem.Movement.Unitest
             mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => unitId = x);
             mpu.Tick(0);
 
-            mpu.RequestAddModifier(unitId, new DummyMovementAction(), h => handle = h);
+            mpu.RequestAddAction(unitId, new DummyMovementAction(), h => handle = h);
             mpu.Tick(0);
 
-            mpu.RequestRemoveModifier(handle);
+            mpu.RequestRemoveAction(handle);
             mpu.Tick(0);
 
             Assert.IsFalse(mpu.HasModifier(handle));
@@ -67,12 +67,12 @@ namespace _KITSystem.Movement.Unitest
             mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => unitId = x);
             mpu.Tick(0);
 
-            mpu.RequestAddModifier(unitId, new DummyMovementAction(), h => h1 = h);
-            mpu.RequestAddModifier(unitId, new DummyMovementAction(), h => h2 = h);
-            mpu.RequestAddModifier(unitId, new DummyMovementAction(), h => h3 = h);
+            mpu.RequestAddAction(unitId, new DummyMovementAction(), h => h1 = h);
+            mpu.RequestAddAction(unitId, new DummyMovementAction(), h => h2 = h);
+            mpu.RequestAddAction(unitId, new DummyMovementAction(), h => h3 = h);
             mpu.Tick(0);
 
-            mpu.RequestRemoveModifier(h2);
+            mpu.RequestRemoveAction(h2);
             mpu.Tick(0);
 
             Assert.IsTrue(mpu.HasModifier(h1));
@@ -88,8 +88,8 @@ namespace _KITSystem.Movement.Unitest
             mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => unitId = x);
             mpu.Tick(0);
 
-            mpu.RequestAddModifier(unitId, new DummyMovementAction(), h => h1 = h);
-            mpu.RequestAddModifier(unitId, new DummyMovementAction(), h => h2 = h);
+            mpu.RequestAddAction(unitId, new DummyMovementAction(), h => h1 = h);
+            mpu.RequestAddAction(unitId, new DummyMovementAction(), h => h2 = h);
             mpu.Tick(0);
 
             mpu.RequestRemoveUnit(unitId);

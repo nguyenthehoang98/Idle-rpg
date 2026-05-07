@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using _KITSystem.Schedule;
+using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Debug = UnityEngine.Debug;
 
 namespace _KITSystem.Movement
@@ -19,11 +21,13 @@ namespace _KITSystem.Movement
         // Đánh version giúp kiểm tra debug
         private int version;
         // biến kiểm tra đã khởi tạo chưa
-        private bool isInitialized = false;
+        [HideInEditorMode, DisableInPlayMode]
+        [SerializeField] private bool isInitialized = false;
         // Kiểu collection khác, giúp kiểm tra nhanh hơn
         private HashSet<ModifierName> flags = new HashSet<ModifierName>();
         // Danh sách chứa vị trí của các unit. unit id = index
-        private List<Vector3> positions = new List<Vector3>();
+        [HideInEditorMode, DisableInPlayMode]
+        [SerializeField] private List<Vector3> positions = new List<Vector3>();
         private List<Vector3> destinations = new List<Vector3>();
         // Tương tự poistions list nhưng lưu vận tốc
         private List<Vector3> desiredVelocities = new List<Vector3>();
@@ -35,18 +39,19 @@ namespace _KITSystem.Movement
          * Map các unit Id -> Modifier Runtime [index]
          * Muốn tìm 1 modifier thì sẽ unitModifiers[unitId][x] x là index => activeModifiers[x]
          */
-        private Dictionary<int, List<int>> unitModifiers = new Dictionary<int, List<int>>();
+        private Dictionary<int, List<int>> units = new Dictionary<int, List<int>>();
         // Danh sách chứa các modifiers đang hoạt động (sử dụng loops)
-        private List<ModifierRuntime> activeModifiers = new List<ModifierRuntime>();
+        [HideInEditorMode, DisableInPlayMode]
+        [SerializeField] private List<ModifierRuntime> activeActions = new List<ModifierRuntime>();
         // Cờ id cho phần thêm, xóa modifier
         private int nextUniqueModifierId = 1;
         // Danh sách các cờ modifier được lưu ở đây. Map [uniqueId]->[globalid] giúp tìm modifier trực tiếp
-        private Dictionary<int, int> mapModifierIdToIndex = new Dictionary<int, int>();
+        private Dictionary<int, int> mapActionIdToIndex = new Dictionary<int, int>();
         // Hàng chờ các command, tránh conflic data
         private Queue<Action> pendingCommands = new Queue<Action>();
         // Danh sách chứa các modifier đã finish để chờ remove.
-        private List<int> pendingModifierRemoved = new List<int>();
-        private List<ModifierCompleteReason> pendingReasonModifierRemoved = new List<ModifierCompleteReason>();
+        private List<int> pendingActionRemoved = new List<int>();
+        private List<ModifierCompleteReason> pendingReasonActionRemoved = new List<ModifierCompleteReason>();
 
         public MPU()
         {
@@ -80,30 +85,29 @@ namespace _KITSystem.Movement
         public void Tick(float deltaTime)
         {
             if (!isInitialized) return;
-
             FlushCommands();
 
             // Update modifier
             int totalModifierFinished = 0;
             int startVersion = version;
-            for (int i = 0; i < activeModifiers.Count; i++)
+            for (int i = 0; i < activeActions.Count; i++)
             {
-                ModifierRuntime m = activeModifiers[i];
-                m.MovementAction.Process(positions[m.unitId], deltaTime);
-                activeModifiers[i] = m;
+                ModifierRuntime m = activeActions[i];
+                m.action.Process(positions[m.unitId], deltaTime);
+                activeActions[i] = m;
 
                 // Xử lý để giảm việc cấp phát bộ nhớ (clear || new) liên tục
-                if (m.MovementAction.IsFinished)
+                if (m.action.IsFinished)
                 {
-                    if (pendingModifierRemoved.Count > totalModifierFinished)
+                    if (pendingActionRemoved.Count > totalModifierFinished)
                     {
-                        pendingReasonModifierRemoved[totalModifierFinished] = m.MovementAction.Reason;
-                        pendingModifierRemoved[totalModifierFinished] = m.modifierId;
+                        pendingReasonActionRemoved[totalModifierFinished] = m.action.Reason;
+                        pendingActionRemoved[totalModifierFinished] = m.actionId;
                     }
                     else
                     {
-                        pendingReasonModifierRemoved.Add(m.MovementAction.Reason);
-                        pendingModifierRemoved.Add(m.modifierId);
+                        pendingReasonActionRemoved.Add(m.action.Reason);
+                        pendingActionRemoved.Add(m.actionId);
                     }
 
                     totalModifierFinished++;
@@ -123,7 +127,7 @@ namespace _KITSystem.Movement
                 if (!alives[unitId])
                     continue;
                 
-                if (!unitModifiers.TryGetValue(unitId, out var list)) // modifiers list
+                if (!units.TryGetValue(unitId, out var list)) // modifiers list
                 {
                     desiredVelocities[unitId] = Vector3.zero;
                     continue;
@@ -135,29 +139,29 @@ namespace _KITSystem.Movement
                 for (int i = 0; i < list.Count; i++)
                 {
                     int idx = list[i];
-                    ModifierRuntime m = activeModifiers[idx];
+                    ModifierRuntime m = activeActions[idx];
 
-                    if (m.MovementAction.IsFinished) continue;
-                    if (m.MovementAction.Priority > maxPriority && m.MovementAction.OverrideOthers)
+                    if (m.action.IsFinished) continue;
+                    if (m.action.Priority > maxPriority && m.action.OverrideOthers)
                     {
-                        maxPriority = m.MovementAction.Priority;
+                        maxPriority = m.action.Priority;
                     }
                 }
 
                 for (int i = 0; i < list.Count; i++)
                 {
                     int idx = list[i];
-                    ModifierRuntime m = activeModifiers[idx];
+                    ModifierRuntime m = activeActions[idx];
                     
-                    if (m.MovementAction.IsFinished) continue;
+                    if (m.action.IsFinished) continue;
                     if (maxPriority != int.MinValue)
                     {
-                        if (m.MovementAction.Priority < maxPriority)
+                        if (m.action.Priority < maxPriority)
                             continue;
                     }
                     
-                    desiredPosition += m.MovementAction.EvaluatePosition(deltaTime);
-                    desiredVelocity += m.MovementAction.EvaluateVelocity(deltaTime);
+                    desiredPosition += m.action.EvaluatePosition(deltaTime);
+                    desiredVelocity += m.action.EvaluateVelocity(deltaTime);
                 }
 
                 positions[unitId] += desiredPosition;
@@ -180,11 +184,11 @@ namespace _KITSystem.Movement
             // Remove all modifier finished
             for (int i = 0; i < totalModifierFinished; i++)
             {
-                ModifierCompleteReason reason = pendingReasonModifierRemoved[i];
+                ModifierCompleteReason reason = pendingReasonActionRemoved[i];
                 if (reason == ModifierCompleteReason.EndLifeCycle)
-                    RequestRemoveModifierEndLifeCycle(pendingModifierRemoved[i]);
+                    RequestRemoveActionEndLifeCycle(pendingActionRemoved[i]);
                 else if (reason == ModifierCompleteReason.Interrupt)
-                    RequestRemoveModifier(pendingModifierRemoved[i]);
+                    RequestRemoveAction(pendingActionRemoved[i]);
                 else Debug.LogError($"Not define reason '{reason}'");
             }
 
@@ -219,35 +223,40 @@ namespace _KITSystem.Movement
             pendingCommands.Enqueue(() => { RemoveUnit_Internal(unitId); });
         }
 
-        public void RequestAddModifier(int unitId, IMovementAction movementAction, Action<int> callback)
+        public void RequestAddAction(int unitId, IMovementAction movementAction, Action<int> callback)
         {
-            pendingCommands.Enqueue(() => { callback.Invoke(AddModifier_Internal(unitId, movementAction)); });
+            pendingCommands.Enqueue(() => { callback.Invoke(AddAction_Internal(unitId, movementAction)); });
         }
         
-        public void RequestAddModifier(int unitId, IMovementAction movementAction)
+        public void RequestAddAction(int unitId, IMovementAction movementAction)
         {
-            pendingCommands.Enqueue(() => { AddModifier_Internal(unitId, movementAction); });
+            pendingCommands.Enqueue(() => { AddAction_Internal(unitId, movementAction); });
         }
      
-        public void RequestRemoveModifier(int uniqueId, Action<bool> callback)
+        public void RequestRemoveAction(int uniqueId, Action<bool> callback)
         {
-            pendingCommands.Enqueue(() => { callback.Invoke(RemoveModifier_Internal(uniqueId, true)); });
+            pendingCommands.Enqueue(() => { callback.Invoke(RemoveAction_Internal(uniqueId, true)); });
         }
      
-        public void RequestRemoveModifier(int uniqueId)
+        public void RequestRemoveAction(int uniqueId)
         {
-            pendingCommands.Enqueue(() => { RemoveModifier_Internal(uniqueId, true); });
+            pendingCommands.Enqueue(() => { RemoveAction_Internal(uniqueId, true); });
         }
      
-        private void RequestRemoveModifierEndLifeCycle(int uniqueId)
+        private void RequestRemoveActionEndLifeCycle(int uniqueId)
         {
-            pendingCommands.Enqueue(() => { RemoveModifier_Internal(uniqueId, false); });
+            pendingCommands.Enqueue(() => { RemoveAction_Internal(uniqueId, false); });
         }
 
         private int AddUnit_Internal(Vector3 position, Vector3 destination)
         {
             if (!isInitialized)
+            {
+#if UNITY_EDITOR
+                Debug.LogError("MPU not initialized");
+#endif
                 return -2;
+            }
             
             int id;
 
@@ -278,14 +287,19 @@ namespace _KITSystem.Movement
 
         private bool RemoveUnit_Internal(int unitId)
         {
-            if (!IsValidUnit(unitId)) 
+            if (!IsValidUnit(unitId))
+            {
+#if UNITY_EDITOR
+                Debug.LogError($"MPU not registered as a valid unit '{unitId}'");
+#endif
                 return false;
+            }
 
             // mark dead
             alives[unitId] = false;
 
             // cleanup modifiers của unit này
-            if (unitModifiers.TryGetValue(unitId, out List<int> list))
+            if (units.TryGetValue(unitId, out List<int> list))
             {
                 List<int> handles = new List<int>(list.Count);
 
@@ -295,16 +309,16 @@ namespace _KITSystem.Movement
 
                     if (!IsValidModifierIndex(idx)) continue;
 
-                    handles.Add(activeModifiers[idx].modifierId);
+                    handles.Add(activeActions[idx].actionId);
                 }
                 
                 // remove bằng handle (an toàn)
                 for (int i = 0; i < handles.Count; i++)
                 {
-                    RemoveModifier_Internal(handles[i], true);
+                    RemoveAction_Internal(handles[i], true);
                 }
 
-                unitModifiers.Remove(unitId);
+                units.Remove(unitId);
             }
 
             // đưa id vào free list
@@ -319,14 +333,21 @@ namespace _KITSystem.Movement
             return true;
         }
 
-        private int AddModifier_Internal(int unitId, IMovementAction movementAction)
+        private int AddAction_Internal(int unitId, IMovementAction movementAction)
         {
-            if (!isInitialized) 
+            if (!isInitialized)
+            {
+#if UNITY_EDITOR
+                Debug.LogError("MPU not initialized");
+#endif
                 return -2;
+            }
 
             if (!flags.Contains(movementAction.Name))
             {
+#if UNITY_EDITOR
                 Debug.LogError($"Modifier '{movementAction.Name}' is not registered to system.");
+#endif
                 return -3;
             }
             
@@ -337,41 +358,46 @@ namespace _KITSystem.Movement
              */
             
             if (!IsValidUnit(unitId))
+            {
+#if UNITY_EDITOR
+                Debug.LogError($"MPU not registered as a valid unit '{unitId}'");
+#endif
                 return -1;
+            }
             
             // Lấy danh sách modifier của unit
-            if (!unitModifiers.TryGetValue(unitId, out var list))
+            if (!units.TryGetValue(unitId, out var list))
             {
                 list = new List<int>();
-                unitModifiers[unitId] = list;
+                units[unitId] = list;
             }
             
             // ~ start ->
             movementAction.Start(positions[unitId]);
             
-            int modifierIndex = activeModifiers.Count;
+            int modifierIndex = activeActions.Count;
             int modifierId = nextUniqueModifierId++;
             
             // Add modifier vào hệ thống
             ModifierRuntime runtime = new ModifierRuntime
             {
                 unitId = unitId,
-                MovementAction = movementAction,
-                modifierId = modifierId
+                action = movementAction,
+                actionId = modifierId
             };
 
-            activeModifiers.Add(runtime);
+            activeActions.Add(runtime);
 
             list.Add(modifierIndex);
             
-            mapModifierIdToIndex[modifierId] = modifierIndex;
+            mapActionIdToIndex[modifierId] = modifierIndex;
 
             version++;
 
             return modifierId;
         }
 
-        private bool RemoveModifier_Internal(int uniqueId, bool hasInterrupted)
+        private bool RemoveAction_Internal(int uniqueId, bool hasInterrupted)
         {
             /*
              * Áp dụng kĩ thuật trong môn Thuật toán & ứng dụng
@@ -388,15 +414,15 @@ namespace _KITSystem.Movement
              * UpdateUnitModifier O(k) với K là số modifier hiện tại (khá ít) 
              */
 
-            if (!TryGetIndexModifier(uniqueId, out int idx))
+            if (!TryGetIndexAction(uniqueId, out int idx))
                 return false;
             
-            ModifierRuntime removed = activeModifiers[idx];
-            if(hasInterrupted) removed.MovementAction.Interrupt();
-            removed.MovementAction.Stop();
+            ModifierRuntime removed = activeActions[idx];
+            if(hasInterrupted) removed.action.Interrupt();
+            removed.action.Stop();
             
             // xóa modifier ở danh sách theo unitId
-            if (unitModifiers.TryGetValue(removed.unitId, out List<int> list))
+            if (units.TryGetValue(removed.unitId, out List<int> list))
             {
                 for (int i = 0; i < list.Count; i++)
                 {
@@ -410,23 +436,23 @@ namespace _KITSystem.Movement
 
                 // xóa key nếu ko còn phần tử nào cả
                 if (list.Count == 0)
-                    unitModifiers.Remove(removed.unitId);
+                    units.Remove(removed.unitId);
             }
 
             // lấy index của modifier bên trong danh sách
-            int lastIdx = activeModifiers.Count - 1;
+            int lastIdx = activeActions.Count - 1;
             if (idx != lastIdx)
             {
                 // đảo chỗ phần tử cần xóa cho phần tử cuối -> thay vì xóa ở list (giảm độ phức tạp)
-                ModifierRuntime last = activeModifiers[lastIdx];
-                activeModifiers[idx] = last;
+                ModifierRuntime last = activeActions[lastIdx];
+                activeActions[idx] = last;
 
                 // cập nhật lại các phần tử
-                mapModifierIdToIndex[last.modifierId] = idx;
-                activeModifiers[idx] = last;
+                mapActionIdToIndex[last.actionId] = idx;
+                activeActions[idx] = last;
                 
                 // update unitModifiers của thằng bị swap
-                if (unitModifiers.TryGetValue(last.unitId, out List<int> list2))
+                if (units.TryGetValue(last.unitId, out List<int> list2))
                 {
                     for (int i = 0; i < list2.Count; i++)
                     {
@@ -440,19 +466,19 @@ namespace _KITSystem.Movement
             }
             
             // xóa tại index cuối (thay vì xóa ở index nào đó -> phải sort list)
-            activeModifiers.RemoveAt(lastIdx);
+            activeActions.RemoveAt(lastIdx);
             
             // xoá mapping của thằng bị remove
-            mapModifierIdToIndex.Remove(uniqueId);
+            mapActionIdToIndex.Remove(uniqueId);
 
             version++;
 
             return true;
         }
         
-        private bool TryGetIndexModifier(int handle, out int idx)
+        private bool TryGetIndexAction(int handle, out int idx)
         {
-            if (!mapModifierIdToIndex.TryGetValue(handle, out idx))
+            if (!mapActionIdToIndex.TryGetValue(handle, out idx))
                 return false;
 
             if (!IsValidModifierIndex(idx)) return false;
@@ -475,16 +501,16 @@ namespace _KITSystem.Movement
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool HasModifier(int handle)
         {
-            return mapModifierIdToIndex.ContainsKey(handle);
+            return mapActionIdToIndex.ContainsKey(handle);
         }
 
         public bool HasModifierType(int unitId, ModifierName name)
         {
-            if (IsValidUnit(unitId) && unitModifiers.TryGetValue(unitId, out var list))
+            if (IsValidUnit(unitId) && units.TryGetValue(unitId, out var list))
             {
                 foreach (var idx in list)
                 {
-                    if(IsValidModifierIndex(idx) && activeModifiers[idx].MovementAction.Name == name)
+                    if(IsValidModifierIndex(idx) && activeActions[idx].action.Name == name)
                         return true;
                 }
             }
@@ -495,7 +521,7 @@ namespace _KITSystem.Movement
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool HasModifier(int handle, out int idx)
         {
-            return mapModifierIdToIndex.TryGetValue(handle, out idx);
+            return mapActionIdToIndex.TryGetValue(handle, out idx);
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -507,7 +533,7 @@ namespace _KITSystem.Movement
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool IsValidModifierIndex(int idx)
         {
-            return (uint)idx < (uint)activeModifiers.Count;
+            return (uint)idx < (uint)activeActions.Count;
         }
     }
     
@@ -521,8 +547,11 @@ namespace _KITSystem.Movement
             public int unitId;
             public float elapsedTime;
             public bool markedForRemoval;
-            public IMovementAction MovementAction;
-            public int modifierId; // Dùng lưu để xóa
+#if UNITY_EDITOR
+            [SerializeReference]
+#endif
+            public IMovementAction action;
+            public int actionId; // Dùng lưu để xóa
         }
     }
 }

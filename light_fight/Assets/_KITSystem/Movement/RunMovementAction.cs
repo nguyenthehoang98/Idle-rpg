@@ -1,17 +1,21 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace _KITSystem.Movement
 {
+#if UNITY_EDITOR
+    [Serializable]
+#endif
     public struct RunMovementAction : IMovementAction
     {
-        private Vector3 direction;
-        private float speed;
-        private bool useLifeTime;
-        private float remainingLifeTime;
-        private bool useDestination;
-        private Vector3 destination;
-        private float stopDistance;
+        [SerializeField] private Vector3 direction;
+        [SerializeField] private float speed;
+        [SerializeField] private bool useLifeTime;
+        [SerializeField] private float remainingLifeTime;
+        [SerializeField] private bool useDestination;
+        [SerializeField] private Vector3 destination;
+        [SerializeField] private float stopDistance;
 
         public int Priority => PriorityModifierIndex.DEFAULT;
         public ModifierName Name => ModifierName.Default;

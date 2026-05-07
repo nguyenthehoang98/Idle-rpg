@@ -5,10 +5,13 @@ namespace _KITSystem.SkillSystem.Config
     public sealed class OwnGameObject
     {
         private GameObject gameObject;
+        private readonly int hash;
+        private static int count;
 
         public OwnGameObject(GameObject gameObject)
         {
             this.gameObject = gameObject;
+            hash = count++;
         }
 
         private Vector3 position;
@@ -19,7 +22,8 @@ namespace _KITSystem.SkillSystem.Config
             set
             {
                 position = value;
-                gameObject.transform.position = position;
+                if(gameObject != null) 
+                    gameObject.transform.position = position;
             }
         }
 
@@ -31,8 +35,11 @@ namespace _KITSystem.SkillSystem.Config
             set
             {
                 rotation = value;
-                gameObject.transform.rotation = rotation;
+                if(gameObject != null) 
+                    gameObject.transform.rotation = rotation;
             }
         }
+
+        public override int GetHashCode() => hash;
     }
 }
