@@ -33,15 +33,12 @@ namespace _KITSystem.SkillSystem.Runtime
 
         public void Trigger(int id)
         {
-            Debug.Log($"[{GetType().Name}] call_trigger {IsFinished}, {type}, {eventId}, {id}, {hasTriggered}");
-            
             if (IsFinished) return;
             
             if (type == TriggerConfig.TriggerType.Event 
                 && eventId == id 
                 && (!hasTriggered || isMultiplierTrigger))
             {
-                Debug.LogError("trigger is already triggered " + id);
                 hasTriggered = true;
                 Execute();
             }

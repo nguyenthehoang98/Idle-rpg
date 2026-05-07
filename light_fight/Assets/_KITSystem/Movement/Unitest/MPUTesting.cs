@@ -5,11 +5,18 @@ namespace _KITSystem.Movement.Unitest
 {
     public class MPUTesting
     {
+        private MPU mpu;
+        
+        [SetUp]
+        public void Setup()
+        {
+            mpu = new MPU(ModifierName.Testing);
+            mpu.Initialize();
+        }
+        
         [Test]
         public void AddUnit_ShouldCreateValidUnit()
         {
-            var mpu = CreateMPU();
-
             int id = -1;
 
             mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => id = x);
@@ -21,8 +28,6 @@ namespace _KITSystem.Movement.Unitest
         [Test]
         public void AddModifier_ShouldExistInSystem()
         {
-            var mpu = CreateMPU();
-
             int unitId = -1;
             int handle = -1;
 
@@ -38,8 +43,6 @@ namespace _KITSystem.Movement.Unitest
         [Test]
         public void RemoveModifier_ShouldRemoveCorrectly()
         {
-            var mpu = CreateMPU();
-
             int unitId = -1;
             int handle = -1;
 
@@ -58,8 +61,6 @@ namespace _KITSystem.Movement.Unitest
         [Test]
         public void RemoveModifier_ShouldKeepOtherModifiersValid()
         {
-            var mpu = CreateMPU();
-
             int unitId = -1;
             int h1 = -1, h2 = -1, h3 = -1;
 
@@ -81,8 +82,6 @@ namespace _KITSystem.Movement.Unitest
         [Test]
         public void RemoveUnit_ShouldRemoveAllModifiers()
         {
-            var mpu = CreateMPU();
-
             int unitId = -1;
             int h1 = -1, h2 = -1;
 
@@ -103,8 +102,6 @@ namespace _KITSystem.Movement.Unitest
         [Test]
         public void Request_ShouldNotApplyImmediately()
         {
-            var mpu = CreateMPU();
-
             int unitId = -1;
 
             mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => unitId = x);
@@ -115,13 +112,6 @@ namespace _KITSystem.Movement.Unitest
             mpu.Tick(0);
 
             Assert.IsTrue(unitId >= 0);
-        }
-
-        MPU CreateMPU()
-        {
-            var mpu = new MPU(ModifierName.Testing);
-            mpu.Initialize();
-            return mpu;
         }
     }
 
