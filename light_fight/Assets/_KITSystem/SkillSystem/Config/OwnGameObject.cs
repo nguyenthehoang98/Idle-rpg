@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Config
 {
-    public sealed class OwnGameObject
+    public sealed class OwnGameObject : IDisposable
     {
         private GameObject gameObject;
         private readonly int hash;
@@ -41,5 +42,10 @@ namespace _KITSystem.SkillSystem.Config
         }
 
         public override int GetHashCode() => hash;
+
+        public void Dispose()
+        {
+            
+        }
     }
 }

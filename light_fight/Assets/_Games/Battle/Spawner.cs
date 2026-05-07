@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using _KIT.Utils;
 using _KITSystem.Grid;
 using _KITSystem.Movement;
 using _KITSystem.Schedule;
@@ -46,6 +47,7 @@ public class Spawner : MonoBehaviour
         
         gridManager = new FixedUniformGrid(1);
         StartCoroutine(SppawnIE());
+        StartCoroutine(RemoveIE());
     }
 
     private void Update()
@@ -63,12 +65,35 @@ public class Spawner : MonoBehaviour
         }
     }
 
+    IEnumerator RemoveIE()
+    {
+        while (true)
+        {
+            Remove();
+            yield return new WaitForSeconds(Random.Range(0.7f, 1.0f));
+        }
+    }
+
+    void Remove()
+    {
+        if (list.Count <= 0) return;
+        
+        OwnGameObject first = list[0];
+        int hash = first.GetHashCode();
+        first.Dispose();
+        list.RemoveAt(0);
+        
+        mpu.RequestRemoveUnit(container[hash]);
+        gridManager.Remove(hash);
+        container.Remove(hash);
+    }
+
     IEnumerator SppawnIE()
     {
         while (true)
         {
             Spawn();
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(Random.Range(0.3f, 0.5f));
         }
     }
 
@@ -80,11 +105,11 @@ public class Spawner : MonoBehaviour
 
         Vector3 destination = Vector3.zero;
         int hash = go.GetHashCode();
-        list.Add(go);
-        gridManager.Insert(hash, position, out _);
         mpu.RequestAddUnit(position, destination, i =>
         {
             container[hash] = i;
+            gridManager.Insert(hash, position, out _);
+            list.Add(go);
             mpu.RequestAddAction(i, new RunMovementAction(position, 1, destination, 2));
         });
     }
