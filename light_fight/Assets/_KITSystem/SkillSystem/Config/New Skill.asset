@@ -26,13 +26,21 @@ MonoBehaviour:
     rid: 7993921337256312910
   events:
   - triggerConfig:
-      type: 0
-      eventId: 0
+      type: 1
+      eventId: 1
       isMultiplierTrigger: 0
       timer: 0
     actionType: 0
     actionConfig:
       rid: 7993921337256312919
+  - triggerConfig:
+      type: 0
+      eventId: 0
+      isMultiplierTrigger: 0
+      timer: 0
+    actionType: 1
+    actionConfig:
+      rid: 7993921385622929451
   references:
     version: 2
     RefIds:
@@ -76,3 +84,7 @@ MonoBehaviour:
       type: {class: StationaryTrajectoryConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
         isRequireTargetToCast: 0
+    - rid: 7993921385622929451
+      type: {class: TriggerEventIdConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
+      data:
+        eventId: 1

@@ -5,6 +5,7 @@ namespace _KITSystem.SkillSystem.Runtime
 {
     public abstract class BaseSkillAction : ISkillAction
     {
+        protected readonly SPU spu;
         private float lifeTime;
         private TriggerConfig.TriggerType type;
         private int eventId;
@@ -14,9 +15,9 @@ namespace _KITSystem.SkillSystem.Runtime
         private bool hasTriggered;
         private float elapsedTime;
 
-        protected BaseSkillAction(TriggerConfig triggerConfig,
-            float lifeTime)
+        protected BaseSkillAction(SPU spu, TriggerConfig triggerConfig, float lifeTime)
         {
+            this.spu = spu;
             this.lifeTime = lifeTime;
             type = triggerConfig.type;
             eventId = triggerConfig.eventId;
@@ -32,6 +33,8 @@ namespace _KITSystem.SkillSystem.Runtime
 
         public void Trigger(int id)
         {
+            Debug.Log($"[{GetType().Name}] call_trigger {IsFinished}, {type}, {eventId}, {id}, {hasTriggered}");
+            
             if (IsFinished) return;
             
             if (type == TriggerConfig.TriggerType.Event 
@@ -58,7 +61,7 @@ namespace _KITSystem.SkillSystem.Runtime
                 Execute();
             }
             
-            OnUpdate(deltaTime);
+            if(hasTriggered) OnUpdate(deltaTime);
 
             if (elapsedTime >= lifeTime)
             {

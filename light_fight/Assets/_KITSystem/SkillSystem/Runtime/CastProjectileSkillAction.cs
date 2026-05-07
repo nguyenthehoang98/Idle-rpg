@@ -6,12 +6,10 @@ namespace _KITSystem.SkillSystem.Runtime
     internal abstract class CastProjectileSkillAction : BaseSkillAction
     {
         protected readonly BaseShapeAction[] shapes;
-        protected readonly SPU spu;
         
         protected internal CastProjectileSkillAction(BaseShapeAction[] shapes,
-            SPU spu, TriggerConfig triggerConfig, float lifeTime) : base(triggerConfig, lifeTime)
+            SPU spu, TriggerConfig triggerConfig, float lifeTime) : base(spu, triggerConfig, lifeTime)
         {
-            this.spu = spu;
             this.shapes = shapes;
         }
 

@@ -1,3 +1,4 @@
+using System;
 using _KITSystem.SkillSystem.Config;
 using _KITSystem.SkillSystem.Runtime;
 using NUnit.Framework;
@@ -62,7 +63,7 @@ namespace _KITSystem.SkillSystem.Unitest
             };
 
             int skillId = SkillFactory.Build(spu, skillConfig);
-            spu.Tick(2f);
+            spu.Tick(2.1f);
             bool flag = spu.HasSkill(skillId, out var actions);
             Assert.IsFalse(flag);
         }

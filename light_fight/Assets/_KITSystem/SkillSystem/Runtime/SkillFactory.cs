@@ -45,6 +45,13 @@ namespace _KITSystem.SkillSystem.Runtime
                         }
 
                         break;
+                    case BaseActionConfig.ActionType.TriggerEventId:
+                        var triggerEventId = e.actionConfig as TriggerEventIdConfig;
+                        spu.RequestAddAction(skillId,
+                            new TriggerEventIdSkillAction(skillId, triggerEventId.eventId, 
+                                spu, e.triggerConfig, lifeTimeInSeconds)
+                        );
+                        break;
                 }
             }
             

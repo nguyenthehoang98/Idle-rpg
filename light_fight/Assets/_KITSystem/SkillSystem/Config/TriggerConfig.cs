@@ -8,7 +8,7 @@ namespace _KITSystem.SkillSystem.Config
     {
         public TriggerType type;
         [ShowIf("type", TriggerType.Event)]
-        public int eventId;
+        public int eventId = -1;
         [ShowIf("type", TriggerType.Event)]
         public bool isMultiplierTrigger = false;
         [ShowIf("type", TriggerType.Timeline)]

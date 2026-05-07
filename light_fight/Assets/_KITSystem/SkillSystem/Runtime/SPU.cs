@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using _KITSystem.Schedule;
 using UnityEngine;
@@ -111,11 +112,16 @@ namespace _KITSystem.SkillSystem.Runtime
 
         public void TriggerEventId(int skillId, int eventId)
         {
-            if (HasSkill(skillId, out var list))
+            if (eventId <= 0) return;
+
+            bool flag = HasSkill(skillId, out var list);
+            if (flag)
             {
-                foreach (var actionId in list)
+                for (var i = 0; i < list.Count; i++)
                 {
-                    if (TryGetAction(actionId, out var action)) action.Trigger(eventId);
+                    var actionId = list[i];
+                    bool flag2 = TryGetAction(actionId, out var action);
+                    if (flag2) action.Trigger(eventId);
                 }
             }
         }
@@ -200,7 +206,7 @@ namespace _KITSystem.SkillSystem.Runtime
             };
 
             activeActions.Add(runtime);
-            list.Add(index);
+            list.Add(actionId);
             mapActionIdToIndex[actionId] = index;
 
             version++;
@@ -226,7 +232,7 @@ namespace _KITSystem.SkillSystem.Runtime
             {
                 for (int i = 0; i < list.Count; i++)
                 {
-                    if (list[i] == idx)
+                    if (list[i] == actionId)
                     {
                         list.RemoveAt(i);
                         break;
