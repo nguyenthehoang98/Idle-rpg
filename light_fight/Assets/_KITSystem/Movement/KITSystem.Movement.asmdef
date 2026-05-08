@@ -2,7 +2,8 @@
     "name": "KITSystem.Movement",
     "rootNamespace": "",
     "references": [
-        "GUID:4e70febc7c3ea804584817271583c98c"
+        "GUID:4e70febc7c3ea804584817271583c98c",
+        "GUID:82d1e9f4e71141c4983602af7fd5f675"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

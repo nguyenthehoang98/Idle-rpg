@@ -17,7 +17,6 @@ public class MPUDemo : MonoBehaviour
     void Start()
     {
         owner.TryGetTickable(out mpu);
-        mpu.Initialize();
         StartCoroutine(AutoSpawn());
     }
 

@@ -171,6 +171,9 @@ MonoBehaviour:
   - group: 1
     tickable:
       rid: 7993921322042785839
+  - group: 0
+    tickable:
+      rid: 7993921408989134895
   references:
     version: 2
     RefIds:
@@ -194,6 +197,20 @@ MonoBehaviour:
         avoidStrength: 2
         maxAvoidForce: 3
         stopDecelerationNormalize: 0.9
+    - rid: 7993921408989134895
+      type: {class: SpawnerTickable, ns: , asm: Assembly-CSharp}
+      data:
+        debugGizmos: 1
+        isInitialized: 0
+        neighborDistance: 5
+        maxNeighbors: 10
+        timeHorizontal: 10
+        timeHorizontalDistance: 10
+        agentRadius: 0.5
+        agentMaxSpeed: 1
+        cellSize: 1
+        ignoreNeighborsDistanceMultiplier: 1.25
+        stuckMovementDistance: 0.15
 --- !u!1 &177143862
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,7 +324,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &780848939
 MonoBehaviour:
   m_ObjectHideFlags: 0

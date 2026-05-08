@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Random = System.Random;
 
-namespace _KIT.Utils
+namespace _KITSystem.Utils
 {
     public static class CollectionUtils
     {

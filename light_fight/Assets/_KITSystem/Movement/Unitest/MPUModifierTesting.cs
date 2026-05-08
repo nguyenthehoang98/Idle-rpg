@@ -191,7 +191,6 @@ namespace _KITSystem.Movement.Unitest
         MPU CreateMPU()
         {
             var mpu = new MPU(ModifierName.Default, ModifierName.Teleport, ModifierName.KnockBack);
-            mpu.Initialize();
             return mpu;
         }
     }

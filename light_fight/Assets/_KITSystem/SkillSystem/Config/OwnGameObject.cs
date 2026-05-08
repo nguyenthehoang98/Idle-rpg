@@ -3,16 +3,18 @@ using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Config
 {
+    [Serializable]
     public sealed class OwnGameObject : IDisposable
     {
         private GameObject gameObject;
         private readonly int hash;
-        private static int count;
+        
+        private static int Count { get; set; }
 
         public OwnGameObject(GameObject gameObject)
         {
             this.gameObject = gameObject;
-            hash = count++;
+            hash = Count++;
         }
 
         private Vector3 position;

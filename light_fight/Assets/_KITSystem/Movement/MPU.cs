@@ -66,7 +66,7 @@ namespace _KITSystem.Movement
             }
         }
 
-        public void Initialize()
+        private void Initialize()
         {
             if (!isInitialized)
             {
@@ -84,7 +84,8 @@ namespace _KITSystem.Movement
 
         public void Tick(float deltaTime)
         {
-            if (!isInitialized) return;
+            Initialize();
+            
             FlushCommands();
 
             // Update modifier

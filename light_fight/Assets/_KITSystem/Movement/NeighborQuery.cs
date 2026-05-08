@@ -26,9 +26,6 @@ namespace _KITSystem.Movement
                 kv.Value.Clear();
             }
 
-            // không clear dictionary để reuse bucket
-            // grid.Clear(); ❌ tránh nếu muốn reuse tốt hơn
-
             for (int i = 0; i < positions.Count; i++)
             {
                 GetCell(positions[i], out int x, out int y);

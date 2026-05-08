@@ -19,8 +19,7 @@ namespace _KITSystem.Grid.Unitest
         {
             bool inserted = grid.Insert(
                 1,
-                Vector3.zero,
-                out int cellId);
+                Vector3.zero);
 
             Assert.IsTrue(inserted);
 
@@ -39,12 +38,11 @@ namespace _KITSystem.Grid.Unitest
         [Test]
         public void Insert_SameCell_ShouldNotDuplicate()
         {
-            grid.Insert(1, Vector3.zero, out _);
+            grid.Insert(1, Vector3.zero);
 
             grid.Insert(
                 1,
-                new Vector3(0.2f, 0f, 0.2f),
-                out _);
+                new Vector3(0.2f, 0f, 0.2f));
 
             List<int> results = new();
 
@@ -59,12 +57,11 @@ namespace _KITSystem.Grid.Unitest
         [Test]
         public void Insert_NewCell_ShouldMoveObject()
         {
-            grid.Insert(1, Vector3.zero, out _);
+            grid.Insert(1, Vector3.zero);
 
             grid.Insert(
                 1,
-                new Vector3(10f, 0f, 10f),
-                out _);
+                new Vector3(10f, 0f, 10f));
 
             List<int> results = new();
 
@@ -88,7 +85,7 @@ namespace _KITSystem.Grid.Unitest
         [Test]
         public void Remove_ShouldRemoveObject()
         {
-            grid.Insert(1, Vector3.zero, out _);
+            grid.Insert(1, Vector3.zero);
 
             bool removed = grid.Remove(1);
 
@@ -127,14 +124,12 @@ namespace _KITSystem.Grid.Unitest
             // arrange
             grid.Insert(
                 1,
-                Vector3.zero,
-                out _);
+                Vector3.zero);
 
             // move sang cell khác
             grid.Insert(
                 1,
-                new Vector3(10f, 0f, 10f),
-                out _);
+                new Vector3(10f, 0f, 10f));
 
             // act
             List<int> oldResults = new();

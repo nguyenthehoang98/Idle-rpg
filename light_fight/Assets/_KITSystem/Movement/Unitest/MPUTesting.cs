@@ -11,7 +11,6 @@ namespace _KITSystem.Movement.Unitest
         public void Setup()
         {
             mpu = new MPU(ModifierName.Testing);
-            mpu.Initialize();
         }
         
         [Test]

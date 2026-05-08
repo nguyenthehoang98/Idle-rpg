@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using _KITSystem.Utils;
 using UnityEngine;
 
 namespace _KITSystem.Movement
@@ -135,7 +135,7 @@ namespace _KITSystem.Movement
                 // -------------------------
                 if (avoidance.sqrMagnitude > maxAvoidForceSqr)
                 {
-                    avoidance = NormalizeSafe(avoidance) * maxAvoidForce;
+                    avoidance = MathUtils.NormalizeSafeVec3(avoidance) * maxAvoidForce;
                 }
 
                 // -------------------------
@@ -222,14 +222,6 @@ namespace _KITSystem.Movement
                     }
                 }
             }
-        }
-        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Vector3 NormalizeSafe(Vector3 v)
-        {
-            float magSq = v.sqrMagnitude;
-            if (magSq < 1e-6f) return Vector3.zero;
-            return v * (1.0f / Mathf.Sqrt(magSq));
         }
     }
 }

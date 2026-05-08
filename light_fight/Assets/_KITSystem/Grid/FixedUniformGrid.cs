@@ -16,9 +16,9 @@ namespace _KITSystem.Grid
             this.cellSize = cellSize;
         }
         
-        public bool Insert(int unitId, Vector3 position, out int id)
+        public bool Insert(int unitId, Vector3 position)
         {
-            id = PositionToCell(position);
+            int id = PositionToCell(position);
 
             // object đã tồn tại
             if (objectToCell.TryGetValue(unitId, out int oldCell))
