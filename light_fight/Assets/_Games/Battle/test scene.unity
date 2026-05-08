@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59caaf811b304944a8412d3c3a9c7731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetFPS: 60
+  targetFPS: 30
   list:
   - group: 1
     tickable:
@@ -200,7 +200,10 @@ MonoBehaviour:
     - rid: 7993921408989134895
       type: {class: SpawnerTickable, ns: , asm: Assembly-CSharp}
       data:
-        isInitialized: 0
+        stopDistance: 2
+        agentRadius: 0.5
+        multiplierIgnoreCheckDistance: 0.2
+        deltaDistanceStuck: 0.2
         total: 0
 --- !u!1 &177143862
 GameObject:
@@ -328,6 +331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 151da1adfedf2bb42a5a5fab518df3ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  total: 0
 --- !u!4 &780848940
 Transform:
   m_ObjectHideFlags: 0

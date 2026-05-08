@@ -13,10 +13,16 @@ using Random = UnityEngine.Random;
 [Serializable]
 internal class SpawnerTickable : ITickable
 {
-    [TitleGroup("Agent default settings")] [SerializeField]
-    private float stopDistance = 2;
-
+    [TitleGroup("Agent default settings")] 
+    [SerializeField] private float stopDistance = 2;
     [SerializeField] private float agentRadius = 0.5f;
+    [SerializeField, Range(0.1f, 0.9f)]
+    private float multiplierIgnoreCheckDistance = 0.2f;
+    [SerializeField, Range(0.1f, 1.0f)]
+    private float deltaDistanceStuck = 0.2f;
+    [TitleGroup("Debug")] 
+    [SerializeField] private int total;
+    
     private List<float2> positions = new List<float2>();
     private List<bool> stopped = new List<bool>();
     private List<int> stuckFrames = new List<int>();
@@ -26,17 +32,20 @@ internal class SpawnerTickable : ITickable
     private IGridManager gridManager;
     private float stopDistanceSq;
     private float ignoreCheckNeighborDistanceSq;
+    private float deltaDistanceStuckSq;
     private float elapsedTime;
 
     public void Tick(float deltaTime)
     {
         Initialize();
+        simulator.SetTimeStep(deltaTime);
         simulator.EnsureCompleted();
         CheckSpawn(deltaTime);
         SetPreferredVelocities();
         ReachedGoal();
         simulator.DoStep();
-        DrawLine(deltaTime);
+        total = positions.Count;
+        //DrawLine(deltaTime);
     }
 
     private void DrawLine(float deltaTime)
@@ -69,14 +78,14 @@ internal class SpawnerTickable : ITickable
     {
         if (!isInitialized)
         {
-            gridManager = new FixedUniformGrid(20, 20, 1, 1024);
+            gridManager = new FixedUniformGrid(1);
             simulator = new Simulator();
             simulator.SetTimeStep(0.25f);
             simulator.SetAgentDefaults(5f, 10, 10f, 10f, agentRadius, 1f, float2.zero);
             stopDistanceSq = stopDistance * stopDistance;
-            float multiplerIgnoreCheckDistance = 0.1f;
-            float a = (2 * (1 + multiplerIgnoreCheckDistance) * agentRadius);
+            float a = 2 * (1 + multiplierIgnoreCheckDistance) * agentRadius;
             ignoreCheckNeighborDistanceSq = a * a;
+            deltaDistanceStuckSq = deltaDistanceStuck * deltaDistanceStuck;
             isInitialized = true;
         }
     }
@@ -135,8 +144,8 @@ internal class SpawnerTickable : ITickable
                 frontBlockedCount++;
             }
 
-            float movedDistance = math.distance(position, previous);
-            bool stuck = movedDistance < 0.2f;
+            float movedDistanceSq = math.distancesq(position, previous);
+            bool stuck = movedDistanceSq < deltaDistanceStuckSq;
             bool crowdedFront = frontBlockedCount >= 2;
             if (crowdedFront && stuck)
             {
@@ -176,9 +185,9 @@ internal class SpawnerTickable : ITickable
     private void CheckSpawn(float deltaTime)
     {
         elapsedTime += deltaTime;
-        if (elapsedTime >= 0.5f)
+        if (elapsedTime >= 0.1f)
         {
-            elapsedTime -= 0.5f;
+            elapsedTime -= 0.1f;
             Vector3 position = new Vector3(Random.value - 0.5f, Random.value - 0.5f).normalized * Random.Range(10, 14);
             Spawn(position);
         }

@@ -36,16 +36,16 @@ namespace _KITSystem.Schedule
         void Update()
         {
             accumulator += Time.deltaTime;
-
-            while (accumulator >= tickInterval)
+            float f = tickInterval * Time.timeScale;
+            while (accumulator >= f)
             {
-                float dt = tickInterval;
+                float dt = f;
 
                 tickSystem.Run(TickGroup.PreUpdate, dt);
                 tickSystem.Run(TickGroup.Update, dt);
                 tickSystem.Run(TickGroup.PostUpdate, dt);
 
-                accumulator -= tickInterval;
+                accumulator -= f;
             }
         }
 

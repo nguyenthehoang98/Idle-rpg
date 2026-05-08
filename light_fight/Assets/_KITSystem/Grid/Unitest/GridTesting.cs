@@ -11,7 +11,7 @@ namespace _KITSystem.Grid.Unitest
         [SetUp]
         public void Setup()
         {
-            grid = new FixedUniformGrid(20, 20, 1, 1024);
+            grid = new FixedUniformGrid(1);
         }
 
         [Test]
