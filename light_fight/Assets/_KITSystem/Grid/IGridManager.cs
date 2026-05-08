@@ -8,6 +8,6 @@ namespace _KITSystem.Grid
         // Chưa có thì thêm mới, có rồi thì ghi đè
         bool Insert(int unitId, Vector3 position);
         bool Remove(int unitId);
-        bool Query(Vector3 position, float radius, List<int> results);
+        int Query(Vector3 position, float radius, out List<int> results);
     }
 }

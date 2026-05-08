@@ -11,7 +11,7 @@ namespace _KITSystem.Grid.Unitest
         [SetUp]
         public void Setup()
         {
-            grid = new FixedUniformGrid(1);
+            grid = new FixedUniformGrid(20, 20, 1, 1024);
         }
 
         [Test]
@@ -23,14 +23,9 @@ namespace _KITSystem.Grid.Unitest
 
             Assert.IsTrue(inserted);
 
-            List<int> results = new();
+            int count = grid.Query(Vector3.zero, 1, out var results);
 
-            bool found = grid.Query(
-                Vector3.zero,
-                1f,
-                results);
-
-            Assert.IsTrue(found);
+            Assert.IsTrue(count > 0);
 
             Assert.Contains(1, results);
         }
@@ -44,14 +39,9 @@ namespace _KITSystem.Grid.Unitest
                 1,
                 new Vector3(0.2f, 0f, 0.2f));
 
-            List<int> results = new();
+            int count = grid.Query(Vector3.zero, 1, out var results);
 
-            grid.Query(
-                Vector3.zero,
-                1f,
-                results);
-
-            Assert.AreEqual(1, results.Count);
+            Assert.AreEqual(1, count);
         }
 
         [Test]
@@ -63,21 +53,13 @@ namespace _KITSystem.Grid.Unitest
                 1,
                 new Vector3(10f, 0f, 10f));
 
-            List<int> results = new();
-
-            grid.Query(
-                Vector3.zero,
-                1f,
-                results);
+            List<int> results;
+                
+            grid.Query(Vector3.zero, 1, out results);
 
             Assert.IsFalse(results.Contains(1));
-
-            results.Clear();
-
-            grid.Query(
-                new Vector3(10f, 0f, 10f),
-                1f,
-                results);
+            
+            grid.Query(new Vector3(10f, 0f, 10f), 1, out results);
 
             Assert.Contains(1, results);
         }
@@ -91,14 +73,12 @@ namespace _KITSystem.Grid.Unitest
 
             Assert.IsTrue(removed);
 
-            List<int> results = new();
+            int count;
+            List<int> results;
+                
+            count = grid.Query(Vector3.zero, 1, out results);
 
-            bool found = grid.Query(
-                Vector3.zero,
-                1f,
-                results);
-
-            Assert.IsFalse(found);
+            Assert.AreEqual(count, 0);
 
             Assert.IsFalse(results.Contains(1));
         }
@@ -106,16 +86,11 @@ namespace _KITSystem.Grid.Unitest
         [Test]
         public void Query_ShouldReturnFalse_WhenEmpty()
         {
-            List<int> results = new();
+            int count;
 
-            bool found = grid.Query(
-                Vector3.zero,
-                1f,
-                results);
+            count = grid.Query(Vector3.zero, 1, out _);
 
-            Assert.IsFalse(found);
-
-            Assert.AreEqual(0, results.Count);
+            Assert.AreEqual(count, 0);
         }
 
         [Test]
@@ -131,20 +106,17 @@ namespace _KITSystem.Grid.Unitest
                 1,
                 new Vector3(10f, 0f, 10f));
 
+            List<int> results;
+            
             // act
-            List<int> oldResults = new();
 
-            grid.Query(
-                Vector3.zero,
-                1f,
-                oldResults);
+            grid.Query(Vector3.zero, 1, out results);
+            
+            List<int> oldResults = new(results);
+            
+            int count = grid.Query(new Vector3(10f, 0f, 10f), 1, out results);
 
-            List<int> newResults = new();
-
-            grid.Query(
-                new Vector3(10f, 0f, 10f),
-                1f,
-                newResults);
+            List<int> newResults = new(results);
 
             // assert
             Assert.IsFalse(
@@ -157,7 +129,7 @@ namespace _KITSystem.Grid.Unitest
 
             Assert.AreEqual(
                 1,
-                newResults.Count,
+                count,
                 "Object duplicated after moving.");
         }
     }

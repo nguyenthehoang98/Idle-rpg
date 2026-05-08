@@ -6,107 +6,202 @@ namespace _KITSystem.Grid
 {
     public class FixedUniformGrid : IGridManager
     {
-        private readonly Dictionary<int, List<int>> cells = new();
-        private readonly Dictionary<int, int> objectToCell = new();
-        private readonly HashSet<int> visited = new();
+        //========================================================
+        // GRID
+        //========================================================
+
+        private readonly List<int>[] cells;
+        private readonly int[] objectToCell;
+        private readonly int[] marks;
         private readonly float cellSize;
-        
-        public FixedUniformGrid(float cellSize)
+        private readonly int width;
+        private readonly int height;
+
+        private List<int> temp = new List<int>(16);
+        private int currentMark;
+
+        public FixedUniformGrid(
+            int width,
+            int height,
+            float cellSize,
+            int maxUnits)
         {
+            this.width = width;
+            this.height = height;
             this.cellSize = cellSize;
+
+            cells = new List<int>[width * height];
+
+            objectToCell = new int[maxUnits];
+
+            marks = new int[maxUnits];
+
+            for (int i = 0; i < maxUnits; i++)
+            {
+                objectToCell[i] = -1;
+            }
         }
         
         public bool Insert(int unitId, Vector3 position)
         {
-            int id = PositionToCell(position);
+            int cell = PositionToCell(position);
 
-            // object đã tồn tại
-            if (objectToCell.TryGetValue(unitId, out int oldCell))
+            if (cell < 0)
+                return false;
+
+            int oldCell = objectToCell[unitId];
+
+            // same cell
+            if (oldCell == cell)
+                return false;
+
+            // remove old
+            if (oldCell >= 0)
             {
-                if (oldCell == id)
-                    return false;
+                List<int> oldList = cells[oldCell];
 
-                if (cells.TryGetValue(oldCell, out var oldList))
+                if (oldList != null)
                 {
-                    oldList.Remove(unitId);
+                    int index = oldList.IndexOf(unitId);
 
-                    if (oldList.Count == 0)
+                    if (index >= 0)
                     {
-                        cells.Remove(oldCell);
+                        int last = oldList.Count - 1;
+
+                        oldList[index] = oldList[last];
+
+                        oldList.RemoveAt(last);
                     }
                 }
             }
 
-            // add vào cell mới
-            if (!cells.TryGetValue(id, out var newList))
-            {
-                newList = new List<int>();
+            // add new
+            List<int> list = cells[cell];
 
-                cells[id] = newList;
+            if (list == null)
+            {
+                list = new List<int>(8);
+
+                cells[cell] = list;
             }
 
-            newList.Add(unitId);
+            list.Add(unitId);
 
-            objectToCell[unitId] = id;
+            objectToCell[unitId] = cell;
+
             return true;
         }
 
-        public bool Remove(int id)
+        public bool Remove(int unitId)
         {
-            if (!objectToCell.TryGetValue(id, out int cell))
+            int cell = objectToCell[unitId];
+
+            if (cell < 0)
                 return false;
 
-            if (cells.TryGetValue(cell, out var list))
-            {
-                list.Remove(id);
+            List<int> list = cells[cell];
 
-                if (list.Count == 0)
+            if (list != null)
+            {
+                int index = list.IndexOf(unitId);
+
+                if (index >= 0)
                 {
-                    cells.Remove(cell);
+                    int last = list.Count - 1;
+
+                    list[index] = list[last];
+
+                    list.RemoveAt(last);
                 }
             }
 
-            return objectToCell.Remove(id);
+            objectToCell[unitId] = -1;
+
+            return true;
         }
 
-        public bool Query(Vector3 position, float radius, List<int> results)
+
+        public int Query(Vector3 position, float radius, out List<int> results)
         {
-            visited.Clear();
-            int range = Mathf.CeilToInt(radius / cellSize);
-            int centerX = Mathf.FloorToInt(position.x / cellSize);
-            int centerY = Mathf.FloorToInt(position.y / cellSize);
+            int total = 0;
 
-            for (int y = -range; y <= range; y++)
+            currentMark++;
+
+            int range =
+                Mathf.CeilToInt(radius / cellSize);
+
+            int centerX =
+                Mathf.FloorToInt(position.x / cellSize);
+
+            int centerY =
+                Mathf.FloorToInt(position.y / cellSize);
+
+            int minX = Mathf.Max(0, centerX - range);
+            int maxX = Mathf.Min(width - 1, centerX + range);
+
+            int minY = Mathf.Max(0, centerY - range);
+            int maxY = Mathf.Min(height - 1, centerY + range);
+
+            for (int y = minY; y <= maxY; y++)
             {
-                for (int x = -range; x <= range; x++)
-                {
-                    int hash = Hash(centerX + x, centerY + y);
+                int row = y * width;
 
-                    if (!cells.TryGetValue(hash, out var list))
+                for (int x = minX; x <= maxX; x++)
+                {
+                    List<int> list = cells[row + x];
+
+                    if (list == null)
                         continue;
 
-                    foreach (int id in list)
+                    int count = list.Count;
+
+                    for (int i = 0; i < count; i++)
                     {
-                        if (!visited.Add(id))
+                        int id = list[i];
+
+                        if (marks[id] == currentMark)
                             continue;
 
-                        results.Add(id);
+                        marks[id] = currentMark;
+
+                        if (total < temp.Count)
+                        {
+                            temp[total] = id;
+                        }
+                        else
+                        {
+                            temp.Add(id);
+                        }
+
+                        total++;
                     }
                 }
             }
 
-            return results.Count > 0;
+            results = temp;
+            return total;
         }
-        
+
+        //========================================================
+        // HELPERS
+        //========================================================
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private int PositionToCell(Vector2 position)
         {
-            int x = Mathf.FloorToInt(position.x / cellSize);
-            int y = Mathf.FloorToInt(position.y / cellSize);
-            return Hash(x, y);
-        }
+            int x =
+                Mathf.FloorToInt(position.x / cellSize);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private int Hash(int x, int y) => x * 73856093 ^ y * 19349663;
+            int y =
+                Mathf.FloorToInt(position.y / cellSize);
+
+            if ((uint)x >= width ||
+                (uint)y >= height)
+            {
+                return -1;
+            }
+
+            return y * width + x;
+        }
     }
 }
