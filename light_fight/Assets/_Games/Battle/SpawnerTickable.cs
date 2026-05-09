@@ -39,14 +39,38 @@ internal class SpawnerTickable : ITickable
         Initialize();
         simulator.SetTimeStep(deltaTime);
         simulator.EnsureCompleted();
+        
+        // todo: remove
+        RandomRemoveAgent();
+        // todo: spawn (init)
         CheckSpawn(deltaTime);
 #if UNITY_EDITOR
         total = container.Count;
         DrawLine(deltaTime);
 #endif
+        // todo: logic update
         SetPreferredVelocities();
         ReachedGoal();
         simulator.DoStep();
+    }
+
+    private void RandomRemoveAgent()
+    {
+        bool should = RandomUtils.Value < 0.8f;
+        if (should && agents.Count > 0)
+        {
+            DestroyAgent(agents[0]);
+        }
+    }
+
+    public void DestroyAgent(int agent)
+    {
+        if(agents.Remove(agent))
+        {
+            simulator.EnsureCompleted();
+            simulator.RemoveAgent(agent);
+            gridManager.Remove(agent);
+        }
     }
 
     private void DrawLine(float deltaTime)
@@ -198,13 +222,13 @@ internal class SpawnerTickable : ITickable
     private void Spawn(Vector3 position)
     {
         simulator.EnsureCompleted();
-        int agentId = simulator.AddAgent(new float2(position.x, position.y));
-        agents.Add(agentId);
-        container.Add(agentId, new AgentData
+        int agent = simulator.AddAgent(new float2(position.x, position.y));
+        agents.Add(agent);
+        container.Add(agent, new AgentData
         {
             position = new float2(position.x, position.y)
         });
-        gridManager.Insert(agentId, position);
+        gridManager.Insert(agent, position);
     }
     
     struct AgentData
