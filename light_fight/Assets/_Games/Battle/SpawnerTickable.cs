@@ -45,7 +45,7 @@ internal class SpawnerTickable : ITickable
         ReachedGoal();
         simulator.DoStep();
         total = positions.Count;
-        //DrawLine(deltaTime);
+        DrawLine(deltaTime);
     }
 
     private void DrawLine(float deltaTime)

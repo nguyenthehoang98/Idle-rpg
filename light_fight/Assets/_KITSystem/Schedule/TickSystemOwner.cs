@@ -39,11 +39,11 @@ namespace _KITSystem.Schedule
             float f = tickInterval * Time.timeScale;
             while (accumulator >= f)
             {
-                float dt = f;
+                float deltaTime = f;
 
-                tickSystem.Run(TickGroup.PreUpdate, dt);
-                tickSystem.Run(TickGroup.Update, dt);
-                tickSystem.Run(TickGroup.PostUpdate, dt);
+                tickSystem.Run(TickGroup.PreUpdate, deltaTime);
+                tickSystem.Run(TickGroup.Update, deltaTime);
+                tickSystem.Run(TickGroup.PostUpdate, deltaTime);
 
                 accumulator -= f;
             }
