@@ -22,10 +22,9 @@ internal class SpawnerTickable : ITickable
     private float deltaDistanceStuck = 0.2f;
     [TitleGroup("Debug")] 
     [SerializeField] private int total;
-    
-    private List<float2> positions = new List<float2>();
-    private List<bool> stopped = new List<bool>();
-    private List<int> stuckFrames = new List<int>();
+
+    private Dictionary<int, AgentData> container = new Dictionary<int, AgentData>();
+    private List<int> agents = new List<int>();
 
     private bool isInitialized;
     private Simulator simulator;
@@ -41,24 +40,24 @@ internal class SpawnerTickable : ITickable
         simulator.SetTimeStep(deltaTime);
         simulator.EnsureCompleted();
         CheckSpawn(deltaTime);
+#if UNITY_EDITOR
+        total = container.Count;
+        DrawLine(deltaTime);
+#endif
         SetPreferredVelocities();
         ReachedGoal();
         simulator.DoStep();
-        total = positions.Count;
-        DrawLine(deltaTime);
     }
 
     private void DrawLine(float deltaTime)
     {
-#if UNITY_EDITOR
-        int count = positions.Count;
-        for (int i = 0; i < count; i++)
+        foreach (int agent in agents)
         {
-            float2 position = positions[i];
-            Color color = stopped[i] ? Color.red : Color.green;
+            AgentData value = container[agent];
+            float2 position = value.position;
+            Color color = value.isStopped ? Color.red : Color.green;
             DrawCircle(new Vector3(position.x, position.y), 0.5f, 6, color, deltaTime);
         }
-#endif
     }
 
     private void DrawCircle(Vector3 center, float radius, int segments, Color color, float deltaTime)
@@ -95,46 +94,49 @@ internal class SpawnerTickable : ITickable
         simulator.SetAgentMaxSpeed(agentId, 0);
         simulator.SetAgentPrefVelocity(agentId, float2.zero);
     }
-    
+
     private void ReachedGoal()
     {
-        int count = positions.Count;
-        for (int i = 0; i < count; i++)
+        foreach (int agent in agents)
         {
-            if (stopped[i]) continue;
+            AgentData temp = container[agent];
 
-            int agentId = i + 1;
+            if (temp.isStopped) continue;
 
-            float2 previous = positions[i];
-            float2 position = simulator.GetAgentPosition(agentId);
-            positions[i] = position;
-            gridManager.Insert(agentId, new Vector3(position.x, position.y));
+            float2 previous = temp.position;
+            float2 position = simulator.GetAgentPosition(agent);
+            temp.position = position;
+
+            gridManager.Insert(agent, new Vector3(position.x, position.y));
 
             if (math.lengthsq(position) < stopDistanceSq)
             {
-                stopped[i] = true;
-                StopAgent(agentId);
+                temp.isStopped = true;
+                container[agent] = temp;
+                StopAgent(agent);
                 continue;
             }
 
-            int total = gridManager.Query(new Vector3(position.x, position.y), 3, out var results);
+            int query = gridManager.Query(new Vector3(position.x, position.y), 3, out List<int> results);
             int frontBlockedCount = 0;
 
             float2 dirToGoal = MathUtils.NormalizeSafe(-position);
-            for (int i1 = 0; i1 < total; i1++)
+            for (int i1 = 0; i1 < query; i1++)
             {
-                var otherId = results[i1];
-                if (otherId == agentId)
+                int otherId = results[i1];
+                if (otherId == agent)
                     continue;
 
                 // chỉ quan tâm frontier
-                if (!stopped[otherId - 1])
-                    continue;
+                if (container.TryGetValue(otherId, out AgentData other))
+                {
+                    if (!other.isStopped) continue;
+                }
 
                 float2 otherPos = simulator.GetAgentPosition(otherId);
                 float2 toOther = otherPos - position;
-                float distsq = math.lengthsq(toOther);
-                if (distsq > ignoreCheckNeighborDistanceSq)
+                float lengthsq = math.lengthsq(toOther);
+                if (lengthsq > ignoreCheckNeighborDistanceSq)
                     continue;
 
                 float dot = math.dot(dirToGoal, MathUtils.NormalizeSafe(toOther));
@@ -149,35 +151,35 @@ internal class SpawnerTickable : ITickable
             bool crowdedFront = frontBlockedCount >= 2;
             if (crowdedFront && stuck)
             {
-                stuckFrames[i]++;
+                temp.stuckFrames++;
             }
             else
             {
-                stuckFrames[i] = 0;
+                temp.stuckFrames = 0;
             }
 
-            if (stuckFrames[i] >= 10)
+            if (temp.stuckFrames >= 10)
             {
-                stopped[i] = true;
-                StopAgent(agentId);
+                temp.isStopped = true;
+                StopAgent(agent);
             }
+            
+            container[agent] = temp;
         }
     }
 
     private void SetPreferredVelocities()
     {
-        int count = positions.Count;
-        for (int i = 0; i < count; i++)
+        foreach (int agent in agents)
         {
-            int agentId = i + 1;
-            var position = simulator.GetAgentPosition(agentId);
-            var goalVector = MathUtils.NormalizeSafe(-position);
-            if (stopped[i])
+            float2 position = simulator.GetAgentPosition(agent);
+            float2 goalVector = MathUtils.NormalizeSafe(-position);
+            if (container[agent].isStopped)
             {
             }
             else
             {
-                simulator.SetAgentPrefVelocity(agentId, goalVector);
+                simulator.SetAgentPrefVelocity(agent, goalVector);
             }
         }
     }
@@ -197,9 +199,18 @@ internal class SpawnerTickable : ITickable
     {
         simulator.EnsureCompleted();
         int agentId = simulator.AddAgent(new float2(position.x, position.y));
-        positions.Add(new float2(position.x, position.y));
-        stopped.Add(false);
+        agents.Add(agentId);
+        container.Add(agentId, new AgentData
+        {
+            position = new float2(position.x, position.y)
+        });
         gridManager.Insert(agentId, position);
-        stuckFrames.Add(0);
+    }
+    
+    struct AgentData
+    {
+        public float2 position;
+        public bool isStopped;
+        public int stuckFrames;
     }
 }
