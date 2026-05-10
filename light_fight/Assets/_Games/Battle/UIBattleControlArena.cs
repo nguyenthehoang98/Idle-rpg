@@ -32,13 +32,11 @@ namespace _Games.Battle
         [SerializeField] private RectTransform itemPrefab;
         [SerializeField] private int totalItems = 2;
 
-        private const int MAX = 50;
-        private const int MIN = -50;
-
-        private float elapsedTime = 0;
-        private int fill;
-        private bool isPressing;
-        private bool toLeft;
+        private const int MAX_VALUE = 50;
+        private float elapsedTime;
+        private int value;
+        private float leftValue;
+        private float rightValue;
 
         private void Awake()
         {
@@ -61,101 +59,135 @@ namespace _Games.Battle
 
         private void Update()
         {
-            if (isPressing)
+#if UNITY_EDITOR
+            if (Input.GetKeyDown(KeyCode.Alpha1)) OnLeftPointerDown();
+            else if (Input.GetKeyUp(KeyCode.Alpha1)) OnLeftPointerUp();
+            
+            if (Input.GetKeyDown(KeyCode.Alpha2)) OnRightPointerDown();
+            else if (Input.GetKeyUp(KeyCode.Alpha2)) OnRightPointerUp();
+#endif
+            
+            if (leftValue + rightValue > 0)
             {
-                bool shouldUpdate = elapsedTime < 1;
-                elapsedTime += Time.deltaTime * speed;
-                elapsedTime = Mathf.Clamp01(elapsedTime);
-                if (toLeft)
+                float deltaTime = Time.deltaTime * speed * (-leftValue + rightValue);
+                bool shouldUpdate = Mathf.Abs(elapsedTime) < 1;
+            
+                float prev = elapsedTime;
+                elapsedTime += deltaTime;
+                elapsedTime = Mathf.Clamp(elapsedTime, -1, 1);
+                float last = elapsedTime;
+                
+                if (deltaTime > 0 && prev <= 0 && last > 0)
                 {
-                    fill = (int)(upProgressCurve.Evaluate(elapsedTime) * MIN);
-                    fill = Mathf.Clamp(fill, MIN, 0);
+                    upFill2.gameObject.SetActive(true);
+                    downFill2.gameObject.SetActive(false);
                 }
-                else
+
+                if (deltaTime < 0 && prev >= 0 && last < 0)
                 {
-                    fill = (int)(upProgressCurve.Evaluate(elapsedTime) * MAX);
-                    fill = Mathf.Clamp(fill, 0, MAX);
+                    upFill2.gameObject.SetActive(false);
+                    downFill2.gameObject.SetActive(true);
+                }
+                
+                if (elapsedTime > 0)
+                {
+                    value = (int)(upProgressCurve.Evaluate(elapsedTime) * MAX_VALUE);
+                }
+                else if (elapsedTime < 0)
+                {
+                    value = -(int)(downProgressCurve.Evaluate(Mathf.Abs(elapsedTime)) * MAX_VALUE);
                 }
 
                 if (shouldUpdate)
                 {
-                    if (toLeft) downSlider.value = elapsedTime;
-                    else upSlider.value = elapsedTime;
+                    if (elapsedTime > 0)
+                    {
+                        upSlider.value = elapsedTime;
+                        downSlider.value = 0;
+                    }
+                    else
+                    {
+                        downSlider.value = Mathf.Abs(elapsedTime);
+                        upSlider.value = 0;
+                    }
 
                     UpdateProgress();
                 }
             }
             else
             {
-                bool shouldUpdate = elapsedTime > 0;
-                elapsedTime -= Time.deltaTime * speed;
-                elapsedTime = Mathf.Clamp01(elapsedTime);
-                bool shouldInactiveGameObject = shouldUpdate && elapsedTime == 0;
-                if (toLeft)
+                float deltaTime = Time.deltaTime * speed;
+                bool shouldUpdate = Mathf.Abs(elapsedTime) > 0;
+                if(elapsedTime > 0)
                 {
-                    fill = (int)(downProgressCurve.Evaluate(elapsedTime) * MIN);
-                    fill = Mathf.Clamp(fill, MIN, 0);
+                    elapsedTime -= deltaTime;
+                    elapsedTime = Mathf.Clamp(elapsedTime, 0, 1);
                 }
-                else
+                else if (elapsedTime < 0)
                 {
-                    fill = (int)(downProgressCurve.Evaluate(elapsedTime) * MAX);
-                    fill = Mathf.Clamp(fill, 0, MAX);
+                    elapsedTime += deltaTime;
+                    elapsedTime = Mathf.Clamp(elapsedTime, -1, 0);
+                }
+                
+                bool shouldStop = shouldUpdate && Mathf.Abs(elapsedTime) == 0;
+                
+                if (elapsedTime > 0)
+                {
+                    value = (int)(upProgressCurve.Evaluate(elapsedTime) * MAX_VALUE);
+                }
+                else if (elapsedTime < 0)
+                {
+                    value = -(int)(downProgressCurve.Evaluate(Mathf.Abs(elapsedTime)) * MAX_VALUE);
                 }
 
                 if (shouldUpdate)
                 {
-                    if (toLeft) downSlider.value = elapsedTime;
-                    else upSlider.value = elapsedTime;
+                    if (elapsedTime > 0)
+                    {
+                        upSlider.value = elapsedTime;
+                        downSlider.value = 0;
+                    }
+                    else
+                    {
+                        downSlider.value = Mathf.Abs(elapsedTime);
+                        upSlider.value = 0;
+                    }
 
                     UpdateProgress();
                 }
 
-                if (shouldInactiveGameObject)
+                if (shouldStop)
                 {
-                    if (toLeft) buttonRight.interactable = true;
-                    else buttonLeft.interactable = true;
                     upFill2.gameObject.SetActive(false);
                     downFill2.gameObject.SetActive(false);
                 }
             }
         }
 
-        public void OnLeftPointerDown()
-        {
-            buttonRight.interactable = false;
-            toLeft = true;
-            isPressing = true;
-            downFill2.gameObject.SetActive(true);
-        }
+        public void OnLeftPointerDown() => leftValue = 1;
 
-        public void OnLeftPointerUp()
-        {
-            isPressing = false;
-        }
+        public void OnLeftPointerUp() => leftValue = 0;
 
-        public void OnRightPointerDown()
-        {
-            buttonLeft.interactable = false;
-            toLeft = false;
-            isPressing = true;
-            upFill2.gameObject.SetActive(true);
-        }
+        public void OnRightPointerDown() => rightValue = 1;
 
-        public void OnRightPointerUp()
-        { 
-            isPressing = false;
-        }
+        public void OnRightPointerUp() => rightValue = 0;
 
+        public int Value() => value;
+        
         private void UpdateProgress()
         {
             upFill2.transform.position = upSlider.handleRect.transform.position;
             downFill2.transform.position = downSlider.handleRect.transform.position;
-            
-            textProgress.text = fill + "%";
+
+            textProgress.text = value + "%";
 
             Color color;
-            if (toLeft) color = Color.Lerp(centerColor, downColor, elapsedTime);
-            else color = Color.Lerp(centerColor, upColor, elapsedTime);
+            if (elapsedTime > 0)
+                color = Color.Lerp(centerColor, upColor, Mathf.Abs(elapsedTime));
+            else if (elapsedTime < 0)
+                color = Color.Lerp(centerColor, downColor, Mathf.Abs(elapsedTime));
+            else color = centerColor;
+
             imgProgress.color = color;
         }
 
