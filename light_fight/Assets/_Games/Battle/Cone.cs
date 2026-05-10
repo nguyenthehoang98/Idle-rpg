@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MoreMountains.Feedbacks;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace _Games.Battle
 {
@@ -16,7 +18,8 @@ namespace _Games.Battle
         [SerializeField] private MMF_Player initFeedback;
         [SerializeField] private MMF_Player playFeedback;
 
-        [TitleGroup("Elements")] 
+        [TitleGroup("Elements")]
+        [SerializeField] private SpriteRenderer icon;
         [SerializeField] private SpriteRenderer background;
         [SerializeField] private Color defaultColor;
         [SerializeField] private Color selectedColor;
@@ -26,6 +29,11 @@ namespace _Games.Battle
         private bool isInitialized = false;
         private List<int> dicesId = new List<int>();
         private Tween tween;
+
+        private void Awake()
+        {
+            icon.gameObject.SetActive(RandomUtils.Value > 0.2f);
+        }
 
         public UniTask Initialize(int order)
         {
