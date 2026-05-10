@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DG.Tweening;
 using MoreMountains.Feedbacks;
 using UnityEngine;
 
@@ -8,17 +9,48 @@ namespace _Games.Battle
     {
         [SerializeField] private MMF_Player zoomOutFeedback;
         [SerializeField] private MMF_Player zoomInFeedback;
+        [SerializeField] private SpriteRenderer background;
+        [SerializeField] private Color defaultColor;
+        [SerializeField] private Color selectedColor;
+        [SerializeField] private Color selectedX2Color;
+        [SerializeField] private Color selectedX3Color;
 
         private List<int> dicesId = new List<int>();
+        private Tween tween;
 
         public void Init(int order)
         {
             transform.localRotation = Quaternion.Euler(0, 0, -60 * order);
         }
 
-        public void Active() => zoomInFeedback.PlayFeedbacks();
+        public void Active()
+        {
+            Color color = selectedColor;
+            zoomInFeedback.PlayFeedbacks();
+            float duration = zoomInFeedback.TotalDuration;
+            if (tween != null && tween.IsPlaying()) tween.Kill();
+            tween = background.DOColor(color, duration);
+        }
 
-        public void Inactive() => zoomOutFeedback.PlayFeedbacks();
+        public void SetMultiplierColor()
+        {
+            int stack = dicesId.Count;
+            Color color = selectedColor;
+            if (stack == 2) color = selectedX2Color;
+            else if (stack == 3) color = selectedX3Color;
+            float duration = zoomInFeedback.TotalDuration;
+            if (tween != null && tween.IsPlaying()) tween.Kill();
+            tween = background.DOColor(color, duration);
+        }
+
+        public void Inactive()
+        { 
+            Color color = defaultColor;
+            zoomOutFeedback.PlayFeedbacks();
+            float duration = zoomOutFeedback.TotalDuration;
+            if (tween != null && tween.IsPlaying()) tween.Kill();
+            tween = background.DOColor(color, duration);
+        }
         
         public void InsertId(int dice) => dicesId.Add(dice);
         

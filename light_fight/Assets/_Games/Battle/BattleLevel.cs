@@ -47,6 +47,10 @@ namespace _Games.Battle
             {
                 cones[value].Active();
             }
+            else
+            {
+                cones[value].SetMultiplierColor();
+            }
             
             dices[dice] = value;
         }

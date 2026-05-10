@@ -41,7 +41,7 @@ namespace _Games.Battle
         [SerializeField] private UIBattleDiceSlot itemPrefab;
         [SerializeField] private int totalItems = 2;
 
-        private const int MAX_VALUE = 100;
+        private const int MAX_VALUE = 50;
         private float elapsedTime;
         private int value;
         private float leftValue;
