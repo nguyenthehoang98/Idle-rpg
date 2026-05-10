@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using _KITSystem.Utils;
+﻿using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MoreMountains.Feedbacks;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace _Games.Battle
 {
@@ -19,8 +16,8 @@ namespace _Games.Battle
         [SerializeField] private MMF_Player playFeedback;
 
         [TitleGroup("Elements")]
-        [SerializeField] private SpriteRenderer icon;
         [SerializeField] private SpriteRenderer background;
+        [SerializeField] private Weapon weapon;
         [SerializeField] private Color defaultColor;
         [SerializeField] private Color selectedColor;
         [SerializeField] private Color selectedX2Color;
@@ -29,11 +26,6 @@ namespace _Games.Battle
         private bool isInitialized = false;
         private List<int> dicesId = new List<int>();
         private Tween tween;
-
-        private void Awake()
-        {
-            icon.gameObject.SetActive(RandomUtils.Value > 0.2f);
-        }
 
         public UniTask Initialize(int order)
         {
@@ -60,6 +52,7 @@ namespace _Games.Battle
             if (tween != null && tween.IsPlaying()) tween.Complete();
             tween = background.DOColor(color, duration)
                 .SetEase(Ease.OutCubic);
+            weapon.Active();
         }
 
         public void SetMultiplierColor()
@@ -83,6 +76,7 @@ namespace _Games.Battle
             if (tween != null && tween.IsPlaying()) tween.Complete();
             tween = background.DOColor(color, duration)
                 .SetEase(Ease.InCubic);
+            weapon.Inactive();
         }
         
         public void InsertId(int dice) => dicesId.Add(dice);
