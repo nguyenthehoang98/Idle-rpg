@@ -34,14 +34,15 @@ namespace _Games.Battle
         [SerializeField] private Button buttonRight;
         [SerializeField] private RectTransform slotGroupRect;
         [SerializeField] private HorizontalLayoutGroup itemGroup;
-        [SerializeField] private RectTransform itemPrefab;
+        [SerializeField] private UIBattleDiceSlot itemPrefab;
         [SerializeField] private int totalItems = 2;
 
-        private const int MAX_VALUE = 50;
+        private const int MAX_VALUE = 100;
         private float elapsedTime;
         private int value;
         private float leftValue;
         private float rightValue;
+        private List<UIBattleDiceSlot> dices = new List<UIBattleDiceSlot>();
         private readonly Queue<Action> queue = new Queue<Action>();
 
         private void Awake()
@@ -117,7 +118,7 @@ namespace _Games.Battle
                     }
                 }
 
-                if (shouldUpdateFillProgress)
+                if (shouldUpdateTextProgress)
                 {
                     queue.Enqueue(() =>
                     {
@@ -134,7 +135,7 @@ namespace _Games.Battle
                     });
                 }
 
-                if (shouldUpdateTextProgress)
+                if (shouldUpdateFillProgress)
                 {
                     queue.Enqueue(UpdateProgress);
                 }
@@ -237,18 +238,35 @@ namespace _Games.Battle
             {
                 img.color = color;
             }
+
+            float v = value * 0.01f;
+            foreach (var dice in dices)
+            {
+                dice.SetColor(color);
+                dice.SetValue(v);
+            }
         }
 
         private IEnumerator BuildLayout()
         {
+            dices.Add(itemPrefab);
             for (int i = 1; i < totalItems; i++)
             {
-                Instantiate(itemPrefab, itemGroup.transform);
+                var instance = Instantiate(itemPrefab, itemGroup.transform);
+                instance.transform.SetAsLastSibling();
+                dices.Add(instance);
             }
+
+            for (int i = 0; i < dices.Count - 1; i++)
+            {
+                dices[i].Init(false);
+            }
+
+            dices[dices.Count - 1].Init(true);
 
             yield return null;
 
-            float sizeX = itemPrefab.sizeDelta.x;
+            float sizeX = itemPrefab.RectTransform.sizeDelta.x;
             float space = itemGroup.spacing;
             float width = space * (totalItems + 1) + sizeX * totalItems;
             slotGroupRect.sizeDelta = new Vector2(width, slotGroupRect.sizeDelta.y);
