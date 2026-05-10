@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,9 +5,10 @@ namespace _Games.Battle
 {
     public class BattleLevel : MonoBehaviour
     {
-        [SerializeField] private LevelCone prefab;
+        [SerializeField] private Cone prefab;
 
-        private List<LevelCone> cones = new List<LevelCone>();
+        private readonly List<Cone> cones = new List<Cone>();
+        private int[] dices = new int[2];
         
         private void Start()
         {
@@ -22,6 +22,33 @@ namespace _Games.Battle
             {
                 cones[i].Init(i + 1);
             }
+        }
+
+        public void Trigger(Vector2Int trigger)
+        {
+            int dice = trigger.x;
+            int value = trigger.y;
+
+            int prev = dices[dice];
+
+            if (prev == value) return;
+
+            int stack;
+            if (prev != value)
+            {
+                stack = cones[prev].Stack;
+                cones[prev].RemoveId(dice);
+                if (cones[prev].Stack == 0 && stack > 0) cones[prev].Inactive();
+            }
+
+            stack = cones[value].Stack;
+            cones[value].InsertId(dice);
+            if (stack == 0)
+            {
+                cones[value].Active();
+            }
+            
+            dices[dice] = value;
         }
     }
 }

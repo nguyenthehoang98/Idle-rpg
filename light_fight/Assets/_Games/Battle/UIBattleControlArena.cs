@@ -4,12 +4,16 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace _Games.Battle
 {
     public class UIBattleControlArena : MonoBehaviour
     {
+        [TitleGroup("Events")] 
+        [SerializeField] private UnityEvent<Vector2Int> onTrigger;
+        
         [TitleGroup("Fills")]
         ////
         [SerializeField] private Image[] imgColors;
@@ -62,6 +66,17 @@ namespace _Games.Battle
             upFill2.gameObject.SetActive(false);
             
             StartCoroutine(BuildLayout());
+        }
+
+        private void Start()
+        {
+            for (int i = 0; i < dices.Count; i++)
+            {
+                dices[i].Init(i, i >= dices.Count - 1, (a, b) =>
+                {
+                    if(onTrigger != null) onTrigger.Invoke(new Vector2Int(a, b));
+                });
+            }
         }
 
         private void Update()
@@ -215,8 +230,6 @@ namespace _Games.Battle
 
         public void OnRightPointerUp() => rightValue = 0;
 
-        public int Value() => value;
-        
         private void UpdateProgress()
         {
             Vector3 offset = Vector3.zero;
@@ -256,13 +269,6 @@ namespace _Games.Battle
                 instance.transform.SetAsLastSibling();
                 dices.Add(instance);
             }
-
-            for (int i = 0; i < dices.Count - 1; i++)
-            {
-                dices[i].Init(false);
-            }
-
-            dices[dices.Count - 1].Init(true);
 
             yield return null;
 

@@ -17,8 +17,11 @@ namespace _Games.Battle
 
         private float scale = 0;
         private float elapsedTime;
+        private Action<int, int> onTrigger;
+        private int order;
+        private int value;
         private bool isLocked;
-
+        
         private void Update()
         {
             if (!isLocked)
@@ -33,12 +36,15 @@ namespace _Games.Battle
                 {
                     Random();
                     elapsedTime = 0;
+                    onTrigger?.Invoke(order, value);
                 }
             }
         }
 
-        public void Init(bool isLocked)
+        public void Init(int order, bool isLocked, Action<int, int> onTrigger)
         {
+            this.order = order;
+            this.onTrigger = onTrigger;
             this.isLocked = isLocked;
             lockObject.SetActive(isLocked);
             textValue.gameObject.SetActive(!isLocked);
@@ -52,7 +58,8 @@ namespace _Games.Battle
 
         private void Random()
         {
-            textValue.text = RandomUtils.Range(1, 6).ToString();
+            value = RandomUtils.Range(1, 6);
+            textValue.text = value.ToString();
         }
         
         public void SetValue(float value) => scale = value;
