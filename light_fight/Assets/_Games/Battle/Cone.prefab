@@ -515,10 +515,10 @@ MonoBehaviour:
         Owner: {fileID: 3099506334710254040}
         DebugActive: 0
         Mode: 0
-        AnimateScaleTarget: {fileID: 882616176956429958}
-        AnimateScaleDuration: 0.1
+        AnimateScaleTarget: {fileID: 2081466167215532581}
+        AnimateScaleDuration: 0.3
         RemapCurveZero: 1.2
-        RemapCurveOne: 1
+        RemapCurveOne: 0.25
         Offset: 0
         AnimateX: 1
         AnimateScaleTweenX:
@@ -782,8 +782,8 @@ MonoBehaviour:
   DebugActive: 0
   InScriptDrivenPause: 0
   FeedbacksList:
-  - rid: 7993921457489182771
-  - rid: 7993921457489182772
+  - rid: 7993921464242274356
+  - rid: 7993921464242274357
   KeepPlayModeChanges: 0
   PerformanceMode: 0
   RestoreInitialValuesOnDisable: 0
@@ -792,11 +792,11 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 7993921457489182771
+    - rid: 7993921464242274356
       type: {class: MMF_Position, ns: MoreMountains.Feedbacks, asm: MoreMountains.Tools}
       data:
         Active: 1
-        UniqueID: -857975890
+        UniqueID: 1293851688
         Label: Position
         OriginalLabel: Position
         ChannelMode: 0
@@ -870,7 +870,7 @@ MonoBehaviour:
         Mode: 0
         Space: 1
         RandomizeRemap: 0
-        AnimatePositionDuration: 0.15
+        AnimatePositionDuration: 0.2
         AnimatePositionTween:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
@@ -1057,7 +1057,7 @@ MonoBehaviour:
           EnumConditionPropertyName: 
           EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000
         AllowAdditivePlays: 0
-        RelativePosition: 1
+        RelativePosition: 0
         DeterminePositionsOnPlay: 0
         InitialPosition: {x: 0, y: 0.2, z: 0}
         DestinationPosition: {x: 0, y: 0, z: 0}
@@ -1087,11 +1087,11 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-    - rid: 7993921457489182772
+    - rid: 7993921464242274357
       type: {class: MMF_Scale, ns: MoreMountains.Feedbacks, asm: MoreMountains.Tools}
       data:
         Active: 1
-        UniqueID: 2007172713
+        UniqueID: -1873933331
         Label: Scale
         OriginalLabel: Scale
         ChannelMode: 0
@@ -1163,7 +1163,7 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 0
         AnimateScaleTarget: {fileID: 882616176956429958}
-        AnimateScaleDuration: 0.15
+        AnimateScaleDuration: 0.2
         RemapCurveZero: 1.2
         RemapCurveOne: 1
         Offset: 0
@@ -1461,8 +1461,8 @@ MonoBehaviour:
   DebugActive: 0
   InScriptDrivenPause: 0
   FeedbacksList:
-  - rid: 7993921457489182771
-  - rid: 7993921457489182772
+  - rid: 7993921464242274360
+  - rid: 7993921464242274361
   KeepPlayModeChanges: 0
   PerformanceMode: 0
   RestoreInitialValuesOnDisable: 0
@@ -1471,11 +1471,11 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 7993921457489182771
+    - rid: 7993921464242274360
       type: {class: MMF_Position, ns: MoreMountains.Feedbacks, asm: MoreMountains.Tools}
       data:
         Active: 1
-        UniqueID: -857975890
+        UniqueID: 1758256785
         Label: Position
         OriginalLabel: Position
         ChannelMode: 0
@@ -1492,7 +1492,7 @@ MonoBehaviour:
           NumberOfRepeats: 0
           RepeatForever: 0
           DelayBetweenRepeats: 1
-          PlayCount: 11
+          PlayCount: 2
           LimitPlayCount: 0
           MaxPlayCount: 3
           SetPlayCountToZeroOnReset: 0
@@ -1549,7 +1549,7 @@ MonoBehaviour:
         Mode: 0
         Space: 1
         RandomizeRemap: 0
-        AnimatePositionDuration: 0.15
+        AnimatePositionDuration: 0.2
         AnimatePositionTween:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
@@ -1736,7 +1736,7 @@ MonoBehaviour:
           EnumConditionPropertyName: 
           EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000
         AllowAdditivePlays: 0
-        RelativePosition: 1
+        RelativePosition: 0
         DeterminePositionsOnPlay: 0
         InitialPosition: {x: 0, y: 0, z: 0}
         DestinationPosition: {x: 0, y: 0.2, z: 0}
@@ -1766,11 +1766,11 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-    - rid: 7993921457489182772
+    - rid: 7993921464242274361
       type: {class: MMF_Scale, ns: MoreMountains.Feedbacks, asm: MoreMountains.Tools}
       data:
         Active: 1
-        UniqueID: 2007172713
+        UniqueID: -2115743985
         Label: Scale
         OriginalLabel: Scale
         ChannelMode: 0
@@ -1787,7 +1787,7 @@ MonoBehaviour:
           NumberOfRepeats: 0
           RepeatForever: 0
           DelayBetweenRepeats: 1
-          PlayCount: 11
+          PlayCount: 2
           LimitPlayCount: 0
           MaxPlayCount: 3
           SetPlayCountToZeroOnReset: 0
@@ -1842,7 +1842,7 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 0
         AnimateScaleTarget: {fileID: 882616176956429958}
-        AnimateScaleDuration: 0.15
+        AnimateScaleDuration: 0.2
         RemapCurveZero: 1
         RemapCurveOne: 1.2
         Offset: 0
@@ -2197,7 +2197,7 @@ MonoBehaviour:
         Mode: 0
         Space: 1
         RandomizeRemap: 0
-        AnimatePositionDuration: 0.2
+        AnimatePositionDuration: 0.3
         AnimatePositionTween:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
@@ -2489,8 +2489,8 @@ MonoBehaviour:
         Owner: {fileID: 2147579923330255804}
         DebugActive: 0
         Mode: 0
-        AnimateScaleTarget: {fileID: 882616176956429958}
-        AnimateScaleDuration: 0.2
+        AnimateScaleTarget: {fileID: 2081466167215532581}
+        AnimateScaleDuration: 0.3
         RemapCurveZero: 2
         RemapCurveOne: 1.2
         Offset: 0

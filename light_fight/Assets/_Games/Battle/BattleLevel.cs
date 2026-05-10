@@ -8,7 +8,6 @@ namespace _Games.Battle
 {
     public class BattleLevel : MonoBehaviour
     {
-        [SerializeField] private MMF_Player playFeedback;
         [SerializeField] private Cone prefab;
 
         private readonly List<Cone> cones = new List<Cone>();
@@ -37,7 +36,6 @@ namespace _Games.Battle
                 duration = Mathf.Max(duration, cones[i].Play());
             }
 
-            this.WaitInvoke(duration, playFeedback.PlayFeedbacks);
             return duration;
         }
 
@@ -45,7 +43,6 @@ namespace _Games.Battle
         {
             int dice = trigger.x;
             int value = trigger.y;
-
             int prev = dices[dice];
 
             if (prev == value) return;
@@ -55,7 +52,10 @@ namespace _Games.Battle
             {
                 stack = cones[prev].Stack;
                 cones[prev].RemoveId(dice);
-                if (cones[prev].Stack == 0 && stack > 0) cones[prev].Inactive();
+                if (cones[prev].Stack == 0 && stack > 0) 
+                    cones[prev].Inactive();
+                else if (cones[prev].Stack != 0)
+                    cones[prev].SetMultiplierColor();
             }
 
             stack = cones[value].Stack;

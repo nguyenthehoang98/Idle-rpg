@@ -24,7 +24,7 @@ namespace _Games.Battle
         [SerializeField] private Color selectedX3Color;
 
         private bool isInitialized = false;
-        private readonly List<int> dicesId = new List<int>();
+        private List<int> dicesId = new List<int>();
         private Tween tween;
 
         public UniTask Initialize(int order)
@@ -46,10 +46,12 @@ namespace _Games.Battle
         public void Active()
         {
             Color color = selectedColor;
+            zoomOutFeedback.PlayerCompleteFeedbacks();
             zoomInFeedback.PlayFeedbacks();
             float duration = zoomInFeedback.TotalDuration;
             if (tween != null && tween.IsPlaying()) tween.Complete();
-            tween = background.DOColor(color, duration);
+            tween = background.DOColor(color, duration)
+                .SetEase(Ease.OutCubic);
         }
 
         public void SetMultiplierColor()
@@ -60,16 +62,19 @@ namespace _Games.Battle
             else if (stack == 3) color = selectedX3Color;
             float duration = zoomInFeedback.TotalDuration;
             if (tween != null && tween.IsPlaying()) tween.Complete();
-            tween = background.DOColor(color, duration);
+            tween = background.DOColor(color, duration * 0.5f)
+                .SetEase(Ease.OutCubic);
         }
 
         public void Inactive()
         { 
             Color color = defaultColor;
+            zoomInFeedback.PlayerCompleteFeedbacks();
             zoomOutFeedback.PlayFeedbacks();
             float duration = zoomOutFeedback.TotalDuration;
-            if (tween != null && tween.IsPlaying()) tween.Kill();
-            tween = background.DOColor(color, duration);
+            if (tween != null && tween.IsPlaying()) tween.Complete();
+            tween = background.DOColor(color, duration)
+                .SetEase(Ease.InCubic);
         }
         
         public void InsertId(int dice) => dicesId.Add(dice);
