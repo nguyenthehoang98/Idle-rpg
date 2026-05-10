@@ -37,9 +37,10 @@ namespace _Games.Battle
             return UniTask.WaitForSeconds(initFeedback.TotalDuration);
         }
 
-        public void Play()
+        public float Play()
         {
             playFeedback.PlayFeedbacks();
+            return playFeedback.TotalDuration;
         }
 
         public void Active()

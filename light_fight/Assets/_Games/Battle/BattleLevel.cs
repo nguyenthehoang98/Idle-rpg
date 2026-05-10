@@ -1,12 +1,14 @@
-using System.Collections;
 using System.Collections.Generic;
+using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
+using MoreMountains.Feedbacks;
 using UnityEngine;
 
 namespace _Games.Battle
 {
     public class BattleLevel : MonoBehaviour
     {
+        [SerializeField] private MMF_Player playFeedback;
         [SerializeField] private Cone prefab;
 
         private readonly List<Cone> cones = new List<Cone>();
@@ -27,12 +29,16 @@ namespace _Games.Battle
             }
         }
 
-        public void Play()
+        public float Play()
         {
+            float duration = 0;
             for (int i = 0; i < cones.Count; i++)
             {
-                cones[i].Play();
-            } 
+                duration = Mathf.Max(duration, cones[i].Play());
+            }
+
+            this.WaitInvoke(duration, playFeedback.PlayFeedbacks);
+            return duration;
         }
 
         public void Trigger(Vector2Int trigger)

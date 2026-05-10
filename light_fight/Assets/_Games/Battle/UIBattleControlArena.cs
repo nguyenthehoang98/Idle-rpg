@@ -78,11 +78,7 @@ namespace _Games.Battle
             upFill2.m_bottomRightColor = new Color(upColor.r, upColor.g, upColor.b, 0.1f);
             upFill2.gameObject.SetActive(false);
 
-            foreach (var img in imgColors)
-            {
-                img.color = centerColor;
-            }
-            
+            UpdateProgress();
             StartCoroutine(BuildLayout());
         }
 
@@ -134,8 +130,8 @@ namespace _Games.Battle
             if (leftValue + rightValue > 0)
             {
                 float deltaTime = Time.deltaTime * speed * (-leftValue + rightValue);
-                bool shouldUpdateTextProgress = false;
-                bool shouldUpdateFillProgress = Mathf.Abs(elapsedTime) < 1;;
+                bool shouldUpdateFillProgress = false;
+                bool shouldUpdateTextProgress = Mathf.Abs(elapsedTime) < 1;;
             
                 float prev = elapsedTime;
                 elapsedTime += deltaTime;
@@ -161,7 +157,7 @@ namespace _Games.Battle
                     if (prevValue < newValue || leftValue > 0)
                     {
                         value = newValue;
-                        shouldUpdateTextProgress = true;
+                        shouldUpdateFillProgress = true;
                     }
                 }
                 else if (elapsedTime < 0)
@@ -171,7 +167,7 @@ namespace _Games.Battle
                     if (prevValue > newValue || rightValue > 0)
                     {
                         value = newValue;
-                        shouldUpdateTextProgress = true;
+                        shouldUpdateFillProgress = true;
                     }
                 }
 
