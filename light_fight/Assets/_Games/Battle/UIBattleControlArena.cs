@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
@@ -10,12 +12,15 @@ namespace _Games.Battle
     {
         [TitleGroup("Fills")]
         ////
+        [SerializeField] private Image[] imgColors;
         [SerializeField] private TextMeshProUGUI textProgress;
-        [SerializeField] private Image imgProgress;
         [SerializeField] private Color upColor = new Color(0, 1, 0);
         [SerializeField] private Color centerColor = new Color(1, 1, 1);
         [SerializeField] private Color downColor = new Color(1, 0, 0);
+        [SerializeField, Range(0.01f, 0.2f)] private float deltaMaxValue = 0.2f;
         [SerializeField, Range(1f, 5f)] private float speed = 2f;
+        [SerializeField, Range(0.01f, 5.0f)] private float offsetUpX = 0.2f;
+        [SerializeField, Range(0.01f, 5.0f)] private float offsetDownX = 0.2f;
         [SerializeField] private Slider upSlider;
         [SerializeField] private UICornersGradient upFill2;
         [SerializeField] private Slider downSlider;
@@ -37,6 +42,7 @@ namespace _Games.Battle
         private int value;
         private float leftValue;
         private float rightValue;
+        private readonly Queue<Action> queue = new Queue<Action>();
 
         private void Awake()
         {
@@ -70,7 +76,8 @@ namespace _Games.Battle
             if (leftValue + rightValue > 0)
             {
                 float deltaTime = Time.deltaTime * speed * (-leftValue + rightValue);
-                bool shouldUpdate = Mathf.Abs(elapsedTime) < 1;
+                bool shouldUpdateTextProgress = false;
+                bool shouldUpdateFillProgress = Mathf.Abs(elapsedTime) < 1;;
             
                 float prev = elapsedTime;
                 elapsedTime += deltaTime;
@@ -91,27 +98,51 @@ namespace _Games.Battle
                 
                 if (elapsedTime > 0)
                 {
-                    value = (int)(upProgressCurve.Evaluate(elapsedTime) * MAX_VALUE);
+                    int prevValue = value;
+                    int newValue = (int)(upProgressCurve.Evaluate(elapsedTime) * MAX_VALUE);
+                    if (prevValue < newValue || leftValue > 0)
+                    {
+                        value = newValue;
+                        shouldUpdateTextProgress = true;
+                    }
                 }
                 else if (elapsedTime < 0)
                 {
-                    value = -(int)(downProgressCurve.Evaluate(Mathf.Abs(elapsedTime)) * MAX_VALUE);
+                    int prevValue = value;
+                    int newValue = -(int)(downProgressCurve.Evaluate(Mathf.Abs(elapsedTime)) * MAX_VALUE);
+                    if (prevValue > newValue || rightValue > 0)
+                    {
+                        value = newValue;
+                        shouldUpdateTextProgress = true;
+                    }
                 }
 
-                if (shouldUpdate)
+                if (shouldUpdateFillProgress)
                 {
-                    if (elapsedTime > 0)
+                    queue.Enqueue(() =>
                     {
-                        upSlider.value = elapsedTime;
-                        downSlider.value = 0;
-                    }
-                    else
-                    {
-                        downSlider.value = Mathf.Abs(elapsedTime);
-                        upSlider.value = 0;
-                    }
+                        if (elapsedTime > 0)
+                        {
+                            upSlider.value = elapsedTime;
+                            downSlider.value = 0;
+                        }
+                        else
+                        {
+                            downSlider.value = Mathf.Abs(elapsedTime);
+                            upSlider.value = 0;
+                        }
+                    });
+                }
 
-                    UpdateProgress();
+                if (shouldUpdateTextProgress)
+                {
+                    queue.Enqueue(UpdateProgress);
+                }
+
+                if (Mathf.Abs(elapsedTime) >= 1)
+                {
+                    if (elapsedTime >= 1) elapsedTime -= deltaMaxValue;
+                    if (elapsedTime <= -1) elapsedTime += deltaMaxValue;
                 }
             }
             else
@@ -142,18 +173,21 @@ namespace _Games.Battle
 
                 if (shouldUpdate)
                 {
-                    if (elapsedTime > 0)
+                    queue.Enqueue(() =>
                     {
-                        upSlider.value = elapsedTime;
-                        downSlider.value = 0;
-                    }
-                    else
-                    {
-                        downSlider.value = Mathf.Abs(elapsedTime);
-                        upSlider.value = 0;
-                    }
+                        if (elapsedTime > 0)
+                        {
+                            upSlider.value = elapsedTime;
+                            downSlider.value = 0;
+                        }
+                        else
+                        {
+                            downSlider.value = Mathf.Abs(elapsedTime);
+                            upSlider.value = 0;
+                        }
 
-                    UpdateProgress();
+                        UpdateProgress();
+                    });
                 }
 
                 if (shouldStop)
@@ -161,6 +195,14 @@ namespace _Games.Battle
                     upFill2.gameObject.SetActive(false);
                     downFill2.gameObject.SetActive(false);
                 }
+            }
+        }
+
+        private void LateUpdate()
+        {
+            while (queue.Count > 0)
+            {
+                queue.Dequeue().Invoke();
             }
         }
 
@@ -176,8 +218,11 @@ namespace _Games.Battle
         
         private void UpdateProgress()
         {
-            upFill2.transform.position = upSlider.handleRect.transform.position;
-            downFill2.transform.position = downSlider.handleRect.transform.position;
+            Vector3 offset = Vector3.zero;
+            if (elapsedTime > 0) offset.x = offsetUpX;
+            else if (elapsedTime < 0) offset.x = -offsetDownX;
+            upFill2.transform.position = upSlider.handleRect.transform.position + offset;
+            downFill2.transform.position = downSlider.handleRect.transform.position + offset;
 
             textProgress.text = value + "%";
 
@@ -188,7 +233,10 @@ namespace _Games.Battle
                 color = Color.Lerp(centerColor, downColor, Mathf.Abs(elapsedTime));
             else color = centerColor;
 
-            imgProgress.color = color;
+            foreach (var img in imgColors)
+            {
+                img.color = color;
+            }
         }
 
         private IEnumerator BuildLayout()
