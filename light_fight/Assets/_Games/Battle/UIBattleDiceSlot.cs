@@ -21,9 +21,11 @@ namespace _Games.Battle
         private int order;
         private int value;
         private bool isLocked;
+        private bool isInitialized;
         
         private void Update()
         {
+            if (!isInitialized) return;
             if (!isLocked)
             {
                 float deltaTime = Time.deltaTime;
@@ -49,6 +51,11 @@ namespace _Games.Battle
             lockObject.SetActive(isLocked);
             textValue.gameObject.SetActive(!isLocked);
             imgCooldown.gameObject.SetActive(!isLocked);
+        }
+
+        public void Play()
+        {
+            isInitialized = true;
         }
 
         public void SetColor(Color color)

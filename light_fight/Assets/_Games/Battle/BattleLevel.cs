@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace _Games.Battle
@@ -10,9 +12,10 @@ namespace _Games.Battle
         private readonly List<Cone> cones = new List<Cone>();
         private int[] dices = new int[2];
         
-        private void Start()
+        public async UniTask Initialize()
         {
             cones.Add(prefab);
+            
             for (int i = 0; i < 5; i++)
             {
                 cones.Add(Instantiate(prefab, prefab.transform.parent));
@@ -20,8 +23,16 @@ namespace _Games.Battle
 
             for (int i = 0; i < cones.Count; i++)
             {
-                cones[i].Init(i + 1);
+                await cones[i].Initialize(i + 1);
             }
+        }
+
+        public void Play()
+        {
+            for (int i = 0; i < cones.Count; i++)
+            {
+                cones[i].Play();
+            } 
         }
 
         public void Trigger(Vector2Int trigger)

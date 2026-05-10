@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _KITSystem.Utils;
+using Cysharp.Threading.Tasks;
+using MoreMountains.Feedbacks;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
@@ -13,6 +16,10 @@ namespace _Games.Battle
     {
         [TitleGroup("Events")] 
         [SerializeField] private UnityEvent<Vector2Int> onTrigger;
+
+        [TitleGroup("Feedback")]
+        [SerializeField] private MMF_Player initFeedback;
+        [SerializeField] private GameObject[] activeGameObjects;
         
         [TitleGroup("Fills")]
         ////
@@ -46,11 +53,17 @@ namespace _Games.Battle
         private int value;
         private float leftValue;
         private float rightValue;
+        private bool isInitialized;
         private List<UIBattleDiceSlot> dices = new List<UIBattleDiceSlot>();
         private readonly Queue<Action> queue = new Queue<Action>();
 
         private void Awake()
         {
+            foreach (var go in activeGameObjects)
+            {
+                go.SetActive(false);
+            }
+            
             downSlider.fillRect.GetComponent<Image>().color = downColor;
             downFill2.m_topRightColor = new Color(downColor.r, downColor.g, downColor.b, 1f);
             downFill2.m_bottomRightColor = new Color(downColor.r, downColor.g, downColor.b, 1f);
@@ -64,11 +77,16 @@ namespace _Games.Battle
             upFill2.m_topRightColor = new Color(upColor.r, upColor.g, upColor.b, 0.1f);
             upFill2.m_bottomRightColor = new Color(upColor.r, upColor.g, upColor.b, 0.1f);
             upFill2.gameObject.SetActive(false);
+
+            foreach (var img in imgColors)
+            {
+                img.color = centerColor;
+            }
             
             StartCoroutine(BuildLayout());
         }
 
-        private void Start()
+        public UniTask Initialize()
         {
             for (int i = 0; i < dices.Count; i++)
             {
@@ -76,11 +94,35 @@ namespace _Games.Battle
                 {
                     if(onTrigger != null) onTrigger.Invoke(new Vector2Int(a, b));
                 });
+                dices[i].SetColor(centerColor);
+            }
+
+            initFeedback.PlayFeedbacks();
+
+            this.WaitNextFrame(() =>
+            {
+                foreach (var go in activeGameObjects)
+                {
+                    go.SetActive(true);
+                }
+            });
+            
+            return UniTask.WaitForSeconds(initFeedback.TotalDuration);
+        }
+
+        public void Play()
+        {
+            isInitialized = true;
+
+            foreach (var d in dices)
+            {
+                d.Play();
             }
         }
 
         private void Update()
         {
+            if (!isInitialized) return;
 #if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.Alpha1)) OnLeftPointerDown();
             else if (Input.GetKeyUp(KeyCode.Alpha1)) OnLeftPointerUp();
@@ -238,7 +280,7 @@ namespace _Games.Battle
             upFill2.transform.position = upSlider.handleRect.transform.position + offset;
             downFill2.transform.position = downSlider.handleRect.transform.position + offset;
 
-            textProgress.text = value + "%";
+            textProgress.text = (value + 100) + "%";
 
             Color color;
             if (elapsedTime > 0)
