@@ -9,6 +9,9 @@ namespace _Games.Battle
 {
     public class Cone : MonoBehaviour
     {
+        [TitleGroup("Settings")] 
+        [SerializeField] private int[] defaultAngles = new int[] {180, 180, 0, 0, 0, 0};
+        
         [TitleGroup("Feedback")] 
         [SerializeField] private MMF_Player zoomOutFeedback;
         [SerializeField] private MMF_Player zoomInFeedback;
@@ -34,6 +37,10 @@ namespace _Games.Battle
             transform.localRotation = Quaternion.Euler(0, 0, -60 * order);
             initFeedback.PlayFeedbacks();
             isInitialized = true;
+
+            int angle = defaultAngles[order - 1];
+            weapon.transform.localRotation = Quaternion.Euler(0, angle, 0);
+            
             return UniTask.WaitForSeconds(initFeedback.TotalDuration);
         }
 
