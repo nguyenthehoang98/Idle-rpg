@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MoreMountains.Feedbacks;
@@ -59,7 +60,12 @@ namespace _Games.Battle
             if (tween != null && tween.IsPlaying()) tween.Complete();
             tween = background.DOColor(color, duration)
                 .SetEase(Ease.OutCubic);
-            weapon.Active();
+            
+            float f = weapon.Active();
+            this.WaitInvoke(Mathf.Max(f, duration), () =>
+            {
+                weapon.Focus(new Vector3(Random.value, Random.value));
+            });
         }
 
         public void SetMultiplierColor()
@@ -69,7 +75,7 @@ namespace _Games.Battle
             if (stack == 2) color = selectedX2Color;
             else if (stack == 3) color = selectedX3Color;
             float duration = zoomInFeedback.TotalDuration;
-            if (tween != null && tween.IsPlaying()) tween.Complete();
+            if (tween != null && tween.IsPlaying()) tween.Kill();
             tween = background.DOColor(color, duration * 0.5f)
                 .SetEase(Ease.OutCubic);
         }
@@ -77,13 +83,18 @@ namespace _Games.Battle
         public void Inactive()
         { 
             Color color = defaultColor;
-            zoomInFeedback.PlayerCompleteFeedbacks();
-            zoomOutFeedback.PlayFeedbacks();
-            float duration = zoomOutFeedback.TotalDuration;
-            if (tween != null && tween.IsPlaying()) tween.Complete();
-            tween = background.DOColor(color, duration)
-                .SetEase(Ease.InCubic);
-            weapon.Inactive();
+            float f = weapon.StopFocus();
+            this.WaitInvoke(f, () =>
+            {
+                weapon.Inactive();
+
+                zoomInFeedback.PlayerCompleteFeedbacks();
+                zoomOutFeedback.PlayFeedbacks();
+                float duration = zoomOutFeedback.TotalDuration;
+                if (tween != null && tween.IsPlaying()) tween.Complete();
+                tween = background.DOColor(color, duration)
+                    .SetEase(Ease.InCubic);
+            });
         }
         
         public void InsertId(int dice) => dicesId.Add(dice);
