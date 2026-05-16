@@ -7,16 +7,12 @@ using MoreMountains.Feedbacks;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace _Games.Battle
 {
     public class UIBattleControlArena : MonoBehaviour
     {
-        [TitleGroup("Events")] 
-        [SerializeField] private UnityEvent<Vector2Int> onTrigger;
-
         [TitleGroup("Feedback")]
         [SerializeField] private MMF_Player initFeedback;
         [SerializeField] private GameObject[] activeGameObjects;
@@ -49,14 +45,18 @@ namespace _Games.Battle
         
         private const int MAX_VALUE = 50;
         private float elapsedTime;
-        private int value;
+        private int progress;
         private int totalDice;
+        private int totalDiceUnlock;
         private bool unlockAll;
         private float leftValue;
         private float rightValue;
         private bool isInitialized;
+        private List<int> stacks = new List<int>();
         private List<UIBattleDiceSlot> dices = new List<UIBattleDiceSlot>();
         private readonly Queue<Action> queue = new Queue<Action>();
+
+        public event Action<List<int>> OnTrigger; 
 
         public void PrefabBuilder(int dice, bool unlockAll)
         {
@@ -91,10 +91,8 @@ namespace _Games.Battle
             for (int i = 0; i < dices.Count; i++)
             {
                 bool locked = unlockAll ? false : i >= dices.Count - 1;
-                dices[i].Init(i, locked, (a, b) =>
-                {
-                    if(onTrigger != null) onTrigger.Invoke(new Vector2Int(a, b));
-                });
+                totalDiceUnlock += locked ? 0 : 1;
+                dices[i].Init(locked, StackTrigger);
                 dices[i].SetColor(centerColor);
             }
 
@@ -109,6 +107,18 @@ namespace _Games.Battle
             });
             
             return UniTask.WaitForSeconds(initFeedback.TotalDuration);
+        }
+
+        private void StackTrigger(int number)
+        {
+            stacks.Add(number);
+           
+            if (stacks.Count == totalDiceUnlock)
+            {
+                OnTrigger?.Invoke(stacks);
+                
+                stacks.Clear();
+            }
         }
 
         public void Play()
@@ -157,21 +167,21 @@ namespace _Games.Battle
                 
                 if (elapsedTime > 0)
                 {
-                    int prevValue = value;
+                    int prevValue = progress;
                     int newValue = (int)(upProgressCurve.Evaluate(elapsedTime) * MAX_VALUE);
                     if (prevValue < newValue || leftValue > 0)
                     {
-                        value = newValue;
+                        progress = newValue;
                         shouldUpdateFillProgress = true;
                     }
                 }
                 else if (elapsedTime < 0)
                 {
-                    int prevValue = value;
+                    int prevValue = progress;
                     int newValue = -(int)(downProgressCurve.Evaluate(Mathf.Abs(elapsedTime)) * MAX_VALUE);
                     if (prevValue > newValue || rightValue > 0)
                     {
-                        value = newValue;
+                        progress = newValue;
                         shouldUpdateFillProgress = true;
                     }
                 }
@@ -223,11 +233,11 @@ namespace _Games.Battle
                 
                 if (elapsedTime > 0)
                 {
-                    value = (int)(upProgressCurve.Evaluate(elapsedTime) * MAX_VALUE);
+                    progress = (int)(upProgressCurve.Evaluate(elapsedTime) * MAX_VALUE);
                 }
                 else if (elapsedTime < 0)
                 {
-                    value = -(int)(downProgressCurve.Evaluate(Mathf.Abs(elapsedTime)) * MAX_VALUE);
+                    progress = -(int)(downProgressCurve.Evaluate(Mathf.Abs(elapsedTime)) * MAX_VALUE);
                 }
 
                 if (shouldUpdate)
@@ -281,7 +291,7 @@ namespace _Games.Battle
             upFill2.transform.position = upSlider.handleRect.transform.position + offset;
             downFill2.transform.position = downSlider.handleRect.transform.position + offset;
 
-            textProgress.text = (value + 100) + "%";
+            textProgress.text = (progress + 100) + "%";
 
             Color color;
             if (elapsedTime > 0)
@@ -295,11 +305,11 @@ namespace _Games.Battle
                 img.color = color;
             }
 
-            float v = value * 0.01f;
+            float v = progress * 0.01f;
             foreach (var dice in dices)
             {
                 dice.SetColor(color);
-                dice.SetValue(v);
+                dice.SetScaleTime(v);
             }
         }
 

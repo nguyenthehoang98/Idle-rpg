@@ -15,10 +15,9 @@ namespace _Games.Battle
         [SerializeField] private Image imgCooldown;
         [SerializeField] private GameObject lockObject;
 
-        private float scale = 0;
+        private float scaleTime = 0;
         private float elapsedTime;
-        private Action<int, int> onTrigger;
-        private int order;
+        private Action<int> onTriggerDiceNumber;
         private int value;
         private bool isLocked;
         private bool isInitialized;
@@ -29,7 +28,7 @@ namespace _Games.Battle
             if (!isLocked)
             {
                 float deltaTime = Time.deltaTime;
-                float d = deltaTime * (1 + scale);
+                float d = deltaTime * (1 + scaleTime);
                 elapsedTime += d;
                 float f = Mathf.Clamp01(elapsedTime / cooldown);
                 imgCooldown.fillAmount = f;
@@ -38,19 +37,19 @@ namespace _Games.Battle
                 {
                     Random();
                     elapsedTime = 0;
-                    onTrigger?.Invoke(order, value);
+                    onTriggerDiceNumber?.Invoke(value);
                 }
             }
         }
 
-        public void Init(int order, bool isLocked, Action<int, int> onTrigger)
+        public void Init(bool locked, Action<int> onTrigger)
         {
-            this.order = order;
-            this.onTrigger = onTrigger;
-            this.isLocked = isLocked;
-            lockObject.SetActive(isLocked);
-            textValue.gameObject.SetActive(!isLocked);
-            imgCooldown.gameObject.SetActive(!isLocked);
+            isLocked = locked;
+            elapsedTime = float.MaxValue;
+            onTriggerDiceNumber = onTrigger;
+            lockObject.SetActive(locked);
+            textValue.gameObject.SetActive(!locked);
+            imgCooldown.gameObject.SetActive(!locked);
         }
 
         public void Play()
@@ -69,7 +68,7 @@ namespace _Games.Battle
             textValue.text = value.ToString();
         }
         
-        public void SetValue(float value) => scale = value;
+        public void SetScaleTime(float f) => scaleTime = f;
 
         public RectTransform RectTransform => rectTransform;
     }

@@ -1,5 +1,4 @@
-﻿using System;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace _Games.Battle
@@ -15,14 +14,14 @@ namespace _Games.Battle
         private void Awake()
         {
             correctArena.PrefabBuilder(totalDice, unlockAll);
+            correctArena.OnTrigger += battleLevel.Trigger;
         }
 
         private async void Start()
         {
-            //Debug.LogError(@"Khi slot zoom to ra bắt đầu vũ khí mới hoạt động, nó thò ra 1 chút rồi xoay xoay");
-            //Debug.LogError(@"Khi slot zoom nhỏ vào thì vũ khí quay về vị trí ngủ rồi mới zoom nhỏ lại");
+            Debug.Log(@"Khi dice chuyển sang 1 number khác thì có hệu ưnứng như mấy trò gacha ý, Hiệu ứng scroll jackpot spin");
             await UniTask.WaitForSeconds(1);
-            await battleLevel.Initialize(totalDice, timeScale);
+            await battleLevel.Initialize(timeScale);
             await UniTask.WaitForSeconds(0.35f);
             await correctArena.Initialize();
             await UniTask.WaitForSeconds(0.2f);

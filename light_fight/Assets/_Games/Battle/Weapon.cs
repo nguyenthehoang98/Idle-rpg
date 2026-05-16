@@ -7,6 +7,7 @@ using MoreMountains.Feedbacks;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
 
 namespace _Games.Battle
@@ -31,7 +32,7 @@ namespace _Games.Battle
 
         [TitleGroup("Element")]
         [SerializeField] private Transform pivot;
-        [SerializeField] private new Transform renderer; // animator/animation
+        [SerializeField] private SortingGroup sortingGroup; // animator/animation
         
         [TitleGroup("Animation")]
         [SerializeField] private NamedAnimancerComponent animancer;
@@ -55,6 +56,7 @@ namespace _Games.Battle
 
         public float Active()
         {
+            sortingGroup.sortingOrder = 1;
             activeFeedback.TimescaleMultiplier = feedbackScaleTime;
             activeFeedback.PlayFeedbacks();
             return activeFeedback.TotalDuration / feedbackScaleTime;
@@ -62,6 +64,7 @@ namespace _Games.Battle
 
         public void Inactive()
         {
+            sortingGroup.sortingOrder = 0;
             inactiveFeedback.TimescaleMultiplier = feedbackScaleTime;
             inactiveFeedback.PlayFeedbacks();
         }

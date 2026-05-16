@@ -647,6 +647,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3784447391545135218}
+  - component: {fileID: 8721344226196300958}
   m_Layer: 0
   m_Name: Pivot
   m_TagString: Untagged
@@ -670,6 +671,18 @@ Transform:
   - {fileID: 3064327273197952938}
   m_Father: {fileID: 9067714813383549070}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 90}
+--- !u!210 &8721344226196300958
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4347359729938804959}
+  m_Enabled: 1
+  m_SortingLayerID: -152622805
+  m_SortingLayer: 1
+  m_SortingOrder: 0
+  m_SortAtRoot: 1
 --- !u!1 &6161821067419480434
 GameObject:
   m_ObjectHideFlags: 0
@@ -725,7 +738,7 @@ MonoBehaviour:
   activeFeedback: {fileID: 7508009790646059554}
   inactiveFeedback: {fileID: 2330277492136844532}
   pivot: {fileID: 3784447391545135218}
-  renderer: {fileID: 3064327273197952938}
+  sortingGroup: {fileID: 8721344226196300958}
   animancer: {fileID: 5361878566000806513}
   attackClip: {fileID: 7400000, guid: d6d5be68c56967b4abc547fbe6f35d7d, type: 2}
 --- !u!1 &8763454242244791472

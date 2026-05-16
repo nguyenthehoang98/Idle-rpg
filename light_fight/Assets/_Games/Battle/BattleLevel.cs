@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -10,12 +9,10 @@ namespace _Games.Battle
         [SerializeField] private Cone prefab;
 
         private readonly List<Cone> cones = new List<Cone>();
-        private int[] dices;
+        private int[] dicesStackNumber = new int[6];
 
-        public async UniTask Initialize(int totalDice, float timeScale)
+        public async UniTask Initialize(float timeScale)
         {
-            dices = new int[totalDice];
-
             for (int i = 0; i < 6; i++)
             {
                 cones.Add(Instantiate(prefab, prefab.transform.parent));
@@ -38,44 +35,37 @@ namespace _Games.Battle
             return duration;
         }
 
-        public void Trigger(Vector2Int trigger)
+        // trigger: (0, 1),(1, 5),(2, 4),(3, 3)
+        public void Trigger(List<int> triggers)
         {
-            StartCoroutine(TriggerIE(trigger));   
-        }
-
-        private IEnumerator TriggerIE(Vector2Int trigger)
-        {
-            int dice = trigger.x;
-            int value = trigger.y;
-            int prev = dices[dice];
-
-            if (prev == value) yield break;
-
-            int stack;
-            if (prev != value)
+            // todo: stop all dice active
+            for (int i = 0; i < dicesStackNumber.Length; i++)
             {
-                stack = cones[prev].Stack;
-                cones[prev].RemoveId(dice);
-                if (cones[prev].Stack == 0 && stack > 0)
-                    cones[prev].Inactive();
-                else if (cones[prev].Stack != 0)
-                    cones[prev].SetMultiplierColor();
-            }
-
-            yield return null;
-
-            stack = cones[value].Stack;
-            cones[value].InsertId(dice);
-            if (stack == 0)
-            {
-                cones[value].Active();
-            }
-            else
-            {
-                cones[value].SetMultiplierColor();
+                dicesStackNumber[i] = 0;
             }
             
-            dices[dice] = value;
+            for (int i = 0; i < triggers.Count; i++)
+            {
+                int diceNumber = triggers[i];
+                int index = diceNumber - 1; // index of stack
+                dicesStackNumber[index]++;
+            }
+            
+            // * dicesStackNumber: [0,1,1,0,1,1]
+            for (int i = 0; i < cones.Count; i++)
+            {
+                var cone = cones[i];
+                int value = dicesStackNumber[i];
+                if (value > 0)
+                {
+                    cone.StackColor(value);
+                    if (!cone.IsPlaying) cone.Active();
+                }
+                else if (value == 0 && cone.IsPlaying)
+                {
+                    cone.Inactive();
+                }
+            }
         }
     }
 }

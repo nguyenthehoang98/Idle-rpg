@@ -29,9 +29,11 @@ namespace _Games.Battle
 
         private float feedbackScaleTime = 1;
         private bool isInitialized = false;
-        private List<int> dicesId = new List<int>();
+        private int currentStack;
         private Tween tween;
         private Coroutine coroutine;
+        
+        public bool IsPlaying { get; private set; }
 
         public UniTask Initialize(int order, float timeScale)
         {
@@ -59,6 +61,8 @@ namespace _Games.Battle
 
         public void Active()
         {
+            IsPlaying = true;
+            
             if (selectedColors.Length == 0)
             {
                 Debug.LogError("You must select at least one color");
@@ -68,42 +72,37 @@ namespace _Games.Battle
             zoomOutFeedback.PlayerCompleteFeedbacks();
             zoomInFeedback.TimescaleMultiplier = feedbackScaleTime;
             zoomInFeedback.PlayFeedbacks();
-          
-            Color color = selectedColors[0];
-            float duration = zoomInFeedback.TotalDuration / feedbackScaleTime;
-            if (tween != null && tween.IsPlaying()) tween.Complete();
-            tween = background.DOColor(color, duration)
-                .SetEase(Ease.OutCubic);
             
-            float f = weapon.Active();
             if (coroutine != null) StopCoroutine(coroutine);
+            float f = weapon.Active();
+            float duration = zoomInFeedback.TotalDuration / feedbackScaleTime;
             coroutine = this.WaitInvoke(Mathf.Max(f, duration) + 0.1f, () =>
             {
                 weapon.Focus(new Vector3(Random.value, Random.value));
             });
         }
 
-        public void SetMultiplierColor()
+        public void StackColor(int stack)
         {
-            if (selectedColors.Length == 0)
-            {
-                Debug.LogError("You must select at least one color");
-                return;
-            }
+            if (currentStack == stack) return;
+
+            currentStack = stack;
             
-            int stack = dicesId.Count;
             Color color = defaultColor;
             if (stack <= selectedColors.Length) 
                 color = selectedColors[stack - 1];
             float duration = zoomInFeedback.TotalDuration / feedbackScaleTime;
             
-            if (tween != null && tween.IsPlaying()) tween.Kill();
-            tween = background.DOColor(color, duration * 2f)
+            if (tween != null && tween.IsPlaying()) tween.Complete();
+            tween = background.DOColor(color, duration)
                 .SetEase(Ease.Linear);
         }
-
+        
         public void Inactive()
         {
+            IsPlaying = false;
+            currentStack = 0;
+            
             Action action = () =>
             {
                 weapon.Inactive();
@@ -126,11 +125,5 @@ namespace _Games.Battle
             }
             else action();
         }
-        
-        public void InsertId(int dice) => dicesId.Add(dice);
-        
-        public int Stack => dicesId.Count;
-        
-        public void RemoveId(int dice) => dicesId.Remove(dice);
     }
 }
