@@ -18,7 +18,6 @@ namespace _Games.Battle
         [SerializeField] private GameObject[] activeGameObjects;
         
         [TitleGroup("Fills")]
-        ////
         [SerializeField] private Image[] imgColors;
         [SerializeField] private TextMeshProUGUI textProgress;
         [SerializeField] private Color upColor = new Color(0, 1, 0);
@@ -36,7 +35,6 @@ namespace _Games.Battle
         [SerializeField] private AnimationCurve downProgressCurve;
 
         [TitleGroup("Controls")]
-        ////
         [SerializeField] private Button buttonLeft;
         [SerializeField] private Button buttonRight;
         [SerializeField] private RectTransform slotGroupRect;

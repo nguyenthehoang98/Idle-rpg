@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8055015922835937049}
   - component: {fileID: 7122461801700798667}
   - component: {fileID: 1592022268032649877}
-  m_Layer: 6
+  m_Layer: 5
   m_Name: Dice_Cube_black
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 3732459707796469994}
   - component: {fileID: 7185372670268721098}
   - component: {fileID: 7445861577393216079}
-  m_Layer: 6
+  m_Layer: 5
   m_Name: Dice_Cube_base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182,7 +182,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1782380020051374685}
   - component: {fileID: 5501001422036437226}
-  m_Layer: 6
+  m_Layer: 5
   m_Name: Dice
   m_TagString: Untagged
   m_Icon: {fileID: 0}

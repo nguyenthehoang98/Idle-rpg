@@ -21,6 +21,12 @@ public class DiceRollController : MonoBehaviour
     [SerializeField] private Vector3 squashScale = new Vector3(1.1f, 0.9f, 1.1f);
     [SerializeField] private Vector3 stretchScale = new Vector3(0.9f, 1.1f, 0.9f);
 
+    [ContextMenu("Roll")]
+    public void Roll()
+    {
+        Roll(RandomUtils.Range(1, 6), null);
+    }
+
     public void Roll(int value, Action onComplete)
     {
         if (value < 1 || value > 6)

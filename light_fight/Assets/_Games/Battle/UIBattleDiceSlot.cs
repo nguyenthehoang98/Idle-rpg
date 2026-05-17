@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Mime;
 using _KITSystem.Utils;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,13 +10,15 @@ namespace _Games.Battle
 {
     public class UIBattleDiceSlot : MonoBehaviour
     {
+        [TitleGroup("Dice")]
+        [SerializeField] private DiceRollController rig;
+        [TitleGroup("Element")]
         [SerializeField] private RectTransform rectTransform;
         [SerializeField] private float cooldown = 1;
         [SerializeField] private Image imgCooldown;
         [SerializeField] private GameObject lockObject;
         [SerializeField] private GameObject unlockObject;
         [SerializeField] private TextMeshProUGUI numberText;
-        [SerializeField] private DiceRollController dice;
 
         private float scaleTime;
         private float elapsedTime;
@@ -24,7 +27,7 @@ namespace _Games.Battle
         private bool isLocked;
         private bool isInitialized;
         private bool isPaused;
-        
+
         private void Update()
         {
             if (!isInitialized) return;
@@ -70,7 +73,7 @@ namespace _Games.Battle
         private void Random()
         {
             value = RandomUtils.Range(1, 6);
-            dice.Roll(value, () =>
+            rig.Roll(value, () =>
             {
                 numberText.text = value.ToString();
                 onTriggerDiceNumber?.Invoke(value);

@@ -71,6 +71,7 @@ namespace _Games.Battle
 
         public void Focus(Vector3 goal)
         {
+            Debug.Log(@"Trục Y rotate bị sai");
             Action action = () =>
             {
                 Vector3 position = pivot.position;
