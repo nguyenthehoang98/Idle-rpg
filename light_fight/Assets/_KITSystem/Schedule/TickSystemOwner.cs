@@ -10,6 +10,13 @@ namespace _KITSystem.Schedule
         private TickSystem tickSystem;
         private float tickInterval;
         private float accumulator;
+        private bool isPaused = true;
+
+        public bool IsPaused
+        {
+            get => isPaused;
+            set => isPaused = value;
+        }
         
         private void Awake()
         {
@@ -35,6 +42,8 @@ namespace _KITSystem.Schedule
 
         void Update()
         {
+            if (isPaused) return;
+            
             accumulator += Time.deltaTime;
             float f = tickInterval * Time.timeScale;
             while (accumulator >= f)

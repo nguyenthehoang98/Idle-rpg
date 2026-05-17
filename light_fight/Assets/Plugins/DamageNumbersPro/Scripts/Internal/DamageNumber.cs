@@ -395,7 +395,7 @@ namespace DamageNumbersPro
         }
 
         #region Spawn Functions
-        private DamageNumber Spawn()
+        public DamageNumber Spawn()
         {
             DamageNumber newDN = default;
             int instanceID = GetInstanceID();

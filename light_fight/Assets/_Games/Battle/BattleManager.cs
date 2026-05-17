@@ -1,4 +1,6 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using _KITSystem.Schedule;
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -18,6 +20,15 @@ namespace _Games.Battle
 
         [TitleGroup("Elements")]
         [SerializeField] private Canvas uiCanvas;
+        [SerializeField] private TickSystemOwner tickSystemOwner;
+
+        private void Awake()
+        {
+            Debug.Log(@"UIBattleDiceSlot nên dùng queue để tính number dice. có thể config độ khó theo level theo các trường\n
+- tỉ lệ quay vào ô chứa trang bị\n
+	+ Tỉ lệ lặp lại ô chứa trang bị theo level, power. level max =50% chả hạn\n
+- tỉ lệ quay vào ô không chứa trang bị");
+        }
 
         private async void Start()
         {
@@ -37,6 +48,7 @@ namespace _Games.Battle
             float f = battleLevel.Play();
             await UniTask.WaitForSeconds(f);
             controlDice.Play();
+            tickSystemOwner.IsPaused = false;
         }
     }
 }

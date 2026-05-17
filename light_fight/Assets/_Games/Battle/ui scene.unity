@@ -390,6 +390,7 @@ MonoBehaviour:
   controlDicePrefab: {fileID: 6809574273409925262, guid: 36f1ad29f02f59548ac38380f24d745a, type: 3}
   spawnDiceTextPrefab: {fileID: 8286353758412989629, guid: ead6474fe98ede540920de61d3a709bf, type: 3}
   uiCanvas: {fileID: 1940578876}
+  tickSystemOwner: {fileID: 1856148958}
 --- !u!4 &1611421289
 Transform:
   m_ObjectHideFlags: 0
@@ -534,10 +535,48 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetFPS: 30
-  list: []
+  list:
+  - group: 1
+    tickable:
+      rid: 7993921391471624233
+  - group: 1
+    tickable:
+      rid: 7993921322042785839
+  - group: 0
+    tickable:
+      rid: 7993921408989134895
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 7993921322042785839
+      type: {class: SPU, ns: _KITSystem.SkillSystem.Runtime, asm: KITSystem.SkillSystem.Runtime}
+      data: 
+    - rid: 7993921391471624233
+      type: {class: MPU, ns: _KITSystem.Movement, asm: KITSystem.Movement}
+      data:
+        flagModifiers: 000000000200000003000000
+        resolver:
+          rid: 7993921391471624234
+        isInitialized: 0
+        activeActions: []
+    - rid: 7993921391471624234
+      type: {class: AvoidanceResolver, ns: _KITSystem.Movement, asm: KITSystem.Movement}
+      data:
+        cellSize: 1
+        avoidRadius: 1.5
+        avoidStrength: 2
+        maxAvoidForce: 3
+        stopDecelerationNormalize: 0.9
+    - rid: 7993921408989134895
+      type: {class: SpawnerTickable, ns: , asm: Assembly-CSharp}
+      data:
+        shouldDestroy: 0
+        stopDistance: 2.5
+        agentRadius: 0.5
+        multiplierIgnoreCheckDistance: 0.2
+        deltaDistanceStuck: 0.2
+        total: 0
+        isInitialized: 0
 --- !u!1 &1940578873
 GameObject:
   m_ObjectHideFlags: 0

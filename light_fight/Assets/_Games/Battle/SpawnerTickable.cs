@@ -23,11 +23,11 @@ internal class SpawnerTickable : ITickable
     private float deltaDistanceStuck = 0.2f;
     [TitleGroup("Debug")] 
     [SerializeField] private int total;
+    [SerializeField] private bool isInitialized;
 
     private Dictionary<int, AgentData> container = new Dictionary<int, AgentData>();
     private List<int> agents = new List<int>();
 
-    private bool isInitialized;
     private Simulator simulator;
     private IGridManager gridManager;
     private float stopDistanceSq;
