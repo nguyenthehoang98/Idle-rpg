@@ -25,10 +25,10 @@ RectTransform:
   m_GameObject: {fileID: 619395070546441700}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 50, y: 50, z: 50}
   m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 2560984355066674466}
+  - {fileID: 4513238891095995681}
   m_Father: {fileID: 3544979134740644272}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -65,7 +65,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6863157389558382620}
   - {fileID: 3643396861772189843}
@@ -133,7 +133,7 @@ MonoBehaviour:
   imgCooldown: {fileID: 1996939788673995810}
   lockObject: {fileID: 7220315096629781773}
   unlockObject: {fileID: 619395070546441700}
-  dice: {fileID: 5657762201369761577}
+  dice: {fileID: 7658666185009778582}
 --- !u!1 &7220315096629781773
 GameObject:
   m_ObjectHideFlags: 0
@@ -420,14 +420,14 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0205d79b017fc3b44937548a8afbfb71, type: 3}
---- !u!4 &2560984355066674466 stripped
+--- !u!4 &4513238891095995681 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 401953170646874718, guid: 0205d79b017fc3b44937548a8afbfb71, type: 3}
+  m_CorrespondingSourceObject: {fileID: 1782380020051374685, guid: 0205d79b017fc3b44937548a8afbfb71, type: 3}
   m_PrefabInstance: {fileID: 2746764715679762300}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5657762201369761577 stripped
+--- !u!114 &7658666185009778582 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7537371330319847509, guid: 0205d79b017fc3b44937548a8afbfb71, type: 3}
+  m_CorrespondingSourceObject: {fileID: 5501001422036437226, guid: 0205d79b017fc3b44937548a8afbfb71, type: 3}
   m_PrefabInstance: {fileID: 2746764715679762300}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}

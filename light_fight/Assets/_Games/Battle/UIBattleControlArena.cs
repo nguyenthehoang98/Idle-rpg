@@ -315,8 +315,7 @@ namespace _Games.Battle
 
         private IEnumerator BuildLayout()
         {
-            dices.Add(itemPrefab);
-            for (int i = 1; i < totalDice; i++)
+            for (int i = 0; i < totalDice; i++)
             {
                 var instance = Instantiate(itemPrefab, itemGroup.transform);
                 instance.transform.SetAsLastSibling();
