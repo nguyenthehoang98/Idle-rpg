@@ -14,6 +14,7 @@ namespace _Games.Battle
         [SerializeField] private Image imgCooldown;
         [SerializeField] private GameObject lockObject;
         [SerializeField] private GameObject unlockObject;
+        [SerializeField] private TextMeshProUGUI numberText;
         [SerializeField] private DiceRollController dice;
 
         private float scaleTime;
@@ -47,6 +48,7 @@ namespace _Games.Battle
 
         public void Init(bool locked, Action<int> onTrigger)
         {
+            numberText.text = "?";
             isLocked = locked;
             elapsedTime = float.MaxValue;
             onTriggerDiceNumber = onTrigger;
@@ -70,6 +72,7 @@ namespace _Games.Battle
             value = RandomUtils.Range(1, 6);
             dice.Roll(value, () =>
             {
+                numberText.text = value.ToString();
                 onTriggerDiceNumber?.Invoke(value);
                 isPaused = false;
             });

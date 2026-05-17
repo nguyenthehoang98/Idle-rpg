@@ -49,7 +49,7 @@ public class DiceRollController : MonoBehaviour
         yield return new WaitForSeconds(d);
 
         float d1 = duration * 0.5f - d * 2;
-        visual.DOLocalMoveY(startPos.y + jumpHeight, d1).SetEase(Ease.OutQuad);
+        visual.DOLocalMoveY(startPos.y + jumpHeight, d1).SetEase(Ease.OutQuart);
         visual.DOLocalRotate(randomRotation, d1, RotateMode.FastBeyond360).SetEase(Ease.Linear);
         yield return new WaitForSeconds(d1);
 
@@ -66,9 +66,11 @@ public class DiceRollController : MonoBehaviour
         finalRotation.z += Mathf.DeltaAngle(finalRotation.z, targetRotation.z);
 
         // Rơi xuống
-        visual.DOLocalMoveY(startPos.y, d1).SetEase(Ease.InQuad);
+        visual.DOLocalMoveY(startPos.y, d1).SetEase(Ease.InQuart);
         visual.DOLocalRotate(finalRotation, d1, RotateMode.FastBeyond360).SetEase(Ease.OutQuad);
         yield return new WaitForSeconds(d1);
+        
+        onComplete?.Invoke();
 
         // Bounce nhẹ lúc chạm đất
         visual.DOScale(new Vector3(1.1f, 0.85f, 1.1f), d);
@@ -76,20 +78,18 @@ public class DiceRollController : MonoBehaviour
 
         visual.DOScale(Vector3.one, d);
         yield return new WaitForSeconds(d);
-        
-        onComplete?.Invoke();
     }
 
     private Vector3 GetDiceRotation(int value)
     {
         switch (value)
         {
-            case 1: return new Vector3(-90, 0, 0);
-            case 2: return new Vector3(0, 180, 0);
-            case 3: return new Vector3(0, -90, 0);
-            case 4: return new Vector3(0, 0, 0);
-            case 5: return new Vector3(0, 90, 90);
-            case 6: return new Vector3(-90, 0, -180);
+            case 1: return new Vector3(0, -90, 90);
+            case 2: return new Vector3(0, 0, 0);
+            case 3: return new Vector3(0, -180, 0);
+            case 4: return new Vector3(90, 0, 0);
+            case 5: return new Vector3(0, -90, 0);
+            case 6: return new Vector3(0, 90, 0);
             default: return Vector3.zero;
         }
     }

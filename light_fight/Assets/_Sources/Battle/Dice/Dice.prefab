@@ -219,7 +219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visual: {fileID: 1782380020051374685}
-  jumpHeight: 3
+  jumpHeight: 4
   duration: 1.2
   randomSpinCountStart: 2
   randomSpinCountEnd: 2
