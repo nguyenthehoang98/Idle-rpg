@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 namespace _Games.Battle
 {
-    public class UIBattleControlArena : MonoBehaviour
+    public class UIBattleControlDiceSpeed : MonoBehaviour
     {
         [TitleGroup("Feedback")]
         [SerializeField] private MMF_Player initFeedback;

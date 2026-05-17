@@ -1,33 +1,36 @@
 ﻿using Cysharp.Threading.Tasks;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace _Games.Battle
 {
     public class BattleManager : MonoBehaviour
     {
+        [TitleGroup("Settings")]
         [SerializeField] private float timeScale = 1;
         [SerializeField] private bool unlockAll;
         [SerializeField, Range(1, 4)] private int totalDice = 2;
-        [SerializeField] private BattleLevel battleLevel;
-        [SerializeField] private UIBattleControlArena correctArena;
+        
+        [TitleGroup("Prefabs")]
+        [SerializeField] private BattleLevel battleLevelPrefab;
+        [SerializeField] private UIBattleControlDiceSpeed controlDicePrefab;
 
-        private void Awake()
-        {
-            correctArena.PrefabBuilder(totalDice, unlockAll);
-            correctArena.OnTrigger += battleLevel.Trigger;
-        }
+        [TitleGroup("Elements")]
+        [SerializeField] private Canvas uiCanvas;
 
         private async void Start()
         {
-            Debug.Log(@"Khi dice chuyển sang 1 number khác thì có hệu ưnứng như mấy trò gacha ý, Hiệu ứng scroll jackpot spin");
+            var battleLevel = Instantiate(battleLevelPrefab, transform);
             await UniTask.WaitForSeconds(1);
             await battleLevel.Initialize(timeScale);
             await UniTask.WaitForSeconds(0.35f);
-            await correctArena.Initialize();
+            var controlDice = Instantiate(controlDicePrefab, uiCanvas.transform);
+            controlDice.transform.SetAsFirstSibling();
+            await controlDice.Initialize();
             await UniTask.WaitForSeconds(0.2f);
             float f = battleLevel.Play();
             await UniTask.WaitForSeconds(f);
-            correctArena.Play();
+            controlDice.Play();
         }
     }
 }

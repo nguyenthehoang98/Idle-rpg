@@ -1931,7 +1931,7 @@ GameObject:
   - component: {fileID: 6809574273409925262}
   - component: {fileID: 6987014318948095002}
   m_Layer: 5
-  m_Name: Panel Control Arena
+  m_Name: UIBattleControlDiceSpeed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1956,7 +1956,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -1300}
+  m_AnchoredPosition: {x: 0, y: -700}
   m_SizeDelta: {x: 1080, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5345485603715756207
@@ -1979,15 +1979,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f68a016e364f684083d900e0865b3b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  diceLayerMasks:
-  - serializedVersion: 2
-    m_Bits: 64
-  - serializedVersion: 2
-    m_Bits: 128
-  - serializedVersion: 2
-    m_Bits: 256
-  - serializedVersion: 2
-    m_Bits: 512
   initFeedback: {fileID: 6987014318948095002}
   activeGameObjects:
   - {fileID: 1691733223973736995}
