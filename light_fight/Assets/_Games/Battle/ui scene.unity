@@ -446,6 +446,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9300889eebe00cd499bfa2d1df338c59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coneParent: {fileID: 1425970842}
   prefab: {fileID: 2782486295943104099, guid: b2982efe4f9c76a4f82829225c36e47d, type: 3}
 --- !u!1 &1611421287
 GameObject:
@@ -600,7 +601,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96

@@ -54,6 +54,8 @@ namespace _Games.Battle
 
         public void Initialize(float timeScale) => feedbackScaleTime = timeScale;
 
+        public void Play() => pivot.gameObject.SetActive(true);
+
         public float Active()
         {
             sortingGroup.sortingOrder = 1;

@@ -6,6 +6,7 @@ namespace _Games.Battle
 {
     public class BattleLevel : MonoBehaviour
     {
+        [SerializeField] private Transform coneParent;
         [SerializeField] private Cone prefab;
 
         private readonly List<Cone> cones = new List<Cone>();
@@ -15,12 +16,9 @@ namespace _Games.Battle
         {
             for (int i = 0; i < 6; i++)
             {
-                cones.Add(Instantiate(prefab, prefab.transform.parent));
-            }
-
-            for (int i = 0; i < cones.Count; i++)
-            {
-                await cones[i].Initialize(i + 1, timeScale);
+                Cone cone = Instantiate(prefab, coneParent);
+                await cone.Initialize(i, timeScale);
+                cones.Add(cone);
             }
         }
 

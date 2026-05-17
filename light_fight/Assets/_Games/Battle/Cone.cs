@@ -14,6 +14,7 @@ namespace _Games.Battle
     {
         [TitleGroup("Settings")] 
         [SerializeField] private Color defaultColor;
+        [SerializeField] private Sprite[] numbers;
         [SerializeField] private int[] defaultAngles = new int[] {180, 180, 0, 0, 0, 0};
         [SerializeField] private Color[] selectedColors = new Color[4];
         
@@ -24,6 +25,7 @@ namespace _Games.Battle
         [SerializeField] private MMF_Player playFeedback;
 
         [TitleGroup("Elements")]
+        [SerializeField] private SpriteRenderer number;
         [SerializeField] private SpriteRenderer background;
         [SerializeField] private Weapon weapon;
 
@@ -44,8 +46,10 @@ namespace _Games.Battle
             initFeedback.TimescaleMultiplier = feedbackScaleTime;
             initFeedback.PlayFeedbacks();
             isInitialized = true;
+            
+            number.sprite = numbers[order];
 
-            int angle = defaultAngles[order - 1];
+            int angle = defaultAngles[order];
             weapon.Initialize(timeScale);
             weapon.transform.localRotation = Quaternion.Euler(0, angle, 0);
             
@@ -56,7 +60,9 @@ namespace _Games.Battle
         {
             playFeedback.TimescaleMultiplier = feedbackScaleTime;
             playFeedback.PlayFeedbacks();
-            return playFeedback.TotalDuration / feedbackScaleTime;
+            float f = playFeedback.TotalDuration / feedbackScaleTime;
+            this.WaitInvoke(f, weapon.Play);
+            return f;
         }
 
         public void Active()
