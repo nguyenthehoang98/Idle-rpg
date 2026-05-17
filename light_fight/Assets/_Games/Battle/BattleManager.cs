@@ -14,6 +14,7 @@ namespace _Games.Battle
         [TitleGroup("Prefabs")]
         [SerializeField] private BattleLevel battleLevelPrefab;
         [SerializeField] private UIBattleControlDiceSpeed controlDicePrefab;
+        [SerializeField] private UIBattleSpawnDiceText spawnDiceTextPrefab;
 
         [TitleGroup("Elements")]
         [SerializeField] private Canvas uiCanvas;
@@ -24,8 +25,13 @@ namespace _Games.Battle
             await UniTask.WaitForSeconds(1);
             await battleLevel.Initialize(timeScale);
             await UniTask.WaitForSeconds(0.35f);
+            var spawnDiceText = Instantiate(spawnDiceTextPrefab, uiCanvas.transform);
+            spawnDiceText.transform.SetAsFirstSibling();
             var controlDice = Instantiate(controlDicePrefab, uiCanvas.transform);
             controlDice.transform.SetAsFirstSibling();
+            controlDice.PrefabBuilder(totalDice, unlockAll);
+            controlDice.OnTrigger += spawnDiceText.Spawn;
+            controlDice.OnTrigger += battleLevel.Trigger;
             await controlDice.Initialize();
             await UniTask.WaitForSeconds(0.2f);
             float f = battleLevel.Play();

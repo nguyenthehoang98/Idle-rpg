@@ -114,7 +114,6 @@ namespace _Games.Battle
             if (stacks.Count == totalDiceUnlock)
             {
                 OnTrigger?.Invoke(stacks);
-                
                 stacks.Clear();
             }
         }

@@ -10,7 +10,7 @@ namespace _Games.Battle
         [SerializeField] private Cone prefab;
 
         private readonly List<Cone> cones = new List<Cone>();
-        private int[] dicesStackNumber = new int[6];
+        private readonly int[] dicesStackNumber = new int[BattleConst.MAX_DICE_NUMBER];
 
         public async UniTask Initialize(float timeScale)
         {
