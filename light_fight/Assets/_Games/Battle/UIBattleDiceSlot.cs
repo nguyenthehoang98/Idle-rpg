@@ -10,21 +10,24 @@ namespace _Games.Battle
     public class UIBattleDiceSlot : MonoBehaviour
     {
         [SerializeField] private RectTransform rectTransform;
-        [SerializeField] private TextMeshProUGUI textValue;
         [SerializeField] private float cooldown = 1;
         [SerializeField] private Image imgCooldown;
         [SerializeField] private GameObject lockObject;
+        [SerializeField] private GameObject unlockObject;
+        [SerializeField] private DiceRollController dice;
 
-        private float scaleTime = 0;
+        private float scaleTime;
         private float elapsedTime;
         private Action<int> onTriggerDiceNumber;
         private int value;
         private bool isLocked;
         private bool isInitialized;
+        private bool isPaused;
         
         private void Update()
         {
             if (!isInitialized) return;
+            if (isPaused) return;
             if (!isLocked)
             {
                 float deltaTime = Time.deltaTime;
@@ -35,9 +38,9 @@ namespace _Games.Battle
 
                 if (f >= 1)
                 {
+                    isPaused = true;
                     Random();
                     elapsedTime = 0;
-                    onTriggerDiceNumber?.Invoke(value);
                 }
             }
         }
@@ -48,7 +51,7 @@ namespace _Games.Battle
             elapsedTime = float.MaxValue;
             onTriggerDiceNumber = onTrigger;
             lockObject.SetActive(locked);
-            textValue.gameObject.SetActive(!locked);
+            unlockObject.SetActive(!locked);
             imgCooldown.gameObject.SetActive(!locked);
         }
 
@@ -65,7 +68,11 @@ namespace _Games.Battle
         private void Random()
         {
             value = RandomUtils.Range(1, 6);
-            textValue.text = value.ToString();
+            dice.Roll(value, () =>
+            {
+                onTriggerDiceNumber?.Invoke(value);
+                isPaused = false;
+            });
         }
         
         public void SetScaleTime(float f) => scaleTime = f;
