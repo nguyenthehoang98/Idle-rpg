@@ -1,11 +1,7 @@
 {
-    "name": "KITSystem.Grid.Unitest",
+    "name": "KITSystem.EventBus",
     "rootNamespace": "",
-    "references": [
-        "GUID:e446d44f762815c43ae93a80f2a032f1",
-        "GUID:d8b63aba1907145bea998dd612889d6b",
-        "GUID:82d1e9f4e71141c4983602af7fd5f675"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

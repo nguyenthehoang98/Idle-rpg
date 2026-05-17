@@ -84,7 +84,7 @@ namespace _Games.Battle
             float duration = zoomInFeedback.TotalDuration / feedbackScaleTime;
             coroutine = this.WaitInvoke(Mathf.Max(f, duration) + 0.1f, () =>
             {
-                weapon.Focus(new Vector3(Random.value, Random.value));
+                weapon.Focus();
             });
         }
 

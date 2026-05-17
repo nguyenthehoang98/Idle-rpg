@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using _KITSystem.EventBus;
 using _KITSystem.Utils;
 using Animancer;
 using DG.Tweening;
@@ -7,6 +8,7 @@ using MoreMountains.Feedbacks;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
 
@@ -71,10 +73,11 @@ namespace _Games.Battle
             inactiveFeedback.PlayFeedbacks();
         }
 
-        public void Focus(Vector3 goal)
+        public void Focus()
         {
             Debug.Log(@"Trục Y rotate bị sai");
-            Action action = () =>
+          
+            void Action(Vector3 goal)
             {
                 Vector3 position = pivot.position;
                 Vector3 direction = goal - position;
@@ -95,30 +98,56 @@ namespace _Games.Battle
 
                 if (tweener != null && tweener.IsActive()) tweener.Complete();
                 tweener = DOVirtual.Float(0, 1, rotatePhaseDuration / feedbackScaleTime, value =>
-                {
-                    float eased = EaseInOutSine(value);
-                    float a = math.lerp(currentAngle, endAngle, eased);
-                    pivot.eulerAngles = new Vector3(0, 0, a);
-
-                    if (needOffset)
                     {
-                        pivot.localPosition = Vector3.Lerp(originalLocalPos, targetLocalPos, eased);
-                    }
-                }).SetEase(Ease.Linear)
-                .OnComplete(() =>
-                {
-                    if (animationCoroutine != null) StopCoroutine(animationCoroutine);
-                    animationCoroutine = StartCoroutine(PlayAnimation());
-                });
-            };
+                        float eased = EaseInOutSine(value);
+                        float a = math.lerp(currentAngle, endAngle, eased);
+                        pivot.eulerAngles = new Vector3(0, 0, a);
 
+                        if (needOffset)
+                        {
+                            pivot.localPosition = Vector3.Lerp(originalLocalPos, targetLocalPos, eased);
+                        }
+                    })
+                    .SetEase(Ease.Linear)
+                    .OnComplete(() =>
+                    {
+                        if (animationCoroutine != null) StopCoroutine(animationCoroutine);
+                        animationCoroutine = StartCoroutine(PlayAnimation());
+                    });
+            }
+
+            void WaitAction()
+            {
+                Vector3 p = pivot.position;
+                float2 position = new float2(p.x, p.y);
+                float radius = 5f;
+                SystemBus.Publish(new QueryAgentSignal(position, radius, tuple =>
+                {
+                    int count = tuple.count;
+                    float2[] positions = tuple.positions;
+                    float2 goal = position;
+                    float min = float.MaxValue;
+                    for (int i = 0; i < count; i++)
+                    {
+                        float d = math.distancesq(position, positions[i]);
+                        if (d < min)
+                        {
+                            goal = positions[i];
+                            min = d;
+                        }
+                    }
+                    
+                    Action(new Vector3(goal.x, goal.y));
+                }));
+            }
+            
             if (delayFocus > 0)
             {
                 if (coroutine != null) StopCoroutine(coroutine);
-                coroutine = this.WaitInvoke(delayFocus / feedbackScaleTime, action);
+                coroutine = this.WaitInvoke(delayFocus / feedbackScaleTime, WaitAction);
             }
             else
-                action();
+                WaitAction();
         }
 
         public float StopFocus()

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Unity.Mathematics;
+﻿using Unity.Mathematics;
 
 namespace _KITSystem.Grid
 {
@@ -7,6 +6,6 @@ namespace _KITSystem.Grid
     {
         bool Insert(int unitId, float2 position);
         bool Remove(int unitId);
-        int Query(float2 position, float radius, out List<int> results);
+        int Query(float2 position, float radius, out int[] results);
     }
 }

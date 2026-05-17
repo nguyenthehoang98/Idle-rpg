@@ -13,16 +13,14 @@ using Random = UnityEngine.Random;
 [Serializable]
 internal class SpawnerTickable : ITickable
 {
-    [TitleGroup("Agent default settings")] 
-    [SerializeField] private bool shouldDestroy;
+    [TitleGroup("Agent default settings")] [SerializeField]
+    private bool shouldDestroy;
+
     [SerializeField] private float stopDistance = 2;
     [SerializeField] private float agentRadius = 0.5f;
-    [SerializeField, Range(0.1f, 0.9f)]
-    private float multiplierIgnoreCheckDistance = 0.2f;
-    [SerializeField, Range(0.1f, 1.0f)]
-    private float deltaDistanceStuck = 0.2f;
-    [TitleGroup("Debug")] 
-    [SerializeField] private int total;
+    [SerializeField, Range(0.1f, 0.9f)] private float multiplierIgnoreCheckDistance = 0.2f;
+    [SerializeField, Range(0.1f, 1.0f)] private float deltaDistanceStuck = 0.2f;
+    [TitleGroup("Debug")] [SerializeField] private int total;
     [SerializeField] private bool isInitialized;
 
     private Dictionary<int, AgentData> container = new Dictionary<int, AgentData>();
@@ -35,15 +33,33 @@ internal class SpawnerTickable : ITickable
     private float deltaDistanceStuckSq;
     private float elapsedTime;
 
+    public int Query(float2 position, float radius, out float2[] positions)
+    {
+        int query = gridManager.Query(position, radius, out int[] results);
+        positions = new float2[query];
+        int index = 0;
+        for (int i = 0; i < query; i++)
+        {
+            int id = results[i];
+            if (container.TryGetValue(id, out AgentData data))
+            {
+                positions[index] = data.position;
+                index++;
+            }
+        }
+
+        return index;
+    }
+
     public void Tick(float deltaTime)
     {
         Initialize();
         simulator.SetTimeStep(deltaTime);
         simulator.EnsureCompleted();
-        
+
         // todo: remove
-        
-        if(shouldDestroy) RandomRemoveAgent();
+
+        if (shouldDestroy) RandomRemoveAgent();
         // todo: spawn (init)
         CheckSpawn(deltaTime);
 #if UNITY_EDITOR
@@ -67,7 +83,7 @@ internal class SpawnerTickable : ITickable
 
     public void DestroyAgent(int agent)
     {
-        if(agents.Remove(agent))
+        if (agents.Remove(agent))
         {
             simulator.EnsureCompleted();
             simulator.RemoveAgent(agent);
@@ -133,7 +149,7 @@ internal class SpawnerTickable : ITickable
             float2 position = simulator.GetAgentPosition(agent);
             temp.position = position;
 
-        gridManager.Insert(agent, new float2(position.x, position.y));
+            gridManager.Insert(agent, new float2(position.x, position.y));
 
             if (math.lengthsq(position) < stopDistanceSq)
             {
@@ -143,7 +159,7 @@ internal class SpawnerTickable : ITickable
                 continue;
             }
 
-            int query = gridManager.Query(position, 3, out List<int> results);
+            int query = gridManager.Query(position, 3, out int[] results);
             int frontBlockedCount = 0;
 
             float2 dirToGoal = MathUtils.NormalizeSafe(-position);
@@ -189,7 +205,7 @@ internal class SpawnerTickable : ITickable
                 temp.isStopped = true;
                 StopAgent(agent);
             }
-            
+
             container[agent] = temp;
         }
     }
@@ -232,7 +248,7 @@ internal class SpawnerTickable : ITickable
         });
         gridManager.Insert(agent, position);
     }
-    
+
     struct AgentData
     {
         public float2 position;

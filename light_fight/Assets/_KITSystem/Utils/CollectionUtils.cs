@@ -58,6 +58,17 @@ namespace _KITSystem.Utils
 
         #region Array
 
+        public static bool Contains<T>(this T[] array, T value)
+        {
+            if (array == null) return false;
+            foreach (var item in array)
+            {
+                if (EqualityComparer<T>.Default.Equals(item, value)) return true;
+            }
+
+            return false;
+        }
+
         public static void InsertAt<T>(ref T[] array, int index, T newItem)
         {
             if (index < 0 || index > array.Length)

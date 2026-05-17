@@ -1,4 +1,5 @@
 ﻿using System;
+using _KITSystem.EventBus;
 using _KITSystem.Schedule;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
@@ -22,16 +23,39 @@ namespace _Games.Battle
         [SerializeField] private Canvas uiCanvas;
         [SerializeField] private TickSystemOwner tickSystemOwner;
 
+        private SpawnerTickable spawner;
+        
         private void Awake()
         {
             Debug.Log(@"UIBattleDiceSlot nên dùng queue để tính number dice. có thể config độ khó theo level theo các trường\n
 - tỉ lệ quay vào ô chứa trang bị\n
 	+ Tỉ lệ lặp lại ô chứa trang bị theo level, power. level max =50% chả hạn\n
 - tỉ lệ quay vào ô không chứa trang bị");
+            
+            // global
+            SystemBus.Init();
+        }
+
+        private void OnEnable()
+        {
+            SystemBus.Subscribe<QueryAgentSignal>(OnQueryAgent);
+        }
+
+        private void OnQueryAgent(QueryAgentSignal signal)
+        {
+            if (spawner == null) tickSystemOwner.TryGetTickable(out spawner);
+            int count = spawner.Query(signal.Position, signal.Radius, out var results);
+            signal.OnQueryAgent?.Invoke((count, results));
+        }
+
+        private void OnDisable()
+        {
+            SystemBus.Unsubscribe<QueryAgentSignal>(OnQueryAgent);
         }
 
         private async void Start()
         {
+            // instance
             var battleLevel = Instantiate(battleLevelPrefab, transform);
             await UniTask.WaitForSeconds(1);
             await battleLevel.Initialize(timeScale);

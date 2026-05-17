@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using System.Text;
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace _KITSystem.Grid
 {
@@ -165,7 +163,7 @@ namespace _KITSystem.Grid
             }
         }
 
-        public int Query(float2 position, float radius, out List<int> results)
+        public int Query(float2 position, float radius, out int[] results)
         {
             int count = 0;
             visitedVersion++;
@@ -217,12 +215,7 @@ namespace _KITSystem.Grid
                 }
             }
 
-            results = new List<int>(count);
-            for (int i = 0; i < count; i++)
-            {
-                results.Add(resultBuffer[i]);
-            }
-
+            results = resultBuffer;
             return count;
         }
 
