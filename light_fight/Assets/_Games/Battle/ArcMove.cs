@@ -17,7 +17,7 @@ public class ArcMove : MonoBehaviour
         visual.gameObject.SetActive(false);
     }
 
-    public void MoveTo(Vector3 start, Vector3 target, Vector3 rot, 
+    public void MoveTo(Vector3 start, Vector3 target, Vector3 rot, float delay,
         float duration, float radius, float offsetY, float smooth, Action onComplete)
     {
         visual.transform.localScale = localScale;
@@ -38,6 +38,7 @@ public class ArcMove : MonoBehaviour
                 visual.position = Vector3.Lerp(start, begin, t);
             }).SetEase(Ease.InOutSine))
             .AppendInterval(d)
+            .AppendInterval(delay)
             .Append(DOVirtual.Float(0, 1, duration - d, t =>
             {
                 Vector3 linear = Vector3.Lerp(begin, end, t);

@@ -24,7 +24,11 @@ namespace _Games.Battle
         [SerializeField] private Star[] stars;
         [SerializeField] private SpriteRenderer highlight;
         [SerializeField] private Weapon weapon;
-
+        
+        [TitleGroup("Debug")]
+        [SerializeField] private float shineWidth;
+        [SerializeField] private Color shineColor;
+        
         private float feedbackScaleTime = 1;
         private bool isInitialized = false;
         private int currentStack;
@@ -105,6 +109,7 @@ namespace _Games.Battle
         {
             if (currentStack == stack)
             {
+                Debug.Log($"[{name}] Stack Color: {stack} stop");
                 stars[stack - 1].Active();
                 return;
             }
@@ -120,6 +125,7 @@ namespace _Games.Battle
 
                     this.WaitInvoke(star.DelayActive * (index - currentStack), () =>
                     {
+                        Debug.Log($"[{name}] : {index} : {stack}");
                         star.Active();
                     });
                 }
@@ -140,6 +146,7 @@ namespace _Games.Battle
                 }
             }
 
+            int prevStack = currentStack;
             currentStack = stack;
             
             // từ đây đổ xuống thì hoạt động đúng
@@ -150,7 +157,23 @@ namespace _Games.Battle
             
             float duration = 0.3f / feedbackScaleTime;
             
-            DoColor(color, duration, 0.05f, 1);
+            if (tween != null && tween.IsPlaying()) tween.Complete();
+            if (stack == 1 && prevStack == 0)
+            {
+                SetColor(color);
+                SetWidth(0.05f);
+                tween = DOVirtual.Float(0.05f, 1, duration, SetWidth);
+            }
+            else
+            {
+                float width = shineWidth;
+                Color currentColor = shineColor;
+                tween = DOVirtual.Float(0.05f, 1, duration, value =>
+                {
+                    if (value > width) SetWidth(value);
+                    SetColor(Color.Lerp(currentColor, color, value));
+                });
+            }
         }
         
         public void Inactive()
@@ -168,7 +191,10 @@ namespace _Games.Battle
                 zoomOutFeedback.PlayFeedbacks();
 
                 float duration = zoomOutFeedback.TotalDuration / feedbackScaleTime;
-                DoColor(selectedColors[prevStack], duration, 1, 0.05f);
+                
+                Debug.Log($"[{name}] -> Inactive");
+                if (tween != null && tween.IsPlaying()) tween.Complete();
+                tween = DOVirtual.Float(1f, 0.05f, duration, SetWidth);
             };
 
             int order = 0;
@@ -194,6 +220,7 @@ namespace _Games.Battle
 
         private void SetColor(Color color)
         {
+            shineColor = color;
             highlight.GetPropertyBlock(colorProperty);
             colorProperty.SetColor("_ShineColor", color);
             highlight.SetPropertyBlock(colorProperty);
@@ -201,20 +228,10 @@ namespace _Games.Battle
 
         private void SetWidth(float width)
         {
+            shineWidth = width;
             highlight.GetPropertyBlock(widthProperty);
             widthProperty.SetFloat("_ShineWidth", width);
             highlight.SetPropertyBlock(widthProperty);
-        }
-
-        private void DoColor(Color color, float duration, float from, float to)
-        {
-            if (tween != null && tween.IsPlaying()) tween.Complete();
-            if(to >= 1)
-            {
-                SetWidth(0.05f);
-                SetColor(color);
-            }
-            tween = DOVirtual.Float(from, to, duration, SetWidth);
         }
 
         public Vector3 GetStarPosition(int index) => stars[index].transform.position;

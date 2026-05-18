@@ -70,7 +70,8 @@ namespace _Games.Battle
 
         private void Random()
         {
-            value = RandomUtils.Range(1, 6);
+            //value = RandomUtils.Range(1, 7);
+            value = RandomUtils.Range(1, 3);
             rig.Roll(value, () =>
             {
                 numberText.text = value.ToString();

@@ -3295,10 +3295,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultAngles: b4000000b400000000000000000000000000000000000000
   selectedColors:
-  - {r: 0.4, g: 0.6, b: 0, a: 1}
-  - {r: 0.6, g: 0.37647063, b: 0, a: 1}
-  - {r: 0.6, g: 0, b: 0.1, a: 1}
-  - {r: 0.54117656, g: 0, b: 0.6, a: 1}
+  - {r: 0.058823466, g: 0.5, b: 0, a: 1}
+  - {r: 0, g: 0.25339365, b: 0.5, a: 1}
+  - {r: 0.29615694, g: 0, b: 0.5019608, a: 1}
+  - {r: 0.5, g: 0.2509804, b: 0, a: 1}
   zoomOutFeedback: {fileID: 4404944048773776162}
   zoomInFeedback: {fileID: 7296224793412912267}
   initFeedback: {fileID: 2147579923330255804}
@@ -3310,6 +3310,8 @@ MonoBehaviour:
   - {fileID: 3974939765222776087}
   highlight: {fileID: 2211544858756833477}
   weapon: {fileID: 3494460708640905028}
+  shineWidth: 0
+  shineColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1001 &3849786303392877334
 PrefabInstance:
   m_ObjectHideFlags: 0

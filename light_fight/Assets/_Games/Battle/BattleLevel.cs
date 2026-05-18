@@ -17,6 +17,9 @@ namespace _Games.Battle
             for (int i = 0; i < 6; i++)
             {
                 Cone cone = Instantiate(prefab, coneParent);
+#if UNITY_EDITOR
+                cone.name = "Cone " + (i + 1);
+#endif
                 await cone.Initialize(i, maxStar, timeScale);
                 cones.Add(cone);
             }
