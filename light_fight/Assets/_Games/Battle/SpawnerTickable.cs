@@ -22,8 +22,9 @@ internal class SpawnerTickable : ITickable
     [SerializeField] private float agentRadius = 0.5f;
     [SerializeField, Range(0.1f, 0.9f)] private float multiplierIgnoreCheckDistance = 0.2f;
     [SerializeField, Range(0.1f, 1.0f)] private float deltaDistanceStuck = 0.2f;
-    [TitleGroup("Debug")] [SerializeField] private int total;
-    [SerializeField] private bool isInitialized;
+    [TitleGroup("Debug")] 
+    [SerializeField, DisableIf("@true")] private int total;
+    [SerializeField, DisableIf("@true")] private bool isInitialized;
 
     private Dictionary<int, AgentData> container = new Dictionary<int, AgentData>();
     private List<int> agents = new List<int>();

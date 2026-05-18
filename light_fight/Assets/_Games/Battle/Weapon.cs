@@ -161,25 +161,26 @@ namespace _Games.Battle
             Vector3 beginLocalPos = pivot.localPosition;
             bool flag = beginLocalPos != localPosition;
 
-            float targetAngle = localRotation.z;
-            float beginAngle = pivot.localEulerAngles.z;
-            float delta = Mathf.DeltaAngle(beginAngle, targetAngle);
-            float endAngle = beginAngle + delta;
+            float begin = pivot.localEulerAngles.z;
+            float target = localRotation.z;
+            float final = begin + Mathf.DeltaAngle(begin, target);
 
             float d = backPhaseDuration / feedbackScaleTime;
+            
             if (tweener != null && tweener.IsPlaying()) tweener.Kill();
             tweener = DOVirtual.Float(0, 1, d, value =>
             {
-                float eased = EaseInOutSine(value);
-                float a = math.lerp(beginAngle, endAngle, eased);
-                pivot.localEulerAngles = new Vector3(0, 0, a);
-
+                Vector3 rot = pivot.localEulerAngles;
+                rot.z = Mathf.Lerp(begin, final, value);
+                pivot.localEulerAngles = rot;
+                
                 if (flag)
                 {
+                    float eased = EaseInOutSine(value);
                     pivot.localPosition = Vector3.Lerp(beginLocalPos, localPosition, eased);
                 }
             }).SetEase(Ease.Linear);
-
+            
             return d;
         }
         

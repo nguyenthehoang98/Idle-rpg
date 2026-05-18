@@ -3293,7 +3293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68ac2aba9f594a81ba174b07bd5fe409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultAngles: b4000000b400000000000000000000000000000000000000
+  defaultAngles: b4000000b4000000b4000000000000000000000000000000
   selectedColors:
   - {r: 0.058823466, g: 0.5, b: 0, a: 1}
   - {r: 0, g: 0.25339365, b: 0.5, a: 1}
