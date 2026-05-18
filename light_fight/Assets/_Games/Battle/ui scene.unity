@@ -388,7 +388,7 @@ MonoBehaviour:
   maxRadius: 2
   timeScale: 1
   unlockAll: 1
-  totalDice: 1
+  totalDice: 4
   arcMovePrefab: {fileID: 4610025884097093620, guid: 69109f530eb951d49b3dcf7dd19ff31d, type: 3}
   battleLevelPrefab: {fileID: 3451921775748243055, guid: 1fd53fc6988770c4eb5d48c9635dd71d, type: 3}
   controlDicePrefab: {fileID: 6809574273409925262, guid: 36f1ad29f02f59548ac38380f24d745a, type: 3}
@@ -547,7 +547,7 @@ MonoBehaviour:
       rid: 7993921322042785839
   - group: 0
     tickable:
-      rid: 7993921408989134895
+      rid: 7993921639068729740
   references:
     version: 2
     RefIds:
@@ -570,12 +570,12 @@ MonoBehaviour:
         avoidStrength: 2
         maxAvoidForce: 3
         stopDecelerationNormalize: 0.9
-    - rid: 7993921408989134895
-      type: {class: SpawnerTickable, ns: , asm: Assembly-CSharp}
+    - rid: 7993921639068729740
+      type: {class: SpawnerTickable, ns: , asm: Games.Battle}
       data:
         locked: 1
         shouldDestroy: 0
-        stopDistance: 2.5
+        stopDistance: 2
         agentRadius: 0.5
         multiplierIgnoreCheckDistance: 0.2
         deltaDistanceStuck: 0.2

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using _KITSystem.EventBus;
 using _KITSystem.Utils;
 using Animancer;
@@ -8,7 +7,6 @@ using MoreMountains.Feedbacks;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
 
@@ -29,6 +27,7 @@ namespace _Games.Battle
         private float delayFocus = 0.1f;
         
         [TitleGroup("Feedback")] 
+        [SerializeField] private MMF_Player playFeedback;
         [SerializeField] private MMF_Player activeFeedback;
         [SerializeField] private MMF_Player inactiveFeedback;
 
@@ -56,7 +55,7 @@ namespace _Games.Battle
 
         public void Initialize(float timeScale) => feedbackScaleTime = timeScale;
 
-        public void Play() => pivot.gameObject.SetActive(true);
+        public void Play() => playFeedback.PlayFeedbacks();
 
         public float Active()
         {

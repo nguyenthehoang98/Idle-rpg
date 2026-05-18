@@ -11,8 +11,6 @@ namespace _Games.Battle
     public class Cone : MonoBehaviour
     {
         [TitleGroup("Settings")] 
-        [SerializeField] private Color defaultColor;
-        [SerializeField] private Sprite[] numbers;
         [SerializeField] private int[] defaultAngles = new int[] {180, 180, 0, 0, 0, 0};
         [SerializeField] private Color[] selectedColors = new Color[4];
         
@@ -24,8 +22,7 @@ namespace _Games.Battle
 
         [TitleGroup("Elements")] 
         [SerializeField] private Star[] stars;
-        [SerializeField] private SpriteRenderer number;
-        [SerializeField] private SpriteRenderer background;
+        [SerializeField] private SpriteRenderer highlight;
         [SerializeField] private Weapon weapon;
 
         private float feedbackScaleTime = 1;
@@ -34,6 +31,8 @@ namespace _Games.Battle
         private int maxStar;
         private Tween tween;
         private Coroutine coroutine;
+        private MaterialPropertyBlock colorProperty;
+        private MaterialPropertyBlock widthProperty;
         
         public bool IsPlaying { get; private set; }
 
@@ -48,37 +47,35 @@ namespace _Games.Battle
             initFeedback.PlayFeedbacks();
             isInitialized = true;
             
-            number.sprite = numbers[order];
-
             int angle = defaultAngles[order];
             weapon.Initialize(timeScale);
             weapon.transform.localRotation = Quaternion.Euler(0, angle, 0);
             
-            return UniTask.WaitForSeconds(initFeedback.TotalDuration / feedbackScaleTime);
+            return UniTask.WaitForSeconds(0.075f);
+        }
+
+        private void Awake()
+        {
+            colorProperty = new MaterialPropertyBlock();
+            widthProperty = new MaterialPropertyBlock();
         }
 
         public float Play()
         {
             playFeedback.TimescaleMultiplier = feedbackScaleTime;
-            playFeedback.PlayFeedbacks();
-            
             for (int i = 0; i < maxStar; i++)
             {
                 int index = i;
                 float delay = index * 0.1f;
-                this.WaitInvoke(delay, () =>
-                {
-                    stars[index].Play();
-                });
+                this.WaitInvoke(delay, () => { stars[index].Play(); });
             }
-            
-            float f = playFeedback.TotalDuration / feedbackScaleTime;
-            this.WaitInvoke(f, () =>
-            {
-                weapon.gameObject.SetActive(true);
-                weapon.Play();
-            });
-            return f;
+
+            float d1 = 0.1f * maxStar + 1f;
+            float d2 = 0.1f * maxStar + 1.5f;
+            this.WaitInvoke(d1, weapon.Play);
+            this.WaitInvoke(d2, playFeedback.PlayFeedbacks);
+    
+            return d2 + playFeedback.TotalDuration / feedbackScaleTime;
         }
 
         public void Active()
@@ -138,14 +135,11 @@ namespace _Games.Battle
             
             currentStack = stack;
             
-            Color color = defaultColor;
+            Color color = Color.white;
             if (stack <= selectedColors.Length) 
                 color = selectedColors[stack - 1];
-            float duration = zoomInFeedback.TotalDuration / feedbackScaleTime;
-            
-            if (tween != null && tween.IsPlaying()) tween.Complete();
-            tween = background.DOColor(color, duration)
-                .SetEase(Ease.Linear);
+            float duration = 0.3f / feedbackScaleTime;
+            DoColor(color, duration, 0.05f, 1);
         }
         
         public void Inactive()
@@ -161,11 +155,9 @@ namespace _Games.Battle
                 zoomInFeedback.PlayerCompleteFeedbacks();
                 zoomOutFeedback.TimescaleMultiplier = feedbackScaleTime;
                 zoomOutFeedback.PlayFeedbacks();
-                
+
                 float duration = zoomOutFeedback.TotalDuration / feedbackScaleTime;
-                if (tween != null && tween.IsPlaying()) tween.Complete();
-                tween = background.DOColor(defaultColor, duration)
-                    .SetEase(Ease.InCubic);
+                DoColor(selectedColors[prevStack], duration, 1, 0.05f);
             };
 
             for (int i = prevStack - 1; i >= 0; i--)
@@ -184,6 +176,31 @@ namespace _Games.Battle
                 coroutine = this.WaitInvoke(f, action);
             }
             else action();
+        }
+
+        private void SetColor(Color color)
+        {
+            highlight.GetPropertyBlock(colorProperty);
+            colorProperty.SetColor("_ShineColor", color);
+            highlight.SetPropertyBlock(colorProperty);
+        }
+
+        private void SetWidth(float width)
+        {
+            highlight.GetPropertyBlock(widthProperty);
+            widthProperty.SetFloat("_ShineWidth", width);
+            highlight.SetPropertyBlock(widthProperty);
+        }
+
+        private void DoColor(Color color, float duration, float from, float to)
+        {
+            if (tween != null && tween.IsPlaying()) tween.Complete();
+            if(to >= 1)
+            {
+                SetWidth(0);
+                SetColor(color);
+            }
+            tween = DOVirtual.Float(from, to, duration, SetWidth);
         }
 
         public Vector3 GetStarPosition(int index) => stars[index].transform.position;
