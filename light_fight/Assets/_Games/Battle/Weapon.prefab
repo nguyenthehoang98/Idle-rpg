@@ -717,7 +717,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e9da44c2c5948c18b1310c4e5798dea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delayFocus: 0.1
+  delayFocus: 0
   activeFeedback: {fileID: 7508009790646059554}
   inactiveFeedback: {fileID: 2330277492136844532}
   pivot: {fileID: 3784447391545135218}

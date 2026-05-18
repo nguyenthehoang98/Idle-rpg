@@ -8,42 +8,46 @@ namespace _Games.Battle
 {
     public class Weapon : MonoBehaviour
     {
-        [TitleGroup("Feedback")] 
+        [TitleGroup("Feedback")] [SerializeField]
+        private float backPhaseDuration = 0.1f;
+
+        [SerializeField] private float rotatePhaseDuration = 0.1f;
         [SerializeField] private float delayFocus = 0.1f;
         [SerializeField] private MMF_Player activeFeedback;
         [SerializeField] private MMF_Player inactiveFeedback;
 
-        [TitleGroup("Element")]
-        [SerializeField] private Transform pivot;
+        [TitleGroup("Element")] [SerializeField]
+        private Transform pivot;
+
         [SerializeField] private new Transform renderer; // animator/animation
 
+        private float feedbackScaleTime = 1;
         private Tweener tweener;
-        private Vector3 localPosition;
         private Vector3 localRotation;
-        private Vector3 localScale;
-        
+
         private void Awake()
         {
-            localPosition = transform.localPosition;
             localRotation = pivot.localEulerAngles;
-            localScale = pivot.localScale;
         }
+
+        public void Initialize(float timeScale) => feedbackScaleTime = timeScale;
 
         public float Active()
         {
+            activeFeedback.TimescaleMultiplier = feedbackScaleTime;
             activeFeedback.PlayFeedbacks();
-            return activeFeedback.TotalDuration;
+            return activeFeedback.TotalDuration / feedbackScaleTime;
         }
-    
+
         public float Inactive()
         {
+            inactiveFeedback.TimescaleMultiplier = feedbackScaleTime;
             inactiveFeedback.PlayFeedbacks();
-            return inactiveFeedback.TotalDuration;
+            return inactiveFeedback.TotalDuration / feedbackScaleTime;
         }
 
         public void Focus(Vector3 goal)
         {
-            Debug.Log($"Kiểm tra khi Abs(Z) đủ 180 thì bắt đầu flip X");
             this.WaitInvoke(delayFocus, () =>
             {
                 Vector3 position = pivot.position;
@@ -55,7 +59,7 @@ namespace _Games.Battle
                 float endAngle = currentAngle + delta;
                 if (tweener != null && tweener.IsPlaying()) tweener.Kill();
 
-                tweener = DOVirtual.Float(currentAngle, endAngle, 0.1f, value =>
+                tweener = DOVirtual.Float(currentAngle, endAngle, rotatePhaseDuration, value =>
                 {
                     eulerAngles.z = value;
                     pivot.eulerAngles = eulerAngles;
@@ -68,11 +72,9 @@ namespace _Games.Battle
             float angle = localRotation.z;
             float beginAngle = pivot.localEulerAngles.z;
             if (tweener != null && tweener.IsPlaying()) tweener.Kill();
-            tweener = DOVirtual.Float(beginAngle, angle, 0.1f, value =>
-            {
-                pivot.localEulerAngles = new Vector3(0, 0, value);
-            });
-            return 0.1f;
+            tweener = DOVirtual.Float(beginAngle, angle, backPhaseDuration,
+                value => { pivot.localEulerAngles = new Vector3(0, 0, value); });
+            return backPhaseDuration;
         }
     }
 }

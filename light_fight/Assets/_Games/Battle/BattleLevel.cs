@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
-using MoreMountains.Feedbacks;
 using UnityEngine;
 
 namespace _Games.Battle
@@ -13,7 +11,7 @@ namespace _Games.Battle
         private readonly List<Cone> cones = new List<Cone>();
         private int[] dices = new int[2];
         
-        public async UniTask Initialize()
+        public async UniTask Initialize(float timeScale)
         {
             cones.Add(prefab);
             
@@ -24,7 +22,7 @@ namespace _Games.Battle
 
             for (int i = 0; i < cones.Count; i++)
             {
-                await cones[i].Initialize(i + 1);
+                await cones[i].Initialize(i + 1, timeScale);
             }
         }
 

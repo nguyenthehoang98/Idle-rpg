@@ -27,36 +27,42 @@ namespace _Games.Battle
         [SerializeField] private Color selectedX2Color;
         [SerializeField] private Color selectedX3Color;
 
+        private float feedbackScaleTime = 1;
         private bool isInitialized = false;
         private List<int> dicesId = new List<int>();
         private Tween tween;
 
-        public UniTask Initialize(int order)
+        public UniTask Initialize(int order, float timeScale)
         {
             if (isInitialized) 
                 return UniTask.CompletedTask;
+            feedbackScaleTime = timeScale;
             transform.localRotation = Quaternion.Euler(0, 0, -60 * order);
+            initFeedback.TimescaleMultiplier = feedbackScaleTime;
             initFeedback.PlayFeedbacks();
             isInitialized = true;
 
             int angle = defaultAngles[order - 1];
+            weapon.Initialize(timeScale);
             weapon.transform.localRotation = Quaternion.Euler(0, angle, 0);
             
-            return UniTask.WaitForSeconds(initFeedback.TotalDuration);
+            return UniTask.WaitForSeconds(initFeedback.TotalDuration / feedbackScaleTime);
         }
 
         public float Play()
         {
+            playFeedback.TimescaleMultiplier = feedbackScaleTime;
             playFeedback.PlayFeedbacks();
-            return playFeedback.TotalDuration;
+            return playFeedback.TotalDuration / feedbackScaleTime;
         }
 
         public void Active()
         {
             Color color = selectedColor;
             zoomOutFeedback.PlayerCompleteFeedbacks();
+            zoomInFeedback.TimescaleMultiplier = feedbackScaleTime;
             zoomInFeedback.PlayFeedbacks();
-            float duration = zoomInFeedback.TotalDuration;
+            float duration = zoomInFeedback.TotalDuration / feedbackScaleTime;
             if (tween != null && tween.IsPlaying()) tween.Complete();
             tween = background.DOColor(color, duration)
                 .SetEase(Ease.OutCubic);
@@ -74,7 +80,7 @@ namespace _Games.Battle
             Color color = selectedColor;
             if (stack == 2) color = selectedX2Color;
             else if (stack == 3) color = selectedX3Color;
-            float duration = zoomInFeedback.TotalDuration;
+            float duration = zoomInFeedback.TotalDuration / feedbackScaleTime;
             if (tween != null && tween.IsPlaying()) tween.Kill();
             tween = background.DOColor(color, duration * 0.5f)
                 .SetEase(Ease.OutCubic);
@@ -89,8 +95,9 @@ namespace _Games.Battle
                 weapon.Inactive();
 
                 zoomInFeedback.PlayerCompleteFeedbacks();
+                zoomOutFeedback.TimescaleMultiplier = feedbackScaleTime;
                 zoomOutFeedback.PlayFeedbacks();
-                float duration = zoomOutFeedback.TotalDuration;
+                float duration = zoomOutFeedback.TotalDuration / feedbackScaleTime;
                 if (tween != null && tween.IsPlaying()) tween.Complete();
                 tween = background.DOColor(color, duration)
                     .SetEase(Ease.InCubic);
