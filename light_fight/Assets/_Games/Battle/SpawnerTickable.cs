@@ -13,9 +13,11 @@ using Random = UnityEngine.Random;
 [Serializable]
 internal class SpawnerTickable : ITickable
 {
-    [TitleGroup("Agent default settings")] [SerializeField]
-    private bool shouldDestroy;
-
+    [TitleGroup("Agent default settings")]
+#if UNITY_EDITOR
+    [SerializeField] private bool locked;
+#endif
+    [SerializeField] private bool shouldDestroy;
     [SerializeField] private float stopDistance = 2;
     [SerializeField] private float agentRadius = 0.5f;
     [SerializeField, Range(0.1f, 0.9f)] private float multiplierIgnoreCheckDistance = 0.2f;
@@ -54,6 +56,7 @@ internal class SpawnerTickable : ITickable
     public void Tick(float deltaTime)
     {
         Initialize();
+        if (locked) return;
         simulator.SetTimeStep(deltaTime);
         simulator.EnsureCompleted();
 

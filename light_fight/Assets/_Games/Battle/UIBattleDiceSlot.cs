@@ -9,7 +9,7 @@ namespace _Games.Battle
 {
     public class UIBattleDiceSlot : MonoBehaviour
     {
-        [TitleGroup("Dice")]
+        [SerializeField] private ArcMove arcMove;
         [SerializeField] private DiceRollController rig;
         [TitleGroup("Element")]
         [SerializeField] private RectTransform rectTransform;
@@ -74,6 +74,7 @@ namespace _Games.Battle
             value = RandomUtils.Range(1, 6);
             rig.Roll(value, () =>
             {
+                arcMove.MoveTo(Vector3.zero, Mathf.Min(1, cooldown - 0.1f), RandomUtils.Range(1f, 2f), 0.5f, RandomUtils.Range(0.2f, 0.5f));
                 numberText.text = value.ToString();
                 onTriggerDiceNumber?.Invoke(value);
                 isPaused = false;
