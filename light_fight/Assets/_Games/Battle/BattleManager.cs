@@ -123,10 +123,11 @@ namespace _Games.Battle
                     for (int i1 = 0; i1 < value; i1++)
                     {
                         Vector3 end = battleLevel.GetConeWorldPosition(i, i1);
+                        Vector3 rot = battleLevel.GetConeWorldRotation(i, i1);
                         listArcs[index].MoveTo(
-                            start, end, duration,
+                            start, end, rot, duration,
                             RandomUtils.Range(minRadius, maxRadius),
-                            0.5f,
+                            2.5f,
                             RandomUtils.Range(0.3f, 0.5f),
                             () =>
                             {

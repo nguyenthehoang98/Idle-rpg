@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -41,7 +42,11 @@ namespace _Games.Battle
                 if (stack > 0)
                 {
                     cone.StackColor(stack);
-                    if (!cone.IsPlaying) cone.Active();
+
+                    if (!cone.IsPlaying)
+                    {
+                        this.WaitInvoke(0.2f, cone.Active);
+                    }
                 }
                 else if(stack == 0 && cone.IsPlaying)
                 {
@@ -50,9 +55,8 @@ namespace _Games.Battle
             }
         }
 
-        public Vector3 GetConeWorldPosition(int index, int stack)
-        {
-            return cones[index].GetStarPosition(stack);
-        }
+        public Vector3 GetConeWorldPosition(int index, int stack) => cones[index].GetStarPosition(stack);
+
+        public Vector3 GetConeWorldRotation(int index, int stack) => cones[index].GetStarRotation(stack);
     }
 }

@@ -106,7 +106,11 @@ namespace _Games.Battle
 
         public void StackColor(int stack)
         {
-            if (currentStack == stack) return;
+            if (currentStack == stack)
+            {
+                stars[stack - 1].Active();
+                return;
+            }
 
             if (stack - currentStack > 0)
             {
@@ -182,9 +186,7 @@ namespace _Games.Battle
             else action();
         }
 
-        public Vector3 GetStarPosition(int index)
-        {
-            return stars[index].transform.position;
-        }
+        public Vector3 GetStarPosition(int index) => stars[index].transform.position;
+        public Vector3 GetStarRotation(int index) => stars[index].transform.eulerAngles;
     }
 }

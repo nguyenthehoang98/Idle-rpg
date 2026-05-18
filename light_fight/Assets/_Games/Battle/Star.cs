@@ -26,7 +26,6 @@ namespace _Games.Battle
 
         public float Active()
         {
-            Debug.Log("activeFeedback");
             activeFeedback.PlayFeedbacks();
             return activeFeedback.TotalDuration;
         }
