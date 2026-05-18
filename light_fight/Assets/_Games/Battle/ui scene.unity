@@ -573,9 +573,9 @@ MonoBehaviour:
     - rid: 7993921639068729740
       type: {class: SpawnerTickable, ns: , asm: Games.Battle}
       data:
-        locked: 1
+        locked: 0
         shouldDestroy: 0
-        stopDistance: 2
+        stopDistance: 3
         agentRadius: 0.5
         multiplierIgnoreCheckDistance: 0.2
         deltaDistanceStuck: 0.2

@@ -36,20 +36,19 @@ namespace _Games.Battle
             return duration;
         }
 
+        public void ResetStack(int index) => cones[index].ResetStack();
+        
+        public void TriggerStack(int index, int stack) => cones[index].DoStack(stack);
+
         public void Trigger(int[] numbers)
         {
             for (int i = 0; i < cones.Count; i++)
             {
                 Cone cone = cones[i];
                 int stack = numbers[i];
-                if (stack > 0)
+                if (stack > 0 && !cone.IsPlaying)
                 {
-                    cone.StackColor(stack);
-
-                    if (!cone.IsPlaying)
-                    {
-                        this.WaitInvoke(0.2f, cone.Active);
-                    }
+                    this.WaitInvoke(0.2f, cone.Active);
                 }
                 else if(stack == 0 && cone.IsPlaying)
                 {

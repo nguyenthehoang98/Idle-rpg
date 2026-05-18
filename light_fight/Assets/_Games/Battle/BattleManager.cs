@@ -33,6 +33,7 @@ namespace _Games.Battle
         private SpawnerTickable spawner;
         private List<ArcMove> listArcs = new List<ArcMove>();
         private readonly int[] numbers = new int[BattleConst.MAX_DICE_NUMBER];
+        private readonly bool[] triggers = new bool[BattleConst.MAX_DICE_NUMBER];
         
         private void Awake()
         {
@@ -104,6 +105,7 @@ namespace _Games.Battle
             for (int i = 0; i < numbers.Length; i++)
             {
                 numbers[i] = 0;
+                triggers[i] = false;
             }
 
             for (int i = 0; i < list.Count; i++)
@@ -120,7 +122,6 @@ namespace _Games.Battle
                 GetNumberIndex(index, out int numberIndex, out int numberStack);
                 Vector3 start = controlDice.GetUIDiceWorldPosition(i) + Vector3.up * 0.1f;
                 //Debug.Log("Bay numberstack chưa đúng, ví dụ star đang hiện tại trên cone là 3, thì phải bay tới vị trí 3 thay vì 0");
-                Debug.Log($"Dice: {i} - {listCount} - {numberIndex} - {numberStack}");
                 Vector3 end = battleLevel.GetConeWorldPosition(numberIndex, numberStack);
                 Vector3 rot = battleLevel.GetConeWorldRotation(numberIndex, numberStack);
                 listArcs[index].MoveTo(start, end, rot, numberStack * 0.2f, duration,
@@ -128,6 +129,12 @@ namespace _Games.Battle
                     RandomUtils.Range(0.3f, 0.5f), () =>
                     {
                         count++;
+                        if (!triggers[numberIndex])
+                        {
+                            triggers[numberIndex] = true;
+                            battleLevel.ResetStack(numberIndex);
+                        }
+                        battleLevel.TriggerStack(numberIndex, numberStack + 1);
                         if (count == listCount) battleLevel.Trigger(numbers);
                     });
                 index++;

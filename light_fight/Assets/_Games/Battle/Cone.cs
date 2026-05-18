@@ -105,49 +105,20 @@ namespace _Games.Battle
             });
         }
 
-        public void StackColor(int stack)
+        public void ResetStack()
         {
-            if (currentStack == stack)
+            for (int i = 0; i < stars.Length; i++)
             {
-                Debug.Log($"[{name}] Stack Color: {stack} stop");
-                stars[stack - 1].Active();
-                return;
+                stars[i].Inactive();
             }
+        }
 
-            bool increasing = stack > currentStack;
-            if (increasing)
-            {
-                // Active thêm
-                for (int i = currentStack; i < stack; i++)
-                {
-                    int index = i;
-                    Star star = stars[index];
-
-                    this.WaitInvoke(star.DelayActive * (index - currentStack), () =>
-                    {
-                        Debug.Log($"[{name}] : {index} : {stack}");
-                        star.Active();
-                    });
-                }
-            }
-            
-            else
-            {
-                // Inactive bớt
-                for (int i = currentStack - 1; i >= stack; i--)
-                {
-                    int index = i;
-                    Star star = stars[index];
-
-                    this.WaitInvoke(star.DelayActive * (currentStack - 1 - index), () =>
-                    {
-                        star.Inactive();
-                    });
-                }
-            }
-
+        public void DoStack(int stack)
+        {
             int prevStack = currentStack;
+            
             currentStack = stack;
+            stars[stack - 1].Active();
             
             // từ đây đổ xuống thì hoạt động đúng
             Color color = Color.white;
@@ -191,8 +162,6 @@ namespace _Games.Battle
                 zoomOutFeedback.PlayFeedbacks();
 
                 float duration = zoomOutFeedback.TotalDuration / feedbackScaleTime;
-                
-                Debug.Log($"[{name}] -> Inactive");
                 if (tween != null && tween.IsPlaying()) tween.Complete();
                 tween = DOVirtual.Float(1f, 0.05f, duration, SetWidth);
             };
