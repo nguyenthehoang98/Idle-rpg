@@ -33,12 +33,13 @@ namespace _Games.Battle
 
         [TitleGroup("Element")]
         [SerializeField] private Transform pivot;
+        [SerializeField] private Transform flip;
         [SerializeField] private SortingGroup sortingGroup; // animator/animation
         
         [TitleGroup("Animation")]
         [SerializeField] private NamedAnimancerComponent animancer;
         [SerializeField] private AnimationClip attackClip;
-        
+
         private float feedbackScaleTime = 1;
         private Vector3 localRotation;
         private Vector3 localPosition;
@@ -53,7 +54,12 @@ namespace _Games.Battle
             localPosition = pivot.localPosition;
         }
 
-        public void Initialize(float timeScale) => feedbackScaleTime = timeScale;
+        public void Initialize(float flipX, Vector3 pivotLocalRotation, float timeScale)
+        {
+            pivot.transform.localRotation = Quaternion.Euler(pivotLocalRotation);
+            flip.localRotation = Quaternion.Euler(flipX, 0, 0);
+            feedbackScaleTime = timeScale;
+        }
 
         public void Play() => playFeedback.PlayFeedbacks();
 
@@ -74,15 +80,13 @@ namespace _Games.Battle
 
         public void Focus()
         {
-            Debug.Log(@"Trục Y rotate bị sai");
-          
             void Action(Vector3 goal)
             {
                 Vector3 position = pivot.position;
                 Vector3 direction = goal - position;
                 direction.z = 0;
                 if (direction.sqrMagnitude < 0.0001f) return;
-
+                
                 float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
                 float currentAngle = pivot.eulerAngles.z;
                 float delta = Mathf.DeltaAngle(currentAngle, targetAngle);
