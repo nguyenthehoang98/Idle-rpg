@@ -68,7 +68,6 @@ namespace _Games.Battle
 
         private async void Start()
         {
-            Debug.Log("test cone có nhiều layer hơn vì khi đổi màu thì bị nhảy về màu gôc");
             GameObject arcParent = new GameObject("ArcParent");
             arcParent.transform.SetParent(uiCanvas.transform);
             arcParent.transform.SetAsFirstSibling();

@@ -41,7 +41,7 @@ namespace _Games.Battle
         [SerializeField] private HorizontalLayoutGroup itemGroup;
         [SerializeField] private UIBattleDiceSlot itemPrefab;
         
-        private const int MAX_VALUE = 50;
+        private const int MAX_VALUE = 75;
         private float elapsedTime;
         private int progress;
         private int totalDice;
