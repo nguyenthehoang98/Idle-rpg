@@ -114,31 +114,39 @@ namespace _Games.Battle
             int index = 0;
             int count = 0;
             int listCount = list.Count;
+            for (int i = 0; i < listCount; i++)
+            {
+                GetNumberIndex(index, out int numberIndex, out int numberStack);
+                Vector3 start = controlDice.GetUIDiceWorldPosition(i) + Vector3.up * 0.1f;
+                Vector3 end = battleLevel.GetConeWorldPosition(numberIndex, numberStack);
+                Vector3 rot = battleLevel.GetConeWorldRotation(numberIndex, numberStack);
+                listArcs[index].MoveTo(start, end, rot, duration,
+                    RandomUtils.Range(minRadius, maxRadius), 2.5f,
+                    RandomUtils.Range(0.3f, 0.5f), () =>
+                    {
+                        count++;
+                        if (count == listCount) battleLevel.Trigger(numbers);
+                    });
+                index++;
+            }
+        }
+
+        // numbers: [1,2,0,0,1,0]
+        private void GetNumberIndex(int index, out int numberIndex, out int numberStack)
+        {
+            numberIndex = numberStack = 0;
+            int t = index;
             for (int i = 0; i < numbers.Length; i++)
             {
-                int value = numbers[i];
-                if (value > 0)
+                var n = numbers[i];
+                if (t < n)
                 {
-                    Vector3 start = controlDice.GetUIDiceWorldPosition(index) + Vector3.up * 0.1f;
-                    for (int i1 = 0; i1 < value; i1++)
-                    {
-                        Vector3 end = battleLevel.GetConeWorldPosition(i, i1);
-                        Vector3 rot = battleLevel.GetConeWorldRotation(i, i1);
-                        listArcs[index].MoveTo(
-                            start, end, rot, duration,
-                            RandomUtils.Range(minRadius, maxRadius),
-                            2.5f,
-                            RandomUtils.Range(0.3f, 0.5f),
-                            () =>
-                            {
-                                count++;
-                                if (count == listCount) battleLevel.Trigger(numbers);
-                            }
-                        );
-                    }
-                    
-                    index++;
+                    numberIndex = i;
+                    numberStack = n - t - 1;
+                    return;
                 }
+
+                t -= n;
             }
         }
     }

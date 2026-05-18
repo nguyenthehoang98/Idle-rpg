@@ -328,9 +328,6 @@ namespace _Games.Battle
             slotGroupRect.sizeDelta = new Vector2(width, slotGroupRect.sizeDelta.y);
         }
 
-        public Vector3 GetUIDiceWorldPosition(int index)
-        {
-            return dices[index].transform.position;
-        }
+        public Vector3 GetUIDiceWorldPosition(int index) => dices[index].transform.position;
     }
 }

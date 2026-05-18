@@ -109,36 +109,47 @@ namespace _Games.Battle
                 return;
             }
 
-            if (stack - currentStack > 0)
+            bool increasing = stack > currentStack;
+            if (increasing)
             {
+                // Active thêm
                 for (int i = currentStack; i < stack; i++)
                 {
-                    Star star = stars[i];
-                    this.WaitInvoke(star.DelayActive * i, () =>
+                    int index = i;
+                    Star star = stars[index];
+
+                    this.WaitInvoke(star.DelayActive * (index - currentStack), () =>
                     {
                         star.Active();
                     });
                 }
             }
+            
             else
             {
-                int d = currentStack - stack;
-                for (int i = currentStack; i > stack; i--)
+                // Inactive bớt
+                for (int i = currentStack - 1; i >= stack; i--)
                 {
-                    Star star = stars[i];
-                    this.WaitInvoke(star.DelayActive * (d - i), () =>
+                    int index = i;
+                    Star star = stars[index];
+
+                    this.WaitInvoke(star.DelayActive * (currentStack - 1 - index), () =>
                     {
                         star.Inactive();
                     });
                 }
             }
-            
+
             currentStack = stack;
             
+            // từ đây đổ xuống thì hoạt động đúng
             Color color = Color.white;
+            
             if (stack <= selectedColors.Length) 
                 color = selectedColors[stack - 1];
+            
             float duration = 0.3f / feedbackScaleTime;
+            
             DoColor(color, duration, 0.05f, 1);
         }
         
@@ -160,13 +171,16 @@ namespace _Games.Battle
                 DoColor(selectedColors[prevStack], duration, 1, 0.05f);
             };
 
+            int order = 0;
             for (int i = prevStack - 1; i >= 0; i--)
             {
                 Star star = stars[i];
-                this.WaitInvoke(star.DelayInactive * (prevStack - 1 - i), () =>
+                this.WaitInvoke(star.DelayInactive * order, () =>
                 {
                     star.Inactive();
                 });
+
+                order++;
             }
             
             float f = weapon.StopFocus();
@@ -197,7 +211,7 @@ namespace _Games.Battle
             if (tween != null && tween.IsPlaying()) tween.Complete();
             if(to >= 1)
             {
-                SetWidth(0);
+                SetWidth(0.05f);
                 SetColor(color);
             }
             tween = DOVirtual.Float(from, to, duration, SetWidth);
