@@ -7,27 +7,9 @@ public class ArcMove : MonoBehaviour
     [SerializeField] private Transform visual;
     [SerializeField] private TrailRenderer trail;
 
-    private bool cached;
-    private Vector3 start;
-
-    private void Awake()
+    public void MoveTo(Vector3 start, Vector3 target,
+        float duration, float radius, float offsetY, float smooth, Action onComplete)
     {
-        visual.gameObject.SetActive(false);
-    }
-
-    public void MoveTo(
-        Vector3 target,
-        float duration,
-        float radius,
-        float offsetY,
-        float smooth)
-    {
-        if (!cached)
-        {
-            cached = true;
-            start = visual.position;
-        }
-
         visual.transform.position = start;
         visual.gameObject.SetActive(true);
         trail.enabled = false;
@@ -50,6 +32,7 @@ public class ArcMove : MonoBehaviour
             {
                 visual.transform.position = end;
                 visual.gameObject.SetActive(false);
+                onComplete?.Invoke();
             });
     }
 }

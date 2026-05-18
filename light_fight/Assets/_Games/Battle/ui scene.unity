@@ -370,7 +370,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1611421288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -383,12 +383,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0059c342a1240bd97f21605a4d3f1f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  duration: 0.6
+  minRadius: 1.1
+  maxRadius: 2
   timeScale: 1
   unlockAll: 1
-  totalDice: 4
+  totalDice: 1
+  arcMovePrefab: {fileID: 4610025884097093620, guid: 69109f530eb951d49b3dcf7dd19ff31d, type: 3}
   battleLevelPrefab: {fileID: 3451921775748243055, guid: 1fd53fc6988770c4eb5d48c9635dd71d, type: 3}
   controlDicePrefab: {fileID: 6809574273409925262, guid: 36f1ad29f02f59548ac38380f24d745a, type: 3}
-  spawnDiceTextPrefab: {fileID: 8286353758412989629, guid: ead6474fe98ede540920de61d3a709bf, type: 3}
   uiCanvas: {fileID: 1940578876}
   tickSystemOwner: {fileID: 1856148958}
 --- !u!4 &1611421289

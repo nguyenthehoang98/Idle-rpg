@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MoreMountains.Feedbacks;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace _Games.Battle
 {
@@ -24,7 +22,8 @@ namespace _Games.Battle
         [SerializeField] private MMF_Player initFeedback;
         [SerializeField] private MMF_Player playFeedback;
 
-        [TitleGroup("Elements")]
+        [TitleGroup("Elements")] 
+        [SerializeField] private Star[] stars;
         [SerializeField] private SpriteRenderer number;
         [SerializeField] private SpriteRenderer background;
         [SerializeField] private Weapon weapon;
@@ -32,15 +31,17 @@ namespace _Games.Battle
         private float feedbackScaleTime = 1;
         private bool isInitialized = false;
         private int currentStack;
+        private int maxStar;
         private Tween tween;
         private Coroutine coroutine;
         
         public bool IsPlaying { get; private set; }
 
-        public UniTask Initialize(int order, float timeScale)
+        public UniTask Initialize(int order, int maxStar, float timeScale)
         {
             if (isInitialized) 
                 return UniTask.CompletedTask;
+            this.maxStar = maxStar;
             feedbackScaleTime = timeScale;
             transform.localRotation = Quaternion.Euler(0, 0, -60 * order);
             initFeedback.TimescaleMultiplier = feedbackScaleTime;
@@ -60,8 +61,23 @@ namespace _Games.Battle
         {
             playFeedback.TimescaleMultiplier = feedbackScaleTime;
             playFeedback.PlayFeedbacks();
+            
+            for (int i = 0; i < maxStar; i++)
+            {
+                int index = i;
+                float delay = index * 0.1f;
+                this.WaitInvoke(delay, () =>
+                {
+                    stars[index].Play();
+                });
+            }
+            
             float f = playFeedback.TotalDuration / feedbackScaleTime;
-            this.WaitInvoke(f, weapon.Play);
+            this.WaitInvoke(f, () =>
+            {
+                weapon.gameObject.SetActive(true);
+                weapon.Play();
+            });
             return f;
         }
 
@@ -92,6 +108,30 @@ namespace _Games.Battle
         {
             if (currentStack == stack) return;
 
+            if (stack - currentStack > 0)
+            {
+                for (int i = currentStack; i < stack; i++)
+                {
+                    Star star = stars[i];
+                    this.WaitInvoke(star.DelayActive * i, () =>
+                    {
+                        star.Active();
+                    });
+                }
+            }
+            else
+            {
+                int d = currentStack - stack;
+                for (int i = currentStack; i > stack; i--)
+                {
+                    Star star = stars[i];
+                    this.WaitInvoke(star.DelayActive * (d - i), () =>
+                    {
+                        star.Inactive();
+                    });
+                }
+            }
+            
             currentStack = stack;
             
             Color color = defaultColor;
@@ -107,6 +147,7 @@ namespace _Games.Battle
         public void Inactive()
         {
             IsPlaying = false;
+            int prevStack = currentStack;
             currentStack = 0;
             
             Action action = () =>
@@ -122,6 +163,15 @@ namespace _Games.Battle
                 tween = background.DOColor(defaultColor, duration)
                     .SetEase(Ease.InCubic);
             };
+
+            for (int i = prevStack - 1; i >= 0; i--)
+            {
+                Star star = stars[i];
+                this.WaitInvoke(star.DelayInactive * (prevStack - 1 - i), () =>
+                {
+                    star.Inactive();
+                });
+            }
             
             float f = weapon.StopFocus();
             if (f > 0)
@@ -130,6 +180,11 @@ namespace _Games.Battle
                 coroutine = this.WaitInvoke(f, action);
             }
             else action();
+        }
+
+        public Vector3 GetStarPosition(int index)
+        {
+            return stars[index].transform.position;
         }
     }
 }

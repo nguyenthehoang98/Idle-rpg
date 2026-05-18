@@ -10,14 +10,13 @@ namespace _Games.Battle
         [SerializeField] private Cone prefab;
 
         private readonly List<Cone> cones = new List<Cone>();
-        private readonly int[] dicesStackNumber = new int[BattleConst.MAX_DICE_NUMBER];
 
-        public async UniTask Initialize(float timeScale)
+        public async UniTask Initialize(int maxStar, float timeScale)
         {
             for (int i = 0; i < 6; i++)
             {
                 Cone cone = Instantiate(prefab, coneParent);
-                await cone.Initialize(i, timeScale);
+                await cone.Initialize(i, maxStar, timeScale);
                 cones.Add(cone);
             }
         }
@@ -33,37 +32,27 @@ namespace _Games.Battle
             return duration;
         }
 
-        // trigger: (0, 1),(1, 5),(2, 4),(3, 3)
-        public void Trigger(List<int> triggers)
+        public void Trigger(int[] numbers)
         {
-            // todo: stop all dice active
-            for (int i = 0; i < dicesStackNumber.Length; i++)
-            {
-                dicesStackNumber[i] = 0;
-            }
-            
-            for (int i = 0; i < triggers.Count; i++)
-            {
-                int diceNumber = triggers[i];
-                int index = diceNumber - 1; // index of stack
-                dicesStackNumber[index]++;
-            }
-            
-            // * dicesStackNumber: [0,1,1,0,1,1]
             for (int i = 0; i < cones.Count; i++)
             {
-                var cone = cones[i];
-                int value = dicesStackNumber[i];
-                if (value > 0)
+                Cone cone = cones[i];
+                int stack = numbers[i];
+                if (stack > 0)
                 {
-                    cone.StackColor(value);
+                    cone.StackColor(stack);
                     if (!cone.IsPlaying) cone.Active();
                 }
-                else if (value == 0 && cone.IsPlaying)
+                else if(stack == 0 && cone.IsPlaying)
                 {
                     cone.Inactive();
                 }
             }
+        }
+
+        public Vector3 GetConeWorldPosition(int index, int stack)
+        {
+            return cones[index].GetStarPosition(stack);
         }
     }
 }

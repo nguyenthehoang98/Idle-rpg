@@ -50,11 +50,11 @@ namespace _Games.Battle
         private float leftValue;
         private float rightValue;
         private bool isInitialized;
-        private List<int> stacks = new List<int>();
+        private List<(int order, int number)> stacks = new List<(int order, int number)>();
         private List<UIBattleDiceSlot> dices = new List<UIBattleDiceSlot>();
         private readonly Queue<Action> queue = new Queue<Action>();
 
-        public event Action<List<int>> OnTrigger; 
+        public event Action<List<(int order, int number)>> OnDiceTrigger; 
 
         public void PrefabBuilder(int dice, bool unlockAll)
         {
@@ -88,10 +88,11 @@ namespace _Games.Battle
         {
             for (int i = 0; i < dices.Count; i++)
             {
-                bool locked = unlockAll ? false : i >= dices.Count - 1;
+                int index = i;
+                bool locked = unlockAll ? false : index >= dices.Count - 1;
                 totalDiceUnlock += locked ? 0 : 1;
-                dices[i].Init(locked, StackTrigger);
-                dices[i].SetColor(centerColor);
+                dices[index].Init(locked, number => StackTrigger(index, number));
+                dices[index].SetColor(centerColor);
             }
 
             initFeedback.PlayFeedbacks();
@@ -107,13 +108,13 @@ namespace _Games.Battle
             return UniTask.WaitForSeconds(initFeedback.TotalDuration);
         }
 
-        private void StackTrigger(int number)
+        private void StackTrigger(int order, int number)
         {
-            stacks.Add(number);
+            stacks.Add((order, number));
            
             if (stacks.Count == totalDiceUnlock)
             {
-                OnTrigger?.Invoke(stacks);
+                OnDiceTrigger?.Invoke(stacks);
                 stacks.Clear();
             }
         }
@@ -325,6 +326,11 @@ namespace _Games.Battle
             float space = itemGroup.spacing;
             float width = space * (totalDice + 1) + sizeX * totalDice;
             slotGroupRect.sizeDelta = new Vector2(width, slotGroupRect.sizeDelta.y);
+        }
+
+        public Vector3 GetUIDiceWorldPosition(int index)
+        {
+            return dices[index].transform.position;
         }
     }
 }
