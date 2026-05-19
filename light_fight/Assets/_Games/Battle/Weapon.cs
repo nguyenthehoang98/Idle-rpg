@@ -63,11 +63,10 @@ namespace _Games.Battle
             localPosition = pivot.localPosition;
         }
 
-        public void Initialize(float flipX, Vector3 pivotLocalRotation, float timeScale)
+        public void Initialize(Vector3 pivotLocalRotation, float timeScale)
         {
-            pivot.transform.localRotation = Quaternion.Euler(pivotLocalRotation);
-            flip.localRotation = Quaternion.Euler(flipX, 0, 0);
             feedbackScaleTime = timeScale;
+            pivot.transform.localRotation = Quaternion.Euler(pivotLocalRotation);
         }
 
         public void Play() => playFeedback.PlayFeedbacks();
@@ -142,7 +141,7 @@ namespace _Games.Battle
             SystemBus.Publish(new DestroyAgentSignal(agentData.agent));  
         }
 
-        private void RotateTo(AgentData agentData, bool shouldOffsetPosition, Action onComplete)
+        private void RotateTo(AgentData agentData, bool needOffset, Action onComplete)
         {
             float2 f2 = agentData.position;
             Vector3 position = pivot.position;
@@ -155,8 +154,9 @@ namespace _Games.Battle
             float currentAngle = pivot.eulerAngles.z;
             float delta = Mathf.DeltaAngle(currentAngle, targetAngle);
             float endAngle = currentAngle + delta;
+            float startSigned = Mathf.DeltaAngle(0f, currentAngle);
+            bool lastFlip = Mathf.Abs(startSigned) > 90f;
 
-            bool needOffset = shouldOffsetPosition && Mathf.Abs(delta) > 90f;
             float t = Mathf.Clamp01(Mathf.Abs(delta) / 180f);
             Vector3 offset = Vector3.Lerp(offsetMin, offsetMax, t);
             Vector3 offsetDir = needOffset ? offset : Vector3.zero;
@@ -169,6 +169,14 @@ namespace _Games.Battle
                     float eased = EaseInOutSine(value);
                     float a = math.lerp(currentAngle, endAngle, eased);
                     pivot.eulerAngles = new Vector3(0, 0, a);
+                    
+                    float signed = Mathf.DeltaAngle(0f, a);
+                    bool b = Mathf.Abs(signed) > 90f;
+                    if (b != lastFlip)
+                    {
+                        lastFlip = b;
+                        flip.localRotation = Quaternion.Euler(b ? 180: 0, 0, 0);
+                    }
 
                     if (needOffset)
                     {

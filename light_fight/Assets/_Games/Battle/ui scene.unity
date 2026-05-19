@@ -577,6 +577,7 @@ MonoBehaviour:
         shouldDestroy: 0
         stopDistance: 3
         agentRadius: 0.5
+        interval: 0.5
         multiplierIgnoreCheckDistance: 0.2
         deltaDistanceStuck: 0.2
         total: 0

@@ -11,7 +11,6 @@ namespace _Games.Battle
     public class Cone : MonoBehaviour
     {
         [TitleGroup("Settings")] 
-        [SerializeField] private int[] flipsX = new int[] {0, 0, 0, 180, 180, 180};
         [SerializeField] private Vector3[] pivotsLocalRotation = new Vector3[]
         {
             new Vector3(0, 0, 90), new Vector3(0, 0, 90), new Vector3(0, 0, 90),
@@ -55,7 +54,10 @@ namespace _Games.Battle
             initFeedback.TimescaleMultiplier = feedbackScaleTime;
             initFeedback.PlayFeedbacks();
             isInitialized = true;
-            weapon.Initialize(flipsX[order], pivotsLocalRotation[order], timeScale);
+            weapon.Initialize(pivotsLocalRotation[order], timeScale);
+#if UNITY_EDITOR
+            weapon.name = "Weapon " + order;
+#endif
             return UniTask.WaitForSeconds(0.075f);
         }
 
