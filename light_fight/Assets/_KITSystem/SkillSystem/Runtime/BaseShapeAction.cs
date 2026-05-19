@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using _KITSystem.SkillSystem.Config;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Runtime
@@ -8,7 +9,7 @@ namespace _KITSystem.SkillSystem.Runtime
     {
         private float triggerTimeInSeconds;
         private float elapsed;
-        private Vector3 offsetRelativePosition;
+        private float2 offsetRelativePosition;
 
         public bool CanTrigger { get; private set; }
 
@@ -18,7 +19,7 @@ namespace _KITSystem.SkillSystem.Runtime
             offsetRelativePosition = shapeConfig.offsetRelativePosition;
         }
 
-        protected Vector3 GetPosition(Vector3 position)
+        protected float2 GetPosition(float2 position)
         {
             return position + offsetRelativePosition;
         }
@@ -35,7 +36,7 @@ namespace _KITSystem.SkillSystem.Runtime
             }
         }
 
-        public bool Hit(Vector3 position, out List<int> hitsId)
+        public bool Hit(float2 position, out List<int> hitsId)
         {
             if (CanTrigger)
             {
@@ -46,7 +47,7 @@ namespace _KITSystem.SkillSystem.Runtime
             return false;
         }
 
-        protected abstract bool OnHit(Vector3 position, out List<int> hitsId);
+        protected abstract bool OnHit(float2 position, out List<int> hitsId);
 
         public virtual void Gizmos(Vector3 position, Color color, float duration)
         {

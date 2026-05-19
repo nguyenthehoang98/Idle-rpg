@@ -1,25 +1,26 @@
-﻿using UnityEngine;
+﻿using _KITSystem.Utils;
+using Unity.Mathematics;
 
 namespace _KITSystem.SkillSystem.Runtime
 {
     internal abstract class BaseTrajectoryAction
     {
-        protected Vector3 goal;
-        protected Vector3 start;
-        protected Vector3 direction;
+        protected float2 goal;
+        protected float2 start;
+        protected float2 direction;
         
-        protected BaseTrajectoryAction(Vector3 start, Vector3 goal)
+        protected BaseTrajectoryAction(float2 start, float2 goal)
         {
             this.goal = goal;
             this.start = start;
-            direction = (goal - start).normalized;
+            direction = MathUtils.NormalizeSafe(goal - start);
         }
 
-        public Vector3 EvaluatePosition(float deltaTime)
+        public float2 EvaluatePosition(float deltaTime)
         {
             return OnEvaluatePosition(deltaTime);
         }
         
-        protected abstract Vector3 OnEvaluatePosition(float deltaTime);
+        protected abstract float2 OnEvaluatePosition(float deltaTime);
     }
 }

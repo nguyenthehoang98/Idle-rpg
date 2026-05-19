@@ -1,6 +1,6 @@
 ﻿using System;
 using Sirenix.OdinInspector;
-using UnityEngine;
+using Unity.Mathematics;
 
 namespace _KITSystem.SkillSystem.Config
 {
@@ -9,7 +9,7 @@ namespace _KITSystem.SkillSystem.Config
     {
         [TitleGroup("$Type")] 
         [Indent] public float triggerTimeInSeconds;
-        [Indent] public Vector2 offsetRelativePosition;
+        [Indent] public float2 offsetRelativePosition;
         public abstract ShapeType Type { get; }
 
         public enum ShapeType

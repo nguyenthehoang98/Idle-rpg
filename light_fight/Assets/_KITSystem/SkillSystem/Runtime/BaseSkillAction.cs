@@ -1,5 +1,4 @@
 ﻿using _KITSystem.SkillSystem.Config;
-using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Runtime
 {

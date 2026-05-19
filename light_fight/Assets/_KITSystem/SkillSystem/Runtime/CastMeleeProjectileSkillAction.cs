@@ -1,4 +1,5 @@
 ﻿using _KITSystem.SkillSystem.Config;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Runtime
@@ -6,10 +7,10 @@ namespace _KITSystem.SkillSystem.Runtime
     internal sealed class CastMeleeProjectileSkillAction : CastProjectileSkillAction
     {
         private bool[] triggered;
-        private Vector3 start;
-        private Vector3 goal;
+        private float2 start;
+        private float2 goal;
 
-        internal CastMeleeProjectileSkillAction(Vector3 start, Vector3 goal, BaseShapeAction[] shapes,
+        internal CastMeleeProjectileSkillAction(float2 start, float2 goal, BaseShapeAction[] shapes,
             SPU spu, TriggerConfig triggerConfig, float lifeTime) 
             : base(shapes, spu, triggerConfig, lifeTime)
         {
@@ -31,7 +32,7 @@ namespace _KITSystem.SkillSystem.Runtime
                 {
                     bool hit = shape.Hit(start, out var list);
 #if UNITY_EDITOR
-                    shape.Gizmos(start, hit ? Color.red : Color.green, deltaTime);
+                    shape.Gizmos(new Vector3(start.x, start.y), hit ? Color.red : Color.green, deltaTime);
 #endif
                     if (hit)
                     {

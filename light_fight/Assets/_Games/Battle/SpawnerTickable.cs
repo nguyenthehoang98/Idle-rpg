@@ -21,6 +21,7 @@ namespace _Games.Battle
         [SerializeField] private bool shouldDestroy;
         [SerializeField] private float stopDistance = 3;
         [SerializeField] private float agentRadius = 0.5f;
+        [SerializeField] private float interval = 0.5f;
         [SerializeField, Range(0.1f, 0.9f)] private float multiplierIgnoreCheckDistance = 0.2f;
         [SerializeField, Range(0.1f, 1.0f)] private float deltaDistanceStuck = 0.2f;
         [TitleGroup("Debug")] 
@@ -234,9 +235,9 @@ namespace _Games.Battle
         private void CheckSpawn(float deltaTime)
         {
             elapsedTime += deltaTime;
-            if (elapsedTime >= 0.1f)
+            if (elapsedTime >= interval)
             {
-                elapsedTime -= 0.1f;
+                elapsedTime -= interval;
                 Vector3 position = new Vector3(Random.value - 0.5f, Random.value - 0.5f).normalized * Random.Range(10, 14);
                 Spawn(position);
             }

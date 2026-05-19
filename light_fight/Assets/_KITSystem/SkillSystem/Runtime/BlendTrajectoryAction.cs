@@ -1,5 +1,5 @@
 ﻿using _KITSystem.SkillSystem.Config;
-using UnityEngine;
+using Unity.Mathematics;
 
 namespace _KITSystem.SkillSystem.Runtime
 {
@@ -10,16 +10,16 @@ namespace _KITSystem.SkillSystem.Runtime
         private float duration;
         private float elapsedTime;
         
-        public BlendTrajectoryAction(BlendConstValue value, float duration, Vector3 start, Vector3 goal) : base(start, goal)
+        public BlendTrajectoryAction(BlendConstValue value, float duration, float2 start, float2 goal) : base(start, goal)
         {
             this.value = value;
             this.duration = duration;
         }
 
-        protected override Vector3 OnEvaluatePosition(float deltaTime)
+        protected override float2 OnEvaluatePosition(float deltaTime)
         {
             elapsedTime += deltaTime;
-            float f = Mathf.Clamp01(elapsedTime / duration);
+            float f = math.clamp(elapsedTime / duration, 0, 1);
             float d = value.Evaluate(f);
             return start + d * direction;
         }

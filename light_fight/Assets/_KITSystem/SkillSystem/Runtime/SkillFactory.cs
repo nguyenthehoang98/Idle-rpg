@@ -1,4 +1,5 @@
 using _KITSystem.SkillSystem.Config;
+using Unity.Mathematics;
 using UnityEngine;
 using SkillConfig = _KITSystem.SkillSystem.Config.SkillConfig;
 
@@ -10,19 +11,19 @@ namespace _KITSystem.SkillSystem.Runtime
 
         public static void Initialize(SPU spu) => SkillFactory.spu = spu;
 
-        public static int Build(Vector3 start, Vector3 goal, SkillConfig skillConfig)
+        public static int Build(float2 start, float2 goal, SkillConfig skillConfig)
         {
             return Build(spu, start, goal, skillConfig);
         }
 
         public static int Build(SPU spu, SkillConfig config)
         {
-            Vector3 start = Vector3.zero;
-            Vector3 goal = new Vector3(2, 0, 0);
+            float2 start = float2.zero;
+            float2 goal = new float2(2, 0);
             return Build(spu, start, goal, config);
         }
 
-        private static int Build(SPU spu, Vector3 start, Vector3 goal, SkillConfig config)
+        private static int Build(SPU spu, float2 start, float2 goal, SkillConfig config)
         {
             int skillId = spu.GenerateSkillInstanceId();
             float lifeTimeInSeconds = config.defaultSkillConfig.lifeTimeInSeconds;
@@ -85,7 +86,7 @@ namespace _KITSystem.SkillSystem.Runtime
             }
         }
 
-        static BaseTrajectoryAction GetTrajectory(BaseTrajectoryConfig trajectoryConfig, Vector3 start, Vector3 goal)
+        static BaseTrajectoryAction GetTrajectory(BaseTrajectoryConfig trajectoryConfig, float2 start, float2 goal)
         {
             switch (trajectoryConfig.Type)
             {

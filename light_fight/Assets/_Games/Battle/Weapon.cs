@@ -36,6 +36,7 @@ namespace _Games.Battle
         [SerializeField] private MMF_Player inactiveFeedback;
 
         [TitleGroup("Element")]
+        [SerializeField] private Transform muzzle;
         [SerializeField] private Transform pivot;
         [SerializeField] private Transform flip;
         [SerializeField] private SortingGroup sortingGroup; // animator/animation
@@ -80,6 +81,9 @@ namespace _Games.Battle
 
         public void Inactive()
         {
+            if (tweener != null && tweener.IsActive()) tweener.Kill();
+            if (animationCoroutine != null) StopCoroutine(animationCoroutine);
+            if (animancerState != null) animancerState.Stop();
             sortingGroup.sortingOrder = 0;
             inactiveFeedback.TimescaleMultiplier = feedbackScaleTime;
             inactiveFeedback.PlayFeedbacks();
@@ -89,9 +93,9 @@ namespace _Games.Battle
         {
             void Action(AgentData agentData)
             {
-                float2 p = agentData.position;
+                float2 f2 = agentData.position;
                 Vector3 position = pivot.position;
-                Vector3 goal = new Vector3(p.x, p.y);
+                Vector3 goal = new Vector3(f2.x, f2.y);
                 Vector3 direction = goal - position;
                 direction.z = 0;
                 if (direction.sqrMagnitude < 0.0001f) return;
@@ -108,6 +112,7 @@ namespace _Games.Battle
                 Vector3 originalLocalPos = pivot.localPosition;
                 Vector3 targetLocalPos = originalLocalPos + offsetDir;
 
+                // @"Xứ lý tính duration nếu mà góc gần thay quay nhanh hơn. max=rotatePhaseDuration
                 if (tweener != null && tweener.IsActive()) tweener.Complete();
                 tweener = DOVirtual.Float(0, 1, rotatePhaseDuration / feedbackScaleTime, value =>
                     {
@@ -126,14 +131,17 @@ namespace _Games.Battle
                         if (animationCoroutine != null) StopCoroutine(animationCoroutine);
                         animationCoroutine = StartCoroutine(PlayAnimation(() =>
                         {
-                            int id = SkillFactory.Build(position, goal, skillConfig);
                             ScanNearestAgent(5, data =>
                             {
+                                Vector3 mPos = muzzle.position;
+                                SkillFactory.Build(new float2(mPos.x, mPos.y), data.position, skillConfig);
+#if UNITY_EDITOR
                                 Vector3 newAgentPos = new Vector3(data.position.x, data.position.y);
-                                Debug.DrawLine(position, newAgentPos, Color.magenta, 0.5f);
+                                Debug.DrawLine(mPos, newAgentPos, Color.magenta, 0.25f);
+#endif
                                 SystemBus.Publish(new DestroyAgentSignal(data.agent));                                
                             });
-                        }));
+                        }, Focus));
                     });
             }
 
@@ -211,18 +219,16 @@ namespace _Games.Battle
             return -(math.cos(math.PI * t) - 1) * 0.5f;
         }
 
-        private IEnumerator PlayAnimation(Action onComplete)
+        private IEnumerator PlayAnimation(Action onComplete, Action onNextFocus)
         {
             float duration = attackClip.length;
-            while (true)
-            {
-                animancerState = animancer.Play(attackClip);
-                animancerState.Time = 0;
-                animancerState.Speed = feedbackScaleTime;
-                yield return new WaitForSeconds(duration / feedbackScaleTime);
-                onComplete?.Invoke();
-                yield return new WaitForSeconds(Random.Range(0.2f, 0.5f));
-            }
+            animancerState = animancer.Play(attackClip);
+            animancerState.Time = 0;
+            animancerState.Speed = feedbackScaleTime;
+            yield return new WaitForSeconds(duration / feedbackScaleTime);
+            onComplete?.Invoke();
+            yield return new WaitForSeconds(0.2f);
+            onNextFocus?.Invoke();
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Text;
 using _KITSystem.Utils;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace _KITSystem.SkillSystem.Config
 {

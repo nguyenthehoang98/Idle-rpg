@@ -58,7 +58,9 @@ MonoBehaviour:
         maximumCollision: 1
         collisionResetIntervalInSeconds: 0.033333335
         prefab: {fileID: 0}
-        offsetStartPosition: {x: 0, y: 0, z: 0}
+        offsetStartPosition:
+          x: 0
+          y: 0
         shapeType: 1
         shapeConfig:
           rid: 7993921661494362177
@@ -69,11 +71,12 @@ MonoBehaviour:
       type: {class: CircleShapeConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
         triggerTimeInSeconds: 0
-        offsetRelativePosition: {x: 0, y: 0}
-        radius: 1
+        offsetRelativePosition:
+          x: 0
+          y: 0
+        radius: 0.15
     - rid: 7993921661494362178
       type: {class: BulletTrajectoryConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
-        isRequireTargetToCast: 1
         initialSpeed: 10
         acceleration: 0

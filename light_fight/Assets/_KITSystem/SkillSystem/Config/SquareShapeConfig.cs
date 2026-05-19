@@ -1,14 +1,16 @@
 ﻿using System;
 using Sirenix.OdinInspector;
-using UnityEngine;
+using Unity.Mathematics;
 
 namespace _KITSystem.SkillSystem.Config
 {
     [Serializable]
     public class SquareShapeConfig : BaseShapeConfig
     {
-        [Indent] public Vector2 size = new Vector2(1, 1);
+        [Indent] public float2 size = new(1, 1);
+       
         public override ShapeType Type => ShapeType.Square;
+       
         [Indent] public PivotType pivotType;
 
         public enum PivotType

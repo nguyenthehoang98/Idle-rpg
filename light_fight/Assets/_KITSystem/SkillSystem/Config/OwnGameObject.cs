@@ -8,7 +8,7 @@ namespace _KITSystem.SkillSystem.Config
     {
         private GameObject gameObject;
         private readonly int hash;
-        
+
         private static int Count { get; set; }
 
         public OwnGameObject(GameObject gameObject)
@@ -25,7 +25,7 @@ namespace _KITSystem.SkillSystem.Config
             set
             {
                 position = value;
-                if(gameObject != null) 
+                if (gameObject != null)
                     gameObject.transform.position = position;
             }
         }
@@ -38,7 +38,7 @@ namespace _KITSystem.SkillSystem.Config
             set
             {
                 rotation = value;
-                if(gameObject != null) 
+                if (gameObject != null)
                     gameObject.transform.rotation = rotation;
             }
         }
@@ -47,7 +47,7 @@ namespace _KITSystem.SkillSystem.Config
 
         public void Dispose()
         {
-            
+
         }
     }
 }

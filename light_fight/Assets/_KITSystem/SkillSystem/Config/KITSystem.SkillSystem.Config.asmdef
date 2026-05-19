@@ -2,7 +2,8 @@
     "name": "KITSystem.SkillSystem.Config",
     "rootNamespace": "",
     "references": [
-        "GUID:82d1e9f4e71141c4983602af7fd5f675"
+        "GUID:82d1e9f4e71141c4983602af7fd5f675",
+        "GUID:d8b63aba1907145bea998dd612889d6b"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

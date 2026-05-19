@@ -1,8 +1,8 @@
 ﻿using System;
 using _KITSystem.Utils;
 using Sirenix.OdinInspector;
+using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace _KITSystem.SkillSystem.Config
 {
@@ -11,7 +11,7 @@ namespace _KITSystem.SkillSystem.Config
         [TitleGroup("Ranger : GameObject")] [Indent]
         public GameObject prefab;
 
-        [Indent] public Vector3 offsetStartPosition;
+        [Indent] public float2 offsetStartPosition;
 
         [TitleGroup("Ranger : HitBox")] [GUIColor("GetButtonColor1"), OnValueChanged("ShapeTypeChanged"), Indent]
         public BaseShapeConfig.ShapeType shapeType;

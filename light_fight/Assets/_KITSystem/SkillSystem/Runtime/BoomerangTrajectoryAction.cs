@@ -1,5 +1,5 @@
 ﻿using _KITSystem.SkillSystem.Config;
-using UnityEngine;
+using Unity.Mathematics;
 
 namespace _KITSystem.SkillSystem.Runtime
 {
@@ -11,11 +11,11 @@ namespace _KITSystem.SkillSystem.Runtime
         private float backwardDuration;
         private float elapsedTime;
         private bool isForwardPhase;
-        private Vector3 endPosition;
+        private float2 endPosition;
 
         public BoomerangTrajectoryAction(BlendConstValue forward, float forwardDuration,
             BlendConstValue backward, float backwardDuration,
-            Vector3 start, Vector3 goal) : base(start, goal)
+            float2 start, float2 goal) : base(start, goal)
         {
             this.forward = forward;
             this.forwardDuration = forwardDuration;
@@ -24,16 +24,16 @@ namespace _KITSystem.SkillSystem.Runtime
             isForwardPhase = true;
         }
 
-        protected override Vector3 OnEvaluatePosition(float deltaTime)
+        protected override float2 OnEvaluatePosition(float deltaTime)
         {
             elapsedTime += deltaTime;
             float f;
             float d;
             if (isForwardPhase)
             {
-                f = Mathf.Clamp01(elapsedTime / forwardDuration);
+                f = math.clamp(elapsedTime / forwardDuration, 0, 1);
                 d = forward.Evaluate(f);
-                Vector3 s = d * direction;
+                float2 s = d * direction;
                 if (elapsedTime >= forwardDuration)
                 {
                     endPosition = s;
@@ -45,7 +45,7 @@ namespace _KITSystem.SkillSystem.Runtime
             }
             else
             {
-                f = Mathf.Clamp01(elapsedTime / backwardDuration);
+                f = math.clamp(elapsedTime / backwardDuration, 0, 1);
                 d = backward.Evaluate(f);
                 return endPosition + d * -direction;
             }

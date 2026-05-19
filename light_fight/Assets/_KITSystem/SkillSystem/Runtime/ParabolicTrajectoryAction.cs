@@ -1,10 +1,12 @@
 ﻿using _KITSystem.SkillSystem.Config;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Runtime
 {
     internal class ParabolicTrajectoryAction : BaseTrajectoryAction
     {
+        private static readonly float3 back = new float3(0, 0, -1);
         private BlendConstValue height;
         private BlendConstValue distance;
 
@@ -12,7 +14,7 @@ namespace _KITSystem.SkillSystem.Runtime
         private float elapsedTime;
 
         public ParabolicTrajectoryAction(BlendConstValue height, BlendConstValue distance,
-            float duration, Vector3 start, Vector3 goal) : base(start, goal)
+            float duration, float2 start, float2 goal) : base(start, goal)
         {
             this.duration = duration;
             this.height = height;
@@ -20,14 +22,15 @@ namespace _KITSystem.SkillSystem.Runtime
             this.duration = duration;
         }
 
-        protected override Vector3 OnEvaluatePosition(float deltaTime)
+        protected override float2 OnEvaluatePosition(float deltaTime)
         {
             elapsedTime += deltaTime;
             float f = Mathf.Clamp01(elapsedTime / duration);
             float h = height.Evaluate(f);
             float d = distance.Evaluate(f);
-            Vector3 cross = Vector3.Cross(direction, Vector3.back);
-            return start + direction * d + cross * h;
+            float3 cross = math.cross(new float3(direction.x, direction.y, 0), back);
+            float2 cr = new float2(cross.x, cross.y);
+            return start + direction * d + cr * h;
         }
     }
 }

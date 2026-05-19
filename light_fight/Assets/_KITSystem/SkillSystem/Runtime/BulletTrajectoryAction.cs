@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿using Unity.Mathematics;
 
 namespace _KITSystem.SkillSystem.Runtime
 {
@@ -8,14 +8,14 @@ namespace _KITSystem.SkillSystem.Runtime
         float acceleration;
         private float elapsedTime;
 
-        public BulletTrajectoryAction(float initialSpeed, float acceleration, Vector3 start, Vector3 goal) :
+        public BulletTrajectoryAction(float initialSpeed, float acceleration, float2 start, float2 goal) :
             base(start, goal)
         {
             this.initialSpeed = initialSpeed;
             this.acceleration = acceleration;
         }
 
-        protected override Vector3 OnEvaluatePosition(float deltaTime)
+        protected override float2 OnEvaluatePosition(float deltaTime)
         {
             elapsedTime += deltaTime;
 

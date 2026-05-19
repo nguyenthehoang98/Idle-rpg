@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using _KITSystem.SkillSystem.Config;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Runtime
@@ -18,13 +19,13 @@ namespace _KITSystem.SkillSystem.Runtime
         {
             base.OnUpdate(deltaTime);
 
-            Vector3 position = trajectory.EvaluatePosition(deltaTime);
+            float2 position = trajectory.EvaluatePosition(deltaTime);
             for (int i = 0; i < shapes.Length; i++)
             {
                 var shape = shapes[i];
                 bool hit = shape.Hit(position, out List<int> list);
 #if UNITY_EDITOR
-                shape.Gizmos(position, hit ? Color.red : Color.green, deltaTime);
+                shape.Gizmos(new Vector3(position.x, position.y), hit ? Color.red : Color.green, deltaTime);
 #endif
                 if (hit)
                 {
