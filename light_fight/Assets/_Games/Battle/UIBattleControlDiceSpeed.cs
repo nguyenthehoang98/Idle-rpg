@@ -214,7 +214,7 @@ namespace _Games.Battle
             }
             else
             {
-                float deltaTime = Time.deltaTime * speed;
+                /*float deltaTime = Time.deltaTime * speed;
                 bool shouldUpdate = Mathf.Abs(elapsedTime) > 0;
                 if(elapsedTime > 0)
                 {
@@ -261,7 +261,7 @@ namespace _Games.Battle
                 {
                     upFill2.gameObject.SetActive(false);
                     downFill2.gameObject.SetActive(false);
-                }
+                }*/
             }
         }
 

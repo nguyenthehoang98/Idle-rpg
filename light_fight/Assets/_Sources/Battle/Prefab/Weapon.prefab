@@ -1207,6 +1207,7 @@ MonoBehaviour:
   sortingGroup: {fileID: 8721344226196300958}
   animancer: {fileID: 5361878566000806513}
   attackClip: {fileID: 7400000, guid: d6d5be68c56967b4abc547fbe6f35d7d, type: 2}
+  skillConfig: {fileID: 11400000, guid: 5913003fd1eb5ac4cae65e6978f969a2, type: 2}
 --- !u!1 &8763454242244791472
 GameObject:
   m_ObjectHideFlags: 0

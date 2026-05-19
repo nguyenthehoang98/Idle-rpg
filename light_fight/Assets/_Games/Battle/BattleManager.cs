@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using _KITSystem.EventBus;
 using _KITSystem.Schedule;
+using _KITSystem.SkillSystem.Config;
+using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
@@ -44,6 +46,8 @@ namespace _Games.Battle
             
             // global
             SystemBus.Init();
+            tickSystemOwner.TryGetTickable(out SPU spu);
+            SkillFactory.Initialize(spu);
         }
 
         private void OnEnable()

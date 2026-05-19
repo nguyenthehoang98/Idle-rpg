@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections;
 using _KITSystem.EventBus;
+using _KITSystem.SkillSystem.Config;
+using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
 using Animancer;
 using DG.Tweening;
 using MoreMountains.Feedbacks;
 using Sirenix.OdinInspector;
-using Unity.Android.Gradle.Manifest;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -42,6 +43,9 @@ namespace _Games.Battle
         [TitleGroup("Animation")]
         [SerializeField] private NamedAnimancerComponent animancer;
         [SerializeField] private AnimationClip attackClip;
+        
+        [TitleGroup("Skills")]
+        [SerializeField] private SkillConfig skillConfig;
 
         private float feedbackScaleTime = 1;
         private Vector3 localRotation;
@@ -87,7 +91,8 @@ namespace _Games.Battle
             {
                 float2 p = agentData.position;
                 Vector3 position = pivot.position;
-                Vector3 direction = new Vector3(p.x, p.y) - position;
+                Vector3 goal = new Vector3(p.x, p.y);
+                Vector3 direction = goal - position;
                 direction.z = 0;
                 if (direction.sqrMagnitude < 0.0001f) return;
                 
@@ -121,6 +126,7 @@ namespace _Games.Battle
                         if (animationCoroutine != null) StopCoroutine(animationCoroutine);
                         animationCoroutine = StartCoroutine(PlayAnimation(() =>
                         {
+                            int id = SkillFactory.Build(position, goal, skillConfig);
                             ScanNearestAgent(5, data =>
                             {
                                 Vector3 newAgentPos = new Vector3(data.position.x, data.position.y);
