@@ -719,13 +719,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offsetMin: {x: 0, y: 0.2, z: 0}
   offsetMax: {x: 0, y: 0.5, z: 0}
-  backPhaseDuration: 0.2
   rotatePhaseDuration: 0.2
+  backPhaseDuration: 0.2
   delayFocus: 0.1
   activeFeedback: {fileID: 7508009790646059554}
   inactiveFeedback: {fileID: 2330277492136844532}
   pivot: {fileID: 3784447391545135218}
   renderer: {fileID: 3064327273197952938}
+  animancer: {fileID: 5361878566000806513}
+  attackClip: {fileID: 7400000, guid: d6d5be68c56967b4abc547fbe6f35d7d, type: 2}
 --- !u!1 &8763454242244791472
 GameObject:
   m_ObjectHideFlags: 0
@@ -1374,6 +1376,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3064327273197952938}
   - component: {fileID: 473992434469963508}
+  - component: {fileID: 5361878566000806513}
+  - component: {fileID: 3072862617945585558}
   m_Layer: 0
   m_Name: Renderer
   m_TagString: Untagged
@@ -1451,3 +1455,42 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &5361878566000806513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9129738387758336655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c75c0dcb6d50eb64abd727a90406ca2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Animator: {fileID: 3072862617945585558}
+  _ActionOnDisable: 0
+  _PlayAutomatically: 1
+  _Animations:
+  - {fileID: 7400000, guid: d6d5be68c56967b4abc547fbe6f35d7d, type: 2}
+--- !u!95 &3072862617945585558
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9129738387758336655}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

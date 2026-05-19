@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections;
 using _KITSystem.Utils;
+using Animancer;
 using DG.Tweening;
 using MoreMountains.Feedbacks;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace _Games.Battle
 {
@@ -21,6 +24,7 @@ namespace _Games.Battle
         private float backPhaseDuration = 0.1f;
         [SerializeField, Tooltip("Thời gian chờ để bắt đầu xoay")]
         private float delayFocus = 0.1f;
+        
         [TitleGroup("Feedback")] 
         [SerializeField] private MMF_Player activeFeedback;
         [SerializeField] private MMF_Player inactiveFeedback;
@@ -28,12 +32,18 @@ namespace _Games.Battle
         [TitleGroup("Element")]
         [SerializeField] private Transform pivot;
         [SerializeField] private new Transform renderer; // animator/animation
-
+        
+        [TitleGroup("Animation")]
+        [SerializeField] private NamedAnimancerComponent animancer;
+        [SerializeField] private AnimationClip attackClip;
+        
         private float feedbackScaleTime = 1;
         private Vector3 localRotation;
         private Vector3 localPosition;
         private Tweener tweener;
         private Coroutine coroutine;
+        private Coroutine animationCoroutine;
+        private AnimancerState animancerState;
 
         private void Awake()
         {
@@ -88,7 +98,12 @@ namespace _Games.Battle
                     {
                         pivot.localPosition = Vector3.Lerp(originalLocalPos, targetLocalPos, eased);
                     }
-                }).SetEase(Ease.Linear);
+                }).SetEase(Ease.Linear)
+                .OnComplete(() =>
+                {
+                    if (animationCoroutine != null) StopCoroutine(animationCoroutine);
+                    animationCoroutine = StartCoroutine(PlayAnimation());
+                });
             };
 
             if (delayFocus > 0)
@@ -102,6 +117,13 @@ namespace _Games.Battle
 
         public float StopFocus()
         {
+            if (animationCoroutine != null) StopCoroutine(animationCoroutine);
+            if (animancerState != null)
+            {
+                animancerState.Stop();
+                animancerState = null;
+            }
+            
             Vector3 beginLocalPos = pivot.localPosition;
             bool flag = beginLocalPos != localPosition;
 
@@ -126,10 +148,23 @@ namespace _Games.Battle
 
             return d;
         }
-
+        
         private static float EaseInOutSine(float t)
         {
             return -(math.cos(math.PI * t) - 1) * 0.5f;
+        }
+
+        private IEnumerator PlayAnimation()
+        {
+            float duration = attackClip.length;
+            while (true)
+            {
+                animancerState = animancer.Play(attackClip);
+                animancerState.Time = 0;
+                animancerState.Speed = feedbackScaleTime;
+                yield return new WaitForSeconds(duration / feedbackScaleTime);
+                yield return new WaitForSeconds(Random.Range(0.2f, 0.5f));
+            }
         }
     }
 }
