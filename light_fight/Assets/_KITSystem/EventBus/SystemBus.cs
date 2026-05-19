@@ -5,15 +5,10 @@ namespace _KITSystem.EventBus
 {
     public sealed class SystemBus
     {
-        static SystemBus instance;
+        private static SystemBus instance = new SystemBus();
 
         // Mỗi event type giữ đúng Action<T>
-        private readonly Dictionary<Type, Delegate> listeners;
-
-        public SystemBus()
-        {
-            listeners = new Dictionary<Type, Delegate>(32);
-        }
+        private readonly Dictionary<Type, Delegate> listeners = new(32);
 
         // --------------------
         // PUBLISH
@@ -63,7 +58,7 @@ namespace _KITSystem.EventBus
 
         #region Static
 
-        public static void Init() => instance = new SystemBus();
+        public static void Reset() => instance = new SystemBus();
 
         public static void Publish<T>(T evt) where T : struct, ISignal => instance._Publish(evt);
 

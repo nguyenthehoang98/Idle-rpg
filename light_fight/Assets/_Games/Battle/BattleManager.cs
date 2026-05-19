@@ -45,7 +45,7 @@ namespace _Games.Battle
 - tỉ lệ quay vào ô không chứa trang bị");
             
             // global
-            SystemBus.Init();
+            SystemBus.Reset();
             tickSystemOwner.TryGetTickable(out SPU spu);
             SkillFactory.Initialize(spu);
         }

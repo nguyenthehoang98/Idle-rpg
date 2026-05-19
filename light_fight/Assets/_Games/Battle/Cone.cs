@@ -11,11 +11,8 @@ namespace _Games.Battle
     public class Cone : MonoBehaviour
     {
         [TitleGroup("Settings")] 
-        [SerializeField] private Vector3[] pivotsLocalRotation = new Vector3[]
-        {
-            new Vector3(0, 0, 90), new Vector3(0, 0, 90), new Vector3(0, 0, 90),
-            new Vector3(0, 180, 90), new Vector3(0, 180, 90), new Vector3(0, 180, 90)
-        };
+        [SerializeField] private int[] zPivots = new int[] { 90, 90, 90, 90, 90, 90 };
+        [SerializeField] private int[] xPivots = new int[] { 0, 0, 0, 180, 180, 180 };
         [SerializeField] private Color[] selectedColors = new Color[4];
         
         [TitleGroup("Feedback")] 
@@ -44,6 +41,8 @@ namespace _Games.Battle
         
         public bool IsPlaying { get; private set; }
 
+        public Weapon Weapon => weapon;
+
         public UniTask Initialize(int order, int maxStar, float timeScale)
         {
             if (isInitialized) 
@@ -54,7 +53,7 @@ namespace _Games.Battle
             initFeedback.TimescaleMultiplier = feedbackScaleTime;
             initFeedback.PlayFeedbacks();
             isInitialized = true;
-            weapon.Initialize(order, pivotsLocalRotation[order], timeScale);
+            weapon.Initialize(order, zPivots[order], timeScale);
 #if UNITY_EDITOR
             weapon.name = "Weapon " + order;
 #endif

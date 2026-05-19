@@ -60,5 +60,7 @@ namespace _Games.Battle
         public Vector3 GetConeWorldPosition(int index, int stack) => cones[index].GetStarPosition(stack);
 
         public Vector3 GetConeWorldRotation(int index, int stack) => cones[index].GetStarRotation(stack);
+        
+        public Cone GetCone(int index) => cones[index];
     }
 }

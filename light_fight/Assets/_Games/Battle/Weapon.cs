@@ -11,6 +11,7 @@ using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Serialization;
 using Action = System.Action;
 
 namespace _Games.Battle
@@ -36,8 +37,8 @@ namespace _Games.Battle
 
         [TitleGroup("Element")]
         [SerializeField] private Transform muzzle;
-        [SerializeField] private Transform pivot;
-        [SerializeField] private Transform flip;
+        [SerializeField] private Transform zPivot;
+        [SerializeField] private Transform xPivot;
         [SerializeField] private SortingGroup sortingGroup; // animator/animation
         
         [TitleGroup("Animation")]
@@ -49,6 +50,8 @@ namespace _Games.Battle
         [SerializeField] private float recoveryTime = 0.2f;
         [SerializeField] private float scanRadius = 5;
 
+        public Vector3 pivotEulerAngles;
+
         private int orderIndex;
         private float feedbackScaleTime = 1;
         private Vector3 eulerAngles;
@@ -58,17 +61,22 @@ namespace _Games.Battle
         private Coroutine animationCoroutine;
         private AnimancerState animancerState;
 
-        public void Initialize(int order, Vector3 pivotLocalRotation, float timeScale)
+        private void Update()
+        {
+            pivotEulerAngles = zPivot.eulerAngles;
+        }
+
+        public void Initialize(int order, int pivotZ, float timeScale)
         {
             orderIndex = order;
             feedbackScaleTime = timeScale;
-            pivot.transform.localRotation = Quaternion.Euler(pivotLocalRotation);
+            zPivot.localRotation = Quaternion.Euler(0, 0, pivotZ);
         }
 
         public void Play()
         {
-            eulerAngles = pivot.eulerAngles;
-            localPosition = pivot.localPosition;
+            eulerAngles = zPivot.eulerAngles;
+            localPosition = zPivot.localPosition;
             playFeedback.PlayFeedbacks();
         }
 
@@ -95,7 +103,8 @@ namespace _Games.Battle
             void Action(AgentData agentData)
             {
                 // @"Xứ lý tính duration nếu mà góc gần thay quay nhanh hơn. max=rotatePhaseDuration
-                RotateTo(agentData, true, () =>
+                Vector3 goal = new Vector3(agentData.position.x, agentData.position.y, 0);
+                RotateTo(goal, true, () =>
                 {
                     if (animationCoroutine != null) StopCoroutine(animationCoroutine);
                     animationCoroutine = StartCoroutine(PlayAnimation(() =>
@@ -118,7 +127,8 @@ namespace _Games.Battle
         {
             void Action(AgentData agentData)
             {
-                RotateTo(agentData, false, () =>
+                Vector3 goal = new Vector3(agentData.position.x, agentData.position.y, 0);
+                RotateTo(goal, false, () =>
                 {
                     if (animationCoroutine != null) StopCoroutine(animationCoroutine);
                     animationCoroutine = StartCoroutine(PlayAnimation(() =>
@@ -142,71 +152,70 @@ namespace _Games.Battle
             SystemBus.Publish(new DestroyAgentSignal(agentData.agent));  
         }
 
-        private void RotateTo(AgentData agentData, bool needUpdatePosition, Action onComplete)
+        public void RotateTo(Vector3 goal, bool needUpdatePosition, Action onComplete)
         {
-            float2 f2 = agentData.position;
-            Vector3 position = pivot.position;
-            Vector3 goal = new Vector3(f2.x, f2.y);
+            Vector3 position = zPivot.position;
             Vector3 direction = goal - position;
             direction.z = 0;
             if (direction.sqrMagnitude < 0.0001f) return;
                 
             float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            float currentAngle = pivot.eulerAngles.z;
+            float currentAngle = zPivot.eulerAngles.z;
             float delta = Mathf.DeltaAngle(currentAngle, targetAngle);
             float endAngle = currentAngle + delta;
             float startSigned = Mathf.DeltaAngle(0f, currentAngle);
             bool lastFlip = Mathf.Abs(startSigned) > 90f;
 
 #if UNITY_EDITOR
-            if(orderIndex == 5)
-            {
-                Debug.Log($"current:{currentAngle}, end:{endAngle}, target:{targetAngle}");
-                Vector3 v1 = position + (muzzle.position - position).normalized * 3;
-                Vector3 v2 = position + direction.normalized * 3;
-                Debug.DrawLine(position, v1, Color.yellow, 0.5f);
-                Debug.DrawLine(position, v2, Color.yellow, 0.5f);
-                Debug.DrawLine(v1, v2, Color.yellow, 0.5f);
-            }
+            Vector3 v1 = position + (muzzle.position - position).normalized;
+            Vector3 v2 = position + direction.normalized;
+            Debug.DrawLine(position, v1, Color.yellow, 0.5f);
+            Debug.DrawLine(position, v2, Color.yellow, 0.5f);
+            Debug.DrawLine(v1, v2, Color.yellow, 0.5f);
 #endif
+            
+            Debug.LogError($"{currentAngle} => {endAngle} => {targetAngle}");
 
             float t = Mathf.Clamp01(Mathf.Abs(delta) / 180f);
             Vector3 offset = Vector3.Lerp(offsetMin, offsetMax, t);
             Vector3 offsetDir = needUpdatePosition ? offset : Vector3.zero;
-            Vector3 originalLocalPos = pivot.localPosition;
+            Vector3 originalLocalPos = zPivot.localPosition;
             Vector3 targetLocalPos = originalLocalPos + offsetDir;
             
             if (tweener != null && tweener.IsActive()) tweener.Complete();
             tweener = DOVirtual.Float(0, 1, rotatePhaseDuration / feedbackScaleTime, value =>
                 {
-                    float eased = EaseInOutSine(value);
-                    float a = math.lerp(currentAngle, endAngle, eased);
-                    pivot.eulerAngles = new Vector3(0, 0, a);
-                    if (orderIndex == 5)
-                    {
-                        Debug.Log(pivot.eulerAngles + " => " + pivot.localEulerAngles);
-                    }
+                    float a = Mathf.LerpAngle(currentAngle, endAngle, value);
+                    zPivot.eulerAngles = new Vector3(0, 0, a);
+#if UNITY_EDITOR
+                    float rad = a * Mathf.Deg2Rad;
+                    Vector3 dir = new Vector3(
+                        Mathf.Cos(rad),
+                        Mathf.Sin(rad),
+                        0);
+                    Debug.DrawLine(position, position + dir * 1.5f, Color.red, 0.05f);
+#endif
                     
                     float signed = Mathf.DeltaAngle(0f, a);
                     bool b = Mathf.Abs(signed) > 90f;
                     if (b != lastFlip)
                     {
                         lastFlip = b;
-                        flip.localRotation = Quaternion.Euler(b ? 180: 0, 0, 0);
+                        xPivot.localRotation = Quaternion.Euler(b ? 180: 0, 0, 0);
                     }
 
                     if (needUpdatePosition)
                     {
-                        pivot.localPosition = Vector3.Lerp(originalLocalPos, targetLocalPos, eased);
+                        zPivot.localPosition = Vector3.Lerp(originalLocalPos, targetLocalPos, value);
                     }
                 })
-                .SetEase(Ease.Linear)
+                .SetEase(Ease.InOutSine)
                 .OnComplete(() => onComplete?.Invoke());
         }
 
         private void ScanNearestAgent(float radius, Action<AgentData> callback)
         {
-            Vector3 p = pivot.position;
+            Vector3 p = zPivot.position;
             float2 position = new float2(p.x, p.y);
             SystemBus.Publish(new QueryAgentSignal(position, radius, tuple =>
             {
@@ -238,10 +247,10 @@ namespace _Games.Battle
                 animancerState = null;
             }
             
-            Vector3 beginLocalPosition = pivot.localPosition;
+            Vector3 beginLocalPosition = zPivot.localPosition;
             bool needUpdatePosition = beginLocalPosition != localPosition;
             
-            Vector3 currentAngle = pivot.eulerAngles;
+            Vector3 currentAngle = zPivot.eulerAngles;
             Vector3 endAngle = eulerAngles;
             float startSigned = Mathf.DeltaAngle(0f, currentAngle.z);
             bool lastFlip = Mathf.Abs(startSigned) > 90f;
@@ -252,19 +261,19 @@ namespace _Games.Battle
             {
                 float eased = EaseInOutSine(value);
                 Vector3 a = Vector3.Lerp(currentAngle, endAngle, eased);
-                pivot.eulerAngles = a;
+                zPivot.eulerAngles = a;
 
                 float signed = Mathf.DeltaAngle(0f, a.z);
                 bool b = Mathf.Abs(signed) > 90f;
                 if (b != lastFlip)
                 {
                     lastFlip = b;
-                    flip.localRotation = Quaternion.Euler(b ? 180 : 0, 0, 0);
+                    xPivot.localRotation = Quaternion.Euler(b ? 180: 0, 0, 0);
                 }
 
                 if (needUpdatePosition)
                 {
-                    pivot.localPosition = Vector3.Lerp(beginLocalPosition, localPosition, eased);
+                    zPivot.localPosition = Vector3.Lerp(beginLocalPosition, localPosition, eased);
                 }
             }).SetEase(Ease.Linear);
             
