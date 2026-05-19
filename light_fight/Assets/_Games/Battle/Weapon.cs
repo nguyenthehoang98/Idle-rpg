@@ -49,23 +49,25 @@ namespace _Games.Battle
         [SerializeField] private float recoveryTime = 0.2f;
         [SerializeField] private float scanRadius = 5;
 
+        private int orderIndex;
         private float feedbackScaleTime = 1;
-        private Vector3 localEulerAngles;
+        private Vector3 eulerAngles;
         private Vector3 localPosition;
         private Tweener tweener;
         private Coroutine coroutine;
         private Coroutine animationCoroutine;
         private AnimancerState animancerState;
 
-        public void Initialize(Vector3 pivotLocalRotation, float timeScale)
+        public void Initialize(int order, Vector3 pivotLocalRotation, float timeScale)
         {
+            orderIndex = order;
             feedbackScaleTime = timeScale;
             pivot.transform.localRotation = Quaternion.Euler(pivotLocalRotation);
         }
 
         public void Play()
         {
-            localEulerAngles = pivot.localEulerAngles;
+            eulerAngles = pivot.eulerAngles;
             localPosition = pivot.localPosition;
             playFeedback.PlayFeedbacks();
         }
@@ -156,6 +158,18 @@ namespace _Games.Battle
             float startSigned = Mathf.DeltaAngle(0f, currentAngle);
             bool lastFlip = Mathf.Abs(startSigned) > 90f;
 
+#if UNITY_EDITOR
+            if(orderIndex == 5)
+            {
+                Debug.Log($"current:{currentAngle}, end:{endAngle}, target:{targetAngle}");
+                Vector3 v1 = position + (muzzle.position - position).normalized * 3;
+                Vector3 v2 = position + direction.normalized * 3;
+                Debug.DrawLine(position, v1, Color.yellow, 0.5f);
+                Debug.DrawLine(position, v2, Color.yellow, 0.5f);
+                Debug.DrawLine(v1, v2, Color.yellow, 0.5f);
+            }
+#endif
+
             float t = Mathf.Clamp01(Mathf.Abs(delta) / 180f);
             Vector3 offset = Vector3.Lerp(offsetMin, offsetMax, t);
             Vector3 offsetDir = needUpdatePosition ? offset : Vector3.zero;
@@ -168,6 +182,10 @@ namespace _Games.Battle
                     float eased = EaseInOutSine(value);
                     float a = math.lerp(currentAngle, endAngle, eased);
                     pivot.eulerAngles = new Vector3(0, 0, a);
+                    if (orderIndex == 5)
+                    {
+                        Debug.Log(pivot.eulerAngles + " => " + pivot.localEulerAngles);
+                    }
                     
                     float signed = Mathf.DeltaAngle(0f, a);
                     bool b = Mathf.Abs(signed) > 90f;
@@ -223,23 +241,32 @@ namespace _Games.Battle
             Vector3 beginLocalPosition = pivot.localPosition;
             bool needUpdatePosition = beginLocalPosition != localPosition;
             
-            Vector3 localCurrentAngle = pivot.localEulerAngles;
-            Vector3 localEndAngle = localEulerAngles;
+            Vector3 currentAngle = pivot.eulerAngles;
+            Vector3 endAngle = eulerAngles;
+            float startSigned = Mathf.DeltaAngle(0f, currentAngle.z);
+            bool lastFlip = Mathf.Abs(startSigned) > 90f;
 
             float duration = backPhaseDuration / feedbackScaleTime;
             if (tweener != null && tweener.IsPlaying()) tweener.Kill();
             tweener = DOVirtual.Float(0, 1, duration, value =>
-                {
-                    float eased = EaseInOutSine(value);
-                    Vector3 a = Vector3.Lerp(localCurrentAngle, localEndAngle, eased);
-                    pivot.localEulerAngles = a;
+            {
+                float eased = EaseInOutSine(value);
+                Vector3 a = Vector3.Lerp(currentAngle, endAngle, eased);
+                pivot.eulerAngles = a;
 
-                    if (needUpdatePosition)
-                    {
-                        pivot.localPosition = Vector3.Lerp(beginLocalPosition, localPosition, eased);
-                    }
-                }).SetEase(Ease.Linear)
-                .OnComplete(() => flip.localRotation = Quaternion.Euler(0, 0, 0));
+                float signed = Mathf.DeltaAngle(0f, a.z);
+                bool b = Mathf.Abs(signed) > 90f;
+                if (b != lastFlip)
+                {
+                    lastFlip = b;
+                    flip.localRotation = Quaternion.Euler(b ? 180 : 0, 0, 0);
+                }
+
+                if (needUpdatePosition)
+                {
+                    pivot.localPosition = Vector3.Lerp(beginLocalPosition, localPosition, eased);
+                }
+            }).SetEase(Ease.Linear);
             
             return duration;
         }

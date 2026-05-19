@@ -1714,7 +1714,7 @@ GameObject:
   m_Component:
   - component: {fileID: 882616176956429958}
   m_Layer: 0
-  m_Name: Pivot
+  m_Name: Cone-Pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3293,7 +3293,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68ac2aba9f594a81ba174b07bd5fe409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultAngles: 000000000000000000000000b4000000b4000000b4000000
+  pivotsLocalRotation:
+  - {x: 0, y: 0, z: 90}
+  - {x: 0, y: 0, z: 90}
+  - {x: 0, y: 0, z: 90}
+  - {x: 0, y: 180, z: 90}
+  - {x: 0, y: 180, z: 90}
+  - {x: 0, y: 180, z: 90}
   selectedColors:
   - {r: 0.058823466, g: 0.5, b: 0, a: 1}
   - {r: 0, g: 0.25339365, b: 0.5, a: 1}
@@ -3334,7 +3340,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9067714813383549070, guid: 148b51b44cb8b564cad8f53dd66d8e00, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1
+      value: -0.01
       objectReference: {fileID: 0}
     - target: {fileID: 9067714813383549070, guid: 148b51b44cb8b564cad8f53dd66d8e00, type: 3}
       propertyPath: m_LocalRotation.w

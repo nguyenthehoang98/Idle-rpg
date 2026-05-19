@@ -54,7 +54,7 @@ namespace _Games.Battle
             initFeedback.TimescaleMultiplier = feedbackScaleTime;
             initFeedback.PlayFeedbacks();
             isInitialized = true;
-            weapon.Initialize(pivotsLocalRotation[order], timeScale);
+            weapon.Initialize(order, pivotsLocalRotation[order], timeScale);
 #if UNITY_EDITOR
             weapon.name = "Weapon " + order;
 #endif

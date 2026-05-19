@@ -1080,12 +1080,12 @@ GameObject:
   - component: {fileID: 3784447391545135218}
   - component: {fileID: 8721344226196300958}
   m_Layer: 0
-  m_Name: Pivot
+  m_Name: Weapon-Pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3784447391545135218
 Transform:
   m_ObjectHideFlags: 0
@@ -1240,6 +1240,8 @@ MonoBehaviour:
   animancer: {fileID: 5361878566000806513}
   attackClip: {fileID: 7400000, guid: d6d5be68c56967b4abc547fbe6f35d7d, type: 2}
   skillConfig: {fileID: 11400000, guid: 5913003fd1eb5ac4cae65e6978f969a2, type: 2}
+  recoveryTime: 0.2
+  scanRadius: 5
 --- !u!1 &8763454242244791472
 GameObject:
   m_ObjectHideFlags: 0
