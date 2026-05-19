@@ -1,39 +1,39 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
+using Unity.Collections;
+using Unity.Mathematics;
 
 namespace _KITSystem.Movement
 {
     internal class NeighborQuery
     {
         private float cellSize;
+        private float invCellSize;
 
-        // dùng int hash thay vì Vector2Int
-        private Dictionary<int, List<int>> grid = new(256);
+        private readonly Dictionary<int, List<int>> grid = new(256);
 
-        // cache neighbors để tránh new mỗi frame
         private List<int>[] neighborsCache;
+        private int cachedCount;
 
         public NeighborQuery(float cellSize)
         {
             this.cellSize = cellSize;
+            invCellSize = 1f / cellSize;
         }
 
-        public void BuildGrid(List<Vector3> positions)
+        public void BuildGrid(NativeArray<float2> positions)
         {
-            // clear nhưng giữ capacity
             foreach (var kv in grid)
             {
                 kv.Value.Clear();
             }
 
-            for (int i = 0; i < positions.Count; i++)
+            for (int i = 0; i < positions.Length; i++)
             {
-                GetCell(positions[i], out int x, out int y);
-                int hash = Hash(x, y);
+                int hash = PositionToCell(positions[i]);
 
                 if (!grid.TryGetValue(hash, out var list))
                 {
-                    list = new List<int>(8); // preset capacity nhỏ
+                    list = new List<int>(8);
                     grid[hash] = list;
                 }
 
@@ -41,52 +41,55 @@ namespace _KITSystem.Movement
             }
         }
 
-        public List<int>[] QueryNeighbors(List<Vector3> positions, float radius)
+        public List<int>[] QueryNeighbors(NativeArray<float2> positions, float radius)
         {
-            int count = positions.Count;
-
-            // init cache nếu cần
-            if (neighborsCache == null || neighborsCache.Length != count)
+            int count = positions.Length;
+            if (neighborsCache == null || neighborsCache.Length < count)
             {
-                neighborsCache = new List<int>[count];
-                for (int i = 0; i < count; i++)
+                int oldLen = neighborsCache?.Length ?? 0;
+                int newLen = math.max(count, oldLen * 2);
+                var newArr = new List<int>[newLen];
+
+                if (neighborsCache != null)
                 {
-                    neighborsCache[i] = new List<int>(8);
+                    System.Array.Copy(neighborsCache, newArr, oldLen);
                 }
+
+                for (int i = oldLen; i < newLen; i++)
+                {
+                    newArr[i] = new List<int>(8);
+                }
+
+                neighborsCache = newArr;
             }
 
             float radiusSq = radius * radius;
+            int range = (int)math.ceil(radius * invCellSize);
 
             for (int i = 0; i < count; i++)
             {
                 var neighbors = neighborsCache[i];
                 neighbors.Clear();
 
-                Vector3 posI = positions[i];
+                float2 posI = positions[i];
+                int cx = (int)math.floor(posI.x * invCellSize);
+                int cy = (int)math.floor(posI.y * invCellSize);
 
-                GetCell(posI, out int cx, out int cy);
-
-                // check 9 cells
-                for (int dx = -1; dx <= 1; dx++)
+                for (int dy = -range; dy <= range; dy++)
                 {
-                    int nx = cx + dx;
-
-                    for (int dy = -1; dy <= 1; dy++)
+                    for (int dx = -range; dx <= range; dx++)
                     {
-                        int ny = cy + dy;
-                        int hash = Hash(nx, ny);
+                        int hash = Hash(cx + dx, cy + dy);
 
                         if (!grid.TryGetValue(hash, out var list)) continue;
 
-                        // loop tuyến tính (cache-friendly hơn một chút)
                         for (int k = 0; k < list.Count; k++)
                         {
                             int j = list[k];
                             if (j == i) continue;
 
-                            Vector3 diff = posI - positions[j];
-
-                            if (diff.sqrMagnitude <= radiusSq)
+                            float2 diff = posI - positions[j];
+                            if (math.lengthsq(diff) <= radiusSq)
                             {
                                 neighbors.Add(j);
                             }
@@ -95,18 +98,24 @@ namespace _KITSystem.Movement
                 }
             }
 
+            cachedCount = count;
             return neighborsCache;
         }
 
-        private void GetCell(Vector3 pos, out int x, out int y)
+        public List<int> GetCachedNeighbors(int index)
         {
-            x = (int)(pos.x / cellSize);
-            y = (int)(pos.z / cellSize);
+            if (index >= 0 && index < cachedCount && neighborsCache != null)
+                return neighborsCache[index];
+            return null;
         }
 
-        private int Hash(int x, int y)
+        private int PositionToCell(float2 pos)
         {
-            return (x * 73856093) ^ (y * 19349663);
+            int x = (int)math.floor(pos.x * invCellSize);
+            int y = (int)math.floor(pos.y * invCellSize);
+            return Hash(x, y);
         }
+
+        private static int Hash(int x, int y) => (x * 73856093) ^ (y * 19349663);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using _KITSystem.Utils;
+using Unity.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _KITSystem.Movement
@@ -12,215 +14,191 @@ namespace _KITSystem.Movement
         public float avoidStrength = 2f;
         public float maxAvoidForce = 3.0f;
         [Range(0.1f, 0.9f)] public float stopDecelerationNormalize = 0.9f;
-        
-        private List<Vector3> finalVelocities = new List<Vector3>();
+
         private NeighborQuery neighborQuery;
-        private bool[] isStoppedCache = new bool[0];
-        private Queue<int> queueCache = new Queue<int>(256);
+
+        private bool[] isStoppedCache = new bool[64];
+        private int[] queueBuffer = new int[512];
+
         private float maxAvoidForceSqr;
+        private float avoidRadiusSq;
 
         public void Initialize()
         {
             neighborQuery = new NeighborQuery(cellSize);
             maxAvoidForceSqr = maxAvoidForce * maxAvoidForce;
+            avoidRadiusSq = avoidRadius * avoidRadius;
         }
 
-        public List<Vector3> Resolve(List<Vector3> positions, List<Vector3> destinations, List<Vector3> desiredVelocities)
+        public void Resolve(NativeArray<float2> positions, NativeArray<float2> destinations, NativeArray<float2> desiredVelocities, NativeList<float2> outFinalVelocities)
         {
+            int count = positions.Length;
+
+            EnsureCapacityBool(ref isStoppedCache, count);
+            EnsureCapacityInt(ref queueBuffer, math.max(count * 2, 512));
+
             neighborQuery.BuildGrid(positions);
 
-            List<int>[] neighbors = neighborQuery.QueryNeighbors(
-                positions,
-                avoidRadius
-            );
-            
-            if (finalVelocities.Count < desiredVelocities.Count)
-            {
-                finalVelocities.Capacity = desiredVelocities.Count;
-                int delta = desiredVelocities.Count - finalVelocities.Count;
-                for (int i = 0; i < delta; i++)
-                {
-                    finalVelocities.Add(Vector3.zero);
-                }
-            }
-            
-            int count = positions.Count;
-            float avoidRadiusSq = avoidRadius * avoidRadius;
-         
-            // resize nếu cần
-            if (isStoppedCache.Length != count) 
-                isStoppedCache = new bool[count];
-            bool[] isStopped = isStoppedCache;
-            ComputeStopState(positions, destinations, neighbors, isStopped, 2, 1.3f);
+            var neighbors = neighborQuery.QueryNeighbors(positions, avoidRadius);
+
+            ComputeStopState(count, positions, destinations, 2f, 1.3f);
 
             for (int i = 0; i < count; i++)
             {
-                Vector3 pos = positions[i];
-                Vector3 desiredVel = desiredVelocities[i];
+                float2 pos = positions[i];
+                float2 desiredVel = desiredVelocities[i];
 
-                float velSq = desiredVel.sqrMagnitude;
-                Vector3 forward = velSq > 0.0001f ? desiredVel / Mathf.Sqrt(velSq) : Vector3.zero;
-
-                Vector3 avoidance = Vector3.zero;
-                int neighborCount = 0;
+                float velSq = math.lengthsq(desiredVel);
+                float2 forward = velSq > 0.0001f ? MathUtils.NormalizeSafe(desiredVel) : float2.zero;
 
                 var list = neighbors[i];
-                if (list == null)
+                if (list == null || list.Count == 0)
                 {
-                    finalVelocities[i] = Vector3.MoveTowards(
-                        desiredVelocities[i],
-                        Vector3.zero,
-                        stopDecelerationNormalize
-                    );
+                    outFinalVelocities[i] = desiredVel;
                     continue;
                 }
 
-                if (isStopped[i])
+                if (isStoppedCache[i])
                 {
-                    finalVelocities[i] = Vector3.zero;
+                    outFinalVelocities[i] = float2.zero;
                     continue;
                 }
+
+                float2 avoidance = float2.zero;
+                int neighborCount = 0;
 
                 for (int n = 0; n < list.Count; n++)
                 {
                     int j = list[n];
                     if (j == i) continue;
 
-                    Vector3 diff = pos - positions[j];
-                    float distSq = diff.sqrMagnitude;
+                    float2 diff = pos - positions[j];
+                    float distSq = math.lengthsq(diff);
 
                     if (distSq > avoidRadiusSq || distSq < 0.00001f)
                         continue;
 
-                    float dist = Mathf.Sqrt(distSq);
-                    Vector3 dir = diff / dist;
+                    float2 dir = diff * math.rsqrt(distSq);
 
-                    // -------------------------
-                    // 1. Directional weight
-                    // -------------------------
-                    float dirDot = Vector3.Dot(forward, -dir);
-                    if (dirDot <= 0f) continue; // bỏ phía sau
+                    float dirDot = math.dot(forward, -dir);
+                    if (dirDot <= 0f) continue;
 
-                    float directionalWeight = dirDot * dirDot; // smooth hơn
+                    float directionalWeight = dirDot * dirDot;
 
-                    // -------------------------
-                    // 2. Relative velocity check
-                    // -------------------------
-                    Vector3 relativeVel = desiredVel - desiredVelocities[j];
-                    float approaching = Vector3.Dot(relativeVel, diff);
+                    float2 relativeVel = desiredVel - desiredVelocities[j];
+                    float approaching = math.dot(relativeVel, diff);
+                    if (approaching >= 0f) continue;
 
-                    if (approaching >= 0f) continue; // không tiến lại gần
+                    float dist = math.sqrt(distSq);
+                    float distWeight = 1f - (dist * math.rsqrt(avoidRadiusSq));
 
-                    // -------------------------
-                    // 3. Distance weight
-                    // -------------------------
-                    float distWeight = 1f - (dist / avoidRadius);
-
-                    float weight = directionalWeight * distWeight;
-
-                    avoidance += dir * weight;
+                    avoidance += dir * (directionalWeight * distWeight);
                     neighborCount++;
                 }
 
-                // -------------------------
-                // Normalize force
-                // -------------------------
                 if (neighborCount > 0)
                 {
-                    avoidance /= neighborCount;
+                    avoidance *= 1f / neighborCount;
                 }
 
-                // -------------------------
-                // Limit force (tránh giật)
-                // -------------------------
-                if (avoidance.sqrMagnitude > maxAvoidForceSqr)
+                float avoidSq = math.lengthsq(avoidance);
+                if (avoidSq > maxAvoidForceSqr)
                 {
-                    avoidance = MathUtils.NormalizeSafeVec3(avoidance) * maxAvoidForce;
+                    avoidance = MathUtils.NormalizeSafe(avoidance) * maxAvoidForce;
                 }
 
-                // -------------------------
-                // Blend với velocity gốc
-                // -------------------------
-                Vector3 targetVelocity = desiredVel + avoidance * avoidStrength;
-
-                // Smooth (rất quan trọng)
-                finalVelocities[i] = Vector3.Lerp(
-                    desiredVel,
-                    targetVelocity,
-                    0.5f // tweak cái này để chỉnh độ "mượt"
-                );
+                float2 targetVelocity = desiredVel + avoidance * avoidStrength;
+                outFinalVelocities[i] = math.lerp(desiredVel, targetVelocity, 0.5f);
             }
-
-            return finalVelocities;
         }
-        
-        private void ComputeStopState(
-            List<Vector3> positions,
-            List<Vector3> targets,
-            List<int>[] neighbors,
-            bool[] isStopped,
-            float stopDistance,
-            float unitSpacing)
+
+        private void ComputeStopState(int count, NativeArray<float2> positions, NativeArray<float2> destinations, float stopDistance, float unitSpacing)
         {
-            int count = positions.Count;
+            float stopDistSq = stopDistance * stopDistance;
+            float unitSpacingSq = unitSpacing * unitSpacing;
 
-            queueCache.Clear();
-            var queue = queueCache;
+            int queueHead = 0;
+            int queueTail = 0;
 
-            // -------------------------
-            // 1. Seed (gần target)
-            // -------------------------
             for (int i = 0; i < count; i++)
             {
-                float dist = (targets[i] - positions[i]).sqrMagnitude;
+                float distSq = math.lengthsq(destinations[i] - positions[i]);
 
-                if (dist < stopDistance * stopDistance)
+                if (distSq < stopDistSq)
                 {
-                    isStopped[i] = true;
-                    queue.Enqueue(i);
+                    isStoppedCache[i] = true;
+                    queueBuffer[queueTail++] = i;
                 }
                 else
                 {
-                    isStopped[i] = false;
+                    isStoppedCache[i] = false;
                 }
             }
 
-            // -------------------------
-            // 2. BFS propagate
-            // -------------------------
-            while (queue.Count > 0)
+            while (queueHead < queueTail)
             {
-                int j = queue.Dequeue();
-                Vector3 posJ = positions[j];
+                int j = queueBuffer[queueHead++];
+                float2 posJ = positions[j];
 
-                var list = neighbors[j];
-                if (list == null) continue;
+                var neighbors = neighborQuery.GetCachedNeighbors(j);
+                if (neighbors == null) continue;
 
-                for (int n = 0; n < list.Count; n++)
+                for (int n = 0; n < neighbors.Count; n++)
                 {
-                    int i = list[n];
-                    if (isStopped[i]) continue;
+                    int i = neighbors[n];
+                    if (isStoppedCache[i]) continue;
 
-                    Vector3 toJ = posJ - positions[i];
-                    float distSq = toJ.sqrMagnitude;
+                    float2 toJ = posJ - positions[i];
+                    float distSq = math.lengthsq(toJ);
                     if (distSq < 0.0001f) continue;
 
-                    float dist = Mathf.Sqrt(distSq);
-                    Vector3 toTarget = targets[i] - positions[i];
-                    float invLen = 1.0f / Mathf.Sqrt(toTarget.sqrMagnitude + 1e-6f);
-                    Vector3 forward = toTarget * invLen;
-                    Vector3 dir = toJ / dist;
+                    float2 toTarget = destinations[i] - positions[i];
+                    float invLen = math.rsqrt(math.lengthsq(toTarget) + 1e-6f);
+                    float2 forward = toTarget * invLen;
+                    float2 dir = toJ * math.rsqrt(distSq);
 
-                    // chỉ propagate về phía sau
-                    float dot = Vector3.Dot(forward, dir);
+                    float dot = math.dot(forward, dir);
                     if (dot < 0.7f) continue;
 
-                    if (dist < unitSpacing)
+                    if (distSq < unitSpacingSq)
                     {
-                        isStopped[i] = true;
-                        queue.Enqueue(i);
+                        isStoppedCache[i] = true;
+                        if (queueTail < queueBuffer.Length)
+                        {
+                            queueBuffer[queueTail++] = i;
+                        }
+                        else
+                        {
+                            int newSize = math.max(queueBuffer.Length * 2, queueBuffer.Length + 256);
+                            var newQueue = new int[newSize];
+                            System.Array.Copy(queueBuffer, newQueue, queueBuffer.Length);
+                            queueBuffer = newQueue;
+                            queueBuffer[queueTail++] = i;
+                        }
                     }
                 }
+            }
+        }
+
+        private static void EnsureCapacityBool(ref bool[] array, int required)
+        {
+            if (array.Length < required)
+            {
+                int newSize = math.max(required, array.Length * 2);
+                var newArr = new bool[newSize];
+                System.Array.Copy(array, newArr, array.Length);
+                array = newArr;
+            }
+        }
+
+        private static void EnsureCapacityInt(ref int[] array, int required)
+        {
+            if (array.Length < required)
+            {
+                int newSize = math.max(required, array.Length * 2);
+                var newArr = new int[newSize];
+                System.Array.Copy(array, newArr, array.Length);
+                array = newArr;
             }
         }
     }

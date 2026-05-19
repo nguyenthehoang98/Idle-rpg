@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using Unity.Collections;
+using Unity.Mathematics;
 
 namespace _KITSystem.Movement
 {
     public interface IResolver
     {
         void Initialize();
-        List<Vector3> Resolve(List<Vector3> positions, List<Vector3> destinations, List<Vector3> desiredVelocities);
+        void Resolve(NativeArray<float2> positions, NativeArray<float2> destinations, NativeArray<float2> desiredVelocities, NativeList<float2> outFinalVelocities);
     }
 }

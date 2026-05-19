@@ -1,60 +1,71 @@
 ﻿using NUnit.Framework;
+using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace _KITSystem.Movement.Unitest
 {
     public class MPUModifierTesting
     {
+        private MPU mpu;
+
+        [SetUp]
+        public void Setup()
+        {
+            mpu = new MPU(ModifierName.Default, ModifierName.Teleport, ModifierName.KnockBack);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            mpu?.Dispose();
+            mpu = null;
+        }
+
         [Test]
         public void RunModifier_ShouldMoveUnit()
         {
-            var mpu = CreateMPU();
-
             int unitId = -1;
-            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
+            mpu.RequestAddUnit(float2.zero, new float2(999, 999), unit =>
             {
                 unitId = unit;
-                mpu.RequestAddAction(unit, new RunMovementAction(Vector3.right, 5f));
+                mpu.RequestAddAction(unit, new RunMovementAction(Vector2.right, 5f));
             });
 
-            mpu.Tick(1f); // 1 giây
+            mpu.Tick(1f);
 
-            Vector3 pos = mpu.GetUnitPosition(unitId);
+            float2 pos = mpu.GetUnitPosition(unitId);
 
-            Assert.AreEqual(new Vector3(5f, 0f, 0f), pos);
+            Assert.AreEqual(new float2(5f, 0f), pos);
         }
 
         [Test]
         public void RunModifier_ShouldSumVelocity()
         {
-            var mpu = CreateMPU();
-
             int unitId = -1;
-            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
+            mpu.RequestAddUnit(float2.zero, new float2(999, 999), unit =>
             {
                 unitId = unit;
-                mpu.RequestAddAction(unit, new RunMovementAction(Vector3.right, 5f));
-                mpu.RequestAddAction(unit, new RunMovementAction(Vector3.forward, 5f));
+                mpu.RequestAddAction(unit, new RunMovementAction(Vector2.right, 5f));
+                mpu.RequestAddAction(unit, new RunMovementAction(Vector2.up, 5f));
             });
 
             mpu.Tick(2f);
 
-            Vector3 pos = mpu.GetUnitPosition(unitId);
+            float2 pos = mpu.GetUnitPosition(unitId);
 
-            Assert.AreEqual(new Vector3(10f, 0f, 10f), pos);
+            Assert.AreEqual(new float2(10f, 10f), pos);
         }
 
         [Test]
         public void RunModifier_ShouldStopMovement()
         {
-            var mpu = CreateMPU();
-
             int unitId = -1;
             int handle = -1;
-            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
+            mpu.RequestAddUnit(float2.zero, new float2(999, 999), unit =>
             {
                 unitId = unit;
-                mpu.RequestAddAction(unit, new RunMovementAction(Vector3.right, 5f), i => handle = i);
+                mpu.RequestAddAction(unit, new RunMovementAction(Vector2.right, 5f), i => handle = i);
             });
 
             mpu.Tick(1f);
@@ -63,23 +74,20 @@ namespace _KITSystem.Movement.Unitest
 
             mpu.Tick(1f);
 
-            Vector3 pos = mpu.GetUnitPosition(unitId);
+            float2 pos = mpu.GetUnitPosition(unitId);
 
-            // chỉ move 1 lần
-            Assert.AreEqual(new Vector3(5f, 0f, 0f), pos);
+            Assert.AreEqual(new float2(5f, 0f), pos);
         }
 
         [Test]
         public void RunModifier_ShouldKeepOtherModifiersValid()
         {
-            var mpu = CreateMPU();
-
             int unitId = -1, h1 = -1, h2 = -1;
-            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
+            mpu.RequestAddUnit(float2.zero, new float2(999, 999), unit =>
             {
                 unitId = unit;
-                mpu.RequestAddAction(unit, new RunMovementAction(Vector3.right, 5f), i => h1 = i);
-                mpu.RequestAddAction(unit, new RunMovementAction(Vector3.forward, 5f), i => h2 = i);
+                mpu.RequestAddAction(unit, new RunMovementAction(Vector2.right, 5f), i => h1 = i);
+                mpu.RequestAddAction(unit, new RunMovementAction(Vector2.up, 5f), i => h2 = i);
             });
 
             mpu.Tick(1f);
@@ -88,92 +96,80 @@ namespace _KITSystem.Movement.Unitest
 
             mpu.Tick(1f);
 
-            Vector3 pos = mpu.GetUnitPosition(unitId);
+            float2 pos = mpu.GetUnitPosition(unitId);
 
-            // frame 1: (5,0,5)
-            // frame 2: chỉ còn forward → (0,0,5)
-            Assert.AreEqual(new Vector3(5f, 0f, 10f), pos);
+            Assert.AreEqual(new float2(5f, 10f), pos);
         }
 
         [Test]
         public void RunModifier_SameFrame_ShouldNotCrash()
         {
-            var mpu = CreateMPU();
-
             int unitId = -1;
             int handle = -1;
 
-            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
+            mpu.RequestAddUnit(float2.zero, new float2(999, 999), unit =>
             {
                 unitId = unit;
-                mpu.RequestAddAction(unit, new RunMovementAction(Vector3.right, 5f), i => handle = i);
+                mpu.RequestAddAction(unit, new RunMovementAction(Vector2.right, 5f), i => handle = i);
             });
 
-            mpu.Tick(1f); // chạy → move
+            mpu.Tick(1f);
 
             mpu.RequestRemoveAction(handle);
 
-            mpu.Tick(1f); // apply remove
+            mpu.Tick(1f);
 
-            Vector3 pos = mpu.GetUnitPosition(unitId);
+            float2 pos = mpu.GetUnitPosition(unitId);
 
-            // chỉ move 1 lần
-            Assert.AreEqual(new Vector3(5f, 0f, 0f), pos);
+            Assert.AreEqual(new float2(5f, 0f), pos);
         }
 
         [Test]
         public void TeleportModifier_ShouldMoveUnit()
         {
-            var mpu = CreateMPU();
-
             int unitId = -1;
-            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
+            mpu.RequestAddUnit(float2.zero, new float2(999, 999), unit =>
             {
                 unitId = unit;
-                mpu.RequestAddAction(unit, new TeleportMovementAction(new Vector3(33, 0)));
+                mpu.RequestAddAction(unit, new TeleportMovementAction(new Vector3(33, 0, 0)));
             });
 
-            mpu.Tick(Random.Range(0.1f, 10f)); // 1 giây
+            mpu.Tick(Random.Range(0.1f, 10f));
 
-            Vector3 pos = mpu.GetUnitPosition(unitId);
+            float2 pos = mpu.GetUnitPosition(unitId);
 
-            Assert.AreEqual(new Vector3(33, 0), pos);
+            Assert.AreEqual(new float2(33, 0), pos);
         }
-        
+
         [Test]
         public void KnockBackModifier_Move_Should_Be_Ignored_When_Knockback_Active()
         {
-            var mpu = CreateMPU();
-
             int unitId = -1;
-            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
+            mpu.RequestAddUnit(float2.zero, new float2(999, 999), unit =>
             {
                 unitId = unit;
-                mpu.RequestAddAction(unit, new RunMovementAction(new Vector3(1, 0, 0), speed: 5f));
+                mpu.RequestAddAction(unit, new RunMovementAction(new Vector2(1, 0), speed: 5f));
                 mpu.RequestAddAction(unit, new KnockBackMovementAction(
-                    direction: new Vector3(-1, 0, 0), 2f, 1f, null)
+                    direction: new Vector2(-1, 0), 2f, 1f, null)
                 );
             });
 
             mpu.Tick(1f);
-           
-            Vector3 pos = mpu.GetUnitPosition(unitId);
 
-            // phải bị đẩy ngược, không đi theo move
+            float2 pos = mpu.GetUnitPosition(unitId);
+
             Assert.Less(pos.x, 0f);
         }
-        
+
         [Test]
         public void KnockBackModifier_Distance()
         {
-            var mpu = CreateMPU();
-
             int unitId = -1;
-            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), unit =>
+            mpu.RequestAddUnit(float2.zero, new float2(999, 999), unit =>
             {
                 unitId = unit;
                 mpu.RequestAddAction(unit, new KnockBackMovementAction(
-                    direction: new Vector3(-1, 0, 0), 2f, 3f, null)
+                    direction: new Vector2(-1, 0), 2f, 3f, null)
                 );
             });
 
@@ -181,17 +177,10 @@ namespace _KITSystem.Movement.Unitest
             {
                 mpu.Tick(0.2f);
             }
-           
-            Vector3 pos = mpu.GetUnitPosition(unitId);
 
-            // phải bị đẩy ngược, không đi theo move
-            Assert.AreEqual(pos.x, -3f);
-        }
-        
-        MPU CreateMPU()
-        {
-            var mpu = new MPU(ModifierName.Default, ModifierName.Teleport, ModifierName.KnockBack);
-            return mpu;
+            float2 pos = mpu.GetUnitPosition(unitId);
+
+            Assert.AreEqual(-3f, pos.x, 0.001f);
         }
     }
 }

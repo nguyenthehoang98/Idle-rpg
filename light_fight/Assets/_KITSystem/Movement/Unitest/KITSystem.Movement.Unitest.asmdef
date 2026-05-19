@@ -3,7 +3,8 @@
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
-        "KITSystem.Movement"
+        "KITSystem.Movement",
+        "Unity.Mathematics"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

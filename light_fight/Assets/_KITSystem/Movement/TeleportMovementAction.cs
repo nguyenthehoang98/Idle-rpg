@@ -1,24 +1,25 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _KITSystem.Movement
 {
     public struct TeleportMovementAction : IMovementAction
     {
-        private Vector3 destination;
+        private float2 destination;
 
         public TeleportMovementAction(Vector3 destination)
         {
-            this.destination = destination;
+            this.destination = new float2(destination.x, destination.z);
             IsFinished = false;
         }
 
         public int Priority => PriorityModifierIndex.TELEPORT;
         public ModifierName Name => ModifierName.Teleport;
-        public void Start(Vector3 startPos)
+        public void Start(float2 startPos)
         {
         }
 
-        public void Process(Vector3 position, float deltaTime)
+        public void Process(float2 position, float deltaTime)
         {
         }
 
@@ -30,12 +31,12 @@ namespace _KITSystem.Movement
         {
         }
 
-        public Vector3 EvaluateVelocity(float deltaTime)
+        public float2 EvaluateVelocity(float deltaTime)
         {
-            return Vector3.zero;
+            return float2.zero;
         }
 
-        public Vector3 EvaluatePosition(float deltaTime)
+        public float2 EvaluatePosition(float deltaTime)
         {
             if (!IsFinished)
             {
@@ -43,7 +44,7 @@ namespace _KITSystem.Movement
                 return destination;
             }
 
-            return Vector3.zero;
+            return float2.zero;
         }
 
         public bool IsFinished { get; private set; }

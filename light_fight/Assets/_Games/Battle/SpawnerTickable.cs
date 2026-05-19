@@ -14,6 +14,7 @@ using Random = UnityEngine.Random;
 internal class SpawnerTickable : ITickable
 {
     [TitleGroup("Agent default settings")] 
+    [SerializeField] private bool shouldDestroy;
     [SerializeField] private float stopDistance = 2;
     [SerializeField] private float agentRadius = 0.5f;
     [SerializeField, Range(0.1f, 0.9f)]
@@ -41,7 +42,8 @@ internal class SpawnerTickable : ITickable
         simulator.EnsureCompleted();
         
         // todo: remove
-        RandomRemoveAgent();
+        
+        if(shouldDestroy) RandomRemoveAgent();
         // todo: spawn (init)
         CheckSpawn(deltaTime);
 #if UNITY_EDITOR
@@ -131,7 +133,7 @@ internal class SpawnerTickable : ITickable
             float2 position = simulator.GetAgentPosition(agent);
             temp.position = position;
 
-            gridManager.Insert(agent, new Vector3(position.x, position.y));
+        gridManager.Insert(agent, new float2(position.x, position.y));
 
             if (math.lengthsq(position) < stopDistanceSq)
             {
@@ -141,7 +143,7 @@ internal class SpawnerTickable : ITickable
                 continue;
             }
 
-            int query = gridManager.Query(new Vector3(position.x, position.y), 3, out List<int> results);
+            int query = gridManager.Query(position, 3, out List<int> results);
             int frontBlockedCount = 0;
 
             float2 dirToGoal = MathUtils.NormalizeSafe(-position);
@@ -219,10 +221,10 @@ internal class SpawnerTickable : ITickable
         }
     }
 
-    private void Spawn(Vector3 position)
+    private void Spawn(Vector2 position)
     {
         simulator.EnsureCompleted();
-        int agent = simulator.AddAgent(new float2(position.x, position.y));
+        int agent = simulator.AddAgent(position);
         agents.Add(agent);
         container.Add(agent, new AgentData
         {

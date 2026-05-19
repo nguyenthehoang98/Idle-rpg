@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using Unity.Mathematics;
+using _KITSystem.Utils;
 using UnityEngine;
 
 namespace _KITSystem.Movement
@@ -9,55 +11,55 @@ namespace _KITSystem.Movement
 #endif
     public struct RunMovementAction : IMovementAction
     {
-        [SerializeField] private Vector3 direction;
+        [SerializeField] private float2 direction;
         [SerializeField] private float speed;
         [SerializeField] private bool useLifeTime;
         [SerializeField] private float remainingLifeTime;
         [SerializeField] private bool useDestination;
-        [SerializeField] private Vector3 destination;
+        [SerializeField] private float2 destination;
         [SerializeField] private float stopDistance;
 
         public int Priority => PriorityModifierIndex.DEFAULT;
         public ModifierName Name => ModifierName.Default;
 
-        public Vector3 EvaluatePosition(float deltaTime)
+        public float2 EvaluatePosition(float deltaTime)
         {
-            return Vector3.zero;
+            return float2.zero;
         }
 
         public bool IsFinished { get; private set; }
         public ModifierCompleteReason Reason { get; private set; }
         public bool OverrideOthers => false;
 
-        public RunMovementAction(Vector3 direction, float speed)
+        public RunMovementAction(Vector2 direction, float speed)
         {
-            this.direction = direction.normalized;
+            this.direction = direction;
             this.speed = speed;
             this.useLifeTime = false;
             this.remainingLifeTime = 0;
             this.useDestination = false;
-            this.destination = Vector3.zero;
+            this.destination = float2.zero;
             this.stopDistance = 0;
             this.Reason = ModifierCompleteReason.Undefined;
             this.IsFinished = false;
         }
 
-        public RunMovementAction(Vector3 direction, float speed, float duration)
+        public RunMovementAction(Vector2 direction, float speed, float duration)
         {
-            this.direction = direction.normalized;
+            this.direction = direction;
             this.speed = speed;
             this.useLifeTime = true;
             this.remainingLifeTime = duration;
             this.useDestination = false;
-            this.destination = Vector3.zero;
+            this.destination = float2.zero;
             this.stopDistance = 0;
             this.Reason = ModifierCompleteReason.Undefined;
             this.IsFinished = false;
         }
 
-        public RunMovementAction(Vector3 direction, float speed, Vector3 destination, float stopDistance)
+        public RunMovementAction(Vector2 direction, float speed, Vector2 destination, float stopDistance)
         {
-            this.direction = direction.normalized;
+            this.direction = direction;
             this.speed = speed;
             this.useLifeTime = false;
             this.remainingLifeTime = 0;
@@ -69,16 +71,16 @@ namespace _KITSystem.Movement
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector3 EvaluateVelocity(float deltaTime)
+        public float2 EvaluateVelocity(float deltaTime)
         {
             return direction * (speed * deltaTime);
         }
 
-        public void Start(Vector3 startPos)
+        public void Start(float2 startPos)
         {
         }
 
-        public void Process(Vector3 position, float deltaTime)
+        public void Process(float2 position, float deltaTime)
         {
             if (useLifeTime && !IsFinished)
             {
@@ -89,11 +91,11 @@ namespace _KITSystem.Movement
                     IsFinished = true;
                 }
             }
-            
+
             if (useDestination && !IsFinished)
             {
-                direction = (destination - position).normalized;
-                if (Vector3.Distance(destination, position) <= stopDistance)
+                direction = MathUtils.NormalizeSafe(destination - position);
+                if (math.distance(destination, position) <= stopDistance)
                 {
                     Reason = ModifierCompleteReason.EndLifeCycle;
                     IsFinished = true;

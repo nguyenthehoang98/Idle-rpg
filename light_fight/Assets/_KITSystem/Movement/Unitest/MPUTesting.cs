@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _KITSystem.Movement.Unitest
@@ -6,19 +7,26 @@ namespace _KITSystem.Movement.Unitest
     public class MPUTesting
     {
         private MPU mpu;
-        
+
         [SetUp]
         public void Setup()
         {
             mpu = new MPU(ModifierName.Testing);
         }
-        
+
+        [TearDown]
+        public void TearDown()
+        {
+            mpu?.Dispose();
+            mpu = null;
+        }
+
         [Test]
         public void AddUnit_ShouldCreateValidUnit()
         {
             int id = -1;
 
-            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => id = x);
+            mpu.RequestAddUnit(float2.zero, new float2(999, 999), x => id = x);
             mpu.Tick(0);
 
             Assert.IsTrue(id >= 0);
@@ -30,7 +38,7 @@ namespace _KITSystem.Movement.Unitest
             int unitId = -1;
             int handle = -1;
 
-            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => unitId = x);
+            mpu.RequestAddUnit(float2.zero, new float2(999, 999), x => unitId = x);
             mpu.Tick(0);
 
             mpu.RequestAddAction(unitId, new DummyMovementAction(), h => handle = h);
@@ -45,7 +53,7 @@ namespace _KITSystem.Movement.Unitest
             int unitId = -1;
             int handle = -1;
 
-            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => unitId = x);
+            mpu.RequestAddUnit(float2.zero, new float2(999, 999), x => unitId = x);
             mpu.Tick(0);
 
             mpu.RequestAddAction(unitId, new DummyMovementAction(), h => handle = h);
@@ -63,7 +71,7 @@ namespace _KITSystem.Movement.Unitest
             int unitId = -1;
             int h1 = -1, h2 = -1, h3 = -1;
 
-            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => unitId = x);
+            mpu.RequestAddUnit(float2.zero, new float2(999, 999), x => unitId = x);
             mpu.Tick(0);
 
             mpu.RequestAddAction(unitId, new DummyMovementAction(), h => h1 = h);
@@ -84,7 +92,7 @@ namespace _KITSystem.Movement.Unitest
             int unitId = -1;
             int h1 = -1, h2 = -1;
 
-            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => unitId = x);
+            mpu.RequestAddUnit(float2.zero, new float2(999, 999), x => unitId = x);
             mpu.Tick(0);
 
             mpu.RequestAddAction(unitId, new DummyMovementAction(), h => h1 = h);
@@ -103,9 +111,8 @@ namespace _KITSystem.Movement.Unitest
         {
             int unitId = -1;
 
-            mpu.RequestAddUnit(Vector3.zero, new Vector3(999, 999), x => unitId = x);
+            mpu.RequestAddUnit(float2.zero, new float2(999, 999), x => unitId = x);
 
-            // chưa Tick
             Assert.AreEqual(-1, unitId);
 
             mpu.Tick(0);
@@ -119,9 +126,9 @@ namespace _KITSystem.Movement.Unitest
         public int Priority { get; }
         public ModifierName Name => ModifierName.Testing;
 
-        public Vector3 EvaluatePosition(float deltaTime)
+        public float2 EvaluatePosition(float deltaTime)
         {
-            return Vector3.zero;
+            return float2.zero;
         }
 
         public bool IsFinished => false;
@@ -135,22 +142,18 @@ namespace _KITSystem.Movement.Unitest
             OverrideOthers = overrideOthers;
         }
 
-        public Vector3 EvaluateVelocity(float deltaTime)
+        public float2 EvaluateVelocity(float deltaTime)
         {
-            return Vector3.zero;
+            return float2.zero;
         }
 
-        public void Start(Vector3 pos)
+        public void Start(float2 pos)
         {
         }
 
-        public void Process(Vector3 position, float deltaTime)
+        public void Process(float2 position, float deltaTime)
         {
-            
-        }
 
-        public void Tick(float deltaTime)
-        {
         }
 
         public void Stop()

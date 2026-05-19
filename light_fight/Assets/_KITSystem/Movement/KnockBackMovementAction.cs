@@ -1,4 +1,6 @@
 using System;
+using Unity.Mathematics;
+using _KITSystem.Utils;
 using UnityEngine;
 
 namespace _KITSystem.Movement
@@ -8,7 +10,7 @@ namespace _KITSystem.Movement
         public int Priority => PriorityModifierIndex.KNOCK_BACK;
         public ModifierName Name => ModifierName.KnockBack;
 
-        private Vector3 direction;
+        private float2 direction;
         private float duration;
         private float distance;
         private float elapsedTime;
@@ -17,9 +19,9 @@ namespace _KITSystem.Movement
         private AnimationCurve curve;
         private Action onComplete;
 
-        public KnockBackMovementAction(Vector3 direction, float duration, float distance, AnimationCurve curve, Action onComplete)
+        public KnockBackMovementAction(Vector2 direction, float duration, float distance, AnimationCurve curve, Action onComplete)
         {
-            this.direction = direction.normalized;
+            this.direction = direction;
             this.duration = duration;
             this.distance = distance;
             this.curve = curve;
@@ -29,29 +31,29 @@ namespace _KITSystem.Movement
             this.Reason = ModifierCompleteReason.Undefined;
         }
 
-        public KnockBackMovementAction(Vector3 direction, float duration, float distance, Action onComplete)
+        public KnockBackMovementAction(Vector2 direction, float duration, float distance, Action onComplete)
         {
-            this.direction = direction.normalized;
+            this.direction = direction;
             this.duration = duration;
             this.distance = distance;
             this.onComplete = onComplete;
-            this.curve = AnimationCurve.Linear(0, 0, 1, 1);        
+            this.curve = AnimationCurve.Linear(0, 0, 1, 1);
             this.IsFinished = shouldFinish = false;
             this.elapsedTime = traveled = 0;
             this.Reason = ModifierCompleteReason.Undefined;
         }
 
-        public void Start(Vector3 startPos)
+        public void Start(float2 startPos)
         {
         }
 
-        public void Process(Vector3 position, float deltaTime)
+        public void Process(float2 position, float deltaTime)
         {
             if (shouldFinish && !IsFinished)
             {
                 IsFinished = true;
             }
-            
+
             elapsedTime += deltaTime;
             if (elapsedTime > duration && !shouldFinish)
             {
@@ -70,12 +72,12 @@ namespace _KITSystem.Movement
             IsFinished = true;
         }
 
-        public Vector3 EvaluateVelocity(float deltaTime)
+        public float2 EvaluateVelocity(float deltaTime)
         {
-            return Vector3.zero;
+            return float2.zero;
         }
 
-        public Vector3 EvaluatePosition(float deltaTime)
+        public float2 EvaluatePosition(float deltaTime)
         {
             float f = elapsedTime / duration;
             float p = curve.Evaluate(f);

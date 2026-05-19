@@ -1,8 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using _KITSystem.Schedule;
 using Sirenix.OdinInspector;
+using Unity.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Debug = UnityEngine.Debug;
@@ -27,14 +29,14 @@ namespace _KITSystem.Movement
         private HashSet<ModifierName> flags = new HashSet<ModifierName>();
         // Danh sách chứa vị trí của các unit. unit id = index
         [HideInEditorMode, DisableInPlayMode]
-        [SerializeField] private List<Vector3> positions = new List<Vector3>();
-        private List<Vector3> destinations = new List<Vector3>();
-        // Tương tự poistions list nhưng lưu vận tốc
-        private List<Vector3> desiredVelocities = new List<Vector3>();
+        [SerializeField] private NativeList<float2> positions;
+        private NativeList<float2> destinations;
+        private NativeList<float2> desiredVelocities;
         // Danh sách đánh dấu unit nào không còn hoạt động.
         private List<bool> alives = new List<bool>();
         // Chứa các id (resue), nếu danh sách này trống thì tăng thêm size của positions
         private Stack<int> freeIds = new Stack<int>();
+        private NativeList<float2> finalVelocities;
         /*
          * Map các unit Id -> Modifier Runtime [index]
          * Muốn tìm 1 modifier thì sẽ unitModifiers[unitId][x] x là index => activeModifiers[x]
@@ -77,7 +79,12 @@ namespace _KITSystem.Movement
                 }
 
                 resolver.Initialize();
-                
+
+                positions = new NativeList<float2>(64, Allocator.Persistent);
+                destinations = new NativeList<float2>(64, Allocator.Persistent);
+                desiredVelocities = new NativeList<float2>(64, Allocator.Persistent);
+                finalVelocities = new NativeList<float2>(64, Allocator.Persistent);
+
                 isInitialized = true;
             }
         }
@@ -123,19 +130,19 @@ namespace _KITSystem.Movement
             }
 
             // Tính vận tốc của các unit
-            for (int unitId = 0; unitId < positions.Count; unitId++)
+            for (int unitId = 0; unitId < positions.Length; unitId++)
             {
                 if (!alives[unitId])
                     continue;
                 
                 if (!units.TryGetValue(unitId, out var list)) // modifiers list
                 {
-                    desiredVelocities[unitId] = Vector3.zero;
+                    desiredVelocities[unitId] = float2.zero;
                     continue;
                 }
 
-                Vector3 desiredPosition = Vector3.zero;
-                Vector3 desiredVelocity = Vector3.zero;
+                float2 desiredPosition = float2.zero;
+                float2 desiredVelocity = float2.zero;
                 int maxPriority = int.MinValue;
                 for (int i = 0; i < list.Count; i++)
                 {
@@ -170,12 +177,17 @@ namespace _KITSystem.Movement
             }
 
             // Giải quyết / xử lý va chạm
-            var finalVelocities = resolver.Resolve(
-                positions, destinations, desiredVelocities
+            finalVelocities.Clear();
+            finalVelocities.Length = positions.Length;
+            resolver.Resolve(
+                positions.AsArray(),
+                destinations.AsArray(),
+                desiredVelocities.AsArray(),
+                finalVelocities
             );
             
             // tính lại vị trí
-            for (int unitId = 0; unitId < positions.Count; unitId++)
+            for (int unitId = 0; unitId < positions.Length; unitId++)
             {
                 if (!alives[unitId]) continue;
 
@@ -204,12 +216,12 @@ namespace _KITSystem.Movement
             }
         }
 
-        public void RequestAddUnit(Vector3 position, Vector3 destination, Action<int> callback)
+        public void RequestAddUnit(float2 position, float2 destination, Action<int> callback)
         {
             pendingCommands.Enqueue(() => { callback.Invoke(AddUnit_Internal(position, destination)); });
         }
         
-        public void RequestAddUnit(Vector3 position, Vector3 destination)
+        public void RequestAddUnit(float2 position, float2 destination)
         {
             pendingCommands.Enqueue(() => { AddUnit_Internal(position, destination); });
         }
@@ -249,7 +261,7 @@ namespace _KITSystem.Movement
             pendingCommands.Enqueue(() => { RemoveAction_Internal(uniqueId, false); });
         }
 
-        private int AddUnit_Internal(Vector3 position, Vector3 destination)
+        private int AddUnit_Internal(float2 position, float2 destination)
         {
             if (!isInitialized)
             {
@@ -261,23 +273,22 @@ namespace _KITSystem.Movement
             
             int id;
 
-            // reuse id nếu có
             if (freeIds.Count > 0)
             {
                 id = freeIds.Pop();
 
                 positions[id] = position;
                 destinations[id] = destination;
-                desiredVelocities[id] = Vector3.zero;
+                desiredVelocities[id] = float2.zero;
                 alives[id] = true;
             }
             else
             {
-                id = positions.Count;
+                id = positions.Length;
 
                 positions.Add(position);
                 destinations.Add(destination);
-                desiredVelocities.Add(Vector3.zero);
+                desiredVelocities.Add(float2.zero);
                 alives.Add(true);
             }
 
@@ -327,7 +338,7 @@ namespace _KITSystem.Movement
             
             // đoạn này đặt về như thế cho dễ debug nếu ần thôi
             positions[unitId] = default;
-            desiredVelocities[unitId] = Vector3.zero;
+            desiredVelocities[unitId] = float2.zero;
             
             version++; 
 
@@ -488,13 +499,13 @@ namespace _KITSystem.Movement
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector3 GetUnitPosition(int unitId)
+        public float2 GetUnitPosition(int unitId)
         {
             return positions[unitId];
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector3 GetUnitVelocity(int unitId)
+        public float2 GetUnitVelocity(int unitId)
         {
             return desiredVelocities[unitId];
         }
@@ -553,6 +564,18 @@ namespace _KITSystem.Movement
 #endif
             public IMovementAction action;
             public int actionId; // Dùng lưu để xóa
+        }
+
+        public void Dispose()
+        {
+            if (isInitialized)
+            {
+                if (positions.IsCreated) positions.Dispose();
+                if (destinations.IsCreated) destinations.Dispose();
+                if (desiredVelocities.IsCreated) desiredVelocities.Dispose();
+                if (finalVelocities.IsCreated) finalVelocities.Dispose();
+                isInitialized = false;
+            }
         }
     }
 }

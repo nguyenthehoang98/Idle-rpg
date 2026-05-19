@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using _KITSystem.Movement;
 using _KITSystem.Schedule;
+using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class MPUDemo : MonoBehaviour
 {
@@ -73,11 +75,11 @@ public class MPUDemo : MonoBehaviour
             if (isRanged) go.GetComponent<SpriteRenderer>().color = Color.green;
 
             int index = i;
-            mpu.RequestAddUnit(pos, Vector3.zero, unitId =>
+            mpu.RequestAddUnit(new float2(pos.x, pos.z), float2.zero, unitId =>
             {
                 unitIds.Add(unitId);
                 mpu.RequestAddAction(unitId,
-                    new RunMovementAction(directions[index], 3, Vector3.zero, isRanged ? 8 : 2)
+                    new RunMovementAction(new Vector2(directions[index].x, directions[index].z), 3, Vector2.zero, isRanged ? 8 : 2)
                 );
             });
         }
@@ -88,7 +90,7 @@ public class MPUDemo : MonoBehaviour
         int count = unitIds.Count;
         for (var id = 0; id < count; id++)
         {
-            units[id].transform.position = mpu.GetUnitPosition(unitIds[id]);
+            units[id].transform.position = new Vector3(mpu.GetUnitPosition(unitIds[id]).x, 0, mpu.GetUnitPosition(unitIds[id]).y);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -107,12 +109,12 @@ public class MPUDemo : MonoBehaviour
             Vector3 position = units[unitId].transform.position;
             units[unitId].GetComponent<SpriteRenderer>().color = Color.magenta;
             mpu.RequestAddAction(unitId,
-                new KnockBackMovementAction(position, 0.4f, 3, () =>
+                new KnockBackMovementAction(new Vector2(position.x, position.z), 0.4f, 3, () =>
                 {
                     if (!mpu.HasModifierType(unitId, ModifierName.Default))
                     {
                         mpu.RequestAddAction(unitId,
-                            new RunMovementAction(-position, 3, Vector3.zero, isRanged ? 8 : 2)
+                            new RunMovementAction(new Vector2(-position.x, -position.z), 3, Vector2.zero, isRanged ? 8 : 2)
                         );
                     }
                 })

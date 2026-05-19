@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿using Unity.Mathematics;
 
 namespace _KITSystem.Movement
 {
@@ -6,22 +6,17 @@ namespace _KITSystem.Movement
     {
         int Priority { get; }
         ModifierName Name { get; }
-        
-        // ~start/update/stop
-        void Start(Vector3 startPos);
-        void Process(Vector3 position, float deltaTime);
-        void Stop(); //~end lifecycle
-        void Interrupt(); //~force end
-        Vector3 EvaluateVelocity(float deltaTime);
-        Vector3 EvaluatePosition(float deltaTime);
-        
-        // ~end cycle?
+
+        void Start(float2 startPos);
+        void Process(float2 position, float deltaTime);
+        void Stop();
+        void Interrupt();
+        float2 EvaluateVelocity(float deltaTime);
+        float2 EvaluatePosition(float deltaTime);
+
         bool IsFinished { get; }
         ModifierCompleteReason Reason { get; }
-        /// <summary>
-        /// True: sẽ xóa các modifier có priority nhỏ hơn nó
-        /// </summary>
-        bool OverrideOthers { get; } 
+        bool OverrideOthers { get; }
     }
 
     public enum ModifierCompleteReason

@@ -1,9 +1,8 @@
 using System;
-using UnityEngine;
+using Unity.Mathematics;
 
 namespace _KITSystem.Movement
 {
-    // Có thể sẽ thêm modifier Unlock Modifier.
     public struct LockMovementAction : IMovementAction
     {
         public int Priority => PriorityModifierIndex.LOCK;
@@ -21,18 +20,18 @@ namespace _KITSystem.Movement
             this.Reason = ModifierCompleteReason.Undefined;
         }
 
-        public void Start(Vector3 startPos)
+        public void Start(float2 startPos)
         {
 
         }
 
-        public void Process(Vector3 position, float deltaTime)
+        public void Process(float2 position, float deltaTime)
         {
             if (shouldFinish && !IsFinished)
             {
                 IsFinished = true;
             }
-            
+
             elapsedTime += deltaTime;
             if (elapsedTime > duration && !shouldFinish)
             {
@@ -51,14 +50,14 @@ namespace _KITSystem.Movement
 
         }
 
-        public Vector3 EvaluateVelocity(float deltaTime)
+        public float2 EvaluateVelocity(float deltaTime)
         {
-            return Vector3.zero;
+            return float2.zero;
         }
 
-        public Vector3 EvaluatePosition(float deltaTime)
+        public float2 EvaluatePosition(float deltaTime)
         {
-            return Vector3.zero;
+            return float2.zero;
         }
 
         public bool IsFinished { get; private set; }
