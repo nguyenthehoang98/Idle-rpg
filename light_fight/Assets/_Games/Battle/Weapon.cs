@@ -173,8 +173,6 @@ namespace _Games.Battle
             Debug.DrawLine(position, v2, Color.yellow, 0.5f);
             Debug.DrawLine(v1, v2, Color.yellow, 0.5f);
 #endif
-            
-            Debug.LogError($"{currentAngle} => {endAngle} => {targetAngle}");
 
             float t = Mathf.Clamp01(Mathf.Abs(delta) / 180f);
             Vector3 offset = Vector3.Lerp(offsetMin, offsetMax, t);
@@ -250,20 +248,20 @@ namespace _Games.Battle
             Vector3 beginLocalPosition = zPivot.localPosition;
             bool needUpdatePosition = beginLocalPosition != localPosition;
             
-            Vector3 currentAngle = zPivot.eulerAngles;
-            Vector3 endAngle = eulerAngles;
-            float startSigned = Mathf.DeltaAngle(0f, currentAngle.z);
+            float currentAngle = zPivot.eulerAngles.z;
+            float delta = Mathf.DeltaAngle(currentAngle, eulerAngles.z);
+            float endAngle = currentAngle + delta;
+            float startSigned = Mathf.DeltaAngle(0f, currentAngle);
             bool lastFlip = Mathf.Abs(startSigned) > 90f;
-
+            
             float duration = backPhaseDuration / feedbackScaleTime;
             if (tweener != null && tweener.IsPlaying()) tweener.Kill();
             tweener = DOVirtual.Float(0, 1, duration, value =>
             {
-                float eased = EaseInOutSine(value);
-                Vector3 a = Vector3.Lerp(currentAngle, endAngle, eased);
-                zPivot.eulerAngles = a;
+                float a = Mathf.LerpAngle(currentAngle, endAngle, value);
+                zPivot.eulerAngles = new Vector3(0, 0, a);
 
-                float signed = Mathf.DeltaAngle(0f, a.z);
+                float signed = Mathf.DeltaAngle(0f, a);
                 bool b = Mathf.Abs(signed) > 90f;
                 if (b != lastFlip)
                 {
@@ -273,9 +271,9 @@ namespace _Games.Battle
 
                 if (needUpdatePosition)
                 {
-                    zPivot.localPosition = Vector3.Lerp(beginLocalPosition, localPosition, eased);
+                    zPivot.localPosition = Vector3.Lerp(beginLocalPosition, localPosition, value);
                 }
-            }).SetEase(Ease.Linear);
+            }).SetEase(Ease.InOutSine);
             
             return duration;
         }

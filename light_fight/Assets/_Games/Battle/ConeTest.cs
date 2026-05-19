@@ -47,7 +47,7 @@ public class ConeTest : MonoBehaviour
             }
             else
             {
-                battleLevel.GetCone(i).Inactive();
+                if(battleLevel.GetCone(i).IsPlaying) battleLevel.GetCone(i).Inactive();
             }
         }
     }
