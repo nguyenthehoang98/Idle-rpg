@@ -717,6 +717,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e9da44c2c5948c18b1310c4e5798dea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  offsetMin: {x: 0, y: 0.2, z: 0}
+  offsetMax: {x: 0, y: 0.5, z: 0}
   backPhaseDuration: 0.2
   rotatePhaseDuration: 0.2
   delayFocus: 0.1

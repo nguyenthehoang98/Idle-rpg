@@ -1,4 +1,5 @@
-﻿using _KITSystem.Utils;
+﻿using System;
+using _KITSystem.Utils;
 using DG.Tweening;
 using MoreMountains.Feedbacks;
 using Sirenix.OdinInspector;
@@ -9,16 +10,23 @@ namespace _Games.Battle
 {
     public class Weapon : MonoBehaviour
     {
-        [TitleGroup("Feedback")] [SerializeField]
+        [TitleGroup("Settings")] 
+        [SerializeField, Tooltip("Offset tối thiểu của pivot ở góc 90")]
+        private Vector3 offsetMin = new Vector3(0, 0.2f, 0);
+        [SerializeField, Tooltip("Offset tối đa của pivot ở góc 180")]
+        private Vector3 offsetMax = new Vector3(0, 0.5f, 0);
+        [SerializeField, Tooltip("Thời gian pivot xoay tới goal")]
+        private float rotatePhaseDuration = 0.1f;
+        [SerializeField, Tooltip("Thời gian pivot back lại vị trí cũ")]
         private float backPhaseDuration = 0.1f;
-
-        [SerializeField] private float rotatePhaseDuration = 0.1f;
-        [SerializeField] private float delayFocus = 0.1f;
+        [SerializeField, Tooltip("Thời gian chờ để bắt đầu xoay")]
+        private float delayFocus = 0.1f;
+        [TitleGroup("Feedback")] 
         [SerializeField] private MMF_Player activeFeedback;
         [SerializeField] private MMF_Player inactiveFeedback;
 
-        [TitleGroup("Element")] [SerializeField]
-        private Transform pivot;
+        [TitleGroup("Element")]
+        [SerializeField] private Transform pivot;
 
         [SerializeField] private new Transform renderer; // animator/animation
 
@@ -51,7 +59,7 @@ namespace _Games.Battle
 
         public void Focus(Vector3 goal)
         {
-            this.WaitInvoke(delayFocus / feedbackScaleTime, () =>
+            Action action = () =>
             {
                 Vector3 position = pivot.position;
                 Vector3 direction = goal - position;
@@ -64,12 +72,13 @@ namespace _Games.Battle
                 float endAngle = currentAngle + delta;
 
                 bool needOffset = Mathf.Abs(delta) > 90f;
-                Vector3 offsetDir = needOffset ? -pivot.right * 0.15f : Vector3.zero;
-
+                float t = Mathf.Clamp01(Mathf.Abs(delta) / 180f);
+                Vector3 offset = Vector3.Lerp(offsetMin, offsetMax, t);
+                Vector3 offsetDir = needOffset ? offset : Vector3.zero;
                 Vector3 originalLocalPos = pivot.localPosition;
                 Vector3 targetLocalPos = originalLocalPos + offsetDir;
 
-                if (tweener != null && tweener.IsPlaying()) tweener.Kill();
+                if (tweener != null && tweener.IsActive()) tweener.Complete();
                 tweener = DOVirtual.Float(0, 1, rotatePhaseDuration / feedbackScaleTime, value =>
                 {
                     float eased = EaseInOutSine(value);
@@ -81,7 +90,12 @@ namespace _Games.Battle
                         pivot.localPosition = Vector3.Lerp(originalLocalPos, targetLocalPos, eased);
                     }
                 }).SetEase(Ease.Linear);
-            });
+            };
+
+            if (delayFocus > 0)
+                this.WaitInvoke(delayFocus / feedbackScaleTime, action);
+            else
+                action();
         }
 
         public float StopFocus()
@@ -94,7 +108,7 @@ namespace _Games.Battle
             float delta = Mathf.DeltaAngle(beginAngle, targetAngle);
             float endAngle = beginAngle + delta;
 
-            if (tweener != null && tweener.IsPlaying()) tweener.Kill();
+            if (tweener != null && tweener.IsActive()) tweener.Kill();
             tweener = DOVirtual.Float(0, 1, backPhaseDuration / feedbackScaleTime, value =>
             {
                 float eased = EaseInOutSine(value);

@@ -1059,7 +1059,7 @@ MonoBehaviour:
         AllowAdditivePlays: 0
         RelativePosition: 0
         DeterminePositionsOnPlay: 0
-        InitialPosition: {x: 0, y: 0.2, z: 0}
+        InitialPosition: {x: 0, y: 0.75, z: 0}
         DestinationPosition: {x: 0, y: 0, z: 0}
         InitialPositionTransform: {fileID: 0}
         DestinationPositionTransform: {fileID: 0}
@@ -1740,7 +1740,7 @@ MonoBehaviour:
         RelativePosition: 0
         DeterminePositionsOnPlay: 0
         InitialPosition: {x: 0, y: 0, z: 0}
-        DestinationPosition: {x: 0, y: 0.2, z: 0}
+        DestinationPosition: {x: 0, y: 0.75, z: 0}
         InitialPositionTransform: {fileID: 0}
         DestinationPositionTransform: {fileID: 0}
         AnimatePositionCurveX:
@@ -2846,6 +2846,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68ac2aba9f594a81ba174b07bd5fe409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultAngles: b4000000b400000000000000000000000000000000000000
   zoomOutFeedback: {fileID: 4404944048773776162}
   zoomInFeedback: {fileID: 7296224793412912267}
   initFeedback: {fileID: 2147579923330255804}

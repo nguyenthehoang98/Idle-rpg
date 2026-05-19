@@ -13,9 +13,7 @@ namespace _Games.Battle
         
         public async UniTask Initialize(float timeScale)
         {
-            cones.Add(prefab);
-            
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 6; i++)
             {
                 cones.Add(Instantiate(prefab, prefab.transform.parent));
             }
