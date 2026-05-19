@@ -50,18 +50,12 @@ namespace _Games.Battle
         [SerializeField] private float scanRadius = 5;
 
         private float feedbackScaleTime = 1;
-        private Vector3 localRotation;
+        private Vector3 localEulerAngles;
         private Vector3 localPosition;
         private Tweener tweener;
         private Coroutine coroutine;
         private Coroutine animationCoroutine;
         private AnimancerState animancerState;
-
-        private void Awake()
-        {
-            localRotation = pivot.localEulerAngles;
-            localPosition = pivot.localPosition;
-        }
 
         public void Initialize(Vector3 pivotLocalRotation, float timeScale)
         {
@@ -69,7 +63,12 @@ namespace _Games.Battle
             pivot.transform.localRotation = Quaternion.Euler(pivotLocalRotation);
         }
 
-        public void Play() => playFeedback.PlayFeedbacks();
+        public void Play()
+        {
+            localEulerAngles = pivot.localEulerAngles;
+            localPosition = pivot.localPosition;
+            playFeedback.PlayFeedbacks();
+        }
 
         public float Active()
         {
@@ -141,7 +140,7 @@ namespace _Games.Battle
             SystemBus.Publish(new DestroyAgentSignal(agentData.agent));  
         }
 
-        private void RotateTo(AgentData agentData, bool needOffset, Action onComplete)
+        private void RotateTo(AgentData agentData, bool needUpdatePosition, Action onComplete)
         {
             float2 f2 = agentData.position;
             Vector3 position = pivot.position;
@@ -159,7 +158,7 @@ namespace _Games.Battle
 
             float t = Mathf.Clamp01(Mathf.Abs(delta) / 180f);
             Vector3 offset = Vector3.Lerp(offsetMin, offsetMax, t);
-            Vector3 offsetDir = needOffset ? offset : Vector3.zero;
+            Vector3 offsetDir = needUpdatePosition ? offset : Vector3.zero;
             Vector3 originalLocalPos = pivot.localPosition;
             Vector3 targetLocalPos = originalLocalPos + offsetDir;
             
@@ -178,7 +177,7 @@ namespace _Games.Battle
                         flip.localRotation = Quaternion.Euler(b ? 180: 0, 0, 0);
                     }
 
-                    if (needOffset)
+                    if (needUpdatePosition)
                     {
                         pivot.localPosition = Vector3.Lerp(originalLocalPos, targetLocalPos, eased);
                     }
@@ -221,30 +220,28 @@ namespace _Games.Battle
                 animancerState = null;
             }
             
-            Vector3 beginLocalPos = pivot.localPosition;
-            bool flag = beginLocalPos != localPosition;
-
-            float begin = pivot.localEulerAngles.z;
-            float target = localRotation.z;
-            float final = begin + Mathf.DeltaAngle(begin, target);
-
-            float d = backPhaseDuration / feedbackScaleTime;
+            Vector3 beginLocalPosition = pivot.localPosition;
+            bool needUpdatePosition = beginLocalPosition != localPosition;
             
+            Vector3 localCurrentAngle = pivot.localEulerAngles;
+            Vector3 localEndAngle = localEulerAngles;
+
+            float duration = backPhaseDuration / feedbackScaleTime;
             if (tweener != null && tweener.IsPlaying()) tweener.Kill();
-            tweener = DOVirtual.Float(0, 1, d, value =>
-            {
-                Vector3 rot = pivot.localEulerAngles;
-                rot.z = Mathf.Lerp(begin, final, value);
-                pivot.localEulerAngles = rot;
-                
-                if (flag)
+            tweener = DOVirtual.Float(0, 1, duration, value =>
                 {
                     float eased = EaseInOutSine(value);
-                    pivot.localPosition = Vector3.Lerp(beginLocalPos, localPosition, eased);
-                }
-            }).SetEase(Ease.Linear);
+                    Vector3 a = Vector3.Lerp(localCurrentAngle, localEndAngle, eased);
+                    pivot.localEulerAngles = a;
+
+                    if (needUpdatePosition)
+                    {
+                        pivot.localPosition = Vector3.Lerp(beginLocalPosition, localPosition, eased);
+                    }
+                }).SetEase(Ease.Linear)
+                .OnComplete(() => flip.localRotation = Quaternion.Euler(0, 0, 0));
             
-            return d;
+            return duration;
         }
         
         private static float EaseInOutSine(float t)
