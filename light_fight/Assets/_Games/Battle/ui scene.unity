@@ -493,7 +493,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0059c342a1240bd97f21605a4d3f1f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeScale: 5
+  timeScale: 1
   battleLevel: {fileID: 1481752988}
   correctArena: {fileID: 257438813}
 --- !u!4 &1611421289

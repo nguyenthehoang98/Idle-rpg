@@ -24,13 +24,13 @@ namespace _Games.Battle
 
         private float feedbackScaleTime = 1;
         private Tweener tweener;
-        private Vector3 localPosition;
         private Vector3 localRotation;
+        private Vector3 localPosition;
 
         private void Awake()
         {
-            localPosition = pivot.localPosition;
             localRotation = pivot.localEulerAngles;
+            localPosition = pivot.localPosition;
         }
 
         public void Initialize(float timeScale) => feedbackScaleTime = timeScale;
@@ -51,34 +51,36 @@ namespace _Games.Battle
 
         public void Focus(Vector3 goal)
         {
-            this.WaitInvoke(delayFocus, () =>
+            this.WaitInvoke(delayFocus / feedbackScaleTime, () =>
             {
                 Vector3 position = pivot.position;
                 Vector3 direction = goal - position;
-                Vector3 eulerAngles = pivot.eulerAngles;
+                direction.z = 0;
+                if (direction.sqrMagnitude < 0.0001f) return;
 
-                float currentAngle = eulerAngles.z;
-                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                float delta = Mathf.DeltaAngle(currentAngle, angle);
+                float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                float currentAngle = pivot.eulerAngles.z;
+                float delta = Mathf.DeltaAngle(currentAngle, targetAngle);
                 float endAngle = currentAngle + delta;
 
                 bool needOffset = Mathf.Abs(delta) > 90f;
+                Vector3 offsetDir = needOffset ? -pivot.right * 0.15f : Vector3.zero;
 
                 Vector3 originalLocalPos = pivot.localPosition;
-                Vector3 targetLocalPos = needOffset ? originalLocalPos + Vector3.up * 0.1f : originalLocalPos;
+                Vector3 targetLocalPos = originalLocalPos + offsetDir;
 
                 if (tweener != null && tweener.IsPlaying()) tweener.Kill();
-                tweener = DOVirtual.Float(0, 1, rotatePhaseDuration, value =>
+                tweener = DOVirtual.Float(0, 1, rotatePhaseDuration / feedbackScaleTime, value =>
                 {
-                    eulerAngles.z = value;
-                    pivot.eulerAngles = eulerAngles;
+                    float eased = EaseInOutSine(value);
+                    float a = math.lerp(currentAngle, endAngle, eased);
+                    pivot.eulerAngles = new Vector3(0, 0, a);
 
                     if (needOffset)
                     {
-                        Vector3 v = Vector3.Lerp(originalLocalPos, targetLocalPos, value);
-                        pivot.localPosition = v;
+                        pivot.localPosition = Vector3.Lerp(originalLocalPos, targetLocalPos, eased);
                     }
-                }).SetEase(Ease.InSine);
+                }).SetEase(Ease.Linear);
             });
         }
 
@@ -86,24 +88,31 @@ namespace _Games.Battle
         {
             Vector3 beginLocalPos = pivot.localPosition;
             bool flag = beginLocalPos != localPosition;
-            
-            float angle = localRotation.z;
+
+            float targetAngle = localRotation.z;
             float beginAngle = pivot.localEulerAngles.z;
-            
+            float delta = Mathf.DeltaAngle(beginAngle, targetAngle);
+            float endAngle = beginAngle + delta;
+
             if (tweener != null && tweener.IsPlaying()) tweener.Kill();
-            tweener = DOVirtual.Float(0, 1, backPhaseDuration, value =>
+            tweener = DOVirtual.Float(0, 1, backPhaseDuration / feedbackScaleTime, value =>
             {
-                float f = math.lerp(beginAngle, angle, value);
-                pivot.localEulerAngles = new Vector3(0, 0, f);
-                
-                if(flag)
+                float eased = EaseInOutSine(value);
+                float a = math.lerp(beginAngle, endAngle, eased);
+                pivot.localEulerAngles = new Vector3(0, 0, a);
+
+                if (flag)
                 {
-                    Vector3 v = Vector3.Lerp(beginLocalPos, pivot.position, f);
-                    pivot.localPosition = v;
+                    pivot.localPosition = Vector3.Lerp(beginLocalPos, localPosition, eased);
                 }
-            });
-            
-            return backPhaseDuration;
+            }).SetEase(Ease.Linear);
+
+            return backPhaseDuration / feedbackScaleTime;
+        }
+
+        private static float EaseInOutSine(float t)
+        {
+            return -(math.cos(math.PI * t) - 1) * 0.5f;
         }
     }
 }
