@@ -46,19 +46,23 @@ namespace _Games.Battle
         [SerializeField] private RectTransform slotGroupRect;
         [SerializeField] private HorizontalLayoutGroup itemGroup;
         [SerializeField] private UIBattleDiceSlot itemPrefab;
-        [SerializeField] private int totalItems = 2;
-
+        
         private const int MAX_VALUE = 50;
         private float elapsedTime;
         private int value;
+        private int totalDice;
+        private bool unlockAll;
         private float leftValue;
         private float rightValue;
         private bool isInitialized;
         private List<UIBattleDiceSlot> dices = new List<UIBattleDiceSlot>();
         private readonly Queue<Action> queue = new Queue<Action>();
 
-        private void Awake()
+        public void PrefabBuilder(int dice, bool unlockAll)
         {
+            this.unlockAll = unlockAll;
+            totalDice = dice;
+            
             foreach (var go in activeGameObjects)
             {
                 go.SetActive(false);
@@ -86,7 +90,8 @@ namespace _Games.Battle
         {
             for (int i = 0; i < dices.Count; i++)
             {
-                dices[i].Init(i, i >= dices.Count - 1, (a, b) =>
+                bool locked = unlockAll ? false : i >= dices.Count - 1;
+                dices[i].Init(i, locked, (a, b) =>
                 {
                     if(onTrigger != null) onTrigger.Invoke(new Vector2Int(a, b));
                 });
@@ -301,7 +306,7 @@ namespace _Games.Battle
         private IEnumerator BuildLayout()
         {
             dices.Add(itemPrefab);
-            for (int i = 1; i < totalItems; i++)
+            for (int i = 1; i < totalDice; i++)
             {
                 var instance = Instantiate(itemPrefab, itemGroup.transform);
                 instance.transform.SetAsLastSibling();
@@ -312,7 +317,7 @@ namespace _Games.Battle
 
             float sizeX = itemPrefab.RectTransform.sizeDelta.x;
             float space = itemGroup.spacing;
-            float width = space * (totalItems + 1) + sizeX * totalItems;
+            float width = space * (totalDice + 1) + sizeX * totalDice;
             slotGroupRect.sizeDelta = new Vector2(width, slotGroupRect.sizeDelta.y);
         }
     }

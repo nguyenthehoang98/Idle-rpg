@@ -1,17 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MoreMountains.Feedbacks;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace _Games.Battle
 {
     public class Cone : MonoBehaviour
     {
         [TitleGroup("Settings")] 
+        [SerializeField] private Color defaultColor;
         [SerializeField] private int[] defaultAngles = new int[] {180, 180, 0, 0, 0, 0};
+        [SerializeField] private Color[] selectedColors = new Color[4];
         
         [TitleGroup("Feedback")] 
         [SerializeField] private MMF_Player zoomOutFeedback;
@@ -22,10 +26,6 @@ namespace _Games.Battle
         [TitleGroup("Elements")]
         [SerializeField] private SpriteRenderer background;
         [SerializeField] private Weapon weapon;
-        [SerializeField] private Color defaultColor;
-        [SerializeField] private Color selectedColor;
-        [SerializeField] private Color selectedX2Color;
-        [SerializeField] private Color selectedX3Color;
 
         private float feedbackScaleTime = 1;
         private bool isInitialized = false;
@@ -58,10 +58,17 @@ namespace _Games.Battle
 
         public void Active()
         {
-            Color color = selectedColor;
+            if (selectedColors.Length == 0)
+            {
+                Debug.LogError("You must select at least one color");
+                return;
+            }
+            
             zoomOutFeedback.PlayerCompleteFeedbacks();
             zoomInFeedback.TimescaleMultiplier = feedbackScaleTime;
             zoomInFeedback.PlayFeedbacks();
+          
+            Color color = selectedColors[0];
             float duration = zoomInFeedback.TotalDuration / feedbackScaleTime;
             if (tween != null && tween.IsPlaying()) tween.Complete();
             tween = background.DOColor(color, duration)
@@ -76,32 +83,44 @@ namespace _Games.Battle
 
         public void SetMultiplierColor()
         {
+            if (selectedColors.Length == 0)
+            {
+                Debug.LogError("You must select at least one color");
+                return;
+            }
+            
             int stack = dicesId.Count;
-            Color color = selectedColor;
-            if (stack == 2) color = selectedX2Color;
-            else if (stack == 3) color = selectedX3Color;
+            Color color = defaultColor;
+            if (stack <= selectedColors.Length) 
+                color = selectedColors[stack - 1];
             float duration = zoomInFeedback.TotalDuration / feedbackScaleTime;
+            
             if (tween != null && tween.IsPlaying()) tween.Kill();
             tween = background.DOColor(color, duration * 0.5f)
                 .SetEase(Ease.OutCubic);
         }
 
         public void Inactive()
-        { 
-            Color color = defaultColor;
-            float f = weapon.StopFocus();
-            this.WaitInvoke(f, () =>
+        {
+            Action action = () =>
             {
                 weapon.Inactive();
 
                 zoomInFeedback.PlayerCompleteFeedbacks();
                 zoomOutFeedback.TimescaleMultiplier = feedbackScaleTime;
                 zoomOutFeedback.PlayFeedbacks();
+                
                 float duration = zoomOutFeedback.TotalDuration / feedbackScaleTime;
                 if (tween != null && tween.IsPlaying()) tween.Complete();
-                tween = background.DOColor(color, duration)
+                tween = background.DOColor(defaultColor, duration)
                     .SetEase(Ease.InCubic);
-            });
+            };
+            
+            float f = weapon.StopFocus();
+
+            if (f > 0)
+                this.WaitInvoke(f, action);
+            else action();
         }
         
         public void InsertId(int dice) => dicesId.Add(dice);

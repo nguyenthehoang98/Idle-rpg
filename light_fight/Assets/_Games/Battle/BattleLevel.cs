@@ -9,10 +9,12 @@ namespace _Games.Battle
         [SerializeField] private Cone prefab;
 
         private readonly List<Cone> cones = new List<Cone>();
-        private int[] dices = new int[2];
-        
-        public async UniTask Initialize(float timeScale)
+        private int[] dices;
+
+        public async UniTask Initialize(int totalDice, float timeScale)
         {
+            dices = new int[totalDice];
+
             for (int i = 0; i < 6; i++)
             {
                 cones.Add(Instantiate(prefab, prefab.transform.parent));
@@ -48,7 +50,7 @@ namespace _Games.Battle
             {
                 stack = cones[prev].Stack;
                 cones[prev].RemoveId(dice);
-                if (cones[prev].Stack == 0 && stack > 0) 
+                if (cones[prev].Stack == 0 && stack > 0)
                     cones[prev].Inactive();
                 else if (cones[prev].Stack != 0)
                     cones[prev].SetMultiplierColor();

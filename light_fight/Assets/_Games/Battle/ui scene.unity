@@ -477,6 +477,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeScale: 1
+  unlockAll: 1
+  totalDice: 4
   battleLevel: {fileID: 1481752988}
   correctArena: {fileID: 257438813}
 --- !u!4 &1611421289
@@ -758,7 +760,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2039679716525747133, guid: 36f1ad29f02f59548ac38380f24d745a, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2057743038223052654, guid: 36f1ad29f02f59548ac38380f24d745a, type: 3}
       propertyPath: cooldown
@@ -798,15 +800,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4382828318294068164, guid: 36f1ad29f02f59548ac38380f24d745a, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4382828318294068164, guid: 36f1ad29f02f59548ac38380f24d745a, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4382828318294068164, guid: 36f1ad29f02f59548ac38380f24d745a, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5120242779752729065, guid: 36f1ad29f02f59548ac38380f24d745a, type: 3}
       propertyPath: m_SizeDelta.x
