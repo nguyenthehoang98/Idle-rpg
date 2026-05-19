@@ -1,13 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using _KITSystem.EventBus;
 using _KITSystem.Utils;
 using Animancer;
 using DG.Tweening;
 using MoreMountains.Feedbacks;
 using Sirenix.OdinInspector;
+using Unity.Android.Gradle.Manifest;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Action = System.Action;
 using Random = UnityEngine.Random;
 
 namespace _Games.Battle
@@ -80,10 +83,11 @@ namespace _Games.Battle
 
         public void Focus()
         {
-            void Action(Vector3 goal)
+            void Action(AgentData agentData)
             {
+                float2 p = agentData.position;
                 Vector3 position = pivot.position;
-                Vector3 direction = goal - position;
+                Vector3 direction = new Vector3(p.x, p.y) - position;
                 direction.z = 0;
                 if (direction.sqrMagnitude < 0.0001f) return;
                 
@@ -115,42 +119,49 @@ namespace _Games.Battle
                     .OnComplete(() =>
                     {
                         if (animationCoroutine != null) StopCoroutine(animationCoroutine);
-                        animationCoroutine = StartCoroutine(PlayAnimation());
+                        animationCoroutine = StartCoroutine(PlayAnimation(() =>
+                        {
+                            ScanAgent(5, data =>
+                            {
+                                Vector3 newAgentPos = new Vector3(data.position.x, data.position.y);
+                                Debug.DrawLine(position, newAgentPos, Color.magenta, 0.05f);
+                                SystemBus.Publish(new DestroyAgentSignal(data.agent));                                
+                            });
+                        }));
                     });
             }
 
-            void WaitAction()
-            {
-                Vector3 p = pivot.position;
-                float2 position = new float2(p.x, p.y);
-                float radius = 5f;
-                SystemBus.Publish(new QueryAgentSignal(position, radius, tuple =>
-                {
-                    int count = tuple.count;
-                    float2[] positions = tuple.positions;
-                    float2 goal = position;
-                    float min = float.MaxValue;
-                    for (int i = 0; i < count; i++)
-                    {
-                        float d = math.distancesq(position, positions[i]);
-                        if (d < min)
-                        {
-                            goal = positions[i];
-                            min = d;
-                        }
-                    }
-                    
-                    Action(new Vector3(goal.x, goal.y));
-                }));
-            }
-            
             if (delayFocus > 0)
             {
                 if (coroutine != null) StopCoroutine(coroutine);
-                coroutine = this.WaitInvoke(delayFocus / feedbackScaleTime, WaitAction);
+                coroutine = this.WaitInvoke(delayFocus / feedbackScaleTime, () => ScanAgent(5, Action));
             }
             else
-                WaitAction();
+                ScanAgent(5, Action);
+        }
+
+        private void ScanAgent(float radius, Action<AgentData> callback)
+        {
+            Vector3 p = pivot.position;
+            float2 position = new float2(p.x, p.y);
+            SystemBus.Publish(new QueryAgentSignal(position, radius, tuple =>
+            {
+                int count = tuple.count;
+                AgentData[] agents = tuple.agentsData;
+                AgentData agent = default(AgentData);
+                float min = float.MaxValue;
+                for (int i = 0; i < count; i++)
+                {
+                    float2 pos = agents[i].position;
+                    float d = math.distancesq(pos, pos);
+                    if (d < min)
+                    {
+                        agent = agents[i];
+                        min = d;
+                    }
+                }
+                callback?.Invoke(agent);
+            }));
         }
 
         public float StopFocus()
@@ -193,7 +204,7 @@ namespace _Games.Battle
             return -(math.cos(math.PI * t) - 1) * 0.5f;
         }
 
-        private IEnumerator PlayAnimation()
+        private IEnumerator PlayAnimation(Action onComplete)
         {
             float duration = attackClip.length;
             while (true)
@@ -202,6 +213,7 @@ namespace _Games.Battle
                 animancerState.Time = 0;
                 animancerState.Speed = feedbackScaleTime;
                 yield return new WaitForSeconds(duration / feedbackScaleTime);
+                onComplete?.Invoke();
                 yield return new WaitForSeconds(Random.Range(0.2f, 0.5f));
             }
         }

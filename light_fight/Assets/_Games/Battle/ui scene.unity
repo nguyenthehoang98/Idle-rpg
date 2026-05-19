@@ -547,7 +547,7 @@ MonoBehaviour:
       rid: 7993921322042785839
   - group: 0
     tickable:
-      rid: 7993921639068729740
+      rid: 7993921658343391284
   references:
     version: 2
     RefIds:
@@ -570,8 +570,8 @@ MonoBehaviour:
         avoidStrength: 2
         maxAvoidForce: 3
         stopDecelerationNormalize: 0.9
-    - rid: 7993921639068729740
-      type: {class: SpawnerTickable, ns: , asm: Games.Battle}
+    - rid: 7993921658343391284
+      type: {class: SpawnerTickable, ns: _Games.Battle, asm: Games.Battle}
       data:
         locked: 0
         shouldDestroy: 0

@@ -49,6 +49,16 @@ namespace _Games.Battle
         private void OnEnable()
         {
             SystemBus.Subscribe<QueryAgentSignal>(OnQueryAgent);
+            SystemBus.Subscribe<DestroyAgentSignal>(OnDestroyAgent);
+        }
+
+        private void OnDestroyAgent(DestroyAgentSignal signal)
+        {
+            if (spawner == null) tickSystemOwner.TryGetTickable(out spawner);
+            if (spawner != null)
+            {
+               spawner.DestroyAgent(signal.Agent);
+            }
         }
 
         private void OnQueryAgent(QueryAgentSignal signal)
@@ -56,7 +66,7 @@ namespace _Games.Battle
             if (spawner == null) tickSystemOwner.TryGetTickable(out spawner);
             if (spawner != null)
             {
-                int count = spawner.Query(signal.Position, signal.Radius, out var results);
+                int count = spawner.QueryAgents(signal.Position, signal.Radius, out var results);
                 signal.OnQueryAgent?.Invoke((count, results));
             }
         }
@@ -64,6 +74,7 @@ namespace _Games.Battle
         private void OnDisable()
         {
             SystemBus.Unsubscribe<QueryAgentSignal>(OnQueryAgent);
+            SystemBus.Unsubscribe<DestroyAgentSignal>(OnDestroyAgent);
         }
 
         private async void Start()

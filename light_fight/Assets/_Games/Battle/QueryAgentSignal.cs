@@ -8,9 +8,9 @@ namespace _Games.Battle
     {
         public readonly float Radius;
         public readonly float2 Position;
-        public readonly Action<(int count, float2[] positions)> OnQueryAgent;
+        public readonly Action<(int count, AgentData[] agentsData)> OnQueryAgent;
 
-        public QueryAgentSignal(float2 position, float radius, Action<(int count, float2[] positions)> onQueryAgent)
+        public QueryAgentSignal(float2 position, float radius, Action<(int count, AgentData[] agentsData)> onQueryAgent)
         {
             Position = position;
             Radius = radius;
