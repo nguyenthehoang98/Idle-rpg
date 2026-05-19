@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -39,11 +40,16 @@ namespace _Games.Battle
 
         public void Trigger(Vector2Int trigger)
         {
+            StartCoroutine(TriggerIE(trigger));   
+        }
+
+        private IEnumerator TriggerIE(Vector2Int trigger)
+        {
             int dice = trigger.x;
             int value = trigger.y;
             int prev = dices[dice];
 
-            if (prev == value) return;
+            if (prev == value) yield break;
 
             int stack;
             if (prev != value)
@@ -55,6 +61,8 @@ namespace _Games.Battle
                 else if (cones[prev].Stack != 0)
                     cones[prev].SetMultiplierColor();
             }
+
+            yield return null;
 
             stack = cones[value].Stack;
             cones[value].InsertId(dice);

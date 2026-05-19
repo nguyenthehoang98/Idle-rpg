@@ -27,13 +27,13 @@ namespace _Games.Battle
 
         [TitleGroup("Element")]
         [SerializeField] private Transform pivot;
-
         [SerializeField] private new Transform renderer; // animator/animation
 
         private float feedbackScaleTime = 1;
-        private Tweener tweener;
         private Vector3 localRotation;
         private Vector3 localPosition;
+        private Tweener tweener;
+        private Coroutine coroutine;
 
         private void Awake()
         {
@@ -50,11 +50,10 @@ namespace _Games.Battle
             return activeFeedback.TotalDuration / feedbackScaleTime;
         }
 
-        public float Inactive()
+        public void Inactive()
         {
             inactiveFeedback.TimescaleMultiplier = feedbackScaleTime;
             inactiveFeedback.PlayFeedbacks();
-            return inactiveFeedback.TotalDuration / feedbackScaleTime;
         }
 
         public void Focus(Vector3 goal)
@@ -93,7 +92,10 @@ namespace _Games.Battle
             };
 
             if (delayFocus > 0)
-                this.WaitInvoke(delayFocus / feedbackScaleTime, action);
+            {
+                if (coroutine != null) StopCoroutine(coroutine);
+                coroutine = this.WaitInvoke(delayFocus / feedbackScaleTime, action);
+            }
             else
                 action();
         }
@@ -108,8 +110,9 @@ namespace _Games.Battle
             float delta = Mathf.DeltaAngle(beginAngle, targetAngle);
             float endAngle = beginAngle + delta;
 
-            if (tweener != null && tweener.IsActive()) tweener.Kill();
-            tweener = DOVirtual.Float(0, 1, backPhaseDuration / feedbackScaleTime, value =>
+            float d = backPhaseDuration / feedbackScaleTime;
+            if (tweener != null && tweener.IsPlaying()) tweener.Kill();
+            tweener = DOVirtual.Float(0, 1, d, value =>
             {
                 float eased = EaseInOutSine(value);
                 float a = math.lerp(beginAngle, endAngle, eased);
@@ -121,7 +124,7 @@ namespace _Games.Battle
                 }
             }).SetEase(Ease.Linear);
 
-            return backPhaseDuration / feedbackScaleTime;
+            return d;
         }
 
         private static float EaseInOutSine(float t)

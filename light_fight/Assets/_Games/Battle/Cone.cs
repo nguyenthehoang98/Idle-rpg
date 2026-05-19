@@ -31,6 +31,7 @@ namespace _Games.Battle
         private bool isInitialized = false;
         private List<int> dicesId = new List<int>();
         private Tween tween;
+        private Coroutine coroutine;
 
         public UniTask Initialize(int order, float timeScale)
         {
@@ -75,7 +76,8 @@ namespace _Games.Battle
                 .SetEase(Ease.OutCubic);
             
             float f = weapon.Active();
-            this.WaitInvoke(Mathf.Max(f, duration), () =>
+            if (coroutine != null) StopCoroutine(coroutine);
+            coroutine = this.WaitInvoke(Mathf.Max(f, duration) + 0.1f, () =>
             {
                 weapon.Focus(new Vector3(Random.value, Random.value));
             });
@@ -96,8 +98,8 @@ namespace _Games.Battle
             float duration = zoomInFeedback.TotalDuration / feedbackScaleTime;
             
             if (tween != null && tween.IsPlaying()) tween.Kill();
-            tween = background.DOColor(color, duration * 0.5f)
-                .SetEase(Ease.OutCubic);
+            tween = background.DOColor(color, duration * 2f)
+                .SetEase(Ease.Linear);
         }
 
         public void Inactive()
@@ -117,9 +119,11 @@ namespace _Games.Battle
             };
             
             float f = weapon.StopFocus();
-
             if (f > 0)
-                this.WaitInvoke(f, action);
+            {
+                if (coroutine != null) StopCoroutine(coroutine);
+                coroutine = this.WaitInvoke(f, action);
+            }
             else action();
         }
         
