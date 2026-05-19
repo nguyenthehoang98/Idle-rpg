@@ -48,11 +48,8 @@ namespace _Games.Battle
         [TitleGroup("Skills")]
         [SerializeField] private SkillConfig skillConfig;
         [SerializeField] private float recoveryTime = 0.2f;
-        [SerializeField] private float scanRadius = 5;
+        [SerializeField] private float scanRadius = 6;
 
-        public Vector3 pivotEulerAngles;
-
-        private int orderIndex;
         private float feedbackScaleTime = 1;
         private Vector3 eulerAngles;
         private Vector3 localPosition;
@@ -61,15 +58,10 @@ namespace _Games.Battle
         private Coroutine animationCoroutine;
         private AnimancerState animancerState;
 
-        private void Update()
+        public void Initialize(int pivotZ, int pivotX, float timeScale)
         {
-            pivotEulerAngles = zPivot.eulerAngles;
-        }
-
-        public void Initialize(int order, int pivotZ, float timeScale)
-        {
-            orderIndex = order;
             feedbackScaleTime = timeScale;
+            xPivot.localRotation = Quaternion.Euler(pivotX, 0, 0);
             zPivot.localRotation = Quaternion.Euler(0, 0, pivotZ);
         }
 
@@ -213,8 +205,7 @@ namespace _Games.Battle
 
         private void ScanNearestAgent(float radius, Action<AgentData> callback)
         {
-            Vector3 p = zPivot.position;
-            float2 position = new float2(p.x, p.y);
+            float2 position = float2.zero;
             SystemBus.Publish(new QueryAgentSignal(position, radius, tuple =>
             {
                 int count = tuple.count;

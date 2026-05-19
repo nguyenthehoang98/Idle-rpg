@@ -39,6 +39,8 @@ namespace _Games.Battle
         
         private void Awake()
         {
+            Debug.Log(@"Nâng cấp hơn thử tính Dmg xem agent có khả năng chết trong tương lai ko? nếu có thì sẽ ignore sang agent khác, cái này phải có 1 system riêng (lưu flag vào AgentData)");
+            
             Debug.Log(@"UIBattleDiceSlot nên dùng queue để tính number dice. có thể config độ khó theo level theo các trường\n
 - tỉ lệ quay vào ô chứa trang bị\n
 	+ Tỉ lệ lặp lại ô chứa trang bị theo level, power. level max =50% chả hạn\n

@@ -42,7 +42,7 @@ namespace _Games.Battle
         public bool IsPlaying { get; private set; }
 
         public Weapon Weapon => weapon;
-
+        
         public UniTask Initialize(int order, int maxStar, float timeScale)
         {
             if (isInitialized) 
@@ -53,7 +53,7 @@ namespace _Games.Battle
             initFeedback.TimescaleMultiplier = feedbackScaleTime;
             initFeedback.PlayFeedbacks();
             isInitialized = true;
-            weapon.Initialize(order, zPivots[order], timeScale);
+            weapon.Initialize(zPivots[order], xPivots[order], timeScale);
 #if UNITY_EDITOR
             weapon.name = "Weapon " + order;
 #endif
