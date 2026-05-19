@@ -12,7 +12,6 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Action = System.Action;
-using Random = UnityEngine.Random;
 
 namespace _Games.Battle
 {
@@ -47,6 +46,8 @@ namespace _Games.Battle
         
         [TitleGroup("Skills")]
         [SerializeField] private SkillConfig skillConfig;
+        [SerializeField] private float recoveryTime = 0.2f;
+        [SerializeField] private float scanRadius = 5;
 
         private float feedbackScaleTime = 1;
         private Vector3 localRotation;
@@ -93,65 +94,89 @@ namespace _Games.Battle
         {
             void Action(AgentData agentData)
             {
-                float2 f2 = agentData.position;
-                Vector3 position = pivot.position;
-                Vector3 goal = new Vector3(f2.x, f2.y);
-                Vector3 direction = goal - position;
-                direction.z = 0;
-                if (direction.sqrMagnitude < 0.0001f) return;
-                
-                float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                float currentAngle = pivot.eulerAngles.z;
-                float delta = Mathf.DeltaAngle(currentAngle, targetAngle);
-                float endAngle = currentAngle + delta;
-
-                bool needOffset = Mathf.Abs(delta) > 90f;
-                float t = Mathf.Clamp01(Mathf.Abs(delta) / 180f);
-                Vector3 offset = Vector3.Lerp(offsetMin, offsetMax, t);
-                Vector3 offsetDir = needOffset ? offset : Vector3.zero;
-                Vector3 originalLocalPos = pivot.localPosition;
-                Vector3 targetLocalPos = originalLocalPos + offsetDir;
-
                 // @"Xứ lý tính duration nếu mà góc gần thay quay nhanh hơn. max=rotatePhaseDuration
-                if (tweener != null && tweener.IsActive()) tweener.Complete();
-                tweener = DOVirtual.Float(0, 1, rotatePhaseDuration / feedbackScaleTime, value =>
+                RotateTo(agentData, true, () =>
+                {
+                    if (animationCoroutine != null) StopCoroutine(animationCoroutine);
+                    animationCoroutine = StartCoroutine(PlayAnimation(() =>
                     {
-                        float eased = EaseInOutSine(value);
-                        float a = math.lerp(currentAngle, endAngle, eased);
-                        pivot.eulerAngles = new Vector3(0, 0, a);
-
-                        if (needOffset)
-                        {
-                            pivot.localPosition = Vector3.Lerp(originalLocalPos, targetLocalPos, eased);
-                        }
-                    })
-                    .SetEase(Ease.Linear)
-                    .OnComplete(() =>
-                    {
-                        if (animationCoroutine != null) StopCoroutine(animationCoroutine);
-                        animationCoroutine = StartCoroutine(PlayAnimation(() =>
-                        {
-                            ScanNearestAgent(5, data =>
-                            {
-                                Vector3 mPos = muzzle.position;
-                                SkillFactory.Build(new float2(mPos.x, mPos.y), data.position, skillConfig);
-#if UNITY_EDITOR
-                                Vector3 newAgentPos = new Vector3(data.position.x, data.position.y);
-                                Debug.DrawLine(mPos, newAgentPos, Color.magenta, 0.25f);
-#endif
-                                SystemBus.Publish(new DestroyAgentSignal(data.agent));                                
-                            });
-                        }, Focus));
-                    });
+                        CompleteFocus(agentData);
+                    }, AutoFocus));
+                });
             }
 
             if (delayFocus > 0)
             {
                 if (coroutine != null) StopCoroutine(coroutine);
-                coroutine = this.WaitInvoke(delayFocus / feedbackScaleTime, () => ScanNearestAgent(5, Action));
+                coroutine = this.WaitInvoke(delayFocus / feedbackScaleTime, () => ScanNearestAgent(scanRadius, Action));
             }
             else
-                ScanNearestAgent(5, Action);
+                ScanNearestAgent(scanRadius, Action);
+        }
+
+        private void AutoFocus()
+        {
+            void Action(AgentData agentData)
+            {
+                RotateTo(agentData, false, () =>
+                {
+                    if (animationCoroutine != null) StopCoroutine(animationCoroutine);
+                    animationCoroutine = StartCoroutine(PlayAnimation(() =>
+                    {
+                        CompleteFocus(agentData);
+                    }, AutoFocus));
+                });
+            }
+
+            ScanNearestAgent(scanRadius, Action);
+        }
+
+        private void CompleteFocus(AgentData agentData)
+        {
+            Vector3 mPos = muzzle.position;
+            SkillFactory.Build(new float2(mPos.x, mPos.y), agentData.position, skillConfig);
+#if UNITY_EDITOR
+            Vector3 newAgentPos = new Vector3(agentData.position.x, agentData.position.y);
+            Debug.DrawLine(mPos, newAgentPos, Color.magenta, 0.25f);
+#endif
+            SystemBus.Publish(new DestroyAgentSignal(agentData.agent));  
+        }
+
+        private void RotateTo(AgentData agentData, bool shouldOffsetPosition, Action onComplete)
+        {
+            float2 f2 = agentData.position;
+            Vector3 position = pivot.position;
+            Vector3 goal = new Vector3(f2.x, f2.y);
+            Vector3 direction = goal - position;
+            direction.z = 0;
+            if (direction.sqrMagnitude < 0.0001f) return;
+                
+            float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            float currentAngle = pivot.eulerAngles.z;
+            float delta = Mathf.DeltaAngle(currentAngle, targetAngle);
+            float endAngle = currentAngle + delta;
+
+            bool needOffset = shouldOffsetPosition && Mathf.Abs(delta) > 90f;
+            float t = Mathf.Clamp01(Mathf.Abs(delta) / 180f);
+            Vector3 offset = Vector3.Lerp(offsetMin, offsetMax, t);
+            Vector3 offsetDir = needOffset ? offset : Vector3.zero;
+            Vector3 originalLocalPos = pivot.localPosition;
+            Vector3 targetLocalPos = originalLocalPos + offsetDir;
+            
+            if (tweener != null && tweener.IsActive()) tweener.Complete();
+            tweener = DOVirtual.Float(0, 1, rotatePhaseDuration / feedbackScaleTime, value =>
+                {
+                    float eased = EaseInOutSine(value);
+                    float a = math.lerp(currentAngle, endAngle, eased);
+                    pivot.eulerAngles = new Vector3(0, 0, a);
+
+                    if (needOffset)
+                    {
+                        pivot.localPosition = Vector3.Lerp(originalLocalPos, targetLocalPos, eased);
+                    }
+                })
+                .SetEase(Ease.Linear)
+                .OnComplete(() => onComplete?.Invoke());
         }
 
         private void ScanNearestAgent(float radius, Action<AgentData> callback)
@@ -219,15 +244,15 @@ namespace _Games.Battle
             return -(math.cos(math.PI * t) - 1) * 0.5f;
         }
 
-        private IEnumerator PlayAnimation(Action onComplete, Action onNextFocus)
+        private IEnumerator PlayAnimation(Action onCompleteFocus, Action onNextFocus)
         {
             float duration = attackClip.length;
             animancerState = animancer.Play(attackClip);
             animancerState.Time = 0;
             animancerState.Speed = feedbackScaleTime;
             yield return new WaitForSeconds(duration / feedbackScaleTime);
-            onComplete?.Invoke();
-            yield return new WaitForSeconds(0.2f);
+            onCompleteFocus?.Invoke();
+            yield return new WaitForSeconds(recoveryTime);
             onNextFocus?.Invoke();
         }
     }
