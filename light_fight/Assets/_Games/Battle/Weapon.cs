@@ -121,10 +121,10 @@ namespace _Games.Battle
                         if (animationCoroutine != null) StopCoroutine(animationCoroutine);
                         animationCoroutine = StartCoroutine(PlayAnimation(() =>
                         {
-                            ScanAgent(5, data =>
+                            ScanNearestAgent(5, data =>
                             {
                                 Vector3 newAgentPos = new Vector3(data.position.x, data.position.y);
-                                Debug.DrawLine(position, newAgentPos, Color.magenta, 0.05f);
+                                Debug.DrawLine(position, newAgentPos, Color.magenta, 0.5f);
                                 SystemBus.Publish(new DestroyAgentSignal(data.agent));                                
                             });
                         }));
@@ -134,13 +134,13 @@ namespace _Games.Battle
             if (delayFocus > 0)
             {
                 if (coroutine != null) StopCoroutine(coroutine);
-                coroutine = this.WaitInvoke(delayFocus / feedbackScaleTime, () => ScanAgent(5, Action));
+                coroutine = this.WaitInvoke(delayFocus / feedbackScaleTime, () => ScanNearestAgent(5, Action));
             }
             else
-                ScanAgent(5, Action);
+                ScanNearestAgent(5, Action);
         }
 
-        private void ScanAgent(float radius, Action<AgentData> callback)
+        private void ScanNearestAgent(float radius, Action<AgentData> callback)
         {
             Vector3 p = pivot.position;
             float2 position = new float2(p.x, p.y);
@@ -152,11 +152,12 @@ namespace _Games.Battle
                 float min = float.MaxValue;
                 for (int i = 0; i < count; i++)
                 {
-                    float2 pos = agents[i].position;
-                    float d = math.distancesq(pos, pos);
+                    AgentData ad = agents[i];
+                    float2 pos = ad.position;
+                    float d = math.distancesq(pos, position);
                     if (d < min)
                     {
-                        agent = agents[i];
+                        agent = ad;
                         min = d;
                     }
                 }
