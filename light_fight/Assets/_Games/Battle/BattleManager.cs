@@ -33,7 +33,7 @@ namespace _Games.Battle
 
         private UIBattleControlDiceSpeed controlDice;
         private BattleLevel battleLevel;
-        private AgentManager agentManager;
+        private AgentEventManager agentEventManager;
         private List<ArcMove> listArcs = new List<ArcMove>();
         private readonly int[] numbers = new int[BattleConst.MAX_DICE_NUMBER];
         private readonly bool[] triggers = new bool[BattleConst.MAX_DICE_NUMBER];
@@ -57,18 +57,18 @@ namespace _Games.Battle
 
         private void OnEnable()
         {
-            if (agentManager == null)
+            if (agentEventManager == null)
             {
-                tickSystemOwner.TryGetTickable(out agentManager);
+                tickSystemOwner.TryGetTickable(out agentEventManager);
             }
         }
 
         private void OnDisable()
         {
-            if (agentManager != null)
+            if (agentEventManager != null)
             {
-                agentManager.Dispose();
-                agentManager = null;
+                agentEventManager.Dispose();
+                agentEventManager = null;
             }
         }
 

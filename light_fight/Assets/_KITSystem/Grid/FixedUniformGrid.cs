@@ -163,18 +163,19 @@ namespace _KITSystem.Grid
             }
         }
 
-        public int Query(float2 position, float radius, out int[] results)
+        public int Query(float2 position, float2 size, out int[] results)
         {
             int count = 0;
             visitedVersion++;
 
-            int range = (int)math.ceil(radius * invCellSize);
+            int rangeX = (int)math.ceil(size.x * invCellSize);
+            int rangeY = (int)math.ceil(size.y * invCellSize);
             int centerX = (int)math.floor(position.x * invCellSize);
             int centerY = (int)math.floor(position.y * invCellSize);
 
-            for (int dy = -range; dy <= range; dy++)
+            for (int dy = -rangeY; dy <= rangeY; dy++)
             {
-                for (int dx = -range; dx <= range; dx++)
+                for (int dx = -rangeX; dx <= rangeX; dx++)
                 {
                     int hash = Hash(centerX + dx, centerY + dy);
 

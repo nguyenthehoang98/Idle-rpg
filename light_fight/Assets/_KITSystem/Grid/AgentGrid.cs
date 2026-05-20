@@ -56,9 +56,9 @@ namespace _KITSystem.Grid
             simulator.DoStep();
         }
         
-        public int QueryAgent(float2 position, float radius, out AgentData[] agentsData)
+        protected int QueryAgent(float2 position, float2 size, out AgentData[] agentsData)
         {
-            int query = gridManager.Query(position, radius, out int[] results);
+            int query = gridManager.Query(position, size, out int[] results);
             agentsData = new AgentData[query];
             int index = 0;
             for (int i = 0; i < query; i++)
@@ -152,7 +152,7 @@ namespace _KITSystem.Grid
                     continue;
                 }
 
-                int query = gridManager.Query(position, 3, out int[] results);
+                int query = gridManager.Query(position, new float2(3, 3), out int[] results);
                 int frontBlockedCount = 0;
 
                 float2 dirToGoal = MathUtils.NormalizeSafe(-position);
@@ -253,6 +253,7 @@ namespace _KITSystem.Grid
     public struct AgentData
     {
         public int agent;
+        public float radius;
         public float2 position;
         public bool isStopped;
         public int stuckFrames;

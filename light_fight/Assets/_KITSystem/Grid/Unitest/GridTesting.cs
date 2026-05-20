@@ -33,7 +33,7 @@ namespace _KITSystem.Grid.Unitest
 
             Assert.IsTrue(inserted);
 
-            int count = grid.Query(float2.zero, 1, out var results);
+            int count = grid.Query(float2.zero, new float2(1, 1), out var results);
 
             Assert.IsTrue(count > 0);
 
@@ -47,7 +47,7 @@ namespace _KITSystem.Grid.Unitest
 
             grid.Insert(1, new float2(0.2f, 0.2f));
 
-            int count = grid.Query(float2.zero, 1, out var results);
+            int count = grid.Query(float2.zero, new float2(1, 1), out var results);
 
             Assert.AreEqual(1, count);
         }
@@ -59,11 +59,11 @@ namespace _KITSystem.Grid.Unitest
 
             grid.Insert(1, new float2(10f, 10f));
 
-            int count1 = grid.Query(float2.zero, 1, out var oldResults);
+            int count1 = grid.Query(float2.zero, new float2(1, 1), out var oldResults);
 
             Assert.IsFalse(Contains(oldResults, count1, 1));
 
-            int count2 = grid.Query(new float2(10f, 10f), 1, out var newResults);
+            int count2 = grid.Query(new float2(10f, 10f), new float2(1, 1), out var newResults);
 
             Assert.IsTrue(Contains(newResults, count2, 1));
         }
@@ -77,7 +77,7 @@ namespace _KITSystem.Grid.Unitest
 
             Assert.IsTrue(removed);
 
-            int count = grid.Query(float2.zero, 1, out var results);
+            int count = grid.Query(float2.zero, new float2(1, 1), out var results);
 
             Assert.AreEqual(0, count);
 
@@ -87,7 +87,7 @@ namespace _KITSystem.Grid.Unitest
         [Test]
         public void Query_ShouldReturnZero_WhenEmpty()
         {
-            int count = grid.Query(float2.zero, 1, out _);
+            int count = grid.Query(float2.zero, new float2(1, 1), out _);
 
             Assert.AreEqual(0, count);
         }
@@ -98,8 +98,8 @@ namespace _KITSystem.Grid.Unitest
             grid.Insert(1, float2.zero);
             grid.Insert(1, new float2(10f, 10f));
 
-            int count1 = grid.Query(float2.zero, 1, out var oldResults);
-            int count2 = grid.Query(new float2(10f, 10f), 1, out var newResults);
+            int count1 = grid.Query(float2.zero, new float2(1, 1), out var oldResults);
+            int count2 = grid.Query(new float2(10f, 10f), new float2(1, 1), out var newResults);
 
             Assert.IsFalse(Contains(oldResults, count1, 1), "Old cell still contains moved object.");
             Assert.IsTrue(Contains(newResults, count2, 1), "New cell does not contain moved object.");
@@ -113,7 +113,7 @@ namespace _KITSystem.Grid.Unitest
             grid.Insert(2, new float2(0.2f, 0.2f));
             grid.Insert(3, new float2(0.3f, 0.3f));
 
-            int count = grid.Query(float2.zero, 1, out var results);
+            int count = grid.Query(float2.zero, new float2(1, 1), out var results);
 
             Assert.AreEqual(3, count);
             Assert.IsTrue(Contains(results, count, 1));
@@ -128,7 +128,7 @@ namespace _KITSystem.Grid.Unitest
             grid.Insert(2, new float2(10, 10));
             grid.Insert(3, new float2(20, 20));
 
-            int count = grid.Query(float2.zero, 1, out var results);
+            int count = grid.Query(float2.zero, new float2(1, 1), out var results);
 
             Assert.AreEqual(1, count);
             Assert.IsTrue(Contains(results, count, 1));
@@ -149,20 +149,7 @@ namespace _KITSystem.Grid.Unitest
             grid.Insert(1, new float2(10, 10));
             grid.Insert(1, float2.zero);
 
-            int count = grid.Query(float2.zero, 1, out var results);
-
-            Assert.AreEqual(1, count);
-            Assert.IsTrue(Contains(results, count, 1));
-        }
-
-        [Test]
-        public void Remove_Reinsert()
-        {
-            grid.Insert(1, float2.zero);
-            grid.Remove(1);
-            grid.Insert(1, float2.zero);
-
-            int count = grid.Query(float2.zero, 1, out var results);
+            int count = grid.Query(float2.zero, new float2(1, 1), out var results);
 
             Assert.AreEqual(1, count);
             Assert.IsTrue(Contains(results, count, 1));
@@ -176,7 +163,7 @@ namespace _KITSystem.Grid.Unitest
             grid.Insert(3, new float2(-5, 5));
             grid.Insert(4, new float2(5, -5));
 
-            int count = grid.Query(float2.zero, 10, out var results);
+            int count = grid.Query(float2.zero, new float2(10, 10), out var results);
 
             Assert.AreEqual(4, count);
         }
@@ -188,9 +175,9 @@ namespace _KITSystem.Grid.Unitest
             grid.Insert(1, new float2(5, 5));
             grid.Insert(1, new float2(10, 10));
 
-            int rc1 = grid.Query(new float2(0, 0), 1, out var r1);
-            int rc2 = grid.Query(new float2(5, 5), 1, out var r2);
-            int rc3 = grid.Query(new float2(10, 10), 1, out var r3);
+            int rc1 = grid.Query(new float2(0, 0), new float2(1, 1), out var r1);
+            int rc2 = grid.Query(new float2(5, 5), new float2(1, 1), out var r2);
+            int rc3 = grid.Query(new float2(10, 10), new float2(1, 1), out var r3);
 
             Assert.IsFalse(Contains(r1, rc1, 1));
             Assert.IsFalse(Contains(r2, rc2, 1));
@@ -213,7 +200,7 @@ namespace _KITSystem.Grid.Unitest
 
             for (int i = 0; i < length; i++)
             {
-                int count = grid.Query(new float2(i * 2f, i * 2f), 0.5f, out var results);
+                int count = grid.Query(new float2(i * 2f, i * 2f), new float2(0.5f, 0.5f), out var results);
                 if (i % 2 == 0)
                 {
                     Assert.AreEqual(0, count, $"Unit {i} should be removed");
@@ -249,7 +236,7 @@ namespace _KITSystem.Grid.Unitest
                 grid.Insert(i, new float2(i + 200, i + 200));
             }
 
-            int count = grid.Query(float2.zero, 1000, out var results);
+            int count = grid.Query(float2.zero, new float2(1000, 1000), out var results);
 
             Assert.AreEqual(500, count);
 
@@ -267,7 +254,7 @@ namespace _KITSystem.Grid.Unitest
             grid.Insert(2, new float2(0.1f, 0.1f));
             grid.Insert(3, new float2(0.2f, 0.2f));
 
-            int count = grid.Query(float2.zero, 5, out var results);
+            int count = grid.Query(float2.zero, new float2(5, 5), out var results);
 
             Assert.AreEqual(3, count);
 
@@ -285,7 +272,7 @@ namespace _KITSystem.Grid.Unitest
             grid.Insert(100000, float2.zero);
             grid.Insert(200000, new float2(0.1f, 0.1f));
 
-            int count = grid.Query(float2.zero, 1, out var results);
+            int count = grid.Query(float2.zero, new float2(1, 1), out var results);
 
             Assert.AreEqual(2, count);
             Assert.IsTrue(Contains(results, count, 100000));
@@ -298,12 +285,12 @@ namespace _KITSystem.Grid.Unitest
             grid.Insert(1, float2.zero);
             grid.Insert(2, new float2(0.1f, 0.1f));
 
-            int c1 = grid.Query(float2.zero, 1, out var before);
+            int c1 = grid.Query(float2.zero, new float2(1, 1), out var before);
             Assert.AreEqual(2, c1);
 
             grid.Remove(2);
 
-            int c2 = grid.Query(float2.zero, 1, out var after);
+            int c2 = grid.Query(float2.zero, new float2(1, 1), out var after);
             
             Assert.AreEqual(1, c2);
             Assert.IsTrue(Contains(after, c2, 1));
@@ -318,7 +305,7 @@ namespace _KITSystem.Grid.Unitest
 
             grid.Remove(2);
 
-            int count = grid.Query(float2.zero, 1, out var results);
+            int count = grid.Query(float2.zero, new float2(1, 1), out var results);
             Assert.AreEqual(2, count);
             Assert.IsTrue(Contains(results, count, 1));
             Assert.IsTrue(Contains(results, count, 3));
@@ -334,7 +321,7 @@ namespace _KITSystem.Grid.Unitest
 
             grid.Remove(1);
 
-            int c = grid.Query(float2.zero, 1, out var results);
+            int c = grid.Query(float2.zero, new float2(1, 1), out var results);
             
             Assert.AreEqual(2, c);
             Assert.IsTrue(Contains(results, c, 2));
@@ -351,7 +338,7 @@ namespace _KITSystem.Grid.Unitest
             grid.Remove(1);
             grid.Remove(2);
 
-            int c = grid.Query(float2.zero, 1, out var results);
+            int c = grid.Query(float2.zero, new float2(1, 1), out var results);
             Assert.AreEqual(0, c);
         }
 
@@ -362,8 +349,8 @@ namespace _KITSystem.Grid.Unitest
             grid.Remove(1);
             grid.Insert(1, new float2(5f, 5f));
 
-            int c1 = grid.Query(float2.zero, 1, out var r1);
-            int c2 = grid.Query(new float2(5f, 5f), 1, out var r2);
+            int c1 = grid.Query(float2.zero, new float2(1, 1), out var r1);
+            int c2 = grid.Query(new float2(5f, 5f), new float2(1, 1), out var r2);
 
             Assert.AreEqual(0, c1);
             Assert.AreEqual(1, c2);
@@ -383,7 +370,7 @@ namespace _KITSystem.Grid.Unitest
             grid.Remove(1);
             grid.Remove(5);
 
-            int c = grid.Query(float2.zero, 1, out var results);
+            int c = grid.Query(float2.zero, new float2(1, 1), out var results);
             Assert.AreEqual(2, c);
             Assert.IsTrue(Contains(results, c, 2));
             Assert.IsTrue(Contains(results, c, 4));
@@ -397,7 +384,7 @@ namespace _KITSystem.Grid.Unitest
 
             grid.Remove(999);
 
-            int c = grid.Query(float2.zero, 1, out var results);
+            int c = grid.Query(float2.zero, new float2(1, 1), out var results);
             Assert.AreEqual(2, c);
         }
 

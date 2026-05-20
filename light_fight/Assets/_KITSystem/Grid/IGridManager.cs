@@ -6,6 +6,6 @@ namespace _KITSystem.Grid
     {
         bool Insert(int unitId, float2 position);
         bool Remove(int unitId);
-        int Query(float2 position, float radius, out int[] results);
+        int Query(float2 position, float2 size, out int[] results);
     }
 }
