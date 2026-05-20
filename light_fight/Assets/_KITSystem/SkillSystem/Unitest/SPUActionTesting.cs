@@ -18,7 +18,7 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void Add_TriggerTimer()
         {
-            var skillConfig = ScriptableObject.CreateInstance<SkillConfig>();
+            var skillConfig = ScriptableObject.CreateInstance<SkillFrameConfig>();
             skillConfig.defaultSkillConfig = new DefaultSkillConfig
             {
                 lifeTimeInSeconds = 2,
@@ -47,7 +47,7 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void Add_TriggerTimer_EndLifeTime()
         {
-            var skillConfig = ScriptableObject.CreateInstance<SkillConfig>();
+            var skillConfig = ScriptableObject.CreateInstance<SkillFrameConfig>();
             skillConfig.defaultSkillConfig = new DefaultSkillConfig
             {
                 lifeTimeInSeconds = 2,
@@ -76,7 +76,7 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void Add_TriggerTimer_None_EndLifeTime()
         {
-            var skillConfig = ScriptableObject.CreateInstance<SkillConfig>();
+            var skillConfig = ScriptableObject.CreateInstance<SkillFrameConfig>();
             skillConfig.defaultSkillConfig = new DefaultSkillConfig
             {
                 lifeTimeInSeconds = 2,

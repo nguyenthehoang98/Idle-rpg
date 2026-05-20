@@ -1,7 +1,6 @@
 using _KITSystem.SkillSystem.Config;
 using Unity.Mathematics;
 using UnityEngine;
-using SkillConfig = _KITSystem.SkillSystem.Config.SkillConfig;
 
 namespace _KITSystem.SkillSystem.Runtime
 {
@@ -11,23 +10,23 @@ namespace _KITSystem.SkillSystem.Runtime
 
         public static void Initialize(SPU spu) => SkillFactory.spu = spu;
 
-        public static int Build(float2 start, float2 goal, SkillConfig skillConfig)
+        public static int Build(float2 start, float2 goal, SkillFrameConfig skillFrameConfig)
         {
-            return Build(spu, start, goal, skillConfig);
+            return Build(spu, start, goal, skillFrameConfig);
         }
 
-        public static int Build(SPU spu, SkillConfig config)
+        public static int Build(SPU spu, SkillFrameConfig frameConfig)
         {
             float2 start = float2.zero;
             float2 goal = new float2(2, 0);
-            return Build(spu, start, goal, config);
+            return Build(spu, start, goal, frameConfig);
         }
 
-        private static int Build(SPU spu, float2 start, float2 goal, SkillConfig config)
+        private static int Build(SPU spu, float2 start, float2 goal, SkillFrameConfig frameConfig)
         {
             int skillId = spu.GenerateSkillInstanceId();
-            float lifeTimeInSeconds = config.defaultSkillConfig.lifeTimeInSeconds;
-            foreach (EventConfig e in config.events)
+            float lifeTimeInSeconds = frameConfig.defaultSkillConfig.lifeTimeInSeconds;
+            foreach (EventConfig e in frameConfig.events)
             {
                 switch (e.actionConfig.Type)
                 {

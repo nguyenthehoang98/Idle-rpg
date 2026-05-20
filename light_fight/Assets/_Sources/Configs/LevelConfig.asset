@@ -1,0 +1,143 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12f6fdee475d38540b5f3e8bd3decb85, type: 3}
+  m_Name: LevelConfig
+  m_EditorClassIdentifier: 
+  fileUrl: 
+  enable: 1
+  spawns:
+  - levelId: 1
+    waveId: 1
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 10
+    power: 50
+    spawnId: Spawn_Random
+    data:
+    - 10001_10
+    - 10011_2
+    weights:
+    - {x: 10001, y: 10}
+    - {x: 10011, y: 2}
+  - levelId: 1
+    waveId: 2
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 10
+    power: 54
+    spawnId: Spawn_Random
+    data:
+    - 10011_3
+    - 10001_1
+    weights:
+    - {x: 10011, y: 3}
+    - {x: 10001, y: 1}
+  - levelId: 1
+    waveId: 2
+    batchId: 2
+    isBoss: 0
+    delayTime: 0
+    duration: 10
+    power: 55
+    spawnId: Spawn_Random
+    data:
+    - 10011_3
+    - 10001_1
+    weights:
+    - {x: 10011, y: 3}
+    - {x: 10001, y: 1}
+  - levelId: 1
+    waveId: 2
+    batchId: 3
+    isBoss: 0
+    delayTime: 0
+    duration: 10
+    power: 56
+    spawnId: Spawn_Random
+    data:
+    - 10011_3
+    - 10001_1
+    weights:
+    - {x: 10011, y: 3}
+    - {x: 10001, y: 1}
+  - levelId: 1
+    waveId: 2
+    batchId: 4
+    isBoss: 0
+    delayTime: 0
+    duration: 10
+    power: 57
+    spawnId: Spawn_Random
+    data:
+    - 10011_3
+    - 10001_1
+    weights:
+    - {x: 10011, y: 3}
+    - {x: 10001, y: 1}
+  - levelId: 1
+    waveId: 3
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 10
+    power: 58
+    spawnId: Spawn_Random
+    data:
+    - 10011_3
+    - 10001_1
+    weights:
+    - {x: 10011, y: 3}
+    - {x: 10001, y: 1}
+  - levelId: 1
+    waveId: 3
+    batchId: 2
+    isBoss: 0
+    delayTime: 0
+    duration: 10
+    power: 59
+    spawnId: Spawn_Random
+    data:
+    - 10011_3
+    - 10001_1
+    weights:
+    - {x: 10011, y: 3}
+    - {x: 10001, y: 1}
+  - levelId: 1
+    waveId: 3
+    batchId: 3
+    isBoss: 0
+    delayTime: 0
+    duration: 10
+    power: 60
+    spawnId: Spawn_Random
+    data:
+    - 10011_3
+    - 10001_1
+    weights:
+    - {x: 10011, y: 3}
+    - {x: 10001, y: 1}
+  - levelId: 1
+    waveId: 3
+    batchId: 4
+    isBoss: 0
+    delayTime: 0
+    duration: 10
+    power: 61
+    spawnId: Spawn_Random
+    data:
+    - 10011_3
+    - 10001_1
+    weights:
+    - {x: 10011, y: 3}
+    - {x: 10001, y: 1}

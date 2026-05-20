@@ -46,8 +46,9 @@ namespace _Games.Battle
         [SerializeField] private NamedAnimancerComponent animancer;
         [SerializeField] private AnimationClip attackClip;
         
+        [FormerlySerializedAs("skillConfig")]
         [TitleGroup("Skills")]
-        [SerializeField] private SkillConfig skillConfig;
+        [SerializeField] private SkillFrameConfig skillFrameConfig;
         [SerializeField] private float recoveryTime = 0.2f;
         [SerializeField] private float scanRadius = 6;
 
@@ -137,7 +138,7 @@ namespace _Games.Battle
         private void CompleteFocus(AgentData agentData)
         {
             Vector3 mPos = muzzle.position;
-            SkillFactory.Build(new float2(mPos.x, mPos.y), agentData.position, skillConfig);
+            SkillFactory.Build(new float2(mPos.x, mPos.y), agentData.position, skillFrameConfig);
 #if UNITY_EDITOR
             Vector3 newAgentPos = new Vector3(agentData.position.x, agentData.position.y);
             Debug.DrawLine(mPos, newAgentPos, Color.magenta, 0.25f);

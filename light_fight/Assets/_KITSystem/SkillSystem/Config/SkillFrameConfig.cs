@@ -10,7 +10,7 @@ namespace _KITSystem.SkillSystem.Config
     /// Lớp này có thể override data từ excel. override trực tiếp luôn
     /// </summary>
     [CreateAssetMenu(fileName = "New Skill", menuName = "Game/Skill")]
-    public sealed class SkillConfig : SerializedScriptableObject
+    public sealed class SkillFrameConfig : SerializedScriptableObject
     {
         [Title("Core"), OnValueChanged("SkillTypeChanged"), HideLabel]
         public DefaultSkillConfig.SkillType skillType;
