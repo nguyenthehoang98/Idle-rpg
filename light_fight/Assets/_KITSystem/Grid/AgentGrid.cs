@@ -110,7 +110,7 @@ namespace _KITSystem.Grid
                 AgentData value = container[agent];
                 float2 position = value.position;
                 Color color = value.isStopped ? Color.red : Color.green;
-                DrawCircle(new Vector3(position.x, position.y), 0.5f, 6, color);
+                DrawCircle(new Vector3(position.x, position.y), value.radius, 6, color);
             }
         }
 
@@ -232,11 +232,15 @@ namespace _KITSystem.Grid
 
         private void Spawn(Vector2 position)
         {
+            float radius = agentRadius + RandomUtils.Range(-0.5f, 0.5f) * agentRadius;
+            
             simulator.EnsureCompleted();
             int agent = simulator.AddAgent(position);
+            simulator.SetAgentRadius(agent, radius);
             agents.Add(agent);
             container.Add(agent, new AgentData
             {
+                radius = radius,
                 agent = agent,
                 position = new float2(position.x, position.y)
             });

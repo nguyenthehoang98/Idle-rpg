@@ -5,12 +5,13 @@ namespace _KITSystem.Schedule
 {
     public class TickSystemOwner : MonoBehaviour
     {
+        [SerializeField] private bool isPausedDefault = true;
         [SerializeField] private int targetFPS = 30;
         [SerializeField] private DataTemp[] list;
         private TickSystem tickSystem;
         private float tickInterval;
         private float accumulator;
-        private bool isPaused = true;
+        private bool isPaused;
 
         public bool IsPaused
         {
@@ -20,6 +21,7 @@ namespace _KITSystem.Schedule
         
         private void Awake()
         {
+            isPaused = isPausedDefault;
             Application.runInBackground = true;
             Application.targetFrameRate = 60;
             tickInterval = 1f / targetFPS;

@@ -25,25 +25,68 @@ namespace _Games.Battle
 
         private void OnSquareShapeHit(SquareShapeHitSignal signal)
         {
-            int count = QueryAgent(signal.Position, signal.Size, out AgentData[] agents);
+            float2 signalPos = signal.Position;
+            float2 signalSize = signal.Size;
+            int count = QueryAgent(signalPos, signalSize, out AgentData[] agents);
+
+            float2 half = signalSize * 0.5f;
+            float left = signalPos.x - half.x;
+            float right = signalPos.x + half.x;
+            float top = signalPos.y + half.y;
+            float bottom = signalPos.y - half.y;
+            
             List<int> results = new List<int>(count);
+
             for (int i = 0; i < count; i++)
             {
                 AgentData agent = agents[i];
-                float2 agentPos = agent.position;
-                results[i] = agents[i].agent;
+
+                float2 p = agent.position;
+                float r = agent.radius;
+                
+                float closestX = math.clamp(p.x, left, right);
+                float closestY = math.clamp(p.y, bottom, top);
+
+                float dx = p.x - closestX;
+                float dy = p.y - closestY;
+                
+                if (dx * dx + dy * dy <= r * r)
+                {
+                    results.Add(agent.agent);
+                }
             }
+            
             signal.Agents.Invoke(results);
         }
 
         private void OnCircleShapeHit(CircleShapeHitSignal signal)
         {
-            int count = QueryAgent(signal.Position, new float2(signal.Radius, signal.Radius), out AgentData[] agents);
+            float signalRadius = signal.Radius;
+            float2 signalPos = signal.Position;
+            float2 signalSize = new float2(signalRadius * 2, signalRadius * 2);
+            
+            int count = QueryAgent(signalPos, signalSize, out AgentData[] agents);
+            
             List<int> results = new List<int>(count);
+          
+            float radiusSq;
+
             for (int i = 0; i < count; i++)
             {
-                results[i] = agents[i].agent;
+                AgentData agent = agents[i];
+
+                float totalRadius = signalRadius + agent.radius;
+
+                float2 delta = agent.position - signal.Position;
+
+                radiusSq = totalRadius * totalRadius;
+
+                if (math.lengthsq(delta) <= radiusSq)
+                {
+                    results.Add(agent.agent);
+                }
             }
+            
             signal.Agents.Invoke(results);
         }
     }

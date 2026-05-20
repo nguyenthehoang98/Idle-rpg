@@ -163,6 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59caaf811b304944a8412d3c3a9c7731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPausedDefault: 0
   targetFPS: 30
   list:
   - group: 1
@@ -173,7 +174,7 @@ MonoBehaviour:
       rid: 7993921322042785839
   - group: 0
     tickable:
-      rid: 7993921408989134895
+      rid: 7993921678918811746
   references:
     version: 2
     RefIds:
@@ -187,7 +188,6 @@ MonoBehaviour:
         resolver:
           rid: 7993921391471624234
         isInitialized: 0
-        positions: []
         activeActions: []
     - rid: 7993921391471624234
       type: {class: AvoidanceResolver, ns: _KITSystem.Movement, asm: KITSystem.Movement}
@@ -197,14 +197,17 @@ MonoBehaviour:
         avoidStrength: 2
         maxAvoidForce: 3
         stopDecelerationNormalize: 0.9
-    - rid: 7993921408989134895
-      type: {class: SpawnerTickable, ns: , asm: Assembly-CSharp}
+    - rid: 7993921678918811746
+      type: {class: AgentEventManager, ns: _Games.Battle, asm: Games.Battle}
       data:
-        stopDistance: 2
+        locked: 0
+        stopDistance: 3
         agentRadius: 0.5
+        interval: 0.5
         multiplierIgnoreCheckDistance: 0.2
         deltaDistanceStuck: 0.2
         total: 0
+        isInitialized: 0
 --- !u!1 &177143862
 GameObject:
   m_ObjectHideFlags: 0
