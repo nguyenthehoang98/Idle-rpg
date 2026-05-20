@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using _KITSystem.EventBus;
+using _KITSystem.ExcelConfig;
 using _KITSystem.Grid;
 using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Config;
@@ -38,7 +40,7 @@ namespace _Games.Battle
         private readonly int[] numbers = new int[BattleConst.MAX_DICE_NUMBER];
         private readonly bool[] triggers = new bool[BattleConst.MAX_DICE_NUMBER];
         
-        private void Awake()
+        async void Awake()
         {
             Debug.Log(@"Thiết kế 1 phiên bản chỉ chạy logic ko bao gồm UI để có thể stresstest được");
             
@@ -48,30 +50,23 @@ namespace _Games.Battle
 - tỉ lệ quay vào ô chứa trang bị\n
 	+ Tỉ lệ lặp lại ô chứa trang bị theo level, power. level max =50% chả hạn\n
 - tỉ lệ quay vào ô không chứa trang bị");
+
+            await KitConfigManager.Load(new string[]
+            {
+                "SkillConfig",
+                "LevelConfig",
+                "MonsterConfig",
+            });
             
             // global
             SystemBus.Reset();
             tickSystemOwner.TryGetTickable(out SPU spu);
             SkillFactory.Initialize(spu);
+            
+            tickSystemOwner.TryGetTickable(out agentEventManager);
+            agentEventManager.InitializeLevelId(1);
         }
-
-        private void OnEnable()
-        {
-            if (agentEventManager == null)
-            {
-                tickSystemOwner.TryGetTickable(out agentEventManager);
-            }
-        }
-
-        private void OnDisable()
-        {
-            if (agentEventManager != null)
-            {
-                agentEventManager.Dispose();
-                agentEventManager = null;
-            }
-        }
-
+        
         private async void Start()
         {
             GameObject arcParent = new GameObject("ArcParent");
@@ -104,6 +99,12 @@ namespace _Games.Battle
             tickSystemOwner.IsPaused = false;
         }
 
+        private void OnDestroy()
+        {
+            agentEventManager.Dispose();
+        }
+
+        
         private void OnDiceTrigger(List<(int order, int number)> list)
         {
             // trigger: (0, 1),(1, 5),(2, 4),(3, 3)

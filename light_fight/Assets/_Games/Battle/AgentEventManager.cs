@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using _Games.Config;
 using _KITSystem.EventBus;
+using _KITSystem.ExcelConfig;
 using _KITSystem.Grid;
 using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Runtime.Signal;
@@ -10,6 +12,13 @@ namespace _Games.Battle
     // [Don't remove]
     public sealed class AgentEventManager : AgentGrid, ITickable
     {
+        IReadOnlyDictionary<WaveIdData, LevelBatch> container;
+        
+        public void InitializeLevelId(int levelId)
+        {
+            KitConfigManager.Get<LevelConfig>().FindSpawn(levelId, out container);
+        }
+        
         protected override void OnInitialize()
         {
             SystemBus.Subscribe<WeaponQueryAgentSignal>(OnWeaponQueryAgent);
