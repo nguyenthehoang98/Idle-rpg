@@ -16,8 +16,10 @@
         "GUID:0f54b58495cf0aa448bf6c1b83ef4af5",
         "GUID:520c142a54137ac4a8cdf3aeeffdc227",
         "GUID:8c2a8055d972e094cb3fd19de779dbc6",
-        "Game.Config",
-        "KITSystem.ExcelConfig"
+        "GUID:606d3cb775deefe44a4256264738aa5b",
+        "GUID:e590b1c923606d846a63f147c5ff232d",
+        "GUID:dac729895ed631e4291f57b83dbe4c95",
+        "GUID:de832e2fa4f411e408f63d8caed52dfe"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

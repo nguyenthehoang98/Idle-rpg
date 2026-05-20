@@ -60,6 +60,7 @@ namespace _Games.Config
         [SerializeField] private int skillId;
         [SerializeField] private int skillLevel;
         [SerializeField] private float skillCooldown;
+        [SerializeField] private float radius;
         [SerializeField] private float moveSpeed;
         [SerializeField] private float stopMoveDistance;
         [SerializeField] private float attackDistance;
@@ -70,6 +71,7 @@ namespace _Games.Config
         public string MonsterName => name;
         public bool IsRanged => isRanged == 1;
         public string Path => path;
+        public float Radius => radius;
         public int SkillId => skillId;
         public int SkillLevel => skillLevel;
         public float MoveSpeed => moveSpeed;

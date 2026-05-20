@@ -15,11 +15,19 @@ MonoBehaviour:
   fileUrl: 
   enable: 1
   skills:
-  - id: 100001
+  - id: 10001
     level: 1
     path: 
     name: Skill 01
-    lifeTimeInSeconds: 0
-    findTargetType: 
-    targetType: 0
-    findTargetRadius: 0
+    baseFlatDamage: 0
+    flatDamageBonusLevel: 0
+    baseScaleDamage: 1
+    scaleDamageBonusLevel: 0
+  - id: 10011
+    level: 1
+    path: 
+    name: Skill 02
+    baseFlatDamage: 0
+    flatDamageBonusLevel: 0
+    baseScaleDamage: 1
+    scaleDamageBonusLevel: 0

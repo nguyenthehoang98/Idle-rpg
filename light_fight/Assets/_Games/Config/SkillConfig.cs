@@ -36,6 +36,13 @@ namespace _Games.Config
         [SerializeField] private int level;
         [SerializeField] private string path;
         [SerializeField] private string name;
+        [SerializeField] private float baseFlatDamage;
+        [SerializeField] private float flatDamageBonusLevel;
+        [SerializeField] private float baseScaleDamage;
+        [SerializeField] private float scaleDamageBonusLevel;
+        
+        public float FlatDamage(int lv) => baseFlatDamage + lv * flatDamageBonusLevel;
+        public float ScaleDamage(int lv) => baseScaleDamage + lv * scaleDamageBonusLevel;
 
         public int SkillId => id;
 

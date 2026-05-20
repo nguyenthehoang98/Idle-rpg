@@ -5,6 +5,7 @@ using RVO;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace _KITSystem.Grid
@@ -33,7 +34,6 @@ namespace _KITSystem.Grid
         private float stopDistanceSq;
         private float ignoreCheckNeighborDistanceSq;
         private float deltaDistanceStuckSq;
-        private float elapsedTime;
 
         protected abstract void OnInitialize();
 
@@ -44,8 +44,6 @@ namespace _KITSystem.Grid
             simulator.SetTimeStep(deltaTime);
             simulator.EnsureCompleted();
 
-            // todo: spawn (init)
-            CheckSpawn(deltaTime);
 #if UNITY_EDITOR
             total = container.Count;
             DrawLine(deltaTime);
@@ -220,28 +218,17 @@ namespace _KITSystem.Grid
             }
         }
 
-        private void CheckSpawn(float deltaTime)
+        public void Spawn(int monsterId, Vector2 position, float radius)
         {
-            elapsedTime += deltaTime;
-            if (elapsedTime >= interval)
-            {
-                elapsedTime -= interval;
-                Vector3 position = new Vector3(Random.value - 0.5f, Random.value - 0.5f).normalized * Random.Range(10, 14);
-                Spawn(position);
-            }
-        }
-
-        private void Spawn(Vector2 position)
-        {
-            float radius = defaultAgentRadius + RandomUtils.Range(-0.5f, 0.5f) * defaultAgentRadius;
             simulator.EnsureCompleted();
             int agent = simulator.AddAgent(position);
             simulator.SetAgentRadius(agent, radius);
             agents.Add(agent);
             container.Add(agent, new AgentData
             {
+                agentId = agent,
+                monsterId = monsterId,
                 radius = radius,
-                agent = agent,
                 position = new float2(position.x, position.y)
             });
             gridManager.Insert(agent, position);
@@ -256,11 +243,14 @@ namespace _KITSystem.Grid
     [Serializable]
     public struct AgentData
     {
-        public int agent;
+        public int monsterId;
+        public int agentId;
         public float2 position;
         public float radius;
+
         public bool isStopped;
-        public int stuckFrames;
         public bool isDead;
+
+        public int stuckFrames;
     }
 }

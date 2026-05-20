@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using _KITSystem.EventBus;
 using _KITSystem.ExcelConfig;
-using _KITSystem.Grid;
 using _KITSystem.Schedule;
-using _KITSystem.SkillSystem.Config;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
@@ -32,13 +29,15 @@ namespace _Games.Battle
         [TitleGroup("Elements")]
         [SerializeField] private Canvas uiCanvas;
         [SerializeField] private TickSystemOwner tickSystemOwner;
-
-        private UIBattleControlDiceSpeed controlDice;
-        private BattleLevel battleLevel;
-        private AgentEventManager agentEventManager;
+        
         private List<ArcMove> listArcs = new List<ArcMove>();
         private readonly int[] numbers = new int[BattleConst.MAX_DICE_NUMBER];
         private readonly bool[] triggers = new bool[BattleConst.MAX_DICE_NUMBER];
+
+        private UIBattleControlDiceSpeed controlDice;
+        private BattleLevel battleLevel;
+        private LevelSpawner levelSpawner;
+        private AgentEventManager agentEventManager;
         
         async void Awake()
         {
@@ -64,7 +63,11 @@ namespace _Games.Battle
             SkillFactory.Initialize(spu);
             
             tickSystemOwner.TryGetTickable(out agentEventManager);
-            agentEventManager.InitializeLevelId(1);
+            tickSystemOwner.TryGetTickable(out levelSpawner);
+            levelSpawner.Initialize(1, request =>
+            {
+                agentEventManager.Spawn(request.MonsterID, request.Position, request.Radius);
+            });
         }
         
         private async void Start()
@@ -97,6 +100,8 @@ namespace _Games.Battle
             await UniTask.WaitForSeconds(f);
             controlDice.Play();
             tickSystemOwner.IsPaused = false;
+            
+            levelSpawner.WaveSpawn();
         }
 
         private void OnDestroy()

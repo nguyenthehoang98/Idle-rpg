@@ -19,21 +19,23 @@ MonoBehaviour:
     isRanged: 0
     name: Goose
     path: 
-    skillId: 1001
+    skillId: 10001
     skillLevel: 1
     skillCooldown: 3
+    radius: 0.4
     moveSpeed: 3
     stopMoveDistance: 0.2
     attackDistance: 1.2
     attack: 1
     health: 20
-  - id: 1002
+  - id: 1011
     isRanged: 1
     name: Cowboy
     path: 
-    skillId: 1002
+    skillId: 10011
     skillLevel: 1
     skillCooldown: 3
+    radius: 0.4
     moveSpeed: 2.25
     stopMoveDistance: 3
     attackDistance: 4

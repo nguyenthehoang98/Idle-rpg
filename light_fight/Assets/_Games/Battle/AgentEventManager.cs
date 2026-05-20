@@ -12,13 +12,6 @@ namespace _Games.Battle
     // [Don't remove]
     public sealed class AgentEventManager : AgentGrid, ITickable
     {
-        IReadOnlyDictionary<WaveIdData, LevelBatch> container;
-        
-        public void InitializeLevelId(int levelId)
-        {
-            KitConfigManager.Get<LevelConfig>().FindSpawn(levelId, out container);
-        }
-        
         protected override void OnInitialize()
         {
             SystemBus.Subscribe<WeaponQueryAgentSignal>(OnWeaponQueryAgent);
@@ -72,7 +65,7 @@ namespace _Games.Battle
                 
                 if (dx * dx + dy * dy <= r * r)
                 {
-                    results.Add(agent.agent);
+                    results.Add(agent.agentId);
                 }
             }
             
@@ -103,7 +96,7 @@ namespace _Games.Battle
 
                 if (math.lengthsq(delta) <= radiusSq)
                 {
-                    results.Add(agent.agent);
+                    results.Add(agent.agentId);
                 }
             }
             

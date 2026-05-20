@@ -24,11 +24,11 @@ MonoBehaviour:
     power: 50
     spawnId: Spawn_Random
     data:
-    - 10001_10
-    - 10011_2
+    - 1001_10
+    - 1011_2
     weights:
-    - {x: 10001, y: 10}
-    - {x: 10011, y: 2}
+    - {x: 1001, y: 10}
+    - {x: 1011, y: 2}
   - levelId: 1
     waveId: 2
     batchId: 1
@@ -38,11 +38,11 @@ MonoBehaviour:
     power: 54
     spawnId: Spawn_Random
     data:
-    - 10011_3
-    - 10001_1
+    - 1011_3
+    - 1001_1
     weights:
-    - {x: 10011, y: 3}
-    - {x: 10001, y: 1}
+    - {x: 1011, y: 3}
+    - {x: 1001, y: 1}
   - levelId: 1
     waveId: 2
     batchId: 2
@@ -52,11 +52,11 @@ MonoBehaviour:
     power: 55
     spawnId: Spawn_Random
     data:
-    - 10011_3
-    - 10001_1
+    - 1011_3
+    - 1001_1
     weights:
-    - {x: 10011, y: 3}
-    - {x: 10001, y: 1}
+    - {x: 1011, y: 3}
+    - {x: 1001, y: 1}
   - levelId: 1
     waveId: 2
     batchId: 3
@@ -66,11 +66,11 @@ MonoBehaviour:
     power: 56
     spawnId: Spawn_Random
     data:
-    - 10011_3
-    - 10001_1
+    - 1011_3
+    - 1001_1
     weights:
-    - {x: 10011, y: 3}
-    - {x: 10001, y: 1}
+    - {x: 1011, y: 3}
+    - {x: 1001, y: 1}
   - levelId: 1
     waveId: 2
     batchId: 4
@@ -80,11 +80,11 @@ MonoBehaviour:
     power: 57
     spawnId: Spawn_Random
     data:
-    - 10011_3
-    - 10001_1
+    - 1011_3
+    - 1001_1
     weights:
-    - {x: 10011, y: 3}
-    - {x: 10001, y: 1}
+    - {x: 1011, y: 3}
+    - {x: 1001, y: 1}
   - levelId: 1
     waveId: 3
     batchId: 1
@@ -94,11 +94,11 @@ MonoBehaviour:
     power: 58
     spawnId: Spawn_Random
     data:
-    - 10011_3
-    - 10001_1
+    - 1011_3
+    - 1001_1
     weights:
-    - {x: 10011, y: 3}
-    - {x: 10001, y: 1}
+    - {x: 1011, y: 3}
+    - {x: 1001, y: 1}
   - levelId: 1
     waveId: 3
     batchId: 2
@@ -108,11 +108,11 @@ MonoBehaviour:
     power: 59
     spawnId: Spawn_Random
     data:
-    - 10011_3
-    - 10001_1
+    - 1011_3
+    - 1001_1
     weights:
-    - {x: 10011, y: 3}
-    - {x: 10001, y: 1}
+    - {x: 1011, y: 3}
+    - {x: 1001, y: 1}
   - levelId: 1
     waveId: 3
     batchId: 3
@@ -122,11 +122,11 @@ MonoBehaviour:
     power: 60
     spawnId: Spawn_Random
     data:
-    - 10011_3
-    - 10001_1
+    - 1011_3
+    - 1001_1
     weights:
-    - {x: 10011, y: 3}
-    - {x: 10001, y: 1}
+    - {x: 1011, y: 3}
+    - {x: 1001, y: 1}
   - levelId: 1
     waveId: 3
     batchId: 4
@@ -136,8 +136,8 @@ MonoBehaviour:
     power: 61
     spawnId: Spawn_Random
     data:
-    - 10011_3
-    - 10001_1
+    - 1011_3
+    - 1001_1
     weights:
-    - {x: 10011, y: 3}
-    - {x: 10001, y: 1}
+    - {x: 1011, y: 3}
+    - {x: 1001, y: 1}

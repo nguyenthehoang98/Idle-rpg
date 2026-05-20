@@ -7,9 +7,6 @@ namespace _KITSystem.SkillSystem.Config
     [Serializable]
     public abstract class BaseProjectileConfig
     {
-        [TitleGroup("Projectile : Damage"), Indent]
-        public float damageScale = 1;
-
         [Indent] public bool isHpPercent = false;
         [Indent] public DamageTickerType damageTickerType = DamageTickerType.None;
 
