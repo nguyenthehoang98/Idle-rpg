@@ -12,15 +12,26 @@ namespace _Games.Battle
     {
         protected override void OnInitialize()
         {
+            SystemBus.Subscribe<WeaponQueryAgentSignal>(OnWeaponQueryAgent);
             SystemBus.Subscribe<SquareShapeHitSignal>(OnSquareShapeHit);
             SystemBus.Subscribe<CircleShapeHitSignal>(OnCircleShapeHit);
         }
 
         public override void Dispose()
         {
+            SystemBus.Unsubscribe<WeaponQueryAgentSignal>(OnWeaponQueryAgent);
             SystemBus.Unsubscribe<SquareShapeHitSignal>(OnSquareShapeHit);
             SystemBus.Unsubscribe<CircleShapeHitSignal>(OnCircleShapeHit);
             base.Dispose();
+        }
+
+        private void OnWeaponQueryAgent(WeaponQueryAgentSignal signal)
+        {
+            float signalRadius = signal.Radius;
+            float2 signalPos = signal.Position;
+            float2 signalSize = new float2(signalRadius * 2, signalRadius * 2);
+            int count = QueryAgent(signalPos, signalSize, out AgentData[] agents);
+            signal.OnQueryAgent?.Invoke((count, agents));
         }
 
         private void OnSquareShapeHit(SquareShapeHitSignal signal)

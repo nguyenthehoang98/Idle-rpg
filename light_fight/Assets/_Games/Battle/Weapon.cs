@@ -206,7 +206,7 @@ namespace _Games.Battle
         private void ScanNearestAgent(float radius, Action<AgentData> callback)
         {
             float2 position = float2.zero;
-            SystemBus.Publish(new QueryAgentSignal(position, radius, tuple =>
+            SystemBus.Publish(new WeaponQueryAgentSignal(position, radius, tuple =>
             {
                 int count = tuple.count;
                 AgentData[] agents = tuple.agentsData;
@@ -215,6 +215,8 @@ namespace _Games.Battle
                 for (int i = 0; i < count; i++)
                 {
                     AgentData ad = agents[i];
+                    if (ad.isDead) continue;
+                    
                     float2 pos = ad.position;
                     float d = math.distancesq(pos, position);
                     if (d < min)

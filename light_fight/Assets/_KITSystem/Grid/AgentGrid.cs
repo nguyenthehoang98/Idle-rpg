@@ -114,7 +114,7 @@ namespace _KITSystem.Grid
             }
         }
 
-        private void Initialize()
+        protected void Initialize()
         {
             if (!isInitialized)
             {
@@ -126,6 +126,7 @@ namespace _KITSystem.Grid
                 float a = 2 * (1 + multiplierIgnoreCheckDistance) * agentRadius;
                 ignoreCheckNeighborDistanceSq = a * a;
                 deltaDistanceStuckSq = deltaDistanceStuck * deltaDistanceStuck;
+                OnInitialize();
                 isInitialized = true;
             }
         }
@@ -257,9 +258,10 @@ namespace _KITSystem.Grid
     public struct AgentData
     {
         public int agent;
-        public float radius;
         public float2 position;
+        public float radius;
         public bool isStopped;
         public int stuckFrames;
+        public bool isDead;
     }
 }

@@ -537,6 +537,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59caaf811b304944a8412d3c3a9c7731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPausedDefault: 1
   targetFPS: 30
   list:
   - group: 1
@@ -547,7 +548,7 @@ MonoBehaviour:
       rid: 7993921322042785839
   - group: 0
     tickable:
-      rid: 7993921678918811738
+      rid: 7993921685397438520
   references:
     version: 2
     RefIds:
@@ -570,8 +571,8 @@ MonoBehaviour:
         avoidStrength: 2
         maxAvoidForce: 3
         stopDecelerationNormalize: 0.9
-    - rid: 7993921678918811738
-      type: {class: AgentManager, ns: _Games.Battle, asm: Games.Battle}
+    - rid: 7993921685397438520
+      type: {class: AgentEventManager, ns: _Games.Battle, asm: Games.Battle}
       data:
         locked: 0
         stopDistance: 3
