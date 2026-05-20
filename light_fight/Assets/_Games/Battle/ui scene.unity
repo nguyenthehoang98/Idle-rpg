@@ -547,10 +547,12 @@ MonoBehaviour:
       rid: 7993921322042785839
   - group: 0
     tickable:
-      rid: 7993921658343391284
+      rid: -2
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 7993921322042785839
       type: {class: SPU, ns: _KITSystem.SkillSystem.Runtime, asm: KITSystem.SkillSystem.Runtime}
       data: 
@@ -570,18 +572,6 @@ MonoBehaviour:
         avoidStrength: 2
         maxAvoidForce: 3
         stopDecelerationNormalize: 0.9
-    - rid: 7993921658343391284
-      type: {class: SpawnerTickable, ns: _Games.Battle, asm: Games.Battle}
-      data:
-        locked: 0
-        shouldDestroy: 0
-        stopDistance: 3
-        agentRadius: 0.5
-        interval: 0.5
-        multiplierIgnoreCheckDistance: 0.2
-        deltaDistanceStuck: 0.2
-        total: 0
-        isInitialized: 0
 --- !u!1 &1940578873
 GameObject:
   m_ObjectHideFlags: 0

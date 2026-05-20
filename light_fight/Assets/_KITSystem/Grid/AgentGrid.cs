@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using _KITSystem.Grid;
-using _KITSystem.Schedule;
 using _KITSystem.Utils;
 using RVO;
 using Sirenix.OdinInspector;
@@ -9,16 +7,15 @@ using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace _Games.Battle
+namespace _KITSystem.Grid
 {
     [Serializable]
-    internal class SpawnerTickable : ITickable
+    public abstract class AgentGrid : IDisposable
     {
         [TitleGroup("Agent default settings")]
 #if UNITY_EDITOR
         [SerializeField] private bool locked;
 #endif
-        [SerializeField] private bool shouldDestroy;
         [SerializeField] private float stopDistance = 3;
         [SerializeField] private float agentRadius = 0.5f;
         [SerializeField] private float interval = 0.5f;
@@ -38,7 +35,28 @@ namespace _Games.Battle
         private float deltaDistanceStuckSq;
         private float elapsedTime;
 
-        public int QueryAgents(float2 position, float radius, out AgentData[] agentsData)
+        protected abstract void OnInitialize();
+
+        public void Tick(float deltaTime)
+        {
+            Initialize();
+            if (locked) return;
+            simulator.SetTimeStep(deltaTime);
+            simulator.EnsureCompleted();
+
+            // todo: spawn (init)
+            CheckSpawn(deltaTime);
+#if UNITY_EDITOR
+            total = container.Count;
+            DrawLine(deltaTime);
+#endif
+            // todo: logic update
+            SetPreferredVelocities();
+            ReachedGoal();
+            simulator.DoStep();
+        }
+        
+        public int QueryAgent(float2 position, float radius, out AgentData[] agentsData)
         {
             int query = gridManager.Query(position, radius, out int[] results);
             agentsData = new AgentData[query];
@@ -55,39 +73,14 @@ namespace _Games.Battle
 
             return index;
         }
-
-        public void Tick(float deltaTime)
+        
+        protected void StopAgent(int agentId)
         {
-            Initialize();
-            if (locked) return;
-            simulator.SetTimeStep(deltaTime);
-            simulator.EnsureCompleted();
-
-            // todo: remove
-
-            if (shouldDestroy) RandomRemoveAgent();
-            // todo: spawn (init)
-            CheckSpawn(deltaTime);
-#if UNITY_EDITOR
-            total = container.Count;
-            DrawLine(deltaTime);
-#endif
-            // todo: logic update
-            SetPreferredVelocities();
-            ReachedGoal();
-            simulator.DoStep();
+            simulator.SetAgentMaxSpeed(agentId, 0);
+            simulator.SetAgentPrefVelocity(agentId, float2.zero);
         }
 
-        private void RandomRemoveAgent()
-        {
-            bool should = RandomUtils.Value < 0.8f;
-            if (should && agents.Count > 0)
-            {
-                DestroyAgent(agents[0]);
-            }
-        }
-
-        public void DestroyAgent(int agent)
+        protected void DestroyAgent(int agent)
         {
             if (agents.Remove(agent))
             {
@@ -99,25 +92,25 @@ namespace _Games.Battle
 
         private void DrawLine(float deltaTime)
         {
+            void DrawCircle(Vector3 center, float radius, int segments, Color color)
+            {
+                Vector3 prev = center + Vector3.right * radius;
+                for (int i = 1; i <= segments; i++)
+                {
+                    float t = i / (float)segments;
+                    float angle = t * Mathf.PI * 2f;
+                    Vector3 next = center + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+                    Debug.DrawLine(prev, next, color, deltaTime);
+                    prev = next;
+                }
+            }
+            
             foreach (int agent in agents)
             {
                 AgentData value = container[agent];
                 float2 position = value.position;
                 Color color = value.isStopped ? Color.red : Color.green;
-                DrawCircle(new Vector3(position.x, position.y), 0.5f, 6, color, deltaTime);
-            }
-        }
-
-        private void DrawCircle(Vector3 center, float radius, int segments, Color color, float deltaTime)
-        {
-            Vector3 prev = center + Vector3.right * radius;
-            for (int i = 1; i <= segments; i++)
-            {
-                float t = i / (float)segments;
-                float angle = t * Mathf.PI * 2f;
-                Vector3 next = center + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
-                Debug.DrawLine(prev, next, color, deltaTime);
-                prev = next;
+                DrawCircle(new Vector3(position.x, position.y), 0.5f, 6, color);
             }
         }
 
@@ -135,12 +128,6 @@ namespace _Games.Battle
                 deltaDistanceStuckSq = deltaDistanceStuck * deltaDistanceStuck;
                 isInitialized = true;
             }
-        }
-
-        private void StopAgent(int agentId)
-        {
-            simulator.SetAgentMaxSpeed(agentId, 0);
-            simulator.SetAgentPrefVelocity(agentId, float2.zero);
         }
 
         private void ReachedGoal()
@@ -254,6 +241,11 @@ namespace _Games.Battle
                 position = new float2(position.x, position.y)
             });
             gridManager.Insert(agent, position);
+        }
+
+        public virtual void Dispose()
+        {
+            simulator?.Dispose();
         }
     }
 

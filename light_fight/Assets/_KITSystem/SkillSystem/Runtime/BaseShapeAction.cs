@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using _KITSystem.SkillSystem.Config;
 using Unity.Mathematics;
 using UnityEngine;
@@ -36,18 +37,12 @@ namespace _KITSystem.SkillSystem.Runtime
             }
         }
 
-        public bool Hit(float2 position, out List<int> hitsId)
+        public void Hit(float2 position, Action<List<int>> callback)
         {
-            if (CanTrigger)
-            {
-                return OnHit(position, out hitsId);
-            }
-
-            hitsId = null;
-            return false;
+            if (CanTrigger) OnHit(position, callback);
         }
 
-        protected abstract bool OnHit(float2 position, out List<int> hitsId);
+        protected abstract void OnHit(float2 position, Action<List<int>> callback);
 
         public virtual void Gizmos(Vector3 position, Color color, float duration)
         {

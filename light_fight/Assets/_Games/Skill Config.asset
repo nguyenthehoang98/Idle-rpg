@@ -47,8 +47,8 @@ MonoBehaviour:
       data:
         projectileType: 1
         projectileConfig:
-          rid: 7993921661494362174
-    - rid: 7993921661494362174
+          rid: 7993921678918811724
+    - rid: 7993921678918811724
       type: {class: RangerProjectileConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
         damageScale: 1
@@ -61,22 +61,23 @@ MonoBehaviour:
         offsetStartPosition:
           x: 0
           y: 0
-        shapeType: 1
+        shapeType: 0
         shapeConfig:
-          rid: 7993921661494362177
-        trajectoryType: 1
+          rid: 7993921678918811725
+        trajectoryType: 0
         trajectoryConfig:
-          rid: 7993921661494362178
-    - rid: 7993921661494362177
-      type: {class: CircleShapeConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
+          rid: 7993921678918811726
+    - rid: 7993921678918811725
+      type: {class: SquareShapeConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
         triggerTimeInSeconds: 0
         offsetRelativePosition:
           x: 0
           y: 0
-        radius: 0.15
-    - rid: 7993921661494362178
-      type: {class: BulletTrajectoryConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
-      data:
-        initialSpeed: 10
-        acceleration: 0
+        size:
+          x: 1
+          y: 1
+        pivotType: 0
+    - rid: 7993921678918811726
+      type: {class: StationaryTrajectoryConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
+      data: 

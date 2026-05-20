@@ -1,5 +1,6 @@
 ﻿using System;
 using _KITSystem.EventBus;
+using _KITSystem.Grid;
 using Unity.Mathematics;
 
 namespace _Games.Battle

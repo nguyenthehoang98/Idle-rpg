@@ -22,15 +22,22 @@ namespace _KITSystem.SkillSystem.Runtime
             float2 position = trajectory.EvaluatePosition(deltaTime);
             for (int i = 0; i < shapes.Length; i++)
             {
-                var shape = shapes[i];
-                bool hit = shape.Hit(position, out List<int> list);
-#if UNITY_EDITOR
-                shape.Gizmos(new Vector3(position.x, position.y), hit ? Color.red : Color.green, deltaTime);
-#endif
-                if (hit)
+                BaseShapeAction shape = shapes[i];
+                shape.Hit(position, results =>
                 {
-                    foreach (var hitId in list) Damage(hitId);
-                }
+                    bool hit = results.Count > 0;
+#if UNITY_EDITOR
+                    shape.Gizmos(new Vector3(position.x, position.y), hit ? Color.red : Color.green, deltaTime);
+#endif
+                    if (hit)
+                    {
+                        for (int i1 = 0; i1 < results.Count; i1++)
+                        {
+                            int hitId = results[i1];
+                            Damage(hitId);
+                        }
+                    }
+                });
             }
         }
     }

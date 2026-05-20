@@ -1,12 +1,16 @@
 using System.Collections.Generic;
 using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace _Games.Battle
 {
     public class BattleLevel : MonoBehaviour
     {
+        [TitleGroup("Settings")]
+        [SerializeField] private float scale = 0.6f;
+        [TitleGroup("Elements")]
         [SerializeField] private Transform coneParent;
         [SerializeField] private Cone prefab;
 
@@ -14,6 +18,7 @@ namespace _Games.Battle
 
         public async UniTask Initialize(int maxStar, float timeScale)
         {
+            coneParent.transform.localScale = new Vector3(scale, scale, scale);
             for (int i = 0; i < 6; i++)
             {
                 Cone cone = Instantiate(prefab, coneParent);

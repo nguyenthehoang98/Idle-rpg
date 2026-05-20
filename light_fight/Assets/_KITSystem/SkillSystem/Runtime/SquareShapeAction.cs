@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using _KITSystem.EventBus;
 using _KITSystem.SkillSystem.Config;
+using _KITSystem.SkillSystem.Runtime.Signal;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -15,13 +18,11 @@ namespace _KITSystem.SkillSystem.Runtime
             size = shapeConfig.size;
             pivotType = shapeConfig.pivotType;
         }
-
-        protected override bool OnHit(float2 position, out List<int> hitsId)
+        
+        protected override void OnHit(float2 position, Action<List<int>> callback)
         {
             float2 center = GetPosition(position) - GetPivotToCenterOffset(size, pivotType);
-            // todo: scan objects
-            hitsId = null;
-            return false;
+            SystemBus.Publish(new SquareShapeHitSignal(center, size, callback));
         }
 
         public override void Gizmos(Vector3 position, Color color, float duration)

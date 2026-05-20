@@ -1,4 +1,3 @@
-using System;
 using _KITSystem.SkillSystem.Config;
 using _KITSystem.SkillSystem.Runtime;
 using NUnit.Framework;
@@ -8,10 +7,17 @@ namespace _KITSystem.SkillSystem.Unitest
 {
     public class SPUActionTesting
     {
+        private SPU spu;
+
+        [SetUp]
+        public void Setup()
+        {
+            spu = new SPU();
+        }
+
         [Test]
         public void Add_TriggerTimer()
         {
-            var spu = CreateSPU();
             var skillConfig = ScriptableObject.CreateInstance<SkillConfig>();
             skillConfig.defaultSkillConfig = new DefaultSkillConfig
             {
@@ -19,7 +25,7 @@ namespace _KITSystem.SkillSystem.Unitest
             };
             skillConfig.events = new EventConfig[1]
             {
-                new EventConfig
+                new()
                 {
                     triggerConfig = new TriggerConfig
                     {
@@ -37,11 +43,10 @@ namespace _KITSystem.SkillSystem.Unitest
             bool flag = spu.HasSkill(skillId, out var actions);
             Assert.IsTrue(flag);
         }
-        
+
         [Test]
         public void Add_TriggerTimer_EndLifeTime()
         {
-            var spu = CreateSPU();
             var skillConfig = ScriptableObject.CreateInstance<SkillConfig>();
             skillConfig.defaultSkillConfig = new DefaultSkillConfig
             {
@@ -49,7 +54,7 @@ namespace _KITSystem.SkillSystem.Unitest
             };
             skillConfig.events = new EventConfig[1]
             {
-                new EventConfig
+                new()
                 {
                     triggerConfig = new TriggerConfig
                     {
@@ -67,11 +72,10 @@ namespace _KITSystem.SkillSystem.Unitest
             bool flag = spu.HasSkill(skillId, out var actions);
             Assert.IsFalse(flag);
         }
-        
+
         [Test]
         public void Add_TriggerTimer_None_EndLifeTime()
         {
-            var spu = CreateSPU();
             var skillConfig = ScriptableObject.CreateInstance<SkillConfig>();
             skillConfig.defaultSkillConfig = new DefaultSkillConfig
             {
@@ -79,7 +83,7 @@ namespace _KITSystem.SkillSystem.Unitest
             };
             skillConfig.events = new EventConfig[1]
             {
-                new EventConfig
+                new()
                 {
                     triggerConfig = new TriggerConfig
                     {
@@ -96,11 +100,6 @@ namespace _KITSystem.SkillSystem.Unitest
             spu.Tick(1.99f);
             bool flag = spu.HasSkill(skillId, out var actions);
             Assert.True(flag);
-        }
-
-        SPU CreateSPU()
-        {
-            return new SPU();
         }
     }
 }

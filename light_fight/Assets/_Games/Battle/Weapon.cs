@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using _KITSystem.EventBus;
+using _KITSystem.Grid;
 using _KITSystem.SkillSystem.Config;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
@@ -140,8 +141,7 @@ namespace _Games.Battle
 #if UNITY_EDITOR
             Vector3 newAgentPos = new Vector3(agentData.position.x, agentData.position.y);
             Debug.DrawLine(mPos, newAgentPos, Color.magenta, 0.25f);
-#endif
-            SystemBus.Publish(new DestroyAgentSignal(agentData.agent));  
+#endif 
         }
 
         public void RotateTo(Vector3 goal, bool needUpdatePosition, Action onComplete)
@@ -269,11 +269,6 @@ namespace _Games.Battle
             return duration;
         }
         
-        private static float EaseInOutSine(float t)
-        {
-            return -(math.cos(math.PI * t) - 1) * 0.5f;
-        }
-
         private IEnumerator PlayAnimation(Action onCompleteFocus, Action onNextFocus)
         {
             float duration = attackClip.length;

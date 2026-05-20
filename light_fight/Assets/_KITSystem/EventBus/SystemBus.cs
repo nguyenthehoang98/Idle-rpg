@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace _KITSystem.EventBus
 {
@@ -18,6 +19,12 @@ namespace _KITSystem.EventBus
             if (listeners.TryGetValue(typeof(T), out var del))
             {
                 ((Action<T>)del)?.Invoke(evt);
+            }
+            else
+            {
+#if DEBUG
+                Debug.LogError($"Event '{typeof(T)}' not registered");
+#endif
             }
         }
 

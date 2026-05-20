@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using _KITSystem.EventBus;
+using _KITSystem.Grid;
 using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Config;
 using _KITSystem.SkillSystem.Runtime;
@@ -32,13 +33,15 @@ namespace _Games.Battle
 
         private UIBattleControlDiceSpeed controlDice;
         private BattleLevel battleLevel;
-        private SpawnerTickable spawner;
+        private AgentManager agentManager;
         private List<ArcMove> listArcs = new List<ArcMove>();
         private readonly int[] numbers = new int[BattleConst.MAX_DICE_NUMBER];
         private readonly bool[] triggers = new bool[BattleConst.MAX_DICE_NUMBER];
         
         private void Awake()
         {
+            Debug.Log(@"Thiết kế 1 phiên bản chỉ chạy logic ko bao gồm UI để có thể stresstest được");
+            
             Debug.Log(@"Nâng cấp hơn thử tính Dmg xem agent có khả năng chết trong tương lai ko? nếu có thì sẽ ignore sang agent khác, cái này phải có 1 system riêng (lưu flag vào AgentData)");
             
             Debug.Log(@"UIBattleDiceSlot nên dùng queue để tính number dice. có thể config độ khó theo level theo các trường\n
@@ -54,33 +57,19 @@ namespace _Games.Battle
 
         private void OnEnable()
         {
-            SystemBus.Subscribe<QueryAgentSignal>(OnQueryAgent);
-            SystemBus.Subscribe<DestroyAgentSignal>(OnDestroyAgent);
-        }
-
-        private void OnDestroyAgent(DestroyAgentSignal signal)
-        {
-            if (spawner == null) tickSystemOwner.TryGetTickable(out spawner);
-            if (spawner != null)
+            if (agentManager == null)
             {
-               spawner.DestroyAgent(signal.Agent);
-            }
-        }
-
-        private void OnQueryAgent(QueryAgentSignal signal)
-        {
-            if (spawner == null) tickSystemOwner.TryGetTickable(out spawner);
-            if (spawner != null)
-            {
-                int count = spawner.QueryAgents(signal.Position, signal.Radius, out var results);
-                signal.OnQueryAgent?.Invoke((count, results));
+                tickSystemOwner.TryGetTickable(out agentManager);
             }
         }
 
         private void OnDisable()
         {
-            SystemBus.Unsubscribe<QueryAgentSignal>(OnQueryAgent);
-            SystemBus.Unsubscribe<DestroyAgentSignal>(OnDestroyAgent);
+            if (agentManager != null)
+            {
+                agentManager.Dispose();
+                agentManager = null;
+            }
         }
 
         private async void Start()
