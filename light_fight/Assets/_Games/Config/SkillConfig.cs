@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using _KIT.Config.ExcelExtension.Runtime;
+using ExcelExtension;
 using UnityEngine;
 
 namespace _Games.Config

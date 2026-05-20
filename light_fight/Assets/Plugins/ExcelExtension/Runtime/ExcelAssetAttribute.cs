@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace _KIT.Config.ExcelExtension.Runtime
+namespace ExcelExtension
 {
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
 	public class ExcelAssetAttribute : System.Attribute

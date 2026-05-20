@@ -6,7 +6,7 @@ using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using _KIT.Config.ExcelExtension.Runtime;
+using ExcelExtension;
 using NPOI.HSSF.UserModel;
 using NPOI.XSSF.UserModel;
 using NPOI.SS.UserModel;
