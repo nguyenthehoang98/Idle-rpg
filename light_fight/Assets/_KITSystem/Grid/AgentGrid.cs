@@ -16,8 +16,8 @@ namespace _KITSystem.Grid
 #if UNITY_EDITOR
         [SerializeField] private bool locked;
 #endif
-        [SerializeField] private float stopDistance = 3;
-        [SerializeField] private float agentRadius = 0.5f;
+        [SerializeField] private float defaultAgentStopDistance = 3;
+        [SerializeField] private float defaultAgentRadius = 0.5f;
         [SerializeField] private float interval = 0.5f;
         [SerializeField, Range(0.1f, 0.9f)] private float multiplierIgnoreCheckDistance = 0.2f;
         [SerializeField, Range(0.1f, 1.0f)] private float deltaDistanceStuck = 0.2f;
@@ -121,9 +121,9 @@ namespace _KITSystem.Grid
                 gridManager = new FixedUniformGrid(1);
                 simulator = new Simulator();
                 simulator.SetTimeStep(0.25f);
-                simulator.SetAgentDefaults(5f, 10, 10f, 10f, agentRadius, 1f, float2.zero);
-                stopDistanceSq = stopDistance * stopDistance;
-                float a = 2 * (1 + multiplierIgnoreCheckDistance) * agentRadius;
+                simulator.SetAgentDefaults(5f, 10, 10f, 10f, defaultAgentRadius, 1f, float2.zero);
+                stopDistanceSq = defaultAgentStopDistance * defaultAgentStopDistance;
+                float a = 2 * (1 + multiplierIgnoreCheckDistance) * defaultAgentRadius;
                 ignoreCheckNeighborDistanceSq = a * a;
                 deltaDistanceStuckSq = deltaDistanceStuck * deltaDistanceStuck;
                 OnInitialize();
@@ -233,8 +233,7 @@ namespace _KITSystem.Grid
 
         private void Spawn(Vector2 position)
         {
-            float radius = agentRadius + RandomUtils.Range(-0.5f, 0.5f) * agentRadius;
-            
+            float radius = defaultAgentRadius + RandomUtils.Range(-0.5f, 0.5f) * defaultAgentRadius;
             simulator.EnsureCompleted();
             int agent = simulator.AddAgent(position);
             simulator.SetAgentRadius(agent, radius);
