@@ -29,6 +29,8 @@ namespace _KITSystem.SkillSystem.Entity
             components[index] = component;
             entityToIndex[entityId] = index;
             indexToEntity[index] = entityId;
+            
+            ComponentRegistry.Register(typeof(T), ComponentPoolDelegates<T>.Instance);
         }
 
         public static ref T Get(int entityId)

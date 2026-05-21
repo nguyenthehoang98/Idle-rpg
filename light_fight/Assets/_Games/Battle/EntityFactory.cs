@@ -30,7 +30,7 @@ namespace _Games.Battle
         public static void CreateEntity(int agentId)
         {
             int entity = EntityManager.CreateEntity();
-            EntityManager.AddComponent(entity, new HealthData(10));
+            ComponentManager<HealthData>.Add(entity, new HealthData(10));
             entityToAgent[entity] = agentId;
             agentToEntity[agentId] = entity;
         }

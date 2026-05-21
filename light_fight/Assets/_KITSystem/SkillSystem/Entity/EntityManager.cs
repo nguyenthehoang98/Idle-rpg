@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Entity
 {
@@ -18,8 +19,6 @@ namespace _KITSystem.SkillSystem.Entity
         }
 
         public static int ActiveCount { get; private set; }
-
-        #region Entity Lifecycle
 
         public static int CreateEntity()
         {
@@ -59,56 +58,6 @@ namespace _KITSystem.SkillSystem.Entity
             return id;
         }
 
-        #endregion
-
-        #region Component Operations
-
-        public static void AddComponent<T>(int entity, in T component) where T : unmanaged
-        {
-            if (!IsAlive(entity))
-            {
-#if DEBUG
-                throw new ArgumentException($"Entity {entity} is not alive.");       
-#endif
-                return;
-            }
-
-            if (ComponentManager<T>.Has(entity))
-            {
-#if DEBUG
-                throw new InvalidOperationException($"Entity {entity} already has {typeof(T).Name}.");       
-#endif
-                return;
-            }
-
-            ComponentManager<T>.Add(entity, component);
-            ComponentRegistry.Register(typeof(T), ComponentPoolDelegates<T>.Instance);
-        }
-
-        public static ref T GetComponent<T>(int entity) where T : unmanaged
-        {
-            return ref ComponentManager<T>.Get(entity);
-        }
-
-        public static bool TryGetComponent<T>(int entity, out T component) where T : unmanaged
-        {
-            return ComponentManager<T>.TryGet(entity, out component);
-        }
-
-        public static bool HasComponent<T>(int entity) where T : unmanaged
-        {
-            return ComponentManager<T>.Has(entity);
-        }
-
-        public static void RemoveComponent<T>(int entity) where T : unmanaged
-        {
-            ComponentManager<T>.Remove(entity);
-        }
-
-        #endregion
-
-        #region Query
-
         public static IEnumerable<int> Query<T>() where T : unmanaged
         {
             foreach (var id in ComponentManager<T>.EntityIds)
@@ -138,10 +87,6 @@ namespace _KITSystem.SkillSystem.Entity
             }
         }
 
-        #endregion
-
-        #region Cleanup
-
         public static void Clear()
         {
             foreach (KeyValuePair<Type, IComponentPool> pool in ComponentRegistry.Pools)
@@ -154,8 +99,6 @@ namespace _KITSystem.SkillSystem.Entity
             nextId = 1;
             ActiveCount = 0;
         }
-
-        #endregion
     }
 
     internal static class ComponentPoolDelegates<T> where T : unmanaged

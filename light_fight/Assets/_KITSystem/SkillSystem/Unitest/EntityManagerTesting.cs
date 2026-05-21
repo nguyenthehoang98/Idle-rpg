@@ -12,13 +12,10 @@ namespace _KITSystem.SkillSystem.Unitest
             EntityManager.Clear();
         }
 
-        #region Entity Lifecycle
-
         [Test]
         public void NewEntity_ShouldReturnValidId()
         {
             int entity = EntityManager.CreateEntity();
-
             Assert.IsTrue(entity > 0);
             Assert.IsTrue(EntityManager.IsAlive(entity));
             Assert.AreEqual(1, EntityManager.ActiveCount);
@@ -53,7 +50,6 @@ namespace _KITSystem.SkillSystem.Unitest
             EntityManager.DestroyEntity(e1);
 
             int e2 = EntityManager.CreateEntity();
-
             Assert.AreEqual(e1, e2);
             Assert.AreEqual(1, EntityManager.ActiveCount);
         }
@@ -81,7 +77,6 @@ namespace _KITSystem.SkillSystem.Unitest
             EntityManager.CreateEntity();
             EntityManager.CreateEntity();
             EntityManager.CreateEntity();
-
             EntityManager.Clear();
 
             Assert.AreEqual(0, EntityManager.ActiveCount);
@@ -92,7 +87,6 @@ namespace _KITSystem.SkillSystem.Unitest
         public void StressTest_EntityCreateDestroy()
         {
             const int ITER = 10000;
-
             for (int i = 0; i < ITER; i++)
             {
                 int entity = EntityManager.CreateEntity();
@@ -100,232 +94,208 @@ namespace _KITSystem.SkillSystem.Unitest
                 EntityManager.DestroyEntity(entity);
                 Assert.IsFalse(EntityManager.IsAlive(entity));
             }
-
             Assert.AreEqual(0, EntityManager.ActiveCount);
         }
+    }
 
-        #endregion
+    public class ComponentManagerTesting
+    {
+        [SetUp]
+        public void Setup()
+        {
+            ComponentManager<HealthComponent>.Clear();
+            ComponentManager<PositionComponent>.Clear();
+            ComponentManager<VelocityComponent>.Clear();
+        }
 
-        #region Component Operations
+        #region Add/Get/Has
 
         [Test]
-        public void AddComponent_ShouldBeRetrievable()
+        public void Add_ShouldBeRetrievable()
         {
-            int entity = EntityManager.CreateEntity();
-            EntityManager.AddComponent(entity, new HealthComponent { Current = 100, Max = 100 });
+            ComponentManager<HealthComponent>.Add(1, new HealthComponent { Current = 100, Max = 100 });
 
-            Assert.IsTrue(EntityManager.HasComponent<HealthComponent>(entity));
-
-            ref var health = ref EntityManager.GetComponent<HealthComponent>(entity);
+            Assert.IsTrue(ComponentManager<HealthComponent>.Has(1));
+            ref var health = ref ComponentManager<HealthComponent>.Get(1);
             Assert.AreEqual(100, health.Current);
         }
 
         [Test]
-        public void AddComponent_ShouldModifyByRef()
+        public void Add_ShouldModifyByRef()
         {
-            int entity = EntityManager.CreateEntity();
-            EntityManager.AddComponent(entity, new HealthComponent { Current = 100, Max = 100 });
+            ComponentManager<HealthComponent>.Add(1, new HealthComponent { Current = 100 });
 
-            ref var health = ref EntityManager.GetComponent<HealthComponent>(entity);
+            ref var health = ref ComponentManager<HealthComponent>.Get(1);
             health.Current = 50;
 
-            ref var health2 = ref EntityManager.GetComponent<HealthComponent>(entity);
+            ref var health2 = ref ComponentManager<HealthComponent>.Get(1);
             Assert.AreEqual(50, health2.Current);
         }
 
         [Test]
-        public void TryGetComponent_ShouldReturnFalse_WhenMissing()
+        public void TryGet_ShouldReturnFalse_WhenMissing()
         {
-            int entity = EntityManager.CreateEntity();
-
-            bool result = EntityManager.TryGetComponent<HealthComponent>(entity, out _);
-
+            bool result = ComponentManager<HealthComponent>.TryGet(1, out _);
             Assert.IsFalse(result);
         }
 
         [Test]
-        public void TryGetComponent_ShouldReturnTrue_WhenPresent()
+        public void TryGet_ShouldReturnTrue_WhenPresent()
         {
-            int entity = EntityManager.CreateEntity();
-            EntityManager.AddComponent(entity, new HealthComponent { Current = 50 });
-
-            bool result = EntityManager.TryGetComponent<HealthComponent>(entity, out var health);
+            ComponentManager<HealthComponent>.Add(1, new HealthComponent { Current = 50 });
+            bool result = ComponentManager<HealthComponent>.TryGet(1, out var health);
 
             Assert.IsTrue(result);
             Assert.AreEqual(50, health.Current);
         }
 
         [Test]
-        public void RemoveComponent_ShouldRemove()
+        public void Has_ShouldReturnFalse_WhenMissing()
         {
-            int entity = EntityManager.CreateEntity();
-            EntityManager.AddComponent(entity, new HealthComponent());
-
-            EntityManager.RemoveComponent<HealthComponent>(entity);
-
-            Assert.IsFalse(EntityManager.HasComponent<HealthComponent>(entity));
+            Assert.IsFalse(ComponentManager<HealthComponent>.Has(1));
         }
 
         [Test]
-        public void RemoveComponent_Missing_ShouldNotCrash()
+        public void Has_ShouldReturnTrue_WhenPresent()
         {
-            int entity = EntityManager.CreateEntity();
-
-            Assert.DoesNotThrow(() => EntityManager.RemoveComponent<HealthComponent>(entity));
-        }
-
-        [Test]
-        public void AddComponent_Duplicate_ShouldThrow()
-        {
-            int entity = EntityManager.CreateEntity();
-            EntityManager.AddComponent(entity, new HealthComponent());
-
-            Assert.Throws<System.InvalidOperationException>(() =>
-                EntityManager.AddComponent(entity, new HealthComponent()));
-        }
-
-        [Test]
-        public void AddComponent_DeadEntity_ShouldThrow()
-        {
-            int entity = EntityManager.CreateEntity();
-            EntityManager.DestroyEntity(entity);
-
-            Assert.Throws<System.ArgumentException>(() =>
-                EntityManager.AddComponent(entity, new HealthComponent()));
+            ComponentManager<HealthComponent>.Add(1, new HealthComponent());
+            Assert.IsTrue(ComponentManager<HealthComponent>.Has(1));
         }
 
         #endregion
 
-        #region Query
+        #region Remove
 
         [Test]
-        public void Query_SingleComponent_ShouldReturnAllWithComponent()
+        public void Remove_ShouldRemove()
         {
-            int e1 = EntityManager.CreateEntity();
-            int e2 = EntityManager.CreateEntity();
-            int e3 = EntityManager.CreateEntity();
+            ComponentManager<HealthComponent>.Add(1, new HealthComponent());
+            ComponentManager<HealthComponent>.Remove(1);
 
-            EntityManager.AddComponent(e1, new HealthComponent { Current = 10 });
-            EntityManager.AddComponent(e2, new HealthComponent { Current = 20 });
-
-            var results = new List<int>();
-            foreach (var id in EntityManager.Query<HealthComponent>())
-                results.Add(id);
-
-            Assert.AreEqual(2, results.Count);
-            Assert.Contains(e1, results);
-            Assert.Contains(e2, results);
-            Assert.IsFalse(results.Contains(e3));
+            Assert.IsFalse(ComponentManager<HealthComponent>.Has(1));
         }
 
         [Test]
-        public void Query_TwoComponents_ShouldReturnIntersection()
+        public void Remove_Missing_ShouldNotCrash()
         {
-            int e1 = EntityManager.CreateEntity();
-            int e2 = EntityManager.CreateEntity();
-            int e3 = EntityManager.CreateEntity();
-
-            EntityManager.AddComponent(e1, new HealthComponent());
-            EntityManager.AddComponent(e1, new PositionComponent());
-
-            EntityManager.AddComponent(e2, new HealthComponent());
-
-            EntityManager.AddComponent(e3, new PositionComponent());
-
-            var results = new List<int>();
-            foreach (var id in EntityManager.Query<HealthComponent, PositionComponent>())
-                results.Add(id);
-
-            Assert.AreEqual(1, results.Count);
-            Assert.Contains(e1, results);
+            Assert.DoesNotThrow(() => ComponentManager<HealthComponent>.Remove(1));
         }
 
         [Test]
-        public void Query_ThreeComponents_ShouldReturnIntersection()
+        public void Remove_ShouldSwapAndPop()
         {
-            int e1 = EntityManager.CreateEntity();
-            int e2 = EntityManager.CreateEntity();
+            ComponentManager<HealthComponent>.Add(1, new HealthComponent { Current = 1 });
+            ComponentManager<HealthComponent>.Add(2, new HealthComponent { Current = 2 });
+            ComponentManager<HealthComponent>.Add(3, new HealthComponent { Current = 3 });
 
-            EntityManager.AddComponent(e1, new HealthComponent());
-            EntityManager.AddComponent(e1, new PositionComponent());
-            EntityManager.AddComponent(e1, new VelocityComponent());
+            ComponentManager<HealthComponent>.Remove(2);
 
-            EntityManager.AddComponent(e2, new HealthComponent());
-            EntityManager.AddComponent(e2, new PositionComponent());
-
-            var results = new List<int>();
-            foreach (var id in EntityManager.Query<HealthComponent, PositionComponent, VelocityComponent>())
-                results.Add(id);
-
-            Assert.AreEqual(1, results.Count);
-            Assert.Contains(e1, results);
-            Assert.IsFalse(results.Contains(e2));
-        }
-
-        [Test]
-        public void Query_AfterDestroy_ShouldNotReturnDeadEntity()
-        {
-            int e1 = EntityManager.CreateEntity();
-            int e2 = EntityManager.CreateEntity();
-
-            EntityManager.AddComponent(e1, new HealthComponent());
-            EntityManager.AddComponent(e2, new HealthComponent());
-
-            EntityManager.DestroyEntity(e1);
-
-            var results = new List<int>();
-            foreach (var id in EntityManager.Query<HealthComponent>())
-                results.Add(id);
-
-            Assert.AreEqual(1, results.Count);
-            Assert.Contains(e2, results);
-        }
-
-        [Test]
-        public void Query_AfterRemoveComponent_ShouldNotReturnEntity()
-        {
-            int entity = EntityManager.CreateEntity();
-            EntityManager.AddComponent(entity, new HealthComponent());
-
-            EntityManager.RemoveComponent<HealthComponent>(entity);
-
-            var results = new List<int>();
-            foreach (var id in EntityManager.Query<HealthComponent>())
-                results.Add(id);
-
-            Assert.AreEqual(0, results.Count);
+            Assert.IsFalse(ComponentManager<HealthComponent>.Has(2));
+            Assert.IsTrue(ComponentManager<HealthComponent>.Has(1));
+            Assert.IsTrue(ComponentManager<HealthComponent>.Has(3));
+            Assert.AreEqual(2, ComponentManager<HealthComponent>.Count);
         }
 
         #endregion
 
-        #region DestroyEntity Cleans Components
+        #region EntityIds
 
         [Test]
-        public void DestroyEntity_ShouldRemoveAllComponents()
+        public void EntityIds_ShouldReturnAllWithComponent()
         {
-            int entity = EntityManager.CreateEntity();
-            EntityManager.AddComponent(entity, new HealthComponent());
-            EntityManager.AddComponent(entity, new PositionComponent());
-            EntityManager.AddComponent(entity, new VelocityComponent());
+            ComponentManager<HealthComponent>.Add(5, new HealthComponent());
+            ComponentManager<HealthComponent>.Add(8, new HealthComponent());
+            ComponentManager<HealthComponent>.Add(12, new HealthComponent());
 
-            EntityManager.DestroyEntity(entity);
+            var ids = new List<int>();
+            foreach (var id in ComponentManager<HealthComponent>.EntityIds)
+                ids.Add(id);
 
-            Assert.IsFalse(EntityManager.HasComponent<HealthComponent>(entity));
-            Assert.IsFalse(EntityManager.HasComponent<PositionComponent>(entity));
-            Assert.IsFalse(EntityManager.HasComponent<VelocityComponent>(entity));
+            Assert.AreEqual(3, ids.Count);
+            Assert.Contains(5, ids);
+            Assert.Contains(8, ids);
+            Assert.Contains(12, ids);
         }
 
         [Test]
-        public void DestroyEntity_ThenReuseId_ShouldBeClean()
+        public void EntityIds_ShouldNotContainRemoved()
         {
-            int e1 = EntityManager.CreateEntity();
-            EntityManager.AddComponent(e1, new HealthComponent { Current = 999 });
-            EntityManager.DestroyEntity(e1);
+            ComponentManager<HealthComponent>.Add(1, new HealthComponent());
+            ComponentManager<HealthComponent>.Add(2, new HealthComponent());
 
-            int e2 = EntityManager.CreateEntity();
-            Assert.AreEqual(e1, e2);
+            ComponentManager<HealthComponent>.Remove(1);
 
-            Assert.IsFalse(EntityManager.HasComponent<HealthComponent>(e2));
+            var ids = new List<int>();
+            foreach (var id in ComponentManager<HealthComponent>.EntityIds)
+                ids.Add(id);
+
+            Assert.AreEqual(1, ids.Count);
+            Assert.Contains(2, ids);
+            Assert.IsFalse(ids.Contains(1));
+        }
+
+        #endregion
+
+        #region Clear
+
+        [Test]
+        public void Clear_ShouldRemoveAll()
+        {
+            ComponentManager<HealthComponent>.Add(1, new HealthComponent());
+            ComponentManager<HealthComponent>.Add(2, new HealthComponent());
+            ComponentManager<HealthComponent>.Add(3, new HealthComponent());
+
+            ComponentManager<HealthComponent>.Clear();
+
+            Assert.AreEqual(0, ComponentManager<HealthComponent>.Count);
+            Assert.IsFalse(ComponentManager<HealthComponent>.Has(1));
+            Assert.IsFalse(ComponentManager<HealthComponent>.Has(2));
+            Assert.IsFalse(ComponentManager<HealthComponent>.Has(3));
+        }
+
+        [Test]
+        public void Clear_ShouldResetEntityMap()
+        {
+            ComponentManager<HealthComponent>.Add(100, new HealthComponent());
+            ComponentManager<HealthComponent>.Clear();
+
+            ComponentManager<HealthComponent>.Add(100, new HealthComponent { Current = 50 });
+            Assert.AreEqual(50, ComponentManager<HealthComponent>.Get(100).Current);
+        }
+
+        #endregion
+
+        #region Resize
+
+        [Test]
+        public void Add_ShouldAutoResize_Past256()
+        {
+            for (int i = 1; i <= 300; i++)
+            {
+                ComponentManager<HealthComponent>.Add(i, new HealthComponent { Current = i });
+            }
+
+            Assert.AreEqual(300, ComponentManager<HealthComponent>.Count);
+            Assert.AreEqual(300, ComponentManager<HealthComponent>.Get(300).Current);
+        }
+
+        #endregion
+
+        #region Multiple Types
+
+        [Test]
+        public void MultipleComponentTypes_ShouldBeIndependent()
+        {
+            ComponentManager<HealthComponent>.Add(1, new HealthComponent { Current = 100 });
+            ComponentManager<PositionComponent>.Add(1, new PositionComponent { X = 10, Y = 20 });
+
+            Assert.IsTrue(ComponentManager<HealthComponent>.Has(1));
+            Assert.IsTrue(ComponentManager<PositionComponent>.Has(1));
+
+            ComponentManager<HealthComponent>.Remove(1);
+
+            Assert.IsFalse(ComponentManager<HealthComponent>.Has(1));
+            Assert.IsTrue(ComponentManager<PositionComponent>.Has(1));
         }
 
         #endregion
@@ -333,13 +303,12 @@ namespace _KITSystem.SkillSystem.Unitest
         #region Stress Tests
 
         [Test]
-        public void StressTest_ComponentAddRemove()
+        public void StressTest_AddRemove()
         {
             const int ITER = 5000;
             var entities = new int[100];
-
             for (int i = 0; i < 100; i++)
-                entities[i] = EntityManager.CreateEntity();
+                entities[i] = i + 1;
 
             var rnd = new System.Random(42);
 
@@ -348,61 +317,55 @@ namespace _KITSystem.SkillSystem.Unitest
                 int idx = rnd.Next(100);
                 int entity = entities[idx];
                 int op = rnd.Next(4);
-                if (op == 0 && !EntityManager.HasComponent<HealthComponent>(entity))
-                    EntityManager.AddComponent(entity, new HealthComponent { Current = rnd.Next(100) });
-                else if (op == 1 && !EntityManager.HasComponent<PositionComponent>(entity))
-                    EntityManager.AddComponent(entity, new PositionComponent { X = rnd.Next(), Y = rnd.Next() });
-                else if (op == 2 && EntityManager.HasComponent<HealthComponent>(entity))
-                    EntityManager.RemoveComponent<HealthComponent>(entity);
-                else if (op == 3 && EntityManager.HasComponent<PositionComponent>(entity))
-                    EntityManager.RemoveComponent<PositionComponent>(entity);
+
+                if (op == 0 && !ComponentManager<HealthComponent>.Has(entity))
+                    ComponentManager<HealthComponent>.Add(entity, new HealthComponent { Current = rnd.Next(100) });
+                else if (op == 1 && !ComponentManager<PositionComponent>.Has(entity))
+                    ComponentManager<PositionComponent>.Add(entity, new PositionComponent { X = rnd.Next(), Y = rnd.Next() });
+                else if (op == 2 && ComponentManager<HealthComponent>.Has(entity))
+                    ComponentManager<HealthComponent>.Remove(entity);
+                else if (op == 3 && ComponentManager<PositionComponent>.Has(entity))
+                    ComponentManager<PositionComponent>.Remove(entity);
             }
         }
 
         [Test]
-        public void StressTest_MixedOperations()
+        public void StressTest_LargeEntityIds()
         {
-            const int ITER = 2000;
-            var active = new List<int>();
+            ComponentManager<HealthComponent>.Add(5000, new HealthComponent { Current = 99 });
+            ComponentManager<HealthComponent>.Add(10000, new HealthComponent { Current = 100 });
+
+            Assert.AreEqual(99, ComponentManager<HealthComponent>.Get(5000).Current);
+            Assert.AreEqual(100, ComponentManager<HealthComponent>.Get(10000).Current);
+
+            ComponentManager<HealthComponent>.Remove(5000);
+            Assert.IsFalse(ComponentManager<HealthComponent>.Has(5000));
+            Assert.IsTrue(ComponentManager<HealthComponent>.Has(10000));
+        }
+
+        [Test]
+        public void StressTest_RandomOperations()
+        {
+            const int ITER = 10000;
             var rnd = new System.Random(123);
 
             for (int i = 0; i < ITER; i++)
             {
-                int op = rnd.Next(4);
+                int entity = rnd.Next(1, 500);
+                int op = rnd.Next(3);
 
                 if (op == 0)
-                {
-                    int entity = EntityManager.CreateEntity();
-                    EntityManager.AddComponent(entity, new HealthComponent { Current = rnd.Next(100) });
-                    EntityManager.AddComponent(entity, new PositionComponent());
-                    active.Add(entity);
-                }
-                else if (op == 1 && active.Count > 0)
-                {
-                    int idx = rnd.Next(active.Count);
-                    EntityManager.DestroyEntity(active[idx]);
-                    active.RemoveAt(idx);
-                }
-                else if (op == 2 && active.Count > 0)
-                {
-                    int idx = rnd.Next(active.Count);
-                    EntityManager.RemoveComponent<HealthComponent>(active[idx]);
-                }
-                else if (op == 3)
-                {
-                    foreach (var id in EntityManager.Query<HealthComponent, PositionComponent>())
-                    {
-                        ref var health = ref EntityManager.GetComponent<HealthComponent>(id);
-                        health.Current--;
-                    }
-                }
+                    ComponentManager<HealthComponent>.Add(entity, new HealthComponent { Current = rnd.Next() });
+                else if (op == 1)
+                    ComponentManager<HealthComponent>.Remove(entity);
+                else if (op == 2 && ComponentManager<HealthComponent>.Has(entity))
+                    _ = ComponentManager<HealthComponent>.Get(entity);
             }
         }
 
         #endregion
     }
 
-    // Test components
     internal struct HealthComponent
     {
         internal int Current;

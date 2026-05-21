@@ -25,7 +25,7 @@ namespace _KITSystem.SkillSystem.Runtime
 
         protected virtual void OnDamage(int entity)
         {
-            ref var health = ref EntityManager.GetComponent<HealthData>(entity);
+            ref var health = ref ComponentManager<HealthData>.Get(entity);
             health.CurrentHealth -= 10;
             if (health.CurrentHealth <= 0)
             {
