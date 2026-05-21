@@ -34,6 +34,9 @@ namespace _KITSystem.Grid
         private float stopDistanceSq;
         private float ignoreCheckNeighborDistanceSq;
         private float deltaDistanceStuckSq;
+        
+        public event Action<AgentData> OnNewAgent; 
+        public event Action<AgentData> OnDestroyAgent; 
 
         protected abstract void OnInitialize();
 
@@ -85,6 +88,8 @@ namespace _KITSystem.Grid
                 simulator.EnsureCompleted();
                 simulator.RemoveAgent(agent);
                 gridManager.Remove(agent);
+                if (container.Remove(agent, out var agentData))
+                    OnDestroyAgent?.Invoke(agentData);
             }
         }
 
@@ -224,13 +229,15 @@ namespace _KITSystem.Grid
             int agent = simulator.AddAgent(position);
             simulator.SetAgentRadius(agent, radius);
             agents.Add(agent);
-            container.Add(agent, new AgentData
+            AgentData data = new AgentData
             {
                 agentId = agent,
                 monsterId = monsterId,
                 radius = radius,
                 position = new float2(position.x, position.y)
-            });
+            };
+            container.Add(agent, data);
+            OnNewAgent?.Invoke(data);
             gridManager.Insert(agent, position);
         }
 

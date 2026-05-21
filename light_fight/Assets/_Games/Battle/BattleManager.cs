@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using _KITSystem.EventBus;
 using _KITSystem.ExcelConfig;
+using _KITSystem.Grid;
 using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
@@ -64,12 +65,16 @@ namespace _Games.Battle
             
             tickSystemOwner.TryGetTickable(out agentEventManager);
             tickSystemOwner.TryGetTickable(out levelSpawner);
+
+            agentEventManager.OnNewAgent += NewAgent;
+            agentEventManager.OnDestroyAgent += DestroyAgent;
+            
             levelSpawner.Initialize(1, request =>
             {
                 agentEventManager.Spawn(request.MonsterID, request.Position, request.Radius);
             });
         }
-        
+
         private async void Start()
         {
             GameObject arcParent = new GameObject("ArcParent");
@@ -106,9 +111,18 @@ namespace _Games.Battle
 
         private void OnDestroy()
         {
+            agentEventManager.OnNewAgent -= NewAgent;
+            agentEventManager.OnDestroyAgent -= DestroyAgent;
             agentEventManager.Dispose();
         }
 
+        private void DestroyAgent(AgentData data)
+        {
+        }
+
+        private void NewAgent(AgentData data)
+        {
+        }
         
         private void OnDiceTrigger(List<(int order, int number)> list)
         {
