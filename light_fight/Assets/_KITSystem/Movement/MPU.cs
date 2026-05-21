@@ -11,7 +11,7 @@ namespace _KITSystem.Movement
 {
     [Serializable]
     //~ Movement Processing Unit
-    public sealed partial class MPU
+    public partial class MPU
     {
         [SerializeField, Tooltip("Các modifier có kiểu khác danh sách này sẽ không được thêm vào hệ thống")]
         private ModifierName[] flagModifiers = new ModifierName[0];

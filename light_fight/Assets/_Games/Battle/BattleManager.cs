@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using _KITSystem.EventBus;
 using _KITSystem.ExcelConfig;
-using _KITSystem.Grid;
 using _KITSystem.Schedule;
-using _KITSystem.SkillSystem.Entity;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
@@ -39,8 +37,6 @@ namespace _Games.Battle
 
         private UIBattleControlDiceSpeed controlDice;
         private BattleLevel battleLevel;
-        private LevelSpawner levelSpawner;
-        private AgentEventManager agentEventManager;
         
         async void Awake()
         {
@@ -61,19 +57,19 @@ namespace _Games.Battle
             });
             
             tickSystemOwner.TryGetTickable(out SkillTickable skillTickable);
-            tickSystemOwner.TryGetTickable(out agentEventManager);
-            tickSystemOwner.TryGetTickable(out levelSpawner);
+            tickSystemOwner.TryGetTickable(out AgentTickable agentTickable);
+            tickSystemOwner.TryGetTickable(out SpawnerTickable spawnerTickable);
             
             SystemBus.Reset();
-            SkillFactory.Initialize(skillTickable.SPU, null);
-            EntityFactory.Initialize(agentEventManager);
+            EntityFactory.Initialize(agentTickable);
+            SkillFactory.Initialize(skillTickable, new SkillQuery(agentTickable));
             
-            levelSpawner.Initialize(1, request =>
+            spawnerTickable.Initialize(1, request =>
             {
                 int monsterId = request.MonsterID;
                 float2 position = request.Position;
                 float radius = request.Radius;
-                int agentId = agentEventManager.CreateAgent(monsterId, position, radius);
+                int agentId = agentTickable.CreateAgent(monsterId, position, radius);
                 EntityFactory.CreateEntity(agentId);
             });
         }
@@ -109,7 +105,8 @@ namespace _Games.Battle
             controlDice.Play();
             tickSystemOwner.IsPaused = false;
             
-            levelSpawner.WaveSpawn();
+            tickSystemOwner.TryGetTickable(out SpawnerTickable spawnerTickable);
+            spawnerTickable.WaveSpawn();
         }
         
         private void OnDiceTrigger(List<(int order, int number)> list)

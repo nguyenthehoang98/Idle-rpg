@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using _KITSystem.EventBus;
+﻿using _KITSystem.EventBus;
 using _KITSystem.Grid;
 using _KITSystem.Schedule;
 using Unity.Mathematics;
@@ -7,7 +6,7 @@ using Unity.Mathematics;
 namespace _Games.Battle
 {
     // [Don't remove]
-    public sealed class AgentEventManager : AgentGrid, ITickable
+    public sealed class AgentTickable : AgentGrid, ITickable
     {
         protected override void OnInitialize()
         {

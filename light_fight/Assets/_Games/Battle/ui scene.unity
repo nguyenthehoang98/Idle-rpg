@@ -542,24 +542,27 @@ MonoBehaviour:
   list:
   - group: 0
     tickable:
-      rid: 7993921713083514970
-  - group: 0
+      rid: 7993921713083514981
+  - group: 1
     tickable:
-      rid: 7993921713083514971
-  - group: 0
+      rid: 7993921713083514982
+  - group: 1
     tickable:
-      rid: 7993921713083514972
+      rid: 7993921713083514983
   - group: 0
     tickable:
       rid: 7993921713083514973
   references:
     version: 2
     RefIds:
-    - rid: 7993921713083514970
-      type: {class: LevelSpawner, ns: _Games.Battle, asm: Games.Battle}
+    - rid: 7993921713083514973
+      type: {class: SkillTickable, ns: _Games.Battle, asm: Games.Battle}
       data: 
-    - rid: 7993921713083514971
-      type: {class: AgentEventManager, ns: _Games.Battle, asm: Games.Battle}
+    - rid: 7993921713083514981
+      type: {class: SpawnerTickable, ns: _Games.Battle, asm: Games.Battle}
+      data: 
+    - rid: 7993921713083514982
+      type: {class: AgentTickable, ns: _Games.Battle, asm: Games.Battle}
       data:
         locked: 0
         defaultAgentStopDistance: 3
@@ -569,19 +572,15 @@ MonoBehaviour:
         deltaDistanceStuck: 0.2
         total: 0
         isInitialized: 0
-    - rid: 7993921713083514972
+    - rid: 7993921713083514983
       type: {class: MovementTickable, ns: _Games.Battle, asm: Games.Battle}
       data:
-        mpu:
-          flagModifiers: 00000000
-          resolver:
-            rid: 7993921713083514974
-          isInitialized: 0
-          activeActions: []
-    - rid: 7993921713083514973
-      type: {class: SkillTickable, ns: _Games.Battle, asm: Games.Battle}
-      data: {}
-    - rid: 7993921713083514974
+        flagModifiers: 00000000
+        resolver:
+          rid: 7993921713083514984
+        isInitialized: 0
+        activeActions: []
+    - rid: 7993921713083514984
       type: {class: AvoidanceResolver, ns: _KITSystem.Movement, asm: KITSystem.Movement}
       data:
         cellSize: 1

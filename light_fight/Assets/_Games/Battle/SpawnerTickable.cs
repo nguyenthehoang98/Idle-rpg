@@ -12,7 +12,7 @@ using UnityEngine;
 namespace _Games.Battle
 {
     [Serializable]
-    public sealed class LevelSpawner : ITickable, IDisposable
+    public sealed class SpawnerTickable : ITickable, IDisposable
     {
         private MonsterConfig monsterConfig;
         private SkillConfig skillConfig;

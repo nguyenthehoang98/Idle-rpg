@@ -56,7 +56,7 @@ namespace _KITSystem.Grid
             simulator.DoStep();
         }
         
-        protected int QueryAgent(float2 position, float2 size, out AgentData[] agentsData)
+        public int QueryAgent(float2 position, float2 size, out AgentData[] agentsData)
         {
             int query = gridManager.Query(position, size, out int[] results);
             agentsData = new AgentData[query];
