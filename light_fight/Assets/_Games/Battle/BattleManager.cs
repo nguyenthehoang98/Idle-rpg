@@ -3,6 +3,7 @@ using _KITSystem.EventBus;
 using _KITSystem.ExcelConfig;
 using _KITSystem.Grid;
 using _KITSystem.Schedule;
+using _KITSystem.SkillSystem.Entity;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
@@ -62,6 +63,7 @@ namespace _Games.Battle
             SystemBus.Reset();
             tickSystemOwner.TryGetTickable(out SPU spu);
             SkillFactory.Initialize(spu);
+            EntityFactory.Initialize();
             
             tickSystemOwner.TryGetTickable(out agentEventManager);
             tickSystemOwner.TryGetTickable(out levelSpawner);
@@ -118,10 +120,12 @@ namespace _Games.Battle
 
         private void DestroyAgent(AgentData data)
         {
+            EntityFactory.RemoveEntity(data.agentId);
         }
 
         private void NewAgent(AgentData data)
         {
+            EntityFactory.NewEntity(data.agentId);
         }
         
         private void OnDiceTrigger(List<(int order, int number)> list)
