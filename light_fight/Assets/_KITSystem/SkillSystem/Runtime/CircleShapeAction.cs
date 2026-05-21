@@ -20,7 +20,7 @@ namespace _KITSystem.SkillSystem.Runtime
         protected override void OnHit(float2 position, Action<List<int>> callback)
         {
             float2 center = GetPosition(position);
-            SystemBus.Publish(new CircleShapeHitSignal(center, radius, callback));
+            SystemBus.Publish(new CircleShapeHitEntitySignal(center, radius, callback));
         }
 
         public override void Gizmos(Vector3 position, Color color, float duration)

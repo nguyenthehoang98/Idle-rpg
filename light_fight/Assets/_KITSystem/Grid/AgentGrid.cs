@@ -11,7 +11,7 @@ using Random = UnityEngine.Random;
 namespace _KITSystem.Grid
 {
     [Serializable]
-    public abstract class AgentGrid : IDisposable
+    public class AgentGrid : IDisposable
     {
         [TitleGroup("Agent default settings")]
 #if UNITY_EDITOR
@@ -35,10 +35,9 @@ namespace _KITSystem.Grid
         private float ignoreCheckNeighborDistanceSq;
         private float deltaDistanceStuckSq;
         
-        public event Action<AgentData> OnNewAgent; 
-        public event Action<AgentData> OnDestroyAgent; 
-
-        protected abstract void OnInitialize();
+        protected virtual void OnInitialize()
+        { 
+        }
 
         public void Tick(float deltaTime)
         {
@@ -79,18 +78,6 @@ namespace _KITSystem.Grid
         {
             simulator.SetAgentMaxSpeed(agentId, 0);
             simulator.SetAgentPrefVelocity(agentId, float2.zero);
-        }
-
-        protected void DestroyAgent(int agent)
-        {
-            if (agents.Remove(agent))
-            {
-                simulator.EnsureCompleted();
-                simulator.RemoveAgent(agent);
-                gridManager.Remove(agent);
-                if (container.Remove(agent, out var agentData))
-                    OnDestroyAgent?.Invoke(agentData);
-            }
         }
 
         private void DrawLine(float deltaTime)
@@ -223,7 +210,7 @@ namespace _KITSystem.Grid
             }
         }
 
-        public void Spawn(int monsterId, Vector2 position, float radius)
+        public int CreateAgent(int monsterId, Vector2 position, float radius)
         {
             simulator.EnsureCompleted();
             int agent = simulator.AddAgent(position);
@@ -237,10 +224,21 @@ namespace _KITSystem.Grid
                 position = new float2(position.x, position.y)
             };
             container.Add(agent, data);
-            OnNewAgent?.Invoke(data);
             gridManager.Insert(agent, position);
+            return agent;
         }
 
+        public void DestroyAgent(int agentId)
+        {
+            if (agents.Remove(agentId))
+            {
+                simulator.EnsureCompleted();
+                simulator.RemoveAgent(agentId);
+                gridManager.Remove(agentId);
+                container.Remove(agentId);
+            }
+        }
+        
         public virtual void Dispose()
         {
             simulator?.Dispose();

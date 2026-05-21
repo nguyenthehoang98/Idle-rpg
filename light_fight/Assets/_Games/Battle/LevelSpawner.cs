@@ -4,10 +4,8 @@ using System.Linq;
 using _Games.Config;
 using _Games.Utils;
 using _KITSystem.ExcelConfig;
-using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using _KITSystem.Utils;
-using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -30,9 +28,9 @@ namespace _Games.Battle
         private bool paused = true;
         private bool waiting;
         
-        public void Initialize(int levelId, Action<RequestCreateMonster> onCreateMonster)
+        public void Initialize(int levelId, Action<RequestCreateMonster> ocmCalllback)
         {
-            this.onCreateMonster = onCreateMonster;
+            onCreateMonster = ocmCalllback;
             monsterConfig = KitConfigManager.Get<MonsterConfig>();
             skillConfig = KitConfigManager.Get<SkillConfig>();
             

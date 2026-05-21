@@ -17,7 +17,7 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void NewEntity_ShouldReturnValidId()
         {
-            int entity = EntityManager.NewEntity();
+            int entity = EntityManager.CreateEntity();
 
             Assert.IsTrue(entity > 0);
             Assert.IsTrue(EntityManager.IsAlive(entity));
@@ -27,9 +27,9 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void NewEntity_ShouldIncrementId()
         {
-            int e1 = EntityManager.NewEntity();
-            int e2 = EntityManager.NewEntity();
-            int e3 = EntityManager.NewEntity();
+            int e1 = EntityManager.CreateEntity();
+            int e2 = EntityManager.CreateEntity();
+            int e3 = EntityManager.CreateEntity();
 
             Assert.AreNotEqual(e1, e2);
             Assert.AreNotEqual(e2, e3);
@@ -39,7 +39,7 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void DestroyEntity_ShouldMarkDead()
         {
-            int entity = EntityManager.NewEntity();
+            int entity = EntityManager.CreateEntity();
             EntityManager.DestroyEntity(entity);
 
             Assert.IsFalse(EntityManager.IsAlive(entity));
@@ -49,10 +49,10 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void DestroyEntity_ShouldFreeIdForReuse()
         {
-            int e1 = EntityManager.NewEntity();
+            int e1 = EntityManager.CreateEntity();
             EntityManager.DestroyEntity(e1);
 
-            int e2 = EntityManager.NewEntity();
+            int e2 = EntityManager.CreateEntity();
 
             Assert.AreEqual(e1, e2);
             Assert.AreEqual(1, EntityManager.ActiveCount);
@@ -68,7 +68,7 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void DestroyEntity_DoubleDestroy_ShouldNotCrash()
         {
-            int entity = EntityManager.NewEntity();
+            int entity = EntityManager.CreateEntity();
             EntityManager.DestroyEntity(entity);
             EntityManager.DestroyEntity(entity);
 
@@ -78,9 +78,9 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void Clear_ShouldResetAll()
         {
-            EntityManager.NewEntity();
-            EntityManager.NewEntity();
-            EntityManager.NewEntity();
+            EntityManager.CreateEntity();
+            EntityManager.CreateEntity();
+            EntityManager.CreateEntity();
 
             EntityManager.Clear();
 
@@ -95,7 +95,7 @@ namespace _KITSystem.SkillSystem.Unitest
 
             for (int i = 0; i < ITER; i++)
             {
-                int entity = EntityManager.NewEntity();
+                int entity = EntityManager.CreateEntity();
                 Assert.IsTrue(EntityManager.IsAlive(entity));
                 EntityManager.DestroyEntity(entity);
                 Assert.IsFalse(EntityManager.IsAlive(entity));
@@ -111,7 +111,7 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void AddComponent_ShouldBeRetrievable()
         {
-            int entity = EntityManager.NewEntity();
+            int entity = EntityManager.CreateEntity();
             EntityManager.AddComponent(entity, new HealthComponent { Current = 100, Max = 100 });
 
             Assert.IsTrue(EntityManager.HasComponent<HealthComponent>(entity));
@@ -123,7 +123,7 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void AddComponent_ShouldModifyByRef()
         {
-            int entity = EntityManager.NewEntity();
+            int entity = EntityManager.CreateEntity();
             EntityManager.AddComponent(entity, new HealthComponent { Current = 100, Max = 100 });
 
             ref var health = ref EntityManager.GetComponent<HealthComponent>(entity);
@@ -136,7 +136,7 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void TryGetComponent_ShouldReturnFalse_WhenMissing()
         {
-            int entity = EntityManager.NewEntity();
+            int entity = EntityManager.CreateEntity();
 
             bool result = EntityManager.TryGetComponent<HealthComponent>(entity, out _);
 
@@ -146,7 +146,7 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void TryGetComponent_ShouldReturnTrue_WhenPresent()
         {
-            int entity = EntityManager.NewEntity();
+            int entity = EntityManager.CreateEntity();
             EntityManager.AddComponent(entity, new HealthComponent { Current = 50 });
 
             bool result = EntityManager.TryGetComponent<HealthComponent>(entity, out var health);
@@ -158,7 +158,7 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void RemoveComponent_ShouldRemove()
         {
-            int entity = EntityManager.NewEntity();
+            int entity = EntityManager.CreateEntity();
             EntityManager.AddComponent(entity, new HealthComponent());
 
             EntityManager.RemoveComponent<HealthComponent>(entity);
@@ -169,7 +169,7 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void RemoveComponent_Missing_ShouldNotCrash()
         {
-            int entity = EntityManager.NewEntity();
+            int entity = EntityManager.CreateEntity();
 
             Assert.DoesNotThrow(() => EntityManager.RemoveComponent<HealthComponent>(entity));
         }
@@ -177,7 +177,7 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void AddComponent_Duplicate_ShouldThrow()
         {
-            int entity = EntityManager.NewEntity();
+            int entity = EntityManager.CreateEntity();
             EntityManager.AddComponent(entity, new HealthComponent());
 
             Assert.Throws<System.InvalidOperationException>(() =>
@@ -187,7 +187,7 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void AddComponent_DeadEntity_ShouldThrow()
         {
-            int entity = EntityManager.NewEntity();
+            int entity = EntityManager.CreateEntity();
             EntityManager.DestroyEntity(entity);
 
             Assert.Throws<System.ArgumentException>(() =>
@@ -201,9 +201,9 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void Query_SingleComponent_ShouldReturnAllWithComponent()
         {
-            int e1 = EntityManager.NewEntity();
-            int e2 = EntityManager.NewEntity();
-            int e3 = EntityManager.NewEntity();
+            int e1 = EntityManager.CreateEntity();
+            int e2 = EntityManager.CreateEntity();
+            int e3 = EntityManager.CreateEntity();
 
             EntityManager.AddComponent(e1, new HealthComponent { Current = 10 });
             EntityManager.AddComponent(e2, new HealthComponent { Current = 20 });
@@ -221,9 +221,9 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void Query_TwoComponents_ShouldReturnIntersection()
         {
-            int e1 = EntityManager.NewEntity();
-            int e2 = EntityManager.NewEntity();
-            int e3 = EntityManager.NewEntity();
+            int e1 = EntityManager.CreateEntity();
+            int e2 = EntityManager.CreateEntity();
+            int e3 = EntityManager.CreateEntity();
 
             EntityManager.AddComponent(e1, new HealthComponent());
             EntityManager.AddComponent(e1, new PositionComponent());
@@ -243,8 +243,8 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void Query_ThreeComponents_ShouldReturnIntersection()
         {
-            int e1 = EntityManager.NewEntity();
-            int e2 = EntityManager.NewEntity();
+            int e1 = EntityManager.CreateEntity();
+            int e2 = EntityManager.CreateEntity();
 
             EntityManager.AddComponent(e1, new HealthComponent());
             EntityManager.AddComponent(e1, new PositionComponent());
@@ -265,8 +265,8 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void Query_AfterDestroy_ShouldNotReturnDeadEntity()
         {
-            int e1 = EntityManager.NewEntity();
-            int e2 = EntityManager.NewEntity();
+            int e1 = EntityManager.CreateEntity();
+            int e2 = EntityManager.CreateEntity();
 
             EntityManager.AddComponent(e1, new HealthComponent());
             EntityManager.AddComponent(e2, new HealthComponent());
@@ -284,7 +284,7 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void Query_AfterRemoveComponent_ShouldNotReturnEntity()
         {
-            int entity = EntityManager.NewEntity();
+            int entity = EntityManager.CreateEntity();
             EntityManager.AddComponent(entity, new HealthComponent());
 
             EntityManager.RemoveComponent<HealthComponent>(entity);
@@ -303,7 +303,7 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void DestroyEntity_ShouldRemoveAllComponents()
         {
-            int entity = EntityManager.NewEntity();
+            int entity = EntityManager.CreateEntity();
             EntityManager.AddComponent(entity, new HealthComponent());
             EntityManager.AddComponent(entity, new PositionComponent());
             EntityManager.AddComponent(entity, new VelocityComponent());
@@ -318,11 +318,11 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void DestroyEntity_ThenReuseId_ShouldBeClean()
         {
-            int e1 = EntityManager.NewEntity();
+            int e1 = EntityManager.CreateEntity();
             EntityManager.AddComponent(e1, new HealthComponent { Current = 999 });
             EntityManager.DestroyEntity(e1);
 
-            int e2 = EntityManager.NewEntity();
+            int e2 = EntityManager.CreateEntity();
             Assert.AreEqual(e1, e2);
 
             Assert.IsFalse(EntityManager.HasComponent<HealthComponent>(e2));
@@ -339,7 +339,7 @@ namespace _KITSystem.SkillSystem.Unitest
             var entities = new int[100];
 
             for (int i = 0; i < 100; i++)
-                entities[i] = EntityManager.NewEntity();
+                entities[i] = EntityManager.CreateEntity();
 
             var rnd = new System.Random(42);
 
@@ -372,7 +372,7 @@ namespace _KITSystem.SkillSystem.Unitest
 
                 if (op == 0)
                 {
-                    int entity = EntityManager.NewEntity();
+                    int entity = EntityManager.CreateEntity();
                     EntityManager.AddComponent(entity, new HealthComponent { Current = rnd.Next(100) });
                     EntityManager.AddComponent(entity, new PositionComponent());
                     active.Add(entity);

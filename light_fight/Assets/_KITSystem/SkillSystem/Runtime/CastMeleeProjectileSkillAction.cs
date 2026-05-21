@@ -40,8 +40,8 @@ namespace _KITSystem.SkillSystem.Runtime
                         {
                             for (int i1 = 0; i1 < results.Count; i1++)
                             {
-                                int hitId = results[i1];
-                                Damage(hitId);
+                                int entity = results[i1];
+                                Damage(entity);
                             }
                         }
                     });

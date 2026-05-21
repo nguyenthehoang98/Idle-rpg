@@ -8,6 +8,7 @@ using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _Games.Battle
@@ -59,21 +60,21 @@ namespace _Games.Battle
                 "MonsterConfig",
             });
             
-            // global
-            SystemBus.Reset();
             tickSystemOwner.TryGetTickable(out SPU spu);
-            SkillFactory.Initialize(spu);
-            EntityFactory.Initialize();
-            
             tickSystemOwner.TryGetTickable(out agentEventManager);
             tickSystemOwner.TryGetTickable(out levelSpawner);
-
-            agentEventManager.OnNewAgent += NewAgent;
-            agentEventManager.OnDestroyAgent += DestroyAgent;
+            
+            SystemBus.Reset();
+            SkillFactory.Initialize(spu);
+            EntityFactory.Initialize(agentEventManager);
             
             levelSpawner.Initialize(1, request =>
             {
-                agentEventManager.Spawn(request.MonsterID, request.Position, request.Radius);
+                int monsterId = request.MonsterID;
+                float2 position = request.Position;
+                float radius = request.Radius;
+                int agentId = agentEventManager.CreateAgent(monsterId, position, radius);
+                EntityFactory.CreateEntity(agentId);
             });
         }
 
@@ -109,23 +110,6 @@ namespace _Games.Battle
             tickSystemOwner.IsPaused = false;
             
             levelSpawner.WaveSpawn();
-        }
-
-        private void OnDestroy()
-        {
-            agentEventManager.OnNewAgent -= NewAgent;
-            agentEventManager.OnDestroyAgent -= DestroyAgent;
-            agentEventManager.Dispose();
-        }
-
-        private void DestroyAgent(AgentData data)
-        {
-            EntityFactory.RemoveEntity(data.agentId);
-        }
-
-        private void NewAgent(AgentData data)
-        {
-            EntityFactory.NewEntity(data.agentId);
         }
         
         private void OnDiceTrigger(List<(int order, int number)> list)

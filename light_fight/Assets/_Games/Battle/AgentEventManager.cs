@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using _Games.Config;
 using _KITSystem.EventBus;
-using _KITSystem.ExcelConfig;
 using _KITSystem.Grid;
 using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Runtime.Signal;
@@ -16,14 +14,14 @@ namespace _Games.Battle
         {
             SystemBus.Subscribe<WeaponQueryAgentSignal>(OnWeaponQueryAgent);
             SystemBus.Subscribe<SquareShapeHitSignal>(OnSquareShapeHit);
-            SystemBus.Subscribe<CircleShapeHitSignal>(OnCircleShapeHit);
+            SystemBus.Subscribe<CircleShapeHitEntitySignal>(OnCircleShapeHit);
         }
 
         public override void Dispose()
         {
             SystemBus.Unsubscribe<WeaponQueryAgentSignal>(OnWeaponQueryAgent);
             SystemBus.Unsubscribe<SquareShapeHitSignal>(OnSquareShapeHit);
-            SystemBus.Unsubscribe<CircleShapeHitSignal>(OnCircleShapeHit);
+            SystemBus.Unsubscribe<CircleShapeHitEntitySignal>(OnCircleShapeHit);
             base.Dispose();
         }
 
@@ -69,13 +67,13 @@ namespace _Games.Battle
                 }
             }
             
-            signal.Agents.Invoke(results);
+            signal.Entities.Invoke(results);
         }
 
-        private void OnCircleShapeHit(CircleShapeHitSignal signal)
+        private void OnCircleShapeHit(CircleShapeHitEntitySignal entitySignal)
         {
-            float signalRadius = signal.Radius;
-            float2 signalPos = signal.Position;
+            float signalRadius = entitySignal.Radius;
+            float2 signalPos = entitySignal.Position;
             float2 signalSize = new float2(signalRadius * 2, signalRadius * 2);
             
             int count = QueryAgent(signalPos, signalSize, out AgentData[] agents);
@@ -88,19 +86,21 @@ namespace _Games.Battle
             {
                 AgentData agent = agents[i];
 
+                if (!EntityFactory.FindEntity(agent.agentId, out var entity)) continue;
+
                 float totalRadius = signalRadius + agent.radius;
 
-                float2 delta = agent.position - signal.Position;
+                float2 delta = agent.position - entitySignal.Position;
 
                 radiusSq = totalRadius * totalRadius;
 
                 if (math.lengthsq(delta) <= radiusSq)
                 {
-                    results.Add(agent.agentId);
+                    results.Add(entity);
                 }
             }
             
-            signal.Agents.Invoke(results);
+            entitySignal.Entities.Invoke(results);
         }
     }
 }

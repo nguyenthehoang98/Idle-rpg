@@ -8,13 +8,13 @@ namespace _KITSystem.SkillSystem.Runtime.Signal
     {
         public float2 Position;
         public float2 Size;
-        public Action<List<int>> Agents;
+        public Action<List<int>> Entities;
         
-        public SquareShapeHitSignal(float2 position, float2 size, Action<List<int>> agents)
+        public SquareShapeHitSignal(float2 position, float2 size, Action<List<int>> entities)
         {
             Position = position;
             Size = size;
-            Agents = agents;
+            Entities = entities;
         }
     }
 }

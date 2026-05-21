@@ -1,4 +1,5 @@
 ﻿using _KITSystem.SkillSystem.Config;
+using _KITSystem.SkillSystem.Entity;
 
 namespace _KITSystem.SkillSystem.Runtime
 {
@@ -20,10 +21,16 @@ namespace _KITSystem.SkillSystem.Runtime
             }
         }
 
-        protected void Damage(int target) => OnDamage(target);
+        protected void Damage(int entity) => OnDamage(entity);
 
-        protected virtual void OnDamage(int target)
+        protected virtual void OnDamage(int entity)
         {
+            ref var health = ref EntityManager.GetComponent<HealthData>(entity);
+            health.CurrentHealth -= 10;
+            if (health.CurrentHealth <= 0)
+            {
+                EntityManager.DestroyEntity(entity);
+            }
         }
     }
 }

@@ -8,6 +8,9 @@ namespace _KITSystem.SkillSystem.Entity
         private static int[] entityVersions = new int[256];
         private static readonly Stack<int> freeIds = new();
         private static int nextId = 1;
+        
+        public static event Action<int> OnEntityCreated;
+        public static event Action<int> OnEntityRemoved;
 
         static EntityManager()
         {
@@ -18,11 +21,12 @@ namespace _KITSystem.SkillSystem.Entity
 
         #region Entity Lifecycle
 
-        public static int NewEntity()
+        public static int CreateEntity()
         {
             int id = freeIds.Count > 0 ? freeIds.Pop() : AllocateId();
             entityVersions[id] = 0;
             ActiveCount++;
+            OnEntityCreated?.Invoke(id);
             return id;
         }
 
@@ -39,6 +43,7 @@ namespace _KITSystem.SkillSystem.Entity
             entityVersions[entity] = -1;
             freeIds.Push(entity);
             ActiveCount--;
+            OnEntityRemoved?.Invoke(entity);
         }
 
         public static bool IsAlive(int entity)
