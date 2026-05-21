@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using _KITSystem.Schedule;
 using Sirenix.OdinInspector;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Debug = UnityEngine.Debug;
 
 namespace _KITSystem.Movement
 {
     [Serializable]
     //~ Movement Processing Unit
-    public sealed partial class MPU : ITickable
+    public sealed partial class MPU
     {
         [SerializeField, Tooltip("Các modifier có kiểu khác danh sách này sẽ không được thêm vào hệ thống")]
         private ModifierName[] flagModifiers = new ModifierName[0];

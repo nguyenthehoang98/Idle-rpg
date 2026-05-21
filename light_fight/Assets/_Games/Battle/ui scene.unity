@@ -542,39 +542,23 @@ MonoBehaviour:
   list:
   - group: 0
     tickable:
-      rid: 7993921685397438726
+      rid: 7993921713083514970
   - group: 0
     tickable:
-      rid: 7993921685397438520
-  - group: 1
+      rid: 7993921713083514971
+  - group: 0
     tickable:
-      rid: 7993921391471624233
-  - group: 1
+      rid: 7993921713083514972
+  - group: 0
     tickable:
-      rid: 7993921322042785839
+      rid: 7993921713083514973
   references:
     version: 2
     RefIds:
-    - rid: 7993921322042785839
-      type: {class: SPU, ns: _KITSystem.SkillSystem.Runtime, asm: KITSystem.SkillSystem.Runtime}
+    - rid: 7993921713083514970
+      type: {class: LevelSpawner, ns: _Games.Battle, asm: Games.Battle}
       data: 
-    - rid: 7993921391471624233
-      type: {class: MPU, ns: _KITSystem.Movement, asm: KITSystem.Movement}
-      data:
-        flagModifiers: 000000000200000003000000
-        resolver:
-          rid: 7993921391471624234
-        isInitialized: 0
-        activeActions: []
-    - rid: 7993921391471624234
-      type: {class: AvoidanceResolver, ns: _KITSystem.Movement, asm: KITSystem.Movement}
-      data:
-        cellSize: 1
-        avoidRadius: 1.5
-        avoidStrength: 2
-        maxAvoidForce: 3
-        stopDecelerationNormalize: 0.9
-    - rid: 7993921685397438520
+    - rid: 7993921713083514971
       type: {class: AgentEventManager, ns: _Games.Battle, asm: Games.Battle}
       data:
         locked: 0
@@ -585,10 +569,26 @@ MonoBehaviour:
         deltaDistanceStuck: 0.2
         total: 0
         isInitialized: 0
-    - rid: 7993921685397438726
-      type: {class: LevelSpawner, ns: _Games.Battle, asm: Games.Battle}
+    - rid: 7993921713083514972
+      type: {class: MovementTickable, ns: _Games.Battle, asm: Games.Battle}
       data:
-        isInitialized: 0
+        mpu:
+          flagModifiers: 00000000
+          resolver:
+            rid: 7993921713083514974
+          isInitialized: 0
+          activeActions: []
+    - rid: 7993921713083514973
+      type: {class: SkillTickable, ns: _Games.Battle, asm: Games.Battle}
+      data: {}
+    - rid: 7993921713083514974
+      type: {class: AvoidanceResolver, ns: _KITSystem.Movement, asm: KITSystem.Movement}
+      data:
+        cellSize: 1
+        avoidRadius: 1.5
+        avoidStrength: 2
+        maxAvoidForce: 3
+        stopDecelerationNormalize: 0.9
 --- !u!1 &1940578873
 GameObject:
   m_ObjectHideFlags: 0
