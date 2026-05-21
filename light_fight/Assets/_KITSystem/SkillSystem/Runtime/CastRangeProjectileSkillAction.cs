@@ -23,7 +23,8 @@ namespace _KITSystem.SkillSystem.Runtime
             for (int i = 0; i < shapes.Length; i++)
             {
                 BaseShapeAction shape = shapes[i];
-                shape.Hit(position, results =>
+                var results = shape.Hit(position);
+                if (results != null)
                 {
                     bool hit = results.Count > 0;
 #if UNITY_EDITOR
@@ -37,7 +38,7 @@ namespace _KITSystem.SkillSystem.Runtime
                             Damage(entity);
                         }
                     }
-                });
+                }
             }
         }
     }

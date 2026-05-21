@@ -8,14 +8,16 @@ namespace _KITSystem.SkillSystem.Runtime
 {
     internal abstract class BaseShapeAction
     {
+        protected IQuery query;
         private float triggerTimeInSeconds;
         private float elapsed;
         private float2 offsetRelativePosition;
 
         public bool CanTrigger { get; private set; }
 
-        protected BaseShapeAction(BaseShapeConfig shapeConfig)
+        protected BaseShapeAction(BaseShapeConfig shapeConfig, IQuery query)
         {
+            this.query = query;
             triggerTimeInSeconds = shapeConfig.triggerTimeInSeconds;
             offsetRelativePosition = shapeConfig.offsetRelativePosition;
         }
@@ -37,12 +39,14 @@ namespace _KITSystem.SkillSystem.Runtime
             }
         }
 
-        public void Hit(float2 position, Action<List<int>> callback)
+        public List<int> Hit(float2 position)
         {
-            if (CanTrigger) OnHit(position, callback);
+            if (CanTrigger)
+                OnHit(position);
+            return null;
         }
 
-        protected abstract void OnHit(float2 position, Action<List<int>> callback);
+        protected abstract List<int> OnHit(float2 position);
 
         public virtual void Gizmos(Vector3 position, Color color, float duration)
         {

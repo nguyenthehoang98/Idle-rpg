@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using _KITSystem.Schedule;
 using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Runtime
 {
+    [Serializable]
     /// <summary>
     /// Logic tương tự MPU. nhưng khác 1 chút về skill
     /// Thay vì có 1 lớp Skill xử lý logic của các action thì mỗi action lại có 1 logic riêng, tương tự như request rồi có ref đến parent là skillId
     /// </summary>
-    public partial class SPU : ITickable
+    public partial class SPU
     {
         private int version;
         private int nextActionId = 1;

@@ -30,7 +30,8 @@ namespace _KITSystem.SkillSystem.Runtime
                 var shape = shapes[i];
                 if (shape.CanTrigger)
                 {
-                    shape.Hit(start, results =>
+                    var results = shape.Hit(start);
+                    if (results != null)
                     {
                         bool hit = results.Count > 0;
 #if UNITY_EDITOR
@@ -44,8 +45,8 @@ namespace _KITSystem.SkillSystem.Runtime
                                 Damage(entity);
                             }
                         }
-                    });
-                    
+                    }
+
                     triggered[i] = true;
                 }
             }

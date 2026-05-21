@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using _KITSystem.EventBus;
+﻿using System.Collections.Generic;
 using _KITSystem.SkillSystem.Config;
-using _KITSystem.SkillSystem.Runtime.Signal;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -11,18 +8,18 @@ namespace _KITSystem.SkillSystem.Runtime
     internal class SquareShapeAction : BaseShapeAction
     {
         private Vector2 size;
-        SquareShapeConfig.PivotType pivotType;
-            
-        public SquareShapeAction(SquareShapeConfig shapeConfig) : base(shapeConfig)
+        private SquareShapeConfig.PivotType pivotType;
+
+        public SquareShapeAction(SquareShapeConfig shapeConfig, IQuery query) : base(shapeConfig, query)
         {
             size = shapeConfig.size;
             pivotType = shapeConfig.pivotType;
         }
-        
-        protected override void OnHit(float2 position, Action<List<int>> callback)
+
+        protected override List<int> OnHit(float2 position)
         {
             float2 center = GetPosition(position) - GetPivotToCenterOffset(size, pivotType);
-            SystemBus.Publish(new SquareShapeHitSignal(center, size, callback));
+            return query.GetUnits(center, size);
         }
 
         public override void Gizmos(Vector3 position, Color color, float duration)

@@ -60,12 +60,12 @@ namespace _Games.Battle
                 "MonsterConfig",
             });
             
-            tickSystemOwner.TryGetTickable(out SPU spu);
+            tickSystemOwner.TryGetTickable(out SkillTickable skillTickable);
             tickSystemOwner.TryGetTickable(out agentEventManager);
             tickSystemOwner.TryGetTickable(out levelSpawner);
             
             SystemBus.Reset();
-            SkillFactory.Initialize(spu);
+            SkillFactory.Initialize(skillTickable.SPU, null);
             EntityFactory.Initialize(agentEventManager);
             
             levelSpawner.Initialize(1, request =>

@@ -7,8 +7,13 @@ namespace _KITSystem.SkillSystem.Runtime
     public static class SkillFactory
     {
         private static SPU spu;
+        private static IQuery query;
 
-        public static void Initialize(SPU spu) => SkillFactory.spu = spu;
+        public static void Initialize(SPU spu, IQuery query)
+        {
+            SkillFactory.spu = spu;
+            SkillFactory.query = query;
+        }
 
         public static int Build(float2 start, float2 goal, SkillFrameConfig skillFrameConfig)
         {
@@ -75,10 +80,10 @@ namespace _KITSystem.SkillSystem.Runtime
             {
                 case BaseShapeConfig.ShapeType.Square:
                     var square = shapeConfig as SquareShapeConfig;
-                    return new SquareShapeAction(square);
+                    return new SquareShapeAction(square, query);
                 case BaseShapeConfig.ShapeType.Circle:
                     var circle = shapeConfig as CircleShapeConfig;
-                    return new CircleShapeAction(circle);
+                    return new CircleShapeAction(circle, query);
                 default:
                     Debug.LogError($"Type {shapeConfig.Type} is not supported");
                     return null;
