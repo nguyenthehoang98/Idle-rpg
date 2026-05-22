@@ -20,6 +20,7 @@ namespace _Games.Battle
 
         private bool waveSpawnComplete = false;
         private int totalEntityInScene = 0;
+        private int killed;
 
         private async void Start()
         {
@@ -64,6 +65,7 @@ namespace _Games.Battle
             
             EntityManager.OnEntityRemoved += i =>
             {
+                killed++;
                 totalEntityInScene = entityToAgent.Count;
                 SpawnAction();
             };
@@ -92,8 +94,10 @@ namespace _Games.Battle
                 int[] numbers = battle.DiceNumbers();
                 for (int i = 0; i < numbers.Length; i++)
                 {
-                    DrawCell(numbers[i].ToString(), new Vector2(0.1f + 0.1f * i, 0.2f), 0.08f, Color.gray, Color.white);
-                }                
+                    DrawCell(numbers[i].ToString(), new Vector2(0.1f + 0.1f * i, 0.1f), 0.08f, Color.gray, Color.white);
+                }  
+                
+                DrawCell("Killed: " + killed, new Vector2(0.1f, 0.2f), 0.1f, Color.gray, Color.white);
             }
         }
 
@@ -105,7 +109,10 @@ namespace _Games.Battle
                 {
                     bool spawn = spawner.WaveSpawn();
                     if (!spawn)
+                    {
+                        IsPaused = true;
                         Debug.LogError("Complete");
+                    }
                     else
                         waveSpawnComplete = false;
                 });
