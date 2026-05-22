@@ -1,5 +1,6 @@
 ﻿using _KITSystem.SkillSystem.Config;
 using _KITSystem.SkillSystem.Entity;
+using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Runtime
 {
@@ -23,8 +24,6 @@ namespace _KITSystem.SkillSystem.Runtime
 
         protected void Damage(int entity)
         {
-            if (!EntityManager.IsAlive(entity)) return;
-            
             int dmg = DamageOutput(entity);
             
             ref var health = ref ComponentManager<HealthData>.Get(entity);

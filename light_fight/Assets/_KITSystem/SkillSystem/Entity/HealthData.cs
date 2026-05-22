@@ -10,4 +10,14 @@
             MaxHealth = CurrentHealth = health;
         }
     }
+
+    public struct MonsterData
+    {
+        public int ConfigId;
+
+        public MonsterData(int configId)
+        {
+            ConfigId = configId;
+        }
+    }
 }

@@ -214,7 +214,7 @@ namespace _KITSystem.Grid
             }
         }
 
-        public AgentData CreateAgent(int entityId, int monsterId, Vector2 position, float radius)
+        public AgentData CreateAgent(int entityId, Vector2 position, float radius)
         {
             simulator.EnsureCompleted();
             int agent = simulator.AddAgent(position);
@@ -224,7 +224,6 @@ namespace _KITSystem.Grid
             {
                 entity = entityId,
                 agent = agent,
-                monsterConfigId = monsterId,
                 radius = radius,
                 position = new float2(position.x, position.y)
             };
@@ -253,7 +252,6 @@ namespace _KITSystem.Grid
     [Serializable]
     public struct AgentData
     {
-        public int monsterConfigId;
         public int entity;
         public int agent;
         

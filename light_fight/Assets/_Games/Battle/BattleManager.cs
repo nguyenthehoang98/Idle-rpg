@@ -35,7 +35,11 @@ namespace _Games.Battle
         
         [TitleGroup("Debug")]
         [SerializeField, DisableIf("@true")]
+#if UNITY_EDITOR
         private SerializableDictionary<int, int> entityToAgent = new SerializableDictionary<int, int>();
+#else
+        private Dictionary<int, int> entityToAgent = new Dictionary<int, int>();        
+#endif
         private List<ArcMove> listArcs = new List<ArcMove>();
         private readonly int[] numbers = new int[BattleConst.MAX_DICE_NUMBER];
         private readonly bool[] triggers = new bool[BattleConst.MAX_DICE_NUMBER];
@@ -76,9 +80,10 @@ namespace _Games.Battle
                 
                 int entity = EntityManager.CreateEntity();
                 int monsterId = request.MonsterID;
-                AgentData agentData = agentTickable.CreateAgent(entity, monsterId, position, radius);
+                AgentData agentData = agentTickable.CreateAgent(entity, position, radius);
                 
                 ComponentManager<HealthData>.Add(entity, new HealthData(10));
+                ComponentManager<MonsterData>.Add(entity, new MonsterData(monsterId));
                 entityToAgent[entity] = agentData.agent;
             });
             

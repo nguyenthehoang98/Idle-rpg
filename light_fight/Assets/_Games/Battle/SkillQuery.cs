@@ -46,8 +46,6 @@ namespace _Games.Battle
                 }
             }
             
-            if(results.Count > 0) Debug.Log(string.Join(", ", results));
-            
             return results;
         }
 
@@ -83,11 +81,9 @@ namespace _Games.Battle
                 
                 if (dx * dx + dy * dy <= r * r)
                 {
-                    results.Add(agent.agent);
+                    results.Add(entity);
                 }
             }
-            
-            if(results.Count > 0) Debug.Log(string.Join(", ", results));
             
             return results;
         }
