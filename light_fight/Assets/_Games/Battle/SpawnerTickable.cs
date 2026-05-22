@@ -17,6 +17,8 @@ namespace _Games.Battle
         private MonsterConfig monsterConfig;
         private SkillConfig skillConfig;
         private Action<RequestCreateMonster> onCreateMonster;
+        
+        public event Action OnWaveCompleted;
 
         private IReadOnlyDictionary<WaveIdData, LevelBatch> container;
         private Batch[] batches;
@@ -42,10 +44,13 @@ namespace _Games.Battle
             }
         }
         
-        public void WaveSpawn()
+        public bool WaveSpawn()
         {
+            if (currentBatch >= totalWave) return false;
+            
             LoadWave(currentWave);
             paused = false;
+            return true;
         }
 
         private void LoadWave(int waveIndex)
@@ -118,12 +123,8 @@ namespace _Games.Battle
                     paused = true;
                     currentWave++;
                     waiting = true;
+                    OnWaveCompleted?.Invoke();
                 }
-            }
-
-            if (waiting)
-            {
-                // Pause
             }
         }
         

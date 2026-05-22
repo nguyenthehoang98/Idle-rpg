@@ -74,7 +74,7 @@ namespace _KITSystem.SkillSystem.Entity
             scroll = EditorGUILayout.BeginScrollView(scroll);
             DrawSummary();
             DrawIssues();
-            DrawComponentSnapshots();
+            DrawEntitySnapshots();
             EditorGUILayout.EndScrollView();
         }
 
@@ -149,65 +149,102 @@ namespace _KITSystem.SkillSystem.Entity
             }
         }
 
-        private void DrawComponentSnapshots()
+        private void DrawEntitySnapshots()
         {
             EditorGUILayout.Space(6);
-            EditorGUILayout.LabelField("Component Data", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("Entity Data", EditorStyles.boldLabel);
 
-            if (componentSnapshots.Count == 0)
+            List<EntitySnapshot> entitySnapshots = BuildEntitySnapshots();
+            if (entitySnapshots.Count == 0)
             {
-                EditorGUILayout.HelpBox("No component type has been registered yet. ComponentRegistry is filled when ComponentManager<T>.Add() is called.", MessageType.Info);
+                EditorGUILayout.HelpBox("No live entities or registered component rows yet. ComponentRegistry is filled when ComponentManager<T>.Add() is called.", MessageType.Info);
                 return;
             }
 
-            foreach (ComponentSnapshot snapshot in componentSnapshots)
+            foreach (EntitySnapshot entity in entitySnapshots)
             {
-                if (!ShouldDrawSnapshot(snapshot))
+                if (!ShouldDrawEntity(entity))
                     continue;
 
-                string key = snapshot.ComponentType.AssemblyQualifiedName ?? snapshot.ComponentType.FullName ?? snapshot.ComponentType.Name;
+                string key = $"entity:{entity.EntityId}";
                 if (!foldouts.ContainsKey(key))
                     foldouts[key] = true;
 
-                string title = $"{GetTypeName(snapshot.ComponentType)}  Count: {snapshot.Count}  Rows: {snapshot.Entries.Count}";
+                Color previousColor = GUI.color;
+                if (entity.HasIssue)
+                    GUI.color = new Color(1f, 0.85f, 0.35f);
+
+                string title = $"Entity {entity.EntityId}  Alive: {entity.IsAlive}  Components: {entity.Components.Count}";
                 foldouts[key] = EditorGUILayout.Foldout(foldouts[key], title, true);
+                GUI.color = previousColor;
+
                 if (!foldouts[key])
                     continue;
 
                 EditorGUILayout.BeginVertical(GUI.skin.box);
 
-                if (snapshot.Entries.Count == 0)
-                {
-                    EditorGUILayout.LabelField("No rows.");
-                }
+                if (!entity.IsAlive)
+                    EditorGUILayout.HelpBox("Entity is dead/missing but still has component rows.", MessageType.Warning);
 
-                foreach (ComponentEntry entry in snapshot.Entries)
+                if (entity.Components.Count == 0)
+                    EditorGUILayout.LabelField("No components.");
+
+                foreach (EntityComponentSnapshot component in entity.Components)
                 {
-                    if (!ShouldDrawEntry(entry))
+                    if (showOnlyIssues && !component.HasIssue)
                         continue;
 
-                    DrawComponentEntry(entry);
+                    DrawEntityComponent(component);
                 }
 
                 EditorGUILayout.EndVertical();
             }
         }
 
-        private void DrawComponentEntry(ComponentEntry entry)
+        private void DrawEntityComponent(EntityComponentSnapshot component)
         {
             Color previousColor = GUI.color;
-            if (entry.HasIssue)
+            if (component.HasIssue)
                 GUI.color = new Color(1f, 0.85f, 0.35f);
 
             EditorGUILayout.BeginVertical(GUI.skin.box);
-            EditorGUILayout.LabelField($"Entity {entry.EntityId}  Alive: {entry.IsAlive}", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField(GetTypeName(component.ComponentType), EditorStyles.boldLabel);
             GUI.color = previousColor;
 
-            if (!string.IsNullOrEmpty(entry.Error))
-                EditorGUILayout.HelpBox(entry.Error, MessageType.Warning);
+            if (!string.IsNullOrEmpty(component.Entry.Error))
+                EditorGUILayout.HelpBox(component.Entry.Error, MessageType.Warning);
 
-            EditorGUILayout.LabelField(entry.ValueText, EditorStyles.wordWrappedLabel);
+            EditorGUILayout.LabelField(component.Entry.ValueText, EditorStyles.wordWrappedLabel);
             EditorGUILayout.EndVertical();
+        }
+
+        private List<EntitySnapshot> BuildEntitySnapshots()
+        {
+            Dictionary<int, EntitySnapshot> entities = new();
+
+            foreach (int entityId in aliveEntityIds)
+            {
+                if (!entities.ContainsKey(entityId))
+                    entities.Add(entityId, new EntitySnapshot(entityId, true));
+            }
+
+            foreach (ComponentSnapshot snapshot in componentSnapshots)
+            {
+                foreach (ComponentEntry entry in snapshot.Entries)
+                {
+                    if (!entities.TryGetValue(entry.EntityId, out EntitySnapshot entity))
+                    {
+                        entity = new EntitySnapshot(entry.EntityId, entry.IsAlive);
+                        entities.Add(entry.EntityId, entity);
+                    }
+
+                    entity.Components.Add(new EntityComponentSnapshot(snapshot.ComponentType, entry));
+                }
+            }
+
+            return entities.Values
+                .OrderBy(entity => entity.EntityId)
+                .ToList();
         }
 
         private void RefreshData()
@@ -288,17 +325,26 @@ namespace _KITSystem.SkillSystem.Entity
                     ComponentEntry entry = ReadComponentEntry(managerType, componentType, entityId);
                     snapshot.Entries.Add(entry);
 
-                    if (!seenEntityIds.Add(entityId))
-                        AddSnapshotIssue(snapshot, $"{GetTypeName(componentType)} has duplicate row for entity {entityId}. Check if ComponentManager<{componentType.Name}>.Add() was called twice without Remove().");
-
-                    if (entityId <= 0)
-                        AddSnapshotIssue(snapshot, $"{GetTypeName(componentType)} has invalid entity id {entityId}.");
-
-                    if (!entry.IsAlive)
-                        AddSnapshotIssue(snapshot, $"{GetTypeName(componentType)} exists on dead/missing entity {entityId}.");
-
                     if (!string.IsNullOrEmpty(entry.Error))
                         AddSnapshotIssue(snapshot, $"{GetTypeName(componentType)} entity {entityId}: {entry.Error}");
+
+                    if (!seenEntityIds.Add(entityId))
+                    {
+                        entry.Error = AppendError(entry.Error, "Duplicate component row for this entity.");
+                        AddSnapshotIssue(snapshot, $"{GetTypeName(componentType)} has duplicate row for entity {entityId}. Check if ComponentManager<{componentType.Name}>.Add() was called twice without Remove().");
+                    }
+
+                    if (entityId <= 0)
+                    {
+                        entry.Error = AppendError(entry.Error, $"Invalid entity id {entityId}.");
+                        AddSnapshotIssue(snapshot, $"{GetTypeName(componentType)} has invalid entity id {entityId}.");
+                    }
+
+                    if (!entry.IsAlive)
+                    {
+                        entry.Error = AppendError(entry.Error, "Component exists on dead/missing entity.");
+                        AddSnapshotIssue(snapshot, $"{GetTypeName(componentType)} exists on dead/missing entity {entityId}.");
+                    }
                 }
 
                 if (snapshot.Count != snapshot.Entries.Count)
@@ -355,38 +401,27 @@ namespace _KITSystem.SkillSystem.Entity
             issues.Add(new Issue(message, MessageType.Warning));
         }
 
-        private bool ShouldDrawSnapshot(ComponentSnapshot snapshot)
+        private bool ShouldDrawEntity(EntitySnapshot entity)
         {
-            if (showOnlyIssues && !snapshot.HasIssue)
+            if (showOnlyIssues && !entity.HasIssue)
                 return false;
 
             if (string.IsNullOrWhiteSpace(search))
                 return true;
 
             string searchText = search.Trim();
-            if (GetTypeName(snapshot.ComponentType).IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0)
+            if (entity.EntityId.ToString().IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0)
                 return true;
 
-            return snapshot.Entries.Any(entry => EntryMatchesSearch(entry, searchText));
+            return entity.Components.Any(component => EntityComponentMatchesSearch(component, searchText));
         }
 
-        private bool ShouldDrawEntry(ComponentEntry entry)
+        private bool EntityComponentMatchesSearch(EntityComponentSnapshot component, string searchText)
         {
-            if (showOnlyIssues && !entry.HasIssue)
-                return false;
-
-            if (string.IsNullOrWhiteSpace(search))
+            if (GetTypeName(component.ComponentType).IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0)
                 return true;
 
-            return EntryMatchesSearch(entry, search.Trim());
-        }
-
-        private bool EntryMatchesSearch(ComponentEntry entry, string searchText)
-        {
-            if (entry.EntityId.ToString().IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0)
-                return true;
-
-            return entry.ValueText.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0;
+            return component.Entry.ValueText.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
         private string BuildReport()
@@ -409,16 +444,21 @@ namespace _KITSystem.SkillSystem.Entity
             }
 
             builder.AppendLine();
-            builder.AppendLine("Component Data");
+            builder.AppendLine("Entity Data");
 
-            foreach (ComponentSnapshot snapshot in componentSnapshots)
+            foreach (EntitySnapshot entity in BuildEntitySnapshots())
             {
-                builder.AppendLine($"{GetTypeName(snapshot.ComponentType)} Count: {snapshot.Count} Rows: {snapshot.Entries.Count}");
-                foreach (ComponentEntry entry in snapshot.Entries)
-                    builder.AppendLine($"  Entity {entry.EntityId} Alive: {entry.IsAlive} Value: {entry.ValueText}");
+                builder.AppendLine($"Entity {entity.EntityId} Alive: {entity.IsAlive} Components: {entity.Components.Count}");
+                foreach (EntityComponentSnapshot component in entity.Components)
+                    builder.AppendLine($"  {GetTypeName(component.ComponentType)}: {component.Entry.ValueText}");
             }
 
             return builder.ToString();
+        }
+
+        private static string AppendError(string current, string message)
+        {
+            return string.IsNullOrEmpty(current) ? message : $"{current} {message}";
         }
 
         private static string FormatComponentValue(object value, Type componentType)
@@ -482,7 +522,7 @@ namespace _KITSystem.SkillSystem.Entity
 
         private static string GetTypeName(Type type)
         {
-            return string.IsNullOrEmpty(type.FullName) ? type.Name : type.FullName;
+            return type.Name;
         }
 
         private static Exception Unwrap(Exception exception)
@@ -523,6 +563,33 @@ namespace _KITSystem.SkillSystem.Entity
             public object Value { get; set; }
             public string ValueText { get; set; } = string.Empty;
             public string Error { get; set; }
+        }
+
+        private sealed class EntitySnapshot
+        {
+            public EntitySnapshot(int entityId, bool isAlive)
+            {
+                EntityId = entityId;
+                IsAlive = isAlive;
+            }
+
+            public int EntityId { get; }
+            public bool IsAlive { get; }
+            public bool HasIssue => !IsAlive || Components.Any(component => component.HasIssue);
+            public List<EntityComponentSnapshot> Components { get; } = new();
+        }
+
+        private sealed class EntityComponentSnapshot
+        {
+            public EntityComponentSnapshot(Type componentType, ComponentEntry entry)
+            {
+                ComponentType = componentType;
+                Entry = entry;
+            }
+
+            public Type ComponentType { get; }
+            public ComponentEntry Entry { get; }
+            public bool HasIssue => Entry.HasIssue;
         }
 
         private readonly struct Issue

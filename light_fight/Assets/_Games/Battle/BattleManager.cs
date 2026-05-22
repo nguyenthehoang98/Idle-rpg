@@ -104,7 +104,7 @@ namespace _Games.Battle
                 arc.transform.localScale = Vector3.one;
                 listArcs.Add(arc);
             }
-            
+
             // instance
             battleLevel = Instantiate(battleLevelPrefab, transform);
             await UniTask.WaitForSeconds(1);
@@ -120,11 +120,39 @@ namespace _Games.Battle
             await UniTask.WaitForSeconds(f);
             controlDice.Play();
             tickSystemOwner.IsPaused = false;
-            
             tickSystemOwner.TryGetTickable(out SpawnerTickable spawnerTickable);
             spawnerTickable.WaveSpawn();
+
+            bool waveSpawnComplete = false;
+            int totalEntityInScene = 0;
+
+            void SpawnAction()
+            {
+                if (totalEntityInScene == 0 && waveSpawnComplete)
+                {
+                    this.WaitInvoke(2, () =>
+                    {
+                        bool spawn = spawnerTickable.WaveSpawn();
+                        if (!spawn)
+                            Debug.LogError("Complete");
+                        else
+                            waveSpawnComplete = false;
+                    });
+                }
+            }
+
+            EntityManager.OnEntityRemoved += i =>
+            {
+                totalEntityInScene = entityToAgent.Count;
+                SpawnAction();
+            };
+            spawnerTickable.OnWaveCompleted += () =>
+            {
+                waveSpawnComplete = true;
+                SpawnAction();
+            };
         }
-        
+
         private void OnDiceTrigger(List<(int order, int number)> list)
         {
             // trigger: (0, 1),(1, 5),(2, 4),(3, 3)
