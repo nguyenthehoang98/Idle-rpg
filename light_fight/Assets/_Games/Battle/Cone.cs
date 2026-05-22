@@ -5,18 +5,16 @@ namespace _Games.Battle
     [System.Serializable]
     public class Cone
     {
-        private Vector3 center;
+        private Weapon weapon;
         private Vector3 left1;
         private Vector3 right1;
         private Vector3 left2;
         private Vector3 right2;
 
         public bool IsPlaying { get; private set; }
-        public Weapon Weapon { get; private set; }
 
-        public Cone(int order, Vector3 position)
+        public Cone(int order, Vector3 position, float cooldown)
         {
-            center = position;
             float angle = -360f / BattleConst.MAX_DICE_NUMBER * order + 90;
             Vector3 dir = new Vector2(
                 Mathf.Cos(angle * Mathf.Deg2Rad),
@@ -35,12 +33,25 @@ namespace _Games.Battle
             left2 = baseCenter2 - right * length2/2f;
             right2 = baseCenter2 + right * length2/2f;
            
-            Weapon = new Weapon(position, dir);
+            weapon = new Weapon(position, dir, cooldown);
         }
 
-        public void Active() => IsPlaying = true;
+        public void Active()
+        {
+            IsPlaying = true;
+            weapon.Active();
+        }
         
-        public void Inactive() => IsPlaying = false;
+        public void Inactive()
+        { 
+            IsPlaying = false;
+            weapon.Inactive();
+        }
+
+        public void Tick(float dt)
+        {
+            weapon.Tick(dt);
+        }
 
         public void Draw()
         {
@@ -61,7 +72,7 @@ namespace _Games.Battle
             Debug.DrawLine(v4, v5, color);
             Debug.DrawLine(v5, v2, color);
             
-            Weapon.Draw(scale, color);
+            weapon.Draw(scale, color);
         }
     }
 }

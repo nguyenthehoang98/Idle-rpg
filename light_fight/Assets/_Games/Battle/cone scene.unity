@@ -279,7 +279,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1117385073
+--- !u!1 &1308119661
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -287,22 +287,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1117385074}
-  - component: {fileID: 1117385075}
+  - component: {fileID: 1308119662}
+  - component: {fileID: 1308119663}
   m_Layer: 0
-  m_Name: ConeTest
+  m_Name: TestOwner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1117385074
+--- !u!4 &1308119662
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1117385073}
+  m_GameObject: {fileID: 1308119661}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -311,25 +311,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1117385075
+--- !u!114 &1308119663
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1117385073}
+  m_GameObject: {fileID: 1308119661}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30f20d9a8eccc414cb39f94c8032afb2, type: 3}
+  m_Script: {fileID: 11500000, guid: 99ee1036bd3a4abd82795f88b1dd31db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cones:
-  - order: 0
-  - order: 1
-  - order: 2
-  - order: 3
-  - order: 4
-  - order: 5
+  loop: 5
+  targetFPS: 30
+  setting:
+    totalDice: 2
+    diceCooldown: 1
+    diceDelayTrigger: 0.2
+    weaponCooldown: 0.3
 --- !u!1 &1940578873
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,4 +438,4 @@ SceneRoots:
   - {fileID: 951278405}
   - {fileID: 1940578877}
   - {fileID: 55006557}
-  - {fileID: 1117385074}
+  - {fileID: 1308119662}

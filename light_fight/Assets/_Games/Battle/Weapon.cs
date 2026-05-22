@@ -1,4 +1,5 @@
 ﻿using System;
+using _KITSystem.Utils;
 using UnityEngine;
 
 namespace _Games.Battle
@@ -11,9 +12,13 @@ namespace _Games.Battle
         private Vector3 position;
         private Vector3 direction;
         private Vector3 defaultDirection;
+        private float elapsedTime;
+        private float cooldown;
+        private bool isPlaying;
 
-        public Weapon(Vector3 position, Vector3 direction)
+        public Weapon(Vector3 position, Vector3 direction, float cooldown)
         {
+            this.cooldown = cooldown;
             this.direction = defaultDirection = direction;
             this.position = position + direction.normalized * (forwardOffset * scaleTime);
         }
@@ -25,6 +30,23 @@ namespace _Games.Battle
             DrawSquare(color);
         }
 
+        public void Active() => isPlaying = true;
+        
+        public void Inactive() => isPlaying = false;
+
+        public void Tick(float dt)
+        {
+            if (isPlaying)
+            {
+                elapsedTime += dt;
+                if (elapsedTime >= cooldown)
+                {
+                    elapsedTime = 0;
+                    RotateTo(new Vector3(RandomUtils.Range(-1f, 1f), RandomUtils.Range(-1f, 1f)));
+                }
+            }
+        }
+        
         void DrawTriangle(Color color)
         {
             float height = 0.4f;
@@ -68,12 +90,12 @@ namespace _Games.Battle
             Debug.DrawLine(v4, v1, color);
         }
 
-        public void RotateTo(Vector3 worldPos, bool needUpdatePosition, Action onComplete)
+        public void RotateTo(Vector3 worldPos)
         {
             direction = (worldPos - position).normalized;
             Vector3 offset = defaultDirection * (forwardOffset * (scaleTime - 1));
             Vector3 center = position + offset;
-            Debug.DrawRay(center, direction * 10, Color.magenta, 0.5f);
+            Debug.DrawRay(center, direction * 10, Color.magenta, cooldown * 0.6f);
         }
     }
 }
