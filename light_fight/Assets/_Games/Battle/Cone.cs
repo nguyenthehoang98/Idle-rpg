@@ -49,7 +49,7 @@ namespace _Games.Battle
             Vector2 v4 = right2;
             Vector2 v5 = left2;
             
-            float scale = IsPlaying ? 1.0f : 0.8f;
+            float scale = IsPlaying ? 1.3f : 1f;
             v2 *= scale;
             v3 *= scale;
             v4 *= scale;
