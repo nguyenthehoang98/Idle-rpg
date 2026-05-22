@@ -1,13 +1,22 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace _Games.Battle
 {
-    [System.Serializable]
+    [Serializable]
     public class Weapon
     {
         private float forwardOffset = 1.5f;
+        private Vector3 position;
+        private Vector3 direction;
 
-        public void Draw(Vector3 position, Vector3 direction, float scale, Color color)
+        public Weapon(Vector3 position, Vector3 direction)
+        {
+            this.position = position;
+            this.direction = direction;
+        }
+
+        public void Draw(float scale, Color color)
         {
             float size = 0.3f;
 
@@ -30,7 +39,7 @@ namespace _Games.Battle
             Debug.DrawLine(v4, v1, color);
         }
 
-        public void RotateTo(Vector3 worldPos, bool needUpdatePosition, object o)
+        public void RotateTo(Vector3 worldPos, bool needUpdatePosition, Action onComplete)
         {
         }
     }

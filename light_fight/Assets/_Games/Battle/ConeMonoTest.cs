@@ -5,22 +5,33 @@ namespace _Games.Battle
     [ExecuteInEditMode, ExecuteAlways]
     public class ConeMonoTest : MonoBehaviour
     {
-        [SerializeField] private Cone[] cones = new Cone[6];
-        
+        private Cone[] cones;
         private bool needUpdatePosition = false;
+
         private Weapon currentWeapon;
         private Cone currentCone;
 
-        private void OnDrawGizmos()
+        private void Awake()
         {
+            cones = new Cone[BattleConst.MAX_DICE_NUMBER];
+            for (int i = 0; i < cones.Length; i++)
+            {
+                cones[i] = new Cone(i, Vector3.zero);
+            }
+        }
+
+        private void OnValidate() => Awake();
+
+        private void Update()
+        {
+            if (cones == null) Awake();
+            if (cones == null) return;
+
             for (int i = 0; i < cones.Length; i++)
             {
                 cones[i].Draw();
             }
-        }
-        
-        private void Update()
-        {
+
             if (Input.GetKeyDown(KeyCode.Alpha1)) PickCone(0);
             if (Input.GetKeyDown(KeyCode.Alpha2)) PickCone(1);
             if (Input.GetKeyDown(KeyCode.Alpha3)) PickCone(2);
@@ -36,7 +47,7 @@ namespace _Games.Battle
                 needUpdatePosition = false;
             }
         }
-        
+
         void PickCone(int index)
         {
             for (int i = 0; i < 6; i++)
@@ -50,7 +61,7 @@ namespace _Games.Battle
                 }
                 else
                 {
-                    if(cones[i].IsPlaying) cones[i].Inactive();
+                    if (cones[i].IsPlaying) cones[i].Inactive();
                 }
             }
         }

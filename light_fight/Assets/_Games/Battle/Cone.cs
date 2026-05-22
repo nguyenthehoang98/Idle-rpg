@@ -5,52 +5,63 @@ namespace _Games.Battle
     [System.Serializable]
     public class Cone
     {
-        [SerializeField] private int order;
-        [SerializeField] private Weapon weapon = new Weapon();
-        
-        private Vector3 position;
+        private Vector3 center;
+        private Vector3 left1;
+        private Vector3 right1;
+        private Vector3 left2;
+        private Vector3 right2;
+
         public bool IsPlaying { get; private set; }
-        public Weapon Weapon => weapon;
+        public Weapon Weapon { get; private set; }
 
         public Cone(int order, Vector3 position)
         {
-            this.order = order;
-            this.position = position;
+            center = position;
+            float angle = -360f / BattleConst.MAX_DICE_NUMBER * order + 90;
+            Vector3 dir = new Vector2(
+                Mathf.Cos(angle * Mathf.Deg2Rad),
+                Mathf.Sin(angle * Mathf.Deg2Rad)
+            );
+            Vector2 right = new Vector2(dir.y, -dir.x);
+            
+            float length1 = 2;
+            float length2 = 0.4f;
+            
+            Vector2 baseCenter1 = position + dir * length1;
+            left1 = baseCenter1 - right * length1/2f;
+            right1 = baseCenter1 + right * length1/2f;
+            
+            Vector2 baseCenter2 = position + dir *length2;
+            left2 = baseCenter2 - right * length2/2f;
+            right2 = baseCenter2 + right * length2/2f;
+           
+            Weapon = new Weapon(position, dir);
         }
 
         public void Active() => IsPlaying = true;
         
         public void Inactive() => IsPlaying = false;
 
-        public void Focus(Vector3 goalPosition)
-        {
-        }
-
         public void Draw()
         {
-            float angle = -360f / BattleConst.MAX_DICE_NUMBER * order + 90;
-            float height = 2;
-            Vector2 v3 = position;
-            Vector2 dir = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
-            Vector2 right = new Vector2(dir.y, -dir.x);
-            float halfBase = height / 2;
-
-            Vector2 baseCenter = v3 + dir * height;
-            Vector2 v1 = baseCenter - right * halfBase;
-            Vector2 v2 = baseCenter + right * halfBase;
-
+            Vector2 v2 = left1;
+            Vector2 v3 = right1;
+            Vector2 v4 = right2;
+            Vector2 v5 = left2;
+            
             float scale = IsPlaying ? 1.0f : 0.8f;
-            v1 *= scale;
             v2 *= scale;
             v3 *= scale;
+            v4 *= scale;
+            v5 *= scale;
 
             Color color = IsPlaying ? Color.red : Color.green;
-            
-            Debug.DrawLine(v1, v2, color);
             Debug.DrawLine(v2, v3, color);
-            Debug.DrawLine(v3, v1, color);
+            Debug.DrawLine(v3, v4, color);
+            Debug.DrawLine(v4, v5, color);
+            Debug.DrawLine(v5, v2, color);
             
-            weapon.Draw(position, dir, scale, color);
+            Weapon.Draw(scale, color);
         }
     }
 }
