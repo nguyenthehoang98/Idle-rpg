@@ -101,6 +101,30 @@ namespace _Games.Battle
             {
                 cones[i].Draw();
             }
+
+            DrawCircle(new Vector3(setting.center.x, setting.center.y), setting.weaponAttackRange, Color.yellow);
+        }
+        
+        void DrawCircle(Vector3 center, float radius, Color color, int segments = 32)
+        {
+            float angleStep = 360f / segments;
+
+            Vector3 prevPoint = center + new Vector3(radius, 0f, 0f);
+
+            for (int i = 1; i <= segments; i++)
+            {
+                float angle = angleStep * i * Mathf.Deg2Rad;
+
+                Vector3 newPoint = center + new Vector3(
+                    Mathf.Cos(angle) * radius,
+                    Mathf.Sin(angle) * radius,
+                    0f
+                );
+
+                Debug.DrawLine(prevPoint, newPoint, color);
+
+                prevPoint = newPoint;
+            }
         }
     }
 }

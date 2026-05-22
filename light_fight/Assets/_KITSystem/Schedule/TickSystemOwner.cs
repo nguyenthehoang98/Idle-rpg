@@ -10,7 +10,7 @@ namespace _KITSystem.Schedule
         [SerializeField] private bool isPausedDefault = true;
         [SerializeField, Range(1, 25)] private int loop = 1;
         [SerializeField] private int targetFPS = 30;
-        [SerializeReference] public ITickable[] tickables;
+        [SerializeReference, HideLabel] public ITickable[] tickables;
 
         private float tickInterval;
         private float accumulator;

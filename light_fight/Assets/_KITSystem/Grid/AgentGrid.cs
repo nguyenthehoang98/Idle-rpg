@@ -34,6 +34,10 @@ namespace _KITSystem.Grid
 #endif
         private List<int> agents = new List<int>();
         private Simulator simulator;
+        
+#if UNITY_EDITOR
+        [SerializeField, SerializeReference]
+#endif
         private IGridManager gridManager;
         private float stopDistanceSq;
         private float ignoreCheckNeighborDistanceSq;

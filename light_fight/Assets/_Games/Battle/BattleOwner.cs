@@ -15,23 +15,35 @@ namespace _Games.Battle
         private SkillTickable skill;
         private AgentTickable agent;
         private SpawnerTickable spawner;
-        private MovementTickable movement;
         private BattleTickable battle;
         private Dictionary<int, int> entityToAgent = new Dictionary<int, int>();
 
+        private bool waveSpawnComplete = false;
+        private int totalEntityInScene = 0;
+
         private async void Start()
         {
+            // todo: load instance data
             await KitConfigManager.Load(new string[]
             {
                 "SkillConfig",
                 "LevelConfig",
                 "MonsterConfig",
             });
-
+            
+            // todo: assign
+            TryGetTickable(out skill);
+            TryGetTickable(out agent);
+            TryGetTickable(out spawner);
+            TryGetTickable(out battle);
+            TryGetTickable(out MovementTickable movement);
+            
+            // todo: create instance logic
             IQuery query = new SkillQuery(agent);
             
-            SkillFactory.Initialize(skill, query);
-            
+            movement.Initialize();
+            agent.Initialize();
+            battle.Initialize(query);
             spawner.Initialize(1, request =>
             {
                 float2 position = request.Position;
@@ -46,25 +58,10 @@ namespace _Games.Battle
                 ComponentManager<MonsterData>.Add(entity, new MonsterData(monsterId));
             });
             
-            spawner.WaveSpawn();
+            // todo: reset global data + register event
             
-            bool waveSpawnComplete = false;
-            int totalEntityInScene = 0;
-            void SpawnAction()
-            {
-                if (totalEntityInScene == 0 && waveSpawnComplete)
-                {
-                    this.WaitInvoke(2, () =>
-                    {
-                        bool spawn = spawner.WaveSpawn();
-                        if (!spawn)
-                            Debug.LogError("Complete");
-                        else
-                            waveSpawnComplete = false;
-                    });
-                }
-            }
-
+            SkillFactory.Initialize(skill, query);
+            
             EntityManager.OnEntityRemoved += i =>
             {
                 totalEntityInScene = entityToAgent.Count;
@@ -76,6 +73,11 @@ namespace _Games.Battle
                 SpawnAction();
             };
             EntityManager.OnEntityRemoved += EntityRemoved;
+            
+            // todo: start spawn
+            spawner.WaveSpawn();
+
+            IsPaused = false;
         }
 
         private void OnDrawGizmos()
@@ -95,6 +97,21 @@ namespace _Games.Battle
             }
         }
 
+        void SpawnAction()
+        {
+            if (totalEntityInScene == 0 && waveSpawnComplete)
+            {
+                this.WaitInvoke(2, () =>
+                {
+                    bool spawn = spawner.WaveSpawn();
+                    if (!spawn)
+                        Debug.LogError("Complete");
+                    else
+                        waveSpawnComplete = false;
+                });
+            }
+        }
+        
         private void EntityRemoved(int entity)
         {
             if (entityToAgent.Remove(entity, out int agentId)) agent.DestroyAgent(agentId);

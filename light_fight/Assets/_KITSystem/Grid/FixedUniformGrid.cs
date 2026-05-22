@@ -1,18 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace _KITSystem.Grid
 {
+    [System.Serializable]
     public class FixedUniformGrid : IGridManager
     {
         private readonly float invCellSize;
 
         // Flat entry pool với linked list per cell
-        private int[] entryCellHash;
-        private int[] entryUnitId;
-        private int[] entryNext;
-        private int entryCount;
+        [SerializeField] private int[] entryCellHash;
+        [SerializeField] private int[] entryUnitId;
+        [SerializeField] private int[] entryNext;
+        [SerializeField] private int entryCount;
         private int freeHead = -1;
 
         // cellHash -> headEntryIndex

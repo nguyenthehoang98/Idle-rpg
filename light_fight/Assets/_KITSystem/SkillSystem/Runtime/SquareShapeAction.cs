@@ -19,7 +19,7 @@ namespace _KITSystem.SkillSystem.Runtime
         protected override List<int> OnHit(float2 position)
         {
             float2 center = GetPosition(position) - GetPivotToCenterOffset(size, pivotType);
-            return query.GetUnits(center, size);
+            return query.GetEntities(center, size);
         }
 
         public override void Gizmos(Vector3 position, Color color, float duration)

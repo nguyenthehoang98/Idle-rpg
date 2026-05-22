@@ -3,6 +3,7 @@ using _KITSystem.Grid;
 using _KITSystem.SkillSystem.Entity;
 using _KITSystem.SkillSystem.Runtime;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace _Games.Battle
 {
@@ -15,7 +16,40 @@ namespace _Games.Battle
             this.agentGrid = agentGrid;
         }
 
-        public List<int> GetUnits(float2 center, float radius)
+        public bool FindNearestTargetPosition(float2 center, float radius, out float2 targetPosition)
+        {
+            float sqrRadius = radius * radius;
+            
+            int count = agentGrid.QueryAgent(center, new float2(radius, radius), out AgentData[] agents);
+            
+            bool found = false;
+
+            targetPosition = float2.zero;
+            
+            float minDistance = float.MaxValue;
+
+            for (int i = 0; i < count; i++)
+            {
+                AgentData agent = agents[i];
+
+                if (!EntityManager.IsAlive(agent.entity)) continue;
+
+                float dsq = math.distancesq(center, agent.position);
+
+                if (dsq < minDistance && dsq <= sqrRadius)
+                {
+                    minDistance = dsq;
+
+                    targetPosition = agent.position;
+                    
+                    found = true;
+                }
+            }
+
+            return found;
+        }
+
+        public List<int> GetEntities(float2 center, float radius)
         {
             float2 signalSize = new float2(radius * 2, radius * 2);
             
@@ -48,7 +82,7 @@ namespace _Games.Battle
             return results;
         }
 
-        public List<int> GetUnits(float2 center, float2 size)
+        public List<int> GetEntities(float2 center, float2 size)
         {
             int count = agentGrid.QueryAgent(center, size, out AgentData[] agents);
 

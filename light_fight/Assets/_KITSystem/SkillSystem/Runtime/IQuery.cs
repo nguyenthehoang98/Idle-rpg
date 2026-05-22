@@ -5,7 +5,8 @@ namespace _KITSystem.SkillSystem.Runtime
 {
     public interface IQuery
     {
-        List<int> GetUnits(float2 center, float radius);
-        List<int> GetUnits(float2 center, float2 size);
+        bool FindNearestTargetPosition(float2 center, float radius, out float2 targetPosition);
+        List<int> GetEntities(float2 center, float radius);
+        List<int> GetEntities(float2 center, float2 size);
     }
 }

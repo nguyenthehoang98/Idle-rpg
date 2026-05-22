@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _Games.Battle
@@ -14,17 +15,18 @@ namespace _Games.Battle
         private float scanRadius;
         private float forwardOffset = 1.5f;
         private float scaleTime = 1f;
-        private Vector3 position;
-        private Vector3 direction;
-        private Vector3 defaultDirection;
+        private float2 position;
+        private float2 direction;
+        private float2 defaultDirection;
         private float elapsedTime;
         private bool isPlaying;
 
-        public Weapon(BattleSetting setting, IQuery query, Vector3 direction)
+        public Weapon(BattleSetting setting, IQuery query, float2 direction)
         {
             this.query = query;
+            this.setting = setting;
             this.direction = defaultDirection = direction;
-            this.position = position + direction.normalized * (forwardOffset * scaleTime);
+            this.position = position + direction * (forwardOffset * scaleTime);
         }
 
         public void Draw(float scale, Color color)
@@ -46,7 +48,9 @@ namespace _Games.Battle
                 if (elapsedTime >= setting.weaponCooldown)
                 {
                     elapsedTime = 0;
-                    List<int> units = query.GetUnits(setting.center, setting.weaponAttackRange);
+
+                    bool found = query.FindNearestTargetPosition(setting.center, setting.weaponAttackRange, out float2 targetPosition);
+                    if (found) RotateTo(targetPosition);
                 }
             }
         }
@@ -55,51 +59,56 @@ namespace _Games.Battle
         {
             float height = 0.4f;
 
-            Vector3 offset = defaultDirection * (forwardOffset * (scaleTime - 1));
-            Vector3 center = position + offset;
-            Vector3 right = new Vector3(-direction.y, direction.x, 0f);
+            float2 offset = defaultDirection * (forwardOffset * (scaleTime - 1));
+            float2 center = position + offset;
+            float2 right = new float2(-direction.y, direction.x);
             
             float halfBase = height / 3;
-            Vector3 vector = direction * height;
-            Vector3 v3 = center + vector * 0.75f;
-            Vector3 baseCenter = center;
+            float2 vector = direction * height;
+            float2 v3 = center + vector * 0.75f;
+            float2 baseCenter = center;
 
-            Vector3 v1 = baseCenter - right * halfBase;
-            Vector3 v2 = baseCenter + right * halfBase;
+            float2 v1 = baseCenter - right * halfBase;
+            float2 v2 = baseCenter + right * halfBase;
 
-            Debug.DrawLine(v1, v2, color);
-            Debug.DrawLine(v2, v3, color);
-            Debug.DrawLine(v3, v1, color);
+            Debug.DrawLine(new Vector3(v1.x, v1.y), new Vector3(v2.x, v2.y), color);
+            Debug.DrawLine(new Vector3(v2.x, v2.y), new Vector3(v3.x, v3.y), color);
+            Debug.DrawLine(new Vector3(v3.x, v3.y), new Vector3(v1.x, v1.y), color);
         }
         
         void DrawSquare(Color color)
         {
             float size = 0.1f;
 
-            Vector3 offset = defaultDirection * (forwardOffset * (scaleTime - 1));
-            Vector3 center = position + offset;
-            Vector3 right = new Vector3(-direction.y, direction.x, 0f);
+            float2 offset = defaultDirection * (forwardOffset * (scaleTime - 1));
+            float2 center = position + offset;
+            float2 right = new float2(-direction.y, direction.x);
             float half = size * 0.5f;
 
             // 4 góc hình vuông
-            Vector3 v1 = center - right * half - direction * half;
-            Vector3 v2 = center + right * half - direction * half;
-            Vector3 v3 = center + right * half + direction * half;
-            Vector3 v4 = center - right * half + direction * half;
+            float2 v1 = center - right * half - direction * half;
+            float2 v2 = center + right * half - direction * half;
+            float2 v3 = center + right * half + direction * half;
+            float2 v4 = center - right * half + direction * half;
 
             // draw
-            Debug.DrawLine(v1, v2, color);
-            Debug.DrawLine(v2, v3, color);
-            Debug.DrawLine(v3, v4, color);
-            Debug.DrawLine(v4, v1, color);
+            Debug.DrawLine(new Vector3(v1.x, v1.y), new Vector3(v2.x, v2.y), color);
+            Debug.DrawLine(new Vector3(v2.x, v2.y), new Vector3(v3.x, v3.y), color);
+            Debug.DrawLine(new Vector3(v3.x, v3.y), new Vector3(v4.x, v4.y), color);
+            Debug.DrawLine(new Vector3(v1.x, v1.y), new Vector3(v4.x, v4.y), color);
         }
 
-        public void RotateTo(Vector3 worldPos)
+        public void RotateTo(float2 worldPos)
         {
-            direction = (worldPos - position).normalized;
-            Vector3 offset = defaultDirection * (forwardOffset * (scaleTime - 1));
-            Vector3 center = position + offset;
-            Debug.DrawRay(center, direction * 10, Color.magenta, setting.weaponCooldown * 0.6f);
+            direction = MathUtils.NormalizeSafe(worldPos - position);
+            float2 offset = defaultDirection * (forwardOffset * (scaleTime - 1));
+            float2 center = position + offset;
+            Debug.DrawRay(
+                new Vector3(center.x, center.y),
+                new Vector3(direction.x, direction.y) * 10,
+                Color.magenta,
+                setting.weaponCooldown * 0.6f
+            );
         }
     }
 }
