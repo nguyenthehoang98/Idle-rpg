@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using _KITSystem.EventBus;
 using _KITSystem.ExcelConfig;
+using _KITSystem.Grid;
 using _KITSystem.Schedule;
+using _KITSystem.SkillSystem.Entity;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
+using Sherbert.Framework.Generic;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
@@ -14,7 +17,6 @@ namespace _Games.Battle
     public class BattleManager : MonoBehaviour
     {
         [TitleGroup("Settings")]
-        ///
         [SerializeField, Range(0.1f, 1.0f)] private float duration = 0.6f;
         [SerializeField, Range(1.1f, 2.0f)] private float minRadius = 1.1f;
         [SerializeField, Range(1.1f, 2.0f)] private float maxRadius = 2.0f;
@@ -31,12 +33,16 @@ namespace _Games.Battle
         [SerializeField] private Canvas uiCanvas;
         [SerializeField] private TickSystemOwner tickSystemOwner;
         
+        [TitleGroup("Debug")]
+        [SerializeField, DisableIf("@true")]
+        private SerializableDictionary<int, int> entityToAgent = new SerializableDictionary<int, int>();
         private List<ArcMove> listArcs = new List<ArcMove>();
         private readonly int[] numbers = new int[BattleConst.MAX_DICE_NUMBER];
         private readonly bool[] triggers = new bool[BattleConst.MAX_DICE_NUMBER];
 
         private UIBattleControlDiceSpeed controlDice;
         private BattleLevel battleLevel;
+        private AgentTickable agentTickable;
         
         async void Awake()
         {
@@ -57,21 +63,26 @@ namespace _Games.Battle
             });
             
             tickSystemOwner.TryGetTickable(out SkillTickable skillTickable);
-            tickSystemOwner.TryGetTickable(out AgentTickable agentTickable);
+            tickSystemOwner.TryGetTickable(out  agentTickable);
             tickSystemOwner.TryGetTickable(out SpawnerTickable spawnerTickable);
-            
+         
             SystemBus.Reset();
-            EntityFactory.Initialize(agentTickable);
             SkillFactory.Initialize(skillTickable, new SkillQuery(agentTickable));
             
             spawnerTickable.Initialize(1, request =>
             {
-                int monsterId = request.MonsterID;
                 float2 position = request.Position;
                 float radius = request.Radius;
-                int agentId = agentTickable.CreateAgent(monsterId, position, radius);
-                EntityFactory.CreateEntity(agentId);
+                
+                int entity = EntityManager.CreateEntity();
+                int monsterId = request.MonsterID;
+                AgentData agentData = agentTickable.CreateAgent(entity, monsterId, position, radius);
+                
+                ComponentManager<HealthData>.Add(entity, new HealthData(10));
+                entityToAgent[entity] = agentData.agent;
             });
+            
+            EntityManager.OnEntityRemoved += EntityRemoved;
         }
 
         private async void Start()
@@ -149,6 +160,11 @@ namespace _Games.Battle
                     });
                 index++;
             }
+        }
+
+        private void EntityRemoved(int entity)
+        {
+            if (entityToAgent.Remove(entity, out int agentId)) agentTickable.DestroyAgent(agentId);
         }
 
         // numbers: [1,2,0,0,1,0]

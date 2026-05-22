@@ -34,6 +34,7 @@ namespace _KITSystem.SkillSystem.Runtime
             if (health.CurrentHealth <= 0)
             {
                 EntityManager.DestroyEntity(entity);
+                
             }
             else
             {

@@ -32,8 +32,7 @@ namespace _KITSystem.Grid
 #else
         private Dictionary<int, AgentData> containers = new Dictionary<int, AgentData>();        
 #endif
-        [SerializeField] public List<int> agents = new List<int>();
-
+        public List<int> agents = new List<int>();
         private Simulator simulator;
         private IGridManager gridManager;
         private float stopDistanceSq;
@@ -215,7 +214,7 @@ namespace _KITSystem.Grid
             }
         }
 
-        public int CreateAgent(int monsterId, Vector2 position, float radius)
+        public AgentData CreateAgent(int entityId, int monsterId, Vector2 position, float radius)
         {
             simulator.EnsureCompleted();
             int agent = simulator.AddAgent(position);
@@ -223,14 +222,15 @@ namespace _KITSystem.Grid
             agents.Add(agent);
             AgentData data = new AgentData
             {
-                agentId = agent,
-                monsterId = monsterId,
+                entity = entityId,
+                agent = agent,
+                monsterConfigId = monsterId,
                 radius = radius,
                 position = new float2(position.x, position.y)
             };
             containers.Add(agent, data);
             gridManager.Insert(agent, position);
-            return agent;
+            return data;
         }
 
         public void DestroyAgent(int agentId)
@@ -253,8 +253,10 @@ namespace _KITSystem.Grid
     [Serializable]
     public struct AgentData
     {
-        public int monsterId;
-        public int agentId;
+        public int monsterConfigId;
+        public int entity;
+        public int agent;
+        
         public float2 position;
         public float radius;
 

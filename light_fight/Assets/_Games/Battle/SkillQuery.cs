@@ -29,8 +29,8 @@ namespace _Games.Battle
             for (int i = 0; i < count; i++)
             {
                 AgentData agent = agents[i];
-
-                if (!EntityFactory.FindEntity(agent.agentId, out var entity)) continue;
+                
+                int entity = agent.entity;
 
                 if (!EntityManager.IsAlive(entity)) continue;
 
@@ -67,11 +67,12 @@ namespace _Games.Battle
             {
                 AgentData agent = agents[i];
 
-                if (!EntityFactory.FindEntity(agent.agentId, out var entity)) continue;
+                int entity = agent.entity;
 
                 if (!EntityManager.IsAlive(entity)) continue;
 
                 float2 p = agent.position;
+                
                 float r = agent.radius;
                 
                 float closestX = math.clamp(p.x, left, right);
@@ -82,7 +83,7 @@ namespace _Games.Battle
                 
                 if (dx * dx + dy * dy <= r * r)
                 {
-                    results.Add(agent.agentId);
+                    results.Add(agent.agent);
                 }
             }
             
