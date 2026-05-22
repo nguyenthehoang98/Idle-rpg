@@ -26,6 +26,7 @@ namespace _KITSystem.SkillSystem.Entity
             entityVersions[id] = 0;
             ActiveCount++;
             OnEntityCreated?.Invoke(id);
+            Debug.Log("CreateEntity " + id);
             return id;
         }
 
@@ -42,6 +43,7 @@ namespace _KITSystem.SkillSystem.Entity
             entityVersions[entity] = -1;
             freeIds.Push(entity);
             ActiveCount--;
+            Debug.Log("DestroyEntity " + entity);
             OnEntityRemoved?.Invoke(entity);
         }
 

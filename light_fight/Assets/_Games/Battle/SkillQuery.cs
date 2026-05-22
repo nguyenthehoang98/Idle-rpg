@@ -2,6 +2,7 @@
 using _KITSystem.Grid;
 using _KITSystem.SkillSystem.Runtime;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace _Games.Battle
 {
@@ -41,7 +42,7 @@ namespace _Games.Battle
                     results.Add(entity);
                 }
             }
-
+            
             return results;
         }
 
@@ -75,7 +76,7 @@ namespace _Games.Battle
                     results.Add(agent.agentId);
                 }
             }
-
+            
             return results;
         }
     }

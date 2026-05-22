@@ -21,16 +21,30 @@ namespace _KITSystem.SkillSystem.Runtime
             }
         }
 
-        protected void Damage(int entity) => OnDamage(entity);
-
-        protected virtual void OnDamage(int entity)
+        protected void Damage(int entity)
         {
+            if (!EntityManager.IsAlive(entity)) return;
+            
+            int dmg = DamageOutput(entity);
+            
             ref var health = ref ComponentManager<HealthData>.Get(entity);
-            health.CurrentHealth -= 10;
+
+            health.CurrentHealth -= dmg;
+            
             if (health.CurrentHealth <= 0)
             {
                 EntityManager.DestroyEntity(entity);
             }
+            else
+            {
+                OnDamageEffect(entity);                
+            }
         }
+
+        protected virtual void OnDamageEffect(int entity)
+        {
+        }
+
+        protected virtual int DamageOutput(int entity) => 10;
     }
 }

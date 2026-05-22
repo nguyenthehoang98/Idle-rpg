@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using _KITSystem.SkillSystem.Config;
 using Unity.Mathematics;
 using UnityEngine;
@@ -42,7 +41,7 @@ namespace _KITSystem.SkillSystem.Runtime
         public List<int> Hit(float2 position)
         {
             if (CanTrigger)
-                OnHit(position);
+                return OnHit(position);
             return null;
         }
 
