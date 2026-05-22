@@ -5,37 +5,19 @@ using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Entity;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
-using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
 
 namespace _Games.Battle
 {
-    public class TestOwner : MonoBehaviour
+    public class BattleOwner : TickSystemOwner
     {
-        [SerializeField, Range(1, 25)] private int loop = 1;
-        [SerializeField] private int targetFPS = 30;
-        [SerializeField] private BattleSetting setting;
-
-        [TitleGroup("Element")] 
-        [SerializeField] private SkillTickable skill;
-        [SerializeField] private AgentTickable agent;
-        [SerializeField] private SpawnerTickable spawner;
-        [SerializeField] private MovementTickable movement;
-
+        private SkillTickable skill;
+        private AgentTickable agent;
+        private SpawnerTickable spawner;
+        private MovementTickable movement;
+        private BattleTickable battle;
         private Dictionary<int, int> entityToAgent = new Dictionary<int, int>();
-        private ITickable[] tickables;
-        private BattleLogic logic;
-        private float tickInterval;
-        private float accumulator;
-
-        private void Awake()
-        {
-            Application.runInBackground = true;
-            tickInterval = 1f / targetFPS;
-
-            tickables = new ITickable[5] { spawner, agent, movement, skill, null };
-        }
 
         private async void Start()
         {
@@ -63,9 +45,6 @@ namespace _Games.Battle
                 ComponentManager<HealthData>.Add(entity, new HealthData(10));
                 ComponentManager<MonsterData>.Add(entity, new MonsterData(monsterId));
             });
-            
-            logic = new BattleLogic(setting, query);
-            tickables[4] = logic;
             
             spawner.WaveSpawn();
             
@@ -101,36 +80,18 @@ namespace _Games.Battle
 
         private void OnDrawGizmos()
         {
-            if (logic == null) return;
-
-            logic.Draw();
+            if (battle != null) battle.Draw();
         }
 
         private void OnGUI()
         {
-            if (logic == null) return;
-
-            int[] numbers = logic.DiceNumbers();
-            for (int i = 0; i < numbers.Length; i++)
+            if (battle != null)
             {
-                DrawCell(numbers[i].ToString(), new Vector2(0.1f + 0.1f * i, 0.2f), 0.08f, Color.gray, Color.white);
-            }
-        }
-
-        private void Update()
-        {
-            if (logic == null) return;
-
-            accumulator += Time.deltaTime * loop;
-            float f = tickInterval;
-            while (accumulator >= f)
-            {
-                for (int i = 0; i < tickables.Length; i++)
+                int[] numbers = battle.DiceNumbers();
+                for (int i = 0; i < numbers.Length; i++)
                 {
-                    tickables[i].Tick(f);
-                }
-                
-                accumulator -= f;
+                    DrawCell(numbers[i].ToString(), new Vector2(0.1f + 0.1f * i, 0.2f), 0.08f, Color.gray, Color.white);
+                }                
             }
         }
 

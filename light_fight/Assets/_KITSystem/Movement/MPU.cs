@@ -66,31 +66,26 @@ namespace _KITSystem.Movement
             }
         }
 
-        private void Initialize()
+        public void Initialize()
         {
-            if (!isInitialized)
+            flags.Add(ModifierName.Default);
+            foreach (ModifierName modifierName in flagModifiers)
             {
-                flags.Add(ModifierName.Default);
-                foreach (ModifierName modifierName in flagModifiers)
-                {
-                    flags.Add(modifierName);
-                }
-
-                resolver.Initialize();
-
-                positions = new NativeList<float2>(64, Allocator.Persistent);
-                destinations = new NativeList<float2>(64, Allocator.Persistent);
-                desiredVelocities = new NativeList<float2>(64, Allocator.Persistent);
-                finalVelocities = new NativeList<float2>(64, Allocator.Persistent);
-
-                isInitialized = true;
+                flags.Add(modifierName);
             }
+
+            resolver.Initialize();
+
+            positions = new NativeList<float2>(64, Allocator.Persistent);
+            destinations = new NativeList<float2>(64, Allocator.Persistent);
+            desiredVelocities = new NativeList<float2>(64, Allocator.Persistent);
+            finalVelocities = new NativeList<float2>(64, Allocator.Persistent);
+
+            isInitialized = true;
         }
 
         public void Tick(float deltaTime)
         {
-            Initialize();
-            
             FlushCommands();
 
             // Update modifier

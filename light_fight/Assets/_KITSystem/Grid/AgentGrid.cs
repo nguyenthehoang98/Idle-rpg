@@ -45,7 +45,6 @@ namespace _KITSystem.Grid
 
         public void Tick(float deltaTime)
         {
-            Initialize();
             if (locked) return;
             simulator.SetTimeStep(deltaTime);
             simulator.EnsureCompleted();
@@ -108,21 +107,18 @@ namespace _KITSystem.Grid
             }
         }
 
-        protected void Initialize()
+        public void Initialize()
         {
-            if (!isInitialized)
-            {
-                gridManager = new FixedUniformGrid(1);
-                simulator = new Simulator();
-                simulator.SetTimeStep(0.25f);
-                simulator.SetAgentDefaults(5f, 10, 10f, 10f, defaultAgentRadius, 1f, float2.zero);
-                stopDistanceSq = defaultAgentStopDistance * defaultAgentStopDistance;
-                float a = 2 * (1 + multiplierIgnoreCheckDistance) * defaultAgentRadius;
-                ignoreCheckNeighborDistanceSq = a * a;
-                deltaDistanceStuckSq = deltaDistanceStuck * deltaDistanceStuck;
-                OnInitialize();
-                isInitialized = true;
-            }
+            gridManager = new FixedUniformGrid(1);
+            simulator = new Simulator();
+            simulator.SetTimeStep(0.25f);
+            simulator.SetAgentDefaults(5f, 10, 10f, 10f, defaultAgentRadius, 1f, float2.zero);
+            stopDistanceSq = defaultAgentStopDistance * defaultAgentStopDistance;
+            float a = 2 * (1 + multiplierIgnoreCheckDistance) * defaultAgentRadius;
+            ignoreCheckNeighborDistanceSq = a * a;
+            deltaDistanceStuckSq = deltaDistanceStuck * deltaDistanceStuck;
+            OnInitialize();
+            isInitialized = true;
         }
 
         private void ReachedGoal()

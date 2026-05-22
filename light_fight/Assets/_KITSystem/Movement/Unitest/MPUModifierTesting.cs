@@ -13,6 +13,7 @@ namespace _KITSystem.Movement.Unitest
         public void Setup()
         {
             mpu = new MPU(ModifierName.Default, ModifierName.Teleport, ModifierName.KnockBack);
+            mpu.Initialize();
         }
 
         [TearDown]

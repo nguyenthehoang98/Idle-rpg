@@ -290,7 +290,7 @@ GameObject:
   - component: {fileID: 1308119662}
   - component: {fileID: 1308119663}
   m_Layer: 0
-  m_Name: TestOwner
+  m_Name: BattleOwner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -323,25 +323,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ee1036bd3a4abd82795f88b1dd31db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tickables:
-  - rid: 7993921732869881925
-  - rid: 7993921732869881933
-  - rid: 7993921732869881934
-  - rid: 7993921732869881936
-  loop: 25
+  isPausedDefault: 1
+  loop: 1
   targetFPS: 30
-  setting:
-    totalDice: 2
-    diceCooldown: 1
-    diceDelayTrigger: 0.2
-    weaponCooldown: 0.3
+  tickables:
+  - rid: 7993921732869881960
+  - rid: 7993921732869881961
+  - rid: 7993921732869881965
+  - rid: 7993921732869881962
+  - rid: 7993921732869881964
   references:
     version: 2
     RefIds:
-    - rid: 7993921732869881925
-      type: {class: SpawnerTickable, ns: _Games.Battle, asm: Games.Battle}
-      data: 
-    - rid: 7993921732869881933
+    - rid: 7993921732869881960
+      type: {class: BattleTickable, ns: _Games.Battle, asm: Games.Battle}
+      data:
+        setting:
+          totalDice: 2
+          diceCooldown: 1
+          diceDelayTrigger: 0.2
+          weaponCooldown: 0.3
+          weaponAttackRange: 6
+          center:
+            x: 0
+            y: 0
+        isInitialized: 0
+    - rid: 7993921732869881961
       type: {class: AgentTickable, ns: _Games.Battle, asm: Games.Battle}
       data:
         locked: 0
@@ -355,15 +362,15 @@ MonoBehaviour:
         containers:
           keys: 
           values: []
-    - rid: 7993921732869881934
+    - rid: 7993921732869881962
       type: {class: MovementTickable, ns: _Games.Battle, asm: Games.Battle}
       data:
-        flagModifiers: 00000000
+        flagModifiers: 
         resolver:
-          rid: 7993921732869881935
+          rid: 7993921732869881963
         isInitialized: 0
         activeActions: []
-    - rid: 7993921732869881935
+    - rid: 7993921732869881963
       type: {class: AvoidanceResolver, ns: _KITSystem.Movement, asm: KITSystem.Movement}
       data:
         cellSize: 1
@@ -371,8 +378,11 @@ MonoBehaviour:
         avoidStrength: 2
         maxAvoidForce: 3
         stopDecelerationNormalize: 0.9
-    - rid: 7993921732869881936
+    - rid: 7993921732869881964
       type: {class: SkillTickable, ns: _Games.Battle, asm: Games.Battle}
+      data: 
+    - rid: 7993921732869881965
+      type: {class: SpawnerTickable, ns: _Games.Battle, asm: Games.Battle}
       data: 
 --- !u!1 &1940578873
 GameObject:

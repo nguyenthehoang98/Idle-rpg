@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace _KITSystem.Schedule
 {
     public class TickSystemOwner : MonoBehaviour
     {
+        [TitleGroup("Tick Group")] 
         [SerializeField] private bool isPausedDefault = true;
+        [SerializeField, Range(1, 25)] private int loop = 1;
         [SerializeField] private int targetFPS = 30;
-        [SerializeField] private DataTemp[] list;
-        private TickSystem tickSystem;
+        [SerializeReference] public ITickable[] tickables;
+
         private float tickInterval;
         private float accumulator;
         private bool isPaused;
@@ -18,43 +21,31 @@ namespace _KITSystem.Schedule
             get => isPaused;
             set => isPaused = value;
         }
-        
+
         private void Awake()
         {
             isPaused = isPausedDefault;
             Application.runInBackground = true;
             Application.targetFrameRate = 60;
             tickInterval = 1f / targetFPS;
-            
-            Dictionary<TickGroup, List<ITickable>> ticks = new Dictionary<TickGroup, List<ITickable>>();
-            foreach (var dataTemp in list)
-            {
-                if (ticks.ContainsKey(dataTemp.group))
-                {
-                    ticks[dataTemp.group].Add(dataTemp.tickable);
-                }
-                else
-                {
-                    ticks.Add(dataTemp.group, new List<ITickable> { dataTemp.tickable });
-                }
-            }
-
-            tickSystem = new TickSystem(ticks);
         }
 
         void Update()
         {
             if (isPaused) return;
-            
+
+#if UNITY_EDITOR
+            accumulator += Time.deltaTime * loop;
+#else
             accumulator += Time.deltaTime;
+#endif
             float f = tickInterval * Time.timeScale;
             while (accumulator >= f)
             {
-                float deltaTime = f;
-
-                tickSystem.Run(TickGroup.PreUpdate, deltaTime);
-                tickSystem.Run(TickGroup.Update, deltaTime);
-                tickSystem.Run(TickGroup.PostUpdate, deltaTime);
+                for (int i = 0; i < tickables.Length; i++)
+                {
+                    tickables[i].Tick(f);
+                }
 
                 accumulator -= f;
             }
@@ -62,24 +53,17 @@ namespace _KITSystem.Schedule
 
         public bool TryGetTickable<T>(out T tickable) where T : ITickable
         {
-            foreach (var dataTemp in list)
+            foreach (var t in tickables)
             {
-                if (dataTemp.tickable is T t)
+                if (t is T tt)
                 {
-                    tickable = t;
+                    tickable = tt;
                     return true;
                 }
             }
 
             tickable = default;
             return false;
-        }
-
-        [System.Serializable]
-        class DataTemp
-        {
-            public TickGroup group;
-            [SerializeReference] public ITickable tickable;
         }
     }
 }
