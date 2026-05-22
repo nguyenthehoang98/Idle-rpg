@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using _KITSystem.SkillSystem.Runtime;
+using UnityEngine;
 
 namespace _Games.Battle
 {
@@ -13,27 +14,29 @@ namespace _Games.Battle
 
         public bool IsPlaying { get; private set; }
 
-        public Cone(int order, Vector3 position, float cooldown)
+        public Cone(int order, BattleSetting setting, IQuery query)
         {
             float angle = -360f / BattleConst.MAX_DICE_NUMBER * order + 90;
-            Vector3 dir = new Vector2(
+            Vector2 dir = new Vector2(
                 Mathf.Cos(angle * Mathf.Deg2Rad),
                 Mathf.Sin(angle * Mathf.Deg2Rad)
             );
+
+            Vector2 center = setting.center;
             Vector2 right = new Vector2(dir.y, -dir.x);
             
             float length1 = 2;
             float length2 = 0.4f;
             
-            Vector2 baseCenter1 = position + dir * length1;
+            Vector2 baseCenter1 = center + dir * length1;
             left1 = baseCenter1 - right * length1/2f;
             right1 = baseCenter1 + right * length1/2f;
             
-            Vector2 baseCenter2 = position + dir *length2;
+            Vector2 baseCenter2 = center + dir *length2;
             left2 = baseCenter2 - right * length2/2f;
             right2 = baseCenter2 + right * length2/2f;
            
-            weapon = new Weapon(position, dir, cooldown);
+            weapon = new Weapon(setting, query, dir);
         }
 
         public void Active()

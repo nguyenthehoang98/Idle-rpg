@@ -15,7 +15,7 @@ namespace _Games.Battle
     {
         [SerializeField, Range(1, 25)] private int loop = 1;
         [SerializeField] private int targetFPS = 30;
-        [SerializeField] private TestSetting setting;
+        [SerializeField] private BattleSetting setting;
 
         [TitleGroup("Element")] 
         [SerializeField] private SkillTickable skill;
@@ -25,7 +25,7 @@ namespace _Games.Battle
 
         private Dictionary<int, int> entityToAgent = new Dictionary<int, int>();
         private ITickable[] tickables;
-        private TestLogic logic;
+        private BattleLogic logic;
         private float tickInterval;
         private float accumulator;
 
@@ -34,7 +34,7 @@ namespace _Games.Battle
             Application.runInBackground = true;
             tickInterval = 1f / targetFPS;
 
-            tickables = new ITickable[4] { spawner, agent, movement, skill };
+            tickables = new ITickable[5] { spawner, agent, movement, skill, null };
         }
 
         private async void Start()
@@ -45,8 +45,11 @@ namespace _Games.Battle
                 "LevelConfig",
                 "MonsterConfig",
             });
+
+            IQuery query = new SkillQuery(agent);
             
-            SkillFactory.Initialize(skill, new SkillQuery(agent));
+            SkillFactory.Initialize(skill, query);
+            
             spawner.Initialize(1, request =>
             {
                 float2 position = request.Position;
@@ -60,8 +63,10 @@ namespace _Games.Battle
                 ComponentManager<HealthData>.Add(entity, new HealthData(10));
                 ComponentManager<MonsterData>.Add(entity, new MonsterData(monsterId));
             });
-            logic = new TestLogic(setting);
-
+            
+            logic = new BattleLogic(setting, query);
+            tickables[4] = logic;
+            
             spawner.WaveSpawn();
             
             bool waveSpawnComplete = false;
@@ -125,7 +130,6 @@ namespace _Games.Battle
                     tickables[i].Tick(f);
                 }
                 
-                logic.Tick(f);
                 accumulator -= f;
             }
         }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
 using UnityEngine;
 
@@ -7,18 +9,20 @@ namespace _Games.Battle
     [Serializable]
     public class Weapon
     {
+        private IQuery query;
+        private BattleSetting setting;
+        private float scanRadius;
         private float forwardOffset = 1.5f;
         private float scaleTime = 1f;
         private Vector3 position;
         private Vector3 direction;
         private Vector3 defaultDirection;
         private float elapsedTime;
-        private float cooldown;
         private bool isPlaying;
 
-        public Weapon(Vector3 position, Vector3 direction, float cooldown)
+        public Weapon(BattleSetting setting, IQuery query, Vector3 direction)
         {
-            this.cooldown = cooldown;
+            this.query = query;
             this.direction = defaultDirection = direction;
             this.position = position + direction.normalized * (forwardOffset * scaleTime);
         }
@@ -39,10 +43,10 @@ namespace _Games.Battle
             if (isPlaying)
             {
                 elapsedTime += dt;
-                if (elapsedTime >= cooldown)
+                if (elapsedTime >= setting.weaponCooldown)
                 {
                     elapsedTime = 0;
-                    RotateTo(new Vector3(RandomUtils.Range(-1f, 1f), RandomUtils.Range(-1f, 1f)));
+                    List<int> units = query.GetUnits(setting.center, setting.weaponAttackRange);
                 }
             }
         }
@@ -95,7 +99,7 @@ namespace _Games.Battle
             direction = (worldPos - position).normalized;
             Vector3 offset = defaultDirection * (forwardOffset * (scaleTime - 1));
             Vector3 center = position + offset;
-            Debug.DrawRay(center, direction * 10, Color.magenta, cooldown * 0.6f);
+            Debug.DrawRay(center, direction * 10, Color.magenta, setting.weaponCooldown * 0.6f);
         }
     }
 }
