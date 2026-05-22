@@ -67,7 +67,7 @@ namespace _Games.Battle
             });
             
             tickSystemOwner.TryGetTickable(out SkillTickable skillTickable);
-            tickSystemOwner.TryGetTickable(out  agentTickable);
+            tickSystemOwner.TryGetTickable(out agentTickable);
             tickSystemOwner.TryGetTickable(out SpawnerTickable spawnerTickable);
          
             SystemBus.Reset();

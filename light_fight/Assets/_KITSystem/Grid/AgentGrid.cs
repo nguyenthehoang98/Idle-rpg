@@ -28,11 +28,11 @@ namespace _KITSystem.Grid
         [SerializeField, DisableIf("@true")] private bool isInitialized;
 
 #if UNITY_EDITOR
-        [SerializeField] private SerializableDictionary<int, AgentData> containers = new SerializableDictionary<int, AgentData>();
+        [SerializeField, DisableIf("@true")] private SerializableDictionary<int, AgentData> containers = new SerializableDictionary<int, AgentData>();
 #else
         private Dictionary<int, AgentData> containers = new Dictionary<int, AgentData>();        
 #endif
-        public List<int> agents = new List<int>();
+        private List<int> agents = new List<int>();
         private Simulator simulator;
         private IGridManager gridManager;
         private float stopDistanceSq;

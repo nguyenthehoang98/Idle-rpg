@@ -6,6 +6,7 @@ using Unity.Mathematics;
 namespace _Games.Battle
 {
     // [Don't remove]
+    [System.Serializable]
     public sealed class AgentTickable : AgentGrid, ITickable
     {
         protected override void OnInitialize()

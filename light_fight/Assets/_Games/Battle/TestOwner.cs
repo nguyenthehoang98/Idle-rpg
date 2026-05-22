@@ -1,4 +1,13 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using _KITSystem.ExcelConfig;
+using _KITSystem.Grid;
+using _KITSystem.Schedule;
+using _KITSystem.SkillSystem.Entity;
+using _KITSystem.SkillSystem.Runtime;
+using _KITSystem.Utils;
+using Sirenix.OdinInspector;
+using Unity.Mathematics;
+using UnityEngine;
 
 namespace _Games.Battle
 {
@@ -7,7 +16,15 @@ namespace _Games.Battle
         [SerializeField, Range(1, 25)] private int loop = 1;
         [SerializeField] private int targetFPS = 30;
         [SerializeField] private TestSetting setting;
-        
+
+        [TitleGroup("Element")] 
+        [SerializeField] private SkillTickable skill;
+        [SerializeField] private AgentTickable agent;
+        [SerializeField] private SpawnerTickable spawner;
+        [SerializeField] private MovementTickable movement;
+
+        private Dictionary<int, int> entityToAgent = new Dictionary<int, int>();
+        private ITickable[] tickables;
         private TestLogic logic;
         private float tickInterval;
         private float accumulator;
@@ -16,20 +33,78 @@ namespace _Games.Battle
         {
             Application.runInBackground = true;
             tickInterval = 1f / targetFPS;
+
+            tickables = new ITickable[4] { spawner, agent, movement, skill };
+        }
+
+        private async void Start()
+        {
+            await KitConfigManager.Load(new string[]
+            {
+                "SkillConfig",
+                "LevelConfig",
+                "MonsterConfig",
+            });
+            
+            SkillFactory.Initialize(skill, new SkillQuery(agent));
+            spawner.Initialize(1, request =>
+            {
+                float2 position = request.Position;
+                float radius = request.Radius;
+                
+                int entity = EntityManager.CreateEntity();
+                int monsterId = request.MonsterID;
+                AgentData agentData = agent.CreateAgent(entity, position, radius);
+                entityToAgent[entity] = agentData.agent;
+                
+                ComponentManager<HealthData>.Add(entity, new HealthData(10));
+                ComponentManager<MonsterData>.Add(entity, new MonsterData(monsterId));
+            });
             logic = new TestLogic(setting);
+
+            spawner.WaveSpawn();
+            
+            bool waveSpawnComplete = false;
+            int totalEntityInScene = 0;
+            void SpawnAction()
+            {
+                if (totalEntityInScene == 0 && waveSpawnComplete)
+                {
+                    this.WaitInvoke(2, () =>
+                    {
+                        bool spawn = spawner.WaveSpawn();
+                        if (!spawn)
+                            Debug.LogError("Complete");
+                        else
+                            waveSpawnComplete = false;
+                    });
+                }
+            }
+
+            EntityManager.OnEntityRemoved += i =>
+            {
+                totalEntityInScene = entityToAgent.Count;
+                SpawnAction();
+            };
+            spawner.OnWaveCompleted += () =>
+            {
+                waveSpawnComplete = true;
+                SpawnAction();
+            };
+            EntityManager.OnEntityRemoved += EntityRemoved;
         }
 
         private void OnDrawGizmos()
         {
             if (logic == null) return;
-            
+
             logic.Draw();
         }
 
         private void OnGUI()
         {
             if (logic == null) return;
-            
+
             int[] numbers = logic.DiceNumbers();
             for (int i = 0; i < numbers.Length; i++)
             {
@@ -40,16 +115,26 @@ namespace _Games.Battle
         private void Update()
         {
             if (logic == null) return;
-            
+
             accumulator += Time.deltaTime * loop;
             float f = tickInterval;
             while (accumulator >= f)
             {
+                for (int i = 0; i < tickables.Length; i++)
+                {
+                    tickables[i].Tick(f);
+                }
+                
                 logic.Tick(f);
                 accumulator -= f;
             }
         }
 
+        private void EntityRemoved(int entity)
+        {
+            if (entityToAgent.Remove(entity, out int agentId)) agent.DestroyAgent(agentId);
+        }
+        
         private void DrawCell(string text, Vector2 normalizedPos, float normalizedSize, Color background,
             Color textColor)
         {

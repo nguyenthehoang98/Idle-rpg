@@ -16,7 +16,7 @@ namespace _KITSystem.Movement
         [SerializeField, Tooltip("Các modifier có kiểu khác danh sách này sẽ không được thêm vào hệ thống")]
         private ModifierName[] flagModifiers = new ModifierName[0];
         [SerializeField, Tooltip("Các phương pháp xử lý vận tốc của unit"), SerializeReference]
-        private IResolver resolver;
+        private IResolver resolver = new AvoidanceResolver();
 
         // Đánh version giúp kiểm tra debug
         private int version;
