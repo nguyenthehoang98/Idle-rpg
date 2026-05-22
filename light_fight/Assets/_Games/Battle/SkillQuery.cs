@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using _KITSystem.Grid;
+using _KITSystem.SkillSystem.Entity;
 using _KITSystem.SkillSystem.Runtime;
 using Unity.Mathematics;
 using UnityEngine;
@@ -31,6 +32,8 @@ namespace _Games.Battle
 
                 if (!EntityFactory.FindEntity(agent.agentId, out var entity)) continue;
 
+                if (!EntityManager.IsAlive(entity)) continue;
+
                 float totalRadius = radius + agent.radius;
 
                 float2 delta = agent.position - center;
@@ -42,6 +45,8 @@ namespace _Games.Battle
                     results.Add(entity);
                 }
             }
+            
+            if(results.Count > 0) Debug.Log(string.Join(", ", results));
             
             return results;
         }
@@ -62,6 +67,10 @@ namespace _Games.Battle
             {
                 AgentData agent = agents[i];
 
+                if (!EntityFactory.FindEntity(agent.agentId, out var entity)) continue;
+
+                if (!EntityManager.IsAlive(entity)) continue;
+
                 float2 p = agent.position;
                 float r = agent.radius;
                 
@@ -76,6 +85,8 @@ namespace _Games.Battle
                     results.Add(agent.agentId);
                 }
             }
+            
+            if(results.Count > 0) Debug.Log(string.Join(", ", results));
             
             return results;
         }

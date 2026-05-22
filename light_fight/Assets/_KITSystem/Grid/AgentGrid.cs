@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using _KITSystem.Utils;
 using RVO;
+using Sherbert.Framework.Generic;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
@@ -26,8 +27,12 @@ namespace _KITSystem.Grid
         [SerializeField, DisableIf("@true")] private int total;
         [SerializeField, DisableIf("@true")] private bool isInitialized;
 
-        private Dictionary<int, AgentData> container = new Dictionary<int, AgentData>();
-        private List<int> agents = new List<int>();
+#if UNITY_EDITOR
+        [SerializeField] private SerializableDictionary<int, AgentData> containers = new SerializableDictionary<int, AgentData>();
+#else
+        private Dictionary<int, AgentData> containers = new Dictionary<int, AgentData>();        
+#endif
+        [SerializeField] public List<int> agents = new List<int>();
 
         private Simulator simulator;
         private IGridManager gridManager;
@@ -47,7 +52,7 @@ namespace _KITSystem.Grid
             simulator.EnsureCompleted();
 
 #if UNITY_EDITOR
-            total = container.Count;
+            total = containers.Count;
             DrawLine(deltaTime);
 #endif
             // todo: logic update
@@ -64,7 +69,7 @@ namespace _KITSystem.Grid
             for (int i = 0; i < query; i++)
             {
                 int id = results[i];
-                if (container.TryGetValue(id, out AgentData data))
+                if (containers.TryGetValue(id, out AgentData data))
                 {
                     agentsData[index] = data;
                     index++;
@@ -97,7 +102,7 @@ namespace _KITSystem.Grid
             
             foreach (int agent in agents)
             {
-                AgentData value = container[agent];
+                AgentData value = containers[agent];
                 float2 position = value.position;
                 Color color = value.isStopped ? Color.red : Color.green;
                 DrawCircle(new Vector3(position.x, position.y), value.radius, 6, color);
@@ -125,7 +130,7 @@ namespace _KITSystem.Grid
         {
             foreach (int agent in agents)
             {
-                AgentData temp = container[agent];
+                AgentData temp = containers[agent];
 
                 if (temp.isStopped) continue;
 
@@ -138,7 +143,7 @@ namespace _KITSystem.Grid
                 if (math.lengthsq(position) < stopDistanceSq)
                 {
                     temp.isStopped = true;
-                    container[agent] = temp;
+                    containers[agent] = temp;
                     StopAgent(agent);
                     continue;
                 }
@@ -154,7 +159,7 @@ namespace _KITSystem.Grid
                         continue;
 
                     // chỉ quan tâm frontier
-                    if (container.TryGetValue(otherId, out AgentData other))
+                    if (containers.TryGetValue(otherId, out AgentData other))
                     {
                         if (!other.isStopped) continue;
                     }
@@ -190,7 +195,7 @@ namespace _KITSystem.Grid
                     StopAgent(agent);
                 }
 
-                container[agent] = temp;
+                containers[agent] = temp;
             }
         }
 
@@ -200,7 +205,7 @@ namespace _KITSystem.Grid
             {
                 float2 position = simulator.GetAgentPosition(agent);
                 float2 goalVector = MathUtils.NormalizeSafe(-position);
-                if (container[agent].isStopped)
+                if (containers[agent].isStopped)
                 {
                 }
                 else
@@ -223,7 +228,7 @@ namespace _KITSystem.Grid
                 radius = radius,
                 position = new float2(position.x, position.y)
             };
-            container.Add(agent, data);
+            containers.Add(agent, data);
             gridManager.Insert(agent, position);
             return agent;
         }
@@ -235,7 +240,7 @@ namespace _KITSystem.Grid
                 simulator.EnsureCompleted();
                 simulator.RemoveAgent(agentId);
                 gridManager.Remove(agentId);
-                container.Remove(agentId);
+                containers.Remove(agentId);
             }
         }
         
