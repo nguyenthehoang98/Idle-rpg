@@ -12,21 +12,21 @@ namespace _Games.Battle
         [SerializeField] private float scale = 0.6f;
         [TitleGroup("Elements")]
         [SerializeField] private Transform coneParent;
-        [SerializeField] private Cone prefab;
+        [SerializeField] private ConeMono prefab;
 
-        private readonly List<Cone> cones = new List<Cone>();
+        private readonly List<ConeMono> cones = new List<ConeMono>();
 
         public async UniTask Initialize(int maxStar, float timeScale)
         {
             coneParent.transform.localScale = new Vector3(scale, scale, scale);
             for (int i = 0; i < 6; i++)
             {
-                Cone cone = Instantiate(prefab, coneParent);
+                ConeMono coneMono = Instantiate(prefab, coneParent);
 #if UNITY_EDITOR
-                cone.name = "Cone " + (i + 1);
+                coneMono.name = "Cone " + (i + 1);
 #endif
-                await cone.Initialize(i, maxStar, timeScale);
-                cones.Add(cone);
+                await coneMono.Initialize(i, maxStar, timeScale);
+                cones.Add(coneMono);
             }
         }
 
@@ -49,15 +49,15 @@ namespace _Games.Battle
         {
             for (int i = 0; i < cones.Count; i++)
             {
-                Cone cone = cones[i];
+                ConeMono coneMono = cones[i];
                 int stack = numbers[i];
-                if (stack > 0 && !cone.IsPlaying)
+                if (stack > 0 && !coneMono.IsPlaying)
                 {
-                    this.WaitInvoke(0.2f, cone.Active);
+                    this.WaitInvoke(0.2f, coneMono.Active);
                 }
-                else if(stack == 0 && cone.IsPlaying)
+                else if(stack == 0 && coneMono.IsPlaying)
                 {
-                    cone.Inactive();
+                    coneMono.Inactive();
                 }
             }
         }
@@ -66,6 +66,6 @@ namespace _Games.Battle
 
         public Vector3 GetConeWorldRotation(int index, int stack) => cones[index].GetStarRotation(stack);
         
-        public Cone GetCone(int index) => cones[index];
+        public ConeMono GetCone(int index) => cones[index];
     }
 }
