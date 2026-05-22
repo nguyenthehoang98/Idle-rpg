@@ -1,4 +1,5 @@
 ﻿using System;
+using _KITSystem.SkillSystem.Config;
 using Unity.Mathematics;
 
 namespace _Games.Battle
@@ -12,5 +13,6 @@ namespace _Games.Battle
         public float weaponCooldown;
         public float weaponAttackRange;
         public float2 center;
+        public SkillFrameConfig skillFrameConfig;
     }
 }

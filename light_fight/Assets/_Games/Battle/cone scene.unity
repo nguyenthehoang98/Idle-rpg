@@ -335,6 +335,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 7993921732869881960
       type: {class: BattleTickable, ns: _Games.Battle, asm: Games.Battle}
       data:
@@ -347,6 +349,7 @@ MonoBehaviour:
           center:
             x: 0
             y: 0
+          skillFrameConfig: {fileID: 11400000, guid: 5913003fd1eb5ac4cae65e6978f969a2, type: 2}
         isInitialized: 0
     - rid: 7993921732869881961
       type: {class: AgentTickable, ns: _Games.Battle, asm: Games.Battle}
@@ -362,6 +365,8 @@ MonoBehaviour:
         containers:
           keys: 
           values: []
+        gridManager:
+          rid: -2
     - rid: 7993921732869881962
       type: {class: MovementTickable, ns: _Games.Battle, asm: Games.Battle}
       data:

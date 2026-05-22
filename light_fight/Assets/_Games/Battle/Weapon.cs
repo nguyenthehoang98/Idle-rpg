@@ -50,7 +50,11 @@ namespace _Games.Battle
                     elapsedTime = 0;
 
                     bool found = query.FindNearestTargetPosition(setting.center, setting.weaponAttackRange, out float2 targetPosition);
-                    if (found) RotateTo(targetPosition);
+                    if (found)
+                    {
+                        RotateTo(targetPosition);
+                        SkillFactory.Build(position, targetPosition, setting.skillFrameConfig);
+                    }
                 }
             }
         }
