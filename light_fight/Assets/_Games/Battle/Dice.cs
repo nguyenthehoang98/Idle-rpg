@@ -15,7 +15,7 @@ namespace _Games.Battle
         private bool phaseRandom = true;
         private bool phaseWait;
 
-        public Dice(float cooldown, float delayTrigger)
+        public Dice(BattleShare share, float cooldown, float delayTrigger)
         {
             this.cooldown = cooldown;
             this.delayTrigger = delayTrigger;

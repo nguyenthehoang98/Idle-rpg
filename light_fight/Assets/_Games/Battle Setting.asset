@@ -21,5 +21,5 @@ MonoBehaviour:
   diceDelayTrigger: 0.2
   weaponCooldown: 0.3
   weaponAttackRange: 6
-  coneView: {fileID: 0}
+  coneView: {fileID: 5535604774282497494, guid: ec77afdda9dbff243a651399d484c267, type: 3}
   skillFrameConfig: {fileID: 11400000, guid: 5913003fd1eb5ac4cae65e6978f969a2, type: 2}

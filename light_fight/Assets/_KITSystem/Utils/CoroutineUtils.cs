@@ -11,7 +11,7 @@ namespace _KITSystem.Utils
             yield return new WaitForSeconds(duration);
             action?.Invoke();
         }
-        
+
         static IEnumerator WaitNextFrameIE(Action action, int frame)
         {
             yield return new WaitForEndOfFrame();
@@ -19,8 +19,9 @@ namespace _KITSystem.Utils
             {
                 yield return null;
             }
+
             action?.Invoke();
-        } 
+        }
 
         static IEnumerator WhileInvokeIE(float interval, Action action)
         {
@@ -34,22 +35,29 @@ namespace _KITSystem.Utils
 
         public static Coroutine WaitNextFrame(this MonoBehaviour target, Action action, int frame = 1)
         {
-            if(target != null)
+            if (target != null)
                 return target.StartCoroutine(WaitNextFrameIE(action, frame));
             return null;
         }
 
         public static Coroutine WaitInvoke(this MonoBehaviour target, float duration, Action action)
         {
-            if(target != null)
+            if (target != null)
                 return target.StartCoroutine(WaitInvokeIE(duration, action));
             return null;
         }
 
         public static Coroutine WhileInvoke(this MonoBehaviour target, float interval, Action action)
         {
-            if(target != null)
+            if (target != null)
                 return target.StartCoroutine(WhileInvokeIE(interval, action));
+            return null;
+        }
+
+        public static Coroutine Run(this MonoBehaviour target, IEnumerator routine)
+        {
+            if (target != null)
+                return target.StartCoroutine(routine);
             return null;
         }
     }

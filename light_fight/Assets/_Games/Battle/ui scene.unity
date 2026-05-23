@@ -394,6 +394,9 @@ MonoBehaviour:
   controlDicePrefab: {fileID: 6809574273409925262, guid: 36f1ad29f02f59548ac38380f24d745a, type: 3}
   uiCanvas: {fileID: 1940578876}
   tickSystemOwner: {fileID: 1856148958}
+  entityToAgent:
+    keys: 
+    values: 
 --- !u!4 &1611421289
 Transform:
   m_ObjectHideFlags: 0
@@ -538,30 +541,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPausedDefault: 1
+  loop: 1
   targetFPS: 30
-  list:
-  - group: 0
-    tickable:
-      rid: 7993921713083514981
-  - group: 1
-    tickable:
-      rid: 7993921713083514982
-  - group: 1
-    tickable:
-      rid: 7993921713083514983
-  - group: 0
-    tickable:
-      rid: 7993921713083514973
+  tickables:
+  - rid: 7993921747017793639
+  - rid: 7993921747017793641
+  - rid: 7993921747017793643
+  - rid: 7993921747017793644
   references:
     version: 2
     RefIds:
-    - rid: 7993921713083514973
-      type: {class: SkillTickable, ns: _Games.Battle, asm: Games.Battle}
-      data: 
-    - rid: 7993921713083514981
-      type: {class: SpawnerTickable, ns: _Games.Battle, asm: Games.Battle}
-      data: 
-    - rid: 7993921713083514982
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 7993921747017793639
       type: {class: AgentTickable, ns: _Games.Battle, asm: Games.Battle}
       data:
         locked: 0
@@ -572,15 +564,20 @@ MonoBehaviour:
         deltaDistanceStuck: 0.2
         total: 0
         isInitialized: 0
-    - rid: 7993921713083514983
+        containers:
+          keys: 
+          values: []
+        gridManager:
+          rid: -2
+    - rid: 7993921747017793641
       type: {class: MovementTickable, ns: _Games.Battle, asm: Games.Battle}
       data:
-        flagModifiers: 00000000
+        flagModifiers: 
         resolver:
-          rid: 7993921713083514984
+          rid: 7993921747017793642
         isInitialized: 0
         activeActions: []
-    - rid: 7993921713083514984
+    - rid: 7993921747017793642
       type: {class: AvoidanceResolver, ns: _KITSystem.Movement, asm: KITSystem.Movement}
       data:
         cellSize: 1
@@ -588,6 +585,12 @@ MonoBehaviour:
         avoidStrength: 2
         maxAvoidForce: 3
         stopDecelerationNormalize: 0.9
+    - rid: 7993921747017793643
+      type: {class: SpawnerTickable, ns: _Games.Battle, asm: Games.Battle}
+      data: 
+    - rid: 7993921747017793644
+      type: {class: SkillTickable, ns: _Games.Battle, asm: Games.Battle}
+      data: 
 --- !u!1 &1940578873
 GameObject:
   m_ObjectHideFlags: 0

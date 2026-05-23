@@ -15,7 +15,8 @@ namespace _Games.Battle
     {
         [TitleGroup("Battle")]
         [SerializeField] private BattleSetting setting;
-        
+
+        private BattleShare share;
         private SkillTickable skill;
         private AgentTickable agent;
         private SpawnerTickable spawner;
@@ -25,7 +26,7 @@ namespace _Games.Battle
         private bool waveSpawnComplete = false;
         private int totalEntityInScene = 0;
         private int killed;
-
+        
         private async void Start()
         {
             // todo: load instance data
@@ -45,10 +46,20 @@ namespace _Games.Battle
             
             // todo: create instance logic
             IQuery query = new SkillQuery(agent);
+            share = new BattleShare();
+            share.owner = this;
+            
+            Transform coneParent = null;
+            if (setting.mode == BattleMode.Default)
+            {
+                coneParent = new GameObject("ConeParent").transform;
+                coneParent.parent = transform;
+            }
+            share.coneParent = coneParent;
             
             movement.Initialize();
             agent.Initialize();
-            battle.Initialize(setting, query);
+            battle.Initialize(share, setting, query);
             spawner.Initialize(1, request =>
             {
                 float2 position = request.Position;
@@ -83,7 +94,7 @@ namespace _Games.Battle
             // todo: start spawn
             spawner.WaveSpawn();
 
-            IsPaused = false;
+            //IsPaused = false;
         }
 
         private void OnDrawGizmos()

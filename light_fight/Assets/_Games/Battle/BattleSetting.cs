@@ -21,6 +21,13 @@ namespace _Games.Battle
         public ConeView coneView;
         public SkillFrameConfig skillFrameConfig;
     }
+
+    [System.Serializable]
+    public class BattleShare
+    {
+        public BattleOwner owner;
+        public Transform coneParent;
+    }
     
     public enum BattleMode {Default, Test}
 }
