@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using _KITSystem.Resource;
-using _KITSystem.SkillSystem.Runtime;
+﻿using _KITSystem.SkillSystem.Runtime;
 using UnityEngine;
 
 namespace _Games.Battle
@@ -8,6 +6,7 @@ namespace _Games.Battle
     [System.Serializable]
     public class Cone
     {
+        private BattleShare share;
         private BattleMode mode;
         private Weapon weapon;
         private ConeView view;
@@ -22,6 +21,7 @@ namespace _Games.Battle
 
         public Cone(BattleShare share, int order, BattleSetting setting, IQuery query)
         {
+            this.share = share;
             float angle = -360f / BattleConst.MAX_DICE_NUMBER * order + 90;
             Vector2 dir = new Vector2(
                 Mathf.Cos(angle * Mathf.Deg2Rad),
@@ -56,35 +56,31 @@ namespace _Games.Battle
         public float Init()
         {
             if (mode == BattleMode.Default)
-            {
-                view.initFeedback.PlayFeedbacks();
-                return view.initFeedback.TotalDuration; 
-            }
-
+                return view.Init(share.timeScale);
             return 0;
         }
 
         public float Play()
         {
             if (mode == BattleMode.Default)
-            {
-               view.playFeedback.PlayFeedbacks();
-               return view.playFeedback.TotalDuration;
-            }
-
+                return view.Play(share.timeScale);
             return 0;
         }
 
         public void Active()
         {
-            IsPlaying = true;
             weapon.Active();
+            if (mode == BattleMode.Default)
+                view.Active(share.timeScale);
+            IsPlaying = true;
         }
         
         public void Inactive()
-        { 
-            IsPlaying = false;
+        {
             weapon.Inactive();
+            if (mode == BattleMode.Default)
+                view.Inactive(share.timeScale);
+            IsPlaying = false;
         }
 
         public void Tick(float dt)

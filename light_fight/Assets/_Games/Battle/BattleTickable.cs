@@ -41,20 +41,20 @@ namespace _Games.Battle
                 cones[i] = new Cone(share, i, setting, query);
             }
 
-            CoroutineUtils.Run(share.owner, InitCoroutine());
+            CoroutineUtils.Run(share.owner, InitCoroutine(share.timeScale));
         }
 
-        private IEnumerator InitCoroutine()
+        private IEnumerator InitCoroutine(float timeScale)
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(1f / timeScale);
 
             for (int i = 0; i < cones.Length; i++)
             {
                 cones[i].Init();
-                yield return new WaitForSeconds(0.075f);
+                yield return new WaitForSeconds(0.075f / timeScale);
             }
 
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.5f / timeScale);
 
             float play = 0;
             for (int i = 0; i < cones.Length; i++)
@@ -62,9 +62,7 @@ namespace _Games.Battle
                 play = cones[i].Play();
             }
 
-            yield return new WaitForSeconds(play);
-
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds((play + 0.1f) / timeScale);
 
             isInitialized = true;
 

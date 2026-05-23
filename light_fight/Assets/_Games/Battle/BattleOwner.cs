@@ -48,6 +48,7 @@ namespace _Games.Battle
             IQuery query = new SkillQuery(agent);
             share = new BattleShare();
             share.owner = this;
+            share.timeScale = loop;
             
             Transform coneParent = null;
             if (setting.mode == BattleMode.Default)
@@ -59,7 +60,6 @@ namespace _Games.Battle
             
             movement.Initialize();
             agent.Initialize();
-            battle.Initialize(share, setting, query);
             spawner.Initialize(1, request =>
             {
                 float2 position = request.Position;
@@ -73,11 +73,12 @@ namespace _Games.Battle
                 ComponentManager<HealthData>.Add(entity, new HealthData(10));
                 ComponentManager<MonsterData>.Add(entity, new MonsterData(monsterId));
             });
+            battle.OnInitialized += OnInitialize;
+            battle.Initialize(share, setting, query);
             
             // todo: reset global data + register event
             
             SkillFactory.Initialize(skill, query);
-            
             EntityManager.OnEntityRemoved += i =>
             {
                 killed++;
@@ -90,11 +91,13 @@ namespace _Games.Battle
                 SpawnAction();
             };
             EntityManager.OnEntityRemoved += EntityRemoved;
-            
-            // todo: start spawn
-            spawner.WaveSpawn();
+        }
 
-            //IsPaused = false;
+        private void OnInitialize()
+        {
+            spawner.WaveSpawn();
+            
+            IsPaused = false;
         }
 
         private void OnDrawGizmos()

@@ -25,7 +25,8 @@ namespace _Games.Battle
         [TitleGroup("Elements")] 
         [SerializeField] private Star[] stars;
         [SerializeField] private SpriteRenderer highlight;
-        [FormerlySerializedAs("weapon")] [SerializeField] private WeaponMono weaponMono;
+        [FormerlySerializedAs("weapon")]
+        [SerializeField] private WeaponMono weaponMono;
         
         [TitleGroup("Debug")]
         [SerializeField] private float shineWidth;

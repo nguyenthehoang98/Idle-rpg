@@ -254,7 +254,7 @@ MonoBehaviour:
           ButtonText: 
         Owner: {fileID: 8733146480305813083}
         DebugActive: 0
-        AnimatePositionTarget: {fileID: 0}
+        AnimatePositionTarget: {fileID: 1152989737629607410}
         Mode: 0
         Space: 1
         RandomizeRemap: 0
@@ -550,7 +550,7 @@ MonoBehaviour:
         Owner: {fileID: 8733146480305813083}
         DebugActive: 0
         Mode: 0
-        AnimateScaleTarget: {fileID: 0}
+        AnimateScaleTarget: {fileID: 7116007085571538190}
         AnimateScaleDuration: 0.1
         RemapCurveZero: 1
         RemapCurveOne: 1.2
@@ -2685,6 +2685,8 @@ MonoBehaviour:
   - {fileID: 5604783869922615517}
   initFeedback: {fileID: 8958812487760503100}
   playFeedback: {fileID: 3359252361135066520}
+  zoomOutFeedback: {fileID: 9215097961338113431}
+  zoomInFeedback: {fileID: 8733146480305813083}
 --- !u!1 &8272847187857744492
 GameObject:
   m_ObjectHideFlags: 0
@@ -2904,7 +2906,7 @@ MonoBehaviour:
           ButtonText: 
         Owner: {fileID: 9215097961338113431}
         DebugActive: 0
-        AnimatePositionTarget: {fileID: 0}
+        AnimatePositionTarget: {fileID: 1152989737629607410}
         Mode: 0
         Space: 1
         RandomizeRemap: 0
@@ -3200,7 +3202,7 @@ MonoBehaviour:
         Owner: {fileID: 9215097961338113431}
         DebugActive: 0
         Mode: 0
-        AnimateScaleTarget: {fileID: 0}
+        AnimateScaleTarget: {fileID: 7116007085571538190}
         AnimateScaleDuration: 0.1
         RemapCurveZero: 1.2
         RemapCurveOne: 1

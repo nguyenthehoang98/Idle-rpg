@@ -55,6 +55,22 @@ Each has its own `.asmdef` under `Assets/_KITSystem/`:
 - **No root namespace** in EditorSettings — namespaces are explicit per file.
 - Game code (`_Games/`) falls into `Assembly-CSharp` (no asmdef). KITSystem code has its own asmdefs.
 
+## Docs
+
+| Path | Purpose |
+|------|---------|
+| `docs/plans/` | Implementation plans (Logic/View separation, Free Agent Group) |
+| `docs/architecture/` | Architecture decisions & target design |
+| `docs/knowledge/` | AI knowledge base (KG facts, Palace config reference) |
+
+## Architecture Direction (2026-05-23)
+
+Separating Logic & View for testability. See `docs/architecture/`.
+
+- **Logic**: Pure C# POCO, no `UnityEngine` dependency. Lives in `Assets/_Games/Battle/Logic/`.
+- **View**: MonoBehaviours with DOTween/MMF/Animancer. Lives in `Assets/_Games/Battle/View/`.
+- Logic talks to View via interfaces (`IWeaponLogic`, `IDiceLogic`, `IConeLogic`).
+
 ## Verify
 
 No CI/lint/typecheck. Verify in Unity Editor:
