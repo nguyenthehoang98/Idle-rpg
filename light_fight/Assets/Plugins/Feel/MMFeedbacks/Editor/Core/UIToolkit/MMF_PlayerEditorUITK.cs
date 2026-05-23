@@ -279,26 +279,23 @@ namespace MoreMountains.Feedbacks
 				return;
 			}
 
-			if (Application.isPlaying)
+			if (TargetMmfPlayer.IsPlaying)
 			{
-				if (TargetMmfPlayer.IsPlaying)
+				foreach (var headerData in FeedbackHeaderContainersDictionary)
+				{
+					UpdateProgressBar(headerData.Value);
+				}
+			}
+
+			if (TargetMmfPlayer.IsPlaying != _isPlayingLastFrame)
+			{
+				// display IsPlaying label in the top bar
+				_isPlayingLabel.style.display = TargetMmfPlayer.IsPlaying ? DisplayStyle.Flex : DisplayStyle.None;
+				if (!TargetMmfPlayer.IsPlaying)
 				{
 					foreach (var headerData in FeedbackHeaderContainersDictionary)
 					{
-						UpdateProgressBar(headerData.Value);
-					}
-				}
-
-				if (TargetMmfPlayer.IsPlaying != _isPlayingLastFrame)
-				{
-					// display IsPlaying label in the top bar
-					_isPlayingLabel.style.display = TargetMmfPlayer.IsPlaying ? DisplayStyle.Flex : DisplayStyle.None;
-					if (!TargetMmfPlayer.IsPlaying)
-					{
-						foreach (var headerData in FeedbackHeaderContainersDictionary)
-						{
-							headerData.Value.ProgressBar.style.width = 0f;
-						}
+						headerData.Value.ProgressBar.style.width = 0f;
 					}
 				}
 			}
@@ -316,9 +313,9 @@ namespace MoreMountains.Feedbacks
 
 			float totalDuration = data.Feedback.TotalDuration - data.Feedback.Timing.InitialDelay;
 			float startedAt = data.Feedback.FeedbackStartedAt;
-			float thisTime = data.Feedback.Timing.TimescaleMode == TimescaleModes.Scaled
-				? Time.time
-				: Time.unscaledTime;
+			float thisTime = Application.isPlaying
+				? (data.Feedback.Timing.TimescaleMode == TimescaleModes.Scaled ? Time.time : Time.unscaledTime)
+				: (float)EditorApplication.timeSinceStartup;
 
 			if (totalDuration == 0f)
 			{
@@ -1076,11 +1073,6 @@ namespace MoreMountains.Feedbacks
 				Button stopButton = new Button(() => StopFeedback(index));
 				stopButton.text = _stopText;
 				feedbackControlButtons.Add(stopButton);
-				if (!Application.isPlaying)
-				{
-					playButton.SetEnabled(false);
-					stopButton.SetEnabled(false);
-				}
 
 				feedbackControlButtons.RegisterCallback<PointerDownEvent>(evt => { evt.StopPropagation(); });
 			};
@@ -1599,7 +1591,7 @@ namespace MoreMountains.Feedbacks
 			controlsContainer.Add(secondRow);
 
 			// disable buttons if not in play mode
-			if (!Application.isPlaying)
+			/*if (!Application.isPlaying)
 			{
 				initializeButton.SetEnabled(false);
 				playButton.SetEnabled(false);
@@ -1607,7 +1599,7 @@ namespace MoreMountains.Feedbacks
 				resetButton.SetEnabled(false);
 				skipButton.SetEnabled(false);
 				restoreButton.SetEnabled(false);
-			}
+			}*/
 
 			// keep playmode changes button
 			Button keepPlaymodeChangesButton = new Button() { text = _keepPlaymodeChangesText };
@@ -1730,12 +1722,17 @@ namespace MoreMountains.Feedbacks
 		/// </summary>
 		protected virtual void PlayFeedback(int id)
 		{
+			if (!Application.isPlaying)
+			{
+				TargetMmfPlayer.Initialization();
+			}
+
 			MMF_Feedback feedback = TargetMmfPlayer.FeedbacksList[id];
 			feedback.Play(TargetMmfPlayer.transform.position, TargetMmfPlayer.FeedbacksIntensity);
 		}
 
 		/// <summary>
-		/// Play the selected feedback
+		/// Stop the selected feedback
 		/// </summary>
 		protected virtual void StopFeedback(int id)
 		{
