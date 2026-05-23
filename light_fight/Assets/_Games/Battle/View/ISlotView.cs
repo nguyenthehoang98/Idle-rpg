@@ -9,5 +9,6 @@ namespace _Games.Battle.View
         float Play(float timeScale);
         float Activate(float timeScale);
         float Deactivate(float timeScale);
+        void Stack(int stack, float timeScale);
     }
 }

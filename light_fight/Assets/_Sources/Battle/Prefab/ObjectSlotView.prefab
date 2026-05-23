@@ -2677,6 +2677,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae4d720d60ef4b52bed46b503011fc65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedColors:
+  - {r: 0.05882353, g: 0.5019608, b: 0, a: 1}
+  - {r: 0, g: 0.25490198, b: 0.5019608, a: 1}
+  - {r: 0.29803923, g: 0, b: 0.5019608, a: 1}
+  - {r: 0.5019608, g: 0.2509804, b: 0, a: 1}
+  highlight: {fileID: 1566544260554606642}
   pivot: {fileID: 7116007085571538190}
   stars:
   - {fileID: 4275456458687468820}
@@ -2687,6 +2693,8 @@ MonoBehaviour:
   playFeedback: {fileID: 3359252361135066520}
   zoomOutFeedback: {fileID: 9215097961338113431}
   zoomInFeedback: {fileID: 8733146480305813083}
+  shineWidth: 0
+  shineColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &8272847187857744492
 GameObject:
   m_ObjectHideFlags: 0

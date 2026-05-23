@@ -29,5 +29,9 @@ namespace _Games.Battle.View
         {
             return 0;
         }
+
+        public void Stack(int stack, float timeScale)
+        {
+        }
     }
 }

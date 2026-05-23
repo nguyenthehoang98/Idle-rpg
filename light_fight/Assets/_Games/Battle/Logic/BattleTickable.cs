@@ -18,8 +18,8 @@ namespace _Games.Battle.Logic
         private bool isInitialized = false;
         private Dice[] dices;
         private Slot[] slots;
-        private int number;
-        private HashSet<int> values = new HashSet<int>();
+        private int totalDiceActivate;
+        private int[] diceNumberStacks = new int[BattleConst.MAX_DICE_NUMBER];
         private Vector3 center;
         private float attackRange;
 
@@ -79,21 +79,24 @@ namespace _Games.Battle.Logic
                 return;
             }
 
-            number++;
-            values.Add(dice - 1);
-            if (number == dices.Length)
+            totalDiceActivate++;
+            diceNumberStacks[dice - 1]++;
+            if (totalDiceActivate == dices.Length)
             {
-                for (int i = 0; i < slots.Length; i++) slots[i].Deactivate();
-                for (int i = 0; i < slots.Length; i++)
+                int count = BattleConst.MAX_DICE_NUMBER;
+                for (int i = 0; i < count; i++)
                 {
-                    if (values.Contains(i))
+                    int stack = diceNumberStacks[i];
+                    if (stack == 0) slots[i].Deactivate();
+                    else
                     {
                         slots[i].Activate();
+                        slots[i].DoStack(stack);
                     }
                 }
 
-                number = 0;
-                values.Clear();
+                Array.Clear(diceNumberStacks, 0, diceNumberStacks.Length);
+                totalDiceActivate = 0;
             }
         }
 

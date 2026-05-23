@@ -33,6 +33,27 @@ namespace _KITSystem.Utils
             }
         }
 
+        static IEnumerator LerpNormalizeInvokeIE(float begin, float end, float duration, Action<float> onProgress, Action onComplete)
+        {
+            float time = 0;
+            while (time < duration)
+            {
+                time += Time.deltaTime;
+                float f = Mathf.Lerp(begin, end, Mathf.Clamp01(time / duration));
+                onProgress?.Invoke(f);
+                yield return null;
+            }
+
+            onComplete?.Invoke();
+        }
+
+        public static Coroutine LerpNormalize(this MonoBehaviour target, float begin, float end, float duration, Action<float> onProgress, Action onComplete = null)
+        {
+            if (target != null)
+                return target.StartCoroutine(LerpNormalizeInvokeIE(begin, end, duration, onProgress, onComplete));
+            return null;
+        }
+
         public static Coroutine WaitNextFrame(this MonoBehaviour target, Action action, int frame = 1)
         {
             if (target != null)

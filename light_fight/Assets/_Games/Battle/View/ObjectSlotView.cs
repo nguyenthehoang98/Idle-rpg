@@ -1,4 +1,7 @@
-﻿using _KITSystem.Utils;
+﻿using System;
+using System.Collections;
+using _KITSystem.Utils;
+using DG.Tweening;
 using MoreMountains.Feedbacks;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -25,6 +28,8 @@ namespace _Games.Battle.View
         private MaterialPropertyBlock colorProperty;
         private MaterialPropertyBlock widthProperty;
         private int currentStack;
+        private Coroutine coroutineLerp;
+        private Coroutine coroutineDelayCallback;
 
         private void Awake()
         {
@@ -76,17 +81,73 @@ namespace _Games.Battle.View
 
         public float Deactivate(float timeScale)
         {
-            zoomOutFeedback.TimescaleMultiplier = timeScale;
-            zoomOutFeedback.PlayFeedbacks();
-            return zoomOutFeedback.TotalDuration / timeScale;
+            int prevStack = currentStack;
+            currentStack = 0;
+
+            Action action = () =>
+            {
+                zoomInFeedback.PlayerCompleteFeedbacks();
+
+                zoomOutFeedback.TimescaleMultiplier = timeScale;
+                zoomOutFeedback.PlayFeedbacks();
+
+                float duration = zoomOutFeedback.TotalDuration / timeScale;
+                if (coroutineLerp != null) StopCoroutine(coroutineLerp);
+                coroutineLerp = this.LerpNormalize(1f, 0.05f, duration, SetWidth);
+            };
+
+            int order = 0;
+            for (int i = prevStack - 1; i >= 0; i--)
+            {
+                StarView star = stars[i];
+                this.WaitInvoke(0.2f * order, () => { star.Inactive(timeScale); });
+
+                order++;
+            }
+
+            float weaponRollbackDuration = 0;
+            if (weaponRollbackDuration > 0)
+            {
+                if (coroutineDelayCallback != null) StopCoroutine(coroutineDelayCallback);
+                coroutineDelayCallback = this.WaitInvoke(weaponRollbackDuration, action);
+            }
+            else action();
+
+            return 0;
         }
 
-        public void Stack(int stack)
+        public void Stack(int stack, float timeScale)
         {
-            /*int prevStack = currentStack;
+            int prevStack = currentStack;
             
             currentStack = stack;
-            stars[stack - 1].Active();*/
+            stars[stack - 1].Active(timeScale);
+            
+            Color color = Color.white;
+            
+            if (stack <= selectedColors.Length) 
+                color = selectedColors[stack - 1];
+            
+            float duration = 0.3f / timeScale;
+
+            if (coroutineLerp != null) StopCoroutine(coroutineLerp);
+            
+            if (stack == 1 && prevStack == 0)
+            {
+                SetColor(color);
+                SetWidth(0.05f);
+                coroutineLerp = this.LerpNormalize(0.05f, 1f, duration, SetWidth);
+            }
+            else
+            {
+                float width = shineWidth;
+                Color currentColor = shineColor;
+                coroutineLerp = this.LerpNormalize(0.05f, 1f, duration, value =>
+                {
+                    if (value > width) SetWidth(value);
+                    SetColor(Color.Lerp(currentColor, color, value));
+                });
+            }
         }
         
         private void SetColor(Color color)

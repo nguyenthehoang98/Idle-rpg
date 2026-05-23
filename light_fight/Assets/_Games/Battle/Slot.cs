@@ -73,6 +73,8 @@ namespace _Games.Battle
             weapon.Tick(dt);
         }
 
+        public void DoStack(int stack) => view.Stack(stack, share.timeScale);
+
         public void Draw()
         {
 #if UNITY_EDITOR
