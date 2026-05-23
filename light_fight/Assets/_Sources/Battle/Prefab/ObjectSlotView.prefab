@@ -2639,7 +2639,7 @@ GameObject:
   - component: {fileID: 8430470660457761053}
   - component: {fileID: 5535604774282497494}
   m_Layer: 0
-  m_Name: ConeView
+  m_Name: ObjectSlotView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

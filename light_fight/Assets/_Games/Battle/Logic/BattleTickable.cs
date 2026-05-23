@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using _Games.Battle.Model;
 using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace _Games.Battle
+namespace _Games.Battle.Logic
 {
     [Serializable]
     public class BattleTickable : ITickable
     {
-        [HideInEditorMode, DisableInPlayMode] [SerializeField]
-        private bool isInitialized = false;
-
         public event Action OnInitialized;
+        
+        private bool isInitialized = false;
         private Dice[] dices;
-        private Cone[] cones;
+        private Slot[] slots;
         private int number;
         private HashSet<int> values = new HashSet<int>();
         private Vector3 center;
@@ -28,7 +28,7 @@ namespace _Games.Battle
             this.attackRange = setting.weaponAttackRange;
             this.center = new Vector3(setting.center.x, setting.center.y);
             this.dices = new Dice[setting.totalDice];
-            this.cones = new Cone[BattleConst.MAX_DICE_NUMBER];
+            this.slots = new Slot[BattleConst.MAX_DICE_NUMBER];
 
             for (int i = 0; i < setting.totalDice; i++)
             {
@@ -36,9 +36,9 @@ namespace _Games.Battle
                 dices[i].OnTriggerDice += TriggerDice;
             }
 
-            for (int i = 0; i < cones.Length; i++)
+            for (int i = 0; i < slots.Length; i++)
             {
-                cones[i] = new Cone(share, i, setting, query);
+                slots[i] = new Slot(share, i, setting, query);
             }
 
             CoroutineUtils.Run(share.owner, InitCoroutine(share.timeScale));
@@ -48,18 +48,18 @@ namespace _Games.Battle
         {
             yield return new WaitForSeconds(1f / timeScale);
 
-            for (int i = 0; i < cones.Length; i++)
+            for (int i = 0; i < slots.Length; i++)
             {
-                cones[i].Init();
+                slots[i].Initialize();
                 yield return new WaitForSeconds(0.075f / timeScale);
             }
 
-            yield return new WaitForSeconds(0.5f / timeScale);
+            yield return new WaitForSeconds(0.1f / timeScale);
 
             float play = 0;
-            for (int i = 0; i < cones.Length; i++)
+            for (int i = 0; i < slots.Length; i++)
             {
-                play = cones[i].Play();
+                play = slots[i].Play();
             }
 
             yield return new WaitForSeconds((play + 0.1f) / timeScale);
@@ -83,12 +83,12 @@ namespace _Games.Battle
             values.Add(dice - 1);
             if (number == dices.Length)
             {
-                for (int i = 0; i < cones.Length; i++) cones[i].Inactive();
-                for (int i = 0; i < cones.Length; i++)
+                for (int i = 0; i < slots.Length; i++) slots[i].Deactivate();
+                for (int i = 0; i < slots.Length; i++)
                 {
                     if (values.Contains(i))
                     {
-                        cones[i].Active();
+                        slots[i].Activate();
                     }
                 }
 
@@ -119,9 +119,9 @@ namespace _Games.Battle
                 dices[i].Tick(dt);
             }
 
-            for (int i = 0; i < cones.Length; i++)
+            for (int i = 0; i < slots.Length; i++)
             {
-                cones[i].Tick(dt);
+                slots[i].Tick(dt);
             }
         }
 
@@ -129,9 +129,9 @@ namespace _Games.Battle
         {
             if (!isInitialized) return;
 
-            for (int i = 0; i < cones.Length; i++)
+            for (int i = 0; i < slots.Length; i++)
             {
-                cones[i].Draw();
+                slots[i].Draw();
             }
 
             DrawCircle(attackRange, Color.yellow);

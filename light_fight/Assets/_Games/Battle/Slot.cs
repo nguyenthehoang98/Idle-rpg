@@ -1,15 +1,17 @@
-﻿using _KITSystem.SkillSystem.Runtime;
+﻿using _Games.Battle.Logic;
+using _Games.Battle.Model;
+using _Games.Battle.View;
+using _KITSystem.SkillSystem.Runtime;
 using UnityEngine;
 
 namespace _Games.Battle
 {
     [System.Serializable]
-    public class Cone
+    public class Slot
     {
         private BattleShare share;
-        private BattleMode mode;
         private Weapon weapon;
-        private ConeView view;
+        private ISlotView view;
 #if UNITY_EDITOR
         private Vector3 left1;
         private Vector3 right1;
@@ -19,7 +21,7 @@ namespace _Games.Battle
 
         public bool IsPlaying { get; private set; }
 
-        public Cone(BattleShare share, int order, BattleSetting setting, IQuery query)
+        public Slot(BattleShare share, int order, BattleSetting setting, IQuery query)
         {
             this.share = share;
             float angle = -360f / BattleConst.MAX_DICE_NUMBER * order + 90;
@@ -45,41 +47,24 @@ namespace _Games.Battle
 #endif
            
             weapon = new Weapon(setting, query, dir);
-            mode = setting.mode;
-            if (mode == BattleMode.Default)
-            {
-                view = Object.Instantiate(setting.coneView, share.coneParent);
-                view.transform.localRotation = Quaternion.Euler(0, 0, angle - 90);
-            }
+            view = setting.slot.Instantiate(share.coneParent, new Vector3(0, 0, angle - 90));
         }
 
-        public float Init()
-        {
-            if (mode == BattleMode.Default)
-                return view.Init(share.timeScale);
-            return 0;
-        }
+        public void Initialize() => view.Initialize(share.timeScale);
 
-        public float Play()
-        {
-            if (mode == BattleMode.Default)
-                return view.Play(share.timeScale);
-            return 0;
-        }
+        public float Play() => view.Play(share.timeScale);
 
-        public void Active()
+        public void Activate()
         {
-            weapon.Active();
-            if (mode == BattleMode.Default)
-                view.Active(share.timeScale);
+            weapon.Activate();
+            view.Activate(share.timeScale);
             IsPlaying = true;
         }
         
-        public void Inactive()
+        public void Deactivate()
         {
-            weapon.Inactive();
-            if (mode == BattleMode.Default)
-                view.Inactive(share.timeScale);
+            weapon.Deactivate();
+            view.Deactivate(share.timeScale);
             IsPlaying = false;
         }
 

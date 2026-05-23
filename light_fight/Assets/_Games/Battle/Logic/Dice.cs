@@ -1,7 +1,8 @@
 ﻿using System;
+using _Games.Battle.Model;
 using _KITSystem.Utils;
 
-namespace _Games.Battle
+namespace _Games.Battle.Logic
 {
     public class Dice
     {

@@ -2,7 +2,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace _Games.Battle
+namespace _Games.Battle.View
 {
     public class StarView : MonoBehaviour
     {

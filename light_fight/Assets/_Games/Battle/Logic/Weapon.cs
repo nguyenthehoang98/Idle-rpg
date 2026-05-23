@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
+using _Games.Battle.Model;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace _Games.Battle
+namespace _Games.Battle.Logic
 {
     [Serializable]
     public class Weapon
@@ -36,9 +36,9 @@ namespace _Games.Battle
             DrawSquare(color);
         }
 
-        public void Active() => isPlaying = true;
+        public void Activate() => isPlaying = true;
         
-        public void Inactive() => isPlaying = false;
+        public void Deactivate() => isPlaying = false;
 
         public void Tick(float dt)
         {

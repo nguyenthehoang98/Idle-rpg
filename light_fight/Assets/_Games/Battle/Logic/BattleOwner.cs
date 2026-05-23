@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using _Games.Battle.Logic;
+using _Games.Battle.Model;
 using _KITSystem.ExcelConfig;
 using _KITSystem.Grid;
 using _KITSystem.Schedule;
@@ -49,14 +51,7 @@ namespace _Games.Battle
             share = new BattleShare();
             share.owner = this;
             share.timeScale = loop;
-            
-            Transform coneParent = null;
-            if (setting.mode == BattleMode.Default)
-            {
-                coneParent = new GameObject("ConeParent").transform;
-                coneParent.parent = transform;
-            }
-            share.coneParent = coneParent;
+            share.coneParent = new GameObject("ConeParent").transform;;
             
             movement.Initialize();
             agent.Initialize();

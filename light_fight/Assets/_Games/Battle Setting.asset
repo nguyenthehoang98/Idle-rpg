@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeb9f4c094fd4f4494eb78bd3f5824d7, type: 3}
   m_Name: Battle Setting
   m_EditorClassIdentifier: 
-  mode: 0
   center:
     x: 0
     y: 0
@@ -21,5 +20,11 @@ MonoBehaviour:
   diceDelayTrigger: 0.2
   weaponCooldown: 0.3
   weaponAttackRange: 6
-  coneView: {fileID: 5535604774282497494, guid: ec77afdda9dbff243a651399d484c267, type: 3}
+  slot:
+    rid: -2
   skillFrameConfig: {fileID: 11400000, guid: 5913003fd1eb5ac4cae65e6978f969a2, type: 2}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }

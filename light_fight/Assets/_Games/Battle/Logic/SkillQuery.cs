@@ -3,9 +3,8 @@ using _KITSystem.Grid;
 using _KITSystem.SkillSystem.Entity;
 using _KITSystem.SkillSystem.Runtime;
 using Unity.Mathematics;
-using UnityEngine;
 
-namespace _Games.Battle
+namespace _Games.Battle.Logic
 {
     public class SkillQuery : IQuery
     {

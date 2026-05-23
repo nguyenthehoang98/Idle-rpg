@@ -3,7 +3,7 @@ using _KITSystem.Grid;
 using _KITSystem.Schedule;
 using Unity.Mathematics;
 
-namespace _Games.Battle
+namespace _Games.Battle.Logic
 {
     // [Don't remove]
     [System.Serializable]

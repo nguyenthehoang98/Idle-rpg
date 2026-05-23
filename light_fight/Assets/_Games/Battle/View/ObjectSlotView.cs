@@ -3,9 +3,9 @@ using MoreMountains.Feedbacks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace _Games.Battle
+namespace _Games.Battle.View
 {
-    public class ConeView : MonoBehaviour
+    public class ObjectSlotView : MonoBehaviour, ISlotView
     {
         [TitleGroup("Settings")] 
         [SerializeField] private Color[] selectedColors = new Color[4];
@@ -33,7 +33,14 @@ namespace _Games.Battle
             widthProperty = new MaterialPropertyBlock();
         }
 
-        public float Init(float timeScale)
+        public ISlotView Instantiate(Transform parent, Vector3 localEulerAngles)
+        {
+            var view = Instantiate(transform, parent);
+            view.localEulerAngles = localEulerAngles;
+            return view.GetComponent<ISlotView>();
+        }
+
+        public float Initialize(float timeScale)
         {
             initFeedback.TimescaleMultiplier = timeScale;
             initFeedback.PlayFeedbacks();
@@ -52,24 +59,26 @@ namespace _Games.Battle
             
             playFeedback.TimescaleMultiplier = timeScale;
 
-            float d1 = d + 1f / timeScale;
-            float d2 = d1 + 1.5f / timeScale;
-            this.WaitInvoke(d1, () => { });
+            //float d1 = d + 0.5f / timeScale;
+            float d2 = d + 0.5f / timeScale;
+            //this.WaitInvoke(d1, () => { Debug.Log("weapon_active"); });
             this.WaitInvoke(d2, playFeedback.PlayFeedbacks);
 
             return d2 + playFeedback.TotalDuration / timeScale;
         }
 
-        public void Active(float timeScale)
+        public float Activate(float timeScale)
         {
             zoomInFeedback.TimescaleMultiplier = timeScale;
             zoomInFeedback.PlayFeedbacks();
+            return zoomInFeedback.TotalDuration / timeScale;
         }
 
-        public void Inactive(float timeScale)
+        public float Deactivate(float timeScale)
         {
             zoomOutFeedback.TimescaleMultiplier = timeScale;
             zoomOutFeedback.PlayFeedbacks();
+            return zoomOutFeedback.TotalDuration / timeScale;
         }
 
         public void Stack(int stack)

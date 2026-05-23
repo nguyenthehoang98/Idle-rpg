@@ -1,14 +1,14 @@
-﻿using _KITSystem.SkillSystem.Config;
+﻿using _Games.Battle.View;
+using _KITSystem.SkillSystem.Config;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace _Games.Battle
+namespace _Games.Battle.Model
 {
     [CreateAssetMenu]
-    public class BattleSetting : ScriptableObject
+    public class BattleSetting : SerializedScriptableObject
     {
-        public BattleMode mode = BattleMode.Default;
         public float2 center;
         [TitleGroup("Dice")]
         public int totalDice;
@@ -18,17 +18,7 @@ namespace _Games.Battle
         public float weaponCooldown;
         public float weaponAttackRange;
         [TitleGroup("View")]
-        public ConeView coneView;
+        public ISlotView slot;
         public SkillFrameConfig skillFrameConfig;
     }
-
-    [System.Serializable]
-    public class BattleShare
-    {
-        public float timeScale = 1f;
-        public BattleOwner owner;
-        public Transform coneParent;
-    }
-    
-    public enum BattleMode {Default, Test}
 }

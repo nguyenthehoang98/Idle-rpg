@@ -9,7 +9,7 @@ using _KITSystem.Utils;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace _Games.Battle
+namespace _Games.Battle.Logic
 {
     [Serializable]
     public sealed class SpawnerTickable : ITickable, IDisposable

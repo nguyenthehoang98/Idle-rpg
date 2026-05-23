@@ -327,23 +327,19 @@ MonoBehaviour:
   loop: 1
   targetFPS: 30
   tickables:
-  - rid: 7993921732869881960
-  - rid: 7993921732869881961
-  - rid: 7993921732869881965
-  - rid: 7993921732869881962
-  - rid: 7993921732869881964
+  - rid: 7993921753502711864
+  - rid: 7993921753502711868
+  - rid: 7993921753502711863
+  - rid: 7993921753502711865
+  - rid: 7993921753502711867
   setting: {fileID: 11400000, guid: 95ecddcd768858c4780676724adee50c, type: 2}
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 7993921732869881960
-      type: {class: BattleTickable, ns: _Games.Battle, asm: Games.Battle}
-      data:
-        isInitialized: 0
-    - rid: 7993921732869881961
-      type: {class: AgentTickable, ns: _Games.Battle, asm: Games.Battle}
+    - rid: 7993921753502711863
+      type: {class: AgentTickable, ns: _Games.Battle.Logic, asm: Games.Battle}
       data:
         locked: 0
         defaultAgentStopDistance: 3
@@ -358,15 +354,19 @@ MonoBehaviour:
           values: []
         gridManager:
           rid: -2
-    - rid: 7993921732869881962
-      type: {class: MovementTickable, ns: _Games.Battle, asm: Games.Battle}
+    - rid: 7993921753502711864
+      type: {class: BattleTickable, ns: _Games.Battle.Logic, asm: Games.Battle}
+      data:
+        isInitialized: 0
+    - rid: 7993921753502711865
+      type: {class: MovementTickable, ns: _Games.Battle.Logic, asm: Games.Battle}
       data:
         flagModifiers: 
         resolver:
-          rid: 7993921732869881963
+          rid: 7993921753502711866
         isInitialized: 0
         activeActions: []
-    - rid: 7993921732869881963
+    - rid: 7993921753502711866
       type: {class: AvoidanceResolver, ns: _KITSystem.Movement, asm: KITSystem.Movement}
       data:
         cellSize: 1
@@ -374,11 +374,11 @@ MonoBehaviour:
         avoidStrength: 2
         maxAvoidForce: 3
         stopDecelerationNormalize: 0.9
-    - rid: 7993921732869881964
-      type: {class: SkillTickable, ns: _Games.Battle, asm: Games.Battle}
+    - rid: 7993921753502711867
+      type: {class: SkillTickable, ns: _Games.Battle.Logic, asm: Games.Battle}
       data: 
-    - rid: 7993921732869881965
-      type: {class: SpawnerTickable, ns: _Games.Battle, asm: Games.Battle}
+    - rid: 7993921753502711868
+      type: {class: SpawnerTickable, ns: _Games.Battle.Logic, asm: Games.Battle}
       data: 
 --- !u!1 &1940578873
 GameObject:
