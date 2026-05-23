@@ -9,8 +9,6 @@ namespace _Games.Battle
     [System.Serializable]
     public class BattleTickable : ITickable
     {
-        [SerializeField, HideLabel] private BattleSetting setting;
-        // biến kiểm tra đã khởi tạo chưa
         [HideInEditorMode, DisableInPlayMode]
         [SerializeField] private bool isInitialized = false;
         
@@ -18,9 +16,13 @@ namespace _Games.Battle
         private Cone[] cones;
         private int number;
         private HashSet<int> values = new HashSet<int>();
+        private Vector3 center;
+        private float attackRange;
 
-        public void Initialize(IQuery query)
+        public void Initialize(BattleSetting setting, IQuery query)
         {
+            this.attackRange = setting.weaponAttackRange;
+            this.center = new Vector3(setting.center.x, setting.center.y);
             this.dices = new Dice[setting.totalDice];
             this.cones = new Cone[BattleConst.MAX_DICE_NUMBER];
             
@@ -102,10 +104,10 @@ namespace _Games.Battle
                 cones[i].Draw();
             }
 
-            DrawCircle(new Vector3(setting.center.x, setting.center.y), setting.weaponAttackRange, Color.yellow);
+            DrawCircle(attackRange, Color.yellow);
         }
         
-        void DrawCircle(Vector3 center, float radius, Color color, int segments = 32)
+        void DrawCircle(float radius, Color color, int segments = 32)
         {
             float angleStep = 360f / segments;
 

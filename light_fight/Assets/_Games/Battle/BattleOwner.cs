@@ -5,6 +5,7 @@ using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Entity;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
+using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -12,6 +13,9 @@ namespace _Games.Battle
 {
     public class BattleOwner : TickSystemOwner
     {
+        [TitleGroup("Battle")]
+        [SerializeField] private BattleSetting setting;
+        
         private SkillTickable skill;
         private AgentTickable agent;
         private SpawnerTickable spawner;
@@ -44,7 +48,7 @@ namespace _Games.Battle
             
             movement.Initialize();
             agent.Initialize();
-            battle.Initialize(query);
+            battle.Initialize(setting, query);
             spawner.Initialize(1, request =>
             {
                 float2 position = request.Position;

@@ -35,7 +35,7 @@ namespace _KITSystem.SkillSystem.Runtime
                     {
                         bool hit = results.Count > 0;
 #if UNITY_EDITOR
-                        shape.Gizmos(new Vector3(start.x, start.y), hit ? Color.red : Color.green, deltaTime);
+                        shape.Gizmos(new Vector3(start.x, start.y), hit ? Color.red : Color.green, 0.1f);
 #endif
                         if (hit)
                         {

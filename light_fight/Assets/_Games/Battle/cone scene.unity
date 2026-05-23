@@ -332,6 +332,7 @@ MonoBehaviour:
   - rid: 7993921732869881965
   - rid: 7993921732869881962
   - rid: 7993921732869881964
+  setting: {fileID: 11400000, guid: 95ecddcd768858c4780676724adee50c, type: 2}
   references:
     version: 2
     RefIds:
@@ -340,16 +341,6 @@ MonoBehaviour:
     - rid: 7993921732869881960
       type: {class: BattleTickable, ns: _Games.Battle, asm: Games.Battle}
       data:
-        setting:
-          totalDice: 2
-          diceCooldown: 1
-          diceDelayTrigger: 0.2
-          weaponCooldown: 0.3
-          weaponAttackRange: 6
-          center:
-            x: 0
-            y: 0
-          skillFrameConfig: {fileID: 11400000, guid: 5913003fd1eb5ac4cae65e6978f969a2, type: 2}
         isInitialized: 0
     - rid: 7993921732869881961
       type: {class: AgentTickable, ns: _Games.Battle, asm: Games.Battle}
