@@ -11,15 +11,19 @@ namespace _Games.Battle.Model
     {
         public float2 center;
         [TitleGroup("Dice")]
-        public int totalDice;
-        public float diceCooldown;
-        public float diceDelayTrigger;
+        public int totalDice = 4;
+        public float diceCooldown = 1;
+        public float diceDelayTrigger = 0.2f;
         [TitleGroup("Weapon")]
-        public float weaponCooldown;
-        public float weaponAttackRange;
+        public float weaponCooldown = 0.3f;
+        public float weaponAttackRange = 6f;
+        [TitleGroup("Attractor")]
+        [Range(1.1f, 2.0f)] public float minAttractorRadius = 1.1f;
+        [Range(1.1f, 2.0f)] public float maxAttractorRadius = 2.0f;
         [TitleGroup("View")]
         public ISlotView slot;
         public IDiceView dice;
+        public IAttractorView attractor;
         public SkillFrameConfig skillFrameConfig;
     }
 }

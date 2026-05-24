@@ -33,5 +33,8 @@ namespace _Games.Battle.View
         public void Stack(int stack, float timeScale)
         {
         }
+
+        public Vector3 WorldPosition => Vector3.zero;
+        public Vector3 WorldEulerAngles => Vector3.zero;
     }
 }

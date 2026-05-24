@@ -7,7 +7,7 @@ namespace _Games.Battle.Logic
 {
     public class Dice
     {
-        public event Action<int> OnTriggerDice;
+        public event Action<int, float> OnTriggerDice;
         
         private int value;
         private IDiceView view;
@@ -41,6 +41,7 @@ namespace _Games.Battle.Logic
                     elapsedTime = setting.diceDelayTrigger;
                     phase = Phase.Delaying;
                     view.SetValue(value);
+                    OnTriggerDice?.Invoke(value, setting.diceDelayTrigger);
                     break;
                 case Phase.Delaying:
                     elapsedTime = setting.diceCooldown;

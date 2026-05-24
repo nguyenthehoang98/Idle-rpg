@@ -24,6 +24,8 @@ namespace _Games.Battle.View
         [TitleGroup("Debug")]
         [SerializeField] private float shineWidth;
         [SerializeField] private Color shineColor;
+
+        private Vector3 localEulerAngles;
         
         private MaterialPropertyBlock colorProperty;
         private MaterialPropertyBlock widthProperty;
@@ -40,6 +42,7 @@ namespace _Games.Battle.View
 
         public ISlotView Instantiate(Transform parent, Vector3 localEulerAngles)
         {
+            this.localEulerAngles = localEulerAngles;
             var view = Instantiate(transform, parent);
             view.localEulerAngles = localEulerAngles;
             return view.GetComponent<ISlotView>();
@@ -167,6 +170,9 @@ namespace _Games.Battle.View
                 });
             }
         }
+
+        public Vector3 WorldPosition => stars[0].transform.position;
+        public Vector3 WorldEulerAngles => localEulerAngles;
 
         private void SetColor(Color color)
         {

@@ -51,10 +51,18 @@ namespace _Games.Battle.Logic
             
             // todo: create instance logic
             IQuery query = new SkillQuery(agent);
-            share = new BattleShare();
-            share.owner = this;
-            share.timeScale = loop;
-            share.coneParent = new GameObject("ConeParent").transform;;
+            share = new BattleShare
+            {
+                owner = this,
+                timeScale = loop,
+                coneParent = new GameObject("ConeParent").transform,
+                attractorParent = new GameObject("AttractorParent", typeof(RectTransform)).transform,
+            };
+            var attract = share.attractorParent;
+            attract.SetParent(canvas.transform);
+            attract.SetAsFirstSibling();
+            attract.transform.localPosition = Vector3.zero;
+            attract.transform.localScale = Vector3.one;
             
             movement.Initialize();
             agent.Initialize();

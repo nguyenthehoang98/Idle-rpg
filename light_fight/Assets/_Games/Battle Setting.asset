@@ -18,6 +18,7 @@ MonoBehaviour:
     ReferencedUnityObjects:
     - {fileID: 5535604774282497494, guid: ec77afdda9dbff243a651399d484c267, type: 3}
     - {fileID: 1260976206857264283, guid: 55b0d2eefeccf1d4ca0b78457e343d6e, type: 3}
+    - {fileID: 7840636616252386546, guid: dafbcef128748c144afe3343a2803e73, type: 3}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -29,6 +30,9 @@ MonoBehaviour:
     - Name: dice
       Entry: 10
       Data: 1
+    - Name: attractor
+      Entry: 10
+      Data: 2
   center:
     x: 0
     y: 0
@@ -37,4 +41,6 @@ MonoBehaviour:
   diceDelayTrigger: 0.2
   weaponCooldown: 0.3
   weaponAttackRange: 6
+  minAttractorRadius: 1.1
+  maxAttractorRadius: 2
   skillFrameConfig: {fileID: 11400000, guid: 5913003fd1eb5ac4cae65e6978f969a2, type: 2}

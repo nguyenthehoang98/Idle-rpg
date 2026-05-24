@@ -61,6 +61,8 @@ namespace _Games.Battle.View
             return rig.Roll(value, null);
         }
 
+        public Vector3 WorldPosition => rig.transform.position;
+
         public float2 RectTransformSize => GetComponent<RectTransform>().sizeDelta;
     }
 }

@@ -11,6 +11,7 @@ namespace _Games.Battle.Model
         public float timeScale = 1f;
         public BattleOwner owner;
         public Transform coneParent;
+        public Transform attractorParent;
         public List<IDiceView> dices = new List<IDiceView>();
         public List<ISlotView> slots = new List<ISlotView>();
     }

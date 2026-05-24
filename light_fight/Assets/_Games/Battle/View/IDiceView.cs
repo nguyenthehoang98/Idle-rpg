@@ -13,6 +13,7 @@ namespace _Games.Battle.View
         void SetColor(Color color);
         float Roll(int value);
         
+        Vector3 WorldPosition { get; }
         float2 RectTransformSize { get; }
     }
 }

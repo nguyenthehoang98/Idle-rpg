@@ -10,5 +10,8 @@ namespace _Games.Battle.View
         float Activate(float timeScale);
         float Deactivate(float timeScale);
         void Stack(int stack, float timeScale);
+        
+        Vector3 WorldPosition { get; }
+        Vector3 WorldEulerAngles { get; }
     }
 }
