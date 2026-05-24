@@ -1,16 +1,15 @@
-using System;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _Games.Battle.View
 {
     public interface IDiceView
     {
-        void ShowValue(int value);
+        IDiceView Instantiate(Transform parent);
+        void Initialize(float cooldown);
         void SetLocked(bool locked);
-        void SetCooldownProgress(float progress);
-        void PlayRoll(int value, Action onComplete);
-        void SetColor(Color color);
-        void SetScaleTime(float scaleTime);
-        RectTransform RectTransform { get; }
+        void SetValue(int value);
+        
+        float2 RectTransformSize { get; }
     }
 }

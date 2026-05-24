@@ -32,7 +32,7 @@ namespace _Games.Battle.Logic
 
             for (int i = 0; i < setting.totalDice; i++)
             {
-                dices[i] = new Dice(share, setting.diceCooldown, setting.diceDelayTrigger);
+                dices[i] = new Dice(share, setting);
                 dices[i].OnTriggerDice += TriggerDice;
             }
 
@@ -62,7 +62,7 @@ namespace _Games.Battle.Logic
                 play = slots[i].Play();
             }
 
-            yield return new WaitForSeconds((play + 0.1f) / timeScale);
+            yield return new WaitForSeconds((play) / timeScale);
 
             isInitialized = true;
 

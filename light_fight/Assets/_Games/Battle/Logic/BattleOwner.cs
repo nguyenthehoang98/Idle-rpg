@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using _Games.Battle.Logic;
 using _Games.Battle.Model;
+using _Games.Battle.View;
 using _KITSystem.ExcelConfig;
 using _KITSystem.Grid;
 using _KITSystem.Schedule;
@@ -11,12 +11,14 @@ using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace _Games.Battle
+namespace _Games.Battle.Logic
 {
     public class BattleOwner : TickSystemOwner
     {
         [TitleGroup("Battle")]
         [SerializeField] private BattleSetting setting;
+        [SerializeField] private Canvas canvas;
+        [SerializeField] private DiceControlView diceControlPrefab;
 
         private BattleShare share;
         private SkillTickable skill;
@@ -25,9 +27,11 @@ namespace _Games.Battle
         private BattleTickable battle;
         private Dictionary<int, int> entityToAgent = new Dictionary<int, int>();
 
+        private DiceControlView diceControl;
         private bool waveSpawnComplete = false;
         private int totalEntityInScene = 0;
         private int killed;
+        private int totalSubModuleWaitingInit = 2;
         
         private async void Start()
         {
@@ -68,11 +72,14 @@ namespace _Games.Battle
                 ComponentManager<HealthData>.Add(entity, new HealthData(10));
                 ComponentManager<MonsterData>.Add(entity, new MonsterData(monsterId));
             });
-            battle.OnInitialized += OnInitialize;
+            battle.OnInitialized += OnBattleInitialize;
             battle.Initialize(share, setting, query);
             
-            // todo: reset global data + register event
+            diceControl = Instantiate(diceControlPrefab, canvas.transform);
+            diceControl.OnInitialized += OnDiceInitialize;
+            diceControl.transform.SetAsFirstSibling();
             
+            // todo: reset global data + register event
             SkillFactory.Initialize(skill, query);
             EntityManager.OnEntityRemoved += i =>
             {
@@ -88,10 +95,23 @@ namespace _Games.Battle
             EntityManager.OnEntityRemoved += EntityRemoved;
         }
 
-        private void OnInitialize()
+        private void OnDiceInitialize(List<IDiceView> list)
+        {
+            totalSubModuleWaitingInit--;
+            if (totalSubModuleWaitingInit <= 0) StartGame();
+        }
+
+        private void OnBattleInitialize()
+        {
+            totalSubModuleWaitingInit--;
+            if (totalSubModuleWaitingInit <= 0) StartGame();
+            
+            diceControl.Initialize(share, setting);
+        }
+
+        private void StartGame()
         {
             spawner.WaveSpawn();
-            
             IsPaused = false;
         }
 

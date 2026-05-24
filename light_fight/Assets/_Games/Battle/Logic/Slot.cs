@@ -1,10 +1,9 @@
-﻿using _Games.Battle.Logic;
-using _Games.Battle.Model;
+﻿using _Games.Battle.Model;
 using _Games.Battle.View;
 using _KITSystem.SkillSystem.Runtime;
 using UnityEngine;
 
-namespace _Games.Battle
+namespace _Games.Battle.Logic
 {
     [System.Serializable]
     public class Slot

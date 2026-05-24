@@ -19,6 +19,7 @@ namespace _Games.Battle.Model
         public float weaponAttackRange;
         [TitleGroup("View")]
         public ISlotView slot;
+        public IDiceView dice;
         public SkillFrameConfig skillFrameConfig;
     }
 }

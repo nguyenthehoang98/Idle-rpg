@@ -1,5 +1,4 @@
 ﻿using System;
-using _Games.Battle.View;
 using _KITSystem.Utils;
 using Sirenix.OdinInspector;
 using TMPro;
@@ -8,7 +7,7 @@ using UnityEngine.UI;
 
 namespace _Games.Battle
 {
-    public class UIBattleDiceSlot : MonoBehaviour, IDiceView
+    public class UIBattleDiceSlot : MonoBehaviour
     {
         [SerializeField] private DiceRollController rig;
         [TitleGroup("Element")]

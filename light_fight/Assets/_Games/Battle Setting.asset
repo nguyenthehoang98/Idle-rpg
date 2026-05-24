@@ -17,6 +17,7 @@ MonoBehaviour:
     SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 5535604774282497494, guid: ec77afdda9dbff243a651399d484c267, type: 3}
+    - {fileID: 1260976206857264283, guid: 55b0d2eefeccf1d4ca0b78457e343d6e, type: 3}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -25,6 +26,9 @@ MonoBehaviour:
     - Name: slot
       Entry: 10
       Data: 0
+    - Name: dice
+      Entry: 10
+      Data: 1
   center:
     x: 0
     y: 0

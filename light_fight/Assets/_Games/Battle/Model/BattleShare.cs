@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using _Games.Battle.Logic;
+using UnityEngine;
 
 namespace _Games.Battle.Model
 {

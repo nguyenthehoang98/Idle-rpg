@@ -1,5 +1,6 @@
 ﻿using System;
 using _Games.Battle.Model;
+using _Games.Battle.View;
 using _KITSystem.Utils;
 
 namespace _Games.Battle.Logic
@@ -10,16 +11,14 @@ namespace _Games.Battle.Logic
         
         public int Value { get; private set; }
 
-        private readonly float cooldown;
-        private readonly float delayTrigger;
+        private BattleSetting setting;
         private float elapsedTime;
         private bool phaseRandom = true;
         private bool phaseWait;
 
-        public Dice(BattleShare share, float cooldown, float delayTrigger)
+        public Dice(BattleShare share, BattleSetting setting)
         {
-            this.cooldown = cooldown;
-            this.delayTrigger = delayTrigger;
+            this.setting = setting;
         }
 
         public void Tick(float dt)
@@ -27,7 +26,7 @@ namespace _Games.Battle.Logic
             if (phaseRandom)
             {
                 elapsedTime += dt;
-                if (elapsedTime >= cooldown)
+                if (elapsedTime >= setting.diceCooldown)
                 {
                     phaseRandom = false;
                     elapsedTime = 0; 
@@ -38,7 +37,7 @@ namespace _Games.Battle.Logic
             if (phaseWait)
             {
                 elapsedTime += dt;
-                if (elapsedTime >= delayTrigger)
+                if (elapsedTime >= setting.diceDelayTrigger)
                 {
                     phaseWait = false;
                     Value = RandomUtils.Range(1, 3);
