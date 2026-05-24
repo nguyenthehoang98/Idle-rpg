@@ -16,6 +16,7 @@ namespace _Games.Battle
         private void Awake()
         {
             visual.gameObject.SetActive(false);
+            trail.enabled = false;
         }
 
         public IAttractorView Instantiate(Transform parent)
@@ -30,11 +31,9 @@ namespace _Games.Battle
             visual.transform.rotation = Quaternion.Euler(0, 0, 0);
             visual.transform.position = start;
             visual.gameObject.SetActive(true);
-            Debug.DrawLine(start, target, Color.green, 1);
-            Debug.Break();
-            trail.enabled = false;
+            trail.enabled = true;
+            
             bool completed = false;
-            ActiveTrail();
             float d = duration * 0.6f;
             Vector3 begin = start + Vector3.up * offsetY;
             Vector3 end = target;
@@ -71,12 +70,11 @@ namespace _Games.Battle
                         });
                     }
                 
-                })).SetEase(Ease.OutQuart);
-        }
-
-        void ActiveTrail()
-        {
-            this.WaitNextFrame(() => trail.enabled = true);
+                })).SetEase(Ease.OutQuart)
+                .OnComplete(() =>
+                {
+                    trail.enabled = false;
+                });
         }
     }
 }

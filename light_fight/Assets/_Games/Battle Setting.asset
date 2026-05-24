@@ -38,7 +38,7 @@ MonoBehaviour:
     y: 0
   totalDice: 4
   diceCooldown: 1
-  diceDelayTrigger: 0.2
+  diceDelayTrigger: 1
   weaponCooldown: 0.3
   weaponAttackRange: 6
   minAttractorRadius: 1.1

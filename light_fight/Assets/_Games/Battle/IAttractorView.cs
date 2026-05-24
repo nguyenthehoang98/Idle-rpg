@@ -6,7 +6,7 @@ namespace _Games.Battle
     public interface IAttractorView
     {
         IAttractorView Instantiate(Transform parent);
-        public void MoveTo(Vector3 start, Vector3 target, Vector3 rot, float delay,
+        void MoveTo(Vector3 start, Vector3 target, Vector3 rot, float delay,
             float duration, float radius, float offsetY, float smooth, Action onComplete);
     }
 }

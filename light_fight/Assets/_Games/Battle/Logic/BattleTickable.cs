@@ -24,7 +24,10 @@ namespace _Games.Battle.Logic
         private Slot[] slots;
         private IAttractorView[] attractors;
         private int totalDiceActivate;
+        // {number:stack}
         private int[] diceNumberStacks = new int[BattleConst.MAX_DICE_NUMBER];
+        // {index:number}
+        private int[] diceNumbers;
         private Vector3 center;
         private float attackRange;
 
@@ -34,6 +37,7 @@ namespace _Games.Battle.Logic
             this.setting = setting;
             this.attackRange = setting.weaponAttackRange;
             this.center = new Vector3(setting.center.x, setting.center.y);
+            this.diceNumbers = new int[setting.totalDice];
             this.dices = new Dice[setting.totalDice];
             this.slots = new Slot[BattleConst.MAX_DICE_NUMBER];
             this.attractors = new IAttractorView[setting.totalDice];
@@ -68,6 +72,7 @@ namespace _Games.Battle.Logic
             for (int i = 0; i < slots.Length; i++)
             {
                 slots[i].Initialize();
+                
                 yield return new WaitForSeconds(0.1f / timeScale);
             }
 
@@ -86,7 +91,7 @@ namespace _Games.Battle.Logic
             OnInitialized?.Invoke();
         }
 
-        private void TriggerDice(int diceIndex, int number, float duration)
+        private void TriggerDice(int triggerDiceIndex, int triggerNumber, float duration)
         {
             if (!isInitialized)
             {
@@ -97,34 +102,42 @@ namespace _Games.Battle.Logic
             }
 
             totalDiceActivate++;
-            diceNumberStacks[number - 1]++;
+            diceNumberStacks[triggerNumber - 1]++;
+            diceNumbers[triggerDiceIndex] = triggerNumber - 1;
+            
             if (totalDiceActivate == dices.Length)
             {
-                int count = BattleConst.MAX_DICE_NUMBER;
-
-                for (int i = 0; i < count; i++)
+                for (int i = 0; i < diceNumberStacks.Length; i++)
                 {
-                    int stack = diceNumberStacks[i];
                     Slot slot = slots[i];
-
-                    if (stack == 0)
+                    if (diceNumberStacks[i] == 0 && slot.IsPlaying)
                     {
-                        if (slot.IsPlaying) slot.Deactivate();
+                        slot.Deactivate();
                     }
-                    else
+                }
+                
+                for (int dice = 0; dice < diceNumbers.Length; dice++)
+                {
+                    int number = diceNumbers[dice];
+                    int stack = diceNumberStacks[number];
+                    Slot slot = slots[number];
+                    
+                    if (stack != 0)
                     {
-                        if (!slot.IsPlaying) slot.Activate();
-
-                        Vector3 start = share.dices[diceIndex].WorldPosition;
-                        Vector3 end = share.slots[i].WorldPosition;
-                        Vector3 rot = share.slots[i].WorldEulerAngles;
-
-                        attractors[diceIndex].MoveTo(start, end, rot, 0, duration,
+                        Vector3 start = share.dices[dice].WorldPosition;
+                        Vector3 end = share.slots[number].WorldPosition;
+                        Vector3 rot = share.slots[number].WorldEulerAngles;
+                        attractors[dice].MoveTo(start, end, rot, 0, duration,
                             RandomUtils.Range(setting.minAttractorRadius, setting.maxAttractorRadius), 2.5f,
-                            RandomUtils.Range(0.3f, 0.5f), () => { slot.DoStack(stack); });
+                            RandomUtils.Range(0.3f, 0.5f), () =>
+                            {
+                                if (!slot.IsPlaying) slot.Activate();
+                                slot.DoStack(stack);
+                            });
                     }
                 }
 
+                Array.Clear(diceNumbers, 0, diceNumbers.Length);
                 Array.Clear(diceNumberStacks, 0, diceNumberStacks.Length);
                 totalDiceActivate = 0;
             }
