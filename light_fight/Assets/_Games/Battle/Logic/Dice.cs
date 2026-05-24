@@ -41,7 +41,7 @@ namespace _Games.Battle.Logic
                 if (elapsedTime >= delayTrigger)
                 {
                     phaseWait = false;
-                    Value = RandomUtils.Range(1, 7);
+                    Value = RandomUtils.Range(1, 3);
                     OnTriggerDice?.Invoke(Value);
                     elapsedTime = 0;
                     phaseRandom = true;

@@ -82,6 +82,7 @@ namespace _Games.Battle.View
         public float Deactivate(float timeScale)
         {
             int prevStack = currentStack;
+            
             currentStack = 0;
 
             Action action = () =>
@@ -119,19 +120,36 @@ namespace _Games.Battle.View
         public void Stack(int stack, float timeScale)
         {
             int prevStack = currentStack;
-            
+
             currentStack = stack;
-            stars[stack - 1].Active(timeScale);
-            
+
+            if (prevStack == currentStack)
+            {
+                stars[currentStack - 1].Active(timeScale);
+                return;
+            }
+            else
+            {
+                for (int i = 0; i < stars.Length; i++)
+                {
+                    stars[i].Inactive(timeScale);
+                }
+
+                for (int i = 0; i < currentStack; i++)
+                {
+                    int index = i;
+                    this.WaitInvoke(0.1f * i, () => { stars[index].Active(timeScale); });
+                }
+            }
+
             Color color = Color.white;
-            
-            if (stack <= selectedColors.Length) 
-                color = selectedColors[stack - 1];
-            
-            float duration = 0.3f / timeScale;
+
+            if (stack <= selectedColors.Length) color = selectedColors[stack - 1];
+
+            float duration = 0.5f / timeScale;
 
             if (coroutineLerp != null) StopCoroutine(coroutineLerp);
-            
+
             if (stack == 1 && prevStack == 0)
             {
                 SetColor(color);
@@ -149,7 +167,7 @@ namespace _Games.Battle.View
                 });
             }
         }
-        
+
         private void SetColor(Color color)
         {
             shineColor = color;

@@ -87,10 +87,15 @@ namespace _Games.Battle.Logic
                 for (int i = 0; i < count; i++)
                 {
                     int stack = diceNumberStacks[i];
-                    if (stack == 0) slots[i].Deactivate();
+                    Slot slot = slots[i];
+                    
+                    if (stack == 0)
+                    {
+                        if(slot.IsPlaying) slots[i].Deactivate();
+                    }
                     else
                     {
-                        slots[i].Activate();
+                        if (!slot.IsPlaying) slots[i].Activate();
                         slots[i].DoStack(stack);
                     }
                 }

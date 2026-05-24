@@ -28,7 +28,7 @@ MonoBehaviour:
   center:
     x: 0
     y: 0
-  totalDice: 2
+  totalDice: 4
   diceCooldown: 1
   diceDelayTrigger: 0.2
   weaponCooldown: 0.3

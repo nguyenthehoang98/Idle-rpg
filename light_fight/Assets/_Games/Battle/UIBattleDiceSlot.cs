@@ -1,4 +1,5 @@
 ﻿using System;
+using _Games.Battle.View;
 using _KITSystem.Utils;
 using Sirenix.OdinInspector;
 using TMPro;
@@ -7,7 +8,7 @@ using UnityEngine.UI;
 
 namespace _Games.Battle
 {
-    public class UIBattleDiceSlot : MonoBehaviour
+    public class UIBattleDiceSlot : MonoBehaviour, IDiceView
     {
         [SerializeField] private DiceRollController rig;
         [TitleGroup("Element")]
@@ -35,32 +36,51 @@ namespace _Games.Battle
                 float deltaTime = Time.deltaTime;
                 float d = deltaTime * (1 + scaleTime);
                 elapsedTime += d;
-                float f = Mathf.Clamp01(elapsedTime / cooldown);
-                imgCooldown.fillAmount = f;
+                SetCooldownProgress(Mathf.Clamp01(elapsedTime / cooldown));
 
-                if (f >= 1)
+                if (elapsedTime >= cooldown)
                 {
                     isPaused = true;
-                    Random();
                     elapsedTime = 0;
+                    Random();
                 }
             }
         }
 
         public void Init(bool locked, Action<int> onTrigger)
         {
-            numberText.text = "?";
-            isLocked = locked;
-            elapsedTime = float.MaxValue;
+            SetLocked(locked);
+            elapsedTime = cooldown;
             onTriggerDiceNumber = onTrigger;
-            lockObject.SetActive(locked);
-            unlockObject.SetActive(!locked);
-            imgCooldown.gameObject.SetActive(!locked);
+            ShowValue(0);
         }
 
         public void Play()
         {
             isInitialized = true;
+        }
+
+        public void ShowValue(int value)
+        {
+            numberText.text = value > 0 ? value.ToString() : "?";
+        }
+
+        public void SetLocked(bool locked)
+        {
+            isLocked = locked;
+            lockObject.SetActive(locked);
+            unlockObject.SetActive(!locked);
+            imgCooldown.gameObject.SetActive(!locked);
+        }
+
+        public void SetCooldownProgress(float progress)
+        {
+            imgCooldown.fillAmount = progress;
+        }
+
+        public void PlayRoll(int value, Action onComplete)
+        {
+            rig.Roll(value, onComplete);
         }
 
         public void SetColor(Color color)
@@ -71,14 +91,14 @@ namespace _Games.Battle
         private void Random()
         {
             value = RandomUtils.Range(1, 7);
-            rig.Roll(value, () =>
+            PlayRoll(value, () =>
             {
-                numberText.text = value.ToString();
+                ShowValue(value);
                 onTriggerDiceNumber?.Invoke(value);
                 isPaused = false;
             });
         }
-        
+
         public void SetScaleTime(float f) => scaleTime = f;
 
         public RectTransform RectTransform => rectTransform;
