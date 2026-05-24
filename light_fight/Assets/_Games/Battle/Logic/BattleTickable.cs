@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using _Games.Battle.Model;
-using _Games.Battle.View;
 using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
-using Sherbert.Framework.Generic;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace _Games.Battle.Logic
@@ -24,8 +20,6 @@ namespace _Games.Battle.Logic
         private Slot[] slots;
         private IAttractorView[] attractors;
         private int totalDiceActivate;
-        // {number:stack}
-        private int[] diceNumberStacks = new int[BattleConst.MAX_DICE_NUMBER];
         // {index:number}
         private int[] diceNumbers;
         private Vector3 center;
@@ -37,18 +31,18 @@ namespace _Games.Battle.Logic
             this.setting = setting;
             this.attackRange = setting.weaponAttackRange;
             this.center = new Vector3(setting.center.x, setting.center.y);
-            this.diceNumbers = new int[setting.totalDice];
-            this.dices = new Dice[setting.totalDice];
+            this.diceNumbers = new int[setting.totalSlot];
+            this.dices = new Dice[setting.totalSlot];
             this.slots = new Slot[BattleConst.MAX_DICE_NUMBER];
-            this.attractors = new IAttractorView[setting.totalDice];
+            this.attractors = new IAttractorView[setting.totalSlot];
 
-            for (int i = 0; i < setting.totalDice; i++)
+            for (int i = 0; i < setting.totalSlot; i++)
             {
                 int index = i;
                 dices[i] = new Dice(share, setting);
-                dices[i].OnTriggerDice += (i1, f) =>
+                dices[i].OnTriggerDice += (i1) =>
                 {
-                    TriggerDice(index, i1, f);
+                    TriggerDice(index, i1);
                 };
             }
 
@@ -91,7 +85,7 @@ namespace _Games.Battle.Logic
             OnInitialized?.Invoke();
         }
 
-        private void TriggerDice(int triggerDiceIndex, int triggerNumber, float duration)
+        private void TriggerDice(int triggerDiceIndex, int triggerNumber)
         {
             if (!isInitialized)
             {
@@ -102,43 +96,47 @@ namespace _Games.Battle.Logic
             }
 
             totalDiceActivate++;
-            diceNumberStacks[triggerNumber - 1]++;
             diceNumbers[triggerDiceIndex] = triggerNumber - 1;
-            
+
+            float delay = 0.5f;
             if (totalDiceActivate == dices.Length)
             {
-                for (int i = 0; i < diceNumberStacks.Length; i++)
+                int[] stacks = new int[BattleConst.MAX_DICE_NUMBER];
+                for (int i = 0; i < diceNumbers.Length; i++)
                 {
-                    Slot slot = slots[i];
-                    if (diceNumberStacks[i] == 0 && slot.IsPlaying)
-                    {
-                        slot.Deactivate();
-                    }
-                }
-                
-                for (int dice = 0; dice < diceNumbers.Length; dice++)
-                {
-                    int number = diceNumbers[dice];
-                    int stack = diceNumberStacks[number];
+                    int number = diceNumbers[i];
                     Slot slot = slots[number];
                     
-                    if (stack != 0)
+                    stacks[number]++;
+                    int stack = stacks[number]; // begin at 0;
+                    
+                    Vector3 start = share.dices[i].WorldPosition;
+                    Vector3 end = share.slots[number].WorldPosition(stack);
+                    Vector3 rot = share.slots[number].WorldEulerAngles(stack);
+                    attractors[i].MoveTo(start, end, rot, stack * delay, setting.attractorFlyTime,
+                        RandomUtils.Range(setting.minAttractorRadius, setting.maxAttractorRadius), 2.5f,
+                        RandomUtils.Range(0.3f, 0.5f), () =>
+                        {
+                            slot.DoStack(stack);
+                        });
+                }
+                
+                for (int i = 0; i < stacks.Length; i++)
+                {
+                    int stack = stacks[i];
+                    Slot slot = slots[i];
+                    
+                    if (stack == 0 && slot.IsPlaying)
                     {
-                        Vector3 start = share.dices[dice].WorldPosition;
-                        Vector3 end = share.slots[number].WorldPosition;
-                        Vector3 rot = share.slots[number].WorldEulerAngles;
-                        attractors[dice].MoveTo(start, end, rot, 0, duration,
-                            RandomUtils.Range(setting.minAttractorRadius, setting.maxAttractorRadius), 2.5f,
-                            RandomUtils.Range(0.3f, 0.5f), () =>
-                            {
-                                if (!slot.IsPlaying) slot.Activate();
-                                slot.DoStack(stack);
-                            });
+                        slot.Deactivate(setting.attractorFlyTime + delay);
+                    }
+                    else if (stack > 0 && !slot.IsPlaying)
+                    {
+                        slot.Activate(setting.attractorFlyTime + (delay + 0.1f) * stack);
                     }
                 }
 
                 Array.Clear(diceNumbers, 0, diceNumbers.Length);
-                Array.Clear(diceNumberStacks, 0, diceNumberStacks.Length);
                 totalDiceActivate = 0;
             }
         }

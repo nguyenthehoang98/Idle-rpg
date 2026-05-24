@@ -127,7 +127,7 @@ namespace _Games.Battle.Logic
         {
             if (battle != null)
             {
-                DrawCell("Killed: " + killed, new Vector2(0.1f, 0.2f), 0.1f, Color.gray, Color.white);
+                DrawCell("Killed " + killed, new Vector2(0.1f, 0.2f), 0.1f, Color.gray, Color.white);
             }
         }
 

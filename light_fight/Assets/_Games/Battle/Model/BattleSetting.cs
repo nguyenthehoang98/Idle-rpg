@@ -11,13 +11,14 @@ namespace _Games.Battle.Model
     {
         public float2 center;
         [TitleGroup("Dice")]
-        public int totalDice = 4;
-        public float diceCooldown = 1;
-        public float diceDelayTrigger = 0.2f;
+        public int totalSlot = 4;
+        public float slotCooldown = 1;
+        public float slotLerpDuration = 0.5f;
         [TitleGroup("Weapon")]
         public float weaponCooldown = 0.3f;
         public float weaponAttackRange = 6f;
         [TitleGroup("Attractor")]
+        public float attractorFlyTime = 1f;
         [Range(1.1f, 2.0f)] public float minAttractorRadius = 1.1f;
         [Range(1.1f, 2.0f)] public float maxAttractorRadius = 2.0f;
         [TitleGroup("View")]

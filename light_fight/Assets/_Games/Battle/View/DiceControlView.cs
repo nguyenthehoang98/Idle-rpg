@@ -77,7 +77,7 @@ namespace _Games.Battle.View
                 transform.GetChild(i).gameObject.SetActive(false);
             }
             
-            for (int i = 0; i < setting.totalDice; i++)
+            for (int i = 0; i < setting.totalSlot; i++)
             {
                 share.dices[i].Initialize(itemGroup.transform);
             }
@@ -86,7 +86,7 @@ namespace _Games.Battle.View
 
             float sizeX = setting.dice.RectTransformSize.x;
             float space = itemGroup.spacing;
-            float width = space * (setting.totalDice + 1) + sizeX * setting.totalDice;
+            float width = space * (setting.totalSlot + 1) + sizeX * setting.totalSlot;
             slotGroupRect.sizeDelta = new Vector2(width, slotGroupRect.sizeDelta.y);
 
             yield return new WaitForSeconds(0.2f / share.timeScale);

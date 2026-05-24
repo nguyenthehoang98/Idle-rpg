@@ -47,6 +47,28 @@ namespace _KITSystem.Utils
             onComplete?.Invoke();
         }
 
+        static IEnumerator CurveNormalizeInvokeIE(float begin, float end, AnimationCurve curve, float duration, Action<float> onProgress, Action onComplete)
+        {
+            float time = 0;
+            while (time < duration)
+            {
+                time += Time.deltaTime;
+                float clamped = curve.Evaluate(Mathf.Clamp01(time / duration));
+                float f = Mathf.Lerp(begin, end, clamped);
+                onProgress?.Invoke(f);
+                yield return null;
+            }
+
+            onComplete?.Invoke();
+        }
+
+        public static Coroutine CurveNormalize(this MonoBehaviour target, float begin, float end, AnimationCurve curve, float duration, Action<float> onProgress, Action onComplete = null)
+        {
+            if (target != null)
+                return target.StartCoroutine(CurveNormalizeInvokeIE(begin, end, curve, duration, onProgress, onComplete));
+            return null;
+        }
+
         public static Coroutine LerpNormalize(this MonoBehaviour target, float begin, float end, float duration, Action<float> onProgress, Action onComplete = null)
         {
             if (target != null)

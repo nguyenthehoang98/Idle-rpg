@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using _KITSystem.Utils;
-using DG.Tweening;
 using MoreMountains.Feedbacks;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -10,28 +8,33 @@ namespace _Games.Battle.View
 {
     public class ObjectSlotView : MonoBehaviour, ISlotView
     {
-        [TitleGroup("Settings")] 
+        [TitleGroup("Settings")]
         [SerializeField] private Color[] selectedColors = new Color[4];
-        [TitleGroup("Elements")] 
+
+        [TitleGroup("Elements")]
         [SerializeField] private SpriteRenderer highlight;
         [SerializeField] private Transform pivot;
         [SerializeField] private StarView[] stars;
-        [TitleGroup("Feedback")] 
+
+        [TitleGroup("Feedback")]
+        [SerializeField] private AnimationCurve deactivateLerpCurve;
+        [SerializeField] private AnimationCurve activateLerpCurve;
         [SerializeField] private MMF_Player initFeedback;
         [SerializeField] private MMF_Player playFeedback;
-        [SerializeField] private MMF_Player zoomOutFeedback;
-        [SerializeField] private MMF_Player zoomInFeedback;
+        [SerializeField] private MMF_Player deactivateFeedback;
+        [SerializeField] private MMF_Player activateFeedback;
         [TitleGroup("Debug")]
         [SerializeField] private float shineWidth;
         [SerializeField] private Color shineColor;
 
         private Vector3 localEulerAngles;
-        
+
         private MaterialPropertyBlock colorProperty;
         private MaterialPropertyBlock widthProperty;
         private int currentStack;
         private Coroutine coroutineLerp;
         private Coroutine coroutineDelayCallback;
+        private Coroutine[] coroutinesStar;
 
         private void Awake()
         {
@@ -42,17 +45,18 @@ namespace _Games.Battle.View
 
         public ISlotView Instantiate(Transform parent, Vector3 localEulerAngles)
         {
-            this.localEulerAngles = localEulerAngles;
-            var view = Instantiate(transform, parent);
+            Transform view = Instantiate(transform, parent);
             view.localEulerAngles = localEulerAngles;
-            return view.GetComponent<ISlotView>();
+            ObjectSlotView osv = view.GetComponent<ObjectSlotView>();
+            osv.localEulerAngles = localEulerAngles;
+            osv.coroutinesStar = new Coroutine[stars.Length];
+            return osv;
         }
 
-        public float Initialize(float timeScale)
+        public void Initialize(float timeScale)
         {
             initFeedback.TimescaleMultiplier = timeScale;
             initFeedback.PlayFeedbacks();
-            return initFeedback.TotalDuration / timeScale;
         }
 
         public float Play(float timeScale)
@@ -64,40 +68,40 @@ namespace _Games.Battle.View
                 d = Mathf.Max(d, index * 0.1f / timeScale);
                 this.WaitInvoke(d, () => stars[index].Play(timeScale));
             }
-            
+
             playFeedback.TimescaleMultiplier = timeScale;
 
-            //float d1 = d + 0.5f / timeScale;
+            float d1 = d + 0.5f / timeScale;
             float d2 = d + 0.5f / timeScale;
-            //this.WaitInvoke(d1, () => { Debug.Log("weapon_active"); });
+            this.WaitInvoke(d1, () => { Debug.Log("weapon_active"); });
             this.WaitInvoke(d2, playFeedback.PlayFeedbacks);
 
             return d2 + playFeedback.TotalDuration / timeScale;
         }
 
-        public float Activate(float timeScale)
+        public void Activate(float delayActivate, float timeScale)
         {
-            zoomInFeedback.TimescaleMultiplier = timeScale;
-            zoomInFeedback.PlayFeedbacks();
-            return zoomInFeedback.TotalDuration / timeScale;
+            activateFeedback.TimescaleMultiplier = timeScale;
+            
+            this.WaitInvoke(delayActivate / timeScale, activateFeedback.PlayFeedbacks);
         }
 
-        public float Deactivate(float timeScale)
+        public void Deactivate(float delayDeactivate, float timeScale)
         {
             int prevStack = currentStack;
-            
+
             currentStack = 0;
 
             Action action = () =>
             {
-                zoomInFeedback.PlayerCompleteFeedbacks();
+                activateFeedback.PlayerCompleteFeedbacks();
 
-                zoomOutFeedback.TimescaleMultiplier = timeScale;
-                zoomOutFeedback.PlayFeedbacks();
+                deactivateFeedback.TimescaleMultiplier = timeScale;
+                deactivateFeedback.PlayFeedbacks();
 
-                float duration = zoomOutFeedback.TotalDuration / timeScale;
+                float duration = deactivateFeedback.TotalDuration / timeScale;
                 if (coroutineLerp != null) StopCoroutine(coroutineLerp);
-                coroutineLerp = this.LerpNormalize(1f, 0.05f, duration, SetWidth);
+                coroutineLerp = this.CurveNormalize(1f, 0.05f, deactivateLerpCurve, duration, SetWidth);
             };
 
             int order = 0;
@@ -109,22 +113,16 @@ namespace _Games.Battle.View
                 order++;
             }
 
-            float weaponRollbackDuration = 0;
-            if (weaponRollbackDuration > 0)
-            {
-                if (coroutineDelayCallback != null) StopCoroutine(coroutineDelayCallback);
-                coroutineDelayCallback = this.WaitInvoke(weaponRollbackDuration, action);
-            }
-            else action();
-
-            return 0;
+            if (coroutineDelayCallback != null) StopCoroutine(coroutineDelayCallback);
+            coroutineDelayCallback = this.WaitInvoke(delayDeactivate / timeScale, action);
         }
 
-        public void Stack(int stack, float timeScale)
+        // totalStack:begin 1
+        public void Stack(int totalStack, float lerpDuration, float timeScale)
         {
             int prevStack = currentStack;
 
-            currentStack = stack;
+            currentStack = totalStack;
 
             if (prevStack == currentStack)
             {
@@ -141,29 +139,31 @@ namespace _Games.Battle.View
                 for (int i = 0; i < currentStack; i++)
                 {
                     int index = i;
-                    this.WaitInvoke(0.1f * i, () => { stars[index].Active(timeScale); });
+
+                    if (coroutinesStar[i] != null) StopCoroutine(coroutinesStar[i]);
+                    coroutinesStar[i] = this.WaitInvoke(0.1f * (i + 1), () => { stars[index].Active(timeScale); });
                 }
             }
 
             Color color = Color.white;
 
-            if (stack <= selectedColors.Length) color = selectedColors[stack - 1];
+            if (totalStack <= selectedColors.Length) color = selectedColors[totalStack - 1];
 
-            float duration = 0.5f / timeScale;
+            float duration = lerpDuration / timeScale;
 
             if (coroutineLerp != null) StopCoroutine(coroutineLerp);
 
-            if (stack == 1 && prevStack == 0)
+            if (totalStack == 1 && prevStack == 0)
             {
                 SetColor(color);
                 SetWidth(0.05f);
-                coroutineLerp = this.LerpNormalize(0.05f, 1f, duration, SetWidth);
+                coroutineLerp = this.CurveNormalize(0.05f, 1f, activateLerpCurve, duration, SetWidth);
             }
             else
             {
                 float width = shineWidth;
                 Color currentColor = shineColor;
-                coroutineLerp = this.LerpNormalize(0.05f, 1f, duration, value =>
+                coroutineLerp = this.CurveNormalize(0.05f, 1f, activateLerpCurve, duration, value =>
                 {
                     if (value > width) SetWidth(value);
                     SetColor(Color.Lerp(currentColor, color, value));
@@ -171,8 +171,15 @@ namespace _Games.Battle.View
             }
         }
 
-        public Vector3 WorldPosition => stars[0].transform.position;
-        public Vector3 WorldEulerAngles => localEulerAngles;
+        Vector3 ISlotView.WorldPosition(int stack)
+        {
+            return stars[stack - 1].transform.position;
+        }
+
+        Vector3 ISlotView.WorldEulerAngles(int stack)
+        {
+            return localEulerAngles;
+        }
 
         private void SetColor(Color color)
         {

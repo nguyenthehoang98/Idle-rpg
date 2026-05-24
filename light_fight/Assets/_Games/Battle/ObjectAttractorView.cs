@@ -24,14 +24,15 @@ namespace _Games.Battle
             return Instantiate(transform, parent).GetComponent<IAttractorView>();
         }
 
-        public void MoveTo(Vector3 start, Vector3 target, Vector3 rot, float delay, float duration, float radius, float offsetY,
+        public void MoveTo(Vector3 start, Vector3 target, Vector3 rot, float flyToTargetDelay, 
+            float duration, float radius, float offsetY,
             float smooth, Action onComplete)
         {
             visual.transform.localScale = localScale;
             visual.transform.rotation = Quaternion.Euler(0, 0, 0);
             visual.transform.position = start;
             visual.gameObject.SetActive(true);
-            trail.enabled = true;
+            ActiveTrail();
             
             bool completed = false;
             float d = duration * 0.6f;
@@ -45,7 +46,7 @@ namespace _Games.Battle
                     visual.position = Vector3.Lerp(start, begin, t);
                 }).SetEase(Ease.InOutSine))
                 .AppendInterval(d)
-                .AppendInterval(delay)
+                .AppendInterval(flyToTargetDelay)
                 .Append(DOVirtual.Float(0, 1, duration - d, t =>
                 {
                     Vector3 linear = Vector3.Lerp(begin, end, t);
@@ -54,9 +55,8 @@ namespace _Games.Battle
                     visual.position = Vector3.Lerp(linear, linear + offset, smooth);
                     visual.rotation = Quaternion.Euler(Vector3.Lerp(Vector3.zero, rot, t));
                     visual.localScale = Vector3.Lerp(localScale, to, t);
-                
-                    float s = math.lengthsq(visual.position - end);
-                    if (s <= 0.01f && !completed)
+
+                    if (math.lengthsq(visual.position - end) <= 0.01f && !completed)
                     {
                         completed = true;
                         this.WaitInvoke(0.15f, () =>
@@ -69,12 +69,13 @@ namespace _Games.Battle
                             });
                         });
                     }
-                
-                })).SetEase(Ease.OutQuart)
-                .OnComplete(() =>
-                {
-                    trail.enabled = false;
-                });
+
+                })).SetEase(Ease.OutQuart);
+        }
+        
+        void ActiveTrail()
+        {
+            this.WaitNextFrame(() => trail.enabled = true);
         }
     }
 }

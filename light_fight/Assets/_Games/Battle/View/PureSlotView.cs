@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿/*using UnityEngine;
 
 namespace _Games.Battle.View
 {
@@ -20,21 +20,28 @@ namespace _Games.Battle.View
             return 0;
         }
 
-        public float Activate(float timeScale)
+        public float Activate(float delayActivate, float timeScale)
         {
             return 0;
         }
 
-        public float Deactivate(float timeScale)
+        public float Deactivate(float delayDeactivate, float timeScale)
         {
             return 0;
         }
 
-        public void Stack(int stack, float timeScale)
+        public void Stack(int totalStack, float timeScale)
         {
         }
 
-        public Vector3 WorldPosition => Vector3.zero;
-        public Vector3 WorldEulerAngles => Vector3.zero;
+        Vector3 ISlotView.WorldPosition(int stack)
+        {
+            return Vector3.zero;
+        }
+
+        Vector3 ISlotView.WorldEulerAngles(int stack)
+        {
+            return Vector3.zero;
+        }
     }
-}
+}*/

@@ -8,6 +8,7 @@ namespace _Games.Battle.Logic
     [System.Serializable]
     public class Slot
     {
+        private BattleSetting setting;
         private BattleShare share;
         private Weapon weapon;
         private ISlotView view;
@@ -23,6 +24,7 @@ namespace _Games.Battle.Logic
         public Slot(BattleShare share, int order, BattleSetting setting, IQuery query)
         {
             this.share = share;
+            this.setting = setting;
             float angle = -360f / BattleConst.MAX_DICE_NUMBER * order + 90;
             Vector2 dir = new Vector2(
                 Mathf.Cos(angle * Mathf.Deg2Rad),
@@ -54,17 +56,17 @@ namespace _Games.Battle.Logic
 
         public float Play() => view.Play(share.timeScale);
 
-        public void Activate()
+        public void Activate(float delayActivate)
         {
             weapon.Activate();
-            view.Activate(share.timeScale);
+            view.Activate(delayActivate, share.timeScale);
             IsPlaying = true;
         }
         
-        public void Deactivate()
+        public void Deactivate(float delayDeactivate)
         {
             weapon.Deactivate();
-            view.Deactivate(share.timeScale);
+            view.Deactivate(delayDeactivate, share.timeScale);
             IsPlaying = false;
         }
 
@@ -73,7 +75,7 @@ namespace _Games.Battle.Logic
             weapon.Tick(dt);
         }
 
-        public void DoStack(int stack) => view.Stack(stack, share.timeScale);
+        public void DoStack(int stack) => view.Stack(stack, setting.slotLerpDuration, share.timeScale);
 
         public void Draw()
         {

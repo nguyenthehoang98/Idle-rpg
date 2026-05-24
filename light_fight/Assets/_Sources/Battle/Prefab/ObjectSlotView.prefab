@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 5617043173236008917}
   - component: {fileID: 8733146480305813083}
   m_Layer: 0
-  m_Name: Zoom in Feedback
+  m_Name: Activate Feedback
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -261,7 +261,7 @@ MonoBehaviour:
         AnimatePositionDuration: 0.1
         AnimatePositionTween:
           MMTweenDefinitionType: 0
-          MMTweenCurve: 22
+          MMTweenCurve: 4
           Curve:
             serializedVersion: 2
             m_Curve:
@@ -2659,10 +2659,10 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7116007085571538190}
-  - {fileID: 5617043173236008917}
-  - {fileID: 8283121152760633510}
   - {fileID: 5276141255433364097}
   - {fileID: 2895293961741461308}
+  - {fileID: 8283121152760633510}
+  - {fileID: 5617043173236008917}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5535604774282497494
@@ -2689,10 +2689,58 @@ MonoBehaviour:
   - {fileID: 9021188265992025150}
   - {fileID: 655727780125093756}
   - {fileID: 5604783869922615517}
+  deactivateLerpCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 3.4153397
+      outSlope: 3.4153397
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.03643781
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.046051316
+      outSlope: 0.046051316
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.079535306
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  activateLerpCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.050122898
+      outSlope: 0.050122898
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.10809817
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 3.3223305
+      outSlope: 3.3223305
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.04556948
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   initFeedback: {fileID: 8958812487760503100}
   playFeedback: {fileID: 3359252361135066520}
-  zoomOutFeedback: {fileID: 9215097961338113431}
-  zoomInFeedback: {fileID: 8733146480305813083}
+  deactivateFeedback: {fileID: 9215097961338113431}
+  activateFeedback: {fileID: 8733146480305813083}
   shineWidth: 0
   shineColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &8272847187857744492
@@ -2706,7 +2754,7 @@ GameObject:
   - component: {fileID: 8283121152760633510}
   - component: {fileID: 9215097961338113431}
   m_Layer: 0
-  m_Name: Zoom out Feedback
+  m_Name: Deactivate Feedback
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2722,7 +2770,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.35, y: 0.35, z: 1}
+  m_LocalScale: {x: 0.34999993, y: 0.34999993, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8430470660457761053}
@@ -2921,7 +2969,7 @@ MonoBehaviour:
         AnimatePositionDuration: 0.1
         AnimatePositionTween:
           MMTweenDefinitionType: 0
-          MMTweenCurve: 23
+          MMTweenCurve: 5
           Curve:
             serializedVersion: 2
             m_Curve:

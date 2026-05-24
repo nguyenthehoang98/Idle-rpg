@@ -7,7 +7,7 @@ namespace _Games.Battle.Logic
 {
     public class Dice
     {
-        public event Action<int, float> OnTriggerDice;
+        public event Action<int> OnTriggerDice;
         
         private int value;
         private IDiceView view;
@@ -18,7 +18,7 @@ namespace _Games.Battle.Logic
         public Dice(BattleShare share, BattleSetting setting)
         {
             this.setting = setting;
-            this.elapsedTime = setting.diceCooldown;
+            this.elapsedTime = setting.slotCooldown;
             this.view = setting.dice.Instantiate();
             share.dices.Add(view);
         }
@@ -32,27 +32,23 @@ namespace _Games.Battle.Logic
             switch (phase)
             {
                 case Phase.Processing:
-                    value = RandomUtils.Range(1, 7);
+                    value = RandomUtils.Range(1, 4);
                     elapsedTime = view.Roll(value);
                     phase = Phase.Rolling;
                     break;
                 case Phase.Rolling:
                     // todo: post fx
-                    elapsedTime = setting.diceDelayTrigger;
-                    phase = Phase.Delaying;
-                    view.SetValue(value);
-                    OnTriggerDice?.Invoke(value, setting.diceDelayTrigger);
-                    break;
-                case Phase.Delaying:
-                    elapsedTime = setting.diceCooldown;
+                    elapsedTime = setting.slotCooldown;
                     phase = Phase.Processing;
+                    view.SetValue(value);
+                    OnTriggerDice?.Invoke(value);
                     break;
             }
         }
 
         enum Phase
         {
-            Processing, Rolling, Delaying,
+            Processing, Rolling,
         }
     }
 }
