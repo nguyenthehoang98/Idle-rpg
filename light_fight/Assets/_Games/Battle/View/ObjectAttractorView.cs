@@ -1,4 +1,5 @@
 ﻿using System;
+using _Games.Battle.View;
 using _KITSystem.Utils;
 using DG.Tweening;
 using Unity.Mathematics;
@@ -12,6 +13,8 @@ namespace _Games.Battle
         [SerializeField] private Vector3 to = new Vector3(0.2f, 0.2f, 0.2f);
         [SerializeField] private Transform visual;
         [SerializeField] private TrailRenderer trail;
+
+        private Sequence sequence;
 
         private void Awake()
         {
@@ -28,6 +31,8 @@ namespace _Games.Battle
             float duration, float radius, float offsetY,
             float smooth, Action onComplete)
         {
+            if (sequence != null && sequence.IsPlaying()) sequence.Kill();
+            
             visual.transform.localScale = localScale;
             visual.transform.rotation = Quaternion.Euler(0, 0, 0);
             visual.transform.position = start;
@@ -40,7 +45,8 @@ namespace _Games.Battle
             Vector3 end = target;
             Vector3 dir = (end - begin).normalized;
             Vector3 normal = Vector3.Cross(dir, Vector3.forward);
-            DOTween.Sequence()
+            
+            sequence = DOTween.Sequence()
                 .Append(DOVirtual.Float(0, 1f, d, t =>
                 {
                     visual.position = Vector3.Lerp(start, begin, t);
@@ -69,7 +75,6 @@ namespace _Games.Battle
                             });
                         });
                     }
-
                 })).SetEase(Ease.OutQuart);
         }
         

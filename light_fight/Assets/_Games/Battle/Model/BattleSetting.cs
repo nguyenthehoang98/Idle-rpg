@@ -12,10 +12,11 @@ namespace _Games.Battle.Model
         public float2 center;
         [TitleGroup("Dice")]
         public int totalSlot = 4;
-        public float slotCooldown = 1;
-        public float slotLerpDuration = 0.5f;
+        public float slotCooldownTime = 1;
+        public float slotRecoveryTime = 0.5f;
+        public float slotLerpColorDuration = 0.1f;
         [TitleGroup("Weapon")]
-        public float weaponCooldown = 0.3f;
+        public float weaponCooldown = 1f;
         public float weaponAttackRange = 6f;
         [TitleGroup("Attractor")]
         public float attractorFlyTime = 1f;

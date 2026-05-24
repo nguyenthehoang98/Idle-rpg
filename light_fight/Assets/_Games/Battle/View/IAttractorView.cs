@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace _Games.Battle
+namespace _Games.Battle.View
 {
     public interface IAttractorView
     {

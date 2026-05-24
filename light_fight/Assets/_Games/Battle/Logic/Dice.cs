@@ -18,7 +18,7 @@ namespace _Games.Battle.Logic
         public Dice(BattleShare share, BattleSetting setting)
         {
             this.setting = setting;
-            this.elapsedTime = setting.slotCooldown;
+            this.elapsedTime = setting.slotCooldownTime;
             this.view = setting.dice.Instantiate();
             share.dices.Add(view);
         }
@@ -38,17 +38,21 @@ namespace _Games.Battle.Logic
                     break;
                 case Phase.Rolling:
                     // todo: post fx
-                    elapsedTime = setting.slotCooldown;
-                    phase = Phase.Processing;
+                    elapsedTime = setting.slotRecoveryTime;
+                    phase = Phase.Watting;
                     view.SetValue(value);
                     OnTriggerDice?.Invoke(value);
+                    break;
+                case Phase.Watting:
+                    elapsedTime = setting.slotCooldownTime;
+                    phase = Phase.Processing;
                     break;
             }
         }
 
         enum Phase
         {
-            Processing, Rolling,
+            Processing, Rolling, Watting
         }
     }
 }

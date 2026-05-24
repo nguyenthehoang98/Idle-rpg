@@ -37,9 +37,10 @@ MonoBehaviour:
     x: 0
     y: 0
   totalSlot: 4
-  slotCooldown: 1
-  slotLerpDuration: 0.1
-  weaponCooldown: 0.3
+  slotCooldownTime: 1
+  slotRecoveryTime: 1
+  slotLerpColorDuration: 0.1
+  weaponCooldown: 1
   weaponAttackRange: 6
   attractorFlyTime: 1
   minAttractorRadius: 1.1

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using _Games.Battle.Model;
+using _Games.Battle.View;
 using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
@@ -98,7 +99,7 @@ namespace _Games.Battle.Logic
             totalDiceActivate++;
             diceNumbers[triggerDiceIndex] = triggerNumber - 1;
 
-            float delay = 0.5f;
+            float delay = 0.2f;
             if (totalDiceActivate == dices.Length)
             {
                 int[] stacks = new int[BattleConst.MAX_DICE_NUMBER];

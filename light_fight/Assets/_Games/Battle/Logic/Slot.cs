@@ -75,7 +75,7 @@ namespace _Games.Battle.Logic
             weapon.Tick(dt);
         }
 
-        public void DoStack(int stack) => view.Stack(stack, setting.slotLerpDuration, share.timeScale);
+        public void DoStack(int stack) => view.Stack(stack, setting.slotLerpColorDuration, share.timeScale);
 
         public void Draw()
         {
