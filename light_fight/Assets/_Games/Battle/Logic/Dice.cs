@@ -2,6 +2,7 @@
 using _Games.Battle.Model;
 using _Games.Battle.View;
 using _KITSystem.Utils;
+using UnityEngine;
 
 namespace _Games.Battle.Logic
 {
@@ -26,6 +27,12 @@ namespace _Games.Battle.Logic
         public void Tick(float dt)
         {
             elapsedTime -= dt;
+
+            if (phase == Phase.Processing)
+            {
+                float f = Mathf.Clamp01((setting.slotCooldownTime - elapsedTime) / setting.slotCooldownTime);
+                view.SetProgress(f);
+            }
             
             if (elapsedTime > 0) return;
             

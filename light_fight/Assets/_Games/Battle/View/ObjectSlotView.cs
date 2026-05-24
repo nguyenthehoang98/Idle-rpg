@@ -27,14 +27,13 @@ namespace _Games.Battle.View
         [SerializeField] private float shineWidth;
         [SerializeField] private Color shineColor;
 
-        private Vector3 localEulerAngles;
-
         private MaterialPropertyBlock colorProperty;
         private MaterialPropertyBlock widthProperty;
         private int currentStack;
         private Coroutine coroutineLerp;
         private Coroutine coroutineDelayCallback;
-        private Coroutine[] coroutinesStar;
+
+        private Vector3 localEulerAngles;
 
         private void Awake()
         {
@@ -49,7 +48,6 @@ namespace _Games.Battle.View
             view.localEulerAngles = localEulerAngles;
             ObjectSlotView osv = view.GetComponent<ObjectSlotView>();
             osv.localEulerAngles = localEulerAngles;
-            osv.coroutinesStar = new Coroutine[stars.Length];
             return osv;
         }
 
@@ -94,6 +92,11 @@ namespace _Games.Battle.View
 
             Action action = () =>
             {
+                for (int i = prevStack - 1; i >= 0; i--)
+                {
+                    stars[i].Inactive(timeScale);
+                }
+                
                 activateFeedback.PlayerCompleteFeedbacks();
 
                 deactivateFeedback.TimescaleMultiplier = timeScale;
@@ -103,15 +106,6 @@ namespace _Games.Battle.View
                 if (coroutineLerp != null) StopCoroutine(coroutineLerp);
                 coroutineLerp = this.CurveNormalize(1f, 0.05f, deactivateLerpCurve, duration, SetWidth);
             };
-
-            int order = 0;
-            for (int i = prevStack - 1; i >= 0; i--)
-            {
-                StarView star = stars[i];
-                this.WaitInvoke(0.2f * order, () => { star.Inactive(timeScale); });
-
-                order++;
-            }
 
             if (coroutineDelayCallback != null) StopCoroutine(coroutineDelayCallback);
             coroutineDelayCallback = this.WaitInvoke(delayDeactivate / timeScale, action);
@@ -124,26 +118,16 @@ namespace _Games.Battle.View
 
             currentStack = totalStack;
 
-            if (prevStack == currentStack)
+            // pre=1:current=2; => Tăng lên
+            if (currentStack < prevStack)
             {
-                stars[currentStack - 1].Active(timeScale);
-                return;
-            }
-            else
-            {
-                for (int i = 0; i < stars.Length; i++)
+                for (int i = currentStack + 1; i <= prevStack; i++)
                 {
-                    stars[i].Inactive(timeScale);
-                }
-
-                for (int i = 0; i < currentStack; i++)
-                {
-                    int index = i;
-
-                    if (coroutinesStar[i] != null) StopCoroutine(coroutinesStar[i]);
-                    coroutinesStar[i] = this.WaitInvoke(0.1f * (i + 1), () => { stars[index].Active(timeScale); });
+                    stars[i - 1].Inactive(timeScale);                    
                 }
             }
+            
+            stars[currentStack - 1].Active(timeScale);
 
             Color color = Color.white;
 
