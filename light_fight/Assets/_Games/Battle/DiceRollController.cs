@@ -23,21 +23,16 @@ namespace _Games.Battle
         [SerializeField] private Vector3 squashScale = new Vector3(1.1f, 0.9f, 1.1f);
         [SerializeField] private Vector3 stretchScale = new Vector3(0.9f, 1.1f, 0.9f);
 
-        [ContextMenu("Roll")]
-        public void Roll()
-        {
-            Roll(RandomUtils.Range(1, 6), null);
-        }
-
-        public void Roll(int value, Action onComplete)
+        public float Roll(int value, Action onComplete)
         {
             if (value < 1 || value > 6)
             {
                 Debug.LogError("Dice value must be 1-6");
-                return;
+                return 0;
             }
 
             StartCoroutine(SequenceRoll(value, onComplete));
+            return duration;
         }
 
         private IEnumerator SequenceRoll(int value, Action onComplete)

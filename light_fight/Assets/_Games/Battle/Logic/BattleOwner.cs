@@ -31,7 +31,6 @@ namespace _Games.Battle.Logic
         private bool waveSpawnComplete = false;
         private int totalEntityInScene = 0;
         private int killed;
-        private int totalSubModuleWaitingInit = 2;
         
         private async void Start()
         {
@@ -95,17 +94,13 @@ namespace _Games.Battle.Logic
             EntityManager.OnEntityRemoved += EntityRemoved;
         }
 
-        private void OnDiceInitialize(List<IDiceView> list)
+        private void OnDiceInitialize()
         {
-            totalSubModuleWaitingInit--;
-            if (totalSubModuleWaitingInit <= 0) StartGame();
+            StartGame();
         }
 
         private void OnBattleInitialize()
         {
-            totalSubModuleWaitingInit--;
-            if (totalSubModuleWaitingInit <= 0) StartGame();
-            
             diceControl.Initialize(share, setting);
         }
 
@@ -124,12 +119,6 @@ namespace _Games.Battle.Logic
         {
             if (battle != null)
             {
-                int[] numbers = battle.DiceNumbers();
-                for (int i = 0; i < numbers.Length; i++)
-                {
-                    DrawCell(numbers[i].ToString(), new Vector2(0.1f + 0.1f * i, 0.1f), 0.08f, Color.gray, Color.white);
-                }  
-                
                 DrawCell("Killed: " + killed, new Vector2(0.1f, 0.2f), 0.1f, Color.gray, Color.white);
             }
         }

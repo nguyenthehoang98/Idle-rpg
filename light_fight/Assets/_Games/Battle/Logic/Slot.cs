@@ -47,6 +47,7 @@ namespace _Games.Battle.Logic
            
             weapon = new Weapon(setting, query, dir);
             view = setting.slot.Instantiate(share.coneParent, new Vector3(0, 0, angle - 90));
+            share.slots.Add(view);
         }
 
         public void Initialize() => view.Initialize(share.timeScale);

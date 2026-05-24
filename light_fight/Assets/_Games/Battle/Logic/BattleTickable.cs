@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using _Games.Battle.Model;
+using _Games.Battle.View;
 using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
@@ -43,7 +44,7 @@ namespace _Games.Battle.Logic
 
             CoroutineUtils.Run(share.owner, InitCoroutine(share.timeScale));
         }
-
+        
         private IEnumerator InitCoroutine(float timeScale)
         {
             yield return new WaitForSeconds(1f / timeScale);
@@ -103,19 +104,6 @@ namespace _Games.Battle.Logic
                 Array.Clear(diceNumberStacks, 0, diceNumberStacks.Length);
                 totalDiceActivate = 0;
             }
-        }
-
-        public int[] DiceNumbers()
-        {
-            if (!isInitialized) return new int[0];
-
-            int[] numbers = new int[dices.Length];
-            for (int i = 0; i < dices.Length; i++)
-            {
-                numbers[i] = dices[i].Value;
-            }
-
-            return numbers;
         }
 
         public void Tick(float dt)

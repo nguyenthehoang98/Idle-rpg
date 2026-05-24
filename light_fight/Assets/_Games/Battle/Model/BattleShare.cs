@@ -1,4 +1,6 @@
-﻿using _Games.Battle.Logic;
+﻿using System.Collections.Generic;
+using _Games.Battle.Logic;
+using _Games.Battle.View;
 using UnityEngine;
 
 namespace _Games.Battle.Model
@@ -9,5 +11,7 @@ namespace _Games.Battle.Model
         public float timeScale = 1f;
         public BattleOwner owner;
         public Transform coneParent;
+        public List<IDiceView> dices = new List<IDiceView>();
+        public List<ISlotView> slots = new List<ISlotView>();
     }
 }

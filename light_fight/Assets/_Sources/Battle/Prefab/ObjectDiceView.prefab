@@ -306,6 +306,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ff201a672c0473b92967c8c57e9a4fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rig: {fileID: 2552200139441580074}
+  imgCooldown: {fileID: 3507791052635949205}
+  txtNumber: {fileID: 7947983815861403018}
+  lockObject: {fileID: 3193445147752453443}
+  unlockObject: {fileID: 4093719980777520045}
 --- !u!1 &3026805583023519309
 GameObject:
   m_ObjectHideFlags: 0

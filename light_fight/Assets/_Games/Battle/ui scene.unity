@@ -544,17 +544,15 @@ MonoBehaviour:
   loop: 1
   targetFPS: 30
   tickables:
-  - rid: 7993921747017793639
-  - rid: 7993921747017793641
-  - rid: 7993921747017793643
-  - rid: 7993921747017793644
+  - rid: 7993921775300509764
+  - rid: 7993921775300509765
+  - rid: 7993921775300509767
+  - rid: 7993921775300509768
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 7993921747017793639
-      type: {class: AgentTickable, ns: _Games.Battle, asm: Games.Battle}
+    - rid: 7993921775300509764
+      type: {class: AgentTickable, ns: _Games.Battle.Logic, asm: Games.Battle}
       data:
         locked: 0
         defaultAgentStopDistance: 3
@@ -564,20 +562,15 @@ MonoBehaviour:
         deltaDistanceStuck: 0.2
         total: 0
         isInitialized: 0
-        containers:
-          keys: 
-          values: []
-        gridManager:
-          rid: -2
-    - rid: 7993921747017793641
-      type: {class: MovementTickable, ns: _Games.Battle, asm: Games.Battle}
+    - rid: 7993921775300509765
+      type: {class: MovementTickable, ns: _Games.Battle.Logic, asm: Games.Battle}
       data:
         flagModifiers: 
         resolver:
-          rid: 7993921747017793642
+          rid: 7993921775300509766
         isInitialized: 0
         activeActions: []
-    - rid: 7993921747017793642
+    - rid: 7993921775300509766
       type: {class: AvoidanceResolver, ns: _KITSystem.Movement, asm: KITSystem.Movement}
       data:
         cellSize: 1
@@ -585,11 +578,11 @@ MonoBehaviour:
         avoidStrength: 2
         maxAvoidForce: 3
         stopDecelerationNormalize: 0.9
-    - rid: 7993921747017793643
-      type: {class: SpawnerTickable, ns: _Games.Battle, asm: Games.Battle}
+    - rid: 7993921775300509767
+      type: {class: SkillTickable, ns: _Games.Battle.Logic, asm: Games.Battle}
       data: 
-    - rid: 7993921747017793644
-      type: {class: SkillTickable, ns: _Games.Battle, asm: Games.Battle}
+    - rid: 7993921775300509768
+      type: {class: SpawnerTickable, ns: _Games.Battle.Logic, asm: Games.Battle}
       data: 
 --- !u!1 &1940578873
 GameObject:

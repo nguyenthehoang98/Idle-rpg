@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using _Games.Battle.Model;
-using _KITSystem.Utils;
 using MoreMountains.Feedbacks;
 using Sirenix.OdinInspector;
 using TMPro;
@@ -39,7 +38,7 @@ namespace _Games.Battle.View
         [SerializeField] private TextMeshProUGUI txtProgress;
         [SerializeField] private Image[] imgFills;
 
-        public event Action<List<IDiceView>> OnInitialized;
+        public event Action OnInitialized;
 
         private void Awake()
         {
@@ -78,11 +77,9 @@ namespace _Games.Battle.View
                 transform.GetChild(i).gameObject.SetActive(false);
             }
             
-            List<IDiceView> list = new List<IDiceView>();
             for (int i = 0; i < setting.totalDice; i++)
             {
-                var view = setting.dice.Instantiate(itemGroup.transform);
-                list.Add(view);
+                share.dices[i].Initialize(itemGroup.transform);
             }
             
             yield return null;
@@ -104,7 +101,7 @@ namespace _Games.Battle.View
 
             yield return new WaitForSeconds(initFeedback.TotalDuration / share.timeScale);
             
-            OnInitialized?.Invoke(list);
+            OnInitialized?.Invoke();
         }
 
         private void UpdateProgress()
