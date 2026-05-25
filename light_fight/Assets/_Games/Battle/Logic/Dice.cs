@@ -9,7 +9,8 @@ namespace _Games.Battle.Logic
     public class Dice
     {
         public event Action<int> OnTriggerDice;
-        
+
+        private float speed;
         private int value;
         private IDiceView view;
         private BattleSetting setting;
@@ -22,12 +23,12 @@ namespace _Games.Battle.Logic
             this.elapsedTime = setting.slotCooldownTime;
             this.view = setting.dice.Instantiate();
             share.dices.Add(view);
-            SetSpeed(0);
+            SetSpeed(1);
         }
 
         public void Tick(float dt)
         {
-            elapsedTime -= dt;
+            elapsedTime -= dt * speed;
 
             if (phase == Phase.Processing)
             {
@@ -58,14 +59,10 @@ namespace _Games.Battle.Logic
             }
         }
 
-        public void SetSpeed(float speed)
+        public void SetSpeed(float v)
         {
-            float f = Mathf.Clamp(speed, -1f, 1f);
-            float v = Mathf.Lerp(setting.slotMinOffsetSpeed, setting.slotMaxOffsetSpeed, f);
-            Color color = setting.slotColorDefaultSpeed;
-            if (f > 0) color = Color.Lerp(color, setting.slotColorMaxSpeed, f);
-            else if (f < 0) color = Color.Lerp(setting.slotColorMinSpeed, color, -f);
-            view.SetColor(color);
+            speed = v;
+            view.SetSpeed(v);
         }
 
         enum Phase

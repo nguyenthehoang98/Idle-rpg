@@ -490,7 +490,7 @@ MonoBehaviour:
   - rid: 7993921753502711863
   - rid: 7993921753502711865
   - rid: 7993921753502711867
-  setting: {fileID: 11400000, guid: cd01e97456517c34d8a6d8f69bd57099, type: 2}
+  setting: {fileID: 11400000, guid: 95ecddcd768858c4780676724adee50c, type: 2}
   canvas: {fileID: 1993236631}
   references:
     version: 2

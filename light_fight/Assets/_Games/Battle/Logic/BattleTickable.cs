@@ -111,7 +111,7 @@ namespace _Games.Battle.Logic
                     stacks[number]++;
                     int stack = stacks[number]; // begin at 0;
                     
-                    Vector3 start = share.dices[i].WorldPosition;
+                    Vector3 start = share.dices[i].WorldPosition + Vector3.up * 0.1f;
                     Vector3 end = share.slots[number].WorldPosition(stack);
                     Vector3 rot = share.slots[number].WorldEulerAngles(stack);
                     attractors[i].MoveTo(start, end, rot, stack * delay, setting.attractorFlyTime,
@@ -140,6 +140,12 @@ namespace _Games.Battle.Logic
                 Array.Clear(diceNumbers, 0, diceNumbers.Length);
                 totalDiceActivate = 0;
             }
+        }
+
+        public void SetDiceSpeed(float speed)
+        {
+            for (int i = 0; i < dices.Length; i++)
+                dices[i].SetSpeed(speed);
         }
 
         public void Tick(float dt)

@@ -262,13 +262,13 @@ namespace _Games.Battle.View
             {
                 color = Color.Lerp(color, setting.slotColorMaxSpeed, elapsedTime);
                 progress = Mathf.Lerp(progress, setting.slotMaxOffsetSpeed, elapsedTime);
-                prevProgress = Mathf.FloorToInt(Mathf.Max(prevProgress, progress));
+                prevProgress = Mathf.CeilToInt(Mathf.Max(prevProgress, progress));
             }
             else if (elapsedTime < 0)
             {
                 color = Color.Lerp(color, setting.slotColorMinSpeed, -elapsedTime);
                 progress = Mathf.Lerp(setting.slotMinOffsetSpeed, progress, -elapsedTime);
-                prevProgress = Mathf.CeilToInt(Mathf.Min(prevProgress, progress));
+                prevProgress = Mathf.FloorToInt(Mathf.Min(prevProgress, progress));
             }
 
             foreach (var img in imgFills) img.color = color;

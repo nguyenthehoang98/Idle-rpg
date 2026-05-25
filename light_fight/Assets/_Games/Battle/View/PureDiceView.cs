@@ -12,27 +12,32 @@ namespace _Games.Battle.View
 
         public void Initialize(Transform parent)
         {
-            
+
         }
 
         public void SetLocked(bool locked)
         {
-            
+
         }
 
         public void SetValue(int value)
         {
-            
+
         }
 
         public void SetProgress(float progress)
         {
-            
+
         }
 
         public void SetColor(Color color)
         {
-            
+
+        }
+
+        public void SetSpeed(float speed)
+        {
+
         }
 
         public float Roll(int value)

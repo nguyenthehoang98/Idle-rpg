@@ -15,6 +15,9 @@ namespace _Games.Battle.View
 
         public RectTransform RectTransform {get; private set;}
 
+        private float speed;
+        
+
         private void Awake()
         {
             RectTransform = transform as RectTransform;
@@ -41,27 +44,21 @@ namespace _Games.Battle.View
             imgCooldown.gameObject.SetActive(!locked);
         }
 
-        public void SetValue(int value)
+        public void SetValue(int value) => txtNumber.text = value > 0 ? value.ToString() : "?";
+
+        public void SetProgress(float progress) => imgCooldown.fillAmount = progress;
+
+        public void SetColor(Color color) => imgCooldown.color = color;
+
+        public void SetSpeed(float v)
         {
-            txtNumber.text = value > 0 ? value.ToString() : "?";
+            speed = v;
+            rig.Speed = v;
         }
 
-        public void SetProgress(float progress)
-        {
-            imgCooldown.fillAmount = progress;
-        }
+        public float Roll(int value) => rig.Roll(value, null);
 
-        public void SetColor(Color color)
-        {
-            imgCooldown.color = color;
-        }
-
-        public float Roll(int value)
-        {
-            return rig.Roll(value, null);
-        }
-
-        public Vector3 WorldPosition => rig.transform.position;
+        public Vector3 WorldPosition => imgCooldown.transform.position;
 
         public float2 RectTransformSize => GetComponent<RectTransform>().sizeDelta;
     }

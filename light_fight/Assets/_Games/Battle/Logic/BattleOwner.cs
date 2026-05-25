@@ -83,6 +83,7 @@ namespace _Games.Battle.Logic
 
             diceControl = setting.diceControl.Instantiate(canvas.transform);
             diceControl.OnInitialized += OnDiceInitialize;
+            diceControl.OnSpeedChanged += battle.SetDiceSpeed;  
             
             // todo: reset global data + register event
             SkillFactory.Initialize(skill, query);

@@ -11,6 +11,7 @@ namespace _Games.Battle.View
         void SetValue(int value);
         void SetProgress(float progress);
         void SetColor(Color color);
+        void SetSpeed(float speed);
         float Roll(int value);
         
         Vector3 WorldPosition { get; }
