@@ -279,4 +279,18 @@ namespace _Games.Battle.Logic
             public Dictionary<int, int> monsters;
         }
     }
+    
+    public struct RequestCreateMonster
+    {
+        public readonly int MonsterID;
+        public readonly float Radius;
+        public readonly float2 Position;
+
+        public RequestCreateMonster(int monsterID, float radius, float2 position)
+        {
+            MonsterID = monsterID;
+            Radius = radius;
+            Position = position;
+        }
+    }
 }

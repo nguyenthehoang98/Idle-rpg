@@ -31,7 +31,6 @@ Transform:
   m_Children:
   - {fileID: 1609209689769987942}
   - {fileID: 1836958157220811188}
-  - {fileID: 6976300254800254982}
   - {fileID: 2307576398531984705}
   m_Father: {fileID: 8430470660457761053}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -769,37 +768,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &1976506844017890380
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6976300254800254982}
-  m_Layer: 0
-  m_Name: Weapon
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6976300254800254982
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1976506844017890380}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7116007085571538190}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4978583991115783343
 GameObject:
   m_ObjectHideFlags: 0
@@ -1611,7 +1579,7 @@ MonoBehaviour:
           ButtonText: 
         Owner: {fileID: 8958812487760503100}
         DebugActive: 0
-        TargetGameObject: {fileID: 1976506844017890380}
+        TargetGameObject: {fileID: 0}
         ExtraTargetGameObjects: []
         SetStateOnInit: 1
         StateOnInit: 1
@@ -2579,7 +2547,7 @@ MonoBehaviour:
           ButtonText: 
         Owner: {fileID: 3359252361135066520}
         DebugActive: 0
-        TargetGameObject: {fileID: 1976506844017890380}
+        TargetGameObject: {fileID: 0}
         ExtraTargetGameObjects: []
         SetStateOnInit: 0
         StateOnInit: 1

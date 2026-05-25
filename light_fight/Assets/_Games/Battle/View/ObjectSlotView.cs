@@ -70,11 +70,9 @@ namespace _Games.Battle.View
             playFeedback.TimescaleMultiplier = timeScale;
 
             float d1 = d + 0.5f / timeScale;
-            float d2 = d + 0.5f / timeScale;
-            this.WaitInvoke(d1, () => { Debug.Log("weapon_active"); });
-            this.WaitInvoke(d2, playFeedback.PlayFeedbacks);
+            this.WaitInvoke(d1, playFeedback.PlayFeedbacks);
 
-            return d2 + playFeedback.TotalDuration / timeScale;
+            return d1 + playFeedback.TotalDuration / timeScale;
         }
 
         public void Activate(float delayActivate, float timeScale)
@@ -154,6 +152,8 @@ namespace _Games.Battle.View
                 });
             }
         }
+
+        public Transform WeaponRoot => pivot;
 
         Vector3 ISlotView.WorldPosition(int stack)
         {

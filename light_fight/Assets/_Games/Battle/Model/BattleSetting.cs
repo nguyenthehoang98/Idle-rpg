@@ -30,6 +30,7 @@ namespace _Games.Battle.Model
         [TitleGroup("View")]
         public ISlotView slot;
         public IDiceView dice;
+        public IWeaponView weapon;
         public IAttractorView attractor;
         public IDiceControlView diceControl;
         public SkillFrameConfig skillFrameConfig;

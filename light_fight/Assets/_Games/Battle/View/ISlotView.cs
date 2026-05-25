@@ -11,6 +11,7 @@ namespace _Games.Battle.View
         void Deactivate(float delayDeactivate, float timeScale);
         void Stack(int totalStack, float lerpDuration, float timeScale);
 
+        Transform WeaponRoot { get; }
         Vector3 WorldPosition(int stack);
         Vector3 WorldEulerAngles(int stack);
     }

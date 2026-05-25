@@ -35,6 +35,8 @@ namespace _Games.Battle.View
             
         }
 
+        public Transform WeaponRoot => null;
+
         public Vector3 WorldPosition(int stack)
         {
             return Vector3.zero;

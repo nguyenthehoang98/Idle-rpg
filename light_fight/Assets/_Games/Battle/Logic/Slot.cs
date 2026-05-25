@@ -47,8 +47,8 @@ namespace _Games.Battle.Logic
             right2 = baseCenter2 + right * length2/2f;
 #endif
            
-            weapon = new Weapon(setting, query, dir);
             view = setting.slot.Instantiate(share.coneParent, new Vector3(0, 0, angle - 90));
+            weapon = new Weapon(view, share, setting, query, dir);
             share.slots.Add(view);
         }
 
@@ -58,14 +58,14 @@ namespace _Games.Battle.Logic
 
         public void Activate(float delayActivate)
         {
-            weapon.Activate();
+            weapon.Activate(delayActivate);
             view.Activate(delayActivate, share.timeScale);
             IsPlaying = true;
         }
         
         public void Deactivate(float delayDeactivate)
         {
-            weapon.Deactivate();
+            weapon.Deactivate(delayDeactivate);
             view.Deactivate(delayDeactivate, share.timeScale);
             IsPlaying = false;
         }

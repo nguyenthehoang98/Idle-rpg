@@ -1,5 +1,6 @@
 ﻿using System;
 using _Games.Battle.Model;
+using _Games.Battle.View;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
 using Unity.Mathematics;
@@ -11,6 +12,8 @@ namespace _Games.Battle.Logic
     public class Weapon
     {
         private IQuery query;
+        private BattleShare share;
+        private IWeaponView view;
         private BattleSetting setting;
         private float scanRadius;
         private float forwardOffset = 1.5f;
@@ -21,12 +24,14 @@ namespace _Games.Battle.Logic
         private float elapsedTime;
         private bool isPlaying;
 
-        public Weapon(BattleSetting setting, IQuery query, float2 direction)
+        public Weapon(ISlotView slotView, BattleShare share, BattleSetting setting, IQuery query, float2 direction)
         {
+            this.share = share;
             this.query = query;
             this.setting = setting;
             this.direction = defaultDirection = direction;
             this.position = position + direction * (forwardOffset * scaleTime);
+            this.view = setting.weapon.Instantiate(0, 90, slotView);
         }
 
         public void Draw(float scale, Color color)
@@ -36,9 +41,21 @@ namespace _Games.Battle.Logic
             DrawSquare(color);
         }
 
-        public void Activate() => isPlaying = true;
+        public void Activate(float delayActivate)
+        {
+            isPlaying = true;
+            view.Activate(delayActivate, share.timeScale);
+        }
         
-        public void Deactivate() => isPlaying = false;
+        public void Deactivate(float delayActivate)
+        { 
+            view.Deactivate(delayActivate, share.timeScale);
+            isPlaying = false;
+        }
+        
+        public void Focus(){}
+        
+        public void Rollback(){}
 
         public void Tick(float dt)
         {
