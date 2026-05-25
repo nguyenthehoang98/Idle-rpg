@@ -10,29 +10,41 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eeb9f4c094fd4f4494eb78bd3f5824d7, type: 3}
-  m_Name: Battle Setting
+  m_Name: Battle Setting Test
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects:
-    - {fileID: 5535604774282497494, guid: ec77afdda9dbff243a651399d484c267, type: 3}
-    - {fileID: 1260976206857264283, guid: 55b0d2eefeccf1d4ca0b78457e343d6e, type: 3}
-    - {fileID: 7840636616252386546, guid: dafbcef128748c144afe3343a2803e73, type: 3}
+    ReferencedUnityObjects: []
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
     - Name: slot
-      Entry: 10
-      Data: 0
+      Entry: 7
+      Data: 0|_Games.Battle.View.PureSlotView, Games.Battle
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: dice
-      Entry: 10
-      Data: 1
+      Entry: 7
+      Data: 1|_Games.Battle.View.PureDiceView, Games.Battle
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: attractor
-      Entry: 10
-      Data: 2
+      Entry: 7
+      Data: 2|_Games.Battle.View.PureAttractorView, Games.Battle
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: diceControl
+      Entry: 7
+      Data: 3|_Games.Battle.View.PureDiceControlView, Games.Battle
+    - Name: 
+      Entry: 8
+      Data: 
   center:
     x: 0
     y: 0
@@ -40,6 +52,11 @@ MonoBehaviour:
   slotCooldownTime: 1
   slotRecoveryTime: 1
   slotLerpColorDuration: 0.1
+  slotMinOffsetSpeed: 70
+  slotMaxOffsetSpeed: 170
+  slotColorMinSpeed: {r: 1, g: 0, b: 0, a: 1}
+  slotColorDefaultSpeed: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  slotColorMaxSpeed: {r: 0, g: 1, b: 0, a: 1}
   weaponCooldown: 1
   weaponAttackRange: 6
   attractorFlyTime: 1

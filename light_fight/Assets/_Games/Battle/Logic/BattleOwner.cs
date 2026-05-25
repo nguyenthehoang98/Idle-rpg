@@ -18,7 +18,6 @@ namespace _Games.Battle.Logic
         [TitleGroup("Battle")]
         [SerializeField] private BattleSetting setting;
         [SerializeField] private Canvas canvas;
-        [SerializeField] private DiceControlView diceControlPrefab;
 
         private BattleShare share;
         private SkillTickable skill;
@@ -27,7 +26,7 @@ namespace _Games.Battle.Logic
         private BattleTickable battle;
         private Dictionary<int, int> entityToAgent = new Dictionary<int, int>();
 
-        private DiceControlView diceControl;
+        private IDiceControlView diceControl;
         private bool waveSpawnComplete = false;
         private int totalEntityInScene = 0;
         private int killed;
@@ -81,10 +80,9 @@ namespace _Games.Battle.Logic
             });
             battle.OnInitialized += OnBattleInitialize;
             battle.Initialize(share, setting, query);
-            
-            diceControl = Instantiate(diceControlPrefab, canvas.transform);
+
+            diceControl = setting.diceControl.Instantiate(canvas.transform);
             diceControl.OnInitialized += OnDiceInitialize;
-            diceControl.transform.SetAsFirstSibling();
             
             // todo: reset global data + register event
             SkillFactory.Initialize(skill, query);

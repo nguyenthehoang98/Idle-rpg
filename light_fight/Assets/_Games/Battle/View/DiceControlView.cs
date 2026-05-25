@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 namespace _Games.Battle.View
 {
-    public class DiceControlView : MonoBehaviour
+    public class DiceControlView : MonoBehaviour, IDiceControlView
     {
         [TitleGroup("Fills", "Settings")]
         [SerializeField, Range(0.01f, 0.2f)] private float deltaMaxValue = 0.2f;
@@ -39,10 +39,9 @@ namespace _Games.Battle.View
         private Queue<Action> queue = new Queue<Action>();
         private float leftValue;
         private float rightValue;
-        
-        [SerializeField, DisableIf("@true")] private float elapsedTime;
-        [SerializeField, DisableIf("@true")] private float progress;
-        [SerializeField, DisableIf("@true")] private Color color;
+
+        private int prevProgress = 100;
+        private float elapsedTime;
         private bool isInitialized;
 
         private void Awake()
@@ -167,7 +166,14 @@ namespace _Games.Battle.View
                 queue.Dequeue().Invoke();
             }
         }
-        
+
+        public IDiceControlView Instantiate(Transform parent)
+        {
+            DiceControlView view = Instantiate(this, parent, false);
+            view.transform.SetAsFirstSibling();
+            return view;
+        }
+
         public void Initialize(BattleShare share, BattleSetting setting)
         {
             this.setting = setting;
@@ -249,28 +255,31 @@ namespace _Games.Battle.View
             rightFill.transform.position = rightSlider.handleRect.transform.position + offset;
             leftFill.transform.position = leftSlider.handleRect.transform.position + offset;
 
-            color = setting.slotColorDefaultSpeed;
-            progress = 100;
+            Color color = setting.slotColorDefaultSpeed;
+            float progress = 100;
             
             if (elapsedTime > 0)
             {
                 color = Color.Lerp(color, setting.slotColorMaxSpeed, elapsedTime);
                 progress = Mathf.Lerp(progress, setting.slotMaxOffsetSpeed, elapsedTime);
+                prevProgress = Mathf.FloorToInt(Mathf.Max(prevProgress, progress));
             }
             else if (elapsedTime < 0)
             {
                 color = Color.Lerp(color, setting.slotColorMinSpeed, -elapsedTime);
                 progress = Mathf.Lerp(setting.slotMinOffsetSpeed, progress, -elapsedTime);
+                prevProgress = Mathf.CeilToInt(Mathf.Min(prevProgress, progress));
             }
 
             foreach (var img in imgFills) img.color = color;
-            txtProgress.text = string.Format("{0}%", (int)progress);
+            txtProgress.text = string.Format("{0}%", (int)prevProgress);
             
             foreach (var dice in share.dices)
             {
                 dice.SetColor(color);
-                //dice.SetScaleTime(v);
             }
+
+            OnSpeedChanged?.Invoke(prevProgress / 100f);
         }
     }
 }

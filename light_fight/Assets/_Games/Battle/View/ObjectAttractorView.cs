@@ -1,11 +1,10 @@
 ﻿using System;
-using _Games.Battle.View;
 using _KITSystem.Utils;
 using DG.Tweening;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace _Games.Battle
+namespace _Games.Battle.View
 {
     public class ObjectAttractorView : MonoBehaviour, IAttractorView
     {

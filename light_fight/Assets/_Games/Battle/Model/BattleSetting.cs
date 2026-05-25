@@ -31,6 +31,7 @@ namespace _Games.Battle.Model
         public ISlotView slot;
         public IDiceView dice;
         public IAttractorView attractor;
+        public IDiceControlView diceControl;
         public SkillFrameConfig skillFrameConfig;
     }
 }
