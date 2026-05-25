@@ -22,6 +22,7 @@ namespace _Games.Battle.Logic
             this.elapsedTime = setting.slotCooldownTime;
             this.view = setting.dice.Instantiate();
             share.dices.Add(view);
+            SetSpeed(0);
         }
 
         public void Tick(float dt)
@@ -55,6 +56,16 @@ namespace _Games.Battle.Logic
                     phase = Phase.Processing;
                     break;
             }
+        }
+
+        public void SetSpeed(float speed)
+        {
+            float f = Mathf.Clamp(speed, -1f, 1f);
+            float v = Mathf.Lerp(setting.slotMinOffsetSpeed, setting.slotMaxOffsetSpeed, f);
+            Color color = setting.slotColorDefaultSpeed;
+            if (f > 0) color = Color.Lerp(color, setting.slotColorMaxSpeed, f);
+            else if (f < 0) color = Color.Lerp(setting.slotColorMinSpeed, color, -f);
+            view.SetColor(color);
         }
 
         enum Phase

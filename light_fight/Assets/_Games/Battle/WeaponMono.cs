@@ -207,6 +207,8 @@ namespace _Games.Battle
         private void ScanNearestAgent(float radius, Action<AgentData> callback)
         {
             float2 position = float2.zero;
+            
+            // dung iquery
             SystemBus.Publish(new WeaponQueryAgentSignal(position, radius, tuple =>
             {
                 int count = tuple.count;

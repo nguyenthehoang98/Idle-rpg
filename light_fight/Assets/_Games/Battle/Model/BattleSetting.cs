@@ -15,6 +15,11 @@ namespace _Games.Battle.Model
         public float slotCooldownTime = 1;
         public float slotRecoveryTime = 0.5f;
         public float slotLerpColorDuration = 0.1f;
+        public int slotMinOffsetSpeed = 70;
+        public int slotMaxOffsetSpeed = 170;
+        public Color slotColorMinSpeed = Color.red;
+        public Color slotColorDefaultSpeed = Color.yellow;
+        public Color slotColorMaxSpeed = Color.green;
         [TitleGroup("Weapon")]
         public float weaponCooldown = 1f;
         public float weaponAttackRange = 6f;
