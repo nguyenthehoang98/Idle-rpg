@@ -41,7 +41,7 @@ namespace _Games.Battle.Logic
             switch (phase)
             {
                 case Phase.Processing:
-                    value = RandomUtils.Range(1, 4);
+                    value = RandomUtils.Range(1, 7);
                     elapsedTime = view.Roll(value);
                     phase = Phase.Rolling;
                     break;

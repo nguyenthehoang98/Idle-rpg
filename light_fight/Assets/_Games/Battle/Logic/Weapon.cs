@@ -18,13 +18,15 @@ namespace _Games.Battle.Logic
         private float scanRadius;
         private float forwardOffset = 1.5f;
         private float scaleTime = 1f;
-        private float2 position;
-        private float2 direction;
-        private float2 defaultDirection;
+        private Vector3 position;
+        private Vector3 direction;
+        private Vector3 defaultDirection;
+        private Phase phase = Phase.Cooldown;
         private float elapsedTime;
+        private bool needUpdatePosition;
         private bool isPlaying;
 
-        public Weapon(ISlotView slotView, BattleShare share, BattleSetting setting, IQuery query, float2 direction)
+        public Weapon(ISlotView slotView, BattleShare share, BattleSetting setting, IQuery query, Vector3 direction)
         {
             this.share = share;
             this.query = query;
@@ -34,6 +36,8 @@ namespace _Games.Battle.Logic
             this.view = setting.weapon.Instantiate(0, 90, slotView);
         }
 
+        public void Play() => view.Play(share.timeScale);
+        
         public void Draw(float scale, Color color)
         {
             scaleTime = scale;
@@ -43,74 +47,84 @@ namespace _Games.Battle.Logic
 
         public void Activate(float delayActivate)
         {
+            needUpdatePosition = true;
+            
+            elapsedTime = view.Activate(delayActivate, share.timeScale);
+            
             isPlaying = true;
-            view.Activate(delayActivate, share.timeScale);
         }
         
         public void Deactivate(float delayActivate)
-        { 
+        {
             view.Deactivate(delayActivate, share.timeScale);
+            
             isPlaying = false;
         }
         
-        public void Focus(){}
-        
-        public void Rollback(){}
-
         public void Tick(float dt)
         {
             if (isPlaying)
             {
-                elapsedTime += dt;
-                if (elapsedTime >= setting.weaponCooldown)
-                {
-                    elapsedTime = 0;
+                elapsedTime -= dt;
 
-                    bool found = query.FindNearestTargetPosition(setting.center, setting.weaponAttackRange, out float2 targetPosition);
-                    if (found)
-                    {
-                        RotateTo(targetPosition);
-                        SkillFactory.Build(position, targetPosition, setting.skillFrameConfig);
-                    }
+                if (elapsedTime > 0) return;
+
+                switch (phase)
+                {
+                    case Phase.Cooldown:
+                        elapsedTime = int.MaxValue;
+                        //bool found = query.FindNearestTargetPosition(setting.center, setting.weaponAttackRange, out float2 targetPosition);
+                        //if (found)
+                        {
+                            Vector3 targetPosition = new Vector3(RandomUtils.Range(-1f, 1f), RandomUtils.Range(-1f, 1f)) * RandomUtils.Range(3f, 6f);
+                            elapsedTime = RotateTo(targetPosition);
+                            phase = Phase.Rotate;
+                            SkillFactory.Build(new float2(position.x, position.y), new float2(targetPosition.x, targetPosition.y), setting.skillFrameConfig);
+                        }
+                        break;
+                    case Phase.Rotate:
+                        elapsedTime = setting.weaponCooldown;
+                        phase = Phase.Cooldown;
+                        break;
                 }
             }
         }
         
-        void DrawTriangle(Color color)
+        private void DrawTriangle(Color color)
         {
             float height = 0.4f;
 
-            float2 offset = defaultDirection * (forwardOffset * (scaleTime - 1));
-            float2 center = position + offset;
-            float2 right = new float2(-direction.y, direction.x);
+            Vector3 offset = defaultDirection * (forwardOffset * (scaleTime - 1));
+            Vector3 center = position + offset;
+            Vector3 right = new Vector3(-direction.y, direction.x);
             
             float halfBase = height / 3;
-            float2 vector = direction * height;
-            float2 v3 = center + vector * 0.75f;
-            float2 baseCenter = center;
+            Vector3 vector = direction * height;
+            Vector3 v3 = center + vector * 0.75f;
+            Vector3 baseCenter = center;
 
-            float2 v1 = baseCenter - right * halfBase;
-            float2 v2 = baseCenter + right * halfBase;
+            Vector3 v1 = baseCenter - right * halfBase;
+            Vector3 v2 = baseCenter + right * halfBase;
 
             Debug.DrawLine(new Vector3(v1.x, v1.y), new Vector3(v2.x, v2.y), color);
             Debug.DrawLine(new Vector3(v2.x, v2.y), new Vector3(v3.x, v3.y), color);
             Debug.DrawLine(new Vector3(v3.x, v3.y), new Vector3(v1.x, v1.y), color);
         }
         
-        void DrawSquare(Color color)
+        private void DrawSquare(Color color)
         {
             float size = 0.1f;
 
-            float2 offset = defaultDirection * (forwardOffset * (scaleTime - 1));
-            float2 center = position + offset;
-            float2 right = new float2(-direction.y, direction.x);
+            Vector3 offset = defaultDirection * (forwardOffset * (scaleTime - 1));
+            Vector3 center = position + offset;
+            Vector3 right = new Vector3(-direction.y, direction.x);
             float half = size * 0.5f;
 
             // 4 góc hình vuông
-            float2 v1 = center - right * half - direction * half;
-            float2 v2 = center + right * half - direction * half;
-            float2 v3 = center + right * half + direction * half;
-            float2 v4 = center - right * half + direction * half;
+            Vector3 v1 = center - right * half - direction * half;
+            Vector3 v2 = center + right * half - direction * half;
+            Vector3 v3 = center + right * half + direction * half;
+            Vector3 v4 = center - right * half + direction * half;
 
             // draw
             Debug.DrawLine(new Vector3(v1.x, v1.y), new Vector3(v2.x, v2.y), color);
@@ -119,17 +133,32 @@ namespace _Games.Battle.Logic
             Debug.DrawLine(new Vector3(v1.x, v1.y), new Vector3(v4.x, v4.y), color);
         }
 
-        public void RotateTo(float2 worldPos)
+        public float RotateTo(Vector3 worldPos)
         {
-            direction = MathUtils.NormalizeSafe(worldPos - position);
-            float2 offset = defaultDirection * (forwardOffset * (scaleTime - 1));
-            float2 center = position + offset;
+            direction = MathUtils.NormalizeSafeVec3(worldPos - position);
+#if UNITY_EDITOR
+            Vector3 offset = defaultDirection * (forwardOffset * (scaleTime - 1));
+            Vector3 center = position + offset;
             Debug.DrawRay(
                 new Vector3(center.x, center.y),
                 new Vector3(direction.x, direction.y) * 10,
                 Color.magenta,
                 setting.weaponCooldown * 0.6f
             );
+#endif
+            float duration = setting.weaponRotateDuration / share.timeScale;
+            
+            view.Rotate(worldPos, duration, needUpdatePosition);
+
+            needUpdatePosition = false;
+            
+            return duration;
+        }
+
+        enum Phase
+        {
+            Cooldown,
+            Rotate
         }
     }
 }

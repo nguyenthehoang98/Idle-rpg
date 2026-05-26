@@ -54,19 +54,27 @@ namespace _Games.Battle.Logic
 
         public void Initialize() => view.Initialize(share.timeScale);
 
-        public float Play() => view.Play(share.timeScale);
+        public float Play()
+        {
+            weapon.Play();
+            return view.Play(share.timeScale);
+        }
 
         public void Activate(float delayActivate)
         {
             weapon.Activate(delayActivate);
+            
             view.Activate(delayActivate, share.timeScale);
+            
             IsPlaying = true;
         }
         
         public void Deactivate(float delayDeactivate)
         {
             weapon.Deactivate(delayDeactivate);
+            
             view.Deactivate(delayDeactivate, share.timeScale);
+            
             IsPlaying = false;
         }
 

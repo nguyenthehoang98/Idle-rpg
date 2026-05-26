@@ -3,6 +3,7 @@ using _KITSystem.SkillSystem.Config;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Games.Battle.Model
 {
@@ -23,6 +24,7 @@ namespace _Games.Battle.Model
         [TitleGroup("Weapon")]
         public float weaponCooldown = 1f;
         public float weaponAttackRange = 6f;
+        public float weaponRotateDuration = 0.2f;
         [TitleGroup("Attractor")]
         public float attractorFlyTime = 1f;
         [Range(1.1f, 2.0f)] public float minAttractorRadius = 1.1f;
