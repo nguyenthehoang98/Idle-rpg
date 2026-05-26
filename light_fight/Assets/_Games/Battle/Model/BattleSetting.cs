@@ -10,6 +10,7 @@ namespace _Games.Battle.Model
     [CreateAssetMenu]
     public class BattleSetting : SerializedScriptableObject
     {
+        public bool gizmos;
         public float2 center;
         [TitleGroup("Dice")]
         public int totalSlot = 4;

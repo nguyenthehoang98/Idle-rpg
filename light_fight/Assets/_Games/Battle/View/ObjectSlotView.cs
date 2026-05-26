@@ -75,6 +75,10 @@ namespace _Games.Battle.View
             return d1 + playFeedback.TotalDuration / timeScale;
         }
 
+        public void Tick(float deltaTime)
+        {
+        }
+
         public void Activate(float delayActivate, float timeScale)
         {
             activateFeedback.TimescaleMultiplier = timeScale;

@@ -33,18 +33,25 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+    - Name: weapon
+      Entry: 7
+      Data: 2|_Games.Battle.View.PureWeaponView, Games.Battle
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: attractor
       Entry: 7
-      Data: 2|_Games.Battle.View.PureAttractorView, Games.Battle
+      Data: 3|_Games.Battle.View.PureAttractorView, Games.Battle
     - Name: 
       Entry: 8
       Data: 
     - Name: diceControl
       Entry: 7
-      Data: 3|_Games.Battle.View.PureDiceControlView, Games.Battle
+      Data: 4|_Games.Battle.View.PureDiceControlView, Games.Battle
     - Name: 
       Entry: 8
       Data: 
+  gizmos: 1
   center:
     x: 0
     y: 0
@@ -59,6 +66,7 @@ MonoBehaviour:
   slotColorMaxSpeed: {r: 0, g: 1, b: 0, a: 1}
   weaponCooldown: 1
   weaponAttackRange: 6
+  weaponRotateDuration: 0.2
   attractorFlyTime: 1
   minAttractorRadius: 1.1
   maxAttractorRadius: 2

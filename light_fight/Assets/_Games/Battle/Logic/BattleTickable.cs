@@ -167,9 +167,9 @@ namespace _Games.Battle.Logic
         {
             if (!isInitialized) return;
 
-            for (int i = 0; i < slots.Length; i++)
+            if (setting.gizmos)
             {
-                slots[i].Draw();
+                foreach (var slot in slots) slot.Draw();
             }
 
             DrawCircle(attackRange, Color.yellow);
