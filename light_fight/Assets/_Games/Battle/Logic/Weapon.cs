@@ -145,13 +145,11 @@ namespace _Games.Battle.Logic
                 setting.weaponCooldown * 0.6f
             );
 #endif
-            float duration = setting.weaponRotateDuration / share.timeScale;
-            
-            view.Rotate(worldPos, duration, needUpdatePosition);
+            view.Rotate(worldPos, setting.weaponRotateDuration, share.timeScale, needUpdatePosition);
 
             needUpdatePosition = false;
             
-            return duration;
+            return setting.weaponCooldown / share.timeScale;
         }
 
         enum Phase

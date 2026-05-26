@@ -1,4 +1,5 @@
 ﻿using _KITSystem.Utils;
+using Animancer;
 using MoreMountains.Feedbacks;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -20,7 +21,8 @@ namespace _Games.Battle.View
         [SerializeField] private Transform muzzle;
         [SerializeField] private Transform zPivot;
         [SerializeField] private Transform xPivot;
-        [SerializeField] private SortingGroup sortingGroup; // animator/animation
+        [TitleGroup("Renderer")] 
+        [SerializeField] private WeaponRenderer weapon;
 
         private Vector3 zEulerAngles;
         private Vector3 zLocalPosition;
@@ -28,10 +30,10 @@ namespace _Games.Battle.View
         
         public IWeaponView Instantiate(int xPivotAngle, int zPivotAngle, ISlotView slotView)
         {
-            ObjectWeaponView view = Instantiate(this, slotView.WeaponRoot);
+            ObjectWeaponView view = Instantiate(this, slotView.WeaponRoot, false);
             view.xPivot.localEulerAngles = new Vector3(xPivotAngle, 0, 0);
             view.zPivot.localEulerAngles = new Vector3(0, 0, zPivotAngle);
-            view.transform.localPosition = new Vector3(0, 0, -0.1f);
+            view.transform.localPosition = new Vector3(0, 0, -1f);
             return view;
         }
 
@@ -47,8 +49,10 @@ namespace _Games.Battle.View
         {
             this.WaitInvoke(delayActivate / timeScale, () =>
             {
-                sortingGroup.sortingOrder = 1;
+                weapon.Activate();
+                
                 activateFeedback.TimescaleMultiplier = timeScale;
+                
                 activateFeedback.PlayFeedbacks();
             });
             return (delayActivate + activateFeedback.TotalDuration) / timeScale;
@@ -56,7 +60,10 @@ namespace _Games.Battle.View
 
         public float Deactivate(float delayActivate,float timeScale)
         {
+            weapon.Stop();
+            
             float waitTimePlayFeedback = delayActivate / timeScale;
+            
             float rollbackDuration = Mathf.Min(waitTimePlayFeedback, 0.2f / timeScale);
 
             this.WaitInvoke(Mathf.Max(0, waitTimePlayFeedback - rollbackDuration), () =>
@@ -66,14 +73,17 @@ namespace _Games.Battle.View
             
             this.WaitInvoke(waitTimePlayFeedback, () =>
             {
-                sortingGroup.sortingOrder = 0;
+                weapon.Deactivate();
+
                 deactivateFeedback.TimescaleMultiplier = timeScale;
+                
                 deactivateFeedback.PlayFeedbacks();
             });
+            
             return (delayActivate + deactivateFeedback.TotalDuration) / timeScale;
         }
 
-        public void Rotate(Vector3 goal, float duration, bool needUpdatePosition)
+        public void Rotate(Vector3 goal, float duration, float timeScale, bool needUpdatePosition)
         {
             Vector3 position = zPivot.position;
             Vector3 direction = goal - position;
@@ -102,7 +112,8 @@ namespace _Games.Battle.View
             Vector3 targetLocalPosition = originLocalPosition + directionOffset;
             
             if (rotateCoroutine != null) StopCoroutine(rotateCoroutine);
-            rotateCoroutine = this.CurveNormalize(0, 1, rotateCurve, duration, f =>
+            
+            rotateCoroutine = this.CurveNormalize(0, 1, rotateCurve, duration / timeScale, f =>
             {
                 float angle = Mathf.LerpAngle(currentAngle, endAngle, f);
                 zPivot.eulerAngles = new Vector3(0, 0, angle);
@@ -126,6 +137,9 @@ namespace _Games.Battle.View
                 {
                     zPivot.localPosition = Vector3.Lerp(originLocalPosition, targetLocalPosition, f);
                 }
+            }, () =>
+            {
+                weapon.PlayAttack(timeScale);
             });
         }
 

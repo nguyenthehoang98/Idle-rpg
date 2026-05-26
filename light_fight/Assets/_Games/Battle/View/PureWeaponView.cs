@@ -24,9 +24,8 @@ namespace _Games.Battle.View
             return 0;
         }
 
-        public void Rotate(Vector3 goal, float duration, bool needUpdatePosition)
+        public void Rotate(Vector3 goal, float duration, float timeScale, bool needUpdatePosition)
         {
-            
         }
     }
 }

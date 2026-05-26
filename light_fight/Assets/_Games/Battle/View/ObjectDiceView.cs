@@ -9,14 +9,11 @@ namespace _Games.Battle.View
     {
         [SerializeField] private DiceRollController rig;
         [SerializeField] private Image imgCooldown;
-        [SerializeField] private TextMeshProUGUI txtNumber;
         [SerializeField] private GameObject lockObject;
         [SerializeField] private GameObject unlockObject;
 
         public RectTransform RectTransform {get; private set;}
 
-        private float speed;
-        
 
         private void Awake()
         {
@@ -44,17 +41,13 @@ namespace _Games.Battle.View
             imgCooldown.gameObject.SetActive(!locked);
         }
 
-        public void SetValue(int value) => txtNumber.text = value > 0 ? value.ToString() : "?";
+        public void SetValue(int value) {}
 
         public void SetProgress(float progress) => imgCooldown.fillAmount = progress;
 
         public void SetColor(Color color) => imgCooldown.color = color;
 
-        public void SetSpeed(float v)
-        {
-            speed = v;
-            rig.Speed = v;
-        }
+        public void SetSpeed(float v) => rig.Speed = v;
 
         public float Roll(int value) => rig.Roll(value, null);
 

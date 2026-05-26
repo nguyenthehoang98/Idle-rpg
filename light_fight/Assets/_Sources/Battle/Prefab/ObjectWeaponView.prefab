@@ -647,7 +647,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 790234895353320929}
-  - component: {fileID: 1447372468156752027}
   m_Layer: 0
   m_Name: ZPivot
   m_TagString: Untagged
@@ -671,18 +670,6 @@ Transform:
   - {fileID: 2423022675780460510}
   m_Father: {fileID: 3490722090520775109}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
---- !u!210 &1447372468156752027
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 988937949855190528}
-  m_Enabled: 1
-  m_SortingLayerID: -152622805
-  m_SortingLayer: 1
-  m_SortingOrder: 0
-  m_SortAtRoot: 1
 --- !u!1 &4253332416381762321
 GameObject:
   m_ObjectHideFlags: 0
@@ -763,7 +750,7 @@ MonoBehaviour:
   muzzle: {fileID: 4502003849307333278}
   zPivot: {fileID: 790234895353320929}
   xPivot: {fileID: 2423022675780460510}
-  sortingGroup: {fileID: 1447372468156752027}
+  weapon: {fileID: 4477225148816406814}
 --- !u!1 &4485829695358905438
 GameObject:
   m_ObjectHideFlags: 0
@@ -776,6 +763,8 @@ GameObject:
   - component: {fileID: 220661400505325756}
   - component: {fileID: 3367429546346564188}
   - component: {fileID: 4631330501926239553}
+  - component: {fileID: 4477225148816406814}
+  - component: {fileID: 147713121354045040}
   m_Layer: 0
   m_Name: Renderer
   m_TagString: Untagged
@@ -792,7 +781,7 @@ Transform:
   m_GameObject: {fileID: 4485829695358905438}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -842,7 +831,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -152622805
   m_SortingLayer: 1
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: aab89f21b76afc44c82579b08ceb98c6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -893,6 +882,33 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4477225148816406814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4485829695358905438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 399f3f9adcfa40a28c88f5c41912aa1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sortingGroup: {fileID: 147713121354045040}
+  animancer: {fileID: 3367429546346564188}
+  attackClip: {fileID: 7400000, guid: d6d5be68c56967b4abc547fbe6f35d7d, type: 2}
+--- !u!210 &147713121354045040
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4485829695358905438}
+  m_Enabled: 1
+  m_SortingLayerID: -152622805
+  m_SortingLayer: 1
+  m_SortingOrder: 0
+  m_SortAtRoot: 1
 --- !u!1 &5687246579883703690
 GameObject:
   m_ObjectHideFlags: 0
