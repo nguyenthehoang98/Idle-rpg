@@ -17,6 +17,7 @@ namespace _Games.Battle.View
         [SerializeField, Range(1f, 5f)] private float speed = 2f;
         [SerializeField, Range(0.01f, 5.0f)] private float offsetUpX = 0.15f;
         [SerializeField, Range(0.01f, 5.0f)] private float offsetDownX = 0.3f;
+        [SerializeField] private float multiplierInvertSpeed = 2.5f;
         [TitleGroup("Fills ", "Right")]
         [SerializeField] private Slider rightSlider;
         [SerializeField] private UICornersGradient rightFill;
@@ -67,8 +68,11 @@ namespace _Games.Battle.View
             if (leftValue + rightValue > 0)
             {
                 float deltaTime = Time.deltaTime * speed * (rightValue - leftValue);
-                bool shouldUpdateFillProgress = true;
                 bool shouldUpdateTextProgress = Mathf.Abs(elapsedTime) < 1;
+
+                bool invert1 = elapsedTime > 0 && leftValue > 0 && rightValue == 0;
+                bool invert2 = elapsedTime < 0 && leftValue == 0 && rightValue > 0;
+                if (invert1 || invert2) deltaTime *= multiplierInvertSpeed;
 
                 float prev = elapsedTime;
                 elapsedTime += deltaTime;
@@ -101,14 +105,11 @@ namespace _Games.Battle.View
                             leftSlider.value = -elapsedTime;
                             rightSlider.value = 0;
                         }
+
+                        UpdateProgress();
                     });
                 }
-
-                if (shouldUpdateFillProgress)
-                {
-                    queue.Enqueue(UpdateProgress);
-                }
-
+                
                 if (Mathf.Abs(elapsedTime) >= 1)
                 {
                     if (elapsedTime >= 1) elapsedTime -= deltaMaxValue;
@@ -262,22 +263,33 @@ namespace _Games.Battle.View
             {
                 color = Color.Lerp(color, setting.slotColorMaxSpeed, elapsedTime);
                 progress = Mathf.Lerp(progress, setting.slotMaxOffsetSpeed, elapsedTime);
-                prevProgress = Mathf.CeilToInt(Mathf.Max(prevProgress, progress));
+
+                if (rightValue + leftValue > 0)
+                    prevProgress = Mathf.CeilToInt(Mathf.Max(prevProgress, progress));
+                else
+                    prevProgress = Mathf.FloorToInt(Mathf.Min(prevProgress, progress));
             }
             else if (elapsedTime < 0)
             {
                 color = Color.Lerp(color, setting.slotColorMinSpeed, -elapsedTime);
-                progress = Mathf.Lerp(setting.slotMinOffsetSpeed, progress, -elapsedTime);
-                prevProgress = Mathf.FloorToInt(Mathf.Min(prevProgress, progress));
+                progress = Mathf.Lerp(progress, setting.slotMinOffsetSpeed, -elapsedTime);
+
+                if (rightValue + leftValue > 0)
+                    prevProgress = Mathf.FloorToInt(Mathf.Min(prevProgress, progress));
+                else
+                    prevProgress = Mathf.CeilToInt(Mathf.Max(prevProgress, progress));
+            }
+            else
+            {
+                prevProgress = (int)progress;
+                elapsedTime = 0;
             }
 
             foreach (var img in imgFills) img.color = color;
+            
             txtProgress.text = string.Format("{0}%", (int)prevProgress);
             
-            foreach (var dice in share.dices)
-            {
-                dice.SetColor(color);
-            }
+            foreach (var dice in share.dices) dice.SetColor(color);
 
             OnSpeedChanged?.Invoke(prevProgress / 100f);
         }
