@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using _Games.Battle.Model;
+using UnityEngine;
 
 namespace _Games.Battle.View
 {
     public class PureWeaponView : IWeaponView
     {
-        public IWeaponView Instantiate(int xPivotAngle, int zPivotAngle, ISlotView slotView)
+        public IWeaponView Instantiate(int order, BattleSetting setting, int xPivotAngle, int zPivotAngle, ISlotView slotView)
         {
             return new PureWeaponView();
         }

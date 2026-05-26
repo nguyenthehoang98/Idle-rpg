@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using _Games.Battle.Model;
+using UnityEngine;
 
 namespace _Games.Battle.View
 {
     public interface IWeaponView
     {
-        IWeaponView Instantiate(int xPivotAngle, int zPivotAngle, ISlotView slotView);
+        IWeaponView Instantiate(int order, BattleSetting setting, int xPivotAngle, int zPivotAngle, ISlotView slotView);
         void Play(float timeScale);
         float Activate(float delayActivate, float timeScale);
         float Deactivate(float delayActivate, float timeScale);

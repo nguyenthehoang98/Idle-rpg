@@ -21,7 +21,7 @@ namespace _Games.Battle.Logic
 
         public bool IsPlaying { get; private set; }
 
-        public Slot(BattleShare share, int order, BattleSetting setting, IQuery query)
+        public Slot(int order, BattleShare share, BattleSetting setting, IQuery query)
         {
             this.share = share;
             this.setting = setting;
@@ -48,7 +48,7 @@ namespace _Games.Battle.Logic
 #endif
            
             view = setting.slot.Instantiate(share.coneParent, new Vector3(0, 0, angle - 90));
-            weapon = new Weapon(view, share, setting, query, dir);
+            weapon = new Weapon(order, view, share, setting, query, dir);
             share.slots.Add(view);
         }
 

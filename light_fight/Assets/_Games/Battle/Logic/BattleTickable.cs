@@ -49,7 +49,7 @@ namespace _Games.Battle.Logic
 
             for (int i = 0; i < slots.Length; i++)
             {
-                slots[i] = new Slot(share, i, setting, query);
+                slots[i] = new Slot(i, share, setting, query);
             }
 
             for (int i = 0; i < attractors.Length; i++)

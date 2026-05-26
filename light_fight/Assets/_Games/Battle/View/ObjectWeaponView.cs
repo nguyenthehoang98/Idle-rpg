@@ -1,9 +1,8 @@
-﻿using _KITSystem.Utils;
-using Animancer;
+﻿using _Games.Battle.Model;
+using _KITSystem.Utils;
 using MoreMountains.Feedbacks;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace _Games.Battle.View
 {
@@ -27,13 +26,18 @@ namespace _Games.Battle.View
         private Vector3 zEulerAngles;
         private Vector3 zLocalPosition;
         private Coroutine rotateCoroutine;
+
+        private int order;
+        private BattleSetting setting;
         
-        public IWeaponView Instantiate(int xPivotAngle, int zPivotAngle, ISlotView slotView)
+        public IWeaponView Instantiate(int order, BattleSetting setting, int xPivotAngle, int zPivotAngle, ISlotView slotView)
         {
             ObjectWeaponView view = Instantiate(this, slotView.WeaponRoot, false);
             view.xPivot.localEulerAngles = new Vector3(xPivotAngle, 0, 0);
             view.zPivot.localEulerAngles = new Vector3(0, 0, zPivotAngle);
             view.transform.localPosition = new Vector3(0, 0, -1f);
+            view.setting = setting;
+            view.order = order;
             return view;
         }
 
@@ -41,6 +45,11 @@ namespace _Games.Battle.View
         {
             zEulerAngles = zPivot.eulerAngles;
             zLocalPosition = zPivot.localPosition;
+            
+            Vector3 xEulerAngles = xPivot.localEulerAngles;
+            xEulerAngles.x = setting.weaponXRotates[order];
+            xPivot.localEulerAngles = xEulerAngles;
+            
             playFeedback.TimescaleMultiplier = timeScale;
             playFeedback.PlayFeedbacks();
         }

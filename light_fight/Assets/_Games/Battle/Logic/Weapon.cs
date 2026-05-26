@@ -26,14 +26,14 @@ namespace _Games.Battle.Logic
         private bool needUpdatePosition;
         private bool isPlaying;
 
-        public Weapon(ISlotView slotView, BattleShare share, BattleSetting setting, IQuery query, Vector3 direction)
+        public Weapon(int order, ISlotView slotView, BattleShare share, BattleSetting setting, IQuery query, Vector3 direction)
         {
             this.share = share;
             this.query = query;
             this.setting = setting;
             this.direction = defaultDirection = direction;
             this.position = position + direction * (forwardOffset * scaleTime);
-            this.view = setting.weapon.Instantiate(0, 90, slotView);
+            this.view = setting.weapon.Instantiate(order, setting, 0, 90, slotView);
         }
 
         public void Play() => view.Play(share.timeScale);

@@ -12,7 +12,7 @@ namespace _Games.Battle.Model
     {
         public bool gizmos;
         public float2 center;
-        [TitleGroup("Dice")]
+        [TitleGroup("Slot")]
         public int totalSlot = 4;
         public float slotCooldownTime = 1;
         public float slotRecoveryTime = 0.5f;
@@ -26,6 +26,7 @@ namespace _Games.Battle.Model
         public float weaponCooldown = 1f;
         public float weaponAttackRange = 6f;
         public float weaponRotateDuration = 0.2f;
+        public int[] weaponXRotates = new int[6] { 0, 0, 0, 180, 180, 180 };
         [TitleGroup("Attractor")]
         public float attractorFlyTime = 1f;
         [Range(1.1f, 2.0f)] public float minAttractorRadius = 1.1f;
