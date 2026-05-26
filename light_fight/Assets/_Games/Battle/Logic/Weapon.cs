@@ -73,13 +73,12 @@ namespace _Games.Battle.Logic
                 {
                     case Phase.Cooldown:
                         elapsedTime = int.MaxValue;
-                        //bool found = query.FindNearestTargetPosition(setting.center, setting.weaponAttackRange, out float2 targetPosition);
-                        //if (found)
+                        bool found = query.FindNearestTargetPosition(setting.center, setting.weaponAttackRange, out float2 targetPosition);
+                        if (found)
                         {
-                            Vector3 targetPosition = new Vector3(RandomUtils.Range(-1f, 1f), RandomUtils.Range(-1f, 1f)) * RandomUtils.Range(3f, 6f);
-                            elapsedTime = RotateTo(targetPosition);
+                            elapsedTime = RotateTo(new Vector3(targetPosition.x, targetPosition.y));
                             phase = Phase.Rotate;
-                            SkillFactory.Build(new float2(position.x, position.y), new float2(targetPosition.x, targetPosition.y), setting.skillFrameConfig);
+                            SkillFactory.Build(new float2(position.x, position.y), targetPosition, setting.skillFrameConfig);
                         }
                         break;
                     case Phase.Rotate:
