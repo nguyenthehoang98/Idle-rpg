@@ -83,7 +83,7 @@ namespace _Games.Battle.Logic
                 AgentData agentData = agent.CreateAgent(entity, position, radius);
                 entityToAgent[entity] = agentData.agent;
                 
-                ComponentManager<HealthData>.Add(entity, new HealthData(10));
+                ComponentManager<HealthData>.Add(entity, new HealthData(20));
                 ComponentManager<MonsterData>.Add(entity, new MonsterData(monsterId));
 
                 Monster m = new Monster(share, setting, entity, monsterId, agentData.agent);
@@ -99,27 +99,47 @@ namespace _Games.Battle.Logic
             
             // todo: reset global data + register event
             SkillFactory.Initialize(skill, query);
-            EntityManager.OnEntityRemoved += entity =>
-            {
-                killed++;
-                totalEntityInScene = entityToAgent.Count;
-                SpawnAction();
+            EntityManager.OnBehaviour += OnEntityBehaviour;
+            spawner.OnWaveCompleted += OnWaveComplete;
+        }
 
-                if (entityToAgent.Remove(entity, out int agentId))
-                {
-                    agent.DestroyAgent(agentId);
-                }
+        private void OnWaveComplete()
+        {
+            waveSpawnComplete = true;
+            SpawnAction();
+        }
 
-                if (entityToMonster.Remove(entity, out Monster m))
-                {
-                    monster.RemoveMonster(m);
-                }
-            };
-            spawner.OnWaveCompleted += () =>
+        private void OnEntityBehaviour(EntityManagerBehaviourParameters parameter)
+        {
+            int entity = parameter.entity;
+            Monster m;
+            
+            switch (parameter.type)
             {
-                waveSpawnComplete = true;
-                SpawnAction();
-            };
+                case EntityManagerBehaviourType.BeHit:
+                    if (entityToMonster.TryGetValue(entity, out m))
+                    {
+                        m.BeHit();
+                    }
+                    
+                    break;
+                case EntityManagerBehaviourType.Removed:
+                    
+                    killed++;
+                    totalEntityInScene = entityToAgent.Count;
+                    SpawnAction();
+
+                    if (entityToAgent.Remove(entity, out int agentId))
+                    {
+                        agent.DestroyAgent(agentId);
+                    }
+
+                    if (entityToMonster.Remove(entity, out m))
+                    {
+                        monster.RemoveMonster(m);
+                    }
+                    break;
+            }
         }
 
         private void OnDiceInitialize()

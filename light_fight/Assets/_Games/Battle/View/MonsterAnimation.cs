@@ -1,6 +1,7 @@
 using System;
 using _KITSystem.Resource;
 using Animancer;
+using MoreMountains.Feedbacks;
 using UnityEngine;
 
 public class MonsterAnimation : MonoBehaviour
@@ -11,6 +12,7 @@ public class MonsterAnimation : MonoBehaviour
     [SerializeField] private AnimationClip idleClip;
     [SerializeField] private AnimationClip moveClip;
     [SerializeField] private AnimationClip attackClip;
+    [SerializeField] private MMF_Player hitFeedback;
 
     private Vector3 localScale;
     private bool defaultFace = false; // false: left, true: right
@@ -36,6 +38,8 @@ public class MonsterAnimation : MonoBehaviour
     {
         root.gameObject.SetActive(active);
     }
+
+    public void BeHit() => hitFeedback.PlayFeedbacks();
 
     public void Dead()
     {

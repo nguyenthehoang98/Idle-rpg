@@ -122,6 +122,7 @@ MonoBehaviour:
   idleClip: {fileID: 7400000, guid: c30bd1b06963b5f459b355ba2309ecab, type: 2}
   moveClip: {fileID: 7400000, guid: 4c2ab6c329237c64abac71979b50ee4f, type: 2}
   attackClip: {fileID: 7400000, guid: 5d3e6a7a2e2da2849a2a1857e0f0cfad, type: 2}
+  hitFeedback: {fileID: 5756302000052263300}
 --- !u!114 &5502289596545311791
 MonoBehaviour:
   m_ObjectHideFlags: 0

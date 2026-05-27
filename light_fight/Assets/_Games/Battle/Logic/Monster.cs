@@ -82,6 +82,11 @@ public class Monster : IDisposable
         Color color = agentData.isStopped ? Color.red : Color.green;
         DrawCircle(position, agentData.radius, 6, color);
     }
+
+    public void BeHit()
+    {
+        if (animation != null) animation.BeHit();
+    }
     
     static void DrawCircle(Vector3 center, float radius, int segments, Color color)
     {

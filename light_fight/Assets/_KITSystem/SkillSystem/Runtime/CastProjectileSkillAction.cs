@@ -42,8 +42,9 @@ namespace _KITSystem.SkillSystem.Runtime
 
         protected virtual void OnDamageEffect(int entity)
         {
+            EntityManager.InvokeBehaviour(entity, EntityManagerBehaviourType.BeHit);
         }
 
-        protected virtual int DamageOutput(int entity) => 10;
+        protected virtual int DamageOutput(int entity) => 1;
     }
 }

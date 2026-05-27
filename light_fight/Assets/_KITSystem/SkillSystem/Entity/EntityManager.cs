@@ -4,14 +4,26 @@ using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Entity
 {
+    public enum EntityManagerBehaviourType
+    {
+        Created, Removed,
+        BeHit
+    }
+
+    public struct EntityManagerBehaviourParameters
+    {
+        public EntityManagerBehaviourType type;
+        public int entity;
+        public object[] parameters;
+    }
+    
     public static class EntityManager
     {
         private static int[] entityVersions = new int[256];
         private static readonly Stack<int> freeIds = new();
         private static int nextId = 1;
         
-        public static event Action<int> OnEntityCreated;
-        public static event Action<int> OnEntityRemoved;
+        public static event Action<EntityManagerBehaviourParameters> OnBehaviour;
 
         static EntityManager()
         {
@@ -25,7 +37,11 @@ namespace _KITSystem.SkillSystem.Entity
             int id = freeIds.Count > 0 ? freeIds.Pop() : AllocateId();
             entityVersions[id] = 0;
             ActiveCount++;
-            OnEntityCreated?.Invoke(id);
+            OnBehaviour?.Invoke(new EntityManagerBehaviourParameters
+            {
+                type = EntityManagerBehaviourType.Created,
+                entity = id,
+            });
             return id;
         }
 
@@ -42,7 +58,21 @@ namespace _KITSystem.SkillSystem.Entity
             entityVersions[entity] = -1;
             freeIds.Push(entity);
             ActiveCount--;
-            OnEntityRemoved?.Invoke(entity);
+            OnBehaviour?.Invoke(new EntityManagerBehaviourParameters
+            {
+                type = EntityManagerBehaviourType.Removed,
+                entity = entity,
+            });
+        }
+
+        public static void InvokeBehaviour(int entity, EntityManagerBehaviourType type, params object[] parameters)
+        {
+            OnBehaviour?.Invoke(new EntityManagerBehaviourParameters
+            {
+                type = type,
+                entity = entity,
+                parameters = parameters,
+            });
         }
 
         public static bool IsAlive(int entity)
