@@ -18,8 +18,8 @@ MonoBehaviour:
   - id: 1001
     isRanged: 0
     name: Goose
-    path: 
-    skillId: 10001
+    path: 1001 Monster
+    skillId: 10010
     skillLevel: 1
     skillCooldown: 3
     radius: 0.4
@@ -28,11 +28,11 @@ MonoBehaviour:
     attackDistance: 1.2
     attack: 1
     health: 20
-  - id: 1011
+  - id: 1002
     isRanged: 1
     name: Cowboy
-    path: 
-    skillId: 10011
+    path: 1002 Monster
+    skillId: 10020
     skillLevel: 1
     skillCooldown: 3
     radius: 0.4

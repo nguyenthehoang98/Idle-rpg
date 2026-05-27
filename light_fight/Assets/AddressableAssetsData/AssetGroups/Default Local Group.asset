@@ -15,8 +15,18 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: a50f3e4e90eb0714db9c34f24793f732
   m_SerializeEntries:
+  - m_GUID: 132d4d65777c454448c174f201e9fae1
+    m_Address: 1001 Monster
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 527fdc5cbeb1752459f6429ee3e12c9d
     m_Address: SkillConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9c8a4ee2d729d7e4aaa7714da3b17cd1
+    m_Address: 1002 Monster
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
