@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace _KITSystem.Schedule
@@ -7,13 +8,16 @@ namespace _KITSystem.Schedule
     {
         [TitleGroup("Tick Group")] 
         [SerializeField] private bool isPausedDefault = true;
-        [SerializeField, Range(1, 50)] protected float loop = 1;
+        [SerializeField] private bool useUnscaledTime = false;
         [SerializeField] private int targetFPS = 30;
+        [SerializeField, Range(1, 50)] protected float loop = 1;
+        [SerializeField, Range(1, 20)] private int maxTicksPerFrame = 5;
         [SerializeReference, HideLabel] public ITickable[] tickables;
 
         private float tickInterval;
         private float accumulator;
         private bool isPaused;
+        private int tickableCount;
 
         public bool IsPaused
         {
@@ -27,34 +31,66 @@ namespace _KITSystem.Schedule
             Application.runInBackground = true;
             Application.targetFrameRate = 60;
             tickInterval = 1f / targetFPS;
+            tickableCount = tickables.Length;
         }
 
         void Update()
         {
             if (isPaused) return;
 
+            float deltaTime = useUnscaledTime
+                ? Time.unscaledDeltaTime
+                : Time.deltaTime;
+
 #if UNITY_EDITOR
-            accumulator += Time.deltaTime * loop;
+            accumulator += deltaTime * loop;
 #else
-            accumulator += Time.deltaTime;
+            accumulator += deltaTime;
 #endif
-            float f = tickInterval * Time.timeScale;
-            while (accumulator >= f)
+            
+            int tickExecuted = 0;
+
+            while (accumulator >= tickInterval)
             {
-                for (int i = 0; i < tickables.Length; i++)
+                for (int i = 0; i < tickableCount; i++)
                 {
-                    tickables[i].Tick(f);
+                    tickables[i].Tick(tickInterval);
                 }
 
-                accumulator -= f;
+                accumulator -= tickInterval;
+
+                tickExecuted++;
+
+                // chống spiral of death
+                if (tickExecuted >= maxTicksPerFrame)
+                {
+                    accumulator = 0f;
+                    break;
+                }
+            }
+        }
+        
+        private void OnApplicationFocus(bool hasFocus)
+        {
+            if (!hasFocus)
+            {
+                accumulator = 0f;
+            }
+        }
+        
+        private void OnApplicationPause(bool pauseStatus)
+        {
+            if (pauseStatus)
+            {
+                accumulator = 0f;
             }
         }
 
         public bool TryGetTickable<T>(out T tickable) where T : ITickable
         {
-            foreach (var t in tickables)
+            for (int i = 0; i < tickableCount; i++)
             {
-                if (t is T tt)
+                if (tickables[i] is T tt)
                 {
                     tickable = tt;
                     return true;

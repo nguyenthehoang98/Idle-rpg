@@ -482,7 +482,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPausedDefault: 1
-  loop: 1
+  loop: 5
   targetFPS: 30
   tickables:
   - rid: 7993921753502711864

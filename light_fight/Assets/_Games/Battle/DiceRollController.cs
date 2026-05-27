@@ -1,26 +1,36 @@
 using System;
 using System.Collections;
 using _KITSystem.Utils;
-using DG.Tweening;
 using UnityEngine;
 
 namespace _Games.Battle
 {
     public class DiceRollController : MonoBehaviour
     {
-        [Header("References")] [SerializeField]
-        private Transform visual;
+        [Header("References")] 
+        [SerializeField] private Transform visual;
 
-        [Header("Jump")] [SerializeField] private float jumpHeight = 3f;
+        [Header("Jump")] 
+        [SerializeField] private float jumpHeight = 3f;
         [SerializeField] private float duration = 1.2f;
 
-        [Header("Rotation")] [SerializeField] private int randomSpinCountStart = 4;
+        [Header("Rotation")]
+        [SerializeField] private int randomSpinCountStart = 4;
         [SerializeField] private int randomSpinCountEnd = 4;
 
-        [Header("Scale FX")] [SerializeField] private Vector3 squashScale = new Vector3(1.1f, 0.9f, 1.1f);
+        [Header("Scale FX")] 
+        [SerializeField] private Vector3 squashScale = new Vector3(1.1f, 0.9f, 1.1f);
         [SerializeField] private Vector3 stretchScale = new Vector3(0.9f, 1.1f, 0.9f);
 
         public float Speed { private get; set; }
+
+        private Coroutine coroutine;
+        private Vector3 originalPosition;
+
+        private void Awake()
+        {
+            originalPosition = transform.localPosition;;
+        }
 
         public float Roll(int value, Action onComplete)
         {
@@ -30,13 +40,14 @@ namespace _Games.Battle
                 return 0;
             }
 
-            StartCoroutine(SequenceRoll(value, onComplete));
+            if (coroutine != null) StopCoroutine(coroutine);
+            coroutine = StartCoroutine(SequenceRoll(value, onComplete));
             return duration;
         }
 
         private IEnumerator SequenceRoll(int value, Action onComplete)
         {
-            Vector3 startPos = transform.localPosition;
+            Vector3 startPos = originalPosition;
             Vector3 randomRotation = new Vector3(
                 360 * randomSpinCountStart + RandomUtils.Range(0, 360),
                 360 * randomSpinCountStart + RandomUtils.Range(0, 360),
