@@ -51,7 +51,6 @@ MonoBehaviour:
     - rid: 7993921678918811724
       type: {class: RangerProjectileConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
-        damageScale: 1
         isHpPercent: 0
         damageTickerType: 0
         damageTickerIntervalInSeconds: 1
