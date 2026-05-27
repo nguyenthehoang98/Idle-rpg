@@ -1,0 +1,4 @@
+{
+	"name": "KITSystem.Popup",
+	"references":[ "GUID:82d1e9f4e71141c4983602af7fd5f675", "GUID:de832e2fa4f411e408f63d8caed52dfe", "GUID:f51ebe6a0ceec4240a699833d6309b23", "GUID:4a1cb1490dc4df8409b2580d6b44e75e" ]
+}

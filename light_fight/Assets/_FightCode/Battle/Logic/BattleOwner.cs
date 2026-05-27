@@ -32,22 +32,11 @@ namespace _FightCode.Battle.Logic
 
         private IDiceControlView diceControl;
         private bool waveSpawnComplete = false;
-        private bool isDestroyed;
         private int totalEntityInScene = 0;
         private int killed;
         
         private async void Start()
         {
-            // todo: load instance data
-            await KitConfigManager.Load(new string[]
-            {
-                "SkillConfig",
-                "LevelConfig",
-                "MonsterConfig",
-            });
-
-            if (isDestroyed) return;
-            
             // todo: assign
             TryGetTickable(out skill);
             TryGetTickable(out agent);
@@ -148,8 +137,6 @@ namespace _FightCode.Battle.Logic
 
         private void OnDestroy()
         {
-            isDestroyed = true;
-
             if (battle != null)
             {
                 battle.OnInitialized -= OnBattleInitialize;

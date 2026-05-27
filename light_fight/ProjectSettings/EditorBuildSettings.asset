@@ -4,7 +4,16 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/_FightSource/Scenes/Boot Scene.unity
+    guid: f220a6634b129e44e9610ce8b0e056bf
+  - enabled: 1
+    path: Assets/_FightSource/Scenes/Home Scene.unity
+    guid: 759172bea20548741a42c07ce37e038f
+  - enabled: 1
+    path: Assets/_FightSource/Scenes/Battle Scene.unity
+    guid: faf30f343842d9b438134853378254af
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: b3904febb6ca9ad4398d4139976fb66a, type: 2}
   m_UseUCBPForAssetBundles: 0
