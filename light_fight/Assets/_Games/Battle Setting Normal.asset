@@ -41,7 +41,8 @@ MonoBehaviour:
     - Name: diceControl
       Entry: 10
       Data: 4
-  center:
+  enableVisualize: 0
+  worldCenter:
     x: 0
     y: 0
   totalSlot: 4
@@ -55,6 +56,8 @@ MonoBehaviour:
   slotColorMaxSpeed: {r: 0, g: 1, b: 0, a: 1}
   weaponCooldown: 1
   weaponAttackRange: 6
+  weaponRotateDuration: 0.2
+  weaponXRotates: 000000000000000000000000b4000000b4000000b4000000
   attractorFlyTime: 1
   minAttractorRadius: 1.1
   maxAttractorRadius: 2

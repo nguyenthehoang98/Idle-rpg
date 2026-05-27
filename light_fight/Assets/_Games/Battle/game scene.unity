@@ -488,6 +488,7 @@ MonoBehaviour:
   - rid: 7993921753502711864
   - rid: 7993921753502711868
   - rid: 7993921753502711863
+  - rid: 7993921836071780410
   - rid: 7993921753502711865
   - rid: 7993921753502711867
   setting: {fileID: 11400000, guid: 95ecddcd768858c4780676724adee50c, type: 2}
@@ -499,12 +500,12 @@ MonoBehaviour:
       type: {class: AgentTickable, ns: _Games.Battle.Logic, asm: Games.Battle}
       data:
         locked: 0
+        enableGizmos: 0
         defaultAgentStopDistance: 3
         defaultAgentRadius: 0.5
         interval: 0.5
         multiplierIgnoreCheckDistance: 0.2
         deltaDistanceStuck: 0.2
-        total: 0
         isInitialized: 0
     - rid: 7993921753502711864
       type: {class: BattleTickable, ns: _Games.Battle.Logic, asm: Games.Battle}
@@ -530,6 +531,9 @@ MonoBehaviour:
       data: 
     - rid: 7993921753502711868
       type: {class: SpawnerTickable, ns: _Games.Battle.Logic, asm: Games.Battle}
+      data: 
+    - rid: 7993921836071780410
+      type: {class: MonsterTickable, ns: , asm: Games.Battle}
       data: 
 --- !u!1 &1993236628
 GameObject:

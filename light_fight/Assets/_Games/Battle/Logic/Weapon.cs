@@ -73,7 +73,7 @@ namespace _Games.Battle.Logic
                 {
                     case Phase.Cooldown:
                         elapsedTime = int.MaxValue;
-                        bool found = query.FindNearestTargetPosition(setting.center, setting.weaponAttackRange, out float2 targetPosition);
+                        bool found = query.FindNearestTargetPosition(setting.worldCenter, setting.weaponAttackRange, out float2 targetPosition);
                         if (found)
                         {
                             elapsedTime = RotateTo(new Vector3(targetPosition.x, targetPosition.y));

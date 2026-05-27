@@ -25,10 +25,10 @@ MonoBehaviour:
     spawnId: Spawn_Random
     data:
     - 1001_10
-    - 1011_2
+    - 1002_2
     weights:
     - {x: 1001, y: 10}
-    - {x: 1011, y: 2}
+    - {x: 1002, y: 2}
   - levelId: 1
     waveId: 2
     batchId: 1
@@ -38,10 +38,10 @@ MonoBehaviour:
     power: 54
     spawnId: Spawn_Random
     data:
-    - 1011_3
+    - 1002_3
     - 1001_1
     weights:
-    - {x: 1011, y: 3}
+    - {x: 1002, y: 3}
     - {x: 1001, y: 1}
   - levelId: 1
     waveId: 2
@@ -52,10 +52,10 @@ MonoBehaviour:
     power: 55
     spawnId: Spawn_Random
     data:
-    - 1011_3
+    - 1002_3
     - 1001_1
     weights:
-    - {x: 1011, y: 3}
+    - {x: 1002, y: 3}
     - {x: 1001, y: 1}
   - levelId: 1
     waveId: 2
@@ -66,10 +66,10 @@ MonoBehaviour:
     power: 56
     spawnId: Spawn_Random
     data:
-    - 1011_3
+    - 1002_3
     - 1001_1
     weights:
-    - {x: 1011, y: 3}
+    - {x: 1002, y: 3}
     - {x: 1001, y: 1}
   - levelId: 1
     waveId: 2
@@ -80,10 +80,10 @@ MonoBehaviour:
     power: 57
     spawnId: Spawn_Random
     data:
-    - 1011_3
+    - 1002_3
     - 1001_1
     weights:
-    - {x: 1011, y: 3}
+    - {x: 1002, y: 3}
     - {x: 1001, y: 1}
   - levelId: 1
     waveId: 3
@@ -94,10 +94,10 @@ MonoBehaviour:
     power: 58
     spawnId: Spawn_Random
     data:
-    - 1011_3
+    - 1002_3
     - 1001_1
     weights:
-    - {x: 1011, y: 3}
+    - {x: 1002, y: 3}
     - {x: 1001, y: 1}
   - levelId: 1
     waveId: 3
@@ -108,10 +108,10 @@ MonoBehaviour:
     power: 59
     spawnId: Spawn_Random
     data:
-    - 1011_3
+    - 1002_3
     - 1001_1
     weights:
-    - {x: 1011, y: 3}
+    - {x: 1002, y: 3}
     - {x: 1001, y: 1}
   - levelId: 1
     waveId: 3
@@ -122,10 +122,10 @@ MonoBehaviour:
     power: 60
     spawnId: Spawn_Random
     data:
-    - 1011_3
+    - 1002_3
     - 1001_1
     weights:
-    - {x: 1011, y: 3}
+    - {x: 1002, y: 3}
     - {x: 1001, y: 1}
   - levelId: 1
     waveId: 3
@@ -136,8 +136,8 @@ MonoBehaviour:
     power: 61
     spawnId: Spawn_Random
     data:
-    - 1011_3
+    - 1002_3
     - 1001_1
     weights:
-    - {x: 1011, y: 3}
+    - {x: 1002, y: 3}
     - {x: 1001, y: 1}

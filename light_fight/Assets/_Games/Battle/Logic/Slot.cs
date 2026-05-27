@@ -32,17 +32,17 @@ namespace _Games.Battle.Logic
             );
 
 #if UNITY_EDITOR
-            Vector2 center = setting.center;
+            Vector2 worldCenter = setting.worldCenter;
             Vector2 right = new Vector2(dir.y, -dir.x);
             
             float length1 = 2;
             float length2 = 0.4f;
             
-            Vector2 baseCenter1 = center + dir * length1;
+            Vector2 baseCenter1 = worldCenter + dir * length1;
             left1 = baseCenter1 - right * length1/2f;
             right1 = baseCenter1 + right * length1/2f;
             
-            Vector2 baseCenter2 = center + dir *length2;
+            Vector2 baseCenter2 = worldCenter + dir *length2;
             left2 = baseCenter2 - right * length2/2f;
             right2 = baseCenter2 + right * length2/2f;
 #endif

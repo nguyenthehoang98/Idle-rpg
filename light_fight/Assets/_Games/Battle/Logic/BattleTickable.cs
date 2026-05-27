@@ -31,7 +31,7 @@ namespace _Games.Battle.Logic
             this.share = share;
             this.setting = setting;
             this.attackRange = setting.weaponAttackRange;
-            this.center = new Vector3(setting.center.x, setting.center.y);
+            this.center = new Vector3(setting.worldCenter.x, setting.worldCenter.y);
             this.diceNumbers = new int[setting.totalSlot];
             this.dices = new Dice[setting.totalSlot];
             this.slots = new Slot[BattleConst.MAX_DICE_NUMBER];
@@ -167,10 +167,7 @@ namespace _Games.Battle.Logic
         {
             if (!isInitialized) return;
 
-            if (setting.gizmos)
-            {
-                foreach (var slot in slots) slot.Draw();
-            }
+            foreach (var slot in slots) slot.Draw();
 
             DrawCircle(attackRange, Color.yellow);
         }

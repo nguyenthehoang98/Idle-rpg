@@ -10,8 +10,8 @@ namespace _Games.Battle.Model
     [CreateAssetMenu]
     public class BattleSetting : SerializedScriptableObject
     {
-        public bool gizmos;
-        public float2 center;
+        public bool enableVisualize = true;
+        public float2 worldCenter;
         [TitleGroup("Slot")]
         public int totalSlot = 4;
         public float slotCooldownTime = 1;

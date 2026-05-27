@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using _Games.Battle.Logic;
 using _Games.Battle.View;
+using _KITSystem.Grid;
 using UnityEngine;
 
 namespace _Games.Battle.Model
@@ -12,7 +13,8 @@ namespace _Games.Battle.Model
         public BattleOwner owner;
         public Transform coneParent;
         public Transform attractorParent;
-        public List<IDiceView> dices = new List<IDiceView>();
-        public List<ISlotView> slots = new List<ISlotView>();
+        public AgentGrid agentGrid;
+        public List<IDiceView> dices;
+        public List<ISlotView> slots;
     }
 }

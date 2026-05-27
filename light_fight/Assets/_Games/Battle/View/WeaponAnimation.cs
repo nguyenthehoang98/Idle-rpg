@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 
 namespace _Games.Battle.View
 {
-    public class WeaponRenderer : MonoBehaviour
+    public class WeaponAnimation : MonoBehaviour
     {
         [TitleGroup("Animation")]
         [SerializeField] private SortingGroup sortingGroup;

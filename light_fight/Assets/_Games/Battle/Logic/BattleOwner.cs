@@ -24,6 +24,7 @@ namespace _Games.Battle.Logic
         private AgentTickable agent;
         private SpawnerTickable spawner;
         private BattleTickable battle;
+        private MonsterTickable monster;
         private Dictionary<int, int> entityToAgent = new Dictionary<int, int>();
 
         private IDiceControlView diceControl;
@@ -46,6 +47,7 @@ namespace _Games.Battle.Logic
             TryGetTickable(out agent);
             TryGetTickable(out spawner);
             TryGetTickable(out battle);
+            TryGetTickable(out monster);
             TryGetTickable(out MovementTickable movement);
             
             // todo: create instance logic
@@ -56,6 +58,9 @@ namespace _Games.Battle.Logic
                 timeScale = loop,
                 coneParent = new GameObject("ConeParent").transform,
                 attractorParent = new GameObject("AttractorParent", typeof(RectTransform)).transform,
+                agentGrid = agent,
+                dices = new List<IDiceView>(),
+                slots = new List<ISlotView>(),
             };
             var attract = share.attractorParent;
             attract.SetParent(canvas.transform);
@@ -77,6 +82,8 @@ namespace _Games.Battle.Logic
                 
                 ComponentManager<HealthData>.Add(entity, new HealthData(10));
                 ComponentManager<MonsterData>.Add(entity, new MonsterData(monsterId));
+                
+                monster.AddMonster(new Monster(share, entity, monsterId, agentData.agent));
             });
             battle.OnInitialized += OnBattleInitialize;
             battle.Initialize(share, setting, query);
@@ -119,7 +126,11 @@ namespace _Games.Battle.Logic
 
         private void OnDrawGizmos()
         {
-            if (battle != null) battle.Draw();
+            if(!setting.enableVisualize)
+            {
+                if (battle != null) battle.Draw();
+                if (monster != null) monster.Draw();
+            }
         }
 
         private void OnGUI()

@@ -17,6 +17,7 @@ namespace _KITSystem.Grid
         [TitleGroup("Agent default settings")]
 #if UNITY_EDITOR
         [SerializeField] private bool locked;
+        [SerializeField] private bool enableGizmos;
 #endif
         [SerializeField] private float defaultAgentStopDistance = 3;
         [SerializeField] private float defaultAgentRadius = 0.5f;
@@ -24,7 +25,6 @@ namespace _KITSystem.Grid
         [SerializeField, Range(0.1f, 0.9f)] private float multiplierIgnoreCheckDistance = 0.2f;
         [SerializeField, Range(0.1f, 1.0f)] private float deltaDistanceStuck = 0.2f;
         [TitleGroup("Debug")] 
-        [SerializeField, DisableIf("@true")] private int total;
         [SerializeField, DisableIf("@true")] private bool isInitialized;
 
         private Dictionary<int, AgentData> containers = new Dictionary<int, AgentData>();        
@@ -46,8 +46,7 @@ namespace _KITSystem.Grid
             simulator.EnsureCompleted();
 
 #if UNITY_EDITOR
-            total = containers.Count;
-            DrawLine(deltaTime);
+            if(enableGizmos) DrawLine(deltaTime);
 #endif
             // todo: logic update
             SetPreferredVelocities();
@@ -224,6 +223,11 @@ namespace _KITSystem.Grid
             return data;
         }
 
+        public bool TryGetAgent(int agent, out AgentData agentData)
+        {
+            return containers.TryGetValue(agent, out agentData);
+        }
+        
         public void DestroyAgent(int agentId)
         {
             if (agents.Remove(agentId))
@@ -251,7 +255,6 @@ namespace _KITSystem.Grid
         public float radius;
 
         public bool isStopped;
-        public bool isDead;
 
         public int stuckFrames;
     }

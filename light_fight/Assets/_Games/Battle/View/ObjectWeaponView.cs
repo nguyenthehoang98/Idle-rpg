@@ -21,7 +21,7 @@ namespace _Games.Battle.View
         [SerializeField] private Transform zPivot;
         [SerializeField] private Transform xPivot;
         [TitleGroup("Renderer")] 
-        [SerializeField] private WeaponRenderer weapon;
+        [SerializeField] private WeaponAnimation weapon;
 
         private Vector3 zEulerAngles;
         private Vector3 zLocalPosition;
