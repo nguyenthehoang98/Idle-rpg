@@ -33,7 +33,7 @@ Transform:
   - {fileID: 4245079806346324}
   - {fileID: 4703641212467911}
   m_Father: {fileID: 4821352908150431}
-  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 6.2045083}
 --- !u!210 &8595171745948838959
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -122,6 +122,7 @@ MonoBehaviour:
   idleClip: {fileID: 7400000, guid: c30bd1b06963b5f459b355ba2309ecab, type: 2}
   moveClip: {fileID: 7400000, guid: 4c2ab6c329237c64abac71979b50ee4f, type: 2}
   attackClip: {fileID: 7400000, guid: 5d3e6a7a2e2da2849a2a1857e0f0cfad, type: 2}
+  deadClip: {fileID: 7400000, guid: 454ebaccfeec6aa419a135ea331d9b7b, type: 2}
   hitFeedback: {fileID: 5756302000052263300}
 --- !u!114 &5502289596545311791
 MonoBehaviour:

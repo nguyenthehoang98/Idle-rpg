@@ -1,5 +1,6 @@
 using System;
 using _KITSystem.Resource;
+using _KITSystem.Utils;
 using Animancer;
 using MoreMountains.Feedbacks;
 using UnityEngine;
@@ -12,6 +13,7 @@ public class MonsterAnimation : MonoBehaviour
     [SerializeField] private AnimationClip idleClip;
     [SerializeField] private AnimationClip moveClip;
     [SerializeField] private AnimationClip attackClip;
+    [SerializeField] private AnimationClip deadClip;
     [SerializeField] private MMF_Player hitFeedback;
 
     private Vector3 localScale;
@@ -39,14 +41,26 @@ public class MonsterAnimation : MonoBehaviour
         root.gameObject.SetActive(active);
     }
 
-    public void BeHit() => hitFeedback.PlayFeedbacks();
+    public void BeHit()
+    {
+        if (hitFeedback.IsPlaying) return;
+        
+        hitFeedback.PlayFeedbacks();
+    }
 
     public void Dead()
     {
-        SetActive(false);
-        KitPool.Destroy(gameObject);
+        animancer.Play(deadClip);
+        this.WaitInvoke(deadClip.length, () =>
+        {
+            KitPool.Destroy(gameObject);
+        });
     }
 
-    public void PlayIdle() => animancer.Play(idleClip);
-    public void PlayMove() => animancer.Play(moveClip);
+    public void OnDeadEvent()
+    {
+    }
+
+    public void Idle() => animancer.Play(idleClip);
+    public void Move() => animancer.Play(moveClip);
 }

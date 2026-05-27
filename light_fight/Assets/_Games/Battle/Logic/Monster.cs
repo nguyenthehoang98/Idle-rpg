@@ -49,7 +49,7 @@ public class Monster : IDisposable
         animation = KitPool.Instantiate(go).GetComponent<MonsterAnimation>();
         animation.SetPosition(position);
         animation.SetActive(true);
-        animation.PlayMove();
+        animation.Move();
     }
 
     public void Tick(float deltaTime)
@@ -64,12 +64,12 @@ public class Monster : IDisposable
                 if (isMoving && agentData.isStopped)
                 {
                     isMoving = false;
-                    animation.PlayIdle();
+                    animation.Idle();
                 }
                 else if (!isMoving && !agentData.isStopped)
                 {
                     isMoving = true;
-                    animation.PlayMove();
+                    animation.Move();
                 }
                 
                 animation.SetPosition(position);

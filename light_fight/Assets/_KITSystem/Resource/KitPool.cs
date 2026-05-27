@@ -168,6 +168,7 @@ namespace _KITSystem.Resource
         public static void Destroy(GameObject ins)
         {
             if (ins == null) return;
+            
             string code = ins.name;
             if (dictionary.TryGetValue(code, out Pool pool))
             {
