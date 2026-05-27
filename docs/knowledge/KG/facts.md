@@ -9,7 +9,7 @@ idle_rpg → test_framework → Unity Test Framework 1.6.0
 
 _Games → path → Assets/_Games/
 _Games → purpose → Game-specific code (Battle/)
-_Games → asmdef → Assembly-CSharp (no asmdef)
+_Games → asmdef → Games.Battle, Game.Config, Games.Utils
 
 _Games_Config → path → Assets/_Games/Config/
 _Games_Utils → path → Assets/_Games/Utils/
@@ -24,21 +24,29 @@ target_architecture → logic → pure C# POCO, no UnityEngine dependency
 target_architecture → view → MonoBehaviour, DOTween, MMF only
 target_architecture → testability → unit test without Unity runtime
 
-logic_layer → interfaces → IWeaponLogic, IDiceLogic, IConeLogic, ISpawnerLogic
+logic_layer → planned_interfaces → IWeaponLogic, IDiceLogic, ISlotLogic, ISpawnerLogic
 logic_layer → packages → _Games.Battle.Logic
 logic_layer → location → Assets/_Games/Battle/Logic/
 
 view_layer → location → Assets/_Games/Battle/View/
-view_layer → mono → WeaponMono, ConeMono, DiceRollController, ArcMove, BattleLevel
+view_layer → components → ObjectWeaponView, PureWeaponView, ObjectSlotView, PureSlotView, DiceRollController, DiceControlView, StarView
 
 ## Battle
 
-battle → entry → BattleManager.Start()
-battle → flow → BattleLevel.Initialize() → UIBattleControlArena.Initialize() → Play()
-battle → async → UniTask (not coroutines)
+battle → entry → BattleOwner.Start()
+battle → scene → Assets/_Games/Battle/game scene.unity
+battle → flow → load configs → initialize tickables → initialize battle → initialize dice control → StartGame()
+battle → async → UniTask for config/prefab loading; coroutine still used for BattleTickable view sequencing
 
 dice → logic → cooldown → delayTrigger → random value → trigger event
 weapon → logic → cooldown → query target → fire skill
+slot → logic → activate/deactivate weapon and slot view
+
+## Current Manager Risks
+
+manager_fix → BattleOwner → entity cleanup before wave-clear check; OnDestroy unsubscribe/dispose
+manager_fix → SpawnerTickable → currentWave completion guard; empty wave guard
+manager_fix → SPU → independent skill ids; swapped action mapping by action id
 
 ## Knowledge Files
 

@@ -35,34 +35,60 @@ namespace _Games.Battle.Logic
             onCreateMonster = ocmCalllback;
             monsterConfig = KitConfigManager.Get<MonsterConfig>();
             skillConfig = KitConfigManager.Get<SkillConfig>();
-            
+
             LevelConfig levelConfig = KitConfigManager.Get<LevelConfig>();
-            levelConfig.FindSpawn(levelId, out container);
+            if (!levelConfig.FindSpawn(levelId, out container))
+            {
+#if UNITY_EDITOR
+                Debug.LogError($"Not found spawn config for level: {levelId}");
+#endif
+                container = new Dictionary<WaveIdData, LevelBatch>();
+            }
+
+            totalWave = 0;
             foreach (var pair in container)
             {
                 totalWave = Mathf.Max(totalWave, pair.Key.WaveId);
             }
         }
-        
+
         public bool WaveSpawn()
         {
-            if (currentBatch >= totalWave) return false;
-            
-            LoadWave(currentWave);
+            if (currentWave > totalWave) return false;
+
+            if (!LoadWave(currentWave)) return false;
             paused = false;
             return true;
         }
 
-        private void LoadWave(int waveIndex)
+        private bool LoadWave(int waveIndex)
         {
             List<LevelBatch> values = new List<LevelBatch>();
             foreach (var pair in container)
             {
                 if (pair.Key.WaveId == waveIndex) values.Add(pair.Value);
             }
-            
+
+            if (values.Count == 0)
+            {
+#if UNITY_EDITOR
+                Debug.LogError($"Not found wave: {waveIndex}");
+#endif
+                paused = true;
+                return false;
+            }
+
             currentBatch = 0;
             batches = CreateBatches(values, monsterConfig, skillConfig);
+
+            if (batches.Length == 0)
+            {
+#if UNITY_EDITOR
+                Debug.LogError($"Wave has no batches: {waveIndex}");
+#endif
+                paused = true;
+                return false;
+            }
             
             HashSet<int> monsters = new HashSet<int>();
             foreach (var batch in batches)
@@ -79,7 +105,9 @@ namespace _Games.Battle.Logic
             }
 
             waitTime = batches[0].waitTime;
+            spawnTime = 0;
             paused = false;
+            return true;
         }
         
         public void Tick(float dt)
@@ -91,9 +119,28 @@ namespace _Games.Battle.Logic
                 if (waitTime > 0) return;
                 
                 Batch batch = batches[currentBatch];
+                if (batch.monsters.Count == 0)
+                {
+                    currentBatch++;
+                    if (currentBatch < batches.Length)
+                    {
+                        waitTime = batches[currentBatch].waitTime;
+                        spawnTime = 0;
+                    }
+                    else
+                    {
+                        paused = true;
+                        currentWave++;
+                        waiting = true;
+                        OnWaveCompleted?.Invoke();
+                    }
+
+                    return;
+                }
+
                 spawnTime += dt;
 
-                while (spawnTime > batch.interval)
+                while (spawnTime > batch.interval && batch.monsters.Count > 0)
                 {
                     float2 position = RandomPointBetweenRects_NoLoop(
                         new float2(12, 22), new float2(14, 24), Vector2.zero
@@ -115,7 +162,11 @@ namespace _Games.Battle.Logic
                 if (batch.monsters.Count == 0 || batch.time <= 0)
                 {
                     currentBatch++;
-                    if (currentBatch < batches.Length) waitTime = batches[currentBatch].waitTime;
+                    if (currentBatch < batches.Length)
+                    {
+                        waitTime = batches[currentBatch].waitTime;
+                        spawnTime = 0;
+                    }
                 }
 
                 if (currentBatch >= batches.Length)
@@ -141,10 +192,17 @@ namespace _Games.Battle.Logic
                 LevelBatch batch = batches[i];
                 Dictionary<int, int> monsters = new Dictionary<int, int>();
                 List<int> bag = CreateRandomBag(batch.Weights);
+                if (bag.Count == 0)
+                {
+#if UNITY_EDITOR
+                    Debug.LogError($"Batch has no spawn weights. Level:{batch.LevelId}, Wave:{batch.WaveId}, Batch:{batch.BatchId}");
+#endif
+                }
+
                 int bagIndex = 0;
                 int powerBudget = batch.Power;
                 int safe = 0;
-                while (powerBudget > 0 && safe < 10)
+                while (powerBudget > 0 && safe < 10 && bag.Count > 0)
                 {
                     safe++;
                     if (bagIndex >= bag.Count)
@@ -184,7 +242,7 @@ namespace _Games.Battle.Logic
                 result[i] = new Batch
                 {
                     time = batch.Duration,
-                    interval = batch.Duration / total,
+                    interval = total > 0 ? Mathf.Max(batch.Duration / total, 0.001f) : batch.Duration,
                     monsters = monsters,
                     waitTime = batch.DelayTime
                 };
@@ -196,7 +254,7 @@ namespace _Games.Battle.Logic
                 }
                 else
                 {
-                    Debug.Log($"Build total {monsters.Count} monsters: " + string.Join(',', monsters) + $", duration: {batch.Duration}, interval: {batch.Duration / total}");
+                    Debug.Log($"Build total {monsters.Count} monsters: " + string.Join(',', monsters) + $", duration: {batch.Duration}, interval: {result[i].interval}");
                 }
 #endif
             }

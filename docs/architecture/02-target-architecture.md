@@ -21,15 +21,15 @@ They are testable with any C# test framework (NUnit, xUnit) **without** Unity.
                │ wires via inspector / Installer
 ┌──────────────▼─────────────────────────────┐
 │  View Layer (MonoBehaviour)                │
-│  - WeaponMono, ConeMono, BattleLevel       │
-│  - DiceRollController, ArcMove, Star       │
-│  - UIBattleControlDiceSpeed, UIBattleDiceSlot│
+│  - Object/Pure WeaponView, SlotView        │
+│  - DiceRollController, DiceView, StarView  │
+│  - BattleOwner as current scene installer  │
 │  - Depends on: Logic via interfaces        │
 └──────────────┬─────────────────────────────┘
                │ calls logic methods
 ┌──────────────▼─────────────────────────────┐
 │  Logic Layer (POCO / interface)            │  ← TESTABLE
-│  - WeaponLogic, DiceLogic, ConeLogic       │
+│  - WeaponLogic, DiceLogic, SlotLogic       │
 │  - SpawnerLogic, BattleLoopLogic           │
 │  - SkillQuery, SkillFactory                │
 │  - No UnityEngine dependency               │
@@ -54,7 +54,7 @@ public interface IDiceLogic
     event Action<int> OnTriggered;
 }
 
-public interface IConeLogic
+public interface ISlotLogic
 {
     bool IsActive { get; }
     void Activate();
@@ -74,8 +74,8 @@ Assets/
           WeaponLogic.cs
         Dice/
           DiceLogic.cs
-        Cones/
-          ConeLogic.cs
+        Slots/
+          SlotLogic.cs
         Spawning/
           SpawnerLogic.cs
         BattleLoop/
@@ -84,23 +84,21 @@ Assets/
         Interfaces/
           IWeaponLogic.cs
           IDiceLogic.cs
-          IConeLogic.cs
+          ISlotLogic.cs
           ISpawnerLogic.cs
       View/                   ← NEW: MonoBehaviours only
-        WeaponMono.cs
-        ConeMono.cs
+        ObjectWeaponView.cs / PureWeaponView.cs
+        ObjectSlotView.cs / PureSlotView.cs
         DiceRollController.cs
-        ArcMove.cs
-        BattleLevel.cs
-        UIBattleControlDiceSpeed.cs
-        UIBattleDiceSlot.cs
+        ObjectDiceView.cs / PureDiceView.cs
+        DiceControlView.cs
         Star.cs
       (existing files)        ← will be deprecated
     Battle.Unitest/           ← NEW: Unit test assembly
       Logic/
         WeaponLogicTest.cs
         DiceLogicTest.cs
-        ConeLogicTest.cs
+        SlotLogicTest.cs
         SpawnerLogicTest.cs
         BattleFlowTest.cs
 ```
@@ -111,7 +109,13 @@ Assets/
 |-------|-------|-------------|
 | 1 | Extract `WeaponLogic` from `Weapon.cs` | Can test cooldown, target selection, fire rate |
 | 2 | Extract `DiceLogic` from `Dice.cs` | Already mostly pure — just remove `RandomUtils` dependency |
-| 3 | Extract `ConeLogic` from `Cone.cs` | Isolate state machine from view instantiation |
+| 3 | Extract `SlotLogic` from `Slot.cs` | Isolate state machine from view instantiation |
 | 4 | Refactor `BattleTickable` → `BattleLoopLogic` | Core battle loop testable |
 | 5 | Refactor `BattleOwner` → `BattleFlow` | Wave lifecycle testable |
 | 6 | Clean BattleSetting → split Logic/View configs | Remove view refs from config |
+
+## Current Implementation Notes
+
+- Current scene entry is `BattleOwner` in `Assets/_Games/Battle/game scene.unity`.
+- Current game assemblies include `Games.Battle`, `Game.Config`, and `Games.Utils`.
+- The target architecture remains pending for detailed implementation; immediate work should prioritize manager/lifecycle correctness before deep Logic/View extraction.

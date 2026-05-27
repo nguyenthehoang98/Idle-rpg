@@ -13,10 +13,11 @@ namespace _KITSystem.SkillSystem.Runtime
     public partial class SPU
     {
         private int version;
+        private int nextSkillInstanceId = 1;
         private int nextActionId = 1;
         private Queue<Action> pendingCommands = new Queue<Action>();
 
-        // {Key:Value}={SkillId:List_Action_Index->'activeActions'}
+        // {Key:Value}={SkillId:List_ActionId}
         private Dictionary<int, List<int>> mapActionsIndex = new Dictionary<int, List<int>>();
         // {Key:Value}={ActionId:Action_Index->'activeActions'}
         private Dictionary<int, int> mapActionIdToIndex = new Dictionary<int, int>();
@@ -101,7 +102,7 @@ namespace _KITSystem.SkillSystem.Runtime
             }
             else
             {
-                id = mapActionIdToIndex.Count;
+                id = nextSkillInstanceId++;
             }
 
             version++; 
@@ -253,18 +254,6 @@ namespace _KITSystem.SkillSystem.Runtime
                 activeActions[idx] = last;
 
                 mapActionIdToIndex[last.actionInstanceId] = idx;
-
-                if (mapActionsIndex.TryGetValue(last.skillInstanceId, out var list2))
-                {
-                    for (int i = 0; i < list2.Count; i++)
-                    {
-                        if (list2[i] == lastIdx)
-                        {
-                            list2[i] = idx;
-                            break;
-                        }
-                    }
-                }
             }
 
             activeActions.RemoveAt(lastIdx);

@@ -182,16 +182,16 @@ public class DiceLogic : IDiceLogic
 
 ---
 
-## Phase 3: Extract ConeLogic (2 ngày)
+## Phase 3: Extract SlotLogic (2 ngày)
 
 ### Current State
 
-`Cone.cs` vừa quản lý `Weapon` (logic) vừa `Instantiate(ConeView)` (view).
+`Slot.cs` vừa quản lý `Weapon` (logic) vừa `Instantiate(ISlotView)` (view).
 
 ### Step 3.1: Interface
 
 ```csharp
-public interface IConeLogic
+public interface ISlotLogic
 {
     bool IsActive { get; }
     void Activate();
@@ -202,11 +202,11 @@ public interface IConeLogic
 }
 ```
 
-### Step 3.2: Refactor `Cone.cs`
+### Step 3.2: Refactor `Slot.cs`
 
-- `Cone` cũ → rename `ConeViewInstaller` — chỉ chịu trách nhiệm wire view
-- `ConeLogic` mới — quản lý state machine + weapon logic
-- `ConeView` (existing) — không đổi
+- `Slot` cũ → tách phần view wiring sang installer/view adapter
+- `SlotLogic` mới — quản lý state machine + weapon logic
+- `ObjectSlotView` / `PureSlotView` — giữ vai trò view implementation
 
 ---
 
@@ -214,7 +214,7 @@ public interface IConeLogic
 
 ### Current State
 
-`BattleTickable.cs` + `BattleOwner.cs` + `BattleManager.cs` đều có mixed logic/view.
+`BattleTickable.cs` + `BattleOwner.cs` đều có mixed logic/view. `BattleManager` là tên trong tài liệu cũ, không phải entry point hiện tại.
 
 ### Step 4.1: Extract `BattleFlow`
 
@@ -222,7 +222,7 @@ public interface IConeLogic
 public class BattleFlow
 {
     private readonly IDiceLogic[] dices;
-    private readonly IConeLogic[] cones;
+    private readonly ISlotLogic[] slots;
     private readonly ISpawnerLogic spawner;
     
     public void Tick(float deltaTime) { ... }
@@ -241,7 +241,7 @@ public class BattleFlow
 
 ### Current Problem
 
-`BattleSetting.cs` chứa cả logic config lẫn view reference (`ConeView`).
+`BattleSetting.cs` chứa cả logic config lẫn view reference (`ISlotView`, `IDiceView`, `IWeaponView`, `IAttractorView`, `IDiceControlView`).
 
 ### Solution
 
@@ -262,7 +262,9 @@ public class BattleLogicConfig : ScriptableObject
 [CreateAssetMenu]
 public class BattleViewConfig : ScriptableObject
 {
-    public ConeView coneView;
+    public ISlotView slotView;
+    public IDiceView diceView;
+    public IWeaponView weaponView;
     public SkillFrameConfig skillFrameConfig;
 }
 ```
@@ -275,7 +277,7 @@ public class BattleViewConfig : ScriptableObject
 |-------|------|------|---------------|-------------|
 | 1 | WeaponLogic | 3 | 3 new, 1 rename | 15+ |
 | 2 | DiceLogic | 1 | 2 new, 1 edit | 10+ |
-| 3 | ConeLogic | 2 | 2 new, 1 edit | 10+ |
+| 3 | SlotLogic | 2 | 2 new, 1 edit | 10+ |
 | 4 | BattleFlow | 3 | 3 new, 2 edit | 20+ |
 | 5 | BattleSetting | 1 | 2 new, 1 edit | 0 |
 | 6 | Remove old files | 1 | delete 3 files | 0 |
@@ -288,3 +290,13 @@ public class BattleViewConfig : ScriptableObject
 | `docs/architecture/01-current-analysis.md` | **Created** — baseline analysis |
 | `docs/architecture/02-target-architecture.md` | **Created** — target design |
 | `AGENTS.md` | **Update** — add Logic/View subdirectories |
+
+## Immediate Manager Fixes (2026-05-27)
+
+These are prioritized before detailed Logic/View extraction:
+
+- `BattleOwner`: cleanup entity dictionaries before checking whether a wave is clear; unsubscribe static/event callbacks on destroy; dispose native-backed systems.
+- `SpawnerTickable`: use `currentWave` to detect campaign completion; guard missing/empty wave data before reading `batches[0]`.
+- `SPU`: allocate skill instance ids independently from queued action maps; update swapped action mapping by action id, not list index.
+
+Detailed extraction of `WeaponLogic`, `DiceLogic`, `SlotLogic`, and `BattleFlow` remains pending.

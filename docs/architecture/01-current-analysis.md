@@ -8,24 +8,29 @@ The codebase mixes pure logic with Unity-specific rendering, making unit testing
 
 | File | Logic | View | Mixed? |
 |------|-------|------|--------|
-| `BattleManager.cs` | Wave spawn, dice trigger | UI init, ArcMove, Debug.Log | ❌ Heavy |
-| `BattleTickable.cs` | Dice/Cone state machine | DrawCircle (Debug.DrawLine) | ❌ |
-| `BattleOwner.cs` | Entity lifecycle, wave control | OnGUI (Debug HUD), Gizmos | ❌ |
-| `Cone.cs` | Weapon lifecycle, active state | ConeView instantiation, Debug.DrawLine | ❌ |
-| `Weapon.cs` | Cooldown, target find, skill build | Debug.DrawLine (triangle, square) | ❌ |
-| `WeaponMono.cs` | **Pure View** | DOTween, Animancer, MMF_Player, sorting | ✅ |
+| `BattleOwner.cs` | Entity lifecycle, wave control, system wiring | Canvas setup, OnGUI debug HUD, Gizmos | ❌ Heavy |
+| `BattleTickable.cs` | Dice/Slot state machine | Coroutine view sequencing, DrawCircle (Debug.DrawLine) | ❌ |
+| `Slot.cs` | Slot activation/state, owns `Weapon` | Instantiates `ISlotView`, debug shape drawing | ❌ |
+| `Weapon.cs` | Cooldown, target find, skill build | Calls `IWeaponView`, Debug.DrawLine (triangle, square) | ❌ |
+| `ObjectWeaponView.cs` / `PureWeaponView.cs` | _none/minimal_ | DOTween/Animancer/view rendering | ✅ |
 | `DiceRollController.cs` | **Pure View** | DOTween roll animation | ✅ |
-| `ArcMove.cs` | **Pure View** | DOTween arc movement | ✅ |
-| `ConeMono.cs` | **Pure View** | DOTween, MMF_Player, stars | ✅ |
+| `ObjectSlotView.cs` / `PureSlotView.cs` | _none/minimal_ | DOTween/MMF/stars/view rendering | ✅ |
 | `SpawnerTickable.cs` | Wave spawn, budget, random bag | _none_ | ✅ (pure logic) |
-| `Dice.cs` | Cooldown/trigger state machine | _none_ | ✅ (pure logic) |
-| `BattleSetting.cs` | Config data | ConeView reference | ⚠️ (view ref in config) |
+| `Dice.cs` | Cooldown/trigger state machine | Calls `IDiceView` directly | ⚠️ |
+| `BattleSetting.cs` | Config data | View interface/prefab references | ⚠️ (view refs in config) |
 
 ### Root Cause
 
-- **No interface boundaries** between logic and Unity engine
-- **BattleSetting** holds both logic fields (`totalDice`, `diceCooldown`) and view references (`coneView`)
-- **Cone** class new's up `Weapon` (logic) AND instantiates `ConeView` (view) — a single class doing both
+- **No stable interface boundaries** between logic and Unity engine yet
+- **BattleSetting** holds both logic fields (`totalSlot`, `slotCooldownTime`, `weaponCooldown`) and view references (`slot`, `dice`, `weapon`, `attractor`, `diceControl`)
+- **Slot** new's up `Weapon` (logic) AND instantiates `ISlotView` — a single class doing both
 - **BattleTickable** manages state AND draws gizmos
 - **Weapon** calculates cooldown AND draws debug triangles
 - **BattleOwner** extends `TickSystemOwner` directly — hard to test in isolation
+
+### Current Runtime Risks
+
+- Wave progression depends on entity cleanup order in `BattleOwner`.
+- `SpawnerTickable` must guard missing/finished wave data before reading `batches[0]`.
+- `SkillFactory`/`SPU` use queued commands, so skill instance ids must be allocated independently from pending action maps.
+- `BattleOwner` owns static subscriptions and native-backed systems, so scene teardown must unsubscribe and dispose.

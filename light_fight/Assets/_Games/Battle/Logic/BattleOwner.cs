@@ -25,12 +25,14 @@ namespace _Games.Battle.Logic
         private SpawnerTickable spawner;
         private BattleTickable battle;
         private MonsterTickable monster;
+        private MovementTickable movement;
         
         private readonly Dictionary<int, int> entityToAgent = new Dictionary<int, int>();
         private readonly Dictionary<int, Monster> entityToMonster = new Dictionary<int, Monster>();
 
         private IDiceControlView diceControl;
         private bool waveSpawnComplete = false;
+        private bool isDestroyed;
         private int totalEntityInScene = 0;
         private int killed;
         
@@ -43,6 +45,8 @@ namespace _Games.Battle.Logic
                 "LevelConfig",
                 "MonsterConfig",
             });
+
+            if (isDestroyed) return;
             
             // todo: assign
             TryGetTickable(out skill);
@@ -50,7 +54,7 @@ namespace _Games.Battle.Logic
             TryGetTickable(out spawner);
             TryGetTickable(out battle);
             TryGetTickable(out monster);
-            TryGetTickable(out MovementTickable movement);
+            TryGetTickable(out movement);
             
             // todo: create instance logic
             IQuery query = new SkillQuery(agent);
@@ -124,11 +128,8 @@ namespace _Games.Battle.Logic
                     
                     break;
                 case EntityManagerBehaviourType.Removed:
-                    
-                    killed++;
-                    totalEntityInScene = entityToAgent.Count;
-                    SpawnAction();
 
+                    killed++;
                     if (entityToAgent.Remove(entity, out int agentId))
                     {
                         agent.DestroyAgent(agentId);
@@ -138,8 +139,38 @@ namespace _Games.Battle.Logic
                     {
                         monster.RemoveMonster(m);
                     }
+
+                    totalEntityInScene = entityToAgent.Count;
+                    SpawnAction();
                     break;
             }
+        }
+
+        private void OnDestroy()
+        {
+            isDestroyed = true;
+
+            if (battle != null)
+            {
+                battle.OnInitialized -= OnBattleInitialize;
+            }
+
+            if (diceControl != null)
+            {
+                diceControl.OnInitialized -= OnDiceInitialize;
+                if (battle != null) diceControl.OnSpeedChanged -= battle.SetDiceSpeed;
+            }
+
+            if (spawner != null)
+            {
+                spawner.OnWaveCompleted -= OnWaveComplete;
+                spawner.Dispose();
+            }
+
+            EntityManager.OnBehaviour -= OnEntityBehaviour;
+            EntityManager.Clear();
+            movement?.Dispose();
+            agent?.Dispose();
         }
 
         private void OnDiceInitialize()

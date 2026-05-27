@@ -4,8 +4,9 @@
 
 | Config | Type | Fields |
 |--------|------|--------|
-| BattleLogicConfig | ScriptableObject | totalDice, diceCooldown, diceDelayTrigger, weaponCooldown, weaponAttackRange, center |
-| BattleViewConfig | ScriptableObject | coneView, skillFrameConfig |
+| BattleSetting | SerializedScriptableObject | totalSlot, slotCooldownTime, slotRecoveryTime, weaponCooldown, weaponAttackRange, worldCenter, slot, dice, weapon, attractor, diceControl, skillFrameConfig |
+| BattleLogicConfig | Planned ScriptableObject | totalSlot, slotCooldownTime, weaponCooldown, weaponAttackRange, center |
+| BattleViewConfig | Planned ScriptableObject | slotView, diceView, weaponView, attractorView, diceControlView, skillFrameConfig |
 
 ## Logic Interfaces
 
@@ -13,15 +14,15 @@
 |-----------|---------|--------|
 | IWeaponLogic | Tick, Activate, Deactivate, RotateTo | OnFire |
 | IDiceLogic | Tick | OnTriggered |
-| IConeLogic | Tick, Activate, Deactivate | OnActivated, OnDeactivated |
+| ISlotLogic | Tick, Activate, Deactivate | OnActivated, OnDeactivated |
 | ISpawnerLogic | Tick, WaveSpawn | OnWaveCompleted |
 
 ## View Components
 
 | MonoBehaviour | Dependencies | Purpose |
 |--------------|--------------|---------|
-| WeaponMono | IWeaponLogic | DOTween rotate, Animancer attack, MMF feedback |
-| ConeMono | IConeLogic | Stars, highlight, weapon rotation |
+| ObjectWeaponView / PureWeaponView | IWeaponView | DOTween/Animancer weapon visuals |
+| ObjectSlotView / PureSlotView | ISlotView | Slot highlight, stars, stack visuals |
 | DiceRollController | none | Pure visual dice roll animation |
-| ArcMove | none | Arrow arc movement tween |
-| BattleLevel | IConeLogic[] | Manages cone MonoBehaviours |
+| DiceControlView | IDiceControlView | Dice speed/control UI |
+| BattleOwner | TickSystemOwner | Current scene entry and system installer |

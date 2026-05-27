@@ -18,16 +18,16 @@
 
 ## Battle Entry Point
 
-- `BattleManager` (MonoBehaviour) is the scene entry point — wired in `test scene.unity` and `ui scene.unity`.
-- Flow: `Start()` → `BattleLevel.Initialize()` → `UIBattleControlArena.Initialize()` → `Play()`.
-- Uses `UniTask` for async initialization, not coroutines.
+- Current scene entry point is `BattleOwner` (`Assets/_Games/Battle/Logic/BattleOwner.cs`) — wired in `Assets/_Games/Battle/game scene.unity`.
+- Flow: `Start()` → load Excel configs → resolve `ITickable` systems → initialize movement/agent/spawner/battle → initialize dice UI → `StartGame()`.
+- Uses `UniTask` for async config/prefab loading, plus existing coroutine-based view sequencing in `BattleTickable`.
 
 ## KITSystem Subsystems
 
 Each has its own `.asmdef` under `Assets/_KITSystem/`:
 
 - **SkillSystem** — Config/Runtime/Unitest split. ScriptableObject skill configs (`SkillConfig`, `BaseProjectileConfig`). Runtime: `ISkillAction`, trajectory actions (Bullet, Parabolic, Boomerang, Blend), shape actions (Circle, Square, Capsule, Cone), `SkillFactory`.
-- **Movement** — MPU (Movement Processing Unit) implements `ITickable`. Pluggable `IMovementAction` (Run, KnockBack, Lock, Teleport). Uses RVO2 for avoidance.
+- **Movement** — MPU (Movement Processing Unit) is wrapped by `MovementTickable`. Pluggable `IMovementAction` (Run, KnockBack, Lock, Teleport). Uses RVO2 for avoidance.
 - **Schedule** — Tick-based update (`TickSystem`, `TickGroup`, `ITickable`, `TickSystemOwner`). MPU and other systems register as `ITickable` here.
 - **Grid** — `FixedUniformGrid` / `IGridManager` for spatial queries.
 - **Utils** — Shared helpers (`CollectionUtils`, `MathUtils`, `RandomUtils`, `TextFormatter`, `TypeUtils`).
@@ -53,7 +53,7 @@ Each has its own `.asmdef` under `Assets/_KITSystem/`:
 - **`_` prefix** distinguishes first-party code (`_Games`, `_KITSystem`) from third-party.
 - **`.asmdef`** is the unit of compilation. Place new code in an existing asmdef or create one for standalone modules.
 - **No root namespace** in EditorSettings — namespaces are explicit per file.
-- Game code (`_Games/`) falls into `Assembly-CSharp` (no asmdef). KITSystem code has its own asmdefs.
+- Game code has asmdefs for current modules: `Games.Battle`, `Game.Config`, and `Games.Utils`. KITSystem code has its own asmdefs.
 
 ## Docs
 
@@ -67,16 +67,17 @@ Each has its own `.asmdef` under `Assets/_KITSystem/`:
 
 Separating Logic & View for testability. See `docs/architecture/`.
 
-- **Logic**: Pure C# POCO, no `UnityEngine` dependency. Lives in `Assets/_Games/Battle/Logic/`.
+- **Target Logic**: Pure C# POCO, no `UnityEngine` dependency. Lives under `Assets/_Games/Battle/Logic/` after refactor.
+- **Current Logic**: `BattleOwner`, `BattleTickable`, `Slot`, `Weapon`, `Dice`, `SpawnerTickable`, `Monster` still mix some Unity/view responsibilities.
 - **View**: MonoBehaviours with DOTween/MMF/Animancer. Lives in `Assets/_Games/Battle/View/`.
-- Logic talks to View via interfaces (`IWeaponLogic`, `IDiceLogic`, `IConeLogic`).
+- Logic/View separation is in progress. Current view contracts are `ISlotView`, `IDiceView`, `IWeaponView`, `IAttractorView`, `IDiceControlView`.
 
 ## Verify
 
 No CI/lint/typecheck. Verify in Unity Editor:
 1. Open project — check Console for compile errors.
 2. Run tests: Window > General > Test Runner.
-3. Play-mode test: open `test scene.unity` or `ui scene.unity` in `Assets/_Games/Battle/`.
+3. Play-mode test: open `Assets/_Games/Battle/game scene.unity`.
 
 ## Gotchas
 
