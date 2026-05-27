@@ -51,8 +51,8 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  gizmos: 1
-  center:
+  enableVisualize: 0
+  worldCenter:
     x: 0
     y: 0
   totalSlot: 4
@@ -67,6 +67,7 @@ MonoBehaviour:
   weaponCooldown: 1
   weaponAttackRange: 6
   weaponRotateDuration: 0.2
+  weaponXRotates: 000000000000000000000000b4000000b4000000b4000000
   attractorFlyTime: 1
   minAttractorRadius: 1.1
   maxAttractorRadius: 2

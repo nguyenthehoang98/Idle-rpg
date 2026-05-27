@@ -61,11 +61,11 @@ namespace _Games.Battle.Logic
             isPlaying = false;
         }
         
-        public void Tick(float dt)
+        public void Tick(float deltaTime)
         {
             if (isPlaying)
             {
-                elapsedTime -= dt;
+                elapsedTime -= deltaTime;
 
                 if (elapsedTime > 0) return;
 
@@ -76,7 +76,7 @@ namespace _Games.Battle.Logic
                         bool found = query.FindNearestTargetPosition(setting.worldCenter, setting.weaponAttackRange, out float2 targetPosition);
                         if (found)
                         {
-                            elapsedTime = RotateTo(new Vector3(targetPosition.x, targetPosition.y));
+                            elapsedTime = RotateTo(new Vector3(targetPosition.x, targetPosition.y), deltaTime);
                             phase = Phase.Rotate;
                             SkillFactory.Build(new float2(position.x, position.y), targetPosition, setting.skillFrameConfig);
                         }
@@ -132,18 +132,21 @@ namespace _Games.Battle.Logic
             Debug.DrawLine(new Vector3(v1.x, v1.y), new Vector3(v4.x, v4.y), color);
         }
 
-        public float RotateTo(Vector3 worldPos)
+        public float RotateTo(Vector3 worldPos, float deltaTime)
         {
             direction = MathUtils.NormalizeSafeVec3(worldPos - position);
+            
 #if UNITY_EDITOR
-            Vector3 offset = defaultDirection * (forwardOffset * (scaleTime - 1));
-            Vector3 center = position + offset;
-            Debug.DrawRay(
-                new Vector3(center.x, center.y),
-                new Vector3(direction.x, direction.y) * 10,
-                Color.magenta,
-                setting.weaponCooldown * 0.6f
-            );
+            if(!setting.enableVisualize)
+            {
+                Vector3 offset = defaultDirection * (forwardOffset * (scaleTime - 1));
+                Vector3 center = position + offset;
+                Debug.DrawRay(
+                    new Vector3(center.x, center.y),
+                    new Vector3(direction.x, direction.y) * 10,
+                    Color.magenta, deltaTime
+                );
+            }
 #endif
             view.Rotate(worldPos, setting.weaponRotateDuration, share.timeScale, needUpdatePosition);
 

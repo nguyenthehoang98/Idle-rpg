@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4434988134996336}
   - component: {fileID: 8595171745948838959}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,9 +55,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4274639666438931}
-  - component: {fileID: 5499414122142379415}
   - component: {fileID: 4986759943751735561}
-  m_Layer: 11
+  - component: {fileID: 599091372156397077}
+  - component: {fileID: 5502289596545311791}
+  m_Layer: 0
   m_Name: 1001 Monster (Goose)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -81,20 +82,6 @@ Transform:
   - {fileID: 2874202772555079681}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
---- !u!114 &5499414122142379415
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1381269736580933}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ad50f81b1d25c441943c37a89ba23f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _Animator: {fileID: 4986759943751735561}
-  _ActionOnDisable: 0
 --- !u!95 &4986759943751735561
 Animator:
   serializedVersion: 7
@@ -117,6 +104,38 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &599091372156397077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1381269736580933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03b124529af93554cae979e97eeebd5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 4274639666438931}
+  flip: {fileID: 4821352908150431}
+  animancer: {fileID: 5502289596545311791}
+  idleClip: {fileID: 7400000, guid: c30bd1b06963b5f459b355ba2309ecab, type: 2}
+  moveClip: {fileID: 7400000, guid: 4c2ab6c329237c64abac71979b50ee4f, type: 2}
+  attackClip: {fileID: 7400000, guid: 5d3e6a7a2e2da2849a2a1857e0f0cfad, type: 2}
+--- !u!114 &5502289596545311791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1381269736580933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad50f81b1d25c441943c37a89ba23f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Animator: {fileID: 4986759943751735561}
+  _ActionOnDisable: 0
 --- !u!1 &1467427798288346
 GameObject:
   m_ObjectHideFlags: 0
@@ -127,7 +146,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4159869826518471}
   - component: {fileID: 212847830664225712}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Torso_Move
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -213,7 +232,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4821352908150431}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Flipper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -247,7 +266,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4120412901510213}
   - component: {fileID: 212975930770168787}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Torso_Idle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -334,7 +353,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4108990547371373}
   - component: {fileID: 212794901542184798}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Leg Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -507,7 +526,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4703641212467911}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -544,7 +563,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4245079806346324}
   - component: {fileID: 212955436851318389}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: HitFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -631,7 +650,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4688545962275019}
   - component: {fileID: 212339266162806434}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Leg Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -718,7 +737,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4728271342956271}
   - component: {fileID: 212852565331993432}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Torso_Attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -805,7 +824,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2874202772555079681}
   - component: {fileID: 5756302000052263300}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: HitFeedback
   m_TagString: Untagged
   m_Icon: {fileID: 0}

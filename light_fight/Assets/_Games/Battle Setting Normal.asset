@@ -41,7 +41,7 @@ MonoBehaviour:
     - Name: diceControl
       Entry: 10
       Data: 4
-  enableVisualize: 0
+  enableVisualize: 1
   worldCenter:
     x: 0
     y: 0

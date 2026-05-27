@@ -507,7 +507,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4065861066938827}
   - component: {fileID: 7008929035813307589}
-  - component: {fileID: 2172863074344648689}
+  - component: {fileID: 4464226541951326406}
+  - component: {fileID: 4935945052068076699}
   m_Layer: 0
   m_Name: 1002 Monster (Cowboy)
   m_TagString: Untagged
@@ -554,7 +555,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &2172863074344648689
+--- !u!114 &4464226541951326406
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -563,17 +564,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 1557517638517142}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c75c0dcb6d50eb64abd727a90406ca2b, type: 3}
+  m_Script: {fileID: 11500000, guid: 03b124529af93554cae979e97eeebd5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 4065861066938827}
+  flip: {fileID: 4612659469061279}
+  animancer: {fileID: 4935945052068076699}
+  idleClip: {fileID: 7400000, guid: c30bd1b06963b5f459b355ba2309ecab, type: 2}
+  moveClip: {fileID: 7400000, guid: eec9ee88be3d6994b8a78965cf781a8d, type: 2}
+  attackClip: {fileID: 7400000, guid: 031dc6a224b7d88498de740cb361ce21, type: 2}
+--- !u!114 &4935945052068076699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1557517638517142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad50f81b1d25c441943c37a89ba23f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _Animator: {fileID: 7008929035813307589}
   _ActionOnDisable: 0
-  _PlayAutomatically: 1
-  _Animations:
-  - {fileID: 7400000, guid: c30bd1b06963b5f459b355ba2309ecab, type: 2}
-  - {fileID: 7400000, guid: eec9ee88be3d6994b8a78965cf781a8d, type: 2}
-  - {fileID: 7400000, guid: 454ebaccfeec6aa419a135ea331d9b7b, type: 2}
-  - {fileID: 7400000, guid: a659074bcaa886f489c78dcdf1aaa4df, type: 2}
 --- !u!1 &1675549045368860
 GameObject:
   m_ObjectHideFlags: 0

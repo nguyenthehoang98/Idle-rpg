@@ -25,7 +25,9 @@ namespace _Games.Battle.Logic
         private SpawnerTickable spawner;
         private BattleTickable battle;
         private MonsterTickable monster;
-        private Dictionary<int, int> entityToAgent = new Dictionary<int, int>();
+        
+        private readonly Dictionary<int, int> entityToAgent = new Dictionary<int, int>();
+        private readonly Dictionary<int, Monster> entityToMonster = new Dictionary<int, Monster>();
 
         private IDiceControlView diceControl;
         private bool waveSpawnComplete = false;
@@ -62,7 +64,8 @@ namespace _Games.Battle.Logic
                 dices = new List<IDiceView>(),
                 slots = new List<ISlotView>(),
             };
-            var attract = share.attractorParent;
+           
+            Transform attract = share.attractorParent;
             attract.SetParent(canvas.transform);
             attract.SetAsFirstSibling();
             attract.transform.localPosition = Vector3.zero;
@@ -82,8 +85,10 @@ namespace _Games.Battle.Logic
                 
                 ComponentManager<HealthData>.Add(entity, new HealthData(10));
                 ComponentManager<MonsterData>.Add(entity, new MonsterData(monsterId));
-                
-                monster.AddMonster(new Monster(share, entity, monsterId, agentData.agent));
+
+                Monster m = new Monster(share, setting, entity, monsterId, agentData.agent);
+                entityToMonster[entity] = m;
+                monster.AddMonster(m);
             });
             battle.OnInitialized += OnBattleInitialize;
             battle.Initialize(share, setting, query);
@@ -94,18 +99,27 @@ namespace _Games.Battle.Logic
             
             // todo: reset global data + register event
             SkillFactory.Initialize(skill, query);
-            EntityManager.OnEntityRemoved += i =>
+            EntityManager.OnEntityRemoved += entity =>
             {
                 killed++;
                 totalEntityInScene = entityToAgent.Count;
                 SpawnAction();
+
+                if (entityToAgent.Remove(entity, out int agentId))
+                {
+                    agent.DestroyAgent(agentId);
+                }
+
+                if (entityToMonster.Remove(entity, out Monster m))
+                {
+                    monster.RemoveMonster(m);
+                }
             };
             spawner.OnWaveCompleted += () =>
             {
                 waveSpawnComplete = true;
                 SpawnAction();
             };
-            EntityManager.OnEntityRemoved += EntityRemoved;
         }
 
         private void OnDiceInitialize()
@@ -141,7 +155,7 @@ namespace _Games.Battle.Logic
             }
         }
 
-        void SpawnAction()
+        private void SpawnAction()
         {
             if (totalEntityInScene == 0 && waveSpawnComplete)
             {
@@ -157,11 +171,6 @@ namespace _Games.Battle.Logic
                         waveSpawnComplete = false;
                 });
             }
-        }
-        
-        private void EntityRemoved(int entity)
-        {
-            if (entityToAgent.Remove(entity, out int agentId)) agent.DestroyAgent(agentId);
         }
         
         private void DrawCell(string text, Vector2 normalizedPos, float normalizedSize, Color background,

@@ -7,7 +7,7 @@ namespace _KITSystem.Schedule
     {
         [TitleGroup("Tick Group")] 
         [SerializeField] private bool isPausedDefault = true;
-        [SerializeField, Range(1, 25)] protected float loop = 1;
+        [SerializeField, Range(1, 50)] protected float loop = 1;
         [SerializeField] private int targetFPS = 30;
         [SerializeReference, HideLabel] public ITickable[] tickables;
 

@@ -1,6 +1,10 @@
 
 using System;
 using _Games.Battle.Model;
+using _Games.Config;
+using _KITSystem.ExcelConfig;
+using _KITSystem.Grid;
+using _KITSystem.Resource;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -20,29 +24,63 @@ public class Monster : IDisposable
     public readonly int agent;
 
     private BattleShare share;
+    private MonsterAnimation animation;
 
-    public Monster(BattleShare share, int entity, int configId, int agent)
+    private AgentData agentData;
+    private Vector3 position;
+    private bool isMoving = true;
+
+    public Monster(BattleShare share, BattleSetting setting, int entity, int configId, int agent)
     {
+        MonsterConfig monsterConfig = KitConfigManager.Get<MonsterConfig>();
+        monsterConfig.Find(configId, out var monsterData);
+
+        if (setting.enableVisualize) AsyncInstantiate(monsterData.Path);
+        
         this.share = share;
         this.entity = entity;
         this.configId = configId;
         this.agent = agent;
     }
 
+    private async void AsyncInstantiate(string path)
+    {
+        GameObject go = await KitLoaded.LoadAsync<GameObject>(path, true);
+        animation = KitPool.Instantiate(go).GetComponent<MonsterAnimation>();
+        animation.SetPosition(position);
+        animation.SetActive(true);
+        animation.PlayMove();
+    }
+
     public void Tick(float deltaTime)
     {
-        
+        bool f = share.agentGrid.TryGetAgent(agent, out agentData);
+        if (f)
+        {
+            position = new Vector3(agentData.position.x, agentData.position.y);
+
+            if (animation != null)
+            {
+                if (isMoving && agentData.isStopped)
+                {
+                    isMoving = false;
+                    animation.PlayIdle();
+                }
+                else if (!isMoving && !agentData.isStopped)
+                {
+                    isMoving = true;
+                    animation.PlayMove();
+                }
+                
+                animation.SetPosition(position);
+            }
+        }
     }
 
     public void Draw()
     {
-        bool f = share.agentGrid.TryGetAgent(agent, out var agentData);
-        if (f)
-        {
-            float2 position = agentData.position;
-            Color color = agentData.isStopped ? Color.red : Color.green;
-            DrawCircle(new Vector3(position.x, position.y), agentData.radius, 6, color);
-        }
+        Color color = agentData.isStopped ? Color.red : Color.green;
+        DrawCircle(position, agentData.radius, 6, color);
     }
     
     static void DrawCircle(Vector3 center, float radius, int segments, Color color)
@@ -60,6 +98,6 @@ public class Monster : IDisposable
 
     public void Dispose()
     {
-        
+        if (animation != null) animation.Dead();
     }
 }
