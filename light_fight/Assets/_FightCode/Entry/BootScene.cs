@@ -8,7 +8,7 @@ using UnityEditor;
 
 namespace _FightCode.Entry
 {
-    public class BootScene : BaseEntryScene
+    public class BootScene : EntryScene
     {
         private float elapsed = 1;
         private bool isLoadingScene = false;

@@ -35,7 +35,7 @@ namespace _FightCode.Battle.Logic
             this.center = new Vector3(setting.worldCenter.x, setting.worldCenter.y);
             this.diceNumbers = new int[setting.totalSlot];
             this.dices = new Dice[setting.totalSlot];
-            this.slots = new Slot[BattleConst.MAX_DICE_NUMBER];
+            this.slots = new Slot[Const.MAX_DICE_NUMBER];
             this.attractors = new IAttractorView[setting.totalSlot];
 
             for (int i = 0; i < setting.totalSlot; i++)
@@ -103,7 +103,7 @@ namespace _FightCode.Battle.Logic
             float delay = 0.2f;
             if (totalDiceActivate == dices.Length)
             {
-                int[] stacks = new int[BattleConst.MAX_DICE_NUMBER];
+                int[] stacks = new int[Const.MAX_DICE_NUMBER];
                 for (int i = 0; i < diceNumbers.Length; i++)
                 {
                     int number = diceNumbers[i];

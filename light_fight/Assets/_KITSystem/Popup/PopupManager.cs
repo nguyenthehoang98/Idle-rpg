@@ -71,6 +71,10 @@ namespace _KITSystem.Popup
                 popup = KitPool.Instantiate(go).GetComponent<T>();
             }
 
+#if UNITY_EDITOR
+            Debug.Log($"[Popup]: PushAsync '{typeof(T).Name}', popup='{popup}'");
+#endif
+
             SetupPopup(popup, destroyOnLoadScene);
             popups.Add(popup);
             popup.Open();

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using _FightCode.Battle.Model;
+using _FightCode.Battle.Popup;
 using _FightCode.Battle.View;
 using _KITSystem.ExcelConfig;
 using _KITSystem.Grid;
+using _KITSystem.Popup;
 using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Entity;
 using _KITSystem.SkillSystem.Runtime;
@@ -35,8 +37,9 @@ namespace _FightCode.Battle.Logic
         private int totalEntityInScene = 0;
         private int killed;
         
-        private async void Start()
+        private void Start()
         {
+            Debug.Log(@"Cần có method check config, load & validate tất cả mà ko cần play 1 level hoặc vào game");
             // todo: assign
             TryGetTickable(out skill);
             TryGetTickable(out agent);
@@ -203,7 +206,7 @@ namespace _FightCode.Battle.Logic
                     if (!spawn)
                     {
                         IsPaused = true;
-                        Debug.LogError("Complete");
+                        PopupManager.Instance.Push<WinPopup>();
                     }
                     else
                         waveSpawnComplete = false;

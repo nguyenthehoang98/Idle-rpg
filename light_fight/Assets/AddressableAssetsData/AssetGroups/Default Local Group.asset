@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: a50f3e4e90eb0714db9c34f24793f732
   m_SerializeEntries:
+  - m_GUID: 0ad15eadf8c2af842ae81a51c3764fb4
+    m_Address: WinPopup
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 132d4d65777c454448c174f201e9fae1
     m_Address: 1001 Monster
     m_ReadOnly: 0

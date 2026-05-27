@@ -254,7 +254,7 @@ namespace _FightCode.Battle.Logic
                 }
                 else
                 {
-                    Debug.Log($"Build total {monsters.Count} monsters: " + string.Join(',', monsters) + $", duration: {batch.Duration}, interval: {result[i].interval}");
+                    Debug.Log($"[Battle] Build total {monsters.Count} monsters: " + string.Join(',', monsters) + $", duration: {batch.Duration}, interval: {result[i].interval}");
                 }
 #endif
             }

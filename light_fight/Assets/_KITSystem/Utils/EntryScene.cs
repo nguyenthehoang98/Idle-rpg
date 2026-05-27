@@ -3,9 +3,9 @@ using UnityEngine.SceneManagement;
 
 namespace _KITSystem.Utils
 {
-    public abstract class BaseEntryScene : MonoBehaviour
+    public abstract class EntryScene : MonoBehaviour
     {
-         public static BaseEntryScene Instance { get; private set; }
+         public static EntryScene Instance { get; private set; }
 
         [SerializeField] protected bool enableDebug = true;
 

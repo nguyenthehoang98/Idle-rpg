@@ -26,7 +26,7 @@ namespace _FightCode.Battle.Logic
         {
             this.share = share;
             this.setting = setting;
-            float angle = -360f / BattleConst.MAX_DICE_NUMBER * order + 90;
+            float angle = -360f / Const.MAX_DICE_NUMBER * order + 90;
             Vector2 dir = new Vector2(
                 Mathf.Cos(angle * Mathf.Deg2Rad),
                 Mathf.Sin(angle * Mathf.Deg2Rad)
