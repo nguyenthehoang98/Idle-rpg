@@ -2,7 +2,6 @@
 using _FightCode.Battle.Model;
 using _FightCode.Battle.Popup;
 using _FightCode.Battle.View;
-using _KITSystem.ExcelConfig;
 using _KITSystem.Grid;
 using _KITSystem.Popup;
 using _KITSystem.Schedule;
@@ -206,7 +205,7 @@ namespace _FightCode.Battle.Logic
                     if (!spawn)
                     {
                         IsPaused = true;
-                        PopupManager.Instance.Push<WinPopup>();
+                        PopupManager.Instance.Push<BattleWinPopup>();
                     }
                     else
                         waveSpawnComplete = false;

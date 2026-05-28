@@ -1,9 +1,8 @@
-using System;
 using _FightCode.Utils;
 using _KITSystem.Popup;
 using _KITSystem.Utils;
 
-namespace _FightCode.Battle.Popup
+namespace _FightCode.Shared
 {
     public class WinPopup : PopupBase
     {

@@ -1,12 +1,10 @@
 using _KITSystem.ExcelConfig;
 using _KITSystem.Utils;
-using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor.SceneManagement;
 using UnityEditor;
-#endif
+using UnityEditor.SceneManagement;
+using UnityEngine;
 
-namespace _FightCode.Entry
+namespace _FightCode.Shared
 {
     public class BootScene : EntryScene
     {

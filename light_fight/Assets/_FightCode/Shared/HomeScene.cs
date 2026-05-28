@@ -1,7 +1,7 @@
 using _KITSystem.Utils;
 using UnityEngine;
 
-namespace _FightCode.Entry
+namespace _FightCode.Shared
 {
     public class HomeScene : MonoBehaviour
     {

@@ -1,12 +1,13 @@
 {
-    "name": "FightCode.Entry",
+    "name": "FightCode.Shared",
     "rootNamespace": "",
     "references": [
         "GUID:82d1e9f4e71141c4983602af7fd5f675",
         "GUID:de832e2fa4f411e408f63d8caed52dfe",
         "GUID:e590b1c923606d846a63f147c5ff232d",
         "GUID:f51ebe6a0ceec4240a699833d6309b23",
-        "Games.Utils"
+        "GUID:dac729895ed631e4291f57b83dbe4c95",
+        "GUID:69b84b2120679b745857f91a4663dfac"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
