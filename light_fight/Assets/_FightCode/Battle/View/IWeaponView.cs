@@ -7,6 +7,7 @@ namespace _FightCode.Battle.View
     {
         IWeaponView Instantiate(int order, BattleSetting setting, int xPivotAngle, int zPivotAngle, ISlotView slotView);
         void Play(float timeScale);
+        void Equip(int weaponId, int weaponLevel);
         float Activate(float delayActivate, float timeScale);
         float Deactivate(float delayActivate, float timeScale);
         void Rotate(Vector3 goal, float duration, float timeScale, bool needUpdatePosition);

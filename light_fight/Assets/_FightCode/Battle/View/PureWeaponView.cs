@@ -15,6 +15,10 @@ namespace _FightCode.Battle.View
             
         }
 
+        public void Equip(int weaponId, int weaponLevel)
+        {
+        }
+
         public float Activate(float delayActivate, float timeScale)
         {
             return 0;

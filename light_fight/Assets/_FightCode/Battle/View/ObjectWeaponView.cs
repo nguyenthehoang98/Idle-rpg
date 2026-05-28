@@ -1,4 +1,7 @@
 ﻿using _FightCode.Battle.Model;
+using _FightCode.Config;
+using _KITSystem.ExcelConfig;
+using _KITSystem.Resource;
 using _KITSystem.Utils;
 using MoreMountains.Feedbacks;
 using Sirenix.OdinInspector;
@@ -17,11 +20,11 @@ namespace _FightCode.Battle.View
         [SerializeField] private MMF_Player activateFeedback;
         [SerializeField] private MMF_Player deactivateFeedback;
         [TitleGroup("Element")]
-        [SerializeField] private Transform muzzle;
         [SerializeField] private Transform zPivot;
         [SerializeField] private Transform xPivot;
-        [TitleGroup("Renderer")] 
-        [SerializeField] private WeaponAnimation weapon;
+        [SerializeField] private Transform weaponParent;
+        
+        private WeaponAnimation weapon;
 
         private Vector3 zEulerAngles;
         private Vector3 zLocalPosition;
@@ -54,11 +57,27 @@ namespace _FightCode.Battle.View
             playFeedback.PlayFeedbacks();
         }
 
+        public async void Equip(int weaponId, int weaponLevel)
+        {
+            if (weapon != null)
+            {
+                KitPool.Destroy(weapon.gameObject);
+                weapon = null;
+            }
+
+            WeaponConfig weaponConfig = KitConfigManager.Get<WeaponConfig>();
+            if (weaponConfig.Find(weaponId, out WeaponData weaponData))
+            {
+                GameObject go = await KitLoaded.LoadAsync<GameObject>(weaponData.Name);
+                weapon = KitPool.Instantiate(go, weaponParent).GetComponent<WeaponAnimation>();
+            }
+        }
+
         public float Activate(float delayActivate, float timeScale)
         {
             this.WaitInvoke(delayActivate / timeScale, () =>
             {
-                weapon.Activate();
+                if(weapon != null) weapon.Activate();
                 
                 activateFeedback.TimescaleMultiplier = timeScale;
                 
@@ -69,7 +88,7 @@ namespace _FightCode.Battle.View
 
         public float Deactivate(float delayActivate,float timeScale)
         {
-            weapon.Stop();
+            if(weapon != null) weapon.Stop();
             
             float waitTimePlayFeedback = delayActivate / timeScale;
             
@@ -82,7 +101,7 @@ namespace _FightCode.Battle.View
             
             this.WaitInvoke(waitTimePlayFeedback, () =>
             {
-                weapon.Deactivate();
+                if(weapon != null) weapon.Deactivate();
 
                 deactivateFeedback.TimescaleMultiplier = timeScale;
                 
@@ -105,13 +124,6 @@ namespace _FightCode.Battle.View
             float endAngle = currentAngle + deltaAngle;
             bool currentFlipRot = Mathf.Abs(Mathf.DeltaAngle(0f, currentAngle)) > 90f;
             
-#if UNITY_EDITOR
-            Vector3 v1 = position + (muzzle.position - position).normalized;
-            Vector3 v2 = position + direction.normalized;
-            Debug.DrawLine(position, v1, Color.yellow, 0.5f);
-            Debug.DrawLine(position, v2, Color.yellow, 0.5f);
-            Debug.DrawLine(v1, v2, Color.yellow, 0.5f);
-#endif
             Vector3 localPositionOffset = Vector3.Lerp(
                 localPositionOffsetMin, localPositionOffsetMax,
                 Mathf.Clamp01(Mathf.Abs(deltaAngle) / 180f)
@@ -148,7 +160,7 @@ namespace _FightCode.Battle.View
                 }
             }, () =>
             {
-                weapon.PlayAttack(timeScale);
+                if(weapon != null) weapon.PlayAttack(timeScale);
             });
         }
 

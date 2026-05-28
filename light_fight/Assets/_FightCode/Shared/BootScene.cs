@@ -30,6 +30,7 @@ namespace _FightCode.Shared
                 "SkillConfig",
                 "LevelConfig",
                 "MonsterConfig",
+                "WeaponConfig",
             });
 
             ChangeSceneAsync("Home Scene");

@@ -26,6 +26,9 @@ namespace _FightCode.Battle.Logic
         private bool needUpdatePosition;
         private bool isPlaying;
 
+        private int weaponId;
+        private int weaponLevel;
+
         public Weapon(int order, ISlotView slotView, BattleShare share, BattleSetting setting, IQuery query, Vector3 direction)
         {
             this.share = share;
@@ -36,7 +39,18 @@ namespace _FightCode.Battle.Logic
             this.view = setting.weapon.Instantiate(order, setting, 0, 90, slotView);
         }
 
-        public void Play() => view.Play(share.timeScale);
+        public void Equip(int weaponId, int weaponLevel)
+        {
+            this.weaponId = weaponId;
+            this.weaponLevel = weaponLevel;
+            view.Equip(weaponId, weaponLevel);
+        }
+        
+        public void Play()
+        {
+            view.Play(share.timeScale);
+            Equip(1001, 1);
+        }
         
         public void Draw(float scale, Color color)
         {

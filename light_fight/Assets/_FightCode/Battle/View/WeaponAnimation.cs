@@ -11,8 +11,9 @@ namespace _FightCode.Battle.View
         [SerializeField] private SortingGroup sortingGroup;
         [SerializeField] private NamedAnimancerComponent animancer;
         [SerializeField] private AnimationClip attackClip;
+
+        private AnimancerState animancerState;
         
-        AnimancerState animancerState;
 
         public void PlayAttack(float timeScale)
         {

@@ -35,6 +35,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b764d4b204dd98d4796757f795de9408
+    m_Address: 1001 Weapon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cded5a9a13389914484a02e9fa2b9246
+    m_Address: WeaponConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d730643e83691a144a8a76505aa87442
     m_Address: MonsterConfig
     m_ReadOnly: 0

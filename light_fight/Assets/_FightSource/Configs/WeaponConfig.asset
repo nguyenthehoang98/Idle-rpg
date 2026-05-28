@@ -17,7 +17,7 @@ MonoBehaviour:
   weapons:
   - id: 1001
     name: 'Blunderbuss '
-    path: 
+    path: 1001 Weapon
     skillId: 100001
     baseAttack: 20
     attackBonusLevel: 5
