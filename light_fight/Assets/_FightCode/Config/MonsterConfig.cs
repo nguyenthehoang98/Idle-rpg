@@ -10,7 +10,7 @@ namespace _FightCode.Config
 {
     [ExcelAsset(
         ExcelPath = "Assets/Excels/MonsterConfig.xlsx",
-        ConfigPath = "Assets/_Sources/Configs/MonsterConfig.asset")]
+        ConfigPath = "Assets/_FightSource/Configs/MonsterConfig.asset")]
     public class MonsterConfig : BaseConfig
     {
         [SerializeField] private List<MonsterData> monsters = new List<MonsterData>();

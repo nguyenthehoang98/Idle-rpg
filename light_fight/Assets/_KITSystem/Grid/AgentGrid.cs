@@ -19,7 +19,6 @@ namespace _KITSystem.Grid
         [SerializeField] private bool locked;
         [SerializeField] private bool enableGizmos;
 #endif
-        [SerializeField] private float defaultAgentStopDistance = 3;
         [SerializeField] private float defaultAgentRadius = 0.5f;
         [SerializeField] private float interval = 0.5f;
         [SerializeField, Range(0.1f, 0.9f)] private float multiplierIgnoreCheckDistance = 0.2f;
@@ -31,7 +30,6 @@ namespace _KITSystem.Grid
         private List<int> agents = new List<int>();
         private Simulator simulator;
         private IGridManager gridManager;
-        private float stopDistanceSq;
         private float ignoreCheckNeighborDistanceSq;
         private float deltaDistanceStuckSq;
         
@@ -108,7 +106,6 @@ namespace _KITSystem.Grid
             simulator = new Simulator();
             simulator.SetTimeStep(0.25f);
             simulator.SetAgentDefaults(5f, 10, 10f, 10f, defaultAgentRadius, 1f, float2.zero);
-            stopDistanceSq = defaultAgentStopDistance * defaultAgentStopDistance;
             float a = 2 * (1 + multiplierIgnoreCheckDistance) * defaultAgentRadius;
             ignoreCheckNeighborDistanceSq = a * a;
             deltaDistanceStuckSq = deltaDistanceStuck * deltaDistanceStuck;
@@ -130,7 +127,7 @@ namespace _KITSystem.Grid
 
                 gridManager.Insert(agent, new float2(position.x, position.y));
 
-                if (math.lengthsq(position) < stopDistanceSq)
+                if (math.lengthsq(position) < temp.stopDistanceSq)
                 {
                     temp.isStopped = true;
                     containers[agent] = temp;
@@ -205,17 +202,19 @@ namespace _KITSystem.Grid
             }
         }
 
-        public AgentData CreateAgent(int entityId, Vector2 position, float radius)
+        public AgentData CreateAgent(int entityId, Vector2 position, float radius, float speed, float stopDistance)
         {
             simulator.EnsureCompleted();
             int agent = simulator.AddAgent(position);
             simulator.SetAgentRadius(agent, radius);
+            simulator.SetAgentMaxSpeed(agent, speed);
             agents.Add(agent);
             AgentData data = new AgentData
             {
                 entity = entityId,
                 agent = agent,
                 radius = radius,
+                stopDistanceSq = stopDistance * stopDistance,
                 position = new float2(position.x, position.y)
             };
             containers.Add(agent, data);
@@ -253,9 +252,9 @@ namespace _KITSystem.Grid
         
         public float2 position;
         public float radius;
+        public float stopDistanceSq;
 
         public bool isStopped;
-
         public int stuckFrames;
     }
 }

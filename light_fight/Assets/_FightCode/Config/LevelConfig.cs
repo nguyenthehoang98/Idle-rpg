@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using ExcelExtension;
 using UnityEngine;
@@ -7,7 +7,7 @@ namespace _FightCode.Config
 {
     [ExcelAsset(
         ExcelPath = "Assets/Excels/LevelConfig.xlsx",
-        ConfigPath = "Assets/_Sources/Configs/LevelConfig.asset")]
+        ConfigPath = "Assets/_FightSource/Configs/LevelConfig.asset")]
     public class LevelConfig : BaseConfig
     {
         [SerializeField] private List<LevelBatch> spawns = new List<LevelBatch>();

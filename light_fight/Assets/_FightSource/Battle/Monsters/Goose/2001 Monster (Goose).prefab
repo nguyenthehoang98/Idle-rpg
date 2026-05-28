@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 599091372156397077}
   - component: {fileID: 5502289596545311791}
   m_Layer: 0
-  m_Name: 1001 Monster (Goose)
+  m_Name: 2001 Monster (Goose)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

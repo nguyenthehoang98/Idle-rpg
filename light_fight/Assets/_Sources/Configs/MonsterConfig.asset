@@ -15,11 +15,11 @@ MonoBehaviour:
   fileUrl: 
   enable: 1
   monsters:
-  - id: 2001
+  - id: 1001
     isRanged: 0
     name: Goose
-    path: 2001 Monster
-    skillId: 3001
+    path: 1001 Monster
+    skillId: 10010
     skillLevel: 1
     skillCooldown: 3
     radius: 0.4
@@ -28,11 +28,11 @@ MonoBehaviour:
     attackDistance: 1.2
     attack: 1
     health: 20
-  - id: 2002
+  - id: 1002
     isRanged: 1
     name: Cowboy
-    path: 2002 Monster
-    skillId: 3002
+    path: 1002 Monster
+    skillId: 10020
     skillLevel: 1
     skillCooldown: 3
     radius: 0.4

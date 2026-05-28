@@ -7,7 +7,7 @@ namespace _FightCode.Config
 {
     [ExcelAsset(
         ExcelPath = "Assets/Excels/SkillConfig.xlsx",
-        ConfigPath = "Assets/_Sources/Configs/SkillConfig.asset")]
+        ConfigPath = "Assets/_FightSource/Configs/SkillConfig.asset")]
     public class SkillConfig : BaseConfig
     {
         [SerializeField] private List<SkillData> skills = new List<SkillData>();

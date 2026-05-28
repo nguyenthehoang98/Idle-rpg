@@ -149,7 +149,7 @@ namespace _FightCode.Battle.Logic
                     int randomIndex = RandomUtils.Range(0, batch.monsters.Count);
                     int monsterID = batch.monsters.ElementAt(randomIndex).Key;
                     monsterConfig.Find(monsterID, out var monsterData);
-                    onCreateMonster(new RequestCreateMonster(monsterID, monsterData.Radius, position));
+                    onCreateMonster(new RequestCreateMonster(monsterData, position));
 
                     batch.monsters[monsterID]--;
                     if (batch.monsters[monsterID] <= 0)
@@ -340,15 +340,13 @@ namespace _FightCode.Battle.Logic
     
     public struct RequestCreateMonster
     {
-        public readonly int MonsterID;
-        public readonly float Radius;
+        public readonly MonsterData MonsterData;
         public readonly float2 Position;
 
-        public RequestCreateMonster(int monsterID, float radius, float2 position)
+        public RequestCreateMonster(MonsterData monsterData, float2 position)
         {
-            MonsterID = monsterID;
-            Radius = radius;
             Position = position;
+            MonsterData = monsterData;
         }
     }
 }

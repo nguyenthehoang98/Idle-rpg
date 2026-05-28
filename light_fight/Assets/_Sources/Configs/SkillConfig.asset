@@ -15,7 +15,7 @@ MonoBehaviour:
   fileUrl: 
   enable: 1
   skills:
-  - id: 3001
+  - id: 10010
     level: 1
     path: 
     name: Skill 01
@@ -23,7 +23,7 @@ MonoBehaviour:
     flatDamageBonusLevel: 0
     baseScaleDamage: 1
     scaleDamageBonusLevel: 0
-  - id: 3002
+  - id: 10020
     level: 1
     path: 
     name: Skill 02

@@ -510,7 +510,7 @@ GameObject:
   - component: {fileID: 4464226541951326406}
   - component: {fileID: 4935945052068076699}
   m_Layer: 0
-  m_Name: 1002 Monster (Cowboy)
+  m_Name: 2002 Monster (Cowboy)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

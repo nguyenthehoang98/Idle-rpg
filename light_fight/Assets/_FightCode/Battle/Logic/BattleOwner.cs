@@ -70,12 +70,16 @@ namespace _FightCode.Battle.Logic
             agent.Initialize();
             spawner.Initialize(1, request =>
             {
+                Config.MonsterData monsterData = request.MonsterData;
                 float2 position = request.Position;
-                float radius = request.Radius;
+                float radius = monsterData.Radius;
+                float speed = monsterData.MoveSpeed;
+                float stopDistance = monsterData.StopMoveDistance;
                 
                 int entity = EntityManager.CreateEntity();
-                int monsterId = request.MonsterID;
-                AgentData agentData = agent.CreateAgent(entity, position, radius);
+                int monsterId = monsterData.MonsterId;
+                
+                AgentData agentData = agent.CreateAgent(entity, position, radius, speed, stopDistance);
                 entityToAgent[entity] = agentData.agent;
                 
                 ComponentManager<HealthData>.Add(entity, new HealthData(20));
