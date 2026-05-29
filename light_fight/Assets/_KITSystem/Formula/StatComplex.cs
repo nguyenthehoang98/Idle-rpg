@@ -8,36 +8,23 @@ namespace _KITSystem.Formula
     {
         private readonly Dictionary<StatType, StatValue> stats = new Dictionary<StatType, StatValue>();
 
-        public void SetBase(StatType statType, float value)
-        {
-            GetOrCreate(statType).SetBase(value);
-        }
+        public void SetBase(StatType statType, float value) 
+            => GetOrCreate(statType).SetBase(value);
 
-        public void AddBase(StatType statType, float value)
-        {
-            GetOrCreate(statType).AddBase(value);
-        }
+        public void AddBase(StatType statType, float value) 
+            => GetOrCreate(statType).AddBase(value);
 
         public float GetBase(StatType statType)
-        {
-            return stats.TryGetValue(statType, out StatValue stat) ? stat.BaseValue : 0;
-        }
+            => stats.TryGetValue(statType, out StatValue stat) ? stat.BaseValue : 0;
 
         public float GetValue(StatType statType)
-        {
-            return stats.TryGetValue(statType, out StatValue stat) ? stat.GetValue() : 0;
-        }
-        
+            => stats.TryGetValue(statType, out StatValue stat) ? stat.GetValue() : 0;
 
         public void AddModifier(StatModifier modifier)
-        {
-            GetOrCreate(modifier.StatType).AddModifier(modifier);
-        }
+            => GetOrCreate(modifier.StatType).AddModifier(modifier);
 
         public bool RemoveModifier(StatModifier modifier)
-        {
-            return stats.TryGetValue(modifier.StatType, out StatValue stat) && stat.RemoveModifier(modifier);
-        }
+            => stats.TryGetValue(modifier.StatType, out StatValue stat) && stat.RemoveModifier(modifier);
 
         public int RemoveModifiersFrom(object source)
         {
@@ -51,7 +38,6 @@ namespace _KITSystem.Formula
 
             return removed;
         }
-
         
         public void ClearModifiers(StatType statType)
         {

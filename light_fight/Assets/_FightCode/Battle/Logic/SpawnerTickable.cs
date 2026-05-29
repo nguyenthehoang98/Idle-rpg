@@ -226,7 +226,7 @@ namespace _FightCode.Battle.Logic
 #endif
                     if (!foundSkill) break;
                     
-                    int power = FormulaUtils.PowerMonster(monsterData, skillData, monsterData.SkillLevel);
+                    int power = FormulaUtils.MonsterPower(monsterData, skillData);
                     if (power <= 0 || power > powerBudget)
                         continue;
                     powerBudget -= power;

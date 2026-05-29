@@ -16,28 +16,38 @@ MonoBehaviour:
   enable: 1
   monsters:
   - id: 2001
-    isRanged: 0
     name: Goose
     path: 2001 Monster
+    isRanged: 0
     skillId: 3001
     skillLevel: 1
-    skillCooldown: 3
     radius: 0.4
     moveSpeed: 3
     stopMoveDistance: 3
     attackDistance: 1.2
     attack: 1
     health: 20
+    defense: 0
+    attackSpeed: 0
+    criticalRate: 0
+    criticalDamage: 0
+    damageMultiplier: 0
+    armorPenPercent: 0
   - id: 2002
-    isRanged: 1
     name: Cowboy
     path: 2002 Monster
+    isRanged: 1
     skillId: 3002
     skillLevel: 1
-    skillCooldown: 3
     radius: 0.4
     moveSpeed: 2.25
     stopMoveDistance: 6
     attackDistance: 4
     attack: 2
     health: 18
+    defense: 0
+    attackSpeed: 0
+    criticalRate: 0
+    criticalDamage: 0
+    damageMultiplier: 0
+    armorPenPercent: 0

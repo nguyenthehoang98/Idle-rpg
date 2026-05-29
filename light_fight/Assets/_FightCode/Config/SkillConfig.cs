@@ -41,8 +41,8 @@ namespace _FightCode.Config
         [SerializeField] private float baseScaleDamage;
         [SerializeField] private float scaleDamageBonusLevel;
         
-        public float FlatDamage(int lv) => baseFlatDamage + lv * flatDamageBonusLevel;
-        public float ScaleDamage(int lv) => baseScaleDamage + lv * scaleDamageBonusLevel;
+        public float FlatDamage() => baseFlatDamage + level * flatDamageBonusLevel;
+        public float ScaleDamage() => baseScaleDamage + level * scaleDamageBonusLevel;
 
         public int SkillId => id;
 

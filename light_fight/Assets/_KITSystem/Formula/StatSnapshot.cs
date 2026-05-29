@@ -47,5 +47,25 @@ namespace _KITSystem.Formula
             float damageTakenRate = Math.Max(0.0001f, 1f - DamageReduction());
             return Math.Max(0, Health) / damageTakenRate;
         }
+
+        public float DamageDealtTo(StatSnapshot target, float skillScaleDamage = 1f, float skillFlatDamage = 0)
+        {
+            float skillDamage = Attack * Math.Max(0, skillScaleDamage) + Math.Max(0, skillFlatDamage);
+            float criticalFactor = 1f + CriticalRate * CriticalDamage;
+            float rawDamage = skillDamage * criticalFactor * DamageMultiplier;
+
+            float effectiveArmorPen = Math.Max(0, Math.Min(1, ArmorPenPercent));
+            float targetEffectiveDefense = Math.Max(0, target.Defense * (1f - effectiveArmorPen));
+            float damageReduction = targetEffectiveDefense / (targetEffectiveDefense + DEFENSE_K);
+
+            return rawDamage * (1f - damageReduction);
+        }
+
+        public float HitCountToKill(StatSnapshot target, float skillScaleDamage = 1f, float skillFlatDamage = 0)
+        {
+            float damagePerHit = DamageDealtTo(target, skillScaleDamage, skillFlatDamage);
+            if (damagePerHit <= 0) return float.PositiveInfinity;
+            return Math.Max(0, target.Health) / damagePerHit;
+        }
     }
 }
