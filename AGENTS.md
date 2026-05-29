@@ -57,6 +57,12 @@ Each has its own `.asmdef` under `Assets/_KITSystem/`:
 
 ## Docs
 
+Before implementing gameplay systems, read:
+
+- docs/architecture/StatSystem.md
+
+Gameplay systems must follow the formulas and rules defined in these documents.
+
 | Path | Purpose |
 |------|---------|
 | `docs/plans/` | Implementation plans (Logic/View separation, Free Agent Group) |
