@@ -5,6 +5,7 @@ using System.Reflection;
 using ExcelExtension;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _FightCode.Config
 {
@@ -14,14 +15,16 @@ namespace _FightCode.Config
     public class WeaponConfig : BaseConfig
     {
         [SerializeField] private List<WeaponData> weapons = new List<WeaponData>();
+        
         private Dictionary<int, WeaponData> cacheWeaponData;
     
         public override void OnMapValue()
         {
             cacheWeaponData = new Dictionary<int, WeaponData>();
+            
             foreach (var m in weapons)
             {
-                cacheWeaponData.Add(m.Id, m);
+                cacheWeaponData.Add(m.weaponId, m);
             }
         }
 
@@ -32,24 +35,18 @@ namespace _FightCode.Config
     }
 
     [Serializable]
-    public class WeaponData
+    public struct WeaponData
     {
-        [SerializeField] private int id;
-        [SerializeField] private string name;
-        [SerializeField] private string path;
-        [SerializeField] private int skillId;
+        public int weaponId;
+        public string weaponName;
+        public string path;
+        public int skillId;
         [SerializeField] private float baseAttack;
         [SerializeField] private float attackBonusLevel;
         [SerializeField] private float basePrice;
         [SerializeField] private float priceBonusLevel;
-        [SerializeField] private string[] jsonUnlocks;
 
-        public int Id => id;
-        public string Name => name;
-        public string Path => path;
-        public int SkillId => skillId;
         public int Attack(int level) => (int)(baseAttack + attackBonusLevel * level);
         public int Price(int level) => (int)(basePrice + priceBonusLevel * level);
-        public string[] Unlocks => jsonUnlocks;
     }
 }

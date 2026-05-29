@@ -69,7 +69,7 @@ namespace _FightCode.Battle.View
             
             if (weaponConfig.Find(weaponId, out WeaponData weaponData))
             {
-                GameObject go = await KitLoaded.LoadAsync<GameObject>(weaponData.Path);
+                GameObject go = await KitLoaded.LoadAsync<GameObject>(weaponData.path);
             
                 weapon = Instantiate(go, weaponParent).GetComponent<WeaponAnimation>();
             }

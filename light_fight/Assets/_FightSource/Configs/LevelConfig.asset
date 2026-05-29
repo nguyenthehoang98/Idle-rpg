@@ -20,124 +20,4728 @@ MonoBehaviour:
     batchId: 1
     isBoss: 0
     delayTime: 0
-    duration: 10
-    power: 54
-    spawnId: Spawn_Random
+    duration: 12
+    power: 111
+    weights: []
+    data:
+    - 2005_3
+    - 2004_1
+  - levelId: 1
+    waveId: 1
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 112
+    weights: []
+    data:
+    - 2002_2
+    - 2009_3
+  - levelId: 1
+    waveId: 2
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 12
+    power: 121
+    weights: []
+    data:
+    - 2001_3
+    - 2002_1
+  - levelId: 1
+    waveId: 2
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 122
+    weights: []
+    data:
+    - 2009_2
+    - 2010_3
+  - levelId: 1
+    waveId: 2
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 123
+    weights: []
+    data:
+    - 2004_5
+    - 2009_1
+  - levelId: 1
+    waveId: 2
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 124
+    weights: []
+    data:
+    - 2008_4
+    - 2010_1
+  - levelId: 1
+    waveId: 2
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 125
+    weights: []
+    data:
+    - 2003_4
+    - 2007_2
+  - levelId: 1
+    waveId: 3
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 15
+    power: 131
+    weights: []
+    data:
+    - 2006_2
+    - 2002_2
+  - levelId: 1
+    waveId: 3
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 132
+    weights: []
+    data:
+    - 2002_4
+    - 2006_3
+  - levelId: 1
+    waveId: 3
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 133
+    weights: []
+    data:
+    - 2005_5
+    - 2001_3
+  - levelId: 1
+    waveId: 4
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 18
+    power: 141
+    weights: []
+    data:
+    - 2002_4
+    - 2009_3
+  - levelId: 1
+    waveId: 4
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 142
+    weights: []
+    data:
+    - 2010_3
+    - 2006_3
+  - levelId: 1
+    waveId: 5
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 12
+    power: 151
+    weights: []
+    data:
+    - 2004_2
+    - 2005_1
+  - levelId: 1
+    waveId: 5
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 152
+    weights: []
+    data:
+    - 2002_4
+    - 2007_2
+  - levelId: 1
+    waveId: 6
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 14
+    power: 161
+    weights: []
+    data:
+    - 2006_3
+    - 2006_3
+  - levelId: 1
+    waveId: 6
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 162
+    weights: []
+    data:
+    - 2005_3
+    - 2002_3
+  - levelId: 1
+    waveId: 6
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 163
+    weights: []
+    data:
+    - 2004_5
+    - 2003_2
+  - levelId: 1
+    waveId: 6
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 164
+    weights: []
+    data:
+    - 2005_3
+    - 2009_3
+  - levelId: 1
+    waveId: 7
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 12
+    power: 171
+    weights: []
+    data:
+    - 2004_4
+    - 2001_2
+  - levelId: 1
+    waveId: 7
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 172
+    weights: []
+    data:
+    - 2005_3
+    - 2002_3
+  - levelId: 1
+    waveId: 7
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 173
+    weights: []
+    data:
+    - 2006_5
+    - 2004_2
+  - levelId: 1
+    waveId: 7
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 174
+    weights: []
+    data:
+    - 2008_4
+    - 2003_1
+  - levelId: 1
+    waveId: 8
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 20
+    power: 181
+    weights: []
+    data:
+    - 2009_5
+    - 2005_3
+  - levelId: 1
+    waveId: 8
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 182
+    weights: []
+    data:
+    - 2007_3
+    - 2006_1
+  - levelId: 1
+    waveId: 8
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 183
+    weights: []
+    data:
+    - 2009_2
+    - 2008_1
+  - levelId: 1
+    waveId: 9
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 14
+    power: 191
+    weights: []
+    data:
+    - 2003_2
+    - 2007_2
+  - levelId: 1
+    waveId: 9
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 192
+    weights: []
+    data:
+    - 2007_5
+    - 2010_3
+  - levelId: 1
+    waveId: 10
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 20
+    power: 201
+    weights: []
+    data:
+    - 2001_4
+    - 2002_3
+  - levelId: 1
+    waveId: 10
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 202
+    weights: []
+    data:
+    - 2006_4
+    - 2002_2
+  - levelId: 1
+    waveId: 10
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 203
+    weights: []
+    data:
+    - 2003_2
+    - 2008_3
+  - levelId: 1
+    waveId: 10
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 204
+    weights: []
+    data:
+    - 2005_3
+    - 2009_3
+  - levelId: 1
+    waveId: 11
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 16
+    power: 211
+    weights: []
+    data:
+    - 2009_3
+    - 2010_1
+  - levelId: 1
+    waveId: 11
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 212
+    weights: []
+    data:
+    - 2006_2
+    - 2003_3
+  - levelId: 1
+    waveId: 12
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 19
+    power: 221
+    weights: []
+    data:
+    - 2001_4
+    - 2002_2
+  - levelId: 1
+    waveId: 12
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 222
+    weights: []
+    data:
+    - 2004_3
+    - 2001_3
+  - levelId: 1
+    waveId: 12
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 223
+    weights: []
+    data:
+    - 2002_5
+    - 2002_1
+  - levelId: 1
+    waveId: 12
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 224
+    weights: []
+    data:
+    - 2009_3
+    - 2003_3
+  - levelId: 1
+    waveId: 13
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 20
+    power: 231
+    weights: []
+    data:
+    - 2003_5
+    - 2005_1
+  - levelId: 1
+    waveId: 13
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 232
+    weights: []
+    data:
+    - 2009_4
+    - 2004_2
+  - levelId: 1
+    waveId: 13
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 233
+    weights: []
+    data:
+    - 2006_5
+    - 2008_1
+  - levelId: 1
+    waveId: 13
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 234
+    weights: []
+    data:
+    - 2004_2
+    - 2004_2
+  - levelId: 1
+    waveId: 13
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 235
+    weights: []
+    data:
+    - 2001_3
+    - 2010_3
+  - levelId: 1
+    waveId: 14
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 12
+    power: 241
+    weights: []
+    data:
+    - 2002_3
+    - 2001_1
+  - levelId: 1
+    waveId: 14
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 242
+    weights: []
+    data:
+    - 2001_2
+    - 2006_3
+  - levelId: 1
+    waveId: 14
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 243
+    weights: []
+    data:
+    - 2004_5
+    - 2005_1
+  - levelId: 1
+    waveId: 15
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 19
+    power: 251
+    weights: []
+    data:
+    - 2004_5
+    - 2008_1
+  - levelId: 1
+    waveId: 15
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 252
+    weights: []
+    data:
+    - 2002_5
+    - 2002_2
+  - levelId: 1
+    waveId: 15
+    batchId: 3
+    isBoss: 1
+    delayTime: 1
+    duration: 19
+    power: 253
+    weights: []
+    data:
+    - 2007_5
+    - 2007_3
+  - levelId: 2
+    waveId: 1
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 12
+    power: 211
+    weights: []
+    data:
+    - 2007_10
+    - 2006_2
+  - levelId: 2
+    waveId: 1
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 212
+    weights: []
+    data:
+    - 2004_5
+    - 2004_6
+  - levelId: 2
+    waveId: 2
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 14
+    power: 221
+    weights: []
+    data:
+    - 2007_6
+    - 2003_5
+  - levelId: 2
+    waveId: 2
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 222
+    weights: []
+    data:
+    - 2004_7
+    - 2002_6
+  - levelId: 2
+    waveId: 2
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 223
+    weights: []
+    data:
+    - 2002_9
+    - 2001_6
+  - levelId: 2
+    waveId: 2
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 224
+    weights: []
     data:
     - 2001_10
-    - 2002_2
-    weights:
-    - {x: 2001, y: 10}
-    - {x: 2002, y: 2}
-  - levelId: 1
-    waveId: 2
-    batchId: 1
-    isBoss: 0
-    delayTime: 0
-    duration: 10
-    power: 54
-    spawnId: Spawn_Random
-    data:
     - 2002_3
-    - 2001_1
-    weights:
-    - {x: 2002, y: 3}
-    - {x: 2001, y: 1}
-  - levelId: 1
+  - levelId: 2
     waveId: 2
-    batchId: 2
+    batchId: 5
     isBoss: 0
-    delayTime: 0
-    duration: 10
-    power: 55
-    spawnId: Spawn_Random
+    delayTime: 1
+    duration: 14
+    power: 225
+    weights: []
     data:
-    - 2002_3
-    - 2001_1
-    weights:
-    - {x: 2002, y: 3}
-    - {x: 2001, y: 1}
-  - levelId: 1
-    waveId: 2
-    batchId: 3
-    isBoss: 0
-    delayTime: 0
-    duration: 10
-    power: 56
-    spawnId: Spawn_Random
-    data:
-    - 2002_3
-    - 2001_1
-    weights:
-    - {x: 2002, y: 3}
-    - {x: 2001, y: 1}
-  - levelId: 1
-    waveId: 2
-    batchId: 4
-    isBoss: 0
-    delayTime: 0
-    duration: 10
-    power: 57
-    spawnId: Spawn_Random
-    data:
-    - 2002_3
-    - 2001_1
-    weights:
-    - {x: 2002, y: 3}
-    - {x: 2001, y: 1}
-  - levelId: 1
+    - 2003_7
+    - 2007_5
+  - levelId: 2
     waveId: 3
     batchId: 1
     isBoss: 0
     delayTime: 0
-    duration: 10
-    power: 58
-    spawnId: Spawn_Random
+    duration: 18
+    power: 231
+    weights: []
     data:
-    - 2002_3
-    - 2001_1
-    weights:
-    - {x: 2002, y: 3}
-    - {x: 2001, y: 1}
-  - levelId: 1
+    - 2001_7
+    - 2003_2
+  - levelId: 2
     waveId: 3
     batchId: 2
     isBoss: 0
-    delayTime: 0
-    duration: 10
-    power: 59
-    spawnId: Spawn_Random
+    delayTime: 1
+    duration: 18
+    power: 232
+    weights: []
     data:
-    - 2002_3
-    - 2001_1
-    weights:
-    - {x: 2002, y: 3}
-    - {x: 2001, y: 1}
-  - levelId: 1
+    - 2007_10
+    - 2005_5
+  - levelId: 2
     waveId: 3
     batchId: 3
     isBoss: 0
-    delayTime: 0
-    duration: 10
-    power: 60
-    spawnId: Spawn_Random
+    delayTime: 1
+    duration: 18
+    power: 233
+    weights: []
     data:
+    - 2005_9
+    - 2007_6
+  - levelId: 2
+    waveId: 4
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 14
+    power: 241
+    weights: []
+    data:
+    - 2004_5
+    - 2005_2
+  - levelId: 2
+    waveId: 4
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 242
+    weights: []
+    data:
+    - 2010_4
+    - 2009_4
+  - levelId: 2
+    waveId: 4
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 243
+    weights: []
+    data:
+    - 2001_8
+    - 2001_5
+  - levelId: 2
+    waveId: 4
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 244
+    weights: []
+    data:
+    - 2009_5
+    - 2009_2
+  - levelId: 2
+    waveId: 4
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 245
+    weights: []
+    data:
+    - 2009_10
     - 2002_3
-    - 2001_1
-    weights:
-    - {x: 2002, y: 3}
-    - {x: 2001, y: 1}
-  - levelId: 1
+  - levelId: 2
+    waveId: 5
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 13
+    power: 251
+    weights: []
+    data:
+    - 2004_4
+    - 2007_6
+  - levelId: 2
+    waveId: 5
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 252
+    weights: []
+    data:
+    - 2004_8
+    - 2010_2
+  - levelId: 2
+    waveId: 6
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 18
+    power: 261
+    weights: []
+    data:
+    - 2010_8
+    - 2010_4
+  - levelId: 2
+    waveId: 6
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 262
+    weights: []
+    data:
+    - 2005_9
+    - 2004_4
+  - levelId: 2
+    waveId: 7
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 16
+    power: 271
+    weights: []
+    data:
+    - 2007_9
+    - 2003_4
+  - levelId: 2
+    waveId: 7
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 272
+    weights: []
+    data:
+    - 2008_10
+    - 2006_2
+  - levelId: 2
+    waveId: 7
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 273
+    weights: []
+    data:
+    - 2001_8
+    - 2008_6
+  - levelId: 2
+    waveId: 8
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 13
+    power: 281
+    weights: []
+    data:
+    - 2009_8
+    - 2004_4
+  - levelId: 2
+    waveId: 8
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 282
+    weights: []
+    data:
+    - 2003_4
+    - 2006_3
+  - levelId: 2
+    waveId: 9
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 16
+    power: 291
+    weights: []
+    data:
+    - 2003_10
+    - 2008_6
+  - levelId: 2
+    waveId: 9
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 292
+    weights: []
+    data:
+    - 2005_10
+    - 2010_6
+  - levelId: 2
+    waveId: 9
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 293
+    weights: []
+    data:
+    - 2001_6
+    - 2009_2
+  - levelId: 2
+    waveId: 9
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 294
+    weights: []
+    data:
+    - 2003_4
+    - 2005_2
+  - levelId: 2
+    waveId: 10
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 16
+    power: 301
+    weights: []
+    data:
+    - 2005_5
+    - 2010_4
+  - levelId: 2
+    waveId: 10
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 302
+    weights: []
+    data:
+    - 2004_8
+    - 2005_5
+  - levelId: 2
+    waveId: 10
+    batchId: 3
+    isBoss: 1
+    delayTime: 1
+    duration: 16
+    power: 303
+    weights: []
+    data:
+    - 2005_4
+    - 2001_5
+  - levelId: 3
+    waveId: 1
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 12
+    power: 311
+    weights: []
+    data:
+    - 2006_10
+    - 2003_4
+  - levelId: 3
+    waveId: 1
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 312
+    weights: []
+    data:
+    - 2008_12
+    - 2009_7
+  - levelId: 3
+    waveId: 2
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 13
+    power: 321
+    weights: []
+    data:
+    - 2002_14
+    - 2003_3
+  - levelId: 3
+    waveId: 2
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 322
+    weights: []
+    data:
+    - 2006_14
+    - 2010_4
+  - levelId: 3
+    waveId: 3
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 14
+    power: 331
+    weights: []
+    data:
+    - 2001_11
+    - 2005_9
+  - levelId: 3
+    waveId: 3
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 332
+    weights: []
+    data:
+    - 2001_9
+    - 2006_8
+  - levelId: 3
+    waveId: 3
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 333
+    weights: []
+    data:
+    - 2004_11
+    - 2002_9
+  - levelId: 3
     waveId: 3
     batchId: 4
     isBoss: 0
-    delayTime: 0
-    duration: 10
-    power: 61
-    spawnId: Spawn_Random
+    delayTime: 1
+    duration: 14
+    power: 334
+    weights: []
     data:
-    - 2002_3
-    - 2001_1
-    weights:
-    - {x: 2002, y: 3}
-    - {x: 2001, y: 1}
+    - 2009_15
+    - 2007_8
+  - levelId: 3
+    waveId: 3
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 335
+    weights: []
+    data:
+    - 2003_8
+    - 2004_9
+  - levelId: 3
+    waveId: 4
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 18
+    power: 341
+    weights: []
+    data:
+    - 2001_11
+    - 2003_9
+  - levelId: 3
+    waveId: 4
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 342
+    weights: []
+    data:
+    - 2007_10
+    - 2004_4
+  - levelId: 3
+    waveId: 4
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 343
+    weights: []
+    data:
+    - 2002_6
+    - 2007_9
+  - levelId: 3
+    waveId: 5
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 15
+    power: 351
+    weights: []
+    data:
+    - 2004_11
+    - 2008_5
+  - levelId: 3
+    waveId: 5
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 352
+    weights: []
+    data:
+    - 2004_6
+    - 2004_8
+  - levelId: 3
+    waveId: 5
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 353
+    weights: []
+    data:
+    - 2004_11
+    - 2007_5
+  - levelId: 3
+    waveId: 5
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 354
+    weights: []
+    data:
+    - 2002_11
+    - 2005_8
+  - levelId: 3
+    waveId: 5
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 355
+    weights: []
+    data:
+    - 2009_14
+    - 2007_5
+  - levelId: 3
+    waveId: 6
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 13
+    power: 361
+    weights: []
+    data:
+    - 2005_15
+    - 2003_5
+  - levelId: 3
+    waveId: 6
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 362
+    weights: []
+    data:
+    - 2001_15
+    - 2002_6
+  - levelId: 3
+    waveId: 7
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 17
+    power: 371
+    weights: []
+    data:
+    - 2007_14
+    - 2010_3
+  - levelId: 3
+    waveId: 7
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 372
+    weights: []
+    data:
+    - 2007_9
+    - 2010_5
+  - levelId: 3
+    waveId: 7
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 373
+    weights: []
+    data:
+    - 2001_6
+    - 2007_7
+  - levelId: 3
+    waveId: 7
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 374
+    weights: []
+    data:
+    - 2009_11
+    - 2004_6
+  - levelId: 3
+    waveId: 8
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 17
+    power: 381
+    weights: []
+    data:
+    - 2010_7
+    - 2006_8
+  - levelId: 3
+    waveId: 8
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 382
+    weights: []
+    data:
+    - 2005_10
+    - 2009_8
+  - levelId: 3
+    waveId: 9
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 17
+    power: 391
+    weights: []
+    data:
+    - 2007_14
+    - 2005_4
+  - levelId: 3
+    waveId: 9
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 392
+    weights: []
+    data:
+    - 2004_12
+    - 2007_8
+  - levelId: 3
+    waveId: 9
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 393
+    weights: []
+    data:
+    - 2003_15
+    - 2010_5
+  - levelId: 3
+    waveId: 9
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 394
+    weights: []
+    data:
+    - 2007_6
+    - 2009_5
+  - levelId: 3
+    waveId: 9
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 395
+    weights: []
+    data:
+    - 2005_12
+    - 2004_9
+  - levelId: 3
+    waveId: 10
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 19
+    power: 401
+    weights: []
+    data:
+    - 2008_9
+    - 2008_7
+  - levelId: 3
+    waveId: 10
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 402
+    weights: []
+    data:
+    - 2008_7
+    - 2003_5
+  - levelId: 3
+    waveId: 10
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 403
+    weights: []
+    data:
+    - 2009_11
+    - 2010_3
+  - levelId: 3
+    waveId: 10
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 404
+    weights: []
+    data:
+    - 2004_9
+    - 2005_9
+  - levelId: 3
+    waveId: 11
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 14
+    power: 411
+    weights: []
+    data:
+    - 2001_9
+    - 2001_6
+  - levelId: 3
+    waveId: 11
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 412
+    weights: []
+    data:
+    - 2010_13
+    - 2002_6
+  - levelId: 3
+    waveId: 11
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 413
+    weights: []
+    data:
+    - 2010_12
+    - 2004_6
+  - levelId: 3
+    waveId: 12
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 15
+    power: 421
+    weights: []
+    data:
+    - 2003_7
+    - 2001_9
+  - levelId: 3
+    waveId: 12
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 422
+    weights: []
+    data:
+    - 2007_8
+    - 2004_9
+  - levelId: 3
+    waveId: 12
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 423
+    weights: []
+    data:
+    - 2009_6
+    - 2008_7
+  - levelId: 3
+    waveId: 12
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 424
+    weights: []
+    data:
+    - 2004_13
+    - 2002_4
+  - levelId: 3
+    waveId: 12
+    batchId: 5
+    isBoss: 1
+    delayTime: 1
+    duration: 15
+    power: 425
+    weights: []
+    data:
+    - 2008_14
+    - 2009_7
+  - levelId: 4
+    waveId: 1
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 20
+    power: 411
+    weights: []
+    data:
+    - 2007_15
+    - 2009_6
+  - levelId: 4
+    waveId: 1
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 412
+    weights: []
+    data:
+    - 2008_12
+    - 2008_7
+  - levelId: 4
+    waveId: 1
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 413
+    weights: []
+    data:
+    - 2005_15
+    - 2009_7
+  - levelId: 4
+    waveId: 1
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 414
+    weights: []
+    data:
+    - 2005_9
+    - 2008_8
+  - levelId: 4
+    waveId: 1
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 415
+    weights: []
+    data:
+    - 2004_13
+    - 2005_9
+  - levelId: 4
+    waveId: 2
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 14
+    power: 421
+    weights: []
+    data:
+    - 2003_14
+    - 2004_6
+  - levelId: 4
+    waveId: 2
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 422
+    weights: []
+    data:
+    - 2004_14
+    - 2002_10
+  - levelId: 4
+    waveId: 3
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 20
+    power: 431
+    weights: []
+    data:
+    - 2008_8
+    - 2007_7
+  - levelId: 4
+    waveId: 3
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 432
+    weights: []
+    data:
+    - 2007_20
+    - 2007_4
+  - levelId: 4
+    waveId: 3
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 433
+    weights: []
+    data:
+    - 2010_15
+    - 2007_4
+  - levelId: 4
+    waveId: 3
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 434
+    weights: []
+    data:
+    - 2006_20
+    - 2005_10
+  - levelId: 4
+    waveId: 4
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 20
+    power: 441
+    weights: []
+    data:
+    - 2009_11
+    - 2010_11
+  - levelId: 4
+    waveId: 4
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 442
+    weights: []
+    data:
+    - 2004_14
+    - 2005_11
+  - levelId: 4
+    waveId: 4
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 443
+    weights: []
+    data:
+    - 2001_13
+    - 2007_10
+  - levelId: 4
+    waveId: 4
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 444
+    weights: []
+    data:
+    - 2003_10
+    - 2008_12
+  - levelId: 4
+    waveId: 4
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 445
+    weights: []
+    data:
+    - 2001_17
+    - 2007_4
+  - levelId: 4
+    waveId: 5
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 18
+    power: 451
+    weights: []
+    data:
+    - 2003_10
+    - 2008_4
+  - levelId: 4
+    waveId: 5
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 452
+    weights: []
+    data:
+    - 2005_13
+    - 2007_7
+  - levelId: 4
+    waveId: 6
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 17
+    power: 461
+    weights: []
+    data:
+    - 2006_12
+    - 2007_10
+  - levelId: 4
+    waveId: 6
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 462
+    weights: []
+    data:
+    - 2005_15
+    - 2002_4
+  - levelId: 4
+    waveId: 6
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 463
+    weights: []
+    data:
+    - 2009_13
+    - 2001_7
+  - levelId: 4
+    waveId: 6
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 464
+    weights: []
+    data:
+    - 2002_20
+    - 2001_4
+  - levelId: 4
+    waveId: 6
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 465
+    weights: []
+    data:
+    - 2004_8
+    - 2004_6
+  - levelId: 4
+    waveId: 7
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 14
+    power: 471
+    weights: []
+    data:
+    - 2008_17
+    - 2002_7
+  - levelId: 4
+    waveId: 7
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 472
+    weights: []
+    data:
+    - 2008_20
+    - 2005_9
+  - levelId: 4
+    waveId: 7
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 473
+    weights: []
+    data:
+    - 2003_17
+    - 2010_5
+  - levelId: 4
+    waveId: 8
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 16
+    power: 481
+    weights: []
+    data:
+    - 2002_8
+    - 2010_8
+  - levelId: 4
+    waveId: 8
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 482
+    weights: []
+    data:
+    - 2010_14
+    - 2007_7
+  - levelId: 4
+    waveId: 8
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 483
+    weights: []
+    data:
+    - 2002_19
+    - 2010_7
+  - levelId: 4
+    waveId: 9
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 16
+    power: 491
+    weights: []
+    data:
+    - 2010_20
+    - 2002_4
+  - levelId: 4
+    waveId: 9
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 492
+    weights: []
+    data:
+    - 2006_14
+    - 2009_9
+  - levelId: 4
+    waveId: 10
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 20
+    power: 501
+    weights: []
+    data:
+    - 2006_14
+    - 2001_11
+  - levelId: 4
+    waveId: 10
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 502
+    weights: []
+    data:
+    - 2002_13
+    - 2007_11
+  - levelId: 4
+    waveId: 11
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 18
+    power: 511
+    weights: []
+    data:
+    - 2003_18
+    - 2009_8
+  - levelId: 4
+    waveId: 11
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 512
+    weights: []
+    data:
+    - 2010_20
+    - 2009_11
+  - levelId: 4
+    waveId: 11
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 513
+    weights: []
+    data:
+    - 2008_19
+    - 2007_8
+  - levelId: 4
+    waveId: 12
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 15
+    power: 521
+    weights: []
+    data:
+    - 2002_15
+    - 2005_7
+  - levelId: 4
+    waveId: 12
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 522
+    weights: []
+    data:
+    - 2008_17
+    - 2010_10
+  - levelId: 4
+    waveId: 12
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 523
+    weights: []
+    data:
+    - 2006_15
+    - 2001_9
+  - levelId: 4
+    waveId: 12
+    batchId: 4
+    isBoss: 1
+    delayTime: 1
+    duration: 15
+    power: 524
+    weights: []
+    data:
+    - 2003_11
+    - 2008_9
+  - levelId: 5
+    waveId: 1
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 16
+    power: 511
+    weights: []
+    data:
+    - 2010_10
+    - 2005_13
+  - levelId: 5
+    waveId: 1
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 512
+    weights: []
+    data:
+    - 2004_17
+    - 2002_11
+  - levelId: 5
+    waveId: 1
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 513
+    weights: []
+    data:
+    - 2008_17
+    - 2009_12
+  - levelId: 5
+    waveId: 1
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 514
+    weights: []
+    data:
+    - 2008_10
+    - 2008_6
+  - levelId: 5
+    waveId: 2
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 15
+    power: 521
+    weights: []
+    data:
+    - 2007_19
+    - 2004_15
+  - levelId: 5
+    waveId: 2
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 522
+    weights: []
+    data:
+    - 2010_25
+    - 2006_13
+  - levelId: 5
+    waveId: 2
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 523
+    weights: []
+    data:
+    - 2009_23
+    - 2006_13
+  - levelId: 5
+    waveId: 2
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 524
+    weights: []
+    data:
+    - 2006_24
+    - 2006_9
+  - levelId: 5
+    waveId: 3
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 16
+    power: 531
+    weights: []
+    data:
+    - 2004_16
+    - 2002_10
+  - levelId: 5
+    waveId: 3
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 532
+    weights: []
+    data:
+    - 2002_15
+    - 2009_8
+  - levelId: 5
+    waveId: 3
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 533
+    weights: []
+    data:
+    - 2004_18
+    - 2008_14
+  - levelId: 5
+    waveId: 3
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 534
+    weights: []
+    data:
+    - 2009_19
+    - 2010_6
+  - levelId: 5
+    waveId: 4
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 16
+    power: 541
+    weights: []
+    data:
+    - 2004_15
+    - 2006_9
+  - levelId: 5
+    waveId: 4
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 542
+    weights: []
+    data:
+    - 2001_14
+    - 2009_9
+  - levelId: 5
+    waveId: 4
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 543
+    weights: []
+    data:
+    - 2001_19
+    - 2001_7
+  - levelId: 5
+    waveId: 5
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 13
+    power: 551
+    weights: []
+    data:
+    - 2001_19
+    - 2010_12
+  - levelId: 5
+    waveId: 5
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 552
+    weights: []
+    data:
+    - 2008_20
+    - 2008_7
+  - levelId: 5
+    waveId: 5
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 553
+    weights: []
+    data:
+    - 2001_25
+    - 2005_6
+  - levelId: 5
+    waveId: 5
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 554
+    weights: []
+    data:
+    - 2002_25
+    - 2007_6
+  - levelId: 5
+    waveId: 5
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 555
+    weights: []
+    data:
+    - 2010_14
+    - 2001_7
+  - levelId: 5
+    waveId: 6
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 13
+    power: 561
+    weights: []
+    data:
+    - 2004_23
+    - 2002_14
+  - levelId: 5
+    waveId: 6
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 562
+    weights: []
+    data:
+    - 2010_17
+    - 2010_13
+  - levelId: 5
+    waveId: 6
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 563
+    weights: []
+    data:
+    - 2007_24
+    - 2008_9
+  - levelId: 5
+    waveId: 6
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 564
+    weights: []
+    data:
+    - 2010_19
+    - 2007_14
+  - levelId: 5
+    waveId: 7
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 13
+    power: 571
+    weights: []
+    data:
+    - 2004_18
+    - 2004_15
+  - levelId: 5
+    waveId: 7
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 572
+    weights: []
+    data:
+    - 2002_17
+    - 2003_7
+  - levelId: 5
+    waveId: 8
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 14
+    power: 581
+    weights: []
+    data:
+    - 2001_24
+    - 2007_14
+  - levelId: 5
+    waveId: 8
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 582
+    weights: []
+    data:
+    - 2008_11
+    - 2005_8
+  - levelId: 5
+    waveId: 9
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 16
+    power: 591
+    weights: []
+    data:
+    - 2008_17
+    - 2002_9
+  - levelId: 5
+    waveId: 9
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 592
+    weights: []
+    data:
+    - 2010_23
+    - 2004_6
+  - levelId: 5
+    waveId: 9
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 593
+    weights: []
+    data:
+    - 2009_14
+    - 2004_9
+  - levelId: 5
+    waveId: 9
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 594
+    weights: []
+    data:
+    - 2003_11
+    - 2002_7
+  - levelId: 5
+    waveId: 10
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 16
+    power: 601
+    weights: []
+    data:
+    - 2008_24
+    - 2002_9
+  - levelId: 5
+    waveId: 10
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 602
+    weights: []
+    data:
+    - 2007_25
+    - 2005_12
+  - levelId: 5
+    waveId: 10
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 603
+    weights: []
+    data:
+    - 2002_11
+    - 2010_11
+  - levelId: 5
+    waveId: 10
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 604
+    weights: []
+    data:
+    - 2006_18
+    - 2010_5
+  - levelId: 5
+    waveId: 11
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 15
+    power: 611
+    weights: []
+    data:
+    - 2010_10
+    - 2010_15
+  - levelId: 5
+    waveId: 11
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 612
+    weights: []
+    data:
+    - 2005_11
+    - 2010_7
+  - levelId: 5
+    waveId: 12
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 20
+    power: 621
+    weights: []
+    data:
+    - 2008_15
+    - 2005_14
+  - levelId: 5
+    waveId: 12
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 622
+    weights: []
+    data:
+    - 2007_12
+    - 2008_12
+  - levelId: 5
+    waveId: 12
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 623
+    weights: []
+    data:
+    - 2006_20
+    - 2007_10
+  - levelId: 5
+    waveId: 12
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 624
+    weights: []
+    data:
+    - 2002_20
+    - 2003_11
+  - levelId: 5
+    waveId: 12
+    batchId: 5
+    isBoss: 1
+    delayTime: 1
+    duration: 20
+    power: 625
+    weights: []
+    data:
+    - 2008_22
+    - 2005_13
+  - levelId: 6
+    waveId: 1
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 13
+    power: 611
+    weights: []
+    data:
+    - 2006_22
+    - 2005_7
+  - levelId: 6
+    waveId: 1
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 612
+    weights: []
+    data:
+    - 2007_12
+    - 2009_16
+  - levelId: 6
+    waveId: 1
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 613
+    weights: []
+    data:
+    - 2009_25
+    - 2008_6
+  - levelId: 6
+    waveId: 1
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 614
+    weights: []
+    data:
+    - 2004_23
+    - 2009_15
+  - levelId: 6
+    waveId: 1
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 615
+    weights: []
+    data:
+    - 2008_13
+    - 2008_9
+  - levelId: 6
+    waveId: 2
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 20
+    power: 621
+    weights: []
+    data:
+    - 2003_26
+    - 2005_17
+  - levelId: 6
+    waveId: 2
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 622
+    weights: []
+    data:
+    - 2008_12
+    - 2002_16
+  - levelId: 6
+    waveId: 2
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 623
+    weights: []
+    data:
+    - 2010_17
+    - 2004_10
+  - levelId: 6
+    waveId: 2
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 624
+    weights: []
+    data:
+    - 2009_29
+    - 2001_12
+  - levelId: 6
+    waveId: 3
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 15
+    power: 631
+    weights: []
+    data:
+    - 2002_15
+    - 2008_16
+  - levelId: 6
+    waveId: 3
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 632
+    weights: []
+    data:
+    - 2003_21
+    - 2008_14
+  - levelId: 6
+    waveId: 4
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 18
+    power: 641
+    weights: []
+    data:
+    - 2008_19
+    - 2008_13
+  - levelId: 6
+    waveId: 4
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 642
+    weights: []
+    data:
+    - 2009_24
+    - 2003_9
+  - levelId: 6
+    waveId: 4
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 643
+    weights: []
+    data:
+    - 2010_16
+    - 2009_7
+  - levelId: 6
+    waveId: 4
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 644
+    weights: []
+    data:
+    - 2005_22
+    - 2007_18
+  - levelId: 6
+    waveId: 5
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 12
+    power: 651
+    weights: []
+    data:
+    - 2005_30
+    - 2005_15
+  - levelId: 6
+    waveId: 5
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 652
+    weights: []
+    data:
+    - 2008_26
+    - 2003_14
+  - levelId: 6
+    waveId: 5
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 653
+    weights: []
+    data:
+    - 2008_22
+    - 2006_14
+  - levelId: 6
+    waveId: 5
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 654
+    weights: []
+    data:
+    - 2009_26
+    - 2007_11
+  - levelId: 6
+    waveId: 6
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 15
+    power: 661
+    weights: []
+    data:
+    - 2010_19
+    - 2007_18
+  - levelId: 6
+    waveId: 6
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 662
+    weights: []
+    data:
+    - 2007_22
+    - 2001_17
+  - levelId: 6
+    waveId: 6
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 663
+    weights: []
+    data:
+    - 2008_24
+    - 2007_16
+  - levelId: 6
+    waveId: 7
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 19
+    power: 671
+    weights: []
+    data:
+    - 2001_28
+    - 2003_15
+  - levelId: 6
+    waveId: 7
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 672
+    weights: []
+    data:
+    - 2006_26
+    - 2002_7
+  - levelId: 6
+    waveId: 7
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 673
+    weights: []
+    data:
+    - 2009_12
+    - 2008_17
+  - levelId: 6
+    waveId: 8
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 18
+    power: 681
+    weights: []
+    data:
+    - 2003_27
+    - 2002_18
+  - levelId: 6
+    waveId: 8
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 682
+    weights: []
+    data:
+    - 2005_24
+    - 2006_16
+  - levelId: 6
+    waveId: 8
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 683
+    weights: []
+    data:
+    - 2002_29
+    - 2006_12
+  - levelId: 6
+    waveId: 9
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 19
+    power: 691
+    weights: []
+    data:
+    - 2009_14
+    - 2001_9
+  - levelId: 6
+    waveId: 9
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 692
+    weights: []
+    data:
+    - 2005_14
+    - 2004_12
+  - levelId: 6
+    waveId: 9
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 693
+    weights: []
+    data:
+    - 2002_26
+    - 2002_8
+  - levelId: 6
+    waveId: 9
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 694
+    weights: []
+    data:
+    - 2005_13
+    - 2001_11
+  - levelId: 6
+    waveId: 10
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 16
+    power: 701
+    weights: []
+    data:
+    - 2006_25
+    - 2006_8
+  - levelId: 6
+    waveId: 10
+    batchId: 2
+    isBoss: 1
+    delayTime: 1
+    duration: 16
+    power: 702
+    weights: []
+    data:
+    - 2004_25
+    - 2009_15
+  - levelId: 7
+    waveId: 1
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 14
+    power: 711
+    weights: []
+    data:
+    - 2003_33
+    - 2002_20
+  - levelId: 7
+    waveId: 1
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 712
+    weights: []
+    data:
+    - 2007_35
+    - 2010_10
+  - levelId: 7
+    waveId: 1
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 713
+    weights: []
+    data:
+    - 2008_18
+    - 2010_10
+  - levelId: 7
+    waveId: 2
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 16
+    power: 721
+    weights: []
+    data:
+    - 2008_35
+    - 2005_7
+  - levelId: 7
+    waveId: 2
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 722
+    weights: []
+    data:
+    - 2008_35
+    - 2005_15
+  - levelId: 7
+    waveId: 2
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 723
+    weights: []
+    data:
+    - 2003_28
+    - 2002_12
+  - levelId: 7
+    waveId: 2
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 724
+    weights: []
+    data:
+    - 2010_34
+    - 2005_13
+  - levelId: 7
+    waveId: 2
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 725
+    weights: []
+    data:
+    - 2005_23
+    - 2008_10
+  - levelId: 7
+    waveId: 3
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 19
+    power: 731
+    weights: []
+    data:
+    - 2002_26
+    - 2004_16
+  - levelId: 7
+    waveId: 3
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 732
+    weights: []
+    data:
+    - 2006_23
+    - 2010_18
+  - levelId: 7
+    waveId: 3
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 733
+    weights: []
+    data:
+    - 2005_35
+    - 2001_13
+  - levelId: 7
+    waveId: 3
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 734
+    weights: []
+    data:
+    - 2005_32
+    - 2001_20
+  - levelId: 7
+    waveId: 3
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 735
+    weights: []
+    data:
+    - 2001_29
+    - 2010_20
+  - levelId: 7
+    waveId: 4
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 15
+    power: 741
+    weights: []
+    data:
+    - 2010_21
+    - 2006_17
+  - levelId: 7
+    waveId: 4
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 742
+    weights: []
+    data:
+    - 2004_22
+    - 2010_17
+  - levelId: 7
+    waveId: 4
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 743
+    weights: []
+    data:
+    - 2003_34
+    - 2002_17
+  - levelId: 7
+    waveId: 4
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 744
+    weights: []
+    data:
+    - 2001_28
+    - 2005_7
+  - levelId: 7
+    waveId: 5
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 14
+    power: 751
+    weights: []
+    data:
+    - 2002_24
+    - 2005_18
+  - levelId: 7
+    waveId: 5
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 752
+    weights: []
+    data:
+    - 2007_20
+    - 2003_9
+  - levelId: 7
+    waveId: 5
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 753
+    weights: []
+    data:
+    - 2009_30
+    - 2006_15
+  - levelId: 7
+    waveId: 5
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 754
+    weights: []
+    data:
+    - 2005_22
+    - 2003_21
+  - levelId: 7
+    waveId: 6
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 16
+    power: 761
+    weights: []
+    data:
+    - 2006_28
+    - 2002_8
+  - levelId: 7
+    waveId: 6
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 762
+    weights: []
+    data:
+    - 2003_35
+    - 2004_18
+  - levelId: 7
+    waveId: 6
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 763
+    weights: []
+    data:
+    - 2007_25
+    - 2009_8
+  - levelId: 7
+    waveId: 6
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 764
+    weights: []
+    data:
+    - 2007_22
+    - 2001_15
+  - levelId: 7
+    waveId: 6
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 765
+    weights: []
+    data:
+    - 2002_25
+    - 2008_17
+  - levelId: 7
+    waveId: 7
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 18
+    power: 771
+    weights: []
+    data:
+    - 2006_35
+    - 2002_10
+  - levelId: 7
+    waveId: 7
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 772
+    weights: []
+    data:
+    - 2008_33
+    - 2001_21
+  - levelId: 7
+    waveId: 7
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 773
+    weights: []
+    data:
+    - 2009_33
+    - 2006_10
+  - levelId: 7
+    waveId: 7
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 774
+    weights: []
+    data:
+    - 2002_23
+    - 2008_17
+  - levelId: 7
+    waveId: 8
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 13
+    power: 781
+    weights: []
+    data:
+    - 2003_15
+    - 2001_11
+  - levelId: 7
+    waveId: 8
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 782
+    weights: []
+    data:
+    - 2008_17
+    - 2002_10
+  - levelId: 7
+    waveId: 8
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 783
+    weights: []
+    data:
+    - 2009_26
+    - 2003_14
+  - levelId: 7
+    waveId: 8
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 784
+    weights: []
+    data:
+    - 2006_27
+    - 2009_16
+  - levelId: 7
+    waveId: 8
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 785
+    weights: []
+    data:
+    - 2003_34
+    - 2007_8
+  - levelId: 7
+    waveId: 9
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 18
+    power: 791
+    weights: []
+    data:
+    - 2005_25
+    - 2001_10
+  - levelId: 7
+    waveId: 9
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 792
+    weights: []
+    data:
+    - 2008_21
+    - 2008_20
+  - levelId: 7
+    waveId: 9
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 793
+    weights: []
+    data:
+    - 2006_35
+    - 2002_12
+  - levelId: 7
+    waveId: 9
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 794
+    weights: []
+    data:
+    - 2009_15
+    - 2006_13
+  - levelId: 7
+    waveId: 9
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 795
+    weights: []
+    data:
+    - 2005_17
+    - 2004_20
+  - levelId: 7
+    waveId: 10
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 13
+    power: 801
+    weights: []
+    data:
+    - 2004_14
+    - 2010_7
+  - levelId: 7
+    waveId: 10
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 802
+    weights: []
+    data:
+    - 2006_18
+    - 2004_19
+  - levelId: 7
+    waveId: 10
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 803
+    weights: []
+    data:
+    - 2010_16
+    - 2004_20
+  - levelId: 7
+    waveId: 10
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 804
+    weights: []
+    data:
+    - 2009_32
+    - 2004_10
+  - levelId: 7
+    waveId: 10
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 805
+    weights: []
+    data:
+    - 2004_18
+    - 2006_19
+  - levelId: 7
+    waveId: 11
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 16
+    power: 811
+    weights: []
+    data:
+    - 2003_31
+    - 2003_11
+  - levelId: 7
+    waveId: 11
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 812
+    weights: []
+    data:
+    - 2003_35
+    - 2002_20
+  - levelId: 7
+    waveId: 12
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 14
+    power: 821
+    weights: []
+    data:
+    - 2001_21
+    - 2006_16
+  - levelId: 7
+    waveId: 12
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 822
+    weights: []
+    data:
+    - 2006_19
+    - 2001_11
+  - levelId: 7
+    waveId: 13
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 14
+    power: 831
+    weights: []
+    data:
+    - 2007_17
+    - 2009_18
+  - levelId: 7
+    waveId: 13
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 832
+    weights: []
+    data:
+    - 2002_28
+    - 2008_19
+  - levelId: 7
+    waveId: 14
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 20
+    power: 841
+    weights: []
+    data:
+    - 2010_28
+    - 2002_15
+  - levelId: 7
+    waveId: 14
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 842
+    weights: []
+    data:
+    - 2004_15
+    - 2010_18
+  - levelId: 7
+    waveId: 14
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 843
+    weights: []
+    data:
+    - 2009_28
+    - 2005_17
+  - levelId: 7
+    waveId: 14
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 844
+    weights: []
+    data:
+    - 2001_29
+    - 2001_20
+  - levelId: 7
+    waveId: 15
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 18
+    power: 851
+    weights: []
+    data:
+    - 2002_28
+    - 2008_8
+  - levelId: 7
+    waveId: 15
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 852
+    weights: []
+    data:
+    - 2002_33
+    - 2006_9
+  - levelId: 7
+    waveId: 15
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 853
+    weights: []
+    data:
+    - 2002_22
+    - 2003_16
+  - levelId: 7
+    waveId: 15
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 854
+    weights: []
+    data:
+    - 2010_24
+    - 2009_13
+  - levelId: 7
+    waveId: 15
+    batchId: 5
+    isBoss: 1
+    delayTime: 1
+    duration: 18
+    power: 855
+    weights: []
+    data:
+    - 2010_23
+    - 2009_14
+  - levelId: 8
+    waveId: 1
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 13
+    power: 811
+    weights: []
+    data:
+    - 2002_39
+    - 2009_14
+  - levelId: 8
+    waveId: 1
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 812
+    weights: []
+    data:
+    - 2007_23
+    - 2008_21
+  - levelId: 8
+    waveId: 1
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 813
+    weights: []
+    data:
+    - 2006_28
+    - 2008_21
+  - levelId: 8
+    waveId: 1
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 814
+    weights: []
+    data:
+    - 2002_29
+    - 2006_18
+  - levelId: 8
+    waveId: 1
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 815
+    weights: []
+    data:
+    - 2005_20
+    - 2006_23
+  - levelId: 8
+    waveId: 2
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 13
+    power: 821
+    weights: []
+    data:
+    - 2002_29
+    - 2002_11
+  - levelId: 8
+    waveId: 2
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 822
+    weights: []
+    data:
+    - 2006_33
+    - 2003_9
+  - levelId: 8
+    waveId: 3
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 13
+    power: 831
+    weights: []
+    data:
+    - 2007_37
+    - 2006_21
+  - levelId: 8
+    waveId: 3
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 832
+    weights: []
+    data:
+    - 2001_35
+    - 2005_17
+  - levelId: 8
+    waveId: 3
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 833
+    weights: []
+    data:
+    - 2006_34
+    - 2002_24
+  - levelId: 8
+    waveId: 3
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 834
+    weights: []
+    data:
+    - 2004_37
+    - 2003_23
+  - levelId: 8
+    waveId: 4
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 13
+    power: 841
+    weights: []
+    data:
+    - 2006_27
+    - 2009_11
+  - levelId: 8
+    waveId: 4
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 842
+    weights: []
+    data:
+    - 2005_23
+    - 2010_21
+  - levelId: 8
+    waveId: 4
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 843
+    weights: []
+    data:
+    - 2009_35
+    - 2010_8
+  - levelId: 8
+    waveId: 5
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 12
+    power: 851
+    weights: []
+    data:
+    - 2003_38
+    - 2005_17
+  - levelId: 8
+    waveId: 5
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 852
+    weights: []
+    data:
+    - 2006_16
+    - 2006_13
+  - levelId: 8
+    waveId: 5
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 853
+    weights: []
+    data:
+    - 2003_37
+    - 2010_20
+  - levelId: 8
+    waveId: 5
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 854
+    weights: []
+    data:
+    - 2002_39
+    - 2003_8
+  - levelId: 8
+    waveId: 6
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 20
+    power: 861
+    weights: []
+    data:
+    - 2004_29
+    - 2007_22
+  - levelId: 8
+    waveId: 6
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 862
+    weights: []
+    data:
+    - 2006_27
+    - 2003_17
+  - levelId: 8
+    waveId: 7
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 13
+    power: 871
+    weights: []
+    data:
+    - 2001_21
+    - 2003_9
+  - levelId: 8
+    waveId: 7
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 872
+    weights: []
+    data:
+    - 2002_30
+    - 2005_21
+  - levelId: 8
+    waveId: 7
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 873
+    weights: []
+    data:
+    - 2008_30
+    - 2010_21
+  - levelId: 8
+    waveId: 7
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 874
+    weights: []
+    data:
+    - 2005_40
+    - 2004_24
+  - levelId: 8
+    waveId: 8
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 17
+    power: 881
+    weights: []
+    data:
+    - 2007_25
+    - 2002_23
+  - levelId: 8
+    waveId: 8
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 882
+    weights: []
+    data:
+    - 2009_17
+    - 2005_15
+  - levelId: 8
+    waveId: 9
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 12
+    power: 891
+    weights: []
+    data:
+    - 2001_25
+    - 2004_14
+  - levelId: 8
+    waveId: 9
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 892
+    weights: []
+    data:
+    - 2003_25
+    - 2005_18
+  - levelId: 8
+    waveId: 9
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 893
+    weights: []
+    data:
+    - 2002_31
+    - 2001_21
+  - levelId: 8
+    waveId: 9
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 894
+    weights: []
+    data:
+    - 2003_28
+    - 2003_15
+  - levelId: 8
+    waveId: 9
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 895
+    weights: []
+    data:
+    - 2009_37
+    - 2009_19
+  - levelId: 8
+    waveId: 10
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 18
+    power: 901
+    weights: []
+    data:
+    - 2001_16
+    - 2007_22
+  - levelId: 8
+    waveId: 10
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 902
+    weights: []
+    data:
+    - 2002_34
+    - 2006_21
+  - levelId: 8
+    waveId: 11
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 18
+    power: 911
+    weights: []
+    data:
+    - 2005_28
+    - 2002_8
+  - levelId: 8
+    waveId: 11
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 912
+    weights: []
+    data:
+    - 2006_35
+    - 2003_22
+  - levelId: 8
+    waveId: 11
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 913
+    weights: []
+    data:
+    - 2006_29
+    - 2002_11
+  - levelId: 8
+    waveId: 11
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 914
+    weights: []
+    data:
+    - 2004_34
+    - 2007_20
+  - levelId: 8
+    waveId: 11
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 915
+    weights: []
+    data:
+    - 2009_28
+    - 2002_17
+  - levelId: 8
+    waveId: 12
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 15
+    power: 921
+    weights: []
+    data:
+    - 2006_18
+    - 2003_24
+  - levelId: 8
+    waveId: 12
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 922
+    weights: []
+    data:
+    - 2002_32
+    - 2009_14
+  - levelId: 8
+    waveId: 12
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 923
+    weights: []
+    data:
+    - 2006_39
+    - 2006_12
+  - levelId: 8
+    waveId: 12
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 924
+    weights: []
+    data:
+    - 2004_20
+    - 2002_16
+  - levelId: 8
+    waveId: 13
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 14
+    power: 931
+    weights: []
+    data:
+    - 2010_40
+    - 2003_10
+  - levelId: 8
+    waveId: 13
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 932
+    weights: []
+    data:
+    - 2003_30
+    - 2008_22
+  - levelId: 8
+    waveId: 13
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 933
+    weights: []
+    data:
+    - 2010_26
+    - 2010_18
+  - levelId: 8
+    waveId: 14
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 19
+    power: 941
+    weights: []
+    data:
+    - 2002_30
+    - 2008_17
+  - levelId: 8
+    waveId: 14
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 942
+    weights: []
+    data:
+    - 2005_17
+    - 2010_19
+  - levelId: 8
+    waveId: 14
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 943
+    weights: []
+    data:
+    - 2009_25
+    - 2002_22
+  - levelId: 8
+    waveId: 15
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 12
+    power: 951
+    weights: []
+    data:
+    - 2001_25
+    - 2006_10
+  - levelId: 8
+    waveId: 15
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 952
+    weights: []
+    data:
+    - 2002_35
+    - 2010_24
+  - levelId: 8
+    waveId: 15
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 953
+    weights: []
+    data:
+    - 2007_34
+    - 2008_9
+  - levelId: 8
+    waveId: 15
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 954
+    weights: []
+    data:
+    - 2008_36
+    - 2010_14
+  - levelId: 8
+    waveId: 15
+    batchId: 5
+    isBoss: 1
+    delayTime: 1
+    duration: 12
+    power: 955
+    weights: []
+    data:
+    - 2006_31
+    - 2010_24
+  - levelId: 9
+    waveId: 1
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 19
+    power: 911
+    weights: []
+    data:
+    - 2002_40
+    - 2006_11
+  - levelId: 9
+    waveId: 1
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 912
+    weights: []
+    data:
+    - 2009_19
+    - 2003_16
+  - levelId: 9
+    waveId: 2
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 19
+    power: 921
+    weights: []
+    data:
+    - 2009_37
+    - 2009_14
+  - levelId: 9
+    waveId: 2
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 922
+    weights: []
+    data:
+    - 2006_27
+    - 2006_21
+  - levelId: 9
+    waveId: 2
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 923
+    weights: []
+    data:
+    - 2007_39
+    - 2006_10
+  - levelId: 9
+    waveId: 2
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 924
+    weights: []
+    data:
+    - 2006_28
+    - 2002_12
+  - levelId: 9
+    waveId: 2
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 925
+    weights: []
+    data:
+    - 2009_27
+    - 2007_17
+  - levelId: 9
+    waveId: 3
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 17
+    power: 931
+    weights: []
+    data:
+    - 2002_39
+    - 2010_13
+  - levelId: 9
+    waveId: 3
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 932
+    weights: []
+    data:
+    - 2006_38
+    - 2005_21
+  - levelId: 9
+    waveId: 3
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 933
+    weights: []
+    data:
+    - 2003_40
+    - 2010_11
+  - levelId: 9
+    waveId: 4
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 20
+    power: 941
+    weights: []
+    data:
+    - 2007_44
+    - 2006_13
+  - levelId: 9
+    waveId: 4
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 942
+    weights: []
+    data:
+    - 2009_38
+    - 2002_22
+  - levelId: 9
+    waveId: 4
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 943
+    weights: []
+    data:
+    - 2009_18
+    - 2006_20
+  - levelId: 9
+    waveId: 4
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 944
+    weights: []
+    data:
+    - 2005_24
+    - 2003_19
+  - levelId: 9
+    waveId: 5
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 15
+    power: 951
+    weights: []
+    data:
+    - 2004_22
+    - 2003_11
+  - levelId: 9
+    waveId: 5
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 952
+    weights: []
+    data:
+    - 2005_34
+    - 2002_26
+  - levelId: 9
+    waveId: 5
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 953
+    weights: []
+    data:
+    - 2009_39
+    - 2001_19
+  - levelId: 9
+    waveId: 5
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 954
+    weights: []
+    data:
+    - 2010_37
+    - 2003_21
+  - levelId: 9
+    waveId: 5
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 15
+    power: 955
+    weights: []
+    data:
+    - 2003_23
+    - 2003_14
+  - levelId: 9
+    waveId: 6
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 12
+    power: 961
+    weights: []
+    data:
+    - 2007_39
+    - 2006_16
+  - levelId: 9
+    waveId: 6
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 962
+    weights: []
+    data:
+    - 2008_27
+    - 2010_23
+  - levelId: 9
+    waveId: 6
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 963
+    weights: []
+    data:
+    - 2004_25
+    - 2009_18
+  - levelId: 9
+    waveId: 6
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 964
+    weights: []
+    data:
+    - 2008_29
+    - 2004_27
+  - levelId: 9
+    waveId: 6
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 12
+    power: 965
+    weights: []
+    data:
+    - 2008_42
+    - 2008_18
+  - levelId: 9
+    waveId: 7
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 20
+    power: 971
+    weights: []
+    data:
+    - 2009_23
+    - 2007_15
+  - levelId: 9
+    waveId: 7
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 972
+    weights: []
+    data:
+    - 2010_45
+    - 2003_17
+  - levelId: 9
+    waveId: 7
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 973
+    weights: []
+    data:
+    - 2001_45
+    - 2008_20
+  - levelId: 9
+    waveId: 7
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 974
+    weights: []
+    data:
+    - 2009_40
+    - 2002_25
+  - levelId: 9
+    waveId: 7
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 975
+    weights: []
+    data:
+    - 2002_20
+    - 2005_14
+  - levelId: 9
+    waveId: 8
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 19
+    power: 981
+    weights: []
+    data:
+    - 2009_44
+    - 2003_22
+  - levelId: 9
+    waveId: 8
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 982
+    weights: []
+    data:
+    - 2002_44
+    - 2004_23
+  - levelId: 9
+    waveId: 8
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 983
+    weights: []
+    data:
+    - 2006_31
+    - 2001_10
+  - levelId: 9
+    waveId: 8
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 984
+    weights: []
+    data:
+    - 2007_29
+    - 2009_16
+  - levelId: 9
+    waveId: 9
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 13
+    power: 991
+    weights: []
+    data:
+    - 2006_18
+    - 2004_19
+  - levelId: 9
+    waveId: 9
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 992
+    weights: []
+    data:
+    - 2002_43
+    - 2006_13
+  - levelId: 9
+    waveId: 9
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 993
+    weights: []
+    data:
+    - 2003_27
+    - 2001_24
+  - levelId: 9
+    waveId: 9
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 994
+    weights: []
+    data:
+    - 2003_32
+    - 2008_9
+  - levelId: 9
+    waveId: 9
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 995
+    weights: []
+    data:
+    - 2002_26
+    - 2001_15
+  - levelId: 9
+    waveId: 10
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 20
+    power: 1001
+    weights: []
+    data:
+    - 2010_31
+    - 2009_12
+  - levelId: 9
+    waveId: 10
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 20
+    power: 1002
+    weights: []
+    data:
+    - 2005_27
+    - 2004_12
+  - levelId: 9
+    waveId: 10
+    batchId: 3
+    isBoss: 1
+    delayTime: 1
+    duration: 20
+    power: 1003
+    weights: []
+    data:
+    - 2001_31
+    - 2004_23
+  - levelId: 10
+    waveId: 1
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 19
+    power: 1011
+    weights: []
+    data:
+    - 2010_20
+    - 2009_30
+  - levelId: 10
+    waveId: 1
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 1012
+    weights: []
+    data:
+    - 2009_27
+    - 2010_14
+  - levelId: 10
+    waveId: 2
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 18
+    power: 1021
+    weights: []
+    data:
+    - 2001_31
+    - 2010_17
+  - levelId: 10
+    waveId: 2
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 1022
+    weights: []
+    data:
+    - 2010_25
+    - 2007_12
+  - levelId: 10
+    waveId: 2
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 1023
+    weights: []
+    data:
+    - 2009_22
+    - 2006_26
+  - levelId: 10
+    waveId: 2
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 1024
+    weights: []
+    data:
+    - 2009_45
+    - 2009_26
+  - levelId: 10
+    waveId: 3
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 18
+    power: 1031
+    weights: []
+    data:
+    - 2008_40
+    - 2001_22
+  - levelId: 10
+    waveId: 3
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 18
+    power: 1032
+    weights: []
+    data:
+    - 2006_43
+    - 2005_10
+  - levelId: 10
+    waveId: 4
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 13
+    power: 1041
+    weights: []
+    data:
+    - 2006_43
+    - 2004_30
+  - levelId: 10
+    waveId: 4
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 1042
+    weights: []
+    data:
+    - 2002_43
+    - 2010_20
+  - levelId: 10
+    waveId: 4
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 1043
+    weights: []
+    data:
+    - 2003_31
+    - 2001_27
+  - levelId: 10
+    waveId: 4
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 13
+    power: 1044
+    weights: []
+    data:
+    - 2006_46
+    - 2003_24
+  - levelId: 10
+    waveId: 5
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 14
+    power: 1051
+    weights: []
+    data:
+    - 2003_42
+    - 2002_24
+  - levelId: 10
+    waveId: 5
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 1052
+    weights: []
+    data:
+    - 2001_26
+    - 2005_11
+  - levelId: 10
+    waveId: 5
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 1053
+    weights: []
+    data:
+    - 2004_30
+    - 2001_19
+  - levelId: 10
+    waveId: 5
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 1054
+    weights: []
+    data:
+    - 2009_46
+    - 2007_27
+  - levelId: 10
+    waveId: 5
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 14
+    power: 1055
+    weights: []
+    data:
+    - 2008_21
+    - 2005_30
+  - levelId: 10
+    waveId: 6
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 16
+    power: 1061
+    weights: []
+    data:
+    - 2006_47
+    - 2001_30
+  - levelId: 10
+    waveId: 6
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 1062
+    weights: []
+    data:
+    - 2006_23
+    - 2005_21
+  - levelId: 10
+    waveId: 6
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 16
+    power: 1063
+    weights: []
+    data:
+    - 2007_43
+    - 2007_24
+  - levelId: 10
+    waveId: 7
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 17
+    power: 1071
+    weights: []
+    data:
+    - 2003_42
+    - 2008_25
+  - levelId: 10
+    waveId: 7
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 1072
+    weights: []
+    data:
+    - 2006_28
+    - 2009_12
+  - levelId: 10
+    waveId: 7
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 1073
+    weights: []
+    data:
+    - 2007_33
+    - 2002_29
+  - levelId: 10
+    waveId: 7
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 1074
+    weights: []
+    data:
+    - 2003_29
+    - 2009_20
+  - levelId: 10
+    waveId: 7
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 1075
+    weights: []
+    data:
+    - 2002_30
+    - 2002_19
+  - levelId: 10
+    waveId: 8
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 19
+    power: 1081
+    weights: []
+    data:
+    - 2010_25
+    - 2007_24
+  - levelId: 10
+    waveId: 8
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 1082
+    weights: []
+    data:
+    - 2006_21
+    - 2008_21
+  - levelId: 10
+    waveId: 8
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 1083
+    weights: []
+    data:
+    - 2010_28
+    - 2007_30
+  - levelId: 10
+    waveId: 8
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 19
+    power: 1084
+    weights: []
+    data:
+    - 2001_41
+    - 2002_30
+  - levelId: 10
+    waveId: 9
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 17
+    power: 1091
+    weights: []
+    data:
+    - 2009_50
+    - 2003_10
+  - levelId: 10
+    waveId: 9
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 1092
+    weights: []
+    data:
+    - 2003_41
+    - 2010_24
+  - levelId: 10
+    waveId: 9
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 1093
+    weights: []
+    data:
+    - 2001_22
+    - 2003_17
+  - levelId: 10
+    waveId: 9
+    batchId: 4
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 1094
+    weights: []
+    data:
+    - 2006_32
+    - 2006_28
+  - levelId: 10
+    waveId: 9
+    batchId: 5
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 1095
+    weights: []
+    data:
+    - 2001_24
+    - 2010_24
+  - levelId: 10
+    waveId: 10
+    batchId: 1
+    isBoss: 0
+    delayTime: 0
+    duration: 17
+    power: 1101
+    weights: []
+    data:
+    - 2008_38
+    - 2002_14
+  - levelId: 10
+    waveId: 10
+    batchId: 2
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 1102
+    weights: []
+    data:
+    - 2009_32
+    - 2006_20
+  - levelId: 10
+    waveId: 10
+    batchId: 3
+    isBoss: 0
+    delayTime: 1
+    duration: 17
+    power: 1103
+    weights: []
+    data:
+    - 2005_50
+    - 2004_13
+  - levelId: 10
+    waveId: 10
+    batchId: 4
+    isBoss: 1
+    delayTime: 1
+    duration: 17
+    power: 1104
+    weights: []
+    data:
+    - 2001_35
+    - 2003_26

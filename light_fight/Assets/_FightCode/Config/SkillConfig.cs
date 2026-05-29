@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ExcelExtension;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _FightCode.Config
 {
@@ -11,15 +12,15 @@ namespace _FightCode.Config
     public class SkillConfig : BaseConfig
     {
         [SerializeField] private List<SkillData> skills = new List<SkillData>();
-        
+
         private Dictionary<int, SkillData> cacheSkillData;
-    
+
         public override void OnMapValue()
         {
             cacheSkillData = new Dictionary<int, SkillData>();
             foreach (var m in skills)
             {
-                cacheSkillData.Add(m.SkillId, m);
+                cacheSkillData.Add(m.skillId, m);
             }
         }
 
@@ -28,26 +29,19 @@ namespace _FightCode.Config
             return cacheSkillData.TryGetValue(skillId, out skill);
         }
     }
-    
+
     [Serializable]
-    public class SkillData
+    public struct SkillData
     {
-        [SerializeField] private int id;
-        [SerializeField] private int level;
-        [SerializeField] private string path;
-        [SerializeField] private string name;
+        public int skillId;
+        public string skillName;
+        public string path;
         [SerializeField] private float baseFlatDamage;
         [SerializeField] private float flatDamageBonusLevel;
         [SerializeField] private float baseScaleDamage;
         [SerializeField] private float scaleDamageBonusLevel;
-        
-        public float FlatDamage() => baseFlatDamage + level * flatDamageBonusLevel;
-        public float ScaleDamage() => baseScaleDamage + level * scaleDamageBonusLevel;
 
-        public int SkillId => id;
-
-        public int Level => level;
-
-        public string Path => path;
+        public float FlatDamage(int level) => baseFlatDamage + (level - 1) * flatDamageBonusLevel;
+        public float ScaleDamage(int level) => baseScaleDamage + (level - 1) * scaleDamageBonusLevel;
     }
 }

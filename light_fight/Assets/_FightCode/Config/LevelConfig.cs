@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ExcelExtension;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _FightCode.Config
 {
@@ -13,21 +14,22 @@ namespace _FightCode.Config
         [SerializeField] private List<LevelBatch> spawns = new List<LevelBatch>();
 
         private Dictionary<int, IReadOnlyDictionary<WaveIdData, LevelBatch>> cacheSpawns;
-        
+
         public override void OnMapValue()
         {
-            Dictionary<int, Dictionary<WaveIdData, LevelBatch>> temp = new Dictionary<int, Dictionary<WaveIdData, LevelBatch>>();
+            Dictionary<int, Dictionary<WaveIdData, LevelBatch>> temp =
+                new Dictionary<int, Dictionary<WaveIdData, LevelBatch>>();
             foreach (var data in spawns)
             {
-                if (temp.TryGetValue(data.LevelId, out var dictionary))
+                if (temp.TryGetValue(data.levelId, out var dictionary))
                 {
-                    dictionary.Add(new WaveIdData(data.WaveId, data.BatchId), data);
+                    dictionary.Add(new WaveIdData(data.waveId, data.batchId), data);
                 }
                 else
                 {
                     dictionary = new Dictionary<WaveIdData, LevelBatch>();
-                    dictionary.Add(new WaveIdData(data.WaveId, data.BatchId), data);
-                    temp.Add(data.LevelId, dictionary);
+                    dictionary.Add(new WaveIdData(data.waveId, data.batchId), data);
+                    temp.Add(data.levelId, dictionary);
                 }
             }
 
@@ -66,33 +68,24 @@ namespace _FightCode.Config
             BatchId = batchId;
         }
     }
-    
-    [Serializable]
-    public class LevelBatch
-    {
-        [SerializeField] private int levelId;
-        [SerializeField] private int waveId;
-        [SerializeField] private int batchId;
-        [SerializeField] private int isBoss;
-        [SerializeField] private float delayTime;
-        [SerializeField] private float duration;
-        [SerializeField] private int power;
-        [SerializeField] private string spawnId;
-        [SerializeField] private string[] data;
-        [SerializeField] private Vector2Int[] weights;
 
-        public int LevelId => levelId;
-        public int WaveId => waveId;
-        public int BatchId => batchId;
-        public int IsBoss => isBoss;
-        public float DelayTime => delayTime;
-        public float Duration => duration;
-        public Vector2Int[] Weights => weights;
-        public int Power => power;
+    [Serializable]
+    public struct LevelBatch
+    {
+        public int levelId;
+        public int waveId;
+        public int batchId;
+        public int isBoss;
+        public float delayTime;
+        public float duration;
+        public int power;
+        public Vector2Int[] weights;
+        [SerializeField] private string[] data;
 
         public void Validate()
         {
             weights = new Vector2Int[data.Length];
+
             for (int i = 0; i < weights.Length; i++)
             {
                 var split = data[i].Split('_');
@@ -101,11 +94,13 @@ namespace _FightCode.Config
                     Debug.LogError($"Config error. length={split.Length}, format={data[i]}");
                     continue;
                 }
+
                 if (!int.TryParse(split[0], out int num1) || !int.TryParse(split[1], out int num2))
                 {
                     Debug.LogError("Error parse, format=" + data[i]);
                     continue;
                 }
+
                 weights[i] = new Vector2Int(num1, num2);
             }
         }

@@ -15,19 +15,143 @@ MonoBehaviour:
   fileUrl: 
   enable: 1
   skills:
-  - id: 3001
-    level: 1
-    path: 
-    name: Skill 01
-    baseFlatDamage: 0
-    flatDamageBonusLevel: 0
+  - skillId: 3001
+    skillName: Slash
+    path: 3001 Skill
+    baseFlatDamage: 10
+    flatDamageBonusLevel: 2
     baseScaleDamage: 1
-    scaleDamageBonusLevel: 0
-  - id: 3002
-    level: 1
-    path: 
-    name: Skill 02
-    baseFlatDamage: 0
-    flatDamageBonusLevel: 0
+    scaleDamageBonusLevel: 0.05
+  - skillId: 3002
+    skillName: Heavy Slash
+    path: 3002 Skill
+    baseFlatDamage: 20
+    flatDamageBonusLevel: 3
+    baseScaleDamage: 1.2
+    scaleDamageBonusLevel: 0.06
+  - skillId: 3003
+    skillName: Pierce
+    path: 3003 Skill
+    baseFlatDamage: 15
+    flatDamageBonusLevel: 2
+    baseScaleDamage: 1.1
+    scaleDamageBonusLevel: 0.05
+  - skillId: 3004
+    skillName: Whirlwind
+    path: 3004 Skill
+    baseFlatDamage: 25
+    flatDamageBonusLevel: 4
+    baseScaleDamage: 1.3
+    scaleDamageBonusLevel: 0.08
+  - skillId: 3005
+    skillName: Charge
+    path: 3005 Skill
+    baseFlatDamage: 30
+    flatDamageBonusLevel: 5
+    baseScaleDamage: 1.5
+    scaleDamageBonusLevel: 0.1
+  - skillId: 3006
+    skillName: Arrow Shot
+    path: 3006 Skill
+    baseFlatDamage: 12
+    flatDamageBonusLevel: 2
     baseScaleDamage: 1
-    scaleDamageBonusLevel: 0
+    scaleDamageBonusLevel: 0.04
+  - skillId: 3007
+    skillName: Multi Shot
+    path: 3007 Skill
+    baseFlatDamage: 18
+    flatDamageBonusLevel: 3
+    baseScaleDamage: 1.1
+    scaleDamageBonusLevel: 0.05
+  - skillId: 3008
+    skillName: Poison Arrow
+    path: 3008 Skill
+    baseFlatDamage: 16
+    flatDamageBonusLevel: 2
+    baseScaleDamage: 1
+    scaleDamageBonusLevel: 0.05
+  - skillId: 3009
+    skillName: Fireball
+    path: 3009 Skill
+    baseFlatDamage: 22
+    flatDamageBonusLevel: 4
+    baseScaleDamage: 1.4
+    scaleDamageBonusLevel: 0.08
+  - skillId: 3010
+    skillName: Ice Spike
+    path: 3010 Skill
+    baseFlatDamage: 24
+    flatDamageBonusLevel: 4
+    baseScaleDamage: 1.4
+    scaleDamageBonusLevel: 0.08
+  - skillId: 3011
+    skillName: Lightning Bolt
+    path: 3011 Skill
+    baseFlatDamage: 28
+    flatDamageBonusLevel: 5
+    baseScaleDamage: 1.5
+    scaleDamageBonusLevel: 0.1
+  - skillId: 3012
+    skillName: Meteor
+    path: 3012 Skill
+    baseFlatDamage: 50
+    flatDamageBonusLevel: 8
+    baseScaleDamage: 2
+    scaleDamageBonusLevel: 0.15
+  - skillId: 3013
+    skillName: Dark Orb
+    path: 3013 Skill
+    baseFlatDamage: 35
+    flatDamageBonusLevel: 5
+    baseScaleDamage: 1.6
+    scaleDamageBonusLevel: 0.1
+  - skillId: 3014
+    skillName: Shadow Strike
+    path: 3014 Skill
+    baseFlatDamage: 32
+    flatDamageBonusLevel: 5
+    baseScaleDamage: 1.7
+    scaleDamageBonusLevel: 0.1
+  - skillId: 3015
+    skillName: Earth Smash
+    path: 3015 Skill
+    baseFlatDamage: 40
+    flatDamageBonusLevel: 6
+    baseScaleDamage: 1.8
+    scaleDamageBonusLevel: 0.12
+  - skillId: 3016
+    skillName: Rock Throw
+    path: 3016 Skill
+    baseFlatDamage: 20
+    flatDamageBonusLevel: 3
+    baseScaleDamage: 1.2
+    scaleDamageBonusLevel: 0.06
+  - skillId: 3017
+    skillName: Bite
+    path: 3017 Skill
+    baseFlatDamage: 14
+    flatDamageBonusLevel: 2
+    baseScaleDamage: 1
+    scaleDamageBonusLevel: 0.04
+  - skillId: 3018
+    skillName: Claw Attack
+    path: 3018 Skill
+    baseFlatDamage: 18
+    flatDamageBonusLevel: 3
+    baseScaleDamage: 1.1
+    scaleDamageBonusLevel: 0.05
+  - skillId: 3019
+    skillName: Tail Sweep
+    path: 3019 Skill
+    baseFlatDamage: 26
+    flatDamageBonusLevel: 4
+    baseScaleDamage: 1.4
+    scaleDamageBonusLevel: 0.08
+  - skillId: 3020
+    skillName: Boss Rage
+    path: 3020 Skill
+    baseFlatDamage: 60
+    flatDamageBonusLevel: 10
+    baseScaleDamage: 2.2
+    scaleDamageBonusLevel: 0.2

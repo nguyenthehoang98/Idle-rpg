@@ -177,16 +177,16 @@ namespace _FightCode.Battle.Logic
             {
                 LevelBatch batch = batches[i];
                 Dictionary<int, int> monsters = new Dictionary<int, int>();
-                List<int> bag = CreateRandomBag(batch.Weights);
+                List<int> bag = CreateRandomBag(batch.weights);
                 if (bag.Count == 0)
                 {
 #if UNITY_EDITOR
-                    Debug.LogError($"Batch has no spawn weights. Level:{batch.LevelId}, Wave:{batch.WaveId}, Batch:{batch.BatchId}");
+                    Debug.LogError($"Batch has no spawn weights. Level:{batch.levelId}, Wave:{batch.waveId}, Batch:{batch.batchId}");
 #endif
                 }
 
                 int bagIndex = 0;
-                int powerBudget = batch.Power;
+                int powerBudget = batch.power;
                 int safe = 0;
                 while (powerBudget > 0 && safe < 10 && bag.Count > 0)
                 {
@@ -212,7 +212,7 @@ namespace _FightCode.Battle.Logic
 #endif
                     if (!foundSkill) break;
                     
-                    int power = FormulaUtils.MonsterPower(monsterData, skillData);
+                    int power = FormulaUtils.MonsterPower(monsterData, skillData, monsterData.skillLevel);
                     if (power <= 0 || power > powerBudget)
                         continue;
                     powerBudget -= power;
@@ -227,10 +227,10 @@ namespace _FightCode.Battle.Logic
                     total += monster.Value;
                 result[i] = new Batch
                 {
-                    time = batch.Duration,
-                    interval = total > 0 ? Mathf.Max(batch.Duration / total, 0.001f) : batch.Duration,
+                    time = batch.duration,
+                    interval = total > 0 ? Mathf.Max(batch.duration / total, 0.001f) : batch.duration,
                     monsters = monsters,
-                    waitTime = batch.DelayTime
+                    waitTime = batch.delayTime
                 };
 
 #if UNITY_EDITOR
@@ -240,7 +240,7 @@ namespace _FightCode.Battle.Logic
                 }
                 else
                 {
-                    Debug.Log($"[Battle] Build total {monsters.Count} monsters: " + string.Join(',', monsters) + $", duration: {batch.Duration}, interval: {result[i].interval}");
+                    Debug.Log($"[Battle] Build total {monsters.Count} monsters: " + string.Join(',', monsters) + $", duration: {batch.duration}, interval: {result[i].interval}");
                 }
 #endif
             }

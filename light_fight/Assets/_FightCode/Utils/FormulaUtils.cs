@@ -9,13 +9,13 @@ namespace _FightCode.Utils
     {
         private static Dictionary<int, StatComplex> monsterStatsComplex = new Dictionary<int, StatComplex>();
 
-        public static int MonsterPower(MonsterData monsterData, SkillData skillData)
+        public static int MonsterPower(MonsterData monsterData, SkillData skillData, int skillLevel)
         {
             int hash = HashCode.Combine(monsterData.skillId, monsterData.skillId, monsterData.skillLevel);
 
             if (monsterStatsComplex.TryGetValue(hash, out StatComplex statComplex))
             {
-                return (int)statComplex.GetPower(skillData.ScaleDamage(), skillData.FlatDamage());
+                return (int)statComplex.GetPower(skillData.ScaleDamage(skillLevel), skillData.FlatDamage(skillLevel));
             }
             else
             {
@@ -30,7 +30,7 @@ namespace _FightCode.Utils
                 statComplex.AddBase(StatType.ArmorPenPercent, monsterData.armorPenPercent);
                 
                 monsterStatsComplex.Add(hash, statComplex);
-                return (int)statComplex.GetPower(skillData.ScaleDamage(), skillData.FlatDamage());
+                return (int)statComplex.GetPower(skillData.ScaleDamage(skillLevel), skillData.FlatDamage(skillLevel));
             }
         }
     }
