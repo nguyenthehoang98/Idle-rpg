@@ -56,16 +56,16 @@ MonoBehaviour:
         damageTickerIntervalInSeconds: 1
         maximumCollision: 1
         collisionResetIntervalInSeconds: 0.033333335
-        prefab: {fileID: 0}
+        prefab: {fileID: 135561719873023293, guid: a0bc09dd6c08540489a96f32e06aa07c, type: 3}
         offsetStartPosition:
           x: 0
           y: 0
         shapeType: 0
         shapeConfig:
           rid: 7993921678918811725
-        trajectoryType: 0
+        trajectoryType: 1
         trajectoryConfig:
-          rid: 7993921678918811726
+          rid: 8666061037243465779
     - rid: 7993921678918811725
       type: {class: SquareShapeConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
@@ -74,9 +74,11 @@ MonoBehaviour:
           x: 0
           y: 0
         size:
-          x: 1
-          y: 1
+          x: 0.1
+          y: 0.1
         pivotType: 0
-    - rid: 7993921678918811726
-      type: {class: StationaryTrajectoryConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
-      data: 
+    - rid: 8666061037243465779
+      type: {class: BulletTrajectoryConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
+      data:
+        initialSpeed: 10
+        acceleration: 0

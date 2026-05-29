@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using _KITSystem.Resource;
 using _KITSystem.SkillSystem.Config;
 using Unity.Mathematics;
 using UnityEngine;
@@ -8,6 +10,7 @@ namespace _KITSystem.SkillSystem.Runtime
     {
         private static SPU spu;
         private static IQuery query;
+        private static Dictionary<GameObject, bool> projectileLoaded = new Dictionary<GameObject, bool>();
 
         public static void Initialize(SPU spu, IQuery query)
         {
@@ -52,10 +55,15 @@ namespace _KITSystem.SkillSystem.Runtime
                         else if (cp.projectileType == BaseProjectileConfig.ProjectileType.Ranger)
                         {
                             var ranger = cp.projectileConfig as RangerProjectileConfig;
+                            if (projectileLoaded.TryAdd(ranger.prefab, true))
+                            {
+                                KitPool.RegisterPool(ranger.prefab, true);
+                            }
+
                             var trajectory = GetTrajectory(ranger.trajectoryConfig, start + ranger.offsetStartPosition, goal);
                             shapes = new BaseShapeAction[1] { GenerateShape(ranger.shapeConfig) };
                             spu.RequestAddAction(skillId,
-                                new CastRangeProjectileSkillAction(trajectory, shapes, spu,
+                                new CastRangeProjectileSkillAction(ranger, trajectory, shapes, spu,
                                     e.triggerConfig, lifeTimeInSeconds)
                             );
                         }
@@ -64,13 +72,13 @@ namespace _KITSystem.SkillSystem.Runtime
                     case BaseActionConfig.ActionType.TriggerEventId:
                         var triggerEventId = e.actionConfig as TriggerEventIdConfig;
                         spu.RequestAddAction(skillId,
-                            new TriggerEventIdSkillAction(skillId, triggerEventId.eventId, 
+                            new TriggerEventIdSkillAction(skillId, triggerEventId.eventId,
                                 spu, e.triggerConfig, lifeTimeInSeconds)
                         );
                         break;
                 }
             }
-            
+
             return skillId;
         }
 
@@ -101,18 +109,26 @@ namespace _KITSystem.SkillSystem.Runtime
                     return new BulletTrajectoryAction(bullet.initialSpeed, bullet.acceleration, start, goal);
                 case BaseTrajectoryConfig.TrajectoryType.Parabolic:
                     var parabolic = trajectoryConfig as ParabolicTrajectoryConfig;
-                    return new ParabolicTrajectoryAction(parabolic.height, parabolic.distance, parabolic.duration, start, goal);
-               case BaseTrajectoryConfig.TrajectoryType.Blend:
-                   var blend = trajectoryConfig as BlendTrajectoryConfig;
-                   return new BlendTrajectoryAction(blend.value, blend.duration, start, goal);
-               case BaseTrajectoryConfig.TrajectoryType.Boomerang:
-                   var boomerang = trajectoryConfig as BoomerangTrajectoryConfig;
-                   return new BoomerangTrajectoryAction(boomerang.castPhase, boomerang.castDuration,
-                       boomerang.returnPhase, boomerang.returnDuration, start, goal);
+                    return new ParabolicTrajectoryAction(parabolic.height, parabolic.distance, parabolic.duration,
+                        start, goal
+                    );
+                case BaseTrajectoryConfig.TrajectoryType.Blend:
+                    var blend = trajectoryConfig as BlendTrajectoryConfig;
+                    return new BlendTrajectoryAction(blend.value, blend.duration, start, goal);
+                case BaseTrajectoryConfig.TrajectoryType.Boomerang:
+                    var boomerang = trajectoryConfig as BoomerangTrajectoryConfig;
+                    return new BoomerangTrajectoryAction(boomerang.castPhase, boomerang.castDuration,
+                        boomerang.returnPhase, boomerang.returnDuration, start, goal
+                    );
                 default:
                     Debug.LogError($"Type {trajectoryConfig.Type} is not supported");
                     return null;
             }
+        }
+
+        public static void Dispose()
+        {
+            projectileLoaded = new Dictionary<GameObject, bool>();
         }
     }
 }

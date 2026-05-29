@@ -111,7 +111,7 @@ namespace _KITSystem.SkillSystem.Entity
                     "Clear",
                     "Cancel"))
             {
-                EntityManager.Clear();
+                EntityManager.Dispose();
                 RefreshData();
             }
             GUI.enabled = true;

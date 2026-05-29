@@ -24,7 +24,7 @@ MonoBehaviour:
     skillCooldown: 3
     radius: 0.4
     moveSpeed: 3
-    stopMoveDistance: 0.2
+    stopMoveDistance: 3
     attackDistance: 1.2
     attack: 1
     health: 20
@@ -37,7 +37,7 @@ MonoBehaviour:
     skillCooldown: 3
     radius: 0.4
     moveSpeed: 2.25
-    stopMoveDistance: 3
+    stopMoveDistance: 6
     attackDistance: 4
     attack: 2
     health: 18

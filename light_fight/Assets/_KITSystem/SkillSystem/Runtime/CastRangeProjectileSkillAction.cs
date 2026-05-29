@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using _KITSystem.Resource;
 using _KITSystem.SkillSystem.Config;
 using Unity.Mathematics;
 using UnityEngine;
@@ -8,11 +8,15 @@ namespace _KITSystem.SkillSystem.Runtime
     internal sealed class CastRangeProjectileSkillAction : CastProjectileSkillAction
     {
         private BaseTrajectoryAction trajectory;
+        private Transform projectile;
+        private int remainingCollisions;
         
-        internal CastRangeProjectileSkillAction(BaseTrajectoryAction trajectory, BaseShapeAction[] shapes, 
+        internal CastRangeProjectileSkillAction(RangerProjectileConfig ranger, BaseTrajectoryAction trajectory, BaseShapeAction[] shapes, 
             SPU spu, TriggerConfig triggerConfig, float lifeTime) : base(shapes, spu, triggerConfig, lifeTime)
         {
             this.trajectory = trajectory;
+            this.remainingCollisions = ranger.maximumCollision;
+            this.projectile = KitPool.Instantiate(ranger.prefab).transform;
         }
 
         protected override void OnUpdate(float deltaTime)
@@ -20,6 +24,9 @@ namespace _KITSystem.SkillSystem.Runtime
             base.OnUpdate(deltaTime);
 
             float2 position = trajectory.EvaluatePosition(deltaTime);
+            
+            projectile.transform.position = new Vector3(position.x, position.y);
+            
             for (int i = 0; i < shapes.Length; i++)
             {
                 BaseShapeAction shape = shapes[i];
@@ -35,10 +42,32 @@ namespace _KITSystem.SkillSystem.Runtime
                         for (int i1 = 0; i1 < results.Count; i1++)
                         {
                             int entity = results[i1];
+
                             Damage(entity);
+
+                            remainingCollisions--;
+
+                            if (remainingCollisions == 0)
+                            {
+                                EndLifeCycle();
+                                
+                                return;
+                            }
                         }
                     }
                 }
+            }
+        }
+
+        protected override void OnStop()
+        {
+            base.OnStop();
+
+            if (projectile != null)
+            {
+                KitPool.Destroy(projectile.gameObject);
+
+                projectile = null;
             }
         }
     }

@@ -8,9 +8,8 @@ namespace _KITSystem.SkillSystem.Config
 {
     public class RangerProjectileConfig : BaseProjectileConfig
     {
-        [TitleGroup("Ranger : GameObject")] [Indent]
-        public GameObject prefab;
-
+        [TitleGroup("Ranger : GameObject")] 
+        [Indent] public GameObject prefab;
         [Indent] public float2 offsetStartPosition;
 
         [TitleGroup("Ranger : HitBox")] [GUIColor("GetButtonColor1"), OnValueChanged("ShapeTypeChanged"), Indent]

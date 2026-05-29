@@ -117,7 +117,7 @@ namespace _KITSystem.SkillSystem.Entity
             }
         }
 
-        public static void Clear()
+        public static void Dispose()
         {
             foreach (KeyValuePair<Type, IComponentPool> pool in ComponentRegistry.Pools)
             {

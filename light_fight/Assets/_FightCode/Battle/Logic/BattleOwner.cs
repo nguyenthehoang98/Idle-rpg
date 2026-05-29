@@ -4,6 +4,7 @@ using _FightCode.Battle.Popup;
 using _FightCode.Battle.View;
 using _KITSystem.Grid;
 using _KITSystem.Popup;
+using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Entity;
 using _KITSystem.SkillSystem.Runtime;
@@ -30,6 +31,7 @@ namespace _FightCode.Battle.Logic
         
         private readonly Dictionary<int, int> entityToAgent = new Dictionary<int, int>();
         private readonly Dictionary<int, Monster> entityToMonster = new Dictionary<int, Monster>();
+        private static Dictionary<int, bool> monsterLoaded = new Dictionary<int, bool>();
 
         private IDiceControlView diceControl;
         private bool waveSpawnComplete = false;
@@ -68,16 +70,22 @@ namespace _FightCode.Battle.Logic
             
             movement.Initialize();
             agent.Initialize();
-            spawner.Initialize(1, request =>
+            spawner.Initialize(1, async request =>
             {
                 Config.MonsterData monsterData = request.MonsterData;
                 float2 position = request.Position;
                 float radius = monsterData.Radius;
                 float speed = monsterData.MoveSpeed;
                 float stopDistance = monsterData.StopMoveDistance;
+                int monsterId = monsterData.MonsterId;
+                
+                if (setting.enableVisualize && monsterLoaded.TryAdd(monsterId, true))
+                {
+                    GameObject go = await KitLoaded.LoadAsync<GameObject>(monsterData.Path);
+                    KitPool.RegisterPool(go, true);
+                }
                 
                 int entity = EntityManager.CreateEntity();
-                int monsterId = monsterData.MonsterId;
                 
                 AgentData agentData = agent.CreateAgent(entity, position, radius, speed, stopDistance);
                 entityToAgent[entity] = agentData.agent;
@@ -161,7 +169,8 @@ namespace _FightCode.Battle.Logic
             }
 
             EntityManager.OnBehaviour -= OnEntityBehaviour;
-            EntityManager.Clear();
+            EntityManager.Dispose();
+            SkillFactory.Dispose();
             movement?.Dispose();
             agent?.Dispose();
         }

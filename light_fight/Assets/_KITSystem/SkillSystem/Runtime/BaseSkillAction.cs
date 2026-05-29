@@ -59,11 +59,7 @@ namespace _KITSystem.SkillSystem.Runtime
             
             if(hasTriggered) OnUpdate(deltaTime);
 
-            if (elapsedTime >= lifeTime)
-            {
-                Reason = ActionCompleteReason.EndLifeCycle;
-                IsFinished = true;
-            }
+            if (elapsedTime >= lifeTime) EndLifeCycle();
         }
 
         public void Interrupt()
@@ -71,6 +67,15 @@ namespace _KITSystem.SkillSystem.Runtime
             if (!IsFinished)
             {
                 Reason = ActionCompleteReason.Interrupt;
+                IsFinished = true;
+            }
+        }
+
+        public void EndLifeCycle()
+        {
+            if (!IsFinished)
+            {
+                Reason = ActionCompleteReason.EndLifeCycle;
                 IsFinished = true;
             }
         }

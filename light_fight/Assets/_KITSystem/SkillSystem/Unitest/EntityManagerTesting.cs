@@ -9,7 +9,7 @@ namespace _KITSystem.SkillSystem.Unitest
         [SetUp]
         public void Setup()
         {
-            EntityManager.Clear();
+            EntityManager.Dispose();
         }
 
         [Test]
@@ -77,7 +77,7 @@ namespace _KITSystem.SkillSystem.Unitest
             EntityManager.CreateEntity();
             EntityManager.CreateEntity();
             EntityManager.CreateEntity();
-            EntityManager.Clear();
+            EntityManager.Dispose();
 
             Assert.AreEqual(0, EntityManager.ActiveCount);
             Assert.IsFalse(EntityManager.IsAlive(1));

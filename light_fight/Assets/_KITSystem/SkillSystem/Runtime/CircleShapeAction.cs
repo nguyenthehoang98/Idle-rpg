@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using _KITSystem.SkillSystem.Config;
 using Unity.Mathematics;
 using UnityEngine;

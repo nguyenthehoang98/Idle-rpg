@@ -34,8 +34,6 @@ namespace _FightCode.Battle.Logic
         private Vector3 position;
         private bool isMoving = true;
 
-        private static Dictionary<int, bool> MonsterLoaded = new Dictionary<int, bool>();
-
         public Monster(BattleShare share, BattleSetting setting, int entity, int configId, int agent)
         {
             this.share = share;
@@ -48,19 +46,13 @@ namespace _FightCode.Battle.Logic
             
             if (setting.enableVisualize)
             {
-                AsyncInstantiate(monsterData.MonsterId, monsterData.Path);
+                AsyncInstantiate(monsterData.Path);
             }
         }
 
-        private async void AsyncInstantiate(int id, string path)
+        private async void AsyncInstantiate(string path)
         {
-            GameObject go = await KitLoaded.LoadAsync<GameObject>(path, true);
-            
-            if (!MonsterLoaded.ContainsKey(id))
-            {
-                KitPool.RegisterPool(go, true);
-                MonsterLoaded[id] = true;
-            }
+            GameObject go = await KitLoaded.LoadAsync<GameObject>(path);
 
             animation = KitPool.Instantiate(go, false).GetComponent<MonsterAnimation>();
             animation.SetPosition(position);
