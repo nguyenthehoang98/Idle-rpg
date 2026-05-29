@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using _KITSystem.Formula;
 using ExcelExtension;
 using UnityEditor;
 using UnityEngine;
@@ -27,6 +28,30 @@ namespace _FightCode.Config
                 cacheMonsterData.Add(m.monsterId, m);
             }
         }
+        
+#if UNITY_EDITOR
+        public override void OnPostImported()
+        {
+            for (var i = 0; i < monsters.Count; i++)
+            {
+                MonsterData m = monsters[i];
+                ValidateObject<GameObject>(m.path);
+                
+                StatComplex complex = new StatComplex();
+                complex.AddBase(StatType.Attack, m.attack);
+                complex.AddBase(StatType.Health, m.health);
+                complex.AddBase(StatType.Defense, m.defense);
+                complex.AddBase(StatType.AttackSpeed, m.attackSpeed);
+                complex.AddBase(StatType.CriticalRate, m.criticalRate);
+                complex.AddBase(StatType.CriticalDamage, m.criticalDamage);
+                complex.AddBase(StatType.DamageMultiplier, m.damageMultiplier);
+                complex.AddBase(StatType.ArmorPenPercent, m.armorPenPercent);
+
+                m.Power = (int)complex.GetPower();
+                monsters[i] = m;
+            }
+        }
+#endif
 
         public bool Find(int monsterId, out MonsterData skill)
         {
@@ -54,6 +79,11 @@ namespace _FightCode.Config
         public float damageMultiplier;
         public float armorPenPercent;
 
-        public int power;
+        [SerializeField] private int power;
+
+        public int Power
+        {
+            set => power = value;
+        }
     }
 }

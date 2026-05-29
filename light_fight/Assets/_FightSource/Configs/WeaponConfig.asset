@@ -19,80 +19,80 @@ MonoBehaviour:
     weaponName: Chopper
     path: 1001 Weapon
     skillId: 3001
-    baseAttack: 1
-    attackBonusLevel: 0.02
+    baseAttack: 8
+    attackBonusLevel: 0.08
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1002
     weaponName: Sword
     path: 1002 Weapon
     skillId: 3002
-    baseAttack: 2
-    attackBonusLevel: 0.03
+    baseAttack: 10
+    attackBonusLevel: 0.1
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1003
     weaponName: Circular Saw
     path: 1003 Weapon
     skillId: 3003
-    baseAttack: 2
-    attackBonusLevel: 0.03
+    baseAttack: 9
+    attackBonusLevel: 0.09
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1004
     weaponName: Captain's Sword
     path: 1004 Weapon
     skillId: 3004
-    baseAttack: 3
-    attackBonusLevel: 0.04
+    baseAttack: 14
+    attackBonusLevel: 0.12
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1005
     weaponName: Chainsaw
     path: 1005 Weapon
     skillId: 3005
-    baseAttack: 3
-    attackBonusLevel: 0.05
+    baseAttack: 16
+    attackBonusLevel: 0.14
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1006
     weaponName: Brick
     path: 1006 Weapon
     skillId: 3006
-    baseAttack: 4
-    attackBonusLevel: 0.06
+    baseAttack: 7
+    attackBonusLevel: 0.07
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1007
     weaponName: Rock
     path: 1007 Weapon
     skillId: 3007
-    baseAttack: 5
-    attackBonusLevel: 0.07
+    baseAttack: 10
+    attackBonusLevel: 0.09
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1008
     weaponName: Spiky Shield
     path: 1008 Weapon
     skillId: 3008
-    baseAttack: 6
-    attackBonusLevel: 0.08
+    baseAttack: 13
+    attackBonusLevel: 0.11
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1009
     weaponName: Spoon
     path: 1009 Weapon
     skillId: 3009
-    baseAttack: 7
-    attackBonusLevel: 0.09
+    baseAttack: 8
+    attackBonusLevel: 0.08
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1010
     weaponName: Hammer
     path: 1010 Weapon
     skillId: 3010
-    baseAttack: 8
-    attackBonusLevel: 0.1
+    baseAttack: 18
+    attackBonusLevel: 0.15
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1011
@@ -100,15 +100,15 @@ MonoBehaviour:
     path: 1011 Weapon
     skillId: 3011
     baseAttack: 9
-    attackBonusLevel: 0.11
+    attackBonusLevel: 0.1
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1012
     weaponName: Fist
     path: 1012 Weapon
     skillId: 3012
-    baseAttack: 10
-    attackBonusLevel: 0.12
+    baseAttack: 7
+    attackBonusLevel: 0.08
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1013
@@ -116,62 +116,62 @@ MonoBehaviour:
     path: 1013 Weapon
     skillId: 3013
     baseAttack: 11
-    attackBonusLevel: 0.13
+    attackBonusLevel: 0.1
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1014
     weaponName: Hand
     path: 1014 Weapon
     skillId: 3014
-    baseAttack: 12
-    attackBonusLevel: 0.14
+    baseAttack: 8
+    attackBonusLevel: 0.09
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1015
     weaponName: Power Fist
     path: 1015 Weapon
     skillId: 3015
-    baseAttack: 13
-    attackBonusLevel: 0.15
+    baseAttack: 20
+    attackBonusLevel: 0.16
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1016
     weaponName: Plank
     path: 1016 Weapon
     skillId: 3016
-    baseAttack: 14
-    attackBonusLevel: 0.16
+    baseAttack: 10
+    attackBonusLevel: 0.08
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1017
     weaponName: Shredder
     path: 1017 Weapon
     skillId: 3017
-    baseAttack: 15
-    attackBonusLevel: 0.18
+    baseAttack: 16
+    attackBonusLevel: 0.12
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1018
     weaponName: Fireball
     path: 1018 Weapon
     skillId: 3018
-    baseAttack: 16
-    attackBonusLevel: 0.2
+    baseAttack: 18
+    attackBonusLevel: 0.13
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1019
     weaponName: Grenade Launcher
     path: 1019 Weapon
     skillId: 3019
-    baseAttack: 18
-    attackBonusLevel: 0.22
+    baseAttack: 28
+    attackBonusLevel: 0.18
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1020
     weaponName: Rocket Launcher
     path: 1020 Weapon
     skillId: 3020
-    baseAttack: 20
-    attackBonusLevel: 0.25
+    baseAttack: 35
+    attackBonusLevel: 0.22
     basePrice: 0
     priceBonusLevel: 0

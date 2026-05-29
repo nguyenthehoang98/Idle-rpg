@@ -28,6 +28,16 @@ namespace _FightCode.Config
             }
         }
 
+#if UNITY_EDITOR
+        public override void OnPostImported()
+        {
+            for (var i = 0; i < weapons.Count; i++)
+            {
+                ValidateObject<GameObject>(weapons[i].path);
+            }
+        }
+#endif
+        
         public bool Find(int weaponId, out WeaponData skill)
         {
             return cacheWeaponData.TryGetValue(weaponId, out skill);
