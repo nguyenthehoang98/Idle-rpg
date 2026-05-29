@@ -16,7 +16,7 @@ MonoBehaviour:
   enable: 1
   weapons:
   - weaponId: 1001
-    weaponName: Wooden Sword
+    weaponName: Chopper
     path: 1001 Weapon
     skillId: 3001
     baseAttack: 1
@@ -24,7 +24,7 @@ MonoBehaviour:
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1002
-    weaponName: Iron Sword
+    weaponName: Sword
     path: 1002 Weapon
     skillId: 3002
     baseAttack: 2
@@ -32,7 +32,7 @@ MonoBehaviour:
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1003
-    weaponName: Bronze Axe
+    weaponName: Circular Saw
     path: 1003 Weapon
     skillId: 3003
     baseAttack: 2
@@ -40,7 +40,7 @@ MonoBehaviour:
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1004
-    weaponName: Hunter Bow
+    weaponName: Captain's Sword
     path: 1004 Weapon
     skillId: 3004
     baseAttack: 3
@@ -48,7 +48,7 @@ MonoBehaviour:
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1005
-    weaponName: Steel Sword
+    weaponName: Chainsaw
     path: 1005 Weapon
     skillId: 3005
     baseAttack: 3
@@ -56,7 +56,7 @@ MonoBehaviour:
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1006
-    weaponName: War Axe
+    weaponName: Brick
     path: 1006 Weapon
     skillId: 3006
     baseAttack: 4
@@ -64,7 +64,7 @@ MonoBehaviour:
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1007
-    weaponName: Long Bow
+    weaponName: Rock
     path: 1007 Weapon
     skillId: 3007
     baseAttack: 5
@@ -72,7 +72,7 @@ MonoBehaviour:
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1008
-    weaponName: Knight Blade
+    weaponName: Spiky Shield
     path: 1008 Weapon
     skillId: 3008
     baseAttack: 6
@@ -80,7 +80,7 @@ MonoBehaviour:
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1009
-    weaponName: Battle Hammer
+    weaponName: Spoon
     path: 1009 Weapon
     skillId: 3009
     baseAttack: 7
@@ -88,7 +88,7 @@ MonoBehaviour:
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1010
-    weaponName: Assassin Dagger
+    weaponName: Hammer
     path: 1010 Weapon
     skillId: 3010
     baseAttack: 8
@@ -96,7 +96,7 @@ MonoBehaviour:
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1011
-    weaponName: Bronze Spear
+    weaponName: Claw
     path: 1011 Weapon
     skillId: 3011
     baseAttack: 9
@@ -104,7 +104,7 @@ MonoBehaviour:
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1012
-    weaponName: Silver Spear
+    weaponName: Fist
     path: 1012 Weapon
     skillId: 3012
     baseAttack: 10
@@ -112,7 +112,7 @@ MonoBehaviour:
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1013
-    weaponName: Knight Sword
+    weaponName: Flaming Brass Knuckles
     path: 1013 Weapon
     skillId: 3013
     baseAttack: 11
@@ -120,7 +120,7 @@ MonoBehaviour:
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1014
-    weaponName: Hunter Crossbow
+    weaponName: Hand
     path: 1014 Weapon
     skillId: 3014
     baseAttack: 12
@@ -128,7 +128,7 @@ MonoBehaviour:
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1015
-    weaponName: Flame Blade
+    weaponName: Power Fist
     path: 1015 Weapon
     skillId: 3015
     baseAttack: 13
@@ -136,7 +136,7 @@ MonoBehaviour:
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1016
-    weaponName: Ice Blade
+    weaponName: Plank
     path: 1016 Weapon
     skillId: 3016
     baseAttack: 14
@@ -144,7 +144,7 @@ MonoBehaviour:
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1017
-    weaponName: Thunder Hammer
+    weaponName: Shredder
     path: 1017 Weapon
     skillId: 3017
     baseAttack: 15
@@ -152,7 +152,7 @@ MonoBehaviour:
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1018
-    weaponName: Dragon Spear
+    weaponName: Fireball
     path: 1018 Weapon
     skillId: 3018
     baseAttack: 16
@@ -160,7 +160,7 @@ MonoBehaviour:
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1019
-    weaponName: Phoenix Bow
+    weaponName: Grenade Launcher
     path: 1019 Weapon
     skillId: 3019
     baseAttack: 18
@@ -168,7 +168,7 @@ MonoBehaviour:
     basePrice: 0
     priceBonusLevel: 0
   - weaponId: 1020
-    weaponName: Demon Slayer
+    weaponName: Rocket Launcher
     path: 1020 Weapon
     skillId: 3020
     baseAttack: 20
