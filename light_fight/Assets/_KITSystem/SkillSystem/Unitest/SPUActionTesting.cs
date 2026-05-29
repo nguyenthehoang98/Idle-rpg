@@ -19,6 +19,7 @@ namespace _KITSystem.SkillSystem.Unitest
         public void Add_TriggerTimer()
         {
             var skillConfig = ScriptableObject.CreateInstance<SkillFrameConfig>();
+            
             skillConfig.defaultSkillConfig = new DefaultSkillConfig
             {
                 lifeTimeInSeconds = 2,
@@ -31,7 +32,7 @@ namespace _KITSystem.SkillSystem.Unitest
                     {
                         timer = 0.5f, type = TriggerConfig.TriggerType.Timeline
                     },
-                    actionConfig = new CastProjectileConfig()
+                    actionConfig = new TriggerEventIdConfig()
                 }
             };
 
@@ -57,7 +58,7 @@ namespace _KITSystem.SkillSystem.Unitest
                     {
                         timer = 0.5f, type = TriggerConfig.TriggerType.Timeline
                     },
-                    actionConfig = new CastProjectileConfig()
+                    actionConfig = new TriggerEventIdConfig()
                 }
             };
 
@@ -83,7 +84,7 @@ namespace _KITSystem.SkillSystem.Unitest
                     {
                         timer = 0.5f, type = TriggerConfig.TriggerType.Timeline
                     },
-                    actionConfig = new CastProjectileConfig()
+                    actionConfig = new TriggerEventIdConfig()
                 }
             };
 
