@@ -15,57 +15,183 @@ MonoBehaviour:
   fileUrl: 
   enable: 1
   monsters:
-  - monsterId: 0
-    monsterName: 
-    path: 
+  - monsterId: 2001
+    monsterName: Monster_1
+    path: 2001 Monster
     isRanged: 0
-    skillId: 0
-    skillLevel: 0
-    radius: 0
-    moveSpeed: 0
-    stopMoveDistance: 0
+    skillId: 3001
+    skillLevel: 1
+    radius: 0.4
+    moveSpeed: 2
+    stopMoveDistance: 3
     attackDistance: 0
-    attack: 0
-    health: 0
+    attack: 5
+    health: 20
     defense: 0
-    attackSpeed: 0
+    attackSpeed: 1
     criticalRate: 0
-    criticalDamage: 0
-    damageMultiplier: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
     armorPenPercent: 0
-  - monsterId: 0
-    monsterName: 
-    path: 
+  - monsterId: 2002
+    monsterName: Monster_2
+    path: 2002 Monster
     isRanged: 0
-    skillId: 0
-    skillLevel: 0
-    radius: 0
-    moveSpeed: 0
-    stopMoveDistance: 0
+    skillId: 3002
+    skillLevel: 1
+    radius: 0.4
+    moveSpeed: 2.2
+    stopMoveDistance: 3
     attackDistance: 0
-    attack: 0
-    health: 0
-    defense: 0
-    attackSpeed: 0
-    criticalRate: 0
-    criticalDamage: 0
-    damageMultiplier: 0
-    armorPenPercent: 0
-  - monsterId: 0
-    monsterName: 
-    path: 
+    attack: 7
+    health: 30
+    defense: 1
+    attackSpeed: 1.05
+    criticalRate: 0.02
+    criticalDamage: 1.6
+    damageMultiplier: 1.05
+    armorPenPercent: 0.01
+  - monsterId: 2003
+    monsterName: Monster_3
+    path: 2003 Monster
     isRanged: 0
-    skillId: 0
-    skillLevel: 0
-    radius: 0
-    moveSpeed: 0
-    stopMoveDistance: 0
+    skillId: 3003
+    skillLevel: 1
+    radius: 0.4
+    moveSpeed: 2.4
+    stopMoveDistance: 3
     attackDistance: 0
-    attack: 0
-    health: 0
-    defense: 0
-    attackSpeed: 0
-    criticalRate: 0
-    criticalDamage: 0
-    damageMultiplier: 0
-    armorPenPercent: 0
+    attack: 9
+    health: 40
+    defense: 2
+    attackSpeed: 1.1
+    criticalRate: 0.04
+    criticalDamage: 1.7
+    damageMultiplier: 1.1
+    armorPenPercent: 0.02
+  - monsterId: 2004
+    monsterName: Monster_4
+    path: 2004 Monster
+    isRanged: 0
+    skillId: 3004
+    skillLevel: 1
+    radius: 0.4
+    moveSpeed: 2.6
+    stopMoveDistance: 3
+    attackDistance: 0
+    attack: 11
+    health: 50
+    defense: 3
+    attackSpeed: 1.15
+    criticalRate: 0.06
+    criticalDamage: 1.8
+    damageMultiplier: 1.15
+    armorPenPercent: 0.03
+  - monsterId: 2005
+    monsterName: Monster_5
+    path: 2005 Monster
+    isRanged: 0
+    skillId: 3005
+    skillLevel: 1
+    radius: 0.4
+    moveSpeed: 2.8
+    stopMoveDistance: 3
+    attackDistance: 0
+    attack: 13
+    health: 60
+    defense: 4
+    attackSpeed: 1.2
+    criticalRate: 0.08
+    criticalDamage: 1.9
+    damageMultiplier: 1.2
+    armorPenPercent: 0.04
+  - monsterId: 2006
+    monsterName: Monster_6
+    path: 2006 Monster
+    isRanged: 0
+    skillId: 3006
+    skillLevel: 1
+    radius: 0.4
+    moveSpeed: 3
+    stopMoveDistance: 3
+    attackDistance: 0
+    attack: 15
+    health: 70
+    defense: 5
+    attackSpeed: 1.25
+    criticalRate: 0.1
+    criticalDamage: 2
+    damageMultiplier: 1.25
+    armorPenPercent: 0.05
+  - monsterId: 2007
+    monsterName: Monster_7
+    path: 2007 Monster
+    isRanged: 0
+    skillId: 3007
+    skillLevel: 1
+    radius: 0.4
+    moveSpeed: 3.2
+    stopMoveDistance: 3
+    attackDistance: 0
+    attack: 17
+    health: 80
+    defense: 6
+    attackSpeed: 1.3
+    criticalRate: 0.12
+    criticalDamage: 2.1
+    damageMultiplier: 1.3
+    armorPenPercent: 0.06
+  - monsterId: 2008
+    monsterName: Monster_8
+    path: 2008 Monster
+    isRanged: 0
+    skillId: 3008
+    skillLevel: 1
+    radius: 0.4
+    moveSpeed: 3.4
+    stopMoveDistance: 3
+    attackDistance: 0
+    attack: 19
+    health: 90
+    defense: 7
+    attackSpeed: 1.35
+    criticalRate: 0.14
+    criticalDamage: 2.2
+    damageMultiplier: 1.35
+    armorPenPercent: 0.07
+  - monsterId: 2009
+    monsterName: Monster_9
+    path: 2009 Monster
+    isRanged: 0
+    skillId: 3009
+    skillLevel: 1
+    radius: 0.4
+    moveSpeed: 3.6
+    stopMoveDistance: 3
+    attackDistance: 0
+    attack: 21
+    health: 100
+    defense: 8
+    attackSpeed: 1.4
+    criticalRate: 0.16
+    criticalDamage: 2.3
+    damageMultiplier: 1.4
+    armorPenPercent: 0.08
+  - monsterId: 2010
+    monsterName: Monster_10
+    path: 2010 Monster
+    isRanged: 0
+    skillId: 3010
+    skillLevel: 1
+    radius: 0.4
+    moveSpeed: 3.8
+    stopMoveDistance: 3
+    attackDistance: 0
+    attack: 23
+    health: 110
+    defense: 9
+    attackSpeed: 1.45
+    criticalRate: 0.18
+    criticalDamage: 2.4
+    damageMultiplier: 1.45
+    armorPenPercent: 0.09

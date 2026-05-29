@@ -14,38 +14,23 @@ namespace _FightCode.Config
         ConfigPath = "Assets/_FightSource/Configs/MonsterConfig.asset")]
     public class MonsterConfig : BaseConfig
     {
-        public List<MonsterData> monsters = new List<MonsterData>();
+        [SerializeField] private List<MonsterData> monsters = new List<MonsterData>();
     
-        private Dictionary<int, MonsterData> _cacheMonsterData;
+        private Dictionary<int, MonsterData> cacheMonsterData;
     
         public override void OnMapValue()
         {
-            _cacheMonsterData = new Dictionary<int, MonsterData>();
+            cacheMonsterData = new Dictionary<int, MonsterData>();
+
             foreach (var m in monsters)
             {
-                _cacheMonsterData.Add(m.monsterId, m);
+                cacheMonsterData.Add(m.monsterId, m);
             }
         }
-
-#if UNITY_EDITOR
-        public override void OnPostImported()
-        {
-            SkillConfig config = AssetDatabase.LoadAssetAtPath<SkillConfig>("Assets/_Sources/Configs/SkillConfig.asset");
-            var field = config.GetType().GetField("skills", BindingFlags.Default | BindingFlags.Instance | BindingFlags.NonPublic);
-            var list = field.GetValue(config) as List<SkillData>;
-            foreach (var monster in monsters)
-            {
-                bool exists = list.Any(a => a.SkillId == monster.skillId);
-                if (!exists)
-                    Debug.LogError($"[MonsterConfig] Not found skill '{monster.skillId}' at monster '{monster.monsterId}'");
-                ValidateObject<GameObject>(monster.path);
-            }
-        }
-#endif
 
         public bool Find(int monsterId, out MonsterData skill)
         {
-            return _cacheMonsterData.TryGetValue(monsterId, out skill);
+            return cacheMonsterData.TryGetValue(monsterId, out skill);
         }
     }
 
@@ -55,13 +40,11 @@ namespace _FightCode.Config
         public int monsterId;
         public string monsterName;
         public string path;
-        public int isRanged;
         public int skillId;
         public int skillLevel;
         public float radius;
         public float moveSpeed;
         public float stopMoveDistance;
-        public float attackDistance;
         public float attack;
         public float health;
         public float defense;
@@ -70,5 +53,7 @@ namespace _FightCode.Config
         public float criticalDamage;
         public float damageMultiplier;
         public float armorPenPercent;
+
+        public int power;
     }
 }
