@@ -46,7 +46,7 @@ namespace _FightCode.Battle.Logic
             
             if (setting.enableVisualize)
             {
-                AsyncInstantiate(monsterData.Path);
+                AsyncInstantiate(monsterData.path);
             }
         }
 

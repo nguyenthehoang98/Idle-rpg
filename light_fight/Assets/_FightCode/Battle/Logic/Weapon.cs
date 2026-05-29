@@ -1,6 +1,7 @@
 ﻿using System;
 using _FightCode.Battle.Model;
 using _FightCode.Battle.View;
+using _FightCode.Config;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
 using Unity.Mathematics;
@@ -26,9 +27,6 @@ namespace _FightCode.Battle.Logic
         private bool needUpdatePosition;
         private bool isPlaying;
 
-        private int weaponId;
-        private int weaponLevel;
-
         public Weapon(int order, ISlotView slotView, BattleShare share, BattleSetting setting, IQuery query, Vector3 direction)
         {
             this.share = share;
@@ -41,8 +39,6 @@ namespace _FightCode.Battle.Logic
 
         public void Equip(int weaponId, int weaponLevel)
         {
-            this.weaponId = weaponId;
-            this.weaponLevel = weaponLevel;
             view.Equip(weaponId, weaponLevel);
         }
         

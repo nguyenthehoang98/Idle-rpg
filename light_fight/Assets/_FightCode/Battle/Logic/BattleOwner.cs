@@ -74,14 +74,14 @@ namespace _FightCode.Battle.Logic
             {
                 Config.MonsterData monsterData = request.MonsterData;
                 float2 position = request.Position;
-                float radius = monsterData.Radius;
-                float speed = monsterData.MoveSpeed;
-                float stopDistance = monsterData.StopMoveDistance;
-                int monsterId = monsterData.MonsterId;
+                float radius = monsterData.radius;
+                float speed = monsterData.moveSpeed;
+                float stopDistance = monsterData.stopMoveDistance;
+                int monsterId = monsterData.monsterId;
                 
                 if (setting.enableVisualize && monsterLoaded.TryAdd(monsterId, true))
                 {
-                    GameObject go = await KitLoaded.LoadAsync<GameObject>(monsterData.Path);
+                    GameObject go = await KitLoaded.LoadAsync<GameObject>(monsterData.path);
                     KitPool.RegisterPool(go, true);
                 }
                 

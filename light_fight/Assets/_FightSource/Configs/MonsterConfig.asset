@@ -15,36 +15,54 @@ MonoBehaviour:
   fileUrl: 
   enable: 1
   monsters:
-  - id: 2001
-    name: Goose
-    path: 2001 Monster
+  - monsterId: 0
+    monsterName: 
+    path: 
     isRanged: 0
-    skillId: 3001
-    skillLevel: 1
-    radius: 0.4
-    moveSpeed: 3
-    stopMoveDistance: 3
-    attackDistance: 1.2
-    attack: 1
-    health: 20
+    skillId: 0
+    skillLevel: 0
+    radius: 0
+    moveSpeed: 0
+    stopMoveDistance: 0
+    attackDistance: 0
+    attack: 0
+    health: 0
     defense: 0
     attackSpeed: 0
     criticalRate: 0
     criticalDamage: 0
     damageMultiplier: 0
     armorPenPercent: 0
-  - id: 2002
-    name: Cowboy
-    path: 2002 Monster
-    isRanged: 1
-    skillId: 3002
-    skillLevel: 1
-    radius: 0.4
-    moveSpeed: 2.25
-    stopMoveDistance: 6
-    attackDistance: 4
-    attack: 2
-    health: 18
+  - monsterId: 0
+    monsterName: 
+    path: 
+    isRanged: 0
+    skillId: 0
+    skillLevel: 0
+    radius: 0
+    moveSpeed: 0
+    stopMoveDistance: 0
+    attackDistance: 0
+    attack: 0
+    health: 0
+    defense: 0
+    attackSpeed: 0
+    criticalRate: 0
+    criticalDamage: 0
+    damageMultiplier: 0
+    armorPenPercent: 0
+  - monsterId: 0
+    monsterName: 
+    path: 
+    isRanged: 0
+    skillId: 0
+    skillLevel: 0
+    radius: 0
+    moveSpeed: 0
+    stopMoveDistance: 0
+    attackDistance: 0
+    attack: 0
+    health: 0
     defense: 0
     attackSpeed: 0
     criticalRate: 0

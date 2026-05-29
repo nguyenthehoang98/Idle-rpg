@@ -90,20 +90,6 @@ namespace _FightCode.Battle.Logic
                 return false;
             }
             
-            HashSet<int> monsters = new HashSet<int>();
-            foreach (var batch in batches)
-            {
-                var keys = batch.monsters.Keys.ToList();
-                foreach (var key in keys) monsters.Add(key);
-            }
-            
-            foreach (var monster in monsters)
-            {
-                monsterConfig.Find(monster, out var monsterData);
-                if (!monsterData.IsRanged) continue;
-                skillConfig.Find(monsterData.SkillId, out var skillData);
-            }
-
             waitTime = batches[0].waitTime;
             spawnTime = 0;
             paused = false;
@@ -220,9 +206,9 @@ namespace _FightCode.Battle.Logic
 #endif
                     if (!foundMonster) break;
 
-                    bool foundSkill = skillConfig.Find(monsterData.SkillId, out var skillData);
+                    bool foundSkill = skillConfig.Find(monsterData.skillId, out var skillData);
 #if DEBUG
-                    if (!foundSkill) Debug.LogError("Not found skill: " + monsterData.SkillId);
+                    if (!foundSkill) Debug.LogError("Not found skill: " + monsterData.skillId);
 #endif
                     if (!foundSkill) break;
                     
