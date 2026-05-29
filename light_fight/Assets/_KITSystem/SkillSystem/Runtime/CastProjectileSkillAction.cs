@@ -44,6 +44,6 @@ namespace _KITSystem.SkillSystem.Runtime
             EntityManager.InvokeBehaviour(entity, EntityManagerBehaviourType.BeHit);
         }
 
-        protected virtual int DamageOutput(int entity) => 1;
+        protected virtual int DamageOutput(int entity) => 10;
     }
 }

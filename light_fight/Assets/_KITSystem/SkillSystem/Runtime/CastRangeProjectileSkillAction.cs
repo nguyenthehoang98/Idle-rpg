@@ -1,4 +1,5 @@
-﻿using _KITSystem.Resource;
+﻿using System.Collections.Generic;
+using _KITSystem.Resource;
 using _KITSystem.SkillSystem.Config;
 using Unity.Mathematics;
 using UnityEngine;
@@ -9,12 +10,17 @@ namespace _KITSystem.SkillSystem.Runtime
     {
         private BaseTrajectoryAction trajectory;
         private Transform projectile;
+        private HashSet<int> hashset = new HashSet<int>();
         private int remainingCollisions;
+        private float collisionResetIntervalInSeconds;
+
+        private float elapsedTime;
         
         internal CastRangeProjectileSkillAction(RangerProjectileConfig ranger, BaseTrajectoryAction trajectory, BaseShapeAction[] shapes, 
             SPU spu, TriggerConfig triggerConfig, float lifeTime) : base(shapes, spu, triggerConfig, lifeTime)
         {
             this.trajectory = trajectory;
+            this.collisionResetIntervalInSeconds = ranger.collisionResetIntervalInSeconds;
             this.remainingCollisions = ranger.maximumCollision;
             this.projectile = KitPool.Instantiate(ranger.prefab).transform;
         }
@@ -23,6 +29,13 @@ namespace _KITSystem.SkillSystem.Runtime
         {
             base.OnUpdate(deltaTime);
 
+            elapsedTime += deltaTime;
+
+            if (elapsedTime >= collisionResetIntervalInSeconds && hashset.Count > 0)
+            {
+                hashset.Clear();
+            }
+
             float2 position = trajectory.EvaluatePosition(deltaTime);
             
             projectile.transform.position = new Vector3(position.x, position.y);
@@ -30,7 +43,9 @@ namespace _KITSystem.SkillSystem.Runtime
             for (int i = 0; i < shapes.Length; i++)
             {
                 BaseShapeAction shape = shapes[i];
+                
                 var results = shape.Hit(position);
+                
                 if (results != null)
                 {
                     bool hit = results.Count > 0;
@@ -43,15 +58,18 @@ namespace _KITSystem.SkillSystem.Runtime
                         {
                             int entity = results[i1];
 
-                            Damage(entity);
-
-                            remainingCollisions--;
-
-                            if (remainingCollisions == 0)
+                            if (hashset.Add(entity))
                             {
-                                EndLifeCycle();
+                                Damage(entity);
+
+                                remainingCollisions--;
+
+                                if (remainingCollisions == 0)
+                                {
+                                    EndLifeCycle();
                                 
-                                return;
+                                    return;
+                                }
                             }
                         }
                     }
