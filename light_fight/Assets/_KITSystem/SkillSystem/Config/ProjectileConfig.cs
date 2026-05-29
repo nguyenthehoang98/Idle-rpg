@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using _KITSystem.Utils;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
@@ -6,26 +6,36 @@ using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Config
 {
-    public class RangerProjectileConfig : BaseProjectileConfig
+    [Serializable]
+    public class CastProjectileConfig : BaseActionConfig
     {
-        [TitleGroup("Ranger : GameObject")] 
+        [HideLabel, TitleGroup("Damage")] public DamageTicket damageTicket = new DamageTicket();
+
+        [TitleGroup("Collision"), Indent]
+        [Tooltip("Giới hạn va chạm của viên đạn, nếu đủ số lần thì đạn sẽ tự hủy")]
+        public int maximumCollision = 1;
+        [Indent, Tooltip("Ngưỡng thời gian viên đạn có thể va chạm với 1 Object lần nữa. \n(Ví dụ bãi độc gây sát thương mỗi 0.3s nếu đứng trên nó)")]
+        public float collisionResetIntervalInSeconds = 1 / 30f;
+        
+        [TitleGroup("GameObject")] 
         [Indent] public GameObject prefab;
         [Indent] public float2 offsetStartPosition;
 
-        [TitleGroup("Ranger : HitBox")] [GUIColor("GetButtonColor1"), OnValueChanged("ShapeTypeChanged"), Indent]
+        [TitleGroup("HitBox")] [GUIColor("GetButtonColor1"), OnValueChanged("ShapeTypeChanged"), Indent]
         public BaseShapeConfig.ShapeType shapeType;
 
         [SerializeReference, HideReferenceObjectPicker, HideLabel, Indent]
         public BaseShapeConfig shapeConfig;
 
-        [TitleGroup("Ranger : Trajectory")]
+        [TitleGroup("Trajectory")]
         [GUIColor("GetButtonColor2"), OnValueChanged("TrajectoryTypeChanged"), Indent]
         public BaseTrajectoryConfig.TrajectoryType trajectoryType;
 
         [SerializeReference, HideReferenceObjectPicker, HideLabel, Indent]
         public BaseTrajectoryConfig trajectoryConfig;
-
-        public RangerProjectileConfig()
+        
+        
+        public CastProjectileConfig()
         {
             ShapeTypeChanged();
             TrajectoryTypeChanged();
@@ -101,7 +111,7 @@ namespace _KITSystem.SkillSystem.Config
             }
         }
 
-        public override ProjectileType Type => ProjectileType.Ranger;
+        public override ActionType Type => ActionType.CastProjectile;
 
         public override float Duration
         {
@@ -113,5 +123,21 @@ namespace _KITSystem.SkillSystem.Config
                 return max;
             }
         }
+    }
+    
+    [Serializable]
+    public class DamageTicket
+    {
+        [Indent] public bool isHpPercent = false;
+        [Indent] public DamageTickerType damageTickerType = DamageTickerType.None;
+        [HideIf("damageTickerType", DamageTickerType.None), Indent]
+        public float damageTickerIntervalInSeconds = 1f;
+    }
+    
+    public enum DamageTickerType
+    {
+        None,
+        CasterInterval,
+        TargetInterval
     }
 }

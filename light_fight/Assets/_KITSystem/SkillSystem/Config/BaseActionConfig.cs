@@ -11,7 +11,7 @@ namespace _KITSystem.SkillSystem.Config
 
         public enum ActionType
         {
-            CastProjectile, TriggerEventId, Summon
+            CastProjectile, TriggerEventId, SummonUnit
         }
     }
 }

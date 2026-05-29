@@ -8,7 +8,7 @@ namespace _KITSystem.SkillSystem.Config
         public int monsterId;
         public int monsterLevel;
         
-        public override ActionType Type => ActionType.Summon;
+        public override ActionType Type => ActionType.SummonUnit;
 
         public override float Duration => 0;
     }

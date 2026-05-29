@@ -31,10 +31,7 @@ namespace _KITSystem.SkillSystem.Unitest
                     {
                         timer = 0.5f, type = TriggerConfig.TriggerType.Timeline
                     },
-                    actionConfig = new CastProjectileConfig
-                    {
-                        projectileConfig = new MeleeProjectileConfig()
-                    }
+                    actionConfig = new CastProjectileConfig()
                 }
             };
 
@@ -60,10 +57,7 @@ namespace _KITSystem.SkillSystem.Unitest
                     {
                         timer = 0.5f, type = TriggerConfig.TriggerType.Timeline
                     },
-                    actionConfig = new CastProjectileConfig
-                    {
-                        projectileConfig = new MeleeProjectileConfig()
-                    }
+                    actionConfig = new CastProjectileConfig()
                 }
             };
 
@@ -89,10 +83,7 @@ namespace _KITSystem.SkillSystem.Unitest
                     {
                         timer = 0.5f, type = TriggerConfig.TriggerType.Timeline
                     },
-                    actionConfig = new CastProjectileConfig
-                    {
-                        projectileConfig = new MeleeProjectileConfig()
-                    }
+                    actionConfig = new CastProjectileConfig()
                 }
             };
 

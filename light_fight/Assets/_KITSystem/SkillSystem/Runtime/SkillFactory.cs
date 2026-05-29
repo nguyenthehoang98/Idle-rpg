@@ -39,34 +39,20 @@ namespace _KITSystem.SkillSystem.Runtime
                 switch (e.actionConfig.Type)
                 {
                     case BaseActionConfig.ActionType.CastProjectile:
-                        var cp = e.actionConfig as CastProjectileConfig;
-                        BaseShapeAction[] shapes;
-                        if (cp.projectileType == BaseProjectileConfig.ProjectileType.Melee)
+                        var projectileConfig = e.actionConfig as CastProjectileConfig;
+                        if (projectileLoaded.TryAdd(projectileConfig.prefab, true))
                         {
-                            var melee = cp.projectileConfig as MeleeProjectileConfig;
-                            shapes = new BaseShapeAction[melee.hitBoxes.Count];
-                            for (int i = 0; i < melee.hitBoxes.Count; i++)
-                                shapes[i] = GenerateShape(melee.hitBoxes[i]);
-                            spu.RequestAddAction(skillId,
-                                new CastMeleeProjectileSkillAction(start, goal, shapes, spu,
-                                    e.triggerConfig, lifeTimeInSeconds)
-                            );
+                            KitPool.RegisterPool(projectileConfig.prefab, true);
                         }
-                        else if (cp.projectileType == BaseProjectileConfig.ProjectileType.Ranger)
-                        {
-                            var ranger = cp.projectileConfig as RangerProjectileConfig;
-                            if (projectileLoaded.TryAdd(ranger.prefab, true))
-                            {
-                                KitPool.RegisterPool(ranger.prefab, true);
-                            }
 
-                            var trajectory = GetTrajectory(ranger.trajectoryConfig, start + ranger.offsetStartPosition, goal);
-                            shapes = new BaseShapeAction[1] { GenerateShape(ranger.shapeConfig) };
-                            spu.RequestAddAction(skillId,
-                                new CastRangeProjectileSkillAction(ranger, trajectory, shapes, spu,
-                                    e.triggerConfig, lifeTimeInSeconds)
-                            );
-                        }
+                        spu.RequestAddAction(skillId,
+                            new CastProjectileSkillAction(projectileConfig,
+                                GetTrajectory(projectileConfig.trajectoryConfig, start + projectileConfig.offsetStartPosition, goal),
+                                GenerateShape(projectileConfig.shapeConfig),
+                                KitPool.Instantiate(projectileConfig.prefab).transform,
+                                spu,
+                                e.triggerConfig, lifeTimeInSeconds)
+                        );
 
                         break;
                     case BaseActionConfig.ActionType.TriggerEventId:
