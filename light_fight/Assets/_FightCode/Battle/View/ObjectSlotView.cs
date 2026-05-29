@@ -44,10 +44,8 @@ namespace _FightCode.Battle.View
 
         public ISlotView Instantiate(Transform parent, Vector3 localEulerAngles)
         {
-            Transform view = Instantiate(transform, parent);
-            view.localEulerAngles = localEulerAngles;
-            ObjectSlotView osv = view.GetComponent<ObjectSlotView>();
-            osv.localEulerAngles = localEulerAngles;
+            ObjectSlotView osv = Instantiate(this, parent);
+            osv.transform.localEulerAngles = osv.localEulerAngles = localEulerAngles;
             return osv;
         }
 

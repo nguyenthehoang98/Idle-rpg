@@ -168,11 +168,14 @@ namespace _FightCode.Battle.Logic
         {
             if (!isInitialized) return;
 
+#if UNITY_EDITOR
             foreach (var slot in slots) slot.Draw();
 
             DrawCircle(attackRange, Color.yellow);
+#endif
         }
 
+#if UNITY_EDITOR
         private void DrawCircle(float radius, Color color, int segments = 32)
         {
             float angleStep = 360f / segments;
@@ -194,5 +197,6 @@ namespace _FightCode.Battle.Logic
                 prevPoint = newPoint;
             }
         }
+#endif 
     }
 }

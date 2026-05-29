@@ -113,11 +113,12 @@ namespace _KITSystem.Resource
             if (dictionary.TryGetValue(code, out Pool pool))
             {
                 GameObject o = pool.Reuse();
-                if (active) o.SetActive(true);
+                o.SetActive(active);
                 return o;
             }
 
             GameObject obj = UnityEngine.Object.Instantiate(ins);
+            obj.SetActive(active);
             obj.name = ins.name;
             return obj;
         }

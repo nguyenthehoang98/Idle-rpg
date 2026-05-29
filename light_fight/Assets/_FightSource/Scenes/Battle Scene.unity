@@ -484,7 +484,7 @@ MonoBehaviour:
   isPausedDefault: 1
   useUnscaledTime: 0
   targetFPS: 30
-  loop: 5
+  loop: 1
   maxTicksPerFrame: 5
   tickables:
   - rid: 7993921842490900602
@@ -503,7 +503,6 @@ MonoBehaviour:
       data:
         locked: 0
         enableGizmos: 0
-        defaultAgentStopDistance: 3
         defaultAgentRadius: 0.5
         interval: 0.5
         multiplierIgnoreCheckDistance: 0.2

@@ -35,7 +35,7 @@ namespace _FightCode.Battle.View
         
         public IWeaponView Instantiate(int order, BattleSetting setting, int xPivotAngle, int zPivotAngle, ISlotView slotView)
         {
-            ObjectWeaponView view = Instantiate(this, slotView.WeaponRoot, false);
+            ObjectWeaponView view = Instantiate(this, slotView.WeaponRoot);
             view.xPivot.localEulerAngles = new Vector3(xPivotAngle, 0, 0);
             view.zPivot.localEulerAngles = new Vector3(0, 0, zPivotAngle);
             view.transform.localPosition = new Vector3(0, 0, -1f);
@@ -61,15 +61,17 @@ namespace _FightCode.Battle.View
         {
             if (weapon != null)
             {
-                KitPool.Destroy(weapon.gameObject);
+                Object.Destroy(weapon.gameObject);
                 weapon = null;
             }
 
             WeaponConfig weaponConfig = KitConfigManager.Get<WeaponConfig>();
+            
             if (weaponConfig.Find(weaponId, out WeaponData weaponData))
             {
-                GameObject go = await KitLoaded.LoadAsync<GameObject>(weaponData.Name);
-                weapon = KitPool.Instantiate(go, weaponParent).GetComponent<WeaponAnimation>();
+                GameObject go = await KitLoaded.LoadAsync<GameObject>(weaponData.Path);
+            
+                weapon = Instantiate(go, weaponParent).GetComponent<WeaponAnimation>();
             }
         }
 

@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using _FightCode.Battle.Model;
 using _FightCode.Battle.View;
 using _FightCode.Config;
 using _KITSystem.ExcelConfig;
 using _KITSystem.Grid;
 using _KITSystem.Resource;
+using _KITSystem.Utils;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace _FightCode.Battle.Logic
 {
@@ -31,26 +34,42 @@ namespace _FightCode.Battle.Logic
         private Vector3 position;
         private bool isMoving = true;
 
+        private static Dictionary<int, bool> MonsterLoaded = new Dictionary<int, bool>();
+
         public Monster(BattleShare share, BattleSetting setting, int entity, int configId, int agent)
         {
-            MonsterConfig monsterConfig = KitConfigManager.Get<MonsterConfig>();
-            monsterConfig.Find(configId, out var monsterData);
-
-            if (setting.enableVisualize) AsyncInstantiate(monsterData.Path);
-        
             this.share = share;
             this.entity = entity;
             this.configId = configId;
             this.agent = agent;
+
+            MonsterConfig monsterConfig = KitConfigManager.Get<MonsterConfig>();
+            monsterConfig.Find(configId, out var monsterData);
+            
+            if (setting.enableVisualize)
+            {
+                AsyncInstantiate(monsterData.MonsterId, monsterData.Path);
+            }
         }
 
-        private async void AsyncInstantiate(string path)
+        private async void AsyncInstantiate(int id, string path)
         {
             GameObject go = await KitLoaded.LoadAsync<GameObject>(path, true);
-            animation = KitPool.Instantiate(go).GetComponent<MonsterAnimation>();
+            
+            if (!MonsterLoaded.ContainsKey(id))
+            {
+                KitPool.RegisterPool(go, true);
+                MonsterLoaded[id] = true;
+            }
+
+            animation = KitPool.Instantiate(go, false).GetComponent<MonsterAnimation>();
             animation.SetPosition(position);
-            animation.SetActive(true);
-            animation.Move();
+            
+            share.owner.WaitNextFrame(() =>
+            {
+                animation.gameObject.SetActive(true);
+                animation.Move();
+            }, 2);
         }
 
         public void Tick(float deltaTime)
@@ -104,7 +123,10 @@ namespace _FightCode.Battle.Logic
 
         public void Dispose()
         {
-            if (animation != null) animation.Dead();
+            if (animation != null) animation.Dead(() =>
+            {
+                KitPool.Destroy(animation.gameObject);
+            });
         }
     }
 }

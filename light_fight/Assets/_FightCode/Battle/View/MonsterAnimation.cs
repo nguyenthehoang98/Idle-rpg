@@ -1,4 +1,4 @@
-using _KITSystem.Resource;
+using System;
 using _KITSystem.Utils;
 using Animancer;
 using MoreMountains.Feedbacks;
@@ -37,11 +37,6 @@ namespace _FightCode.Battle.View
             }
         }
 
-        public void SetActive(bool active)
-        {
-            root.gameObject.SetActive(active);
-        }
-
         public void BeHit()
         {
             if (hitFeedback.IsPlaying) return;
@@ -49,13 +44,11 @@ namespace _FightCode.Battle.View
             hitFeedback.PlayFeedbacks();
         }
 
-        public void Dead()
+        public void Dead(Action onDestroy)
         {
             animancer.Play(deadClip);
-            this.WaitInvoke(deadClip.length, () =>
-            {
-                KitPool.Destroy(gameObject);
-            });
+            
+            this.WaitInvoke(deadClip.length, onDestroy);
         }
 
         public void OnDeadEvent()

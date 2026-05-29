@@ -13,7 +13,6 @@ namespace _FightCode.Battle.View
 
         public RectTransform RectTransform {get; private set;}
 
-
         private void Awake()
         {
             RectTransform = transform as RectTransform;
