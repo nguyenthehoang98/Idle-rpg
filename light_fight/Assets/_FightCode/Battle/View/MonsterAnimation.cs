@@ -1,25 +1,17 @@
 using System;
-using _KITSystem.Utils;
-using Animancer;
-using MoreMountains.Feedbacks;
 using UnityEngine;
 
 namespace _FightCode.Battle.View
 {
     public class MonsterAnimation : MonoBehaviour
     {
-        [SerializeField] private Transform root;
-        [SerializeField] private Transform flip;
-        [SerializeField] private AnimancerComponent animancer;
-        [SerializeField] private AnimationClip idleClip;
-        [SerializeField] private AnimationClip moveClip;
-        [SerializeField] private AnimationClip attackClip;
-        [SerializeField] private AnimationClip deadClip;
-        [SerializeField] private MMF_Player hitFeedback;
+        // move at transform
+        [SerializeField] private Transform root; // play animation scale ,rotate
+        [SerializeField] private Transform flip; // flip
 
         private Vector3 localScale;
         private bool defaultFace = false; // false: left, true: right
-    
+
         private void Awake()
         {
             localScale = flip.localScale;
@@ -27,7 +19,7 @@ namespace _FightCode.Battle.View
 
         public void SetPosition(Vector3 pos)
         {
-            root.position = pos;
+            transform.position = pos;
 
             bool right = pos.x < 0;
             if (right != defaultFace)
@@ -39,23 +31,26 @@ namespace _FightCode.Battle.View
 
         public void BeHit()
         {
-            if (hitFeedback.IsPlaying) return;
-        
-            hitFeedback.PlayFeedbacks();
+            // spawn fx
         }
 
         public void Dead(Action onDestroy)
         {
-            animancer.Play(deadClip);
-            
-            this.WaitInvoke(deadClip.length, onDestroy);
+            onDestroy?.Invoke();
         }
 
         public void OnDeadEvent()
         {
         }
 
-        public void Idle() => animancer.Play(idleClip);
-        public void Move() => animancer.Play(moveClip);
+        public void Idle()
+        {
+            // code
+        }
+
+        public void Move()
+        {
+            // code
+        }
     }
 }

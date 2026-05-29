@@ -11,6 +11,7 @@ namespace _FightCode.Battle.Model
     {
         public bool enableVisualize = true;
         public float2 worldCenter;
+        public float defaultAgentStopDistance = 2;
         [TitleGroup("Slot")]
         public int totalSlot = 4;
         public float slotCooldownTime = 1;

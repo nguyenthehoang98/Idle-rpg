@@ -16,172 +16,563 @@ MonoBehaviour:
   enable: 1
   monsters:
   - monsterId: 2001
-    monsterName: Monster_1
+    monsterName: Baby Alien
     path: 2001 Monster
     skillId: 3001
     skillLevel: 1
-    radius: 0.4
-    moveSpeed: 2
-    stopMoveDistance: 3
-    attack: 5
-    health: 20
+    radius: 0.35
+    moveSpeed: 3.8
+    stopMoveDistance: 1.2
+    attack: 1
+    health: 3
     defense: 0
     attackSpeed: 1
     criticalRate: 0
     criticalDamage: 1.5
     damageMultiplier: 1
     armorPenPercent: 0
-    power: 14
+    power: 2
   - monsterId: 2002
-    monsterName: Monster_2
+    monsterName: Chaser
     path: 2002 Monster
     skillId: 3002
     skillLevel: 1
-    radius: 0.4
-    moveSpeed: 2.2
-    stopMoveDistance: 3
-    attack: 7
-    health: 30
-    defense: 1
-    attackSpeed: 1.05
-    criticalRate: 0.02
-    criticalDamage: 1.6
-    damageMultiplier: 1.05
-    armorPenPercent: 0.01
-    power: 21
+    radius: 0.3
+    moveSpeed: 4.5
+    stopMoveDistance: 1
+    attack: 1
+    health: 1
+    defense: 0
+    attackSpeed: 1.2
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 1
   - monsterId: 2003
-    monsterName: Monster_3
+    monsterName: Spitter
     path: 2003 Monster
     skillId: 3003
     skillLevel: 1
     radius: 0.4
-    moveSpeed: 2.4
-    stopMoveDistance: 3
-    attack: 9
-    health: 40
-    defense: 2
-    attackSpeed: 1.1
-    criticalRate: 0.04
-    criticalDamage: 1.7
-    damageMultiplier: 1.1
-    armorPenPercent: 0.02
-    power: 29
+    moveSpeed: 3.2
+    stopMoveDistance: 5
+    attack: 1
+    health: 8
+    defense: 0
+    attackSpeed: 0.8
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 3
   - monsterId: 2004
-    monsterName: Monster_4
+    monsterName: Charger
     path: 2004 Monster
     skillId: 3004
     skillLevel: 1
-    radius: 0.4
-    moveSpeed: 2.6
-    stopMoveDistance: 3
-    attack: 11
-    health: 50
-    defense: 3
-    attackSpeed: 1.15
-    criticalRate: 0.06
-    criticalDamage: 1.8
-    damageMultiplier: 1.15
-    armorPenPercent: 0.03
-    power: 38
+    radius: 0.45
+    moveSpeed: 5.5
+    stopMoveDistance: 1
+    attack: 1
+    health: 4
+    defense: 0
+    attackSpeed: 0.7
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 2
   - monsterId: 2005
-    monsterName: Monster_5
+    monsterName: Pursuer
     path: 2005 Monster
     skillId: 3005
     skillLevel: 1
     radius: 0.4
-    moveSpeed: 2.8
-    stopMoveDistance: 3
-    attack: 13
-    health: 60
-    defense: 4
-    attackSpeed: 1.2
-    criticalRate: 0.08
-    criticalDamage: 1.9
-    damageMultiplier: 1.2
-    armorPenPercent: 0.04
-    power: 48
+    moveSpeed: 6
+    stopMoveDistance: 1.2
+    attack: 1
+    health: 10
+    defense: 0
+    attackSpeed: 1.5
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 5
   - monsterId: 2006
-    monsterName: Monster_6
+    monsterName: Bruiser
     path: 2006 Monster
     skillId: 3006
     skillLevel: 1
-    radius: 0.4
+    radius: 0.6
     moveSpeed: 3
-    stopMoveDistance: 3
-    attack: 15
-    health: 70
-    defense: 5
-    attackSpeed: 1.25
-    criticalRate: 0.1
-    criticalDamage: 2
-    damageMultiplier: 1.25
-    armorPenPercent: 0.05
-    power: 59
+    stopMoveDistance: 1.5
+    attack: 2
+    health: 20
+    defense: 0
+    attackSpeed: 0.8
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 8
   - monsterId: 2007
-    monsterName: Monster_7
+    monsterName: Buffer
     path: 2007 Monster
     skillId: 3007
     skillLevel: 1
-    radius: 0.4
-    moveSpeed: 3.2
-    stopMoveDistance: 3
-    attack: 17
-    health: 80
-    defense: 6
-    attackSpeed: 1.3
-    criticalRate: 0.12
-    criticalDamage: 2.1
-    damageMultiplier: 1.3
-    armorPenPercent: 0.06
-    power: 71
+    radius: 0.5
+    moveSpeed: 2.5
+    stopMoveDistance: 5
+    attack: 1
+    health: 20
+    defense: 0
+    attackSpeed: 0.9
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 6
   - monsterId: 2008
-    monsterName: Monster_8
+    monsterName: Fly
     path: 2008 Monster
     skillId: 3008
     skillLevel: 1
-    radius: 0.4
-    moveSpeed: 3.4
-    stopMoveDistance: 3
-    attack: 19
-    health: 90
-    defense: 7
-    attackSpeed: 1.35
-    criticalRate: 0.14
-    criticalDamage: 2.2
-    damageMultiplier: 1.35
-    armorPenPercent: 0.07
-    power: 84
+    radius: 0.35
+    moveSpeed: 4.5
+    stopMoveDistance: 4
+    attack: 1
+    health: 15
+    defense: 0
+    attackSpeed: 0.7
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 4
   - monsterId: 2009
-    monsterName: Monster_9
+    monsterName: Healer
     path: 2009 Monster
     skillId: 3009
     skillLevel: 1
     radius: 0.4
-    moveSpeed: 3.6
+    moveSpeed: 4
     stopMoveDistance: 3
-    attack: 21
-    health: 100
-    defense: 8
-    attackSpeed: 1.4
-    criticalRate: 0.16
-    criticalDamage: 2.3
-    damageMultiplier: 1.4
-    armorPenPercent: 0.08
-    power: 98
+    attack: 1
+    health: 10
+    defense: 0
+    attackSpeed: 0.8
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 4
   - monsterId: 2010
-    monsterName: Monster_10
+    monsterName: Looter
     path: 2010 Monster
     skillId: 3010
     skillLevel: 1
     radius: 0.4
-    moveSpeed: 3.8
+    moveSpeed: 4.5
     stopMoveDistance: 3
-    attack: 23
-    health: 110
-    defense: 9
-    attackSpeed: 1.45
-    criticalRate: 0.18
-    criticalDamage: 2.4
-    damageMultiplier: 1.45
-    armorPenPercent: 0.09
-    power: 113
+    attack: 1
+    health: 5
+    defense: 0
+    attackSpeed: 1
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 3
+  - monsterId: 2011
+    monsterName: Helmet Alien
+    path: 2011 Monster
+    skillId: 3011
+    skillLevel: 1
+    radius: 0.45
+    moveSpeed: 3.5
+    stopMoveDistance: 1.2
+    attack: 1
+    health: 8
+    defense: 1
+    attackSpeed: 1
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 4
+  - monsterId: 2012
+    monsterName: Fin Alien
+    path: 2012 Monster
+    skillId: 3012
+    skillLevel: 1
+    radius: 0.35
+    moveSpeed: 5.5
+    stopMoveDistance: 1
+    attack: 1
+    health: 12
+    defense: 0
+    attackSpeed: 1.3
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 5
+  - monsterId: 2013
+    monsterName: Spawner
+    path: 2013 Monster
+    skillId: 3013
+    skillLevel: 1
+    radius: 0.5
+    moveSpeed: 2.6
+    stopMoveDistance: 4.5
+    attack: 1
+    health: 10
+    defense: 0
+    attackSpeed: 0.9
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 4
+  - monsterId: 2014
+    monsterName: Junkie
+    path: 2014 Monster
+    skillId: 3014
+    skillLevel: 1
+    radius: 0.4
+    moveSpeed: 4
+    stopMoveDistance: 4
+    attack: 1
+    health: 5
+    defense: 0
+    attackSpeed: 1.1
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 3
+  - monsterId: 2015
+    monsterName: Horned Bruiser
+    path: 2015 Monster
+    skillId: 3015
+    skillLevel: 1
+    radius: 0.65
+    moveSpeed: 2
+    stopMoveDistance: 1.5
+    attack: 1
+    health: 30
+    defense: 2
+    attackSpeed: 0.7
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 6
+  - monsterId: 2016
+    monsterName: Horned Charger
+    path: 2016 Monster
+    skillId: 3016
+    skillLevel: 1
+    radius: 0.5
+    moveSpeed: 5
+    stopMoveDistance: 1.2
+    attack: 1
+    health: 12
+    defense: 1
+    attackSpeed: 1
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 4
+  - monsterId: 2017
+    monsterName: Slasher Egg
+    path: 2017 Monster
+    skillId: 3017
+    skillLevel: 1
+    radius: 0.6
+    moveSpeed: 0
+    stopMoveDistance: 0
+    attack: 1
+    health: 5
+    defense: 0
+    attackSpeed: 0.5
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 2
+  - monsterId: 2018
+    monsterName: Slasher
+    path: 2018 Monster
+    skillId: 3018
+    skillLevel: 1
+    radius: 0.8
+    moveSpeed: 3.5
+    stopMoveDistance: 2
+    attack: 1
+    health: 50
+    defense: 1
+    attackSpeed: 0.3
+    criticalRate: 0
+    criticalDamage: 2
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 5
+  - monsterId: 2019
+    monsterName: Tentacle
+    path: 2019 Monster
+    skillId: 3019
+    skillLevel: 1
+    radius: 0.5
+    moveSpeed: 2.4
+    stopMoveDistance: 4
+    attack: 1
+    health: 100
+    defense: 2
+    attackSpeed: 1
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 14
+  - monsterId: 2020
+    monsterName: Rhino
+    path: 2020 Monster
+    skillId: 3020
+    skillLevel: 1
+    radius: 0.75
+    moveSpeed: 6.5
+    stopMoveDistance: 1
+    attack: 3
+    health: 500
+    defense: 5
+    attackSpeed: 0.8
+    criticalRate: 0.05
+    criticalDamage: 1.8
+    damageMultiplier: 1
+    armorPenPercent: 0.05
+    power: 51
+  - monsterId: 2021
+    monsterName: Butcher
+    path: 2021 Monster
+    skillId: 3021
+    skillLevel: 1
+    radius: 0.75
+    moveSpeed: 3.8
+    stopMoveDistance: 2
+    attack: 3
+    health: 500
+    defense: 4
+    attackSpeed: 0.6
+    criticalRate: 0.05
+    criticalDamage: 1.8
+    damageMultiplier: 1
+    armorPenPercent: 0.05
+    power: 44
+  - monsterId: 2022
+    monsterName: Monk
+    path: 2022 Monster
+    skillId: 3022
+    skillLevel: 1
+    radius: 0.7
+    moveSpeed: 5
+    stopMoveDistance: 3
+    attack: 2
+    health: 400
+    defense: 3
+    attackSpeed: 0.7
+    criticalRate: 0.05
+    criticalDamage: 1.8
+    damageMultiplier: 1
+    armorPenPercent: 0.05
+    power: 34
+  - monsterId: 2023
+    monsterName: Croc
+    path: 2023 Monster
+    skillId: 3023
+    skillLevel: 1
+    radius: 0.7
+    moveSpeed: 6
+    stopMoveDistance: 1.2
+    attack: 3
+    health: 500
+    defense: 5
+    attackSpeed: 0.4
+    criticalRate: 0.05
+    criticalDamage: 1.8
+    damageMultiplier: 1
+    armorPenPercent: 0.05
+    power: 36
+  - monsterId: 2024
+    monsterName: Colossus
+    path: 2024 Monster
+    skillId: 3024
+    skillLevel: 1
+    radius: 1
+    moveSpeed: 1.8
+    stopMoveDistance: 2.5
+    attack: 3
+    health: 550
+    defense: 6
+    attackSpeed: 0.5
+    criticalRate: 0.05
+    criticalDamage: 1.8
+    damageMultiplier: 1
+    armorPenPercent: 0.05
+    power: 42
+  - monsterId: 2025
+    monsterName: Mantis
+    path: 2025 Monster
+    skillId: 3025
+    skillLevel: 1
+    radius: 0.7
+    moveSpeed: 4
+    stopMoveDistance: 1.5
+    attack: 3
+    health: 450
+    defense: 4
+    attackSpeed: 0.7
+    criticalRate: 0.05
+    criticalDamage: 1.8
+    damageMultiplier: 1
+    armorPenPercent: 0.05
+    power: 45
+  - monsterId: 2026
+    monsterName: Mother
+    path: 2026 Monster
+    skillId: 3026
+    skillLevel: 1
+    radius: 0.9
+    moveSpeed: 2.2
+    stopMoveDistance: 4
+    attack: 2
+    health: 500
+    defense: 3
+    attackSpeed: 1.2
+    criticalRate: 0.05
+    criticalDamage: 1.8
+    damageMultiplier: 1
+    armorPenPercent: 0.05
+    power: 51
+  - monsterId: 2027
+    monsterName: Gargoyle
+    path: 2027 Monster
+    skillId: 3027
+    skillLevel: 1
+    radius: 0.65
+    moveSpeed: 4
+    stopMoveDistance: 6.5
+    attack: 2
+    health: 400
+    defense: 4
+    attackSpeed: 0.6
+    criticalRate: 0.05
+    criticalDamage: 1.8
+    damageMultiplier: 1
+    armorPenPercent: 0.05
+    power: 32
+  - monsterId: 2028
+    monsterName: Predator
+    path: 2028 Monster
+    skillId: 3028
+    skillLevel: 1
+    radius: 1.1
+    moveSpeed: 4.5
+    stopMoveDistance: 3
+    attack: 5
+    health: 1000
+    defense: 8
+    attackSpeed: 0.8
+    criticalRate: 0.1
+    criticalDamage: 2
+    damageMultiplier: 1
+    armorPenPercent: 0.1
+    power: 98
+  - monsterId: 2029
+    monsterName: Anemone
+    path: 2029 Monster
+    skillId: 3029
+    skillLevel: 1
+    radius: 0.45
+    moveSpeed: 2
+    stopMoveDistance: 5
+    attack: 1
+    health: 8
+    defense: 1
+    attackSpeed: 0.9
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 3
+  - monsterId: 2030
+    monsterName: Dragonfish
+    path: 2030 Monster
+    skillId: 3030
+    skillLevel: 1
+    radius: 0.55
+    moveSpeed: 3.5
+    stopMoveDistance: 6
+    attack: 3
+    health: 100
+    defense: 2
+    attackSpeed: 0.5
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 17
+  - monsterId: 2031
+    monsterName: Walrus
+    path: 2031 Monster
+    skillId: 3031
+    skillLevel: 1
+    radius: 0.6
+    moveSpeed: 3
+    stopMoveDistance: 1.5
+    attack: 2
+    health: 40
+    defense: 2
+    attackSpeed: 0.6
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 9
+  - monsterId: 2032
+    monsterName: Goblin Shark
+    path: 2032 Monster
+    skillId: 3032
+    skillLevel: 1
+    radius: 0.45
+    moveSpeed: 4
+    stopMoveDistance: 1.5
+    attack: 1
+    health: 12
+    defense: 1
+    attackSpeed: 0.9
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 4
+  - monsterId: 2033
+    monsterName: Stonefish
+    path: 2033 Monster
+    skillId: 3033
+    skillLevel: 1
+    radius: 0.5
+    moveSpeed: 2
+    stopMoveDistance: 5
+    attack: 1
+    health: 20
+    defense: 1
+    attackSpeed: 0.8
+    criticalRate: 0
+    criticalDamage: 1.5
+    damageMultiplier: 1
+    armorPenPercent: 0
+    power: 5

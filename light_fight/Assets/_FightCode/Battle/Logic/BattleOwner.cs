@@ -87,7 +87,7 @@ namespace _FightCode.Battle.Logic
                 
                 int entity = EntityManager.CreateEntity();
                 
-                AgentData agentData = agent.CreateAgent(entity, position, radius, speed, stopDistance);
+                AgentData agentData = agent.CreateAgent(entity, position, radius, speed, setting.defaultAgentStopDistance + stopDistance);
                 entityToAgent[entity] = agentData.agent;
                 
                 ComponentManager<HealthData>.Add(entity, new HealthData(20));

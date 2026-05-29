@@ -9,22 +9,14 @@ namespace _FightCode.Battle.View
     {
         [TitleGroup("Animation")]
         [SerializeField] private SortingGroup sortingGroup;
-        [SerializeField] private NamedAnimancerComponent animancer;
-        [SerializeField] private AnimationClip attackClip;
 
-        private AnimancerState animancerState;
-        
 
         public void PlayAttack(float timeScale)
         {
-            animancerState = animancer.Play(attackClip);
-            animancerState.Time = 0;
-            animancerState.Speed = timeScale;
         }
 
         public void Stop()
         {
-            if (animancerState != null) animancerState.Stop();
         }
 
         public void Activate()
