@@ -74,6 +74,8 @@ GameObject:
   m_Component:
   - component: {fileID: 701746044312685361}
   - component: {fileID: 7906924840574414116}
+  - component: {fileID: -284427223511902099}
+  - component: {fileID: -6810736693832673249}
   m_Layer: 0
   m_Name: 2005 Monster (Pursuer)
   m_TagString: Untagged
@@ -111,6 +113,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   root: {fileID: 4449267039007290165}
   flip: {fileID: 6165561268235694485}
+  moveAnimationClip: {fileID: 7400000, guid: c47f91b3f1cc75848a10c0a1e1300a4a, type: 2}
+--- !u!114 &-284427223511902099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7013279461058707138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad50f81b1d25c441943c37a89ba23f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Animator: {fileID: 0}
+  _ActionOnDisable: 0
+--- !u!95 &-6810736693832673249
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7013279461058707138}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &9013199372462908650
 GameObject:
   m_ObjectHideFlags: 0

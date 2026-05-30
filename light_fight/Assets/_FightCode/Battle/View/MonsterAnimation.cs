@@ -1,4 +1,5 @@
 using System;
+using Animancer;
 using UnityEngine;
 
 namespace _FightCode.Battle.View
@@ -8,14 +9,26 @@ namespace _FightCode.Battle.View
         // move at transform
         [SerializeField] private Transform root; // play animation scale ,rotate
         [SerializeField] private Transform flip; // flip
+        [SerializeField] private AnimationClip moveAnimationClip;
+
+        private AnimancerComponent animancer;
+        private AnimancerState state;
 
         private Vector3 localScale;
-        private bool defaultFace = false; // false: left, true: right
+        private bool defaultFace = true; // false: left, true: right
 
         private void Awake()
         {
+            animancer = GetComponent<AnimancerComponent>();
             localScale = flip.localScale;
         }
+
+        /*private void OnValidate()
+        {
+            animancer = GetComponent<AnimancerComponent>();
+            if (animancer.Animator == null)
+                animancer.Animator = GetComponent<Animator>();
+        }*/
 
         public void SetPosition(Vector3 pos)
         {
@@ -25,7 +38,7 @@ namespace _FightCode.Battle.View
             if (right != defaultFace)
             {
                 defaultFace = right;
-                flip.localScale = new Vector3(localScale.x * (right ? -1 : 1), localScale.y, localScale.z);
+                flip.localScale = new Vector3(localScale.x * (right ? 1 : -1), localScale.y, localScale.z);
             }
         }
 
@@ -46,10 +59,12 @@ namespace _FightCode.Battle.View
         public void Idle()
         {
             // code
+            if (state != null) state.Stop();
         }
 
         public void Move()
         {
+            state = animancer.Play(moveAnimationClip);
             // code
         }
     }
