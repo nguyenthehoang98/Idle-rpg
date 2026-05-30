@@ -45,7 +45,9 @@ namespace _FightCode.Config
         {
             for (int i = 0; i < spawns.Count; i++)
             {
-                spawns[i].Validate();
+                LevelBatch lb = spawns[i];
+                lb.Validate();
+                spawns[i] = lb;
             }
         }
 #endif
