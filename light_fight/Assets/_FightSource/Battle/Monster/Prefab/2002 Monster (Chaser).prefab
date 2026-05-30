@@ -82,6 +82,7 @@ MonoBehaviour:
   root: {fileID: 7469516692653366565}
   flip: {fileID: 7228476333448843528}
   moveAnimationClip: {fileID: 7400000, guid: c47f91b3f1cc75848a10c0a1e1300a4a, type: 2}
+  deathAnimationClip: {fileID: 7400000, guid: f6fa1d03dde78a740b314e66ab78d32a, type: 2}
 --- !u!114 &-1194105400068051018
 MonoBehaviour:
   m_ObjectHideFlags: 0

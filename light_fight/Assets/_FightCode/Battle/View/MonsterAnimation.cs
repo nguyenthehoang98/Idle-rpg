@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using _KITSystem.Utils;
 using Animancer;
 using UnityEngine;
 
@@ -10,6 +12,7 @@ namespace _FightCode.Battle.View
         [SerializeField] private Transform root; // play animation scale ,rotate
         [SerializeField] private Transform flip; // flip
         [SerializeField] private AnimationClip moveAnimationClip;
+        [SerializeField] private AnimationClip deathAnimationClip;
 
         private AnimancerComponent animancer;
         private AnimancerState state;
@@ -47,13 +50,53 @@ namespace _FightCode.Battle.View
             // spawn fx
         }
 
-        public void Dead(Action onDestroy)
+        public void Dead(Vector3 force, Action onDestroy)
         {
-            onDestroy?.Invoke();
+            if (state != null) state.Stop();
+            state = animancer.Play(deathAnimationClip);
+            
+            this.WaitInvoke(state.Duration, () =>
+            {
+                gameObject.SetActive(false);
+                onDestroy?.Invoke();
+            });
+            StartCoroutine(Knockback(force, state.Duration));
         }
 
-        public void OnDeadEvent()
+        private IEnumerator Knockback(Vector3 force, float duration)
         {
+            Vector3 startPos = transform.position;
+            Vector3 endPos = startPos + force;
+
+            float elapsed = 0f;
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+
+                float t = Mathf.Clamp01(elapsed / duration);
+
+                // EaseOutBack
+                float ease = EaseOutBack(t);
+
+                transform.position = Vector3.LerpUnclamped(
+                    startPos,
+                    endPos,
+                    ease);
+
+                yield return null;
+            }
+
+            transform.position = endPos;
+        }
+        
+        private float EaseOutBack(float t)
+        {
+            const float c1 = 1.70158f;
+            const float c3 = c1 + 1f;
+
+            return 1f + c3 * Mathf.Pow(t - 1f, 3)
+                      + c1 * Mathf.Pow(t - 1f, 2);
         }
 
         public void Idle()
@@ -64,6 +107,7 @@ namespace _FightCode.Battle.View
 
         public void Move()
         {
+            if (state != null) state.Stop();
             state = animancer.Play(moveAnimationClip);
             // code
         }

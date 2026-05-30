@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using _KITSystem.Data;
 using _KITSystem.Resource;
 using _KITSystem.SkillSystem.Config;
 using _KITSystem.SkillSystem.Entity;
+using _KITSystem.Utils;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -24,6 +26,9 @@ namespace _KITSystem.SkillSystem.Runtime
         private Dictionary<int, float> targetDamageTicketElapsedTimes = new Dictionary<int, float>();
         private List<int> targetDamageTicketEntities = new List<int>();
         private float casterDamageTicketElapsedTime;
+
+        private float2 previousPosition;
+        private float2 direction;
         
         public CastProjectileSkillAction(
             CastProjectileConfig config,
@@ -64,6 +69,10 @@ namespace _KITSystem.SkillSystem.Runtime
             
             // update position
             float2 position = trajectory.EvaluatePosition(deltaTime);
+            
+            direction = MathUtils.NormalizeSafe(position - previousPosition);
+            
+            previousPosition = position;
             
             projectile.transform.position = new Vector3(position.x, position.y);
             
@@ -217,7 +226,7 @@ namespace _KITSystem.SkillSystem.Runtime
 
         private void OnDamageEffect(int entity)
         {
-            EntityManager.InvokeBehaviour(entity, EntityManagerBehaviourType.BeHit);
+            EntityManager.InvokeBehaviour(entity, EntityManagerBehaviourType.BeHit, ParameterValue.Vector3(new Vector3(direction.x, direction.y, 0f)));
         }
 
         private int DamageOutput(int entity) => 10;

@@ -1,29 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using _KITSystem.Data;
 using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Entity
 {
-    public enum EntityManagerBehaviourType
-    {
-        Created, Removed,
-        BeHit
-    }
-
-    public struct EntityManagerBehaviourParameters
-    {
-        public EntityManagerBehaviourType type;
-        public int entity;
-        public object[] parameters;
-    }
-    
     public static class EntityManager
     {
         private static int[] entityVersions = new int[256];
         private static readonly Stack<int> freeIds = new();
         private static int nextId = 1;
         
-        public static event Action<EntityManagerBehaviourParameters> OnBehaviour;
+        public static event Action<EntityManagerBehaviourParameter> OnBehaviour;
 
         static EntityManager()
         {
@@ -37,7 +25,7 @@ namespace _KITSystem.SkillSystem.Entity
             int id = freeIds.Count > 0 ? freeIds.Pop() : AllocateId();
             entityVersions[id] = 0;
             ActiveCount++;
-            OnBehaviour?.Invoke(new EntityManagerBehaviourParameters
+            OnBehaviour?.Invoke(new EntityManagerBehaviourParameter
             {
                 type = EntityManagerBehaviourType.Created,
                 entity = id,
@@ -58,20 +46,20 @@ namespace _KITSystem.SkillSystem.Entity
             entityVersions[entity] = -1;
             freeIds.Push(entity);
             ActiveCount--;
-            OnBehaviour?.Invoke(new EntityManagerBehaviourParameters
+            OnBehaviour?.Invoke(new EntityManagerBehaviourParameter
             {
                 type = EntityManagerBehaviourType.Removed,
                 entity = entity,
             });
         }
 
-        public static void InvokeBehaviour(int entity, EntityManagerBehaviourType type, params object[] parameters)
+        public static void InvokeBehaviour(int entity, EntityManagerBehaviourType type, params ParameterValue[] values)
         {
-            OnBehaviour?.Invoke(new EntityManagerBehaviourParameters
+            OnBehaviour?.Invoke(new EntityManagerBehaviourParameter
             {
                 type = type,
                 entity = entity,
-                parameters = parameters,
+                values = values,
             });
         }
 

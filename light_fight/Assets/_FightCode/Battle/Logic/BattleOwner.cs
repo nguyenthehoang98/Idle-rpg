@@ -116,7 +116,7 @@ namespace _FightCode.Battle.Logic
             SpawnAction();
         }
 
-        private void OnEntityBehaviour(EntityManagerBehaviourParameters parameter)
+        private void OnEntityBehaviour(EntityManagerBehaviourParameter parameter)
         {
             int entity = parameter.entity;
             Monster m;
@@ -126,7 +126,8 @@ namespace _FightCode.Battle.Logic
                 case EntityManagerBehaviourType.BeHit:
                     if (entityToMonster.TryGetValue(entity, out m))
                     {
-                        m.BeHit();
+                        Vector3 direction = parameter.values[0].Vector3Value;
+                        m.BeHit(direction);
                     }
                     
                     break;

@@ -7,6 +7,7 @@ using _KITSystem.ExcelConfig;
 using _KITSystem.Grid;
 using _KITSystem.Resource;
 using _KITSystem.Utils;
+using Unity.Mathematics;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -33,6 +34,7 @@ namespace _FightCode.Battle.Logic
         private AgentData agentData;
         private Vector3 position;
         private bool isMoving = true;
+        private Vector3 beHitDirection;
 
         public Monster(BattleShare share, BattleSetting setting, int entity, int configId, int agent)
         {
@@ -95,8 +97,9 @@ namespace _FightCode.Battle.Logic
             DrawCircle(position, agentData.radius, 6, color);
         }
 
-        public void BeHit()
+        public void BeHit(Vector3 direction)
         {
+            beHitDirection = direction;
             if (animation != null) animation.BeHit();
         }
     
@@ -115,9 +118,11 @@ namespace _FightCode.Battle.Logic
 
         public void Dispose()
         {
-            if (animation != null) animation.Dead(() =>
+            if (animation == null) return;
+
+            animation.Dead(beHitDirection * RandomUtils.Range(1, 4), () =>
             {
-                KitPool.Destroy(animation.gameObject);
+                KitPool.Destroy(animation.gameObject); 
             });
         }
     }

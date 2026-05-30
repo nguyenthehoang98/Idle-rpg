@@ -1,3 +1,4 @@
 {
-	"name": "KITSystem.SkillSystem.Entity"
+	"name": "KITSystem.SkillSystem.Entity",
+	"references":[ "GUID:0239619e1e2025b4c8f2fecc8e33feb2" ]
 }
