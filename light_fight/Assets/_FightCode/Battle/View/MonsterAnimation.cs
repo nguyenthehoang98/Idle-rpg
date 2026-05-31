@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using _KITSystem.Utils;
 using Animancer;
 using UnityEngine;
 
@@ -9,13 +8,13 @@ namespace _FightCode.Battle.View
     public class MonsterAnimation : MonoBehaviour
     {
         // move at transform
-        [SerializeField] private Transform root; // play animation scale ,rotate
         [SerializeField] private Transform flip; // flip
         [SerializeField] private AnimationClip moveAnimationClip;
         [SerializeField] private AnimationClip deathAnimationClip;
 
         private AnimancerComponent animancer;
         private AnimancerState state;
+        private Action onDeathCallback;
 
         private Vector3 localScale;
         private bool defaultFace = true; // false: left, true: right
@@ -26,12 +25,14 @@ namespace _FightCode.Battle.View
             localScale = flip.localScale;
         }
 
-        /*private void OnValidate()
+        private void OnValidate()
         {
-            animancer = GetComponent<AnimancerComponent>();
+            /*animancer = GetComponent<AnimancerComponent>();
             if (animancer.Animator == null)
-                animancer.Animator = GetComponent<Animator>();
-        }*/
+                animancer.Animator = GetComponent<Animator>();*/
+            /*Transform root = flip.Find("Root");
+            root.localPosition = new Vector3(0, -0.8f, 0);*/
+        }
 
         public void SetPosition(Vector3 pos)
         {
@@ -52,15 +53,20 @@ namespace _FightCode.Battle.View
 
         public void Dead(Vector3 force, Action onDestroy)
         {
+            onDeathCallback = onDestroy;
+            
             if (state != null) state.Stop();
+            
             state = animancer.Play(deathAnimationClip);
             
-            this.WaitInvoke(state.Duration, () =>
-            {
-                gameObject.SetActive(false);
-                onDestroy?.Invoke();
-            });
             StartCoroutine(Knockback(force, state.Duration));
+        }
+
+        public void OnDeathEvent()
+        {
+            gameObject.SetActive(false);
+            
+            onDeathCallback?.Invoke();
         }
 
         private IEnumerator Knockback(Vector3 force, float duration)
@@ -109,7 +115,6 @@ namespace _FightCode.Battle.View
         {
             if (state != null) state.Stop();
             state = animancer.Play(moveAnimationClip);
-            // code
         }
     }
 }

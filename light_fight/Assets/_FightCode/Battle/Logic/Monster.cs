@@ -120,7 +120,7 @@ namespace _FightCode.Battle.Logic
         {
             if (animation == null) return;
 
-            animation.Dead(beHitDirection * RandomUtils.Range(1, 4), () =>
+            animation.Dead(beHitDirection * 3, () =>
             {
                 KitPool.Destroy(animation.gameObject); 
             });

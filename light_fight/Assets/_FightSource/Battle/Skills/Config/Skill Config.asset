@@ -39,7 +39,7 @@ MonoBehaviour:
     - rid: 7993921661494362166
       type: {class: DefaultSkillConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
-        lifeTimeInSeconds: 1
+        lifeTimeInSeconds: 0.5
         targetType: 1
         radiusScanTarget: 1
     - rid: 7993921661494362170
@@ -75,5 +75,5 @@ MonoBehaviour:
     - rid: 8666061042531434551
       type: {class: BulletTrajectoryConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
-        initialSpeed: 10
+        initialSpeed: 17.5
         acceleration: 0
