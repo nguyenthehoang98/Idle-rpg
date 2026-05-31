@@ -61,6 +61,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniTask.TextMeshPro", "UniT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIGradient", "UIGradient.csproj", "{4c83b6e9-5a55-b245-c2ba-05ab79671edc}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KITSystem.Data", "KITSystem.Data.csproj", "{993a69c3-2515-680e-f6bd-46c2c16b0d98}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniTask.DOTween", "UniTask.DOTween.csproj", "{6ef4fcc1-fb3e-8084-d821-6f828dadec3e}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RVO2", "RVO2.csproj", "{a511b40c-e4c5-dc32-9aa1-a677b6141a93}"
@@ -146,6 +148,8 @@ Global
 		{731e1ab7-74ee-73d3-6a79-6c66618b6ea6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4c83b6e9-5a55-b245-c2ba-05ab79671edc}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4c83b6e9-5a55-b245-c2ba-05ab79671edc}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{993a69c3-2515-680e-f6bd-46c2c16b0d98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{993a69c3-2515-680e-f6bd-46c2c16b0d98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6ef4fcc1-fb3e-8084-d821-6f828dadec3e}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6ef4fcc1-fb3e-8084-d821-6f828dadec3e}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{a511b40c-e4c5-dc32-9aa1-a677b6141a93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

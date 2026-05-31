@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using _KITSystem.Grid;
+using _KITSystem.SkillSystem.Config;
 using _KITSystem.SkillSystem.Entity;
 using _KITSystem.SkillSystem.Runtime;
+using _KITSystem.Utils;
 using Unity.Mathematics;
 
 namespace _FightCode.Battle.Logic
@@ -15,6 +17,67 @@ namespace _FightCode.Battle.Logic
             this.agentGrid = agentGrid;
         }
 
+        public bool FindRandomTargetPosition(float2 center, float radius, out float2 targetPosition)
+        {
+            int count = agentGrid.QueryAgent(center, new float2(radius, radius), out AgentData[] agents);
+
+            List<AgentData> temp = new List<AgentData>(count);
+
+            for (int i = 0; i < count; i++)
+            {
+                AgentData agent = agents[i];
+
+                int entity = agent.entity;
+
+                if (!EntityManager.IsAlive(entity)) continue;
+                
+                temp.Add(agent);
+            }
+
+            if (temp.Count > 0)
+            {
+                int index = RandomUtils.Range(0, temp.Count);
+                targetPosition = temp[index].position;
+                return true;
+            }
+            
+            targetPosition = new float2();
+            return false;
+        }
+
+        public bool FindFarthestTargetPosition(float2 center, float radius, out float2 targetPosition)
+        {
+            float sqrRadius = radius * radius;
+            
+            int count = agentGrid.QueryAgent(center, new float2(radius, radius), out AgentData[] agents);
+            
+            bool found = false;
+
+            targetPosition = float2.zero;
+            
+            float maxDistance = float.MinValue;
+
+            for (int i = 0; i < count; i++)
+            {
+                AgentData agent = agents[i];
+
+                if (!EntityManager.IsAlive(agent.entity)) continue;
+
+                float dsq = math.distancesq(center, agent.position);
+
+                if (dsq > maxDistance && dsq <= sqrRadius)
+                {
+                    maxDistance = dsq;
+
+                    targetPosition = agent.position;
+                    
+                    found = true;
+                }
+            }
+
+            return found;
+        }
+        
         public bool FindNearestTargetPosition(float2 center, float radius, out float2 targetPosition)
         {
             float sqrRadius = radius * radius;

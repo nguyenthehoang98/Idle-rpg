@@ -44,6 +44,8 @@ namespace _FightCode.Battle.View
             return view;
         }
 
+        public Vector3 MuzzlePosition => weapon.MuzzlePosition;
+
         public void Play(float timeScale)
         {
             zEulerAngles = zPivot.eulerAngles;

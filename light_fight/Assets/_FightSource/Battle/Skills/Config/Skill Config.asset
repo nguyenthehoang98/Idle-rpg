@@ -41,7 +41,7 @@ MonoBehaviour:
       data:
         lifeTimeInSeconds: 0.5
         targetType: 1
-        radiusScanTarget: 1
+        radiusScanTarget: 6
     - rid: 7993921661494362170
       type: {class: CastProjectileConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:

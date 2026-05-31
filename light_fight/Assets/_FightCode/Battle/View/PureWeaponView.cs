@@ -10,6 +10,8 @@ namespace _FightCode.Battle.View
             return new PureWeaponView();
         }
 
+        public Vector3 MuzzlePosition => Vector3.zero;
+
         public void Play(float timeScale)
         {
             

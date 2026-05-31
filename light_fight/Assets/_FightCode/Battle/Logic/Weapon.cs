@@ -2,6 +2,7 @@
 using _FightCode.Battle.Model;
 using _FightCode.Battle.View;
 using _FightCode.Config;
+using _KITSystem.SkillSystem.Config;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
 using Unity.Mathematics;
@@ -70,7 +71,7 @@ namespace _FightCode.Battle.Logic
             
             isPlaying = false;
         }
-        
+
         public void Tick(float deltaTime)
         {
             if (isPlaying)
@@ -83,13 +84,38 @@ namespace _FightCode.Battle.Logic
                 {
                     case Phase.Cooldown:
                         elapsedTime = int.MaxValue;
-                        bool found = query.FindNearestTargetPosition(setting.worldCenter, setting.weaponAttackRange, out float2 targetPosition);
+
+                        Vector3 muzzle = view.MuzzlePosition;
+                        float2 center = new float2(muzzle.x, muzzle.y);
+                        float radius = setting.weaponAttackRange;
+                        
+                        float2 targetPosition = Unity.Mathematics.float2.zero;
+                        bool found = false;
+                        
+                        TargetType targetType = setting.skillFrameConfig.defaultSkillConfig.targetType;
+                        switch (targetType)
+                        {
+                            case TargetType.Nearest:
+                                found = query.FindNearestTargetPosition(center, radius, out targetPosition);
+                                break;
+                            case TargetType.Farthest:
+                                found = query.FindFarthestTargetPosition(center, radius, out targetPosition);
+                                break;
+                            case TargetType.Random:
+                                found = query.FindRandomTargetPosition(center, radius, out targetPosition);
+                                break;
+                            default:
+                                Debug.LogError("Not defined target type " + targetType);
+                                break;
+                        }
+
                         if (found)
                         {
                             elapsedTime = RotateTo(new Vector3(targetPosition.x, targetPosition.y), deltaTime);
                             phase = Phase.Rotate;
                             SkillFactory.Build(new float2(position.x, position.y), targetPosition, setting.skillFrameConfig);
                         }
+
                         break;
                     case Phase.Rotate:
                         elapsedTime = setting.weaponCooldown;
@@ -98,7 +124,7 @@ namespace _FightCode.Battle.Logic
                 }
             }
         }
-        
+
         private void DrawTriangle(Color color)
         {
             float height = 0.4f;

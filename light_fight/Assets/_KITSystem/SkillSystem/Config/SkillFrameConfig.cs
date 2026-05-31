@@ -13,7 +13,7 @@ namespace _KITSystem.SkillSystem.Config
     public sealed class SkillFrameConfig : SerializedScriptableObject
     {
         [Title("Core"), OnValueChanged("SkillTypeChanged"), HideLabel]
-        public DefaultSkillConfig.SkillType skillType;
+        public SkillType skillType;
         [SerializeReference, HideReferenceObjectPicker, HideLabel] public DefaultSkillConfig defaultSkillConfig = new DefaultSkillConfig();
         
         [InfoBox("$GetStringNotify", InfoMessageType.Warning, "$EnableStringNotify")]

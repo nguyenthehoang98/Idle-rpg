@@ -143,9 +143,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 399f3f9adcfa40a28c88f5c41912aa1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  muzzle: {fileID: 3371243731998456185}
   sortingGroup: {fileID: 1350953138904419735}
-  animancer: {fileID: 4470042125580652987}
-  attackClip: {fileID: 7400000, guid: d6d5be68c56967b4abc547fbe6f35d7d, type: 2}
 --- !u!210 &1350953138904419735
 SortingGroup:
   m_ObjectHideFlags: 0

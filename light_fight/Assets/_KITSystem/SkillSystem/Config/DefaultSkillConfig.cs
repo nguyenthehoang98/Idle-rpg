@@ -20,21 +20,21 @@ namespace _KITSystem.SkillSystem.Config
         public float radiusScanTarget = 1;
 
         public virtual SkillType Type => SkillType.Default;
+    }
 
-        public enum TargetType
-        {
-            Random,
-            Nearest,
-            Farthest,
-            HealthLowest,
-            HealthHighest,
-            DamageLowest,
-            DamageHighest,
-        }
+    public enum TargetType
+    {
+        Random,
+        Nearest,
+        Farthest,
+        HealthLowest,
+        HealthHighest,
+        DamageLowest,
+        DamageHighest,
+    }
 
-        public enum SkillType
-        {
-            Default,
-        }
+    public enum SkillType
+    {
+        Default,
     }
 }
