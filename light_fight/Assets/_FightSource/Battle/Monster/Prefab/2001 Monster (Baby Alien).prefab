@@ -119,7 +119,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 22da26abe41cc9845abf24b6161b3000, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -199,6 +199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flip: {fileID: 8642836512475378254}
+  renderer: {fileID: 5590705413404983932}
   moveAnimationClip: {fileID: 7400000, guid: c47f91b3f1cc75848a10c0a1e1300a4a, type: 2}
   deathAnimationClip: {fileID: 7400000, guid: f6fa1d03dde78a740b314e66ab78d32a, type: 2}
 --- !u!114 &-3112511713927605938

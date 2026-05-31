@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using _KITSystem.Utils;
 using Animancer;
 using UnityEngine;
 
@@ -7,8 +8,11 @@ namespace _FightCode.Battle.View
 {
     public class MonsterAnimation : MonoBehaviour
     {
+        private static readonly int HitEffectBlend = Shader.PropertyToID("_HitEffectBlend");
+
         // move at transform
         [SerializeField] private Transform flip; // flip
+        [SerializeField] private new SpriteRenderer renderer;
         [SerializeField] private AnimationClip moveAnimationClip;
         [SerializeField] private AnimationClip deathAnimationClip;
 
@@ -19,8 +23,13 @@ namespace _FightCode.Battle.View
         private Vector3 localScale;
         private bool defaultFace = true; // false: left, true: right
 
+        private MaterialPropertyBlock hitEffectProperty;
+        private Coroutine hitCoroutine;
+
         private void Awake()
         {
+            hitEffectProperty = new MaterialPropertyBlock();
+            
             animancer = GetComponent<AnimancerComponent>();
             localScale = flip.localScale;
         }
@@ -32,6 +41,14 @@ namespace _FightCode.Battle.View
                 animancer.Animator = GetComponent<Animator>();*/
             /*Transform root = flip.Find("Root");
             root.localPosition = new Vector3(0, -0.8f, 0);*/
+
+            /*renderer = GetComponentInChildren<SpriteRenderer>();
+            if (renderer != null)
+            {
+                renderer.material =
+                    AssetDatabase.LoadAssetAtPath<Material>(
+                        "Assets/_FightSource/Battle/Monster/Material/BeHitMaterial.mat");
+            }*/
         }
 
         public void SetPosition(Vector3 pos)
@@ -48,7 +65,21 @@ namespace _FightCode.Battle.View
 
         public void BeHit()
         {
-            // spawn fx
+            if (hitCoroutine != null) StopCoroutine(hitCoroutine);
+
+            renderer.GetPropertyBlock(hitEffectProperty);
+
+            hitCoroutine = this.LerpNormalize(0, 1, 0.1f, f =>
+            {
+                hitEffectProperty.SetFloat(HitEffectBlend, f);
+
+                renderer.SetPropertyBlock(hitEffectProperty);
+            }, () =>
+            {
+                hitEffectProperty.SetFloat(HitEffectBlend, 0);
+
+                renderer.SetPropertyBlock(hitEffectProperty);
+            });
         }
 
         public void Dead(Vector3 force, Action onDestroy)
