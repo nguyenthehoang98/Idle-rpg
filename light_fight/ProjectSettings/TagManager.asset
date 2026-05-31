@@ -47,7 +47,7 @@ TagManager:
   - name: Weapon
     uniqueID: 4142344491
     locked: 0
-  - name: UI
+  - name: VFX
     uniqueID: 1835596807
     locked: 0
   m_RenderingLayers:

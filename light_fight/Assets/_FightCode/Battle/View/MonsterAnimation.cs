@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using _KITSystem.Resource;
 using _KITSystem.Utils;
 using Animancer;
+using MoreMountains.Feedbacks;
 using UnityEngine;
 
 namespace _FightCode.Battle.View
@@ -25,6 +27,7 @@ namespace _FightCode.Battle.View
 
         private MaterialPropertyBlock hitEffectProperty;
         private Coroutine hitCoroutine;
+        private MMF_Player currentBeHit;
 
         private void Awake()
         {
@@ -80,6 +83,8 @@ namespace _FightCode.Battle.View
 
                 renderer.SetPropertyBlock(hitEffectProperty);
             });
+            
+            currentBeHit = BattleEffect.Instance.SpawnHitEffect(transform.position);
         }
 
         public void Dead(Vector3 force, Action onDestroy)
@@ -91,6 +96,13 @@ namespace _FightCode.Battle.View
             state = animancer.Play(deathAnimationClip);
             
             StartCoroutine(Knockback(force, state.Duration));
+
+            if (currentBeHit != null && currentBeHit.IsPlaying)
+            {
+                currentBeHit.StopFeedbacks();
+                
+                KitPool.Destroy(currentBeHit.gameObject);
+            }
         }
 
         public void OnDeathEvent()

@@ -42,9 +42,6 @@ namespace _KITSystem.Utils
             {
                 instance = this as T;
 
-                // 🔥 Quan trọng: giữ qua scene
-                DontDestroyOnLoad(gameObject);
-
                 OnSingletonInit();
             }
             else if (instance != this)
