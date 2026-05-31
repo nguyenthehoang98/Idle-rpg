@@ -16,6 +16,8 @@ namespace _FightCode.Battle.View
         [SerializeField] private Transform flip; // flip
         [SerializeField] private new SpriteRenderer renderer;
         [SerializeField] private AnimationClip moveAnimationClip;
+        [SerializeField] private AnimationClip attackAnimationClip;
+        [SerializeField] private AnimationClip beHitAnimationClip;
         [SerializeField] private AnimationClip deathAnimationClip;
 
         private AnimancerComponent animancer;
