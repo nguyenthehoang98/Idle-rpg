@@ -41,64 +41,35 @@ namespace _FightCode.Battle.View
             localScale = flip.localScale;
         }
 
-        private void OnValidate()
-        {
-            // animancer = GetComponentInChildren<AnimancerComponent>();
-            /*
-            if (animancer.Animator == null)
-                animancer.Animator = GetComponent<Animator>();*/
-            /*Transform root = flip.Find("Root");
-            root.localPosition = new Vector3(0, -0.8f, 0);*/
-
-            /*renderer = GetComponentInChildren<SpriteRenderer>();
-            if (renderer != null)
-            {
-                renderer.name = "Renderer";
-            }
-
-            moveAnimationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>("Assets/_FightSource/Battle/Monster/Animation/Move.anim");
-            attackAnimationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>("Assets/_FightSource/Battle/Monster/Animation/Attack Melee.anim");
-            beHitAnimationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>("Assets/_FightSource/Battle/Monster/Animation/BeHit.anim");
-            deathAnimationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>("Assets/_FightSource/Battle/Monster/Animation/Death.anim");*/
-            
-            /*Transform root = transform.Find("Flip/Root");
-            Animator animator = root.gameObject.AddComponent<Animator>();
-            
-            animancer = root.gameObject.AddComponent<AnimancerComponent>();
-            animancer.Animator = animator;*/
-            
-            /*AnimancerComponent[] components = flip.GetComponentsInChildren<AnimancerComponent>(true);
-            if (components.Length > 1)
-            {
-                for (int i = 1; i < components.Length; i++)
-                {
-                    Object.DestroyImmediate(components[i]);
-                }
-            }*/
-        }
-
-        /*[MenuItem("Tools/A")]
-        public static void Rm()
+        [MenuItem("Tools/Add")]
+        public static void AddComponent()
         {
             foreach (Object obj in Selection.objects)
             {
                 string path = AssetDatabase.GetAssetPath(obj);
 
+                if (string.IsNullOrEmpty(path))
+                    continue;
+
                 GameObject prefabRoot = PrefabUtility.LoadPrefabContents(path);
 
-                var components = prefabRoot.GetComponentsInChildren<AnimancerComponent>(true);
-
-                Debug.Log($"[{components.Length}] {path}");
-
-                for (int i = components.Length - 1; i >= 1; i--)
+                try
                 {
-                    Object.DestroyImmediate(components[i]);
-                }
+                    AnimancerComponent animancer = prefabRoot.GetComponentInChildren<AnimancerComponent>();
+                    MonsterAnimationCallback mac = animancer.GetComponent<MonsterAnimationCallback>();
+                    if (mac == null) mac = animancer.gameObject.AddComponent<MonsterAnimationCallback>();
 
-                PrefabUtility.SaveAsPrefabAsset(prefabRoot, path);
-                PrefabUtility.UnloadPrefabContents(prefabRoot);
+                    PrefabUtility.SaveAsPrefabAsset(prefabRoot, path);
+                }
+                finally
+                {
+                    PrefabUtility.UnloadPrefabContents(prefabRoot);
+                }
             }
-        }*/
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
 
         public void SetPosition(Vector3 pos)
         {
