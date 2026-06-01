@@ -58,14 +58,11 @@ namespace _FightCode.Battle.Logic
 
             animation = KitPool.Instantiate(go, false).GetComponent<MonsterAnimation>();
             animation.SetPosition(position);
-            
-            share.owner.WaitNextFrame(() =>
-            {
-                animation.gameObject.SetActive(true);
-                animation.transform.localScale = Vector3.one;
-                animation.transform.localRotation = Quaternion.Euler(0, 0, 0);
-                animation.Move();
-            }, 2);
+            animation.transform.localScale = Vector3.one;
+            animation.transform.localRotation = Quaternion.Euler(0, 0, 0);
+            animation.gameObject.SetActive(true);
+            animation.Move();
+            animation.Activate();
         }
 
         public void Tick(float deltaTime)
@@ -102,6 +99,7 @@ namespace _FightCode.Battle.Logic
         public void BeHit(Vector3 direction)
         {
             beHitDirection = direction;
+            
             if (animation != null) animation.BeHit();
         }
     

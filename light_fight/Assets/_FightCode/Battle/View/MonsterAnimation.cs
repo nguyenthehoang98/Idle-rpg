@@ -34,6 +34,7 @@ namespace _FightCode.Battle.View
         private MMF_Player currentBeHit;
 
         private bool isDead = false;
+        private bool initialized = false;
 
         private void Awake()
         {
@@ -43,8 +44,18 @@ namespace _FightCode.Battle.View
 
         private void OnEnable()
         {
-            isDead = false;
             renderer.sortingOrder = Order++;
+        }
+
+        private void OnDisable()
+        {
+            initialized = false;
+        }
+
+        public void Activate()
+        { 
+            initialized = true;
+            isDead = false;
         }
 
         public void SetPosition(Vector3 pos)
@@ -52,6 +63,7 @@ namespace _FightCode.Battle.View
             transform.position = pos;
 
             bool right = pos.x < 0;
+            
             if (right != defaultFace)
             {
                 defaultFace = right;
@@ -62,6 +74,7 @@ namespace _FightCode.Battle.View
         private IEnumerator Knockback(Vector3 force, float duration)
         {
             Vector3 startPos = transform.position;
+            
             Vector3 endPos = startPos + force;
 
             float elapsed = 0f;
@@ -104,6 +117,7 @@ namespace _FightCode.Battle.View
         public void Move()
         {
             if (state != null) state.Stop();
+            
             state = animancer.Play(moveAnimationClip);
         }
 
@@ -114,6 +128,11 @@ namespace _FightCode.Battle.View
             if (hitCoroutine != null) StopCoroutine(hitCoroutine);
 
             renderer.GetPropertyBlock(hitEffectProperty);
+
+            if (!gameObject.activeSelf)
+            {
+                Debug.LogError($"Animation is dead: {name} : {isDead} : {initialized}");
+            }
 
             hitCoroutine = this.LerpNormalize(0, 1, 0.1f, f =>
             {
@@ -132,6 +151,8 @@ namespace _FightCode.Battle.View
 
         public void Dead(Vector3 force, Action onDestroy)
         {
+            if (isDead) return;
+            
             isDead = true;
             
             onDeathCallback = onDestroy;
@@ -152,6 +173,8 @@ namespace _FightCode.Battle.View
 
         public void OnDeathEvent()
         {
+            StopAllCoroutines();
+            
             gameObject.SetActive(false);
             
             onDeathCallback?.Invoke();
