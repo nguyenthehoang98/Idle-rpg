@@ -94,7 +94,7 @@ namespace _FightCode.Battle.Logic
                         float2 center = new float2(muzzle.x, muzzle.y);
                         float radius = weaponData.attackRange;
                         
-                        float2 targetPosition = Unity.Mathematics.float2.zero;
+                        float2 targetPosition = float2.zero;
                         bool found = false;
                         
                         TargetType targetType = setting.skillFrameConfig.defaultSkillConfig.targetType;

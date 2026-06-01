@@ -39,7 +39,7 @@ MonoBehaviour:
     - rid: 7993921661494362166
       type: {class: DefaultSkillConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
-        lifeTimeInSeconds: 0.5
+        lifeTimeInSeconds: 0.8
         targetType: 1
         radiusScanTarget: 6
     - rid: 7993921661494362170
