@@ -4,7 +4,9 @@ using _KITSystem.Resource;
 using _KITSystem.Utils;
 using Animancer;
 using MoreMountains.Feedbacks;
+using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace _FightCode.Battle.View
 {
@@ -15,12 +17,12 @@ namespace _FightCode.Battle.View
         // move at transform
         [SerializeField] private Transform flip; // flip
         [SerializeField] private new SpriteRenderer renderer;
+        [SerializeField] private AnimancerComponent animancer;
         [SerializeField] private AnimationClip moveAnimationClip;
         [SerializeField] private AnimationClip attackAnimationClip;
         [SerializeField] private AnimationClip beHitAnimationClip;
         [SerializeField] private AnimationClip deathAnimationClip;
 
-        private AnimancerComponent animancer;
         private AnimancerState state;
         private Action onDeathCallback;
 
@@ -41,7 +43,8 @@ namespace _FightCode.Battle.View
 
         private void OnValidate()
         {
-            /*animancer = GetComponent<AnimancerComponent>();
+            // animancer = GetComponentInChildren<AnimancerComponent>();
+            /*
             if (animancer.Animator == null)
                 animancer.Animator = GetComponent<Animator>();*/
             /*Transform root = flip.Find("Root");
@@ -50,11 +53,52 @@ namespace _FightCode.Battle.View
             /*renderer = GetComponentInChildren<SpriteRenderer>();
             if (renderer != null)
             {
-                renderer.material =
-                    AssetDatabase.LoadAssetAtPath<Material>(
-                        "Assets/_FightSource/Battle/Monster/Material/BeHitMaterial.mat");
+                renderer.name = "Renderer";
+            }
+
+            moveAnimationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>("Assets/_FightSource/Battle/Monster/Animation/Move.anim");
+            attackAnimationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>("Assets/_FightSource/Battle/Monster/Animation/Attack Melee.anim");
+            beHitAnimationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>("Assets/_FightSource/Battle/Monster/Animation/BeHit.anim");
+            deathAnimationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>("Assets/_FightSource/Battle/Monster/Animation/Death.anim");*/
+            
+            /*Transform root = transform.Find("Flip/Root");
+            Animator animator = root.gameObject.AddComponent<Animator>();
+            
+            animancer = root.gameObject.AddComponent<AnimancerComponent>();
+            animancer.Animator = animator;*/
+            
+            /*AnimancerComponent[] components = flip.GetComponentsInChildren<AnimancerComponent>(true);
+            if (components.Length > 1)
+            {
+                for (int i = 1; i < components.Length; i++)
+                {
+                    Object.DestroyImmediate(components[i]);
+                }
             }*/
         }
+
+        /*[MenuItem("Tools/A")]
+        public static void Rm()
+        {
+            foreach (Object obj in Selection.objects)
+            {
+                string path = AssetDatabase.GetAssetPath(obj);
+
+                GameObject prefabRoot = PrefabUtility.LoadPrefabContents(path);
+
+                var components = prefabRoot.GetComponentsInChildren<AnimancerComponent>(true);
+
+                Debug.Log($"[{components.Length}] {path}");
+
+                for (int i = components.Length - 1; i >= 1; i--)
+                {
+                    Object.DestroyImmediate(components[i]);
+                }
+
+                PrefabUtility.SaveAsPrefabAsset(prefabRoot, path);
+                PrefabUtility.UnloadPrefabContents(prefabRoot);
+            }
+        }*/
 
         public void SetPosition(Vector3 pos)
         {

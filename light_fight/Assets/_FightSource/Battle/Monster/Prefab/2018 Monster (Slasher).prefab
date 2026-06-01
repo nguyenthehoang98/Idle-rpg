@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 2518143586049762259}
   - component: {fileID: 6131593349632229215}
   m_Layer: 0
-  m_Name: Slasher
+  m_Name: Renderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -128,6 +128,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7764710591294409744}
+  - component: {fileID: 8804024525359062067}
+  - component: {fileID: 342920796738228313}
   m_Layer: 0
   m_Name: Root
   m_TagString: Untagged
@@ -151,6 +153,42 @@ Transform:
   - {fileID: 2518143586049762259}
   m_Father: {fileID: 6165561268235694485}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &8804024525359062067
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3218558136267467518}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &342920796738228313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3218558136267467518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad50f81b1d25c441943c37a89ba23f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Animator: {fileID: 8804024525359062067}
+  _ActionOnDisable: 0
 --- !u!1 &7013279461058707138
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,7 +236,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flip: {fileID: 6165561268235694485}
   renderer: {fileID: 6131593349632229215}
+  animancer: {fileID: 342920796738228313}
   moveAnimationClip: {fileID: 7400000, guid: c47f91b3f1cc75848a10c0a1e1300a4a, type: 2}
-  attackAnimationClip: {fileID: 0}
-  beHitAnimationClip: {fileID: 0}
+  attackAnimationClip: {fileID: 7400000, guid: 47a4ccb8c0134b94f8bf3d3a1d72cfbb, type: 2}
+  beHitAnimationClip: {fileID: 7400000, guid: 562ecb00dcefd1b41a79e17fd2007d9a, type: 2}
   deathAnimationClip: {fileID: 7400000, guid: f6fa1d03dde78a740b314e66ab78d32a, type: 2}

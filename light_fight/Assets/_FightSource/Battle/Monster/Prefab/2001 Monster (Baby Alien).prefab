@@ -236,6 +236,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flip: {fileID: 8642836512475378254}
   renderer: {fileID: 5590705413404983932}
+  animancer: {fileID: 4909844821552237779}
   moveAnimationClip: {fileID: 7400000, guid: c47f91b3f1cc75848a10c0a1e1300a4a, type: 2}
   attackAnimationClip: {fileID: 7400000, guid: 47a4ccb8c0134b94f8bf3d3a1d72cfbb, type: 2}
   beHitAnimationClip: {fileID: 7400000, guid: 562ecb00dcefd1b41a79e17fd2007d9a, type: 2}

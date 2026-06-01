@@ -47,9 +47,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flip: {fileID: 1523056523448407356}
   renderer: {fileID: 5158963250239360283}
+  animancer: {fileID: 3360303655417081608}
   moveAnimationClip: {fileID: 7400000, guid: c47f91b3f1cc75848a10c0a1e1300a4a, type: 2}
-  attackAnimationClip: {fileID: 0}
-  beHitAnimationClip: {fileID: 0}
+  attackAnimationClip: {fileID: 7400000, guid: 47a4ccb8c0134b94f8bf3d3a1d72cfbb, type: 2}
+  beHitAnimationClip: {fileID: 7400000, guid: 562ecb00dcefd1b41a79e17fd2007d9a, type: 2}
   deathAnimationClip: {fileID: 7400000, guid: f6fa1d03dde78a740b314e66ab78d32a, type: 2}
 --- !u!1 &4225181890013636110
 GameObject:
@@ -60,6 +61,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8239483832889395639}
+  - component: {fileID: 3360303655417081608}
+  - component: {fileID: 1874883098102530735}
   m_Layer: 0
   m_Name: Root
   m_TagString: Untagged
@@ -83,6 +86,42 @@ Transform:
   - {fileID: 2861646505710120874}
   m_Father: {fileID: 1523056523448407356}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3360303655417081608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4225181890013636110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad50f81b1d25c441943c37a89ba23f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Animator: {fileID: 1874883098102530735}
+  _ActionOnDisable: 0
+--- !u!95 &1874883098102530735
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4225181890013636110}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8096425526564503393
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,7 +133,7 @@ GameObject:
   - component: {fileID: 2861646505710120874}
   - component: {fileID: 5158963250239360283}
   m_Layer: 0
-  m_Name: Spitter
+  m_Name: Renderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
