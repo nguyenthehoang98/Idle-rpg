@@ -40,6 +40,7 @@ namespace _FightCode.Battle.Logic
         
         private void Start()
         {
+            Debug.Log(@"Thêm xử lý tránh việc nhiều weapon cùng tấn công 1 monster đã chết, tối ưu hơn");
             Debug.Log(@"Cần có method check config, load & validate tất cả mà ko cần play 1 level hoặc vào game");
             // todo: assign
             TryGetTickable(out skill);

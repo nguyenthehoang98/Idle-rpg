@@ -96,18 +96,20 @@ namespace _FightCode.Battle.Logic
                         
                         float2 targetPosition = float2.zero;
                         bool found = false;
+
+                        int dmg = 10;
                         
                         TargetType targetType = setting.skillFrameConfig.defaultSkillConfig.targetType;
                         switch (targetType)
                         {
                             case TargetType.Nearest:
-                                found = query.FindNearestTargetPosition(center, radius, out targetPosition);
+                                found = query.FindNearestTargetPosition(dmg, center, radius, out targetPosition);
                                 break;
                             case TargetType.Farthest:
-                                found = query.FindFarthestTargetPosition(center, radius, out targetPosition);
+                                found = query.FindFarthestTargetPosition(dmg, center, radius, out targetPosition);
                                 break;
                             case TargetType.Random:
-                                found = query.FindRandomTargetPosition(center, radius, out targetPosition);
+                                found = query.FindRandomTargetPosition(dmg, center, radius, out targetPosition);
                                 break;
                             default:
                                 Debug.LogError("Not defined target type " + targetType);
