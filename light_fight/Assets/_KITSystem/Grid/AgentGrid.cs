@@ -256,6 +256,5 @@ namespace _KITSystem.Grid
 
         public bool isStopped;
         public int stuckFrames;
-        public bool shouldDestroy;
     }
 }

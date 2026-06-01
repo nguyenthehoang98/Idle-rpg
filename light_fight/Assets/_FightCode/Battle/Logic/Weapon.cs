@@ -4,6 +4,7 @@ using _FightCode.Battle.View;
 using _FightCode.Config;
 using _KITSystem.ExcelConfig;
 using _KITSystem.SkillSystem.Config;
+using _KITSystem.SkillSystem.Entity;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
 using Unity.Mathematics;
@@ -94,22 +95,20 @@ namespace _FightCode.Battle.Logic
                         float2 center = new float2(muzzle.x, muzzle.y);
                         float radius = weaponData.attackRange;
                         
-                        float2 targetPosition = float2.zero;
+                        QueryResult result = default;
                         bool found = false;
-
-                        int dmg = 10;
                         
                         TargetType targetType = setting.skillFrameConfig.defaultSkillConfig.targetType;
                         switch (targetType)
                         {
                             case TargetType.Nearest:
-                                found = query.FindNearestTargetPosition(dmg, center, radius, out targetPosition);
+                                found = query.FindNearestTargetPosition(center, radius, FilterEntity, out result);
                                 break;
                             case TargetType.Farthest:
-                                found = query.FindFarthestTargetPosition(dmg, center, radius, out targetPosition);
+                                found = query.FindFarthestTargetPosition(center, radius, FilterEntity, out result);
                                 break;
                             case TargetType.Random:
-                                found = query.FindRandomTargetPosition(dmg, center, radius, out targetPosition);
+                                found = query.FindRandomTargetPosition(center, radius, FilterEntity, out result);
                                 break;
                             default:
                                 Debug.LogError("Not defined target type " + targetType);
@@ -118,10 +117,17 @@ namespace _FightCode.Battle.Logic
 
                         if (found)
                         {
-                            elapsedTime = RotateTo(new Vector3(targetPosition.x, targetPosition.y), deltaTime);
+                            int damage = 10;
+
+                            ComponentManager<HealthData>.Get(result.Entity).TargetHealth -= damage;
+
+                            float2 goal = result.Position;
+
+                            elapsedTime = RotateTo(new Vector3(goal.x, goal.y), deltaTime);
+                            
                             phase = Phase.Rotate;
-                            SkillFactory.Build(new float2(position.x, position.y), targetPosition,
-                                setting.skillFrameConfig);
+                            
+                            SkillFactory.Build(new float2(goal.x, goal.y), goal, setting.skillFrameConfig);
                         }
 
                         break;
@@ -131,6 +137,17 @@ namespace _FightCode.Battle.Logic
                         break;
                 }
             }
+        }
+
+        private bool FilterEntity(int entity)
+        {
+            if (!EntityManager.IsAlive(entity)) return false;
+
+            HealthData healthData = ComponentManager<HealthData>.Get(entity);
+
+            if (healthData.TargetHealth <= 0) return false;
+
+            return true;
         }
 
 #if UNITY_EDITOR
