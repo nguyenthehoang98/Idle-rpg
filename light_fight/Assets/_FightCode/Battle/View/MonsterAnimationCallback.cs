@@ -7,7 +7,7 @@ namespace _FightCode.Battle.View
     {
         [SerializeField] private UnityEvent onAttackEvent;
         [SerializeField] private UnityEvent onDeathEvent;
-        
+
         public void OnAttack()
         {
             onAttackEvent?.Invoke();

@@ -41,36 +41,6 @@ namespace _FightCode.Battle.View
             localScale = flip.localScale;
         }
 
-        [MenuItem("Tools/Add")]
-        public static void AddComponent()
-        {
-            foreach (Object obj in Selection.objects)
-            {
-                string path = AssetDatabase.GetAssetPath(obj);
-
-                if (string.IsNullOrEmpty(path))
-                    continue;
-
-                GameObject prefabRoot = PrefabUtility.LoadPrefabContents(path);
-
-                try
-                {
-                    AnimancerComponent animancer = prefabRoot.GetComponentInChildren<AnimancerComponent>();
-                    MonsterAnimationCallback mac = animancer.GetComponent<MonsterAnimationCallback>();
-                    if (mac == null) mac = animancer.gameObject.AddComponent<MonsterAnimationCallback>();
-
-                    PrefabUtility.SaveAsPrefabAsset(prefabRoot, path);
-                }
-                finally
-                {
-                    PrefabUtility.UnloadPrefabContents(prefabRoot);
-                }
-            }
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-        }
-
         public void SetPosition(Vector3 pos)
         {
             transform.position = pos;
@@ -81,52 +51,6 @@ namespace _FightCode.Battle.View
                 defaultFace = right;
                 flip.localScale = new Vector3(localScale.x * (right ? 1 : -1), localScale.y, localScale.z);
             }
-        }
-
-        public void BeHit()
-        {
-            if (hitCoroutine != null) StopCoroutine(hitCoroutine);
-
-            renderer.GetPropertyBlock(hitEffectProperty);
-
-            hitCoroutine = this.LerpNormalize(0, 1, 0.1f, f =>
-            {
-                hitEffectProperty.SetFloat(HitEffectBlend, f);
-
-                renderer.SetPropertyBlock(hitEffectProperty);
-            }, () =>
-            {
-                hitEffectProperty.SetFloat(HitEffectBlend, 0);
-
-                renderer.SetPropertyBlock(hitEffectProperty);
-            });
-            
-            currentBeHit = BattleEffect.Instance.SpawnHitEffect(transform.position);
-        }
-
-        public void Dead(Vector3 force, Action onDestroy)
-        {
-            onDeathCallback = onDestroy;
-            
-            if (state != null) state.Stop();
-            
-            state = animancer.Play(deathAnimationClip);
-            
-            StartCoroutine(Knockback(force, state.Duration));
-
-            if (currentBeHit != null && currentBeHit.IsPlaying)
-            {
-                currentBeHit.StopFeedbacks();
-                
-                KitPool.Destroy(currentBeHit.gameObject);
-            }
-        }
-
-        public void OnDeathEvent()
-        {
-            gameObject.SetActive(false);
-            
-            onDeathCallback?.Invoke();
         }
 
         private IEnumerator Knockback(Vector3 force, float duration)
@@ -175,6 +99,52 @@ namespace _FightCode.Battle.View
         {
             if (state != null) state.Stop();
             state = animancer.Play(moveAnimationClip);
+        }
+
+        public void BeHit()
+        {
+            if (hitCoroutine != null) StopCoroutine(hitCoroutine);
+
+            renderer.GetPropertyBlock(hitEffectProperty);
+
+            hitCoroutine = this.LerpNormalize(0, 1, 0.1f, f =>
+            {
+                hitEffectProperty.SetFloat(HitEffectBlend, f);
+
+                renderer.SetPropertyBlock(hitEffectProperty);
+            }, () =>
+            {
+                hitEffectProperty.SetFloat(HitEffectBlend, 0);
+
+                renderer.SetPropertyBlock(hitEffectProperty);
+            });
+            
+            currentBeHit = BattleEffect.Instance.SpawnHitEffect(transform.position);
+        }
+
+        public void Dead(Vector3 force, Action onDestroy)
+        {
+            onDeathCallback = onDestroy;
+            
+            if (state != null) state.Stop();
+            
+            state = animancer.Play(deathAnimationClip);
+            
+            StartCoroutine(Knockback(force, state.Duration));
+
+            if (currentBeHit != null && currentBeHit.IsPlaying)
+            {
+                currentBeHit.StopFeedbacks();
+                
+                KitPool.Destroy(currentBeHit.gameObject);
+            }
+        }
+
+        public void OnDeathEvent()
+        {
+            gameObject.SetActive(false);
+            
+            onDeathCallback?.Invoke();
         }
     }
 }
