@@ -23,8 +23,6 @@ namespace _FightCode.Battle.Model
         public Color slotColorDefaultSpeed = Color.yellow;
         public Color slotColorMaxSpeed = Color.green;
         [TitleGroup("Weapon")]
-        public float weaponCooldown = 1f;
-        public float weaponAttackRange = 6f;
         public float weaponRotateDuration = 0.2f;
         public int[] weaponXRotates = new int[6] { 0, 0, 0, 180, 180, 180 };
         [TitleGroup("Attractor")]

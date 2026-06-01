@@ -51,6 +51,8 @@ namespace _FightCode.Config
         public string weaponName;
         public string path;
         public int skillId;
+        public float skillCooldown;
+        public float attackRange;
         [SerializeField] private float baseAttack;
         [SerializeField] private float attackBonusLevel;
         [SerializeField] private float basePrice;
@@ -58,5 +60,7 @@ namespace _FightCode.Config
 
         public int Attack(int level) => (int)(baseAttack + attackBonusLevel * level);
         public int Price(int level) => (int)(basePrice + priceBonusLevel * level);
+
+        public bool IsValid => weaponId > 0;
     }
 }

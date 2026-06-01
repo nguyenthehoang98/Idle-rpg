@@ -2,6 +2,7 @@
 using _FightCode.Battle.Model;
 using _FightCode.Battle.View;
 using _FightCode.Config;
+using _KITSystem.ExcelConfig;
 using _KITSystem.SkillSystem.Config;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
@@ -28,6 +29,8 @@ namespace _FightCode.Battle.Logic
         private bool needUpdatePosition;
         private bool isPlaying;
 
+        private WeaponData weaponData;
+
         public Weapon(int order, ISlotView slotView, BattleShare share, BattleSetting setting, IQuery query, Vector3 direction)
         {
             this.share = share;
@@ -41,6 +44,8 @@ namespace _FightCode.Battle.Logic
         public void Equip(int weaponId, int weaponLevel)
         {
             view.Equip(weaponId, weaponLevel);
+
+            KitConfigManager.Get<WeaponConfig>().Find(weaponId, out weaponData);
         }
         
         public void Play()
@@ -74,7 +79,7 @@ namespace _FightCode.Battle.Logic
 
         public void Tick(float deltaTime)
         {
-            if (isPlaying)
+            if (isPlaying && weaponData.IsValid)
             {
                 elapsedTime -= deltaTime;
 
@@ -83,11 +88,11 @@ namespace _FightCode.Battle.Logic
                 switch (phase)
                 {
                     case Phase.Cooldown:
-                        elapsedTime = int.MaxValue;
+                        elapsedTime = 0;
 
                         Vector3 muzzle = view.MuzzlePosition;
                         float2 center = new float2(muzzle.x, muzzle.y);
-                        float radius = setting.weaponAttackRange;
+                        float radius = weaponData.attackRange;
                         
                         float2 targetPosition = Unity.Mathematics.float2.zero;
                         bool found = false;
@@ -113,18 +118,20 @@ namespace _FightCode.Battle.Logic
                         {
                             elapsedTime = RotateTo(new Vector3(targetPosition.x, targetPosition.y), deltaTime);
                             phase = Phase.Rotate;
-                            SkillFactory.Build(new float2(position.x, position.y), targetPosition, setting.skillFrameConfig);
+                            SkillFactory.Build(new float2(position.x, position.y), targetPosition,
+                                setting.skillFrameConfig);
                         }
 
                         break;
                     case Phase.Rotate:
-                        elapsedTime = setting.weaponCooldown;
+                        elapsedTime = weaponData.skillCooldown;
                         phase = Phase.Cooldown;
                         break;
                 }
             }
         }
 
+#if UNITY_EDITOR
         private void DrawTriangle(Color color)
         {
             float height = 0.4f;
@@ -167,6 +174,7 @@ namespace _FightCode.Battle.Logic
             Debug.DrawLine(new Vector3(v3.x, v3.y), new Vector3(v4.x, v4.y), color);
             Debug.DrawLine(new Vector3(v1.x, v1.y), new Vector3(v4.x, v4.y), color);
         }
+#endif
 
         public float RotateTo(Vector3 worldPos, float deltaTime)
         {
@@ -188,7 +196,7 @@ namespace _FightCode.Battle.Logic
 
             needUpdatePosition = false;
             
-            return setting.weaponCooldown / share.timeScale;
+            return weaponData.skillCooldown / share.timeScale;
         }
 
         enum Phase

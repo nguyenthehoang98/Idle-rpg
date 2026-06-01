@@ -25,13 +25,11 @@ namespace _FightCode.Battle.Logic
         // {index:number}
         private int[] diceNumbers;
         private Vector3 center;
-        private float attackRange;
 
         public void Initialize(BattleShare share, BattleSetting setting, IQuery query)
         {
             this.share = share;
             this.setting = setting;
-            this.attackRange = setting.weaponAttackRange;
             this.center = new Vector3(setting.worldCenter.x, setting.worldCenter.y);
             this.diceNumbers = new int[setting.totalSlot];
             this.dices = new Dice[setting.totalSlot];
@@ -170,33 +168,7 @@ namespace _FightCode.Battle.Logic
 
 #if UNITY_EDITOR
             foreach (var slot in slots) slot.Draw();
-
-            DrawCircle(attackRange, Color.yellow);
 #endif
         }
-
-#if UNITY_EDITOR
-        private void DrawCircle(float radius, Color color, int segments = 32)
-        {
-            float angleStep = 360f / segments;
-
-            Vector3 prevPoint = center + new Vector3(radius, 0f, 0f);
-
-            for (int i = 1; i <= segments; i++)
-            {
-                float angle = angleStep * i * Mathf.Deg2Rad;
-
-                Vector3 newPoint = center + new Vector3(
-                    Mathf.Cos(angle) * radius,
-                    Mathf.Sin(angle) * radius,
-                    0f
-                );
-
-                Debug.DrawLine(prevPoint, newPoint, color);
-
-                prevPoint = newPoint;
-            }
-        }
-#endif 
     }
 }

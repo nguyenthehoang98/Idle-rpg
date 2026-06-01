@@ -85,5 +85,7 @@ namespace _FightCode.Config
         {
             set => power = value;
         }
+
+        public bool IsValid => monsterId > 0;
     }
 }

@@ -19,6 +19,8 @@ MonoBehaviour:
     weaponName: Chopper
     path: 1001 Weapon
     skillId: 3001
+    skillCooldown: 0.3
+    attackRange: 10
     baseAttack: 8
     attackBonusLevel: 0.08
     basePrice: 0
@@ -27,6 +29,8 @@ MonoBehaviour:
     weaponName: Sword
     path: 1002 Weapon
     skillId: 3002
+    skillCooldown: 0.3
+    attackRange: 10
     baseAttack: 10
     attackBonusLevel: 0.1
     basePrice: 0
@@ -35,6 +39,8 @@ MonoBehaviour:
     weaponName: Circular Saw
     path: 1003 Weapon
     skillId: 3003
+    skillCooldown: 0.3
+    attackRange: 10
     baseAttack: 9
     attackBonusLevel: 0.09
     basePrice: 0
@@ -43,6 +49,8 @@ MonoBehaviour:
     weaponName: Captain's Sword
     path: 1004 Weapon
     skillId: 3004
+    skillCooldown: 0.3
+    attackRange: 10
     baseAttack: 14
     attackBonusLevel: 0.12
     basePrice: 0
@@ -51,6 +59,8 @@ MonoBehaviour:
     weaponName: Chainsaw
     path: 1005 Weapon
     skillId: 3005
+    skillCooldown: 0.3
+    attackRange: 10
     baseAttack: 16
     attackBonusLevel: 0.14
     basePrice: 0
@@ -59,6 +69,8 @@ MonoBehaviour:
     weaponName: Brick
     path: 1006 Weapon
     skillId: 3006
+    skillCooldown: 0.3
+    attackRange: 10
     baseAttack: 7
     attackBonusLevel: 0.07
     basePrice: 0
@@ -67,6 +79,8 @@ MonoBehaviour:
     weaponName: Rock
     path: 1007 Weapon
     skillId: 3007
+    skillCooldown: 0.3
+    attackRange: 10
     baseAttack: 10
     attackBonusLevel: 0.09
     basePrice: 0
@@ -75,6 +89,8 @@ MonoBehaviour:
     weaponName: Spiky Shield
     path: 1008 Weapon
     skillId: 3008
+    skillCooldown: 0.3
+    attackRange: 10
     baseAttack: 13
     attackBonusLevel: 0.11
     basePrice: 0
@@ -83,6 +99,8 @@ MonoBehaviour:
     weaponName: Spoon
     path: 1009 Weapon
     skillId: 3009
+    skillCooldown: 0.3
+    attackRange: 10
     baseAttack: 8
     attackBonusLevel: 0.08
     basePrice: 0
@@ -91,6 +109,8 @@ MonoBehaviour:
     weaponName: Hammer
     path: 1010 Weapon
     skillId: 3010
+    skillCooldown: 0.3
+    attackRange: 10
     baseAttack: 18
     attackBonusLevel: 0.15
     basePrice: 0
@@ -99,6 +119,8 @@ MonoBehaviour:
     weaponName: Claw
     path: 1011 Weapon
     skillId: 3011
+    skillCooldown: 0.3
+    attackRange: 10
     baseAttack: 9
     attackBonusLevel: 0.1
     basePrice: 0
@@ -107,6 +129,8 @@ MonoBehaviour:
     weaponName: Fist
     path: 1012 Weapon
     skillId: 3012
+    skillCooldown: 0.3
+    attackRange: 10
     baseAttack: 7
     attackBonusLevel: 0.08
     basePrice: 0
@@ -115,6 +139,8 @@ MonoBehaviour:
     weaponName: Flaming Brass Knuckles
     path: 1013 Weapon
     skillId: 3013
+    skillCooldown: 0.3
+    attackRange: 10
     baseAttack: 11
     attackBonusLevel: 0.1
     basePrice: 0
@@ -123,6 +149,8 @@ MonoBehaviour:
     weaponName: Hand
     path: 1014 Weapon
     skillId: 3014
+    skillCooldown: 0.3
+    attackRange: 10
     baseAttack: 8
     attackBonusLevel: 0.09
     basePrice: 0
@@ -131,6 +159,8 @@ MonoBehaviour:
     weaponName: Power Fist
     path: 1015 Weapon
     skillId: 3015
+    skillCooldown: 0.3
+    attackRange: 10
     baseAttack: 20
     attackBonusLevel: 0.16
     basePrice: 0
@@ -139,6 +169,8 @@ MonoBehaviour:
     weaponName: Plank
     path: 1016 Weapon
     skillId: 3016
+    skillCooldown: 0.3
+    attackRange: 10
     baseAttack: 10
     attackBonusLevel: 0.08
     basePrice: 0
@@ -147,6 +179,8 @@ MonoBehaviour:
     weaponName: Shredder
     path: 1017 Weapon
     skillId: 3017
+    skillCooldown: 0.3
+    attackRange: 10
     baseAttack: 16
     attackBonusLevel: 0.12
     basePrice: 0
@@ -155,6 +189,8 @@ MonoBehaviour:
     weaponName: Fireball
     path: 1018 Weapon
     skillId: 3018
+    skillCooldown: 0.3
+    attackRange: 10
     baseAttack: 18
     attackBonusLevel: 0.13
     basePrice: 0
@@ -163,6 +199,8 @@ MonoBehaviour:
     weaponName: Grenade Launcher
     path: 1019 Weapon
     skillId: 3019
+    skillCooldown: 0.3
+    attackRange: 10
     baseAttack: 28
     attackBonusLevel: 0.18
     basePrice: 0
@@ -171,6 +209,8 @@ MonoBehaviour:
     weaponName: Rocket Launcher
     path: 1020 Weapon
     skillId: 3020
+    skillCooldown: 0.3
+    attackRange: 10
     baseAttack: 35
     attackBonusLevel: 0.22
     basePrice: 0

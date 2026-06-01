@@ -108,6 +108,8 @@ namespace _FightCode.Battle.Logic
             SkillFactory.Initialize(skill, query);
             EntityManager.OnBehaviour += OnEntityBehaviour;
             spawner.OnWaveCompleted += OnWaveComplete;
+
+            MonsterAnimation.Order = 1;
         }
 
         private void OnWaveComplete()

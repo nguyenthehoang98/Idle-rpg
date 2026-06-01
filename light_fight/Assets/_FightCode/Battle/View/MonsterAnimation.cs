@@ -4,15 +4,15 @@ using _KITSystem.Resource;
 using _KITSystem.Utils;
 using Animancer;
 using MoreMountains.Feedbacks;
-using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace _FightCode.Battle.View
 {
     public class MonsterAnimation : MonoBehaviour
     {
         private static readonly int HitEffectBlend = Shader.PropertyToID("_HitEffectBlend");
+        
+        public static int Order = 1;
 
         // move at transform
         [SerializeField] private Transform flip; // flip
@@ -33,12 +33,18 @@ namespace _FightCode.Battle.View
         private Coroutine hitCoroutine;
         private MMF_Player currentBeHit;
 
+        private bool isDead = false;
+
         private void Awake()
         {
             hitEffectProperty = new MaterialPropertyBlock();
-            
-            animancer = GetComponent<AnimancerComponent>();
             localScale = flip.localScale;
+        }
+
+        private void OnEnable()
+        {
+            isDead = false;
+            renderer.sortingOrder = Order++;
         }
 
         public void SetPosition(Vector3 pos)
@@ -103,6 +109,8 @@ namespace _FightCode.Battle.View
 
         public void BeHit()
         {
+            if (isDead) return;
+            
             if (hitCoroutine != null) StopCoroutine(hitCoroutine);
 
             renderer.GetPropertyBlock(hitEffectProperty);
@@ -124,6 +132,8 @@ namespace _FightCode.Battle.View
 
         public void Dead(Vector3 force, Action onDestroy)
         {
+            isDead = true;
+            
             onDeathCallback = onDestroy;
             
             if (state != null) state.Stop();
