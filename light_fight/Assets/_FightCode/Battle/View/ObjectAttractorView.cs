@@ -21,6 +21,11 @@ namespace _FightCode.Battle.View
             trail.enabled = false;
         }
 
+        private void OnDestroy()
+        {
+            if(sequence != null && sequence.IsActive()) sequence.Kill();
+        }
+
         public IAttractorView Instantiate(Transform parent)
         {
             return Instantiate(transform, parent).GetComponent<IAttractorView>();
