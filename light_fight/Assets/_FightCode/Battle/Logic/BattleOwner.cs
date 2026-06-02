@@ -40,6 +40,7 @@ namespace _FightCode.Battle.Logic
         
         private void Start()
         {
+            Debug.Log(@"Tạo behaviour tree tạo các kịch bản test");
             Debug.Log(@"Cần xử lý các công thức tính sát thương, power...");
             Debug.Log(@"Cần có method check config, load & validate tất cả mà ko cần play 1 level hoặc vào game");
             // todo: assign
