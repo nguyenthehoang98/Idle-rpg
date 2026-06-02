@@ -25,6 +25,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 12c7e2a9f94c2ad4ca1091d3e6aab2ee
+    m_Address: StatConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 14302c4bf6ff8a4428344edc1c084f65
     m_Address: 2004 Monster
     m_ReadOnly: 0
@@ -110,11 +115,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 527fdc5cbeb1752459f6429ee3e12c9d
-    m_Address: SkillConfig
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5cb806e9f20ea6f4db7da30f0b5b90f8
     m_Address: 1013 Weapon
     m_ReadOnly: 0
@@ -165,6 +165,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 90ec4b71cf6be264c85156c117717785
+    m_Address: PlayerConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 948f056c3dc7dd649a0912fac4902530
     m_Address: 2003 Monster
     m_ReadOnly: 0
@@ -200,6 +205,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c32a0806f4c05364088cd571ebd194e0
+    m_Address: EquipmentConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c63064496fdb166478149739f9a0200c
     m_Address: 2028 Monster
     m_ReadOnly: 0
@@ -212,16 +222,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cb62c3af2da271c4a904433b4d492c40
     m_Address: 2024 Monster
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: cded5a9a13389914484a02e9fa2b9246
-    m_Address: WeaponConfig
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d730643e83691a144a8a76505aa87442
-    m_Address: MonsterConfig
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -287,11 +287,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fc29d7e73dd9d314a82457e74f1fdcae
     m_Address: 1017 Weapon
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fce783d0c9b053742a0f6ef643f88c75
-    m_Address: LevelConfig
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

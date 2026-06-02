@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using ExcelExtension;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _FightCode.Config
 {
@@ -20,11 +21,11 @@ namespace _FightCode.Config
 
             foreach (var m in infos)
             {
-                cachePlayerData.Add(m.level, m);
+                cachePlayerData.Add(m.Level, m);
             }
         }
         
-        public bool Find(int level, out PlayerData playerData)
+        public bool TryGetPlayerByLevel(int level, out PlayerData playerData)
         {
             return cachePlayerData.TryGetValue(level, out playerData);
         }
@@ -33,7 +34,7 @@ namespace _FightCode.Config
     [Serializable]
     public struct PlayerData
     {
-        public int level;
-        public int expRequire;
+        public int Level;
+        public int Exp;
     }
 }

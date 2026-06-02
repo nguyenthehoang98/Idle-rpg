@@ -67,11 +67,11 @@ namespace _FightCode.Battle.View
                 weapon = null;
             }
 
-            WeaponConfig weaponConfig = KitConfigManager.Get<WeaponConfig>();
+            EquipmentConfig equipmentConfig = KitConfigManager.Get<EquipmentConfig>();
             
-            if (weaponConfig.Find(weaponId, out WeaponData weaponData))
+            if (equipmentConfig.TryGetEquipmentById(weaponId, out EquipmentData weaponData))
             {
-                GameObject go = await KitLoaded.LoadAsync<GameObject>(weaponData.path);
+                GameObject go = await KitLoaded.LoadAsync<GameObject>(weaponData.PrefabName);
             
                 weapon = Instantiate(go, weaponParent).GetComponent<WeaponAnimation>();
             }

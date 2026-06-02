@@ -30,7 +30,7 @@ namespace _FightCode.Battle.Logic
         private bool needUpdatePosition;
         private bool isPlaying;
 
-        private WeaponData weaponData;
+        private EquipmentData equipmentData;
 
         public Weapon(int order, ISlotView slotView, BattleShare share, BattleSetting setting, IQuery query, Vector3 direction)
         {
@@ -46,7 +46,7 @@ namespace _FightCode.Battle.Logic
         {
             view.Equip(weaponId, weaponLevel);
 
-            KitConfigManager.Get<WeaponConfig>().Find(weaponId, out weaponData);
+            KitConfigManager.Get<EquipmentConfig>().TryGetEquipmentById(weaponId, out equipmentData);
         }
         
         public void Play()
@@ -80,7 +80,7 @@ namespace _FightCode.Battle.Logic
 
         public void Tick(float deltaTime)
         {
-            if (isPlaying && weaponData.IsValid)
+            /*if (isPlaying && equipmentData.IsValid)
             {
                 elapsedTime -= deltaTime;
 
@@ -93,7 +93,7 @@ namespace _FightCode.Battle.Logic
 
                         Vector3 muzzle = view.MuzzlePosition;
                         float2 center = new float2(muzzle.x, muzzle.y);
-                        float radius = weaponData.attackRange;
+                        float radius = equipmentData.attackRange;
                         
                         QueryResult result = default;
                         
@@ -133,11 +133,11 @@ namespace _FightCode.Battle.Logic
 
                         break;
                     case Phase.Rotate:
-                        elapsedTime = weaponData.skillCooldown;
+                        elapsedTime = equipmentData.skillCooldown;
                         phase = Phase.Cooldown;
                         break;
                 }
-            }
+            }*/
         }
 
         private bool FilterEntity(int entity)
@@ -210,8 +210,9 @@ namespace _FightCode.Battle.Logic
             view.Rotate(worldPos, setting.weaponRotateDuration, share.timeScale, needUpdatePosition);
 
             needUpdatePosition = false;
-            
-            return weaponData.skillCooldown / share.timeScale;
+
+            return int.MaxValue;
+            //return equipmentData.skillCooldown / share.timeScale;
         }
 
         enum Phase

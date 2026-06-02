@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using _KITSystem.Formula;
 using ExcelExtension;
 using UnityEngine;
 
@@ -13,30 +12,30 @@ namespace _FightCode.Config
     {
         [SerializeField] private List<StatData> stats = new List<StatData>();
     
-        private Dictionary<StatType, StatData> cacheStatData;
+        private Dictionary<int, StatData> byId;
     
         public override void OnMapValue()
         {
-            cacheStatData = new Dictionary<StatType, StatData>();
+            byId = new Dictionary<int, StatData>();
 
-            foreach (var m in stats)
+            foreach (var statData in stats)
             {
-                cacheStatData.Add(m.type, m);
+                byId.Add(statData.ID, statData);
             }
         }
 
-        public bool Find(StatType stat, out StatData statData)
+        public bool TryGetStatById(int statID, out StatData statData)
         {
-            return cacheStatData.TryGetValue(stat, out statData);
+            return byId.TryGetValue(statID, out statData);
         }
     }
 
     [Serializable]
     public struct StatData
     {
-        public int id;
-        public StatType type;
-        public float value;
-        public int modifier;
+        public int ID;
+        public string Name;
+        public int Value;
+        public float Modifier;
     }
 }

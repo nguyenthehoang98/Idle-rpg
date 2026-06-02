@@ -37,12 +37,12 @@ namespace _FightCode.Utils
             }
         }
 
-        public static int OutputDamage(WeaponData weaponData, MonsterData monsterData, SkillData skillData, int skillLevel)
+        /*public static int OutputDamage(EquipmentData equipmentData, MonsterData monsterData, SkillData skillData, int skillLevel)
         {
-            StatComplex source = GetComplex(weaponData, skillData, skillLevel);
+            StatComplex source = GetComplex(equipmentData, skillData, skillLevel);
             StatComplex target = GetComplex(monsterData);
             return OutputDamage(source, target, skillData, skillLevel);
-        }
+        }*/
         
         private static StatComplex GetComplex(MonsterData monsterData)
         {
@@ -67,9 +67,9 @@ namespace _FightCode.Utils
             }
         }
 
-        private static StatComplex GetComplex(WeaponData weaponData, SkillData skillData, int skillLevel)
+        /*private static StatComplex GetComplex(EquipmentData equipmentData, SkillData skillData, int skillLevel)
         {
-            int hash = HashCode.Combine(weaponData.skillId, skillData.skillId, skillLevel);
+            int hash = HashCode.Combine(equipmentData.skillId, skillData.skillId, skillLevel);
             
             if (WeaponStatsComplex.TryGetValue(hash, out StatComplex statComplex))
             {
@@ -78,7 +78,7 @@ namespace _FightCode.Utils
             else
             {
                 statComplex = new StatComplex();
-                statComplex.AddBase(StatType.Attack, weaponData.Attack(skillLevel));
+                statComplex.AddBase(StatType.Attack, equipmentData.Attack(skillLevel));
                 statComplex.AddBase(StatType.CriticalRate, 0);
                 statComplex.AddBase(StatType.CriticalDamage, 0);
                 statComplex.AddBase(StatType.DamageMultiplier, 0);
@@ -87,7 +87,7 @@ namespace _FightCode.Utils
                 WeaponStatsComplex.Add(hash, statComplex);
                 return statComplex;
             }
-        }
+        }*/
         
         private static int OutputDamage(StatComplex source, StatComplex target, SkillData skillData, int skillLevel)
         {
