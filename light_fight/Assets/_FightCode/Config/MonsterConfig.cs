@@ -40,9 +40,9 @@ namespace _FightCode.Config
                     Debug.LogError(
                         $"EquipmentUpgradeConfig: ColliderOffset Length '{data.ColliderOffset.Length}'. Id '{data.ID}'"
                     );
-                if (data.HpBarOffset.Length != 2)
+                if (data.HealthBarOffset.Length != 2)
                     Debug.LogError(
-                        $"EquipmentUpgradeConfig: HpBarOffset Length '{data.HpBarOffset.Length}'. Id '{data.ID}'"
+                        $"EquipmentUpgradeConfig: HpBarOffset Length '{data.HealthBarOffset.Length}'. Id '{data.ID}'"
                     );
                 if (data.FloatingTextOffset.Length != 2)
                     Debug.LogError(
@@ -72,7 +72,7 @@ namespace _FightCode.Config
         public float Scale;
         public float ColliderRadius;
         public float[] ColliderOffset;
-        public float[] HpBarOffset;
+        public float[] HealthBarOffset;
         public float[] FloatingTextOffset;
         public float KnockbackResistance;
         public float KnockbackResistanceCD;

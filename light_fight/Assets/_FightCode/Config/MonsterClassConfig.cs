@@ -35,7 +35,7 @@ namespace _FightCode.Config
     public struct MonsterClassData
     {
         public int ID;
-        public float HPScale;
+        public float HealthScale;
         public float AttackScale;
         public float CooldownIntervalScale;
         public float SpeedScale;

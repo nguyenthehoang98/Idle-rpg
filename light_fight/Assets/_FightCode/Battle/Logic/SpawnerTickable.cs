@@ -24,7 +24,7 @@ namespace _FightCode.Battle.Logic
         
         public event Action OnWaveCompleted;
 
-        private IReadOnlyDictionary<WaveIdData, LevelBatch> container;
+        //private IReadOnlyDictionary<WaveIdData, LevelBatch> container;
         private HashSet<string> monsterPaths = new HashSet<string>();
         private Batch[] batches;
         private int totalWave;
@@ -41,7 +41,7 @@ namespace _FightCode.Battle.Logic
             monsterConfig = KitConfigManager.Get<MonsterConfig>();
             skillConfig = KitConfigManager.Get<SkillConfig>();
 
-            LevelConfig levelConfig = KitConfigManager.Get<LevelConfig>();
+            /*LevelConfig levelConfig = KitConfigManager.Get<LevelConfig>();
             if (!levelConfig.FindSpawn(levelId, out container))
             {
 #if UNITY_EDITOR
@@ -55,7 +55,7 @@ namespace _FightCode.Battle.Logic
             foreach (var pair in container)
             {
                 totalWave = Mathf.Max(totalWave, pair.Key.WaveId);
-            }
+            }*/
         }
 
         public async Task<bool> WaveSpawn()
@@ -71,14 +71,14 @@ namespace _FightCode.Battle.Logic
 
         private async Task<bool> LoadWave(int waveIndex)
         {
-            List<LevelBatch> values = new List<LevelBatch>();
+            /*List<LevelBatch> values = new List<LevelBatch>();
             
             foreach (var pair in container)
             {
                 if (pair.Key.WaveId == waveIndex) values.Add(pair.Value);
-            }
+            }*/
 
-            if (values.Count == 0)
+            /*if (values.Count == 0)
             {
 #if UNITY_EDITOR
                 Debug.LogError($"Not found wave: {waveIndex}");
@@ -89,7 +89,7 @@ namespace _FightCode.Battle.Logic
 
             currentBatch = 0;
             
-            batches = CreateBatches(values, monsterConfig, skillConfig);
+            batches = CreateBatches(values, monsterConfig, skillConfig);*/
 
             foreach (var batch in batches)
             {
@@ -203,6 +203,7 @@ namespace _FightCode.Battle.Logic
             batches = null;
         }
         
+        /*
         private static Batch[] CreateBatches(List<LevelBatch> batches, MonsterConfig monsterConfig, SkillConfig skillConfig)
         {
             Batch[] result = new Batch[batches.Count];
@@ -248,7 +249,7 @@ namespace _FightCode.Battle.Logic
                     int power = FormulaUtils.MonsterPower(monsterData, skillData, monsterData.skillLevel);
                     if (power <= 0 || power > powerBudget)
                         continue;
-                    powerBudget -= power;*/
+                    powerBudget -= power;#1#
                     if (monsters.TryGetValue(enemyId, out int count))
                         monsters[enemyId] = count + 1;
                     else monsters.Add(enemyId, 1);
@@ -280,6 +281,7 @@ namespace _FightCode.Battle.Logic
 
             return result;
         }
+        */
         
         private static List<int> CreateRandomBag(Vector2Int[] weights)
         {

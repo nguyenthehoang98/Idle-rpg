@@ -1,0 +1,380 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85a28949ebf34b7987832b0073553ec8, type: 3}
+  m_Name: SpawnConfig
+  m_EditorClassIdentifier: 
+  fileUrl: 
+  enable: 1
+  spawns:
+  - SpawnGroupID: 100101
+    Power: 100
+    MonsterID: 90001
+    MonsterLevel: 1
+    SpawnTimes:
+    - 1
+    - 5
+    AttackScale: 1
+    HealthScale: 0.5
+    PortalsID: 
+    Distribute: Sequence
+  - SpawnGroupID: 100101
+    Power: 101
+    MonsterID: 90002
+    MonsterLevel: 1
+    SpawnTimes:
+    - 6
+    - 11
+    AttackScale: 1
+    HealthScale: 0.5
+    PortalsID: 
+    Distribute: IndeRandom
+  - SpawnGroupID: 100102
+    Power: 102
+    MonsterID: 90003
+    MonsterLevel: 1
+    SpawnTimes:
+    - 1
+    - 12
+    AttackScale: 1
+    HealthScale: 0.5
+    PortalsID: 
+    Distribute: Sequence
+  - SpawnGroupID: 100102
+    Power: 103
+    MonsterID: 90004
+    MonsterLevel: 1
+    SpawnTimes:
+    - 12
+    - 24
+    AttackScale: 1
+    HealthScale: 0.5
+    PortalsID: 
+    Distribute: IndeRandom
+  - SpawnGroupID: 100103
+    Power: 104
+    MonsterID: 90005
+    MonsterLevel: 1
+    SpawnTimes:
+    - 1
+    - 5
+    AttackScale: 1
+    HealthScale: 0.5
+    PortalsID: 
+    Distribute: Sequence
+  - SpawnGroupID: 100103
+    Power: 105
+    MonsterID: 90006
+    MonsterLevel: 1
+    SpawnTimes:
+    - 6
+    - 11
+    AttackScale: 1
+    HealthScale: 0.5
+    PortalsID: 
+    Distribute: IndeRandom
+  - SpawnGroupID: 100104
+    Power: 106
+    MonsterID: 90007
+    MonsterLevel: 1
+    SpawnTimes:
+    - 1
+    - 12
+    AttackScale: 1
+    HealthScale: 1
+    PortalsID: 
+    Distribute: Sequence
+  - SpawnGroupID: 100104
+    Power: 107
+    MonsterID: 90008
+    MonsterLevel: 1
+    SpawnTimes:
+    - 12
+    - 24
+    AttackScale: 1
+    HealthScale: 1
+    PortalsID: 
+    Distribute: IndeRandom
+  - SpawnGroupID: 100104
+    Power: 108
+    MonsterID: 90009
+    MonsterLevel: 1
+    SpawnTimes:
+    - 1
+    - 5
+    AttackScale: 1
+    HealthScale: 1
+    PortalsID: 
+    Distribute: Sequence
+  - SpawnGroupID: 100104
+    Power: 109
+    MonsterID: 90010
+    MonsterLevel: 1
+    SpawnTimes:
+    - 6
+    - 11
+    AttackScale: 1
+    HealthScale: 1
+    PortalsID: 
+    Distribute: IndeRandom
+  - SpawnGroupID: 100201
+    Power: 110
+    MonsterID: 90011
+    MonsterLevel: 1
+    SpawnTimes:
+    - 1
+    - 12
+    AttackScale: 2
+    HealthScale: 0.5
+    PortalsID: 
+    Distribute: Sequence
+  - SpawnGroupID: 100202
+    Power: 111
+    MonsterID: 90012
+    MonsterLevel: 1
+    SpawnTimes:
+    - 12
+    - 24
+    AttackScale: 2
+    HealthScale: 0.5
+    PortalsID: 
+    Distribute: IndeRandom
+  - SpawnGroupID: 100202
+    Power: 112
+    MonsterID: 90013
+    MonsterLevel: 1
+    SpawnTimes:
+    - 1
+    - 5
+    AttackScale: 2
+    HealthScale: 0.5
+    PortalsID: 
+    Distribute: Sequence
+  - SpawnGroupID: 100203
+    Power: 113
+    MonsterID: 90014
+    MonsterLevel: 1
+    SpawnTimes:
+    - 6
+    - 11
+    AttackScale: 2
+    HealthScale: 0.5
+    PortalsID: 
+    Distribute: IndeRandom
+  - SpawnGroupID: 100203
+    Power: 114
+    MonsterID: 90015
+    MonsterLevel: 1
+    SpawnTimes:
+    - 1
+    - 12
+    AttackScale: 2
+    HealthScale: 0.5
+    PortalsID: 
+    Distribute: Sequence
+  - SpawnGroupID: 100203
+    Power: 115
+    MonsterID: 90016
+    MonsterLevel: 1
+    SpawnTimes:
+    - 12
+    - 24
+    AttackScale: 2
+    HealthScale: 0.5
+    PortalsID: 
+    Distribute: IndeRandom
+  - SpawnGroupID: 100204
+    Power: 116
+    MonsterID: 90017
+    MonsterLevel: 1
+    SpawnTimes:
+    - 1
+    - 5
+    AttackScale: 2
+    HealthScale: 0.5
+    PortalsID: 
+    Distribute: Sequence
+  - SpawnGroupID: 100204
+    Power: 117
+    MonsterID: 90018
+    MonsterLevel: 1
+    SpawnTimes:
+    - 6
+    - 11
+    AttackScale: 2
+    HealthScale: 0.5
+    PortalsID: 
+    Distribute: IndeRandom
+  - SpawnGroupID: 100204
+    Power: 118
+    MonsterID: 90019
+    MonsterLevel: 1
+    SpawnTimes:
+    - 1
+    - 12
+    AttackScale: 2
+    HealthScale: 0.5
+    PortalsID: 
+    Distribute: Sequence
+  - SpawnGroupID: 100205
+    Power: 119
+    MonsterID: 90020
+    MonsterLevel: 1
+    SpawnTimes:
+    - 12
+    - 24
+    AttackScale: 2
+    HealthScale: 0.5
+    PortalsID: 
+    Distribute: IndeRandom
+  - SpawnGroupID: 100205
+    Power: 120
+    MonsterID: 90021
+    MonsterLevel: 1
+    SpawnTimes:
+    - 1
+    - 5
+    AttackScale: 2
+    HealthScale: 0.5
+    PortalsID: 
+    Distribute: Sequence
+  - SpawnGroupID: 100205
+    Power: 121
+    MonsterID: 90022
+    MonsterLevel: 1
+    SpawnTimes:
+    - 6
+    - 11
+    AttackScale: 2
+    HealthScale: 0.5
+    PortalsID: 
+    Distribute: IndeRandom
+  - SpawnGroupID: 100206
+    Power: 122
+    MonsterID: 90023
+    MonsterLevel: 1
+    SpawnTimes:
+    - 1
+    - 12
+    AttackScale: 2
+    HealthScale: 0.6
+    PortalsID: 
+    Distribute: Sequence
+  - SpawnGroupID: 100206
+    Power: 123
+    MonsterID: 90024
+    MonsterLevel: 1
+    SpawnTimes:
+    - 12
+    - 24
+    AttackScale: 2
+    HealthScale: 0.6
+    PortalsID: 
+    Distribute: IndeRandom
+  - SpawnGroupID: 100206
+    Power: 124
+    MonsterID: 90025
+    MonsterLevel: 1
+    SpawnTimes:
+    - 1
+    - 5
+    AttackScale: 2
+    HealthScale: 0.6
+    PortalsID: 
+    Distribute: Sequence
+  - SpawnGroupID: 100206
+    Power: 125
+    MonsterID: 90026
+    MonsterLevel: 1
+    SpawnTimes:
+    - 6
+    - 11
+    AttackScale: 2
+    HealthScale: 0.6
+    PortalsID: 
+    Distribute: IndeRandom
+  - SpawnGroupID: 100301
+    Power: 126
+    MonsterID: 90027
+    MonsterLevel: 1
+    SpawnTimes:
+    - 1
+    - 12
+    AttackScale: 3
+    HealthScale: 1
+    PortalsID: 
+    Distribute: Sequence
+  - SpawnGroupID: 100301
+    Power: 127
+    MonsterID: 90028
+    MonsterLevel: 1
+    SpawnTimes:
+    - 12
+    - 24
+    AttackScale: 3
+    HealthScale: 1
+    PortalsID: 
+    Distribute: IndeRandom
+  - SpawnGroupID: 100301
+    Power: 128
+    MonsterID: 90029
+    MonsterLevel: 1
+    SpawnTimes:
+    - 1
+    - 5
+    AttackScale: 3
+    HealthScale: 1
+    PortalsID: 
+    Distribute: Sequence
+  - SpawnGroupID: 100302
+    Power: 129
+    MonsterID: 90030
+    MonsterLevel: 1
+    SpawnTimes:
+    - 6
+    - 11
+    AttackScale: 3
+    HealthScale: 1
+    PortalsID: 
+    Distribute: IndeRandom
+  - SpawnGroupID: 100302
+    Power: 130
+    MonsterID: 90031
+    MonsterLevel: 1
+    SpawnTimes:
+    - 1
+    - 12
+    AttackScale: 3
+    HealthScale: 1
+    PortalsID: 
+    Distribute: Sequence
+  - SpawnGroupID: 100303
+    Power: 131
+    MonsterID: 90032
+    MonsterLevel: 1
+    SpawnTimes:
+    - 12
+    - 24
+    AttackScale: 3
+    HealthScale: 1
+    PortalsID: 
+    Distribute: IndeRandom
+  - SpawnGroupID: 100303
+    Power: 132
+    MonsterID: 90033
+    MonsterLevel: 1
+    SpawnTimes:
+    - 12
+    - 24
+    AttackScale: 3
+    HealthScale: 1
+    PortalsID: 
+    Distribute: Sequence

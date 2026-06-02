@@ -16,67 +16,67 @@ MonoBehaviour:
   enable: 1
   classes:
   - ID: 1
-    HPScale: 0.8
+    HealthScale: 0.8
     AttackScale: 1
     CooldownIntervalScale: 12
     SpeedScale: 12
   - ID: 2
-    HPScale: 10
+    HealthScale: 10
     AttackScale: 1
     CooldownIntervalScale: 1
     SpeedScale: 12
   - ID: 3
-    HPScale: 2
+    HealthScale: 2
     AttackScale: 0.6
     CooldownIntervalScale: 1
     SpeedScale: 4
   - ID: 4
-    HPScale: 5
+    HealthScale: 5
     AttackScale: 1
     CooldownIntervalScale: 1
     SpeedScale: 12
   - ID: 5
-    HPScale: 6
+    HealthScale: 6
     AttackScale: 175
     CooldownIntervalScale: 1
     SpeedScale: 10
   - ID: 6
-    HPScale: 12
+    HealthScale: 12
     AttackScale: 2
     CooldownIntervalScale: 1
     SpeedScale: 15
   - ID: 7
-    HPScale: 40
+    HealthScale: 40
     AttackScale: 4
     CooldownIntervalScale: 1
     SpeedScale: 20
   - ID: 8
-    HPScale: 40
+    HealthScale: 40
     AttackScale: 4
     CooldownIntervalScale: 1
     SpeedScale: 15
   - ID: 9
-    HPScale: 1
+    HealthScale: 1
     AttackScale: 0.2
     CooldownIntervalScale: 1
     SpeedScale: 8
   - ID: 10
-    HPScale: 60
+    HealthScale: 60
     AttackScale: 3.5
     CooldownIntervalScale: 1
     SpeedScale: 20
   - ID: 11
-    HPScale: 80
+    HealthScale: 80
     AttackScale: 4
     CooldownIntervalScale: 1
     SpeedScale: 30
   - ID: 12
-    HPScale: 40
+    HealthScale: 40
     AttackScale: 4
     CooldownIntervalScale: 1
     SpeedScale: 20
   - ID: 13
-    HPScale: 12
+    HealthScale: 12
     AttackScale: 2
     CooldownIntervalScale: 1
     SpeedScale: 20
