@@ -23,7 +23,7 @@ namespace _FightCode.Utils
             {
                 statComplex = new StatComplex();
                 statComplex.AddBase(StatType.Attack, monsterData.attack);
-                statComplex.AddBase(StatType.Health, monsterData.health);
+                statComplex.AddBase(StatType.MaxHealth, monsterData.health);
                 statComplex.AddBase(StatType.Defense, monsterData.defense);
                 statComplex.AddBase(StatType.AttackSpeed, monsterData.attackSpeed);
                 statComplex.AddBase(StatType.CriticalRate, monsterData.criticalRate);
@@ -54,7 +54,7 @@ namespace _FightCode.Utils
             {
                 statComplex = new StatComplex();
                 statComplex.AddBase(StatType.Attack, monsterData.attack);
-                statComplex.AddBase(StatType.Health, monsterData.health);
+                statComplex.AddBase(StatType.MaxHealth, monsterData.health);
                 statComplex.AddBase(StatType.Defense, monsterData.defense);
                 statComplex.AddBase(StatType.AttackSpeed, monsterData.attackSpeed);
                 statComplex.AddBase(StatType.CriticalRate, monsterData.criticalRate);

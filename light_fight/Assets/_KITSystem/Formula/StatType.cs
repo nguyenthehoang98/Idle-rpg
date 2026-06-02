@@ -3,7 +3,7 @@ namespace _KITSystem.Formula
     public enum StatType
     {
         Attack,
-        Health,
+        MaxHealth,
         Defense,
         AttackSpeed,
         CriticalRate,

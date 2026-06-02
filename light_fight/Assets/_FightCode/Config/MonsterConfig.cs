@@ -35,7 +35,7 @@ namespace _FightCode.Config
                 
                 StatComplex complex = new StatComplex();
                 complex.AddBase(StatType.Attack, m.attack);
-                complex.AddBase(StatType.Health, m.health);
+                complex.AddBase(StatType.MaxHealth, m.health);
                 complex.AddBase(StatType.Defense, m.defense);
                 complex.AddBase(StatType.AttackSpeed, m.attackSpeed);
                 complex.AddBase(StatType.CriticalRate, m.criticalRate);
@@ -64,7 +64,6 @@ namespace _FightCode.Config
         public string path;
         public int skillId;
         public int skillLevel;
-        public float skillCooldown;
         public float radius;
         public float moveSpeed;
         public float stopMoveDistance;

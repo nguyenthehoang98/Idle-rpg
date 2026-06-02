@@ -21,7 +21,7 @@ MonoBehaviour:
     path: 2001 Monster
     skillId: 3001
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 3.8
     stopMoveDistance: 1.2
@@ -40,7 +40,7 @@ MonoBehaviour:
     path: 2002 Monster
     skillId: 3002
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 4.5
     stopMoveDistance: 1
@@ -59,7 +59,7 @@ MonoBehaviour:
     path: 2003 Monster
     skillId: 3003
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 3.2
     stopMoveDistance: 5
@@ -78,7 +78,7 @@ MonoBehaviour:
     path: 2004 Monster
     skillId: 3004
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 5.5
     stopMoveDistance: 1
@@ -97,7 +97,7 @@ MonoBehaviour:
     path: 2005 Monster
     skillId: 3005
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 6
     stopMoveDistance: 1.2
@@ -116,7 +116,7 @@ MonoBehaviour:
     path: 2006 Monster
     skillId: 3006
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 3
     stopMoveDistance: 1.5
@@ -135,7 +135,7 @@ MonoBehaviour:
     path: 2007 Monster
     skillId: 3007
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 2.5
     stopMoveDistance: 5
@@ -154,7 +154,7 @@ MonoBehaviour:
     path: 2008 Monster
     skillId: 3008
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 4.5
     stopMoveDistance: 4
@@ -173,7 +173,7 @@ MonoBehaviour:
     path: 2009 Monster
     skillId: 3009
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 4
     stopMoveDistance: 3
@@ -192,7 +192,7 @@ MonoBehaviour:
     path: 2010 Monster
     skillId: 3010
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 4.5
     stopMoveDistance: 3
@@ -211,7 +211,7 @@ MonoBehaviour:
     path: 2011 Monster
     skillId: 3011
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 3.5
     stopMoveDistance: 1.2
@@ -230,7 +230,7 @@ MonoBehaviour:
     path: 2012 Monster
     skillId: 3012
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 5.5
     stopMoveDistance: 1
@@ -249,7 +249,7 @@ MonoBehaviour:
     path: 2013 Monster
     skillId: 3013
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 2.6
     stopMoveDistance: 4.5
@@ -268,7 +268,7 @@ MonoBehaviour:
     path: 2014 Monster
     skillId: 3014
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 4
     stopMoveDistance: 4
@@ -287,7 +287,7 @@ MonoBehaviour:
     path: 2015 Monster
     skillId: 3015
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 2
     stopMoveDistance: 1.5
@@ -306,7 +306,7 @@ MonoBehaviour:
     path: 2016 Monster
     skillId: 3016
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 5
     stopMoveDistance: 1.2
@@ -325,7 +325,7 @@ MonoBehaviour:
     path: 2017 Monster
     skillId: 3017
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 0
     stopMoveDistance: 0
@@ -344,7 +344,7 @@ MonoBehaviour:
     path: 2018 Monster
     skillId: 3018
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 3.5
     stopMoveDistance: 2
@@ -363,7 +363,7 @@ MonoBehaviour:
     path: 2019 Monster
     skillId: 3019
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 2.4
     stopMoveDistance: 4
@@ -382,7 +382,7 @@ MonoBehaviour:
     path: 2020 Monster
     skillId: 3020
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 6.5
     stopMoveDistance: 1
@@ -401,7 +401,7 @@ MonoBehaviour:
     path: 2021 Monster
     skillId: 3021
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 3.8
     stopMoveDistance: 2
@@ -420,7 +420,7 @@ MonoBehaviour:
     path: 2022 Monster
     skillId: 3022
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 5
     stopMoveDistance: 3
@@ -439,7 +439,7 @@ MonoBehaviour:
     path: 2023 Monster
     skillId: 3023
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 6
     stopMoveDistance: 1.2
@@ -458,7 +458,7 @@ MonoBehaviour:
     path: 2024 Monster
     skillId: 3024
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 1.8
     stopMoveDistance: 2.5
@@ -477,7 +477,7 @@ MonoBehaviour:
     path: 2025 Monster
     skillId: 3025
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 4
     stopMoveDistance: 1.5
@@ -496,7 +496,7 @@ MonoBehaviour:
     path: 2026 Monster
     skillId: 3026
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 2.2
     stopMoveDistance: 4
@@ -515,7 +515,7 @@ MonoBehaviour:
     path: 2027 Monster
     skillId: 3027
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 4
     stopMoveDistance: 6.5
@@ -534,7 +534,7 @@ MonoBehaviour:
     path: 2028 Monster
     skillId: 3028
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 4.5
     stopMoveDistance: 3
@@ -553,7 +553,7 @@ MonoBehaviour:
     path: 2029 Monster
     skillId: 3029
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 2
     stopMoveDistance: 5
@@ -572,7 +572,7 @@ MonoBehaviour:
     path: 2030 Monster
     skillId: 3030
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 3.5
     stopMoveDistance: 6
@@ -591,7 +591,7 @@ MonoBehaviour:
     path: 2031 Monster
     skillId: 3031
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 3
     stopMoveDistance: 1.5
@@ -610,7 +610,7 @@ MonoBehaviour:
     path: 2032 Monster
     skillId: 3032
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 4
     stopMoveDistance: 1.5
@@ -629,7 +629,7 @@ MonoBehaviour:
     path: 2033 Monster
     skillId: 3033
     skillLevel: 1
-    skillCooldown: 1
+    skillCooldown: 0
     radius: 1
     moveSpeed: 2
     stopMoveDistance: 5

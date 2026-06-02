@@ -56,7 +56,7 @@ namespace _KITSystem.Formula
         {
             return new StatSnapshot(
                 GetValue(StatType.Attack),
-                GetValue(StatType.Health),
+                GetValue(StatType.MaxHealth),
                 GetValue(StatType.Defense),
                 Math.Max(0, GetValue(StatType.AttackSpeed)),
                 Clamp01(GetValue(StatType.CriticalRate)),

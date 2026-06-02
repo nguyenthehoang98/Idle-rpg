@@ -68,16 +68,16 @@ namespace _KITSystem.Formula.Unitest
             object buff = new object();
 
             stats.SetBase(StatType.Attack, 100);
-            stats.SetBase(StatType.Health, 1000);
+            stats.SetBase(StatType.MaxHealth, 1000);
             stats.AddModifier(new StatModifier(StatType.Attack, StatModifierType.Flat, 50, equipment));
-            stats.AddModifier(new StatModifier(StatType.Health, StatModifierType.AddPercent, 0.5f, equipment));
+            stats.AddModifier(new StatModifier(StatType.MaxHealth, StatModifierType.AddPercent, 0.5f, equipment));
             stats.AddModifier(new StatModifier(StatType.Attack, StatModifierType.Flat, 25, buff));
 
             int removed = stats.RemoveModifiersFrom(equipment);
 
             Assert.AreEqual(2, removed);
             Assert.AreEqual(125, stats.GetValue(StatType.Attack), DELTA);
-            Assert.AreEqual(1000, stats.GetValue(StatType.Health), DELTA);
+            Assert.AreEqual(1000, stats.GetValue(StatType.MaxHealth), DELTA);
         }
 
         [Test]
@@ -86,14 +86,14 @@ namespace _KITSystem.Formula.Unitest
             StatComplex stats = new StatComplex();
 
             stats.SetBase(StatType.Attack, 100);
-            stats.SetBase(StatType.Health, 1000);
+            stats.SetBase(StatType.MaxHealth, 1000);
             stats.AddModifier(new StatModifier(StatType.Attack, StatModifierType.Flat, 50));
-            stats.AddModifier(new StatModifier(StatType.Health, StatModifierType.Flat, 500));
+            stats.AddModifier(new StatModifier(StatType.MaxHealth, StatModifierType.Flat, 500));
 
             stats.ClearModifiers(StatType.Attack);
 
             Assert.AreEqual(100, stats.GetValue(StatType.Attack), DELTA);
-            Assert.AreEqual(1500, stats.GetValue(StatType.Health), DELTA);
+            Assert.AreEqual(1500, stats.GetValue(StatType.MaxHealth), DELTA);
         }
 
         [Test]
@@ -102,14 +102,14 @@ namespace _KITSystem.Formula.Unitest
             StatComplex stats = new StatComplex();
 
             stats.SetBase(StatType.Attack, 100);
-            stats.SetBase(StatType.Health, 1000);
+            stats.SetBase(StatType.MaxHealth, 1000);
             stats.AddModifier(new StatModifier(StatType.Attack, StatModifierType.Flat, 50));
-            stats.AddModifier(new StatModifier(StatType.Health, StatModifierType.Flat, 500));
+            stats.AddModifier(new StatModifier(StatType.MaxHealth, StatModifierType.Flat, 500));
 
             stats.ClearAllModifiers();
 
             Assert.AreEqual(100, stats.GetValue(StatType.Attack), DELTA);
-            Assert.AreEqual(1000, stats.GetValue(StatType.Health), DELTA);
+            Assert.AreEqual(1000, stats.GetValue(StatType.MaxHealth), DELTA);
         }
 
         [Test]
@@ -150,7 +150,7 @@ namespace _KITSystem.Formula.Unitest
         public void GetEffectiveHp_ShouldApplyDefenseReduction()
         {
             StatComplex stats = new StatComplex();
-            stats.SetBase(StatType.Health, 1000);
+            stats.SetBase(StatType.MaxHealth, 1000);
             stats.SetBase(StatType.Defense, 1000);
 
             Assert.AreEqual(2000, stats.CreateSnapshot().EffectiveHp(), DELTA);
@@ -160,7 +160,7 @@ namespace _KITSystem.Formula.Unitest
         public void GetEffectiveHp_WithArmorPen_ShouldReduceDefenseBeforeCalculation()
         {
             StatComplex stats = new StatComplex();
-            stats.SetBase(StatType.Health, 1000);
+            stats.SetBase(StatType.MaxHealth, 1000);
             stats.SetBase(StatType.Defense, 1000);
             stats.SetBase(StatType.ArmorPenPercent, 0.5f);
 
@@ -173,7 +173,7 @@ namespace _KITSystem.Formula.Unitest
             StatComplex stats = new StatComplex();
             stats.SetBase(StatType.Attack, 100);
             stats.SetBase(StatType.AttackSpeed, 1);
-            stats.SetBase(StatType.Health, 1000);
+            stats.SetBase(StatType.MaxHealth, 1000);
             stats.SetBase(StatType.Defense, 1000);
 
             Assert.AreEqual(447.2136f, stats.GetPower(), DELTA);
