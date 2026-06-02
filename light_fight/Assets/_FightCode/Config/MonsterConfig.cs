@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using _KITSystem.Formula;
 using ExcelExtension;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace _FightCode.Config
 {
