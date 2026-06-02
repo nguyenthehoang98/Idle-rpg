@@ -18,32 +18,19 @@ namespace _FightCode.Config
         {
             
         }
-
-#if UNITY_EDITOR
-        public override void OnPostImported()
-        {
-            foreach (var data in upgrades)
-            {
-                if (data.Stat.Length % 2 == 1)
-                    Debug.LogError(
-                        $"EquipmentUpgradeConfig: Stat Length '{data.Stat.Length}'. Id '{data.ID}', Level '{data.Level}'"
-                    );
-                
-                if (data.CUR.Length % 2 == 1)
-                    Debug.LogError(
-                        $"EquipmentUpgradeConfig: CUR Length '{data.Stat.Length}'. Id '{data.ID}', Level '{data.Level}'"
-                    );
-            }
-        }
-#endif
     }
 
     [Serializable]
     public struct EquipmentUpgradeData
     {
         public int ID;
-        public int Level;
-        public int[] CUR; // Tài nguyên xử dụng để upgrade
-        public int[] Stat; // Chỉ số stat được + thêm (StatConfig)
+        public int StatID; // query từ StatConfig
+        [SerializeField] private int StatValueA; 
+        [SerializeField] private int StatValueB;
+
+        public int StatValue(int level)
+        {
+            return StatValueA + level * StatValueB;
+        }
     }
 }

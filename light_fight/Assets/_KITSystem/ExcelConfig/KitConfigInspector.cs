@@ -16,7 +16,7 @@
     }
     
     [CustomEditor(typeof(KitBaseConfig), true)]
-    class KitConfigInspector : UnityEditor.Editor
+    class KitConfigInspector : Editor
     {
         private const string PRE_PATH = "https://opensheet.elk.sh/";
         private static readonly string ROOT_FORMAT_PATH = "https://docs.google.com/spreadsheets/d/{0}/edit";
@@ -38,12 +38,13 @@
                     
             EditorGUILayout.BeginVertical();
             // todo:
+            GUI.enabled = !string.IsNullOrEmpty(config.fileUrl);
             if (GUILayout.Button("Import", GUILayout.Width(widthButtonMini))) Download();
             if (GUILayout.Button("Open", GUILayout.Width(widthButtonMini)))
             {
-                string sheetId = config.fileUrl.Split("/d/")[1].Split('/')[0];
-                Application.OpenURL(string.Format(ROOT_FORMAT_PATH, sheetId));
+                Application.OpenURL(string.Format(ROOT_FORMAT_PATH, config.fileUrl));
             }
+            GUI.enabled = false;
             EditorGUILayout.EndVertical();
                     
             EditorGUILayout.BeginVertical();
@@ -80,8 +81,7 @@
                 if (!flag)
                 {
                     found = true;
-                    string sheetId = config.fileUrl.Split("/d/")[1].Split('/')[0];
-                    UnityWebRequestAsyncOperation operation = UnityWebRequest.Get(PRE_PATH + sheetId + "/" + info.Name).SendWebRequest();
+                    UnityWebRequestAsyncOperation operation = UnityWebRequest.Get(PRE_PATH + config.fileUrl + "/" + info.Name).SendWebRequest();
                     while (!operation.isDone)
                     {
                         await Task.Delay(1000);
