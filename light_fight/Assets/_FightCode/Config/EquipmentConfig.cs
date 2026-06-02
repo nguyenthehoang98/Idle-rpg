@@ -41,14 +41,14 @@ namespace _FightCode.Config
         }
 #endif
         
-        public bool TryGetEquipmentById(int id, out EquipmentData equipmentData)
+        public bool TryGetEquipmentById(int ID, out EquipmentData equipmentData)
         {
-            return byId.TryGetValue(id, out equipmentData);
+            return byId.TryGetValue(ID, out equipmentData);
         }
 
-        public bool TryGetEquipmentByGroupId(int groupId, out List<EquipmentData> equipmentsData)
+        public bool TryGetEquipmentByGroupId(int groupID, out List<EquipmentData> equipmentsData)
         {
-            return byGroupId.TryGetValue(groupId, out equipmentsData);
+            return byGroupId.TryGetValue(groupID, out equipmentsData);
         }
     }
 

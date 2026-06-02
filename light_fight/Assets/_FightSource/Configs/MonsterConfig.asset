@@ -1,0 +1,875 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 911117756b63495d8b8849886ab0c29f, type: 3}
+  m_Name: MonsterConfig
+  m_EditorClassIdentifier: 
+  fileUrl: 
+  enable: 1
+  monsters:
+  - ID: 90001
+    NameKey: Baby Alien
+    PrefabName: Baby Alien
+    ClassID: 1
+    StopDistance: 1.2
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90002
+    NameKey: Chaser
+    PrefabName: Chaser
+    ClassID: 2
+    StopDistance: 1
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90003
+    NameKey: Spitter
+    PrefabName: Spitter
+    ClassID: 3
+    StopDistance: 5
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90004
+    NameKey: Charger
+    PrefabName: Charger
+    ClassID: 4
+    StopDistance: 1
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90005
+    NameKey: Pursuer
+    PrefabName: Pursuer
+    ClassID: 5
+    StopDistance: 1.2
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90006
+    NameKey: Bruiser
+    PrefabName: Bruiser
+    ClassID: 6
+    StopDistance: 1.5
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90007
+    NameKey: Buffer
+    PrefabName: Buffer
+    ClassID: 7
+    StopDistance: 5
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90008
+    NameKey: Fly
+    PrefabName: Fly
+    ClassID: 8
+    StopDistance: 4
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90009
+    NameKey: Healer
+    PrefabName: Healer
+    ClassID: 9
+    StopDistance: 3
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90010
+    NameKey: Looter
+    PrefabName: Looter
+    ClassID: 10
+    StopDistance: 3
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90011
+    NameKey: Helmet Alien
+    PrefabName: Helmet Alien
+    ClassID: 11
+    StopDistance: 1.2
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90012
+    NameKey: Fin Alien
+    PrefabName: Fin Alien
+    ClassID: 12
+    StopDistance: 1
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90013
+    NameKey: Spawner
+    PrefabName: Spawner
+    ClassID: 13
+    StopDistance: 4.5
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90014
+    NameKey: Junkie
+    PrefabName: Junkie
+    ClassID: 1
+    StopDistance: 4
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90015
+    NameKey: Horned Bruiser
+    PrefabName: Horned Bruiser
+    ClassID: 2
+    StopDistance: 1.5
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90016
+    NameKey: Horned Charger
+    PrefabName: Horned Charger
+    ClassID: 3
+    StopDistance: 1.2
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90017
+    NameKey: Slasher Egg
+    PrefabName: Slasher Egg
+    ClassID: 4
+    StopDistance: 0
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90018
+    NameKey: Slasher
+    PrefabName: Slasher
+    ClassID: 5
+    StopDistance: 2
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90019
+    NameKey: Tentacle
+    PrefabName: Tentacle
+    ClassID: 6
+    StopDistance: 4
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90020
+    NameKey: Rhino
+    PrefabName: Rhino
+    ClassID: 7
+    StopDistance: 1
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90021
+    NameKey: Butcher
+    PrefabName: Butcher
+    ClassID: 8
+    StopDistance: 2
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90022
+    NameKey: Monk
+    PrefabName: Monk
+    ClassID: 9
+    StopDistance: 3
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90023
+    NameKey: Croc
+    PrefabName: Croc
+    ClassID: 10
+    StopDistance: 1.2
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90024
+    NameKey: Colossus
+    PrefabName: Colossus
+    ClassID: 11
+    StopDistance: 2.5
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90025
+    NameKey: Mantis
+    PrefabName: Mantis
+    ClassID: 12
+    StopDistance: 1.5
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90026
+    NameKey: Mother
+    PrefabName: Mother
+    ClassID: 13
+    StopDistance: 4
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90027
+    NameKey: Gargoyle
+    PrefabName: Gargoyle
+    ClassID: 1
+    StopDistance: 6.5
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90028
+    NameKey: Predator
+    PrefabName: Predator
+    ClassID: 2
+    StopDistance: 3
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90029
+    NameKey: Anemone
+    PrefabName: Anemone
+    ClassID: 3
+    StopDistance: 5
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90030
+    NameKey: Dragonfish
+    PrefabName: Dragonfish
+    ClassID: 4
+    StopDistance: 6
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90031
+    NameKey: Walrus
+    PrefabName: Walrus
+    ClassID: 5
+    StopDistance: 1.5
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90032
+    NameKey: Goblin Shark
+    PrefabName: Goblin Shark
+    ClassID: 6
+    StopDistance: 1.5
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 
+  - ID: 90033
+    NameKey: Stonefish
+    PrefabName: Stonefish
+    ClassID: 7
+    StopDistance: 5
+    AttackRange:
+    - 1
+    - 3
+    ActiveSkill: 0
+    PassiveSkill: 0
+    Scale: 1
+    ColliderRadius: 1
+    ColliderOffset:
+    - 0
+    - 0
+    HpBarOffset:
+    - 0
+    - 0
+    FloatingTextOffset:
+    - 0
+    - 0
+    KnockbackResistance: 0
+    KnockbackResistanceCD: 0
+    StunResistance: 0
+    StunResistanceCD: 0
+    DeathSfx: 

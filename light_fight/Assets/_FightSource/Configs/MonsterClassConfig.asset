@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d498e715c3504f2a8296db45cde8ca69, type: 3}
+  m_Name: MonsterClassConfig
+  m_EditorClassIdentifier: 
+  fileUrl: 
+  enable: 1
+  classes:
+  - ID: 1
+    HPScale: 0.8
+    AttackScale: 1
+    CooldownIntervalScale: 12
+    SpeedScale: 12
+  - ID: 2
+    HPScale: 10
+    AttackScale: 1
+    CooldownIntervalScale: 1
+    SpeedScale: 12
+  - ID: 3
+    HPScale: 2
+    AttackScale: 0.6
+    CooldownIntervalScale: 1
+    SpeedScale: 4
+  - ID: 4
+    HPScale: 5
+    AttackScale: 1
+    CooldownIntervalScale: 1
+    SpeedScale: 12
+  - ID: 5
+    HPScale: 6
+    AttackScale: 175
+    CooldownIntervalScale: 1
+    SpeedScale: 10
+  - ID: 6
+    HPScale: 12
+    AttackScale: 2
+    CooldownIntervalScale: 1
+    SpeedScale: 15
+  - ID: 7
+    HPScale: 40
+    AttackScale: 4
+    CooldownIntervalScale: 1
+    SpeedScale: 20
+  - ID: 8
+    HPScale: 40
+    AttackScale: 4
+    CooldownIntervalScale: 1
+    SpeedScale: 15
+  - ID: 9
+    HPScale: 1
+    AttackScale: 0.2
+    CooldownIntervalScale: 1
+    SpeedScale: 8
+  - ID: 10
+    HPScale: 60
+    AttackScale: 3.5
+    CooldownIntervalScale: 1
+    SpeedScale: 20
+  - ID: 11
+    HPScale: 80
+    AttackScale: 4
+    CooldownIntervalScale: 1
+    SpeedScale: 30
+  - ID: 12
+    HPScale: 40
+    AttackScale: 4
+    CooldownIntervalScale: 1
+    SpeedScale: 20
+  - ID: 13
+    HPScale: 12
+    AttackScale: 2
+    CooldownIntervalScale: 1
+    SpeedScale: 20

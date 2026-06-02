@@ -95,7 +95,7 @@ namespace _FightCode.Battle.Logic
             {
                 foreach (var m in batch.monsters)
                 {
-                    if (monsterConfig.Find(m.Key, out MonsterData monsterData))
+                    /*if (monsterConfig.Find(m.Key, out MonsterData monsterData))
                     {
                         GameObject go = await KitLoaded.LoadAsync<GameObject>(monsterData.path, true);
                         GameObject instance = Object.Instantiate(go);
@@ -104,7 +104,7 @@ namespace _FightCode.Battle.Logic
                         KitPool.RegisterPool(go, true);
                         KitPool.Destroy(instance);
                         monsterPaths.Add(monsterData.path);
-                    }
+                    }*/
                 }
             }
 
@@ -233,7 +233,7 @@ namespace _FightCode.Battle.Logic
                     int enemyId = bag[bagIndex];
                     bagIndex++;
 
-                    bool foundMonster = monsterConfig.Find(enemyId, out MonsterData monsterData);
+                    /*bool foundMonster = monsterConfig.Find(enemyId, out MonsterData monsterData);
 #if DEBUG
                     if (!foundMonster) Debug.LogError("Not found monster: " + enemyId);
 #endif
@@ -248,7 +248,7 @@ namespace _FightCode.Battle.Logic
                     int power = FormulaUtils.MonsterPower(monsterData, skillData, monsterData.skillLevel);
                     if (power <= 0 || power > powerBudget)
                         continue;
-                    powerBudget -= power;
+                    powerBudget -= power;*/
                     if (monsters.TryGetValue(enemyId, out int count))
                         monsters[enemyId] = count + 1;
                     else monsters.Add(enemyId, 1);

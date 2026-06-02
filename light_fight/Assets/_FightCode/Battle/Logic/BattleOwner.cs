@@ -184,12 +184,12 @@ namespace _FightCode.Battle.Logic
 
         private void OnCreateMonster(RequestCreateMonster request)
         {
-            Config.MonsterData monsterData = request.MonsterData;
+            /*Config.MonsterData monsterData = request.MonsterData;
             float2 position = request.Position;
             float radius = monsterData.radius;
             float speed = monsterData.moveSpeed;
             float stopDistance = monsterData.stopMoveDistance;
-            int monsterId = monsterData.id;
+            int monsterId = monsterData.ID;
             int entity = EntityManager.CreateEntity();
                 
             AgentData agentData = agent.CreateAgent(entity, position, radius, speed, setting.defaultAgentStopDistance + stopDistance);
@@ -200,7 +200,7 @@ namespace _FightCode.Battle.Logic
 
             Monster m = new Monster(share, monsterConfig, entity, monsterId, agentData.agent);
             entityToMonster[entity] = m;
-            monster.AddMonster(m);
+            monster.AddMonster(m);*/
         }
 
         private async void StartGame()

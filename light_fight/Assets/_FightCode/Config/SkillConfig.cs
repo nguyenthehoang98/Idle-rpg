@@ -23,9 +23,9 @@ namespace _FightCode.Config
             }
         }
 
-        public bool Find(int skillId, out SkillData skill)
+        public bool Find(int skillId, out SkillData skillData)
         {
-            return cacheSkillData.TryGetValue(skillId, out skill);
+            return cacheSkillData.TryGetValue(skillId, out skillData);
         }
     }
 

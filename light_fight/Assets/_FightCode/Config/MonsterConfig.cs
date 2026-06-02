@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using _KITSystem.Formula;
 using ExcelExtension;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _FightCode.Config
 {
@@ -13,76 +14,70 @@ namespace _FightCode.Config
     {
         [SerializeField] private List<MonsterData> monsters = new List<MonsterData>();
     
-        private Dictionary<int, MonsterData> cacheMonsterData;
+        private Dictionary<int, MonsterData> byId;
     
         public override void OnMapValue()
         {
-            cacheMonsterData = new Dictionary<int, MonsterData>();
+            byId = new Dictionary<int, MonsterData>();
 
             foreach (var m in monsters)
             {
-                cacheMonsterData.Add(m.id, m);
+                byId.Add(m.ID, m);
             }
         }
         
+
 #if UNITY_EDITOR
         public override void OnPostImported()
         {
-            for (var i = 0; i < monsters.Count; i++)
+            foreach (var data in monsters)
             {
-                MonsterData m = monsters[i];
-                ValidateObject<GameObject>(m.path);
-                
-                StatComplex complex = new StatComplex();
-                complex.AddBase(StatType.Attack, m.attack);
-                complex.AddBase(StatType.MaxHealth, m.health);
-                complex.AddBase(StatType.Defense, m.defense);
-                complex.AddBase(StatType.AttackSpeed, m.attackSpeed);
-                complex.AddBase(StatType.CriticalRate, m.criticalRate);
-                complex.AddBase(StatType.CriticalDamage, m.criticalDamage);
-                complex.AddBase(StatType.DamageMultiplier, m.damageMultiplier);
-                complex.AddBase(StatType.ArmorPenPercent, m.armorPenPercent);
-
-                m.Power = (int)complex.GetPower();
-                monsters[i] = m;
+                if (data.AttackRange.Length != 2)
+                    Debug.LogError(
+                        $"EquipmentUpgradeConfig: AttackRange Length '{data.AttackRange.Length}'. Id '{data.ID}'"
+                    );
+                if (data.ColliderOffset.Length != 2)
+                    Debug.LogError(
+                        $"EquipmentUpgradeConfig: ColliderOffset Length '{data.ColliderOffset.Length}'. Id '{data.ID}'"
+                    );
+                if (data.HpBarOffset.Length != 2)
+                    Debug.LogError(
+                        $"EquipmentUpgradeConfig: HpBarOffset Length '{data.HpBarOffset.Length}'. Id '{data.ID}'"
+                    );
+                if (data.FloatingTextOffset.Length != 2)
+                    Debug.LogError(
+                        $"EquipmentUpgradeConfig: FloatingTextOffset Length '{data.FloatingTextOffset.Length}'. Id '{data.ID}'"
+                    );
             }
         }
 #endif
 
         public bool Find(int monsterId, out MonsterData skill)
         {
-            return cacheMonsterData.TryGetValue(monsterId, out skill);
+            return byId.TryGetValue(monsterId, out skill);
         }
     }
 
     [Serializable]
     public struct MonsterData
     {
-        public int id;
-        public string name;
-        public string description;
-        public string path;
-        public int skillId;
-        public int skillLevel;
-        public float radius;
-        public float moveSpeed;
-        public float stopMoveDistance;
-        public float attack;
-        public int health;
-        public float defense;
-        public float attackSpeed;
-        public float criticalRate;
-        public float criticalDamage;
-        public float damageMultiplier;
-        public float armorPenPercent;
-
-        [SerializeField] private int power;
-
-        public int Power
-        {
-            set => power = value;
-        }
-
-        public bool IsValid => id > 0;
+        public int ID;
+        public string NameKey;
+        public string PrefabName;
+        public int ClassID;
+        public float StopDistance;
+        public float[] AttackRange;
+        public int ActiveSkill;         // kĩ năng active
+        public int PassiveSkill;        // kĩ năng passive
+        public float Scale;
+        public float ColliderRadius;
+        public float[] ColliderOffset;
+        public float[] HpBarOffset;
+        public float[] FloatingTextOffset;
+        public float KnockbackResistance;
+        public float KnockbackResistanceCD;
+        public float StunResistance;
+        public float StunResistanceCD;
+        public string DeathSfx;
     }
 }

@@ -1,0 +1,417 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61b09e6842824e40bc70b575951e7644, type: 3}
+  m_Name: MonsterLevelConfig
+  m_EditorClassIdentifier: 
+  fileUrl: 
+  enable: 1
+  levels:
+  - Level: 1
+    Health: 12
+    Attack: 1
+    CooldownInterval: 2
+  - Level: 2
+    Health: 28
+    Attack: 2
+    CooldownInterval: 2
+  - Level: 3
+    Health: 76
+    Attack: 2
+    CooldownInterval: 2
+  - Level: 4
+    Health: 164
+    Attack: 5
+    CooldownInterval: 2
+  - Level: 5
+    Health: 171
+    Attack: 6
+    CooldownInterval: 2
+  - Level: 6
+    Health: 212
+    Attack: 7
+    CooldownInterval: 2
+  - Level: 7
+    Health: 239
+    Attack: 7
+    CooldownInterval: 2
+  - Level: 8
+    Health: 306
+    Attack: 8
+    CooldownInterval: 2
+  - Level: 9
+    Health: 361
+    Attack: 9
+    CooldownInterval: 2
+  - Level: 10
+    Health: 416
+    Attack: 10
+    CooldownInterval: 2
+  - Level: 11
+    Health: 426
+    Attack: 11
+    CooldownInterval: 2
+  - Level: 12
+    Health: 484
+    Attack: 13
+    CooldownInterval: 2
+  - Level: 13
+    Health: 494
+    Attack: 14
+    CooldownInterval: 2
+  - Level: 14
+    Health: 555
+    Attack: 14
+    CooldownInterval: 2
+  - Level: 15
+    Health: 625
+    Attack: 15
+    CooldownInterval: 2
+  - Level: 16
+    Health: 689
+    Attack: 16
+    CooldownInterval: 2
+  - Level: 17
+    Health: 764
+    Attack: 19
+    CooldownInterval: 2
+  - Level: 18
+    Health: 836
+    Attack: 19
+    CooldownInterval: 2
+  - Level: 19
+    Health: 851
+    Attack: 21
+    CooldownInterval: 2
+  - Level: 20
+    Health: 924
+    Attack: 23
+    CooldownInterval: 2
+  - Level: 21
+    Health: 939
+    Attack: 24
+    CooldownInterval: 2
+  - Level: 22
+    Health: 1016
+    Attack: 25
+    CooldownInterval: 2
+  - Level: 23
+    Health: 1104
+    Attack: 26
+    CooldownInterval: 2
+  - Level: 24
+    Health: 1183
+    Attack: 27
+    CooldownInterval: 2
+  - Level: 25
+    Health: 1280
+    Attack: 30
+    CooldownInterval: 2
+  - Level: 26
+    Health: 1366
+    Attack: 31
+    CooldownInterval: 2
+  - Level: 27
+    Health: 1385
+    Attack: 32
+    CooldownInterval: 2
+  - Level: 28
+    Health: 1472
+    Attack: 35
+    CooldownInterval: 2
+  - Level: 29
+    Health: 1492
+    Attack: 37
+    CooldownInterval: 2
+  - Level: 30
+    Health: 1582
+    Attack: 37
+    CooldownInterval: 2
+  - Level: 31
+    Health: 1694
+    Attack: 39
+    CooldownInterval: 2
+  - Level: 32
+    Health: 1786
+    Attack: 40
+    CooldownInterval: 2
+  - Level: 33
+    Health: 2063
+    Attack: 44
+    CooldownInterval: 2
+  - Level: 34
+    Health: 2170
+    Attack: 44
+    CooldownInterval: 2
+  - Level: 35
+    Health: 2194
+    Attack: 46
+    CooldownInterval: 2
+  - Level: 36
+    Health: 2301
+    Attack: 53
+    CooldownInterval: 2
+  - Level: 37
+    Health: 2325
+    Attack: 56
+    CooldownInterval: 2
+  - Level: 38
+    Health: 2434
+    Attack: 56
+    CooldownInterval: 2
+  - Level: 39
+    Health: 2749
+    Attack: 58
+    CooldownInterval: 2
+  - Level: 40
+    Health: 2860
+    Attack: 59
+    CooldownInterval: 2
+  - Level: 41
+    Health: 3146
+    Attack: 69
+    CooldownInterval: 2
+  - Level: 42
+    Health: 3269
+    Attack: 70
+    CooldownInterval: 2
+  - Level: 43
+    Health: 3306
+    Attack: 72
+    CooldownInterval: 2
+  - Level: 44
+    Health: 3431
+    Attack: 79
+    CooldownInterval: 2
+  - Level: 45
+    Health: 3467
+    Attack: 81
+    CooldownInterval: 2
+  - Level: 46
+    Health: 3593
+    Attack: 82
+    CooldownInterval: 2
+  - Level: 47
+    Health: 3910
+    Attack: 85
+    CooldownInterval: 2
+  - Level: 48
+    Health: 4038
+    Attack: 86
+    CooldownInterval: 2
+  - Level: 49
+    Health: 4374
+    Attack: 95
+    CooldownInterval: 2
+  - Level: 50
+    Health: 4514
+    Attack: 96
+    CooldownInterval: 2
+  - Level: 51
+    Health: 4561
+    Attack: 99
+    CooldownInterval: 2
+  - Level: 52
+    Health: 4702
+    Attack: 107
+    CooldownInterval: 2
+  - Level: 53
+    Health: 4748
+    Attack: 110
+    CooldownInterval: 2
+  - Level: 54
+    Health: 4891
+    Attack: 111
+    CooldownInterval: 2
+  - Level: 55
+    Health: 5258
+    Attack: 114
+    CooldownInterval: 2
+  - Level: 56
+    Health: 5402
+    Attack: 115
+    CooldownInterval: 2
+  - Level: 57
+    Health: 5788
+    Attack: 125
+    CooldownInterval: 2
+  - Level: 58
+    Health: 5944
+    Attack: 126
+    CooldownInterval: 2
+  - Level: 59
+    Health: 6001
+    Attack: 129
+    CooldownInterval: 2
+  - Level: 60
+    Health: 6158
+    Attack: 138
+    CooldownInterval: 2
+  - Level: 61
+    Health: 6214
+    Attack: 142
+    CooldownInterval: 2
+  - Level: 62
+    Health: 6373
+    Attack: 143
+    CooldownInterval: 2
+  - Level: 63
+    Health: 6790
+    Attack: 146
+    CooldownInterval: 2
+  - Level: 64
+    Health: 6950
+    Attack: 147
+    CooldownInterval: 2
+  - Level: 65
+    Health: 8138
+    Attack: 159
+    CooldownInterval: 2
+  - Level: 66
+    Health: 8331
+    Attack: 160
+    CooldownInterval: 2
+  - Level: 67
+    Health: 8397
+    Attack: 164
+    CooldownInterval: 2
+  - Level: 68
+    Health: 8591
+    Attack: 192
+    CooldownInterval: 2
+  - Level: 69
+    Health: 8657
+    Attack: 196
+    CooldownInterval: 2
+  - Level: 70
+    Health: 8852
+    Attack: 197
+    CooldownInterval: 2
+  - Level: 71
+    Health: 10131
+    Attack: 201
+    CooldownInterval: 2
+  - Level: 72
+    Health: 10328
+    Attack: 202
+    CooldownInterval: 2
+  - Level: 73
+    Health: 11343
+    Attack: 235
+    CooldownInterval: 2
+  - Level: 74
+    Health: 11563
+    Attack: 237
+    CooldownInterval: 2
+  - Level: 75
+    Health: 11659
+    Attack: 241
+    CooldownInterval: 2
+  - Level: 76
+    Health: 11880
+    Attack: 264
+    CooldownInterval: 2
+  - Level: 77
+    Health: 11977
+    Attack: 269
+    CooldownInterval: 2
+  - Level: 78
+    Health: 12200
+    Attack: 271
+    CooldownInterval: 2
+  - Level: 79
+    Health: 13282
+    Attack: 275
+    CooldownInterval: 2
+  - Level: 80
+    Health: 13506
+    Attack: 277
+    CooldownInterval: 2
+  - Level: 81
+    Health: 14633
+    Attack: 304
+    CooldownInterval: 2
+  - Level: 82
+    Health: 14880
+    Attack: 307
+    CooldownInterval: 2
+  - Level: 83
+    Health: 14999
+    Attack: 311
+    CooldownInterval: 2
+  - Level: 84
+    Health: 15248
+    Attack: 337
+    CooldownInterval: 2
+  - Level: 85
+    Health: 15367
+    Attack: 341
+    CooldownInterval: 2
+  - Level: 86
+    Health: 15617
+    Attack: 344
+    CooldownInterval: 2
+  - Level: 87
+    Health: 16811
+    Attack: 349
+    CooldownInterval: 2
+  - Level: 88
+    Health: 17063
+    Attack: 351
+    CooldownInterval: 2
+  - Level: 89
+    Health: 18302
+    Attack: 381
+    CooldownInterval: 2
+  - Level: 90
+    Health: 18577
+    Attack: 384
+    CooldownInterval: 2
+  - Level: 91
+    Health: 18718
+    Attack: 389
+    CooldownInterval: 2
+  - Level: 92
+    Health: 18994
+    Attack: 416
+    CooldownInterval: 2
+  - Level: 93
+    Health: 19135
+    Attack: 422
+    CooldownInterval: 2
+  - Level: 94
+    Health: 19412
+    Attack: 425
+    CooldownInterval: 2
+  - Level: 95
+    Health: 20718
+    Attack: 431
+    CooldownInterval: 2
+  - Level: 96
+    Health: 20997
+    Attack: 434
+    CooldownInterval: 2
+  - Level: 97
+    Health: 22348
+    Attack: 465
+    CooldownInterval: 2
+  - Level: 98
+    Health: 22650
+    Attack: 469
+    CooldownInterval: 2
+  - Level: 99
+    Health: 22814
+    Attack: 474
+    CooldownInterval: 2
+  - Level: 100
+    Health: 23117
+    Attack: 504
+    CooldownInterval: 2

@@ -11,7 +11,7 @@ namespace _FightCode.Utils
         private static readonly Dictionary<int, StatComplex> MonsterStatsComplex = new Dictionary<int, StatComplex>();
         private static readonly Dictionary<int, StatComplex> WeaponStatsComplex = new Dictionary<int, StatComplex>();
 
-        public static int MonsterPower(MonsterData monsterData, SkillData skillData, int skillLevel)
+        /*public static int MonsterPower(MonsterData monsterData, SkillData skillData, int skillLevel)
         {
             int hash = HashCode.Combine(monsterData.skillId, monsterData.skillId, monsterData.skillLevel);
 
@@ -36,6 +36,7 @@ namespace _FightCode.Utils
                 return (int)statComplex.GetPower(skillData.ScaleDamage(skillLevel), skillData.FlatDamage(skillLevel));
             }
         }
+        */
 
         /*public static int OutputDamage(EquipmentData equipmentData, MonsterData monsterData, SkillData skillData, int skillLevel)
         {
@@ -44,9 +45,9 @@ namespace _FightCode.Utils
             return OutputDamage(source, target, skillData, skillLevel);
         }*/
         
-        private static StatComplex GetComplex(MonsterData monsterData)
+        /*private static StatComplex GetComplex(MonsterData monsterData)
         {
-            if (MonsterStatsComplex.TryGetValue(monsterData.id, out StatComplex statComplex))
+            if (MonsterStatsComplex.TryGetValue(monsterData.ID, out StatComplex statComplex))
             {
                 return statComplex;
             }
@@ -62,10 +63,10 @@ namespace _FightCode.Utils
                 statComplex.AddBase(StatType.DamageMultiplier, monsterData.damageMultiplier);
                 statComplex.AddBase(StatType.ArmorPenPercent, monsterData.armorPenPercent);
 
-                MonsterStatsComplex.Add(monsterData.id, statComplex);
+                MonsterStatsComplex.Add(monsterData.ID, statComplex);
                 return statComplex;
             }
-        }
+        }*/
 
         /*private static StatComplex GetComplex(EquipmentData equipmentData, SkillData skillData, int skillLevel)
         {

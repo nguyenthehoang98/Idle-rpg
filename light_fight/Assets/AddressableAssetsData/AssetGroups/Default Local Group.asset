@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0c6a1b9398cf2d44393fb31413127de9
+    m_Address: MonsterClassConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 116bbf7a5f848e54cbf7d0448d2f6d43
     m_Address: 2002 Monster
     m_ReadOnly: 0
@@ -62,6 +67,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1fb90be68a1ac4b44a0292ed3eb62de3
     m_Address: 1020 Weapon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 221665158415fa24c8bbed0803e961a0
+    m_Address: MonsterConfig
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -230,6 +240,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dcab1ad7940d6754fb8230ee31ee6538
+    m_Address: EquipmentUpgradeConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ddcb251d8e52a194c8be1e87b10aad2f
     m_Address: 2030 Monster
     m_ReadOnly: 0
@@ -257,6 +272,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e7a67a250ba1ab74fbeb58a7032aabc7
     m_Address: 2025 Monster
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ee45c1d30dde5f94ab07068ce09cb8d6
+    m_Address: MonsterLevelConfig
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

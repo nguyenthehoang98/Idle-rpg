@@ -44,7 +44,7 @@ namespace _FightCode.Battle.Logic
             this.agent = agent;
             
             monsterConfig.Find(configId, out var monsterData);
-            AsyncInstantiate(monsterData.path);
+            //AsyncInstantiate(monsterData.path);
         }
 
         private async void AsyncInstantiate(string path)
