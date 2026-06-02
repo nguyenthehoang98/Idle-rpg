@@ -12,32 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4da4d2ebf5784ebe9597a7312ecc8ef5, type: 3}
   m_Name: SkillConfig
   m_EditorClassIdentifier: 
-  fileUrl: 
-  enable: 1
+  fileUrl: 1qMIKFI0s-z4DJJutctB5Oka5Hy5huNJHTSSEDBafzZQ
+  enable: 0
   skills:
   - ID: 30001
     NameKey: Bow
     FindTarget: 0
-    LifeTime: 0.8
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -48,27 +46,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30002
     NameKey: Plant Bomb
-    FindTarget: 1
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -79,27 +75,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30003
     NameKey: Magic Wand
-    FindTarget: 2
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -110,27 +104,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30004
     NameKey: Ice Gun
-    FindTarget: 3
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -141,27 +133,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30005
     NameKey: Lightning Dagger
-    FindTarget: 4
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -172,27 +162,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30006
     NameKey: Plant Hammer
-    FindTarget: 5
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -203,27 +191,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30007
     NameKey: Lance
-    FindTarget: 6
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -235,26 +221,24 @@ MonoBehaviour:
   - ID: 30008
     NameKey: Ice Sword
     FindTarget: 0
-    LifeTime: 0.8
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -265,27 +249,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30009
     NameKey: Glove
-    FindTarget: 1
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -296,27 +278,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30010
     NameKey: Potion
-    FindTarget: 2
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -327,27 +307,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30011
     NameKey: Ring
-    FindTarget: 3
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -358,27 +336,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30012
     NameKey: Goggles
-    FindTarget: 4
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -389,27 +365,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30013
     NameKey: Shuriken
-    FindTarget: 5
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -420,27 +394,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30014
     NameKey: Crossbow
-    FindTarget: 6
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -452,26 +424,24 @@ MonoBehaviour:
   - ID: 30015
     NameKey: Gun
     FindTarget: 0
-    LifeTime: 0.8
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -482,27 +452,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30016
     NameKey: Dagger
-    FindTarget: 1
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -513,27 +481,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30017
     NameKey: Hammer
-    FindTarget: 2
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -544,27 +510,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30018
     NameKey: Sword
-    FindTarget: 3
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -575,27 +539,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30019
     NameKey: Lightning Wand
-    FindTarget: 4
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -606,27 +568,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30020
     NameKey: Fire Lance
-    FindTarget: 5
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -637,27 +597,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30021
     NameKey: Shoe
-    FindTarget: 6
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -669,26 +627,24 @@ MonoBehaviour:
   - ID: 30022
     NameKey: Armor
     FindTarget: 0
-    LifeTime: 0.8
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -699,27 +655,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30023
     NameKey: Coin Bag
-    FindTarget: 1
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -730,27 +684,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30024
     NameKey: Medical Bag
-    FindTarget: 2
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -761,27 +713,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30025
     NameKey: Melee Monster
-    FindTarget: 3
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -792,27 +742,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30026
     NameKey: Goblin Bomber
-    FindTarget: 4
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -823,27 +771,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30027
     NameKey: Goblin Demolisher
-    FindTarget: 5
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -854,27 +800,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30028
     NameKey: Catapult
-    FindTarget: 6
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -886,26 +830,24 @@ MonoBehaviour:
   - ID: 30029
     NameKey: Pig
     FindTarget: 0
-    LifeTime: 0.8
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -916,27 +858,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30030
     NameKey: Fire Ring
-    FindTarget: 1
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -947,27 +887,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 30031
     NameKey: Ice Ring
-    FindTarget: 2
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -978,27 +916,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 31001
     NameKey: "(Dagger) T\u0103ng crit dmg khi \u0111\u1EB7t c\u1EA1nh support item"
-    FindTarget: 3
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -1010,27 +946,25 @@ MonoBehaviour:
   - ID: 31002
     NameKey: "(Bow) T\u0103ng Crit Chance v\u1EDBi m\u1ED7i Gear Melee t\u1EA1i v\u1ECB
       tr\xED Star"
-    FindTarget: 4
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -1042,27 +976,25 @@ MonoBehaviour:
   - ID: 31003
     NameKey: "(Glass) C\u1ED9ng dmg cho 6 \xF4 ph\xEDa tr\xEAn - ch\u1EC9 v\u1EDBi
       RangeWeapon"
-    FindTarget: 5
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -1074,27 +1006,25 @@ MonoBehaviour:
   - ID: 31004
     NameKey: "(Glove)C\u1ED9ng dmg cho c\xE1c \xF4 xung quanh - ch\u1EC9 v\u1EDBi
       MeleeWeapon"
-    FindTarget: 6
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -1106,26 +1036,24 @@ MonoBehaviour:
   - ID: 31005
     NameKey: "(Ring) C\u1ED9ng 6% CRIT% cho weapon xung quanh"
     FindTarget: 0
-    LifeTime: 0.8
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -1136,27 +1064,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 31006
     NameKey: "(Support) C\u1ED9ng 5% HP"
-    FindTarget: 1
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -1167,27 +1093,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 31007
     NameKey: "(Coin) Th\xEAm ti\u1EC1n m\u1ED7i khi v\xE0o shop"
-    FindTarget: 2
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -1198,27 +1122,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 31008
     NameKey: "(Medical Kit) Dagger s\u1EBD h\xFAt m\xE1u"
-    FindTarget: 3
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -1229,27 +1151,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 31009
     NameKey: "(Support) C\u1ED9ng 50 max HP"
-    FindTarget: 4
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 
@@ -1260,27 +1180,25 @@ MonoBehaviour:
     SkillIDCastingWhenFinished: 0
   - ID: 31010
     NameKey: "(Support) C\u1ED9ng 75 max HP"
-    FindTarget: 5
-    LifeTime: 0.8
+    FindTarget: 0
+    LifeTime: 0
     Trigger: 0
     SkillTimerTrigger: 0
     SkillEventIdTrigger: 0
     DamageTicker: 0
     IsHealthPercent: 0
     MaximumCollision: 1
-    CollisionResetInterval: 0.034
+    CollisionResetInterval: 0
     Prefab: PROJECTILE/Bullet
     OffsetStartPosition: []
-    Shape: 1
+    Shape: 0
     ShapeTimerTrigger: 0
     OffsetRelativePosition: []
-    SquareSize:
-    - 0.5
-    - 0.5
+    SquareSize: []
     CircleRadius: 0
     CapsuleHeight: 0
     CapsuleRadius: 0
-    Trajectory: 1
+    Trajectory: 0
     BulletInitialSpeed: 15
     BulletAcceleration: 0
     BoomerangCastingPhase: 

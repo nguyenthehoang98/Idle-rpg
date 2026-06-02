@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeb2a6715de3405c83755533d54a423a, type: 3}
   m_Name: LevelConfig
   m_EditorClassIdentifier: 
-  fileUrl: 
-  enable: 1
+  fileUrl: 1TCzJHPI-MGanHrwCGQsXd7GAJYtj1nnGMmzr5-46lFc
+  enable: 0
   levels:
   - ID: 1001
     WaveID: 1

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be472a814d1443c580c82e9c6b31fff7, type: 3}
   m_Name: StatConfig
   m_EditorClassIdentifier: 
-  fileUrl: 
-  enable: 1
+  fileUrl: 1hZHYLVDV-z6-gHu-15GVRbqvZyIlIicqujHYwymHHZM
+  enable: 0
   stats:
   - ID: 1
     Name: Attack
@@ -30,12 +30,12 @@ MonoBehaviour:
   - ID: 4
     Name: AttackSpeed
     Value: 1
-    Modifier: 0.5
+    Modifier: 0
   - ID: 5
     Name: CritRate
     Value: 0
-    Modifier: 0.5
+    Modifier: 0
   - ID: 6
     Name: CritDamage
     Value: 1
-    Modifier: 0.2
+    Modifier: 0

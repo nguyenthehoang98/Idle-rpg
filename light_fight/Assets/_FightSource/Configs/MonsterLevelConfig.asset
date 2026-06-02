@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61b09e6842824e40bc70b575951e7644, type: 3}
   m_Name: MonsterLevelConfig
   m_EditorClassIdentifier: 
-  fileUrl: 
-  enable: 1
+  fileUrl: 1cOiQgE41Bd2_nI7iO-HjSgtTWKkEtpMcinlEkCZ9VP0
+  enable: 0
   levels:
   - Level: 1
     Health: 12

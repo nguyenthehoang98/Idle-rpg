@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d498e715c3504f2a8296db45cde8ca69, type: 3}
   m_Name: MonsterClassConfig
   m_EditorClassIdentifier: 
-  fileUrl: 
-  enable: 1
+  fileUrl: 1VLs4mVyBudV5v9hIQaSIlmYqQQHKb1Ao4IMoLv1LTSA
+  enable: 0
   classes:
   - ID: 1
-    HealthScale: 0.8
+    HealthScale: 0
     AttackScale: 1
     CooldownScale: 12
     SpeedScale: 12
@@ -27,7 +27,7 @@ MonoBehaviour:
     SpeedScale: 12
   - ID: 3
     HealthScale: 2
-    AttackScale: 0.6
+    AttackScale: 0
     CooldownScale: 1
     SpeedScale: 4
   - ID: 4
@@ -37,7 +37,7 @@ MonoBehaviour:
     SpeedScale: 12
   - ID: 5
     HealthScale: 6
-    AttackScale: 175
+    AttackScale: 1
     CooldownScale: 1
     SpeedScale: 10
   - ID: 6
@@ -57,12 +57,12 @@ MonoBehaviour:
     SpeedScale: 15
   - ID: 9
     HealthScale: 1
-    AttackScale: 0.2
+    AttackScale: 0
     CooldownScale: 1
     SpeedScale: 8
   - ID: 10
     HealthScale: 60
-    AttackScale: 3.5
+    AttackScale: 3
     CooldownScale: 1
     SpeedScale: 20
   - ID: 11

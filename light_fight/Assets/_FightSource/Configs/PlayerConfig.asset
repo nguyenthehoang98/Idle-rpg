@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e87e99e7363518046b312d6a202ca4e7, type: 3}
   m_Name: PlayerConfig
   m_EditorClassIdentifier: 
-  fileUrl: 
-  enable: 1
+  fileUrl: 12anI_Fj3Y7IqwSUtmwgJmtW8cCpSTWGNoxkSckf-etk
+  enable: 0
   infos:
   - Level: 1
     Exp: 100
