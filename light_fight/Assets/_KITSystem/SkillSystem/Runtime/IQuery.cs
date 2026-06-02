@@ -12,8 +12,8 @@ namespace _KITSystem.SkillSystem.Runtime
 
         bool FindNearestTargetPosition(float2 center, float radius, Func<int, bool> funcFilterEntity, out QueryResult result);
 
-        List<int> GetEntities(float2 center, float radius);
-        List<int> GetEntities(float2 center, float2 size);
+        List<int> GetEntities(float2 center, Func<int, bool> funcFilterEntity, float radius);
+        List<int> GetEntities(float2 center, Func<int, bool> funcFilterEntity, float2 size);
     }
 
     public struct QueryResult

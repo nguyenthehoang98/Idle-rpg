@@ -127,7 +127,7 @@ namespace _FightCode.Battle.Logic
                             
                             phase = Phase.Rotate;
                             
-                            SkillFactory.Build(new float2(goal.x, goal.y), goal, setting.skillFrameConfig);
+                            SkillFactory.Build(center, goal, setting.skillFrameConfig);
                         }
 
                         break;
@@ -200,16 +200,13 @@ namespace _FightCode.Battle.Logic
             direction = MathUtils.NormalizeSafeVec3(worldPos - position);
             
 #if UNITY_EDITOR
-            if(!setting.enableVisualize)
-            {
-                Vector3 offset = defaultDirection * (forwardOffset * (scaleTime - 1));
-                Vector3 center = position + offset;
-                Debug.DrawRay(
-                    new Vector3(center.x, center.y),
-                    new Vector3(direction.x, direction.y) * 10,
-                    Color.magenta, deltaTime
-                );
-            }
+            Vector3 offset = defaultDirection * (forwardOffset * (scaleTime - 1));
+            Vector3 center = position + offset;
+            Debug.DrawRay(
+                new Vector3(center.x, center.y),
+                new Vector3(direction.x, direction.y) * 10,
+                Color.magenta, deltaTime
+            );
 #endif
             view.Rotate(worldPos, setting.weaponRotateDuration, share.timeScale, needUpdatePosition);
 

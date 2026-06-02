@@ -16,7 +16,7 @@ namespace _KITSystem.SkillSystem.Runtime
 
         protected override List<int> OnHit(float2 position)
         {
-            return query.GetEntities(GetPosition(position), radius);
+            return query.GetEntities(GetPosition(position), FilterEntity, radius);
         }
 
         public override void Gizmos(Vector3 position, Color color, float duration)

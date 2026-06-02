@@ -72,7 +72,7 @@ namespace _KITSystem.SkillSystem.Runtime
             // todo: xóa các action đã xong
             for (int i = 0; i < totalActionFinished; i++)
             {
-                var reason = pendingReasonActionRemoved[i];
+                ActionCompleteReason reason = pendingReasonActionRemoved[i];
                 if (reason == ActionCompleteReason.EndLifeCycle)
                     RequestRemoveActionEndLifeCycle(pendingActionRemoved[i]);
                 else if (reason == ActionCompleteReason.Interrupt)
@@ -114,13 +114,13 @@ namespace _KITSystem.SkillSystem.Runtime
         {
             if (eventId <= 0) return;
 
-            bool flag = HasSkill(skillId, out var list);
+            bool flag = HasSkill(skillId, out List<int> list);
             if (flag)
             {
-                for (var i = 0; i < list.Count; i++)
+                for (int i = 0; i < list.Count; i++)
                 {
-                    var actionId = list[i];
-                    bool flag2 = TryGetAction(actionId, out var action);
+                    int actionId = list[i];
+                    bool flag2 = TryGetAction(actionId, out ISkillAction action);
                     if (flag2) action.Trigger(eventId);
                 }
             }
@@ -152,7 +152,7 @@ namespace _KITSystem.SkillSystem.Runtime
 
         public bool TryGetAction(int actionId, out ISkillAction skillAction)
         {
-            if (mapActionIdToIndex.TryGetValue(actionId, out var index))
+            if (mapActionIdToIndex.TryGetValue(actionId, out int index))
             {
                 if ((uint)index < activeActions.Count)
                 {
@@ -188,7 +188,7 @@ namespace _KITSystem.SkillSystem.Runtime
         {
             int actionId = nextActionId++;
 
-            if (!mapActionsIndex.TryGetValue(skillId, out var list))
+            if (!mapActionsIndex.TryGetValue(skillId, out List<int> list))
             {
                 list = new List<int>();
                 mapActionsIndex[skillId] = list;
@@ -221,14 +221,14 @@ namespace _KITSystem.SkillSystem.Runtime
             if ((uint)idx >= activeActions.Count)
                 return false;
 
-            var removed = activeActions[idx];
+            ActionRuntime removed = activeActions[idx];
 
             if (interrupted) removed.SkillAction.Interrupt();
 
             removed.SkillAction.Stop();
             
             // remove khỏi skill map
-            if (mapActionsIndex.TryGetValue(removed.skillInstanceId, out var list))
+            if (mapActionsIndex.TryGetValue(removed.skillInstanceId, out List<int> list))
             {
                 for (int i = 0; i < list.Count; i++)
                 {
@@ -250,7 +250,7 @@ namespace _KITSystem.SkillSystem.Runtime
 
             if (idx != lastIdx)
             {
-                var last = activeActions[lastIdx];
+                ActionRuntime last = activeActions[lastIdx];
                 activeActions[idx] = last;
 
                 mapActionIdToIndex[last.actionInstanceId] = idx;

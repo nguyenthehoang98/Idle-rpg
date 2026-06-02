@@ -101,7 +101,7 @@ namespace _KITSystem.SkillSystem.Runtime
                             }
 
                             remainingCollisions--;
-
+                            
                             if (remainingCollisions == 0)
                             {
                                 EndLifeCycle();

@@ -45,6 +45,7 @@ MonoBehaviour:
   worldCenter:
     x: 0
     y: 0
+  defaultAgentStopDistance: 2
   totalSlot: 4
   slotCooldownTime: 1
   slotRecoveryTime: 1
@@ -54,8 +55,6 @@ MonoBehaviour:
   slotColorMinSpeed: {r: 1, g: 0, b: 0, a: 1}
   slotColorDefaultSpeed: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   slotColorMaxSpeed: {r: 0, g: 1, b: 0, a: 1}
-  weaponCooldown: 1
-  weaponAttackRange: 6
   weaponRotateDuration: 0.2
   weaponXRotates: 000000000000000000000000b4000000b4000000b4000000
   attractorFlyTime: 1

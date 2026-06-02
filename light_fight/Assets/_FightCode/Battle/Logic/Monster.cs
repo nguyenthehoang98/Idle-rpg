@@ -36,7 +36,7 @@ namespace _FightCode.Battle.Logic
         private bool isMoving = true;
         private Vector3 beHitDirection;
 
-        public Monster(BattleShare share, BattleSetting setting, int entity, int configId, int agent)
+        public Monster(BattleShare share, int entity, int configId, int agent)
         {
             this.share = share;
             this.entity = entity;
@@ -46,10 +46,7 @@ namespace _FightCode.Battle.Logic
             MonsterConfig monsterConfig = KitConfigManager.Get<MonsterConfig>();
             monsterConfig.Find(configId, out var monsterData);
             
-            if (setting.enableVisualize)
-            {
-                AsyncInstantiate(monsterData.path);
-            }
+            AsyncInstantiate(monsterData.path);
         }
 
         private async void AsyncInstantiate(string path)

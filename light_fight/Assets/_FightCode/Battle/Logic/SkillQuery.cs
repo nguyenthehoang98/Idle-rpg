@@ -138,7 +138,7 @@ namespace _FightCode.Battle.Logic
             return found;
         }
 
-        public List<int> GetEntities(float2 center, float radius)
+        public List<int> GetEntities(float2 center, Func<int, bool> funcFilterEntity, float radius)
         {
             float2 signalSize = new float2(radius * 2, radius * 2);
             
@@ -154,24 +154,25 @@ namespace _FightCode.Battle.Logic
                 
                 int entity = agent.entity;
 
-                if (!EntityManager.IsAlive(entity)) continue;
-
-                float totalRadius = radius + agent.radius;
-
-                float2 delta = agent.position - center;
-
-                radiusSq = totalRadius * totalRadius;
-
-                if (math.lengthsq(delta) <= radiusSq)
+                if (funcFilterEntity(entity))
                 {
-                    results.Add(entity);
+                    float totalRadius = radius + agent.radius;
+
+                    float2 delta = agent.position - center;
+
+                    radiusSq = totalRadius * totalRadius;
+
+                    if (math.lengthsq(delta) <= radiusSq)
+                    {
+                        results.Add(entity);
+                    }
                 }
             }
             
             return results;
         }
 
-        public List<int> GetEntities(float2 center, float2 size)
+        public List<int> GetEntities(float2 center, Func<int, bool> funcFilterEntity, float2 size)
         {
             int count = agentGrid.QueryAgent(center, size, out AgentData[] agents);
 
@@ -189,21 +190,22 @@ namespace _FightCode.Battle.Logic
 
                 int entity = agent.entity;
 
-                if (!EntityManager.IsAlive(entity)) continue;
-
-                float2 p = agent.position;
-                
-                float r = agent.radius;
-                
-                float closestX = math.clamp(p.x, left, right);
-                float closestY = math.clamp(p.y, bottom, top);
-
-                float dx = p.x - closestX;
-                float dy = p.y - closestY;
-                
-                if (dx * dx + dy * dy <= r * r)
+                if (funcFilterEntity(entity))
                 {
-                    results.Add(entity);
+                    float2 p = agent.position;
+
+                    float r = agent.radius;
+
+                    float closestX = math.clamp(p.x, left, right);
+                    float closestY = math.clamp(p.y, bottom, top);
+
+                    float dx = p.x - closestX;
+                    float dy = p.y - closestY;
+
+                    if (dx * dx + dy * dy <= r * r)
+                    {
+                        results.Add(entity);
+                    }
                 }
             }
             

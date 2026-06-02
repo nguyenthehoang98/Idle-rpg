@@ -89,7 +89,7 @@ namespace _FightCode.Battle.Logic
         public void Draw()
         {
 #if UNITY_EDITOR
-            Vector2 v2 = left1;
+            /*Vector2 v2 = left1;
             Vector2 v3 = right1;
             Vector2 v4 = right2;
             Vector2 v5 = left2;
@@ -106,7 +106,7 @@ namespace _FightCode.Battle.Logic
             Debug.DrawLine(v4, v5, color);
             Debug.DrawLine(v5, v2, color);
             
-            weapon.Draw(scale, color);
+            weapon.Draw(scale, color);*/
 #endif
         }
     }

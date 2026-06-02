@@ -81,7 +81,7 @@ namespace _FightCode.Battle.Logic
                 float stopDistance = monsterData.stopMoveDistance;
                 int monsterId = monsterData.monsterId;
                 
-                if (setting.enableVisualize && monsterLoaded.TryAdd(monsterId, true))
+                if (monsterLoaded.TryAdd(monsterId, true))
                 {
                     GameObject go = await KitLoaded.LoadAsync<GameObject>(monsterData.path);
                     KitPool.RegisterPool(go, true);
@@ -95,7 +95,7 @@ namespace _FightCode.Battle.Logic
                 ComponentManager<HealthData>.Add(entity, new HealthData(20));
                 ComponentManager<MonsterData>.Add(entity, new MonsterData(monsterId));
 
-                Monster m = new Monster(share, setting, entity, monsterId, agentData.agent);
+                Monster m = new Monster(share, entity, monsterId, agentData.agent);
                 entityToMonster[entity] = m;
                 monster.AddMonster(m);
             });
@@ -198,11 +198,8 @@ namespace _FightCode.Battle.Logic
 
         private void OnDrawGizmos()
         {
-            if(!setting.enableVisualize)
-            {
-                if (battle != null) battle.Draw();
-                if (monster != null) monster.Draw();
-            }
+            if (battle != null) battle.Draw();
+            if (monster != null) monster.Draw();
         }
 
         private void OnGUI()

@@ -68,15 +68,14 @@ namespace _KITSystem.Resource
             }
 
             string code = ins.name;
-            if (!dictionary.ContainsKey(code))
-            {
-                dictionary.Add(code, new Pool(Instance.transform, ins, isDestroyIfChangeScene));
-            }
+
+            dictionary.TryAdd(code, new Pool(Instance.transform, ins, isDestroyIfChangeScene));
         }
 
         public static void UnRegisterPool(GameObject ins)
         {
             string code = ins.name;
+            
             if (dictionary.TryGetValue(code, out Pool pool))
             {
                 pool.Dispose();

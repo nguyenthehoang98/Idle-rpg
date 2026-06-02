@@ -4,8 +4,8 @@ namespace _KITSystem.SkillSystem.Runtime
 {
     internal class BulletTrajectoryAction : BaseTrajectoryAction
     {
-        float initialSpeed;
-        float acceleration;
+        private float initialSpeed;
+        private float acceleration;
         private float elapsedTime;
 
         public BulletTrajectoryAction(float initialSpeed, float acceleration, float2 start, float2 goal) :
