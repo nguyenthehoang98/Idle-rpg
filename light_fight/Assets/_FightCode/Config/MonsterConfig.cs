@@ -71,7 +71,7 @@ namespace _FightCode.Config
         public float moveSpeed;
         public float stopMoveDistance;
         public float attack;
-        public float health;
+        public int health;
         public float defense;
         public float attackSpeed;
         public float criticalRate;

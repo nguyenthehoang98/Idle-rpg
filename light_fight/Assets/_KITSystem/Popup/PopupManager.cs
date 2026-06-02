@@ -13,6 +13,12 @@ namespace _KITSystem.Popup
     {
         private readonly List<PopupBase> popups = new List<PopupBase>();
 
+        protected override void Awake()
+        {
+            base.Awake();
+            DontDestroyOnLoad(gameObject);
+        }
+
         private void Start()
         {
             SceneManager.sceneUnloaded += OnSceneUnloaded;

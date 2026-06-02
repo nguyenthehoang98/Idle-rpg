@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using _FightCode.Battle.Model;
 using _FightCode.Battle.Popup;
 using _FightCode.Battle.View;
@@ -35,6 +36,8 @@ namespace _FightCode.Battle.Logic
         private readonly Dictionary<int, int> entityToAgent = new Dictionary<int, int>();
         private readonly Dictionary<int, Monster> entityToMonster = new Dictionary<int, Monster>();
 
+        private MonsterConfig monsterConfig;
+        
         private IDiceControlView diceControl;
         private bool waveSpawnComplete = false;
         private int totalEntityInScene = 0;
@@ -73,30 +76,11 @@ namespace _FightCode.Battle.Logic
             attract.transform.localPosition = Vector3.zero;
             attract.transform.localScale = Vector3.one;
 
-            MonsterConfig monsterConfig = KitConfigManager.Get<MonsterConfig>();
+            monsterConfig = KitConfigManager.Get<MonsterConfig>();
             
             movement.Initialize();
             agent.Initialize();
-            spawner.Initialize(1, async request =>
-            {
-                Config.MonsterData monsterData = request.MonsterData;
-                float2 position = request.Position;
-                float radius = monsterData.radius;
-                float speed = monsterData.moveSpeed;
-                float stopDistance = monsterData.stopMoveDistance;
-                int monsterId = monsterData.monsterId;
-                int entity = EntityManager.CreateEntity();
-                
-                AgentData agentData = agent.CreateAgent(entity, position, radius, speed, setting.defaultAgentStopDistance + stopDistance);
-                entityToAgent[entity] = agentData.agent;
-                
-                ComponentManager<HealthData>.Add(entity, new HealthData(20));
-                ComponentManager<MonsterData>.Add(entity, new MonsterData(monsterId));
-
-                Monster m = new Monster(share, monsterConfig, entity, monsterId, agentData.agent);
-                entityToMonster[entity] = m;
-                monster.AddMonster(m);
-            });
+            spawner.Initialize(1, OnCreateMonster);
             battle.OnInitialized += OnBattleInitialize;
             battle.Initialize(share, setting, query);
 
@@ -112,10 +96,16 @@ namespace _FightCode.Battle.Logic
             MonsterAnimation.Order = 1;
         }
 
+        private void OnValidate()
+        {
+#if UNITY_EDITOR
+            if(share != null) share.timeScale = loop;
+#endif
+        }
+
         private void OnWaveComplete()
         {
             waveSpawnComplete = true;
-            SpawnAction();
         }
 
         private void OnEntityBehaviour(EntityManagerBehaviourParameter parameter)
@@ -126,6 +116,7 @@ namespace _FightCode.Battle.Logic
             switch (parameter.type)
             {
                 case EntityManagerBehaviourType.BeHit:
+                    
                     if (entityToMonster.TryGetValue(entity, out m))
                     {
                         Vector3 direction = parameter.values[0].Vector3Value;
@@ -136,6 +127,7 @@ namespace _FightCode.Battle.Logic
                 case EntityManagerBehaviourType.Removed:
 
                     killed++;
+                    
                     if (entityToAgent.Remove(entity, out int agentId))
                     {
                         agent.DestroyAgent(agentId);
@@ -147,7 +139,9 @@ namespace _FightCode.Battle.Logic
                     }
 
                     totalEntityInScene = entityToAgent.Count;
+                    
                     SpawnAction();
+                    
                     break;
             }
         }
@@ -164,7 +158,7 @@ namespace _FightCode.Battle.Logic
                 diceControl.OnInitialized -= OnDiceInitialize;
                 if (battle != null) diceControl.OnSpeedChanged -= battle.SetDiceSpeed;
             }
-
+            
             if (spawner != null)
             {
                 spawner.OnWaveCompleted -= OnWaveComplete;
@@ -188,9 +182,31 @@ namespace _FightCode.Battle.Logic
             diceControl.Initialize(share, setting);
         }
 
+        private void OnCreateMonster(RequestCreateMonster request)
+        {
+            Config.MonsterData monsterData = request.MonsterData;
+            float2 position = request.Position;
+            float radius = monsterData.radius;
+            float speed = monsterData.moveSpeed;
+            float stopDistance = monsterData.stopMoveDistance;
+            int monsterId = monsterData.monsterId;
+            int entity = EntityManager.CreateEntity();
+                
+            AgentData agentData = agent.CreateAgent(entity, position, radius, speed, setting.defaultAgentStopDistance + stopDistance);
+            entityToAgent[entity] = agentData.agent;
+                
+            ComponentManager<HealthData>.Add(entity, new HealthData(20));
+            ComponentManager<MonsterData>.Add(entity, new MonsterData(monsterId));
+
+            Monster m = new Monster(share, monsterConfig, entity, monsterId, agentData.agent);
+            entityToMonster[entity] = m;
+            monster.AddMonster(m);
+        }
+
         private async void StartGame()
         {
             await spawner.WaveSpawn();
+            
             IsPaused = false;
         }
 
@@ -212,9 +228,10 @@ namespace _FightCode.Battle.Logic
         {
             if (totalEntityInScene == 0 && waveSpawnComplete)
             {
-                this.WaitInvoke(2, async () =>
+                this.WaitInvoke(2f / share.timeScale, async () =>
                 {
                     bool spawn = await spawner.WaveSpawn();
+                    
                     if (!spawn)
                     {
                         IsPaused = true;

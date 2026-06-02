@@ -42,11 +42,7 @@ namespace _KITSystem.Schedule
                 ? Time.unscaledDeltaTime
                 : Time.deltaTime;
 
-#if UNITY_EDITOR
             accumulator += deltaTime * loop;
-#else
-            accumulator += deltaTime;
-#endif
             
             int tickExecuted = 0;
 
@@ -62,9 +58,10 @@ namespace _KITSystem.Schedule
                 tickExecuted++;
 
                 // chống spiral of death
-                if (tickExecuted >= maxTicksPerFrame)
+                if (tickExecuted >= maxTicksPerFrame * loop)
                 {
                     accumulator = 0f;
+                    
                     break;
                 }
             }

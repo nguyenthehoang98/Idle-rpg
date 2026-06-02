@@ -50,15 +50,6 @@ namespace _KITSystem.Resource
             pool.Release(target);
         }
 
-        public void Preload(int total)
-        {
-            for (int i = 0; i < total; i++)
-            {
-                GameObject go = Reuse();
-                Release(go);
-            }
-        }
-
         public GameObject Reuse()
         {
 #if UNITY_EDITOR

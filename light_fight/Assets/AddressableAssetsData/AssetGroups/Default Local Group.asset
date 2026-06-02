@@ -16,7 +16,7 @@ MonoBehaviour:
   m_GUID: a50f3e4e90eb0714db9c34f24793f732
   m_SerializeEntries:
   - m_GUID: 0ad15eadf8c2af842ae81a51c3764fb4
-    m_Address: WinPopup
+    m_Address: BattleWinPopup
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

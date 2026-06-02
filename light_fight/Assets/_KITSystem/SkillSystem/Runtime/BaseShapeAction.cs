@@ -29,8 +29,6 @@ namespace _KITSystem.SkillSystem.Runtime
 
         protected bool FilterEntity(int entity)
         {
-            if (!EntityManager.IsAlive(entity)) return false;
-            
             return true;
         }
 

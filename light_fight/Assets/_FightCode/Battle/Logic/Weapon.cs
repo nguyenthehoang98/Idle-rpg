@@ -96,32 +96,33 @@ namespace _FightCode.Battle.Logic
                         float radius = weaponData.attackRange;
                         
                         QueryResult result = default;
-                        bool found = false;
                         
                         TargetType targetType = setting.skillFrameConfig.defaultSkillConfig.targetType;
                         switch (targetType)
                         {
                             case TargetType.Nearest:
-                                found = query.FindNearestTargetPosition(center, radius, FilterEntity, out result);
+                                query.NearestTargetPosition(center, radius, FilterEntity, out result);
                                 break;
                             case TargetType.Farthest:
-                                found = query.FindFarthestTargetPosition(center, radius, FilterEntity, out result);
+                                query.FarthestTargetPosition(center, radius, FilterEntity, out result);
                                 break;
                             case TargetType.Random:
-                                found = query.FindRandomTargetPosition(center, radius, FilterEntity, out result);
+                                query.RandomTargetPosition(center, radius, FilterEntity, out result);
                                 break;
                             default:
                                 Debug.LogError("Not defined target type " + targetType);
                                 break;
                         }
 
-                        if (found)
+                        if (result.IsPrimaryValid || result.IsSecondaryValid)
                         {
                             int damage = 10;
+                            
+                            int entity = result.IsPrimaryValid ? result.PrimaryEntity : result.SecondaryEntity;
 
-                            ComponentManager<HealthData>.Get(result.Entity).TargetHealth -= damage;
+                            float2 goal = result.IsPrimaryValid ? result.PrimaryPosition : result.SecondaryPosition;
 
-                            float2 goal = result.Position;
+                            ComponentManager<HealthData>.Get(entity).TargetHealth -= damage;
 
                             elapsedTime = RotateTo(new Vector3(goal.x, goal.y), deltaTime);
                             
@@ -141,8 +142,6 @@ namespace _FightCode.Battle.Logic
 
         private bool FilterEntity(int entity)
         {
-            if (!EntityManager.IsAlive(entity)) return false;
-
             HealthData healthData = ComponentManager<HealthData>.Get(entity);
 
             if (healthData.TargetHealth <= 0) return false;

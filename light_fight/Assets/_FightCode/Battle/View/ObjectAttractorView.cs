@@ -30,7 +30,7 @@ namespace _FightCode.Battle.View
             float duration, float radius, float offsetY,
             float smooth, Action onComplete)
         {
-            if (sequence != null && sequence.IsPlaying()) sequence.Kill();
+            if (sequence != null && sequence.IsActive()) sequence.Kill();
             
             visual.transform.localScale = localScale;
             visual.transform.rotation = Quaternion.Euler(0, 0, 0);

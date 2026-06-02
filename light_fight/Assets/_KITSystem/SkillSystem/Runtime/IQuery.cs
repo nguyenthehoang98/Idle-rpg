@@ -6,11 +6,9 @@ namespace _KITSystem.SkillSystem.Runtime
 {
     public interface IQuery
     {
-        bool FindRandomTargetPosition(float2 center, float radius, Func<int, bool> funcFilterEntity, out QueryResult result);
-
-        bool FindFarthestTargetPosition(float2 center, float radius, Func<int, bool> funcFilterEntity, out QueryResult result);
-
-        bool FindNearestTargetPosition(float2 center, float radius, Func<int, bool> funcFilterEntity, out QueryResult result);
+        void RandomTargetPosition(float2 center, float radius, Func<int, bool> funcFilterEntity, out QueryResult result);
+        void FarthestTargetPosition(float2 center, float radius, Func<int, bool> funcFilterEntity, out QueryResult result);
+        void NearestTargetPosition(float2 center, float radius, Func<int, bool> funcFilterEntity, out QueryResult result);
 
         List<int> GetEntities(float2 center, Func<int, bool> funcFilterEntity, float radius);
         List<int> GetEntities(float2 center, Func<int, bool> funcFilterEntity, float2 size);
@@ -18,7 +16,11 @@ namespace _KITSystem.SkillSystem.Runtime
 
     public struct QueryResult
     {
-        public int Entity;
-        public float2 Position;
+        public bool IsPrimaryValid;
+        public int PrimaryEntity;
+        public float2 PrimaryPosition;
+        public bool IsSecondaryValid;
+        public int SecondaryEntity;
+        public float2 SecondaryPosition;
     }
 }

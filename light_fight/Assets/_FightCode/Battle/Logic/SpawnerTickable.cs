@@ -11,6 +11,7 @@ using _KITSystem.Schedule;
 using _KITSystem.Utils;
 using Unity.Mathematics;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace _FightCode.Battle.Logic
 {
@@ -23,8 +24,8 @@ namespace _FightCode.Battle.Logic
         
         public event Action OnWaveCompleted;
 
-        private HashSet<string> monsterPaths = new HashSet<string>();
         private IReadOnlyDictionary<WaveIdData, LevelBatch> container;
+        private HashSet<string> monsterPaths = new HashSet<string>();
         private Batch[] batches;
         private int totalWave;
         private int currentWave = 1;
@@ -50,6 +51,7 @@ namespace _FightCode.Battle.Logic
             }
 
             totalWave = 0;
+            
             foreach (var pair in container)
             {
                 totalWave = Mathf.Max(totalWave, pair.Key.WaveId);
@@ -60,7 +62,7 @@ namespace _FightCode.Battle.Logic
         {
             if (currentWave > totalWave) return false;
 
-            if (!(await LoadWave(currentWave))) return false;
+            if (!await LoadWave(currentWave)) return false;
            
             paused = false;
             
@@ -70,6 +72,7 @@ namespace _FightCode.Battle.Logic
         private async Task<bool> LoadWave(int waveIndex)
         {
             List<LevelBatch> values = new List<LevelBatch>();
+            
             foreach (var pair in container)
             {
                 if (pair.Key.WaveId == waveIndex) values.Add(pair.Value);
@@ -95,9 +98,12 @@ namespace _FightCode.Battle.Logic
                     if (monsterConfig.Find(m.Key, out MonsterData monsterData))
                     {
                         GameObject go = await KitLoaded.LoadAsync<GameObject>(monsterData.path, true);
-                        MonsterAnimation ma = go.GetComponent<MonsterAnimation>();
+                        GameObject instance = Object.Instantiate(go);
+                        MonsterAnimation ma = instance.GetComponent<MonsterAnimation>();
                         ma.Setup();
-                        KitPool.RegisterPool(go, true, 1);
+                        KitPool.RegisterPool(go, true);
+                        KitPool.Destroy(instance);
+                        monsterPaths.Add(monsterData.path);
                     }
                 }
             }
@@ -188,7 +194,13 @@ namespace _FightCode.Battle.Logic
         
         public void Dispose()
         {
-            
+            foreach (var path in monsterPaths)
+            {
+                KitLoaded.UnCache(path);
+            }
+
+            monsterPaths = null;
+            batches = null;
         }
         
         private static Batch[] CreateBatches(List<LevelBatch> batches, MonsterConfig monsterConfig, SkillConfig skillConfig)
@@ -261,7 +273,7 @@ namespace _FightCode.Battle.Logic
                 }
                 else
                 {
-                    Debug.Log($"[Battle] Build total {monsters.Count} monsters: " + string.Join(',', monsters) + $", duration: {batch.duration}, interval: {result[i].interval}");
+                    //Debug.Log($"[Battle] Build total {monsters.Count} monsters: " + string.Join(',', monsters) + $", duration: {batch.duration}, interval: {result[i].interval}");
                 }
 #endif
             }

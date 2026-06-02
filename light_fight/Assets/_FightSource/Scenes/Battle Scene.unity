@@ -484,7 +484,7 @@ MonoBehaviour:
   isPausedDefault: 1
   useUnscaledTime: 0
   targetFPS: 30
-  loop: 1
+  loop: 50
   maxTicksPerFrame: 5
   tickables:
   - rid: 7993921842490900602

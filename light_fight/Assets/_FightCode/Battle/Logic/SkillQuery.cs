@@ -18,7 +18,7 @@ namespace _FightCode.Battle.Logic
             this.agentGrid = agentGrid;
         }
 
-        public bool FindRandomTargetPosition(float2 center, float radius, Func<int, bool> funcFilterEntity, out QueryResult result)
+        public void RandomTargetPosition(float2 center, float radius, Func<int, bool> funcFilterEntity, out QueryResult result)
         {
             int count = agentGrid.QueryAgent(center, new float2(radius, radius), out AgentData[] agents);
 
@@ -30,83 +30,81 @@ namespace _FightCode.Battle.Logic
 
                 int entity = agent.entity;
 
-                if (funcFilterEntity(entity))
+                if (!EntityManager.IsAlive(entity)) continue;
+
+                temp.Add(agent);
+            }
+            
+            CollectionUtils.Shuffle(ref temp);
+
+            result = new QueryResult();
+
+            for (int i = temp.Count - 1; i >= 0; i--)
+            {
+                AgentData agent = temp[i];
+
+                if (funcFilterEntity(agent.entity))
                 {
-                    temp.Add(agent);                    
+                    result.IsPrimaryValid = true;
+                    result.PrimaryEntity = agent.entity;
+                    result.PrimaryPosition = agent.position;
+                    return;
                 }
+                
+                result.IsSecondaryValid = true;
+                result.SecondaryEntity = agent.entity;
+                result.SecondaryPosition = agent.position;
             }
-            
-
-            AgentData agentData = default;
-
-            if (temp.Count > 0)
-            {
-                int index = RandomUtils.Range(0, temp.Count);
-                agentData = temp[index];
-            }
-
-            result = new QueryResult
-            {
-                Entity = agentData.entity,
-                Position = agentData.position,
-            };
-            
-            return temp.Count > 0;
         }
 
-        public bool FindFarthestTargetPosition(float2 center, float radius, Func<int, bool> funcFilterEntity, out QueryResult result)
+        public void FarthestTargetPosition(float2 center, float radius, Func<int, bool> funcFilterEntity, out QueryResult result)
         {
             float sqrRadius = radius * radius;
             
             int count = agentGrid.QueryAgent(center, new float2(radius, radius), out AgentData[] agents);
-            
-            bool found = false;
-
-            AgentData agentData = default;
             
             float maxDistance = float.MinValue;
+            
+            result = new QueryResult();
 
             for (int i = 0; i < count; i++)
             {
                 AgentData agent = agents[i];
                 
                 int entity = agent.entity;
+
+                if (!EntityManager.IsAlive(entity)) continue;
                 
-                if (funcFilterEntity(entity))
+                float dsq = math.distancesq(center, agent.position);
+
+                if (dsq > maxDistance && dsq <= sqrRadius)
                 {
-                    float dsq = math.distancesq(center, agent.position);
+                    maxDistance = dsq;
 
-                    if (dsq > maxDistance && dsq <= sqrRadius)
+                    if (funcFilterEntity(entity))
                     {
-                        maxDistance = dsq;
+                        result.IsPrimaryValid = true;
+                        result.PrimaryEntity = agent.entity;
+                        result.PrimaryPosition = agent.position;
+                        continue;
+                    }
 
-                        agentData = agent;
-                    
-                        found = true;
-                    }                  
+                    result.IsSecondaryValid = true;
+                    result.SecondaryEntity = agent.entity;
+                    result.SecondaryPosition = agent.position;
                 }
             }
-
-            result = new QueryResult
-            {
-                Entity = agentData.entity,
-                Position = agentData.position,
-            };
-
-            return found;
         }
 
-        public bool FindNearestTargetPosition(float2 center, float radius, Func<int, bool> funcFilterEntity, out QueryResult result)
+        public void NearestTargetPosition(float2 center, float radius, Func<int, bool> funcFilterEntity, out QueryResult result)
         {
             float sqrRadius = radius * radius;
             
             int count = agentGrid.QueryAgent(center, new float2(radius, radius), out AgentData[] agents);
             
-            bool found = false;
-
-            AgentData agentData = default;
-            
             float minDistance = float.MaxValue;
+            
+            result = new QueryResult();
 
             for (int i = 0; i < count; i++)
             {
@@ -114,28 +112,27 @@ namespace _FightCode.Battle.Logic
                 
                 int entity = agent.entity;
 
-                if (funcFilterEntity(entity))
+                if (!EntityManager.IsAlive(entity)) continue;
+
+                float dsq = math.distancesq(center, agent.position);
+
+                if (dsq < minDistance && dsq <= sqrRadius)
                 {
-                    float dsq = math.distancesq(center, agent.position);
+                    minDistance = dsq;
 
-                    if (dsq < minDistance && dsq <= sqrRadius)
+                    if (funcFilterEntity(entity))
                     {
-                        minDistance = dsq;
-
-                        agentData = agent;
-                    
-                        found = true;
+                        result.IsPrimaryValid = true;
+                        result.PrimaryEntity = agent.entity;
+                        result.PrimaryPosition = agent.position;
+                        continue;
                     }
-                } 
+
+                    result.IsSecondaryValid = true;
+                    result.SecondaryEntity = agent.entity;
+                    result.SecondaryPosition = agent.position;
+                }
             }
-
-            result = new QueryResult
-            {
-                Entity = agentData.entity,
-                Position = agentData.position,
-            };
-
-            return found;
         }
 
         public List<int> GetEntities(float2 center, Func<int, bool> funcFilterEntity, float radius)
@@ -153,6 +150,8 @@ namespace _FightCode.Battle.Logic
                 AgentData agent = agents[i];
                 
                 int entity = agent.entity;
+
+                if (!EntityManager.IsAlive(entity)) continue;
 
                 if (funcFilterEntity(entity))
                 {
@@ -189,6 +188,8 @@ namespace _FightCode.Battle.Logic
                 AgentData agent = agents[i];
 
                 int entity = agent.entity;
+
+                if (!EntityManager.IsAlive(entity)) continue;
 
                 if (funcFilterEntity(entity))
                 {

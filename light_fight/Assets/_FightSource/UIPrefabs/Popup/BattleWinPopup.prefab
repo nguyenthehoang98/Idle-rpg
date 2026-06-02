@@ -1724,7 +1724,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6610398954237588090}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: _FightCode.Battle.Popup.WinPopup, Games.Battle
         m_MethodName: Again
         m_Mode: 1
@@ -1745,9 +1745,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7053560384315835115}
-  - component: {fileID: 6610398954237588090}
+  - component: {fileID: -7907139350915543631}
   m_Layer: 5
-  m_Name: WinPopup
+  m_Name: BattleWinPopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1776,7 +1776,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &6610398954237588090
+--- !u!114 &-7907139350915543631
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1785,7 +1785,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7376087970274193337}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd4d3f84eb4c5b44e9711d74648eb5a2, type: 3}
+  m_Script: {fileID: 11500000, guid: b6416fa7a621a8745b4236a351a0e255, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   openFeedback: {fileID: 2611496127167822353}
@@ -1912,7 +1912,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6610398954237588090}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: _FightCode.Battle.Popup.WinPopup, Games.Battle
         m_MethodName: Home
         m_Mode: 1
