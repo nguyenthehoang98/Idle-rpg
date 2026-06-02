@@ -12,11 +12,21 @@ namespace _FightCode.Config
     {
         [SerializeField] private List<EquipmentUpgradeData> upgrades = new List<EquipmentUpgradeData>();
 
-        Dictionary<int, EquipmentUpgradeData> byIdLevel;
+        private Dictionary<int, EquipmentUpgradeData> byId;
         
         public override void OnMapValue()
         {
-            
+            byId = new Dictionary<int, EquipmentUpgradeData>();
+
+            foreach (var upgradeData in upgrades)
+            {
+                byId.Add(upgradeData.ID, upgradeData);
+            }
+        }
+
+        public bool TryGetUpgrade(int id, out EquipmentUpgradeData upgrade)
+        {
+            return byId.TryGetValue(id, out upgrade);
         }
     }
 
@@ -27,16 +37,26 @@ namespace _FightCode.Config
         public int StatID; // query từ StatConfig
         [SerializeField] private int StatValueA; 
         [SerializeField] private int StatValueB;
-        [SerializeField] private int CURID1;
+        public int CURID1;
         [SerializeField] private int CURValueA1;
-        [SerializeField] private int CURValueA2;
-        [SerializeField] private int CURID2;
         [SerializeField] private int CURValueB1;
+        public int CURID2;
+        [SerializeField] private int CURValueA2;
         [SerializeField] private int CURValueB2;
 
-        public int StatValue(int level)
+        public LinearFormula StatFormula
         {
-            return StatValueA + level * StatValueB;
+            get => new LinearFormula(StatValueA, StatValueB);
+        }
+
+        public LinearFormula CUR1Formula
+        {
+            get => new LinearFormula(CURValueA1, CURValueB1);
+        }
+
+        public LinearFormula CUR2Formula
+        {
+            get => new LinearFormula(CURValueA2, CURValueB2);
         }
     }
 }
