@@ -189,7 +189,7 @@ namespace _FightCode.Battle.Logic
             float radius = monsterData.radius;
             float speed = monsterData.moveSpeed;
             float stopDistance = monsterData.stopMoveDistance;
-            int monsterId = monsterData.monsterId;
+            int monsterId = monsterData.id;
             int entity = EntityManager.CreateEntity();
                 
             AgentData agentData = agent.CreateAgent(entity, position, radius, speed, setting.defaultAgentStopDistance + stopDistance);

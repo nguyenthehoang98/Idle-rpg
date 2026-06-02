@@ -1,0 +1,219 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e87e99e7363518046b312d6a202ca4e7, type: 3}
+  m_Name: PlayerConfig
+  m_EditorClassIdentifier: 
+  fileUrl: 
+  enable: 1
+  infos:
+  - level: 0
+    expRequire: 0
+  - level: 1
+    expRequire: 100
+  - level: 2
+    expRequire: 150
+  - level: 3
+    expRequire: 200
+  - level: 4
+    expRequire: 275
+  - level: 5
+    expRequire: 340
+  - level: 6
+    expRequire: 405
+  - level: 7
+    expRequire: 470
+  - level: 8
+    expRequire: 535
+  - level: 9
+    expRequire: 600
+  - level: 10
+    expRequire: 665
+  - level: 11
+    expRequire: 730
+  - level: 12
+    expRequire: 795
+  - level: 13
+    expRequire: 860
+  - level: 14
+    expRequire: 925
+  - level: 15
+    expRequire: 990
+  - level: 16
+    expRequire: 1055
+  - level: 17
+    expRequire: 1120
+  - level: 18
+    expRequire: 1185
+  - level: 19
+    expRequire: 1250
+  - level: 20
+    expRequire: 1315
+  - level: 21
+    expRequire: 1380
+  - level: 22
+    expRequire: 1445
+  - level: 23
+    expRequire: 1510
+  - level: 24
+    expRequire: 1575
+  - level: 25
+    expRequire: 1640
+  - level: 26
+    expRequire: 1705
+  - level: 27
+    expRequire: 1770
+  - level: 28
+    expRequire: 1835
+  - level: 29
+    expRequire: 1900
+  - level: 30
+    expRequire: 1965
+  - level: 31
+    expRequire: 2030
+  - level: 32
+    expRequire: 2095
+  - level: 33
+    expRequire: 2160
+  - level: 34
+    expRequire: 2225
+  - level: 35
+    expRequire: 2290
+  - level: 36
+    expRequire: 2355
+  - level: 37
+    expRequire: 2420
+  - level: 38
+    expRequire: 2485
+  - level: 39
+    expRequire: 2550
+  - level: 40
+    expRequire: 2615
+  - level: 41
+    expRequire: 2680
+  - level: 42
+    expRequire: 2745
+  - level: 43
+    expRequire: 2810
+  - level: 44
+    expRequire: 2875
+  - level: 45
+    expRequire: 2940
+  - level: 46
+    expRequire: 3005
+  - level: 47
+    expRequire: 3070
+  - level: 48
+    expRequire: 3135
+  - level: 49
+    expRequire: 3200
+  - level: 50
+    expRequire: 3265
+  - level: 51
+    expRequire: 3330
+  - level: 52
+    expRequire: 3395
+  - level: 53
+    expRequire: 3460
+  - level: 54
+    expRequire: 3525
+  - level: 55
+    expRequire: 3590
+  - level: 56
+    expRequire: 3655
+  - level: 57
+    expRequire: 3720
+  - level: 58
+    expRequire: 3785
+  - level: 59
+    expRequire: 3850
+  - level: 60
+    expRequire: 3915
+  - level: 61
+    expRequire: 3980
+  - level: 62
+    expRequire: 4045
+  - level: 63
+    expRequire: 4110
+  - level: 64
+    expRequire: 4175
+  - level: 65
+    expRequire: 4240
+  - level: 66
+    expRequire: 4305
+  - level: 67
+    expRequire: 4370
+  - level: 68
+    expRequire: 4435
+  - level: 69
+    expRequire: 4500
+  - level: 70
+    expRequire: 4565
+  - level: 71
+    expRequire: 4630
+  - level: 72
+    expRequire: 4695
+  - level: 73
+    expRequire: 4760
+  - level: 74
+    expRequire: 4825
+  - level: 75
+    expRequire: 4890
+  - level: 76
+    expRequire: 4955
+  - level: 77
+    expRequire: 5020
+  - level: 78
+    expRequire: 5085
+  - level: 79
+    expRequire: 5150
+  - level: 80
+    expRequire: 5215
+  - level: 81
+    expRequire: 5280
+  - level: 82
+    expRequire: 5345
+  - level: 83
+    expRequire: 5410
+  - level: 84
+    expRequire: 5475
+  - level: 85
+    expRequire: 5540
+  - level: 86
+    expRequire: 5605
+  - level: 87
+    expRequire: 5670
+  - level: 88
+    expRequire: 5735
+  - level: 89
+    expRequire: 5800
+  - level: 90
+    expRequire: 5865
+  - level: 91
+    expRequire: 5930
+  - level: 92
+    expRequire: 5995
+  - level: 93
+    expRequire: 6060
+  - level: 94
+    expRequire: 6125
+  - level: 95
+    expRequire: 6190
+  - level: 96
+    expRequire: 6255
+  - level: 97
+    expRequire: 6320
+  - level: 98
+    expRequire: 6385
+  - level: 99
+    expRequire: 6450
+  - level: 100
+    expRequire: 6515

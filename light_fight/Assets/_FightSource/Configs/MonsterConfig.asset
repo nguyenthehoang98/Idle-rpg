@@ -15,11 +15,13 @@ MonoBehaviour:
   fileUrl: 
   enable: 1
   monsters:
-  - monsterId: 2001
-    monsterName: Baby Alien
+  - id: 2001
+    name: Baby Alien
+    description: Chaser
     path: 2001 Monster
     skillId: 3001
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 3.8
     stopMoveDistance: 1.2
@@ -32,11 +34,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 2
-  - monsterId: 2002
-    monsterName: Chaser
+  - id: 2002
+    name: Chaser
+    description: Swarm
     path: 2002 Monster
     skillId: 3002
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 4.5
     stopMoveDistance: 1
@@ -49,11 +53,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 1
-  - monsterId: 2003
-    monsterName: Spitter
+  - id: 2003
+    name: Spitter
+    description: Ranged
     path: 2003 Monster
     skillId: 3003
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 3.2
     stopMoveDistance: 5
@@ -66,11 +72,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 3
-  - monsterId: 2004
-    monsterName: Charger
+  - id: 2004
+    name: Charger
+    description: Charger
     path: 2004 Monster
     skillId: 3004
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 5.5
     stopMoveDistance: 1
@@ -83,11 +91,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 2
-  - monsterId: 2005
-    monsterName: Pursuer
+  - id: 2005
+    name: Pursuer
+    description: Runner
     path: 2005 Monster
     skillId: 3005
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 6
     stopMoveDistance: 1.2
@@ -100,11 +110,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 5
-  - monsterId: 2006
-    monsterName: Bruiser
+  - id: 2006
+    name: Bruiser
+    description: Tank
     path: 2006 Monster
     skillId: 3006
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 3
     stopMoveDistance: 1.5
@@ -117,11 +129,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 8
-  - monsterId: 2007
-    monsterName: Buffer
+  - id: 2007
+    name: Buffer
+    description: Buffer
     path: 2007 Monster
     skillId: 3007
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 2.5
     stopMoveDistance: 5
@@ -134,11 +148,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 6
-  - monsterId: 2008
-    monsterName: Fly
+  - id: 2008
+    name: Fly
+    description: Flyer
     path: 2008 Monster
     skillId: 3008
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 4.5
     stopMoveDistance: 4
@@ -151,11 +167,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 4
-  - monsterId: 2009
-    monsterName: Healer
+  - id: 2009
+    name: Healer
+    description: Healer
     path: 2009 Monster
     skillId: 3009
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 4
     stopMoveDistance: 3
@@ -168,11 +186,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 4
-  - monsterId: 2010
-    monsterName: Looter
+  - id: 2010
+    name: Looter
+    description: Objective
     path: 2010 Monster
     skillId: 3010
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 4.5
     stopMoveDistance: 3
@@ -185,11 +205,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 3
-  - monsterId: 2011
-    monsterName: Helmet Alien
+  - id: 2011
+    name: Helmet Alien
+    description: Armored
     path: 2011 Monster
     skillId: 3011
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 3.5
     stopMoveDistance: 1.2
@@ -202,11 +224,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 4
-  - monsterId: 2012
-    monsterName: Fin Alien
+  - id: 2012
+    name: Fin Alien
+    description: FastMelee
     path: 2012 Monster
     skillId: 3012
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 5.5
     stopMoveDistance: 1
@@ -219,11 +243,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 5
-  - monsterId: 2013
-    monsterName: Spawner
+  - id: 2013
+    name: Spawner
+    description: Spawner
     path: 2013 Monster
     skillId: 3013
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 2.6
     stopMoveDistance: 4.5
@@ -236,11 +262,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 4
-  - monsterId: 2014
-    monsterName: Junkie
+  - id: 2014
+    name: Junkie
+    description: Ranged
     path: 2014 Monster
     skillId: 3014
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 4
     stopMoveDistance: 4
@@ -253,11 +281,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 3
-  - monsterId: 2015
-    monsterName: Horned Bruiser
+  - id: 2015
+    name: Horned Bruiser
+    description: Tank
     path: 2015 Monster
     skillId: 3015
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 2
     stopMoveDistance: 1.5
@@ -270,11 +300,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 6
-  - monsterId: 2016
-    monsterName: Horned Charger
+  - id: 2016
+    name: Horned Charger
+    description: Charger
     path: 2016 Monster
     skillId: 3016
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 5
     stopMoveDistance: 1.2
@@ -287,11 +319,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 4
-  - monsterId: 2017
-    monsterName: Slasher Egg
+  - id: 2017
+    name: Slasher Egg
+    description: Objective
     path: 2017 Monster
     skillId: 3017
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 0
     stopMoveDistance: 0
@@ -304,11 +338,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 2
-  - monsterId: 2018
-    monsterName: Slasher
+  - id: 2018
+    name: Slasher
+    description: BossMelee
     path: 2018 Monster
     skillId: 3018
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 3.5
     stopMoveDistance: 2
@@ -321,11 +357,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 5
-  - monsterId: 2019
-    monsterName: Tentacle
+  - id: 2019
+    name: Tentacle
+    description: Summoner
     path: 2019 Monster
     skillId: 3019
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 2.4
     stopMoveDistance: 4
@@ -338,11 +376,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 14
-  - monsterId: 2020
-    monsterName: Rhino
+  - id: 2020
+    name: Rhino
+    description: EliteCharger
     path: 2020 Monster
     skillId: 3020
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 6.5
     stopMoveDistance: 1
@@ -355,11 +395,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0.05
     power: 51
-  - monsterId: 2021
-    monsterName: Butcher
+  - id: 2021
+    name: Butcher
+    description: Elite
     path: 2021 Monster
     skillId: 3021
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 3.8
     stopMoveDistance: 2
@@ -372,11 +414,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0.05
     power: 44
-  - monsterId: 2022
-    monsterName: Monk
+  - id: 2022
+    name: Monk
+    description: EliteSummoner
     path: 2022 Monster
     skillId: 3022
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 5
     stopMoveDistance: 3
@@ -389,11 +433,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0.05
     power: 34
-  - monsterId: 2023
-    monsterName: Croc
+  - id: 2023
+    name: Croc
+    description: EliteCharger
     path: 2023 Monster
     skillId: 3023
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 6
     stopMoveDistance: 1.2
@@ -406,11 +452,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0.05
     power: 36
-  - monsterId: 2024
-    monsterName: Colossus
+  - id: 2024
+    name: Colossus
+    description: TankBoss
     path: 2024 Monster
     skillId: 3024
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 1.8
     stopMoveDistance: 2.5
@@ -423,11 +471,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0.05
     power: 42
-  - monsterId: 2025
-    monsterName: Mantis
+  - id: 2025
+    name: Mantis
+    description: EliteMelee
     path: 2025 Monster
     skillId: 3025
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 4
     stopMoveDistance: 1.5
@@ -440,11 +490,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0.05
     power: 45
-  - monsterId: 2026
-    monsterName: Mother
+  - id: 2026
+    name: Mother
+    description: SummonBoss
     path: 2026 Monster
     skillId: 3026
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 2.2
     stopMoveDistance: 4
@@ -457,11 +509,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0.05
     power: 51
-  - monsterId: 2027
-    monsterName: Gargoyle
+  - id: 2027
+    name: Gargoyle
+    description: EliteRanged
     path: 2027 Monster
     skillId: 3027
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 4
     stopMoveDistance: 6.5
@@ -474,11 +528,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0.05
     power: 32
-  - monsterId: 2028
-    monsterName: Predator
+  - id: 2028
+    name: Predator
+    description: FinalBoss
     path: 2028 Monster
     skillId: 3028
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 4.5
     stopMoveDistance: 3
@@ -491,11 +547,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0.1
     power: 98
-  - monsterId: 2029
-    monsterName: Anemone
+  - id: 2029
+    name: Anemone
+    description: Turret
     path: 2029 Monster
     skillId: 3029
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 2
     stopMoveDistance: 5
@@ -508,11 +566,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 3
-  - monsterId: 2030
-    monsterName: Dragonfish
+  - id: 2030
+    name: Dragonfish
+    description: HeavyRanged
     path: 2030 Monster
     skillId: 3030
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 3.5
     stopMoveDistance: 6
@@ -525,11 +585,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 17
-  - monsterId: 2031
-    monsterName: Walrus
+  - id: 2031
+    name: Walrus
+    description: Charger
     path: 2031 Monster
     skillId: 3031
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 3
     stopMoveDistance: 1.5
@@ -542,11 +604,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 9
-  - monsterId: 2032
-    monsterName: Goblin Shark
+  - id: 2032
+    name: Goblin Shark
+    description: Ambusher
     path: 2032 Monster
     skillId: 3032
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 4
     stopMoveDistance: 1.5
@@ -559,11 +623,13 @@ MonoBehaviour:
     damageMultiplier: 1
     armorPenPercent: 0
     power: 4
-  - monsterId: 2033
-    monsterName: Stonefish
+  - id: 2033
+    name: Stonefish
+    description: Buffer
     path: 2033 Monster
     skillId: 3033
     skillLevel: 1
+    skillCooldown: 1
     radius: 1
     moveSpeed: 2
     stopMoveDistance: 5

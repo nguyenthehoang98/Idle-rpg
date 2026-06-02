@@ -46,7 +46,7 @@ namespace _FightCode.Utils
         
         private static StatComplex GetComplex(MonsterData monsterData)
         {
-            if (MonsterStatsComplex.TryGetValue(monsterData.monsterId, out StatComplex statComplex))
+            if (MonsterStatsComplex.TryGetValue(monsterData.id, out StatComplex statComplex))
             {
                 return statComplex;
             }
@@ -62,7 +62,7 @@ namespace _FightCode.Utils
                 statComplex.AddBase(StatType.DamageMultiplier, monsterData.damageMultiplier);
                 statComplex.AddBase(StatType.ArmorPenPercent, monsterData.armorPenPercent);
 
-                MonsterStatsComplex.Add(monsterData.monsterId, statComplex);
+                MonsterStatsComplex.Add(monsterData.id, statComplex);
                 return statComplex;
             }
         }

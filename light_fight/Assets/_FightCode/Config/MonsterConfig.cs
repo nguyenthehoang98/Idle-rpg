@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using _KITSystem.Formula;
 using ExcelExtension;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace _FightCode.Config
 {
@@ -25,7 +21,7 @@ namespace _FightCode.Config
 
             foreach (var m in monsters)
             {
-                cacheMonsterData.Add(m.monsterId, m);
+                cacheMonsterData.Add(m.id, m);
             }
         }
         
@@ -62,11 +58,13 @@ namespace _FightCode.Config
     [Serializable]
     public struct MonsterData
     {
-        public int monsterId;
-        public string monsterName;
+        public int id;
+        public string name;
+        public string description;
         public string path;
         public int skillId;
         public int skillLevel;
+        public float skillCooldown;
         public float radius;
         public float moveSpeed;
         public float stopMoveDistance;
@@ -86,6 +84,6 @@ namespace _FightCode.Config
             set => power = value;
         }
 
-        public bool IsValid => monsterId > 0;
+        public bool IsValid => id > 0;
     }
 }

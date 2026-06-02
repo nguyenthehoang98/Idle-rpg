@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using ExcelExtension;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace _FightCode.Config
 {
