@@ -37,7 +37,7 @@ namespace _FightCode.Config
         public int ID;
         public float HealthScale;
         public float AttackScale;
-        public float CooldownIntervalScale;
+        public float CooldownScale;
         public float SpeedScale;
     }
 }

@@ -90,11 +90,11 @@ namespace _FightCode.Utils
             }
         }*/
         
-        private static int OutputDamage(StatComplex source, StatComplex target, SkillData skillData, int skillLevel)
+        /*private static int OutputDamage(StatComplex source, StatComplex target, SkillData skillData, int skillLevel)
         {
             StatSnapshot s = source.CreateSnapshot();
             StatSnapshot t = target.CreateSnapshot();
             return (int) s.DamageDealtTo(t, skillData.ScaleDamage(skillLevel), skillData.FlatDamage(skillLevel));
-        }
+        }*/
     }
 }

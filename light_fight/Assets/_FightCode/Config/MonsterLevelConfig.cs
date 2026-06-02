@@ -37,6 +37,6 @@ namespace _FightCode.Config
         public int Level;
         public int Health;
         public int Attack;
-        public int CooldownInterval;
+        public int Cooldown;
     }
 }

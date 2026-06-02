@@ -27,20 +27,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90002
     NameKey: Chaser
     PrefabName: Chaser
@@ -53,20 +47,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90003
     NameKey: Spitter
     PrefabName: Spitter
@@ -79,20 +67,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90004
     NameKey: Charger
     PrefabName: Charger
@@ -105,20 +87,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90005
     NameKey: Pursuer
     PrefabName: Pursuer
@@ -131,20 +107,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90006
     NameKey: Bruiser
     PrefabName: Bruiser
@@ -157,20 +127,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90007
     NameKey: Buffer
     PrefabName: Buffer
@@ -183,20 +147,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90008
     NameKey: Fly
     PrefabName: Fly
@@ -209,20 +167,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90009
     NameKey: Healer
     PrefabName: Healer
@@ -235,20 +187,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90010
     NameKey: Looter
     PrefabName: Looter
@@ -261,20 +207,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90011
     NameKey: Helmet Alien
     PrefabName: Helmet Alien
@@ -287,20 +227,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90012
     NameKey: Fin Alien
     PrefabName: Fin Alien
@@ -313,20 +247,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90013
     NameKey: Spawner
     PrefabName: Spawner
@@ -339,20 +267,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90014
     NameKey: Junkie
     PrefabName: Junkie
@@ -365,20 +287,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90015
     NameKey: Horned Bruiser
     PrefabName: Horned Bruiser
@@ -391,20 +307,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90016
     NameKey: Horned Charger
     PrefabName: Horned Charger
@@ -417,20 +327,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90017
     NameKey: Slasher Egg
     PrefabName: Slasher Egg
@@ -443,20 +347,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90018
     NameKey: Slasher
     PrefabName: Slasher
@@ -469,20 +367,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90019
     NameKey: Tentacle
     PrefabName: Tentacle
@@ -495,20 +387,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90020
     NameKey: Rhino
     PrefabName: Rhino
@@ -521,20 +407,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90021
     NameKey: Butcher
     PrefabName: Butcher
@@ -547,20 +427,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90022
     NameKey: Monk
     PrefabName: Monk
@@ -573,20 +447,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90023
     NameKey: Croc
     PrefabName: Croc
@@ -599,20 +467,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90024
     NameKey: Colossus
     PrefabName: Colossus
@@ -625,20 +487,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90025
     NameKey: Mantis
     PrefabName: Mantis
@@ -651,20 +507,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90026
     NameKey: Mother
     PrefabName: Mother
@@ -677,20 +527,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90027
     NameKey: Gargoyle
     PrefabName: Gargoyle
@@ -703,20 +547,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90028
     NameKey: Predator
     PrefabName: Predator
@@ -729,20 +567,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90029
     NameKey: Anemone
     PrefabName: Anemone
@@ -755,20 +587,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90030
     NameKey: Dragonfish
     PrefabName: Dragonfish
@@ -781,20 +607,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90031
     NameKey: Walrus
     PrefabName: Walrus
@@ -807,20 +627,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90032
     NameKey: Goblin Shark
     PrefabName: Goblin Shark
@@ -833,20 +647,14 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 
   - ID: 90033
     NameKey: Stonefish
     PrefabName: Stonefish
@@ -859,17 +667,11 @@ MonoBehaviour:
     PassiveSkill: 0
     Scale: 1
     ColliderRadius: 1
-    ColliderOffset:
-    - 0
-    - 0
-    HealthBarOffset:
-    - 0
-    - 0
-    FloatingTextOffset:
-    - 0
-    - 0
+    ColliderOffset: []
+    HealthBarOffset: []
+    FloatingTextOffset: []
     KnockbackResistance: 0
     KnockbackResistanceCD: 0
     StunResistance: 0
     StunResistanceCD: 0
-    DeathSfx: null
+    DeathSfx: 

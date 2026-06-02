@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using DG.DemiEditor.DeGUINodeSystem;
 using ExcelExtension;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _FightCode.Config
 {
@@ -12,35 +14,90 @@ namespace _FightCode.Config
     {
         [SerializeField] private List<SkillData> skills = new List<SkillData>();
 
-        private Dictionary<int, SkillData> cacheSkillData;
-
+        private Dictionary<int, SkillData> byId;
+    
         public override void OnMapValue()
         {
-            cacheSkillData = new Dictionary<int, SkillData>();
-            foreach (var m in skills)
+            byId = new Dictionary<int, SkillData>();
+
+            foreach (var statData in skills)
             {
-                cacheSkillData.Add(m.skillId, m);
+                byId.Add(statData.ID, statData);
             }
         }
 
-        public bool Find(int skillId, out SkillData skillData)
+        public bool TryGetSkillById(int skillID, out SkillData skillData)
         {
-            return cacheSkillData.TryGetValue(skillId, out skillData);
+            return byId.TryGetValue(skillID, out skillData);
         }
     }
 
     [Serializable]
     public struct SkillData
     {
-        public int skillId;
-        public string skillName;
-        public string path;
-        [SerializeField] private float baseFlatDamage;
-        [SerializeField] private float flatDamageBonusLevel;
-        [SerializeField] private float baseScaleDamage;
-        [SerializeField] private float scaleDamageBonusLevel;
+        public int ID;
+        public string NameKey;
+        public FindTargetType FindTarget;
+        public float LifeTime;
+        public SkillTriggerType Trigger;
+        public float SkillTimerTrigger;
+        public int SkillEventIdTrigger;
+        public DamageTickerType DamageTicker;
+        public int IsHealthPercent;
+        public int MaximumCollision;
+        public float CollisionResetInterval;
+        public string Prefab;
+        public float[] OffsetStartPosition;
+        public ShapeType Shape;
+        public float ShapeTimerTrigger;
+        public float[] OffsetRelativePosition;
+        public float[] SquareSize;
+        public float CircleRadius;
+        public float CapsuleHeight;
+        public float CapsuleRadius;
+        public TrajectoryType Trajectory;
+        public float BulletInitialSpeed;
+        public float BulletAcceleration;
+        public string BoomerangCastingPhase;
+        public string BoomerangReturningPhase;
+        public string BlendPhase;
+        public string ParabolicHeightPhase;
+        public string ParabolicDistancePhase;
+        public int SkillIDCastingWhenFinished;
+    }
 
-        public float FlatDamage(int level) => baseFlatDamage + (level - 1) * flatDamageBonusLevel;
-        public float ScaleDamage(int level) => baseScaleDamage + (level - 1) * scaleDamageBonusLevel;
+    public enum TrajectoryType
+    {
+        Stationary,
+        Bullet,
+        Boomerang,
+        Blend,
+        Parabolic
+    }
+
+    public enum ShapeType
+    {
+        Circle, Square, Capsule
+    }
+
+    public enum DamageTickerType
+    {
+        Instant, DamageOverTime
+    }
+
+    public enum SkillTriggerType
+    {
+        Timeline, EventId,
+    }
+
+    public enum FindTargetType
+    {
+        Random,
+        Nearest,
+        Farthest,
+        HealthLowest,
+        HealthHighest,
+        DamageLowest,
+        DamageHighest,
     }
 }
