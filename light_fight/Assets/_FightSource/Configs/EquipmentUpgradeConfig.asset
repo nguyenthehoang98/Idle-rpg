@@ -19,239 +19,599 @@ MonoBehaviour:
     StatID: 1
     StatValueA: 25
     StatValueB: 5
+    CURID1: 101
+    CURValueA1: 100
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 50
+    CURValueB2: 1
   - ID: 61002
     StatID: 1
     StatValueA: 37
     StatValueB: 7
+    CURID1: 101
+    CURValueA1: 100
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 50
+    CURValueB2: 1
   - ID: 61003
     StatID: 1
     StatValueA: 49
     StatValueB: 9
+    CURID1: 101
+    CURValueA1: 100
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 50
+    CURValueB2: 1
   - ID: 61004
     StatID: 1
     StatValueA: 73
     StatValueB: 13
+    CURID1: 101
+    CURValueA1: 200
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 75
+    CURValueB2: 1
   - ID: 61005
     StatID: 1
     StatValueA: 97
     StatValueB: 17
+    CURID1: 101
+    CURValueA1: 200
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 75
+    CURValueB2: 1
   - ID: 61006
     StatID: 1
     StatValueA: 121
     StatValueB: 21
+    CURID1: 101
+    CURValueA1: 200
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 75
+    CURValueB2: 1
   - ID: 61007
     StatID: 1
     StatValueA: 169
     StatValueB: 29
+    CURID1: 101
+    CURValueA1: 400
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 100
+    CURValueB2: 1
   - ID: 61008
     StatID: 1
     StatValueA: 217
     StatValueB: 37
+    CURID1: 101
+    CURValueA1: 400
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 100
+    CURValueB2: 1
   - ID: 61009
     StatID: 1
     StatValueA: 265
     StatValueB: 45
+    CURID1: 101
+    CURValueA1: 400
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 100
+    CURValueB2: 1
   - ID: 61010
     StatID: 1
     StatValueA: 361
     StatValueB: 61
+    CURID1: 101
+    CURValueA1: 600
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 125
+    CURValueB2: 1
   - ID: 61011
     StatID: 1
     StatValueA: 457
     StatValueB: 77
+    CURID1: 101
+    CURValueA1: 600
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 125
+    CURValueB2: 1
   - ID: 61012
     StatID: 1
     StatValueA: 553
     StatValueB: 93
+    CURID1: 101
+    CURValueA1: 600
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 125
+    CURValueB2: 1
   - ID: 61013
     StatID: 1
     StatValueA: 745
     StatValueB: 125
+    CURID1: 101
+    CURValueA1: 800
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 150
+    CURValueB2: 1
   - ID: 61014
     StatID: 1
     StatValueA: 937
     StatValueB: 157
+    CURID1: 101
+    CURValueA1: 800
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 150
+    CURValueB2: 1
   - ID: 61015
     StatID: 1
     StatValueA: 1129
     StatValueB: 189
+    CURID1: 101
+    CURValueA1: 800
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 150
+    CURValueB2: 1
   - ID: 62001
     StatID: 2
     StatValueA: 120
     StatValueB: 20
+    CURID1: 101
+    CURValueA1: 100
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 50
+    CURValueB2: 1
   - ID: 62002
     StatID: 2
     StatValueA: 164
     StatValueB: 24
+    CURID1: 101
+    CURValueA1: 100
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 50
+    CURValueB2: 1
   - ID: 62003
     StatID: 2
     StatValueA: 208
     StatValueB: 28
+    CURID1: 101
+    CURValueA1: 100
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 50
+    CURValueB2: 1
   - ID: 62004
     StatID: 2
     StatValueA: 296
     StatValueB: 36
+    CURID1: 101
+    CURValueA1: 200
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 75
+    CURValueB2: 1
   - ID: 62005
     StatID: 2
     StatValueA: 384
     StatValueB: 44
+    CURID1: 101
+    CURValueA1: 200
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 75
+    CURValueB2: 1
   - ID: 62006
     StatID: 2
     StatValueA: 472
     StatValueB: 52
+    CURID1: 101
+    CURValueA1: 200
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 75
+    CURValueB2: 1
   - ID: 62007
     StatID: 2
     StatValueA: 648
     StatValueB: 68
+    CURID1: 101
+    CURValueA1: 400
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 100
+    CURValueB2: 1
   - ID: 62008
     StatID: 2
     StatValueA: 824
     StatValueB: 84
+    CURID1: 101
+    CURValueA1: 400
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 100
+    CURValueB2: 1
   - ID: 62009
     StatID: 2
     StatValueA: 1000
     StatValueB: 100
+    CURID1: 101
+    CURValueA1: 400
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 100
+    CURValueB2: 1
   - ID: 62010
     StatID: 2
     StatValueA: 1352
     StatValueB: 132
+    CURID1: 101
+    CURValueA1: 600
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 125
+    CURValueB2: 1
   - ID: 62011
     StatID: 2
     StatValueA: 1704
     StatValueB: 164
+    CURID1: 101
+    CURValueA1: 600
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 125
+    CURValueB2: 1
   - ID: 62012
     StatID: 2
     StatValueA: 2056
     StatValueB: 196
+    CURID1: 101
+    CURValueA1: 600
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 125
+    CURValueB2: 1
   - ID: 62013
     StatID: 2
     StatValueA: 2760
     StatValueB: 260
+    CURID1: 101
+    CURValueA1: 800
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 150
+    CURValueB2: 1
   - ID: 62014
     StatID: 2
     StatValueA: 3464
     StatValueB: 324
+    CURID1: 101
+    CURValueA1: 800
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 150
+    CURValueB2: 1
   - ID: 62015
     StatID: 2
     StatValueA: 4168
     StatValueB: 388
+    CURID1: 101
+    CURValueA1: 800
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 150
+    CURValueB2: 1
   - ID: 63001
     StatID: 1
     StatValueA: 25
     StatValueB: 5
+    CURID1: 101
+    CURValueA1: 100
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 50
+    CURValueB2: 1
   - ID: 63002
     StatID: 1
     StatValueA: 36
     StatValueB: 7
+    CURID1: 101
+    CURValueA1: 100
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 50
+    CURValueB2: 1
   - ID: 63003
     StatID: 1
     StatValueA: 47
     StatValueB: 9
+    CURID1: 101
+    CURValueA1: 100
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 50
+    CURValueB2: 1
   - ID: 63004
     StatID: 1
     StatValueA: 69
     StatValueB: 13
+    CURID1: 101
+    CURValueA1: 200
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 75
+    CURValueB2: 1
   - ID: 63005
     StatID: 1
     StatValueA: 91
     StatValueB: 17
+    CURID1: 101
+    CURValueA1: 200
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 75
+    CURValueB2: 1
   - ID: 63006
     StatID: 1
     StatValueA: 113
     StatValueB: 21
+    CURID1: 101
+    CURValueA1: 200
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 75
+    CURValueB2: 1
   - ID: 63007
     StatID: 1
     StatValueA: 157
     StatValueB: 29
+    CURID1: 101
+    CURValueA1: 400
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 100
+    CURValueB2: 1
   - ID: 63008
     StatID: 1
     StatValueA: 201
     StatValueB: 37
+    CURID1: 101
+    CURValueA1: 400
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 100
+    CURValueB2: 1
   - ID: 63009
     StatID: 1
     StatValueA: 245
     StatValueB: 45
+    CURID1: 101
+    CURValueA1: 400
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 100
+    CURValueB2: 1
   - ID: 63010
     StatID: 1
     StatValueA: 333
     StatValueB: 61
+    CURID1: 101
+    CURValueA1: 600
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 125
+    CURValueB2: 1
   - ID: 63011
     StatID: 1
     StatValueA: 421
     StatValueB: 77
+    CURID1: 101
+    CURValueA1: 600
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 125
+    CURValueB2: 1
   - ID: 63012
     StatID: 1
     StatValueA: 509
     StatValueB: 93
+    CURID1: 101
+    CURValueA1: 600
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 125
+    CURValueB2: 1
   - ID: 63013
     StatID: 1
     StatValueA: 685
     StatValueB: 125
+    CURID1: 101
+    CURValueA1: 800
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 150
+    CURValueB2: 1
   - ID: 63014
     StatID: 1
     StatValueA: 861
     StatValueB: 157
+    CURID1: 101
+    CURValueA1: 800
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 150
+    CURValueB2: 1
   - ID: 63015
     StatID: 1
     StatValueA: 1037
     StatValueB: 189
+    CURID1: 101
+    CURValueA1: 800
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 150
+    CURValueB2: 1
   - ID: 64001
     StatID: 2
     StatValueA: 120
     StatValueB: 20
+    CURID1: 101
+    CURValueA1: 100
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 50
+    CURValueB2: 1
   - ID: 64002
     StatID: 2
     StatValueA: 160
     StatValueB: 24
+    CURID1: 101
+    CURValueA1: 100
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 50
+    CURValueB2: 1
   - ID: 64003
     StatID: 2
     StatValueA: 200
     StatValueB: 28
+    CURID1: 101
+    CURValueA1: 100
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 50
+    CURValueB2: 1
   - ID: 64004
     StatID: 2
     StatValueA: 280
     StatValueB: 36
+    CURID1: 101
+    CURValueA1: 200
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 75
+    CURValueB2: 1
   - ID: 64005
     StatID: 2
     StatValueA: 360
     StatValueB: 44
+    CURID1: 101
+    CURValueA1: 200
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 75
+    CURValueB2: 1
   - ID: 64006
     StatID: 2
     StatValueA: 440
     StatValueB: 52
+    CURID1: 101
+    CURValueA1: 200
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 75
+    CURValueB2: 1
   - ID: 64007
     StatID: 2
     StatValueA: 600
     StatValueB: 68
+    CURID1: 101
+    CURValueA1: 400
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 100
+    CURValueB2: 1
   - ID: 64008
     StatID: 2
     StatValueA: 760
     StatValueB: 84
+    CURID1: 101
+    CURValueA1: 400
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 100
+    CURValueB2: 1
   - ID: 64009
     StatID: 2
     StatValueA: 920
     StatValueB: 100
+    CURID1: 101
+    CURValueA1: 400
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 100
+    CURValueB2: 1
   - ID: 64010
     StatID: 2
     StatValueA: 1080
     StatValueB: 132
+    CURID1: 101
+    CURValueA1: 600
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 125
+    CURValueB2: 1
   - ID: 64011
     StatID: 2
     StatValueA: 1240
     StatValueB: 164
+    CURID1: 101
+    CURValueA1: 600
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 125
+    CURValueB2: 1
   - ID: 64012
     StatID: 2
     StatValueA: 1400
     StatValueB: 196
+    CURID1: 101
+    CURValueA1: 600
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 125
+    CURValueB2: 1
   - ID: 64013
     StatID: 2
     StatValueA: 2104
     StatValueB: 260
+    CURID1: 101
+    CURValueA1: 800
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 150
+    CURValueB2: 1
   - ID: 64014
     StatID: 2
     StatValueA: 2808
     StatValueB: 324
+    CURID1: 101
+    CURValueA1: 800
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 150
+    CURValueB2: 1
   - ID: 64015
     StatID: 2
     StatValueA: 3512
     StatValueB: 388
+    CURID1: 101
+    CURValueA1: 800
+    CURValueA2: 1
+    CURID2: 109
+    CURValueB1: 150
+    CURValueB2: 1
