@@ -129,14 +129,14 @@ namespace _KITSystem.SkillSystem.Config
     public class DamageTicket
     {
         [Indent] public bool isHpPercent = false;
-        [Indent] public DamageTickerType damageTickerType = DamageTickerType.None;
-        [HideIf("damageTickerType", DamageTickerType.None), Indent]
+        [Indent] public DamageTickerType damageTickerType = DamageTickerType.Instant;
+        [HideIf("damageTickerType", DamageTickerType.Instant), Indent]
         public float damageTickerIntervalInSeconds = 1f;
     }
     
     public enum DamageTickerType
     {
-        None,
+        Instant,
         CasterInterval,
         TargetInterval
     }

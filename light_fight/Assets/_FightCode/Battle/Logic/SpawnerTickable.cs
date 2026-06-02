@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using _FightCode.Battle.View;
 using _FightCode.Config;
 using _FightCode.Utils;
 using _KITSystem.ExcelConfig;
+using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using _KITSystem.Utils;
 using Unity.Mathematics;
@@ -20,6 +23,7 @@ namespace _FightCode.Battle.Logic
         
         public event Action OnWaveCompleted;
 
+        private HashSet<string> monsterPaths = new HashSet<string>();
         private IReadOnlyDictionary<WaveIdData, LevelBatch> container;
         private Batch[] batches;
         private int totalWave;
@@ -30,9 +34,9 @@ namespace _FightCode.Battle.Logic
         private bool paused = true;
         private bool waiting;
         
-        public void Initialize(int levelId, Action<RequestCreateMonster> ocmCalllback)
+        public void Initialize(int levelId, Action<RequestCreateMonster> onRequestCreate)
         {
-            onCreateMonster = ocmCalllback;
+            onCreateMonster = onRequestCreate;
             monsterConfig = KitConfigManager.Get<MonsterConfig>();
             skillConfig = KitConfigManager.Get<SkillConfig>();
 
@@ -52,16 +56,18 @@ namespace _FightCode.Battle.Logic
             }
         }
 
-        public bool WaveSpawn()
+        public async Task<bool> WaveSpawn()
         {
             if (currentWave > totalWave) return false;
 
-            if (!LoadWave(currentWave)) return false;
+            if (!(await LoadWave(currentWave))) return false;
+           
             paused = false;
+            
             return true;
         }
 
-        private bool LoadWave(int waveIndex)
+        private async Task<bool> LoadWave(int waveIndex)
         {
             List<LevelBatch> values = new List<LevelBatch>();
             foreach (var pair in container)
@@ -79,7 +85,22 @@ namespace _FightCode.Battle.Logic
             }
 
             currentBatch = 0;
+            
             batches = CreateBatches(values, monsterConfig, skillConfig);
+
+            foreach (var batch in batches)
+            {
+                foreach (var m in batch.monsters)
+                {
+                    if (monsterConfig.Find(m.Key, out MonsterData monsterData))
+                    {
+                        GameObject go = await KitLoaded.LoadAsync<GameObject>(monsterData.path, true);
+                        MonsterAnimation ma = go.GetComponent<MonsterAnimation>();
+                        ma.Setup();
+                        KitPool.RegisterPool(go, true, 1);
+                    }
+                }
+            }
 
             if (batches.Length == 0)
             {

@@ -33,9 +33,6 @@ namespace _FightCode.Battle.View
         private Coroutine hitCoroutine;
         private MMF_Player currentBeHit;
 
-        private bool isDead = false;
-        private bool initialized = false;
-
         private void Awake()
         {
             hitEffectProperty = new MaterialPropertyBlock();
@@ -47,15 +44,17 @@ namespace _FightCode.Battle.View
             renderer.sortingOrder = Order++;
         }
 
-        private void OnDisable()
+        public void Setup()
         {
-            initialized = false;
+            renderer.gameObject.SetActive(false);
         }
 
         public void Activate()
         { 
-            initialized = true;
-            isDead = false;
+            this.WaitNextFrame(() =>
+            {
+                renderer.gameObject.SetActive(true);
+            }, 2);
         }
 
         public void SetPosition(Vector3 pos)
@@ -71,7 +70,7 @@ namespace _FightCode.Battle.View
             }
         }
 
-        private IEnumerator Knockback(Vector3 force, float duration)
+        private IEnumerator KnockBack(Vector3 force, float duration)
         {
             Vector3 startPos = transform.position;
             
@@ -123,16 +122,9 @@ namespace _FightCode.Battle.View
 
         public void BeHit()
         {
-            if (isDead) return;
-            
             if (hitCoroutine != null) StopCoroutine(hitCoroutine);
 
             renderer.GetPropertyBlock(hitEffectProperty);
-
-            if (!gameObject.activeSelf)
-            {
-                Debug.LogError($"Animation is dead: {name} : {isDead} : {initialized}");
-            }
 
             hitCoroutine = this.LerpNormalize(0, 1, 0.1f, f =>
             {
@@ -151,17 +143,13 @@ namespace _FightCode.Battle.View
 
         public void Dead(Vector3 force, Action onDestroy)
         {
-            if (isDead) return;
-            
-            isDead = true;
-            
             onDeathCallback = onDestroy;
             
             if (state != null) state.Stop();
             
             state = animancer.Play(deathAnimationClip);
             
-            StartCoroutine(Knockback(force, state.Duration));
+            StartCoroutine(KnockBack(force, state.Duration));
 
             if (currentBeHit != null && currentBeHit.IsPlaying)
             {
@@ -175,7 +163,7 @@ namespace _FightCode.Battle.View
         {
             StopAllCoroutines();
             
-            gameObject.SetActive(false);
+            renderer.gameObject.SetActive(false);
             
             onDeathCallback?.Invoke();
         }

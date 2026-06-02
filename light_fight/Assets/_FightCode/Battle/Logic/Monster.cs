@@ -36,16 +36,14 @@ namespace _FightCode.Battle.Logic
         private bool isMoving = true;
         private Vector3 beHitDirection;
 
-        public Monster(BattleShare share, int entity, int configId, int agent)
+        public Monster(BattleShare share, MonsterConfig monsterConfig, int entity, int configId, int agent)
         {
             this.share = share;
             this.entity = entity;
             this.configId = configId;
             this.agent = agent;
-
-            MonsterConfig monsterConfig = KitConfigManager.Get<MonsterConfig>();
-            monsterConfig.Find(configId, out var monsterData);
             
+            monsterConfig.Find(configId, out var monsterData);
             AsyncInstantiate(monsterData.path);
         }
 
@@ -53,11 +51,10 @@ namespace _FightCode.Battle.Logic
         {
             GameObject go = await KitLoaded.LoadAsync<GameObject>(path);
 
-            animation = KitPool.Instantiate(go, false).GetComponent<MonsterAnimation>();
+            animation = KitPool.Instantiate(go, true).GetComponent<MonsterAnimation>();
             animation.SetPosition(position);
             animation.transform.localScale = Vector3.one;
             animation.transform.localRotation = Quaternion.Euler(0, 0, 0);
-            animation.gameObject.SetActive(true);
             animation.Move();
             animation.Activate();
         }

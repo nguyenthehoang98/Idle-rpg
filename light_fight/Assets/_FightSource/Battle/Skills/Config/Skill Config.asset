@@ -41,7 +41,6 @@ MonoBehaviour:
       data:
         lifeTimeInSeconds: 0.8
         targetType: 1
-        radiusScanTarget: 6
     - rid: 7993921661494362170
       type: {class: CastProjectileConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}
       data:
@@ -69,8 +68,8 @@ MonoBehaviour:
           x: 0
           y: 0
         size:
-          x: 0.2
-          y: 0.2
+          x: 0.5
+          y: 0.5
         pivotType: 0
     - rid: 8666061042531434551
       type: {class: BulletTrajectoryConfig, ns: _KITSystem.SkillSystem.Config, asm: KITSystem.SkillSystem.Config}

@@ -2,6 +2,8 @@
 using _FightCode.Battle.Model;
 using _FightCode.Battle.Popup;
 using _FightCode.Battle.View;
+using _FightCode.Config;
+using _KITSystem.ExcelConfig;
 using _KITSystem.Grid;
 using _KITSystem.Popup;
 using _KITSystem.Resource;
@@ -12,6 +14,7 @@ using _KITSystem.Utils;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
+using MonsterData = _KITSystem.SkillSystem.Entity.MonsterData;
 
 namespace _FightCode.Battle.Logic
 {
@@ -31,7 +34,6 @@ namespace _FightCode.Battle.Logic
         
         private readonly Dictionary<int, int> entityToAgent = new Dictionary<int, int>();
         private readonly Dictionary<int, Monster> entityToMonster = new Dictionary<int, Monster>();
-        private static Dictionary<int, bool> monsterLoaded = new Dictionary<int, bool>();
 
         private IDiceControlView diceControl;
         private bool waveSpawnComplete = false;
@@ -43,6 +45,7 @@ namespace _FightCode.Battle.Logic
             Debug.Log(@"Tạo behaviour tree tạo các kịch bản test");
             Debug.Log(@"Cần xử lý các công thức tính sát thương, power...");
             Debug.Log(@"Cần có method check config, load & validate tất cả mà ko cần play 1 level hoặc vào game");
+            Debug.Log(@"Các object (monster) chưa giải phóng bộ nhớ");
             // todo: assign
             TryGetTickable(out skill);
             TryGetTickable(out agent);
@@ -69,6 +72,8 @@ namespace _FightCode.Battle.Logic
             attract.SetAsFirstSibling();
             attract.transform.localPosition = Vector3.zero;
             attract.transform.localScale = Vector3.one;
+
+            MonsterConfig monsterConfig = KitConfigManager.Get<MonsterConfig>();
             
             movement.Initialize();
             agent.Initialize();
@@ -80,13 +85,6 @@ namespace _FightCode.Battle.Logic
                 float speed = monsterData.moveSpeed;
                 float stopDistance = monsterData.stopMoveDistance;
                 int monsterId = monsterData.monsterId;
-                
-                if (monsterLoaded.TryAdd(monsterId, true))
-                {
-                    GameObject go = await KitLoaded.LoadAsync<GameObject>(monsterData.path);
-                    KitPool.RegisterPool(go, true);
-                }
-                
                 int entity = EntityManager.CreateEntity();
                 
                 AgentData agentData = agent.CreateAgent(entity, position, radius, speed, setting.defaultAgentStopDistance + stopDistance);
@@ -95,7 +93,7 @@ namespace _FightCode.Battle.Logic
                 ComponentManager<HealthData>.Add(entity, new HealthData(20));
                 ComponentManager<MonsterData>.Add(entity, new MonsterData(monsterId));
 
-                Monster m = new Monster(share, entity, monsterId, agentData.agent);
+                Monster m = new Monster(share, monsterConfig, entity, monsterId, agentData.agent);
                 entityToMonster[entity] = m;
                 monster.AddMonster(m);
             });
@@ -190,9 +188,9 @@ namespace _FightCode.Battle.Logic
             diceControl.Initialize(share, setting);
         }
 
-        private void StartGame()
+        private async void StartGame()
         {
-            spawner.WaveSpawn();
+            await spawner.WaveSpawn();
             IsPaused = false;
         }
 
@@ -214,9 +212,9 @@ namespace _FightCode.Battle.Logic
         {
             if (totalEntityInScene == 0 && waveSpawnComplete)
             {
-                this.WaitInvoke(2, () =>
+                this.WaitInvoke(2, async () =>
                 {
-                    bool spawn = spawner.WaveSpawn();
+                    bool spawn = await spawner.WaveSpawn();
                     if (!spawn)
                     {
                         IsPaused = true;

@@ -30,11 +30,7 @@ namespace _KITSystem.SkillSystem.Runtime
         protected bool FilterEntity(int entity)
         {
             if (!EntityManager.IsAlive(entity)) return false;
-
-            HealthData healthData = ComponentManager<HealthData>.Get(entity);
-
-            if (healthData.TargetHealth <= 0) return false;
-
+            
             return true;
         }
 

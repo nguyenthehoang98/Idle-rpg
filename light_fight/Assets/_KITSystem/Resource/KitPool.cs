@@ -72,6 +72,24 @@ namespace _KITSystem.Resource
             dictionary.TryAdd(code, new Pool(Instance.transform, ins, isDestroyIfChangeScene));
         }
 
+        public static void RegisterPool(GameObject ins, bool isDestroyIfChangeScene, int totalPreload)
+        {
+            if (ins == null)
+            {
+#if UNITY_EDITOR
+                Debug.LogError("register pool ins is null");
+#endif
+                return;
+            }
+
+            string code = ins.name;
+
+            if (dictionary.TryAdd(code, new Pool(Instance.transform, ins, isDestroyIfChangeScene)))
+            {
+                dictionary[code].Preload(totalPreload);
+            }
+        }
+
         public static void UnRegisterPool(GameObject ins)
         {
             string code = ins.name;

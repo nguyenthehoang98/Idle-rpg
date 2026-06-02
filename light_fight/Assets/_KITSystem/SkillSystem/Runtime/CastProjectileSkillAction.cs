@@ -164,7 +164,7 @@ namespace _KITSystem.SkillSystem.Runtime
         
         private bool CanProcessCollision(int entity)
         {
-            if (damageTicket.damageTickerType != DamageTickerType.None)
+            if (damageTicket.damageTickerType != DamageTickerType.Instant)
             {
                 return true;
             }
