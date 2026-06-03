@@ -12,9 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e87e99e7363518046b312d6a202ca4e7, type: 3}
   m_Name: PlayerConfig
   m_EditorClassIdentifier: 
-  fileUrl: 12anI_Fj3Y7IqwSUtmwgJmtW8cCpSTWGNoxkSckf-etk
+  fileUrl: 1BhTfBL9nr4__zSK8yfM5q1wkdJqjXzqhlim7Lrkk_xQ
   enable: 0
-  infos:
+  Overview:
+  - ID: 1
+    Name: Default Hero
+    ExpScale: 1
+    BaseHealth: 200
+    BaseAttack: 20
+  - ID: 2
+    Name: Default Hero 2
+    ExpScale: 1
+    BaseHealth: 300
+    BaseAttack: 30
+  EXP_1:
   - Level: 1
     Exp: 100
   - Level: 2

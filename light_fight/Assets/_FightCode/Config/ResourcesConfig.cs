@@ -2,29 +2,28 @@
 using System.Collections.Generic;
 using ExcelExtension;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace _FightCode.Config
 {
     [ExcelAsset(
-        ExcelPath = "Assets/Excels/StatConfig.xlsx",
-        ConfigPath = "Assets/_FightSource/Configs/StatConfig.asset")]
-    public class StatConfig : BaseConfig
+        ExcelPath = "Assets/Excels/ResourcesConfig.xlsx",
+        ConfigPath = "Assets/_FightSource/Configs/ResourcesConfig.asset")]
+    [CreateAssetMenu]
+    public class ResourcesConfig : BaseConfig
     {
-        [SerializeField] private List<StatData> Overview = new List<StatData>();
+        [SerializeField] private List<ResourcesData> Overview = new List<ResourcesData>();
     
-        private Dictionary<int, StatData> byId;
+        private Dictionary<int, ResourcesData> byId;
     
         public override void OnMapValue()
         {
-            byId = new Dictionary<int, StatData>();
+            byId = new Dictionary<int, ResourcesData>();
 
-            foreach (var statData in Overview)
+            foreach (var data in Overview)
             {
-                byId.Add(statData.ID, statData);
+                byId.Add(data.ID, data);
             }
         }
-        
         
 #if UNITY_EDITOR
         public override void OnPostImported()
@@ -40,12 +39,10 @@ namespace _FightCode.Config
     }
 
     [Serializable]
-    public struct StatData : IKitData
+    public struct ResourcesData : IKitData
     {
         public int ID;
         public string Name;
-        public float Value;
-        public float Modifier;
         
         public void OnImported()
         {

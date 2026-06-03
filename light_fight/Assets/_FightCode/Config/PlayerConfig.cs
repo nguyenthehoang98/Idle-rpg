@@ -11,30 +11,58 @@ namespace _FightCode.Config
         ConfigPath = "Assets/_FightSource/Configs/PlayerConfig.asset")]
     public class PlayerConfig : BaseConfig
     {
-        [SerializeField] private List<PlayerData> infos = new List<PlayerData>();
-    
-        private Dictionary<int, PlayerData> cachePlayerData;
+        [SerializeField] private List<PlayerData> Overview = new List<PlayerData>();
+        [SerializeField] private List<PlayerExpData> EXP_1 = new List<PlayerExpData>();
     
         public override void OnMapValue()
         {
-            cachePlayerData = new Dictionary<int, PlayerData>();
-
-            foreach (var m in infos)
-            {
-                cachePlayerData.Add(m.Level, m);
-            }
+            
         }
         
-        public bool TryGetPlayerByLevel(int level, out PlayerData playerData)
+#if UNITY_EDITOR
+        public override void OnPostImported()
         {
-            return cachePlayerData.TryGetValue(level, out playerData);
+            for (var i = 0; i < EXP_1.Count; i++)
+            {
+                var data = EXP_1[i];
+                data.OnImported();
+                EXP_1[i] = data;
+            }
+            
+            for (var i = 0; i < Overview.Count; i++)
+            {
+                var data = Overview[i];
+                data.OnImported();
+                Overview[i] = data;
+            }
+        }
+#endif
+    }
+
+    [Serializable]
+    public struct PlayerData : IKitData
+    {
+        public int ID;
+        public string Name;
+        public float ExpScale;
+        public int BaseHealth;
+        public int BaseAttack;
+        
+        public void OnImported()
+        {
+            
         }
     }
 
     [Serializable]
-    public struct PlayerData
+    public struct PlayerExpData: IKitData
     {
         public int Level;
         public int Exp;
+
+        public void OnImported()
+        {
+
+        }
     }
 }
