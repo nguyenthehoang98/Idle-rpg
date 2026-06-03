@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using _FightCode.Battle.View;
 using _FightCode.Config;
-using _FightCode.Utils;
-using _KITSystem.ExcelConfig;
+using _KITSystem.Data;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using _KITSystem.Utils;
 using Unity.Mathematics;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace _FightCode.Battle.Logic
 {
@@ -38,8 +35,8 @@ namespace _FightCode.Battle.Logic
         public void Initialize(int levelId, Action<RequestCreateMonster> onRequestCreate)
         {
             onCreateMonster = onRequestCreate;
-            monsterConfig = KitConfigManager.Get<MonsterConfig>();
-            skillConfig = KitConfigManager.Get<SkillConfig>();
+            monsterConfig = ConfigManager.Get<MonsterConfig>();
+            skillConfig = ConfigManager.Get<SkillConfig>();
 
             /*LevelConfig levelConfig = KitConfigManager.Get<LevelConfig>();
             if (!levelConfig.FindSpawn(levelId, out container))

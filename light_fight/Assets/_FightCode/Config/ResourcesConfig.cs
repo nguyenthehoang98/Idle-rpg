@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using ExcelExtension;
+using _KITSystem.Data;
 using UnityEngine;
 
 namespace _FightCode.Config
 {
-    [ExcelAsset(
-        ExcelPath = "Assets/Excels/ResourcesConfig.xlsx",
-        ConfigPath = "Assets/_FightSource/Configs/ResourcesConfig.asset")]
-    [CreateAssetMenu]
-    public class ResourcesConfig : BaseConfig
+    [Serializable]
+    public class ResourcesConfig : IGameConfig
     {
         [SerializeField] private List<ResourcesData> Overview = new List<ResourcesData>();
-    
+
         private Dictionary<int, ResourcesData> byId;
-    
-        public override void OnMapValue()
+
+        public void OnMappingValue()
         {
             byId = new Dictionary<int, ResourcesData>();
 
@@ -24,29 +21,16 @@ namespace _FightCode.Config
                 byId.Add(data.ID, data);
             }
         }
-        
-#if UNITY_EDITOR
-        public override void OnPostImported()
+
+        public void OnPostImported()
         {
-            for (var i = 0; i < Overview.Count; i++)
-            {
-                var data = Overview[i];
-                data.OnImported();
-                Overview[i] = data;
-            }
         }
-#endif
     }
 
     [Serializable]
-    public struct ResourcesData : IKitData
+    public struct ResourcesData
     {
         public int ID;
         public string Name;
-        
-        public void OnImported()
-        {
-            
-        }
     }
 }

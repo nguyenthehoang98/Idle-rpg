@@ -1,68 +1,39 @@
 using System;
 using System.Collections.Generic;
-using ExcelExtension;
+using _KITSystem.Data;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace _FightCode.Config
 {
-    [ExcelAsset(
-        ExcelPath = "Assets/Excels/PlayerConfig.xlsx",
-        ConfigPath = "Assets/_FightSource/Configs/PlayerConfig.asset")]
-    public class PlayerConfig : BaseConfig
+    [Serializable]
+    public class PlayerConfig : IGameConfig
     {
         [SerializeField] private List<PlayerData> Overview = new List<PlayerData>();
         [SerializeField] private List<PlayerExpData> EXP_1 = new List<PlayerExpData>();
-    
-        public override void OnMapValue()
+
+        public void OnMappingValue()
         {
-            
         }
-        
-#if UNITY_EDITOR
-        public override void OnPostImported()
+
+        public void OnPostImported()
         {
-            for (var i = 0; i < EXP_1.Count; i++)
-            {
-                var data = EXP_1[i];
-                data.OnImported();
-                EXP_1[i] = data;
-            }
-            
-            for (var i = 0; i < Overview.Count; i++)
-            {
-                var data = Overview[i];
-                data.OnImported();
-                Overview[i] = data;
-            }
         }
-#endif
     }
 
     [Serializable]
-    public struct PlayerData : IKitData
+    public struct PlayerData
     {
         public int ID;
         public string Name;
         public float ExpScale;
         public int BaseHealth;
         public int BaseAttack;
-        
-        public void OnImported()
-        {
-            
-        }
     }
 
     [Serializable]
-    public struct PlayerExpData: IKitData
+    public struct PlayerExpData
     {
         public int Level;
         public int Exp;
-
-        public void OnImported()
-        {
-
-        }
     }
 }

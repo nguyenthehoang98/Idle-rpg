@@ -1,4 +1,4 @@
-using _KITSystem.ExcelConfig;
+using _KITSystem.Data;
 using _KITSystem.Utils;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -25,7 +25,7 @@ namespace _FightCode.Shared
 
         protected override async void OnStart()
         {
-            await KitConfigManager.Load(new[]
+            await ConfigManager.Load(new[]
             {
                 "SkillConfig",
                 "LevelConfig",

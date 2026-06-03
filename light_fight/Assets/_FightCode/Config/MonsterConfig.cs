@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using ExcelExtension;
+using _KITSystem.Data;
 using UnityEngine;
 
 namespace _FightCode.Config
 {
-    [ExcelAsset(
-        ExcelPath = "Assets/Excels/MonsterConfig.xlsx",
-        ConfigPath = "Assets/_FightSource/Configs/MonsterConfig.asset")]
-    public class MonsterConfig : BaseConfig
+    [Serializable]
+    public class MonsterConfig : IGameConfig
     {
         [SerializeField] private List<MonsterData> monsters = new List<MonsterData>();
     
         private Dictionary<int, MonsterData> byId;
     
-        public override void OnMapValue()
+        public void OnMappingValue()
         {
             byId = new Dictionary<int, MonsterData>();
 
@@ -24,9 +22,7 @@ namespace _FightCode.Config
             }
         }
         
-
-#if UNITY_EDITOR
-        public override void OnPostImported()
+        public void OnPostImported()
         {
             foreach (var data in monsters)
             {
@@ -48,7 +44,6 @@ namespace _FightCode.Config
                     );
             }
         }
-#endif
 
         public bool Find(int monsterId, out MonsterData skill)
         {

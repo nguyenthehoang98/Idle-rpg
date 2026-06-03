@@ -1,7 +1,4 @@
 ﻿using _FightCode.Battle.Model;
-using _FightCode.Config;
-using _KITSystem.ExcelConfig;
-using _KITSystem.Resource;
 using _KITSystem.Utils;
 using MoreMountains.Feedbacks;
 using Sirenix.OdinInspector;
@@ -67,7 +64,7 @@ namespace _FightCode.Battle.View
                 weapon = null;
             }
 
-            EquipmentConfig equipmentConfig = KitConfigManager.Get<EquipmentConfig>();
+            // EquipmentConfig equipmentConfig = KitConfigManager.Get<EquipmentConfig>();
             
             /*if (equipmentConfig.TryGetEquipmentById(weaponId, out EquipmentData weaponData))
             {

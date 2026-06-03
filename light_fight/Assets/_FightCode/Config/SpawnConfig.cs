@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using ExcelExtension;
+using _KITSystem.Data;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace _FightCode.Config
 {
-    [ExcelAsset(
-        ExcelPath = "Assets/Excels/SpawnConfig.xlsx",
-        ConfigPath = "Assets/_FightSource/Configs/SpawnConfig.asset")]
-    public class SpawnConfig : BaseConfig
+    [Serializable]
+    public class SpawnConfig : IGameConfig
     {
         [SerializeField] private List<SpawnData> spawns = new List<SpawnData>();
     
         private Dictionary<int, List<SpawnData>> byId;
     
-        public override void OnMapValue()
+        public void OnMappingValue()
         {
             byId = new Dictionary<int, List<SpawnData>>();
 
@@ -25,6 +22,10 @@ namespace _FightCode.Config
                     list.Add(spawnData);
                 else byId.Add(spawnData.SpawnGroupID, new List<SpawnData> { spawnData });
             }
+        }
+
+        public void OnPostImported()
+        {
         }
 
         public bool TryGetSpawnById(int groupID, out List<SpawnData> list)

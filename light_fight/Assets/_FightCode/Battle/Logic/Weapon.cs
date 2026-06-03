@@ -2,12 +2,9 @@
 using _FightCode.Battle.Model;
 using _FightCode.Battle.View;
 using _FightCode.Config;
-using _KITSystem.ExcelConfig;
-using _KITSystem.SkillSystem.Config;
 using _KITSystem.SkillSystem.Entity;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace _FightCode.Battle.Logic

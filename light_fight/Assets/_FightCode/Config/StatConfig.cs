@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using ExcelExtension;
+using _KITSystem.Data;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace _FightCode.Config
 {
-    [ExcelAsset(
-        ExcelPath = "Assets/Excels/StatConfig.xlsx",
-        ConfigPath = "Assets/_FightSource/Configs/StatConfig.asset")]
-    public class StatConfig : BaseConfig
+    [Serializable]
+    public class StatConfig : IGameConfig
     {
         [SerializeField] private List<StatData> Overview = new List<StatData>();
     
         private Dictionary<int, StatData> byId;
     
-        public override void OnMapValue()
+        public void OnMappingValue()
         {
             byId = new Dictionary<int, StatData>();
 
@@ -25,31 +22,17 @@ namespace _FightCode.Config
             }
         }
         
-        
-#if UNITY_EDITOR
-        public override void OnPostImported()
+        public void OnPostImported()
         {
-            for (var i = 0; i < Overview.Count; i++)
-            {
-                var data = Overview[i];
-                data.OnImported();
-                Overview[i] = data;
-            }
         }
-#endif
     }
 
     [Serializable]
-    public struct StatData : IKitData
+    public struct StatData 
     {
         public int ID;
         public string Name;
         public float Value;
         public float Modifier;
-        
-        public void OnImported()
-        {
-            
-        }
     }
 }

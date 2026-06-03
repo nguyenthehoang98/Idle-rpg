@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using ExcelExtension;
+using _KITSystem.Data;
 using UnityEngine;
 
 namespace _FightCode.Config
 {
-    [ExcelAsset(
-        ExcelPath = "Assets/Excels/LevelConfig.xlsx",
-        ConfigPath = "Assets/_FightSource/Configs/LevelConfig.asset")]
-    public class LevelConfig : BaseConfig
+    [Serializable]
+    public class LevelConfig : IGameConfig
     {
         [SerializeField] private List<LevelData> levels = new List<LevelData>();
     
         private Dictionary<int, List<LevelData>> byId;
     
-        public override void OnMapValue()
+        public void OnMappingValue()
         {
             byId = new Dictionary<int, List<LevelData>>();
 
@@ -24,6 +22,10 @@ namespace _FightCode.Config
                     list.Add(levelData);
                 else byId.Add(levelData.ID, new List<LevelData> { levelData });
             }
+        }
+        
+        public void OnPostImported()
+        {
         }
 
         public bool TryGetLevelsById(int levelId, out List<LevelData> list)

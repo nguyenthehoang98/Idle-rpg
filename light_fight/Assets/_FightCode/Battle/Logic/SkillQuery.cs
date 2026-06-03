@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using _KITSystem.Grid;
-using _KITSystem.SkillSystem.Config;
 using _KITSystem.SkillSystem.Entity;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;

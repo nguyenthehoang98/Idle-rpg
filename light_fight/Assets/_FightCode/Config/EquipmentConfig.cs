@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using ExcelExtension;
+using _KITSystem.Data;
 using UnityEngine;
 
 namespace _FightCode.Config
 {
-    [ExcelAsset(
-        ExcelPath = "Assets/Excels/EquipmentConfig.xlsx",
-        ConfigPath = "Assets/_FightSource/Configs/EquipmentConfig.asset")]
-    public class EquipmentConfig : BaseConfig
+    [Serializable]
+    public class EquipmentConfig : IGameConfig
     {
         [SerializeField] private List<EquipmentUpgradeData> UpgradeConfigs_1 = new List<EquipmentUpgradeData>();
         [SerializeField] private List<EquipmentData> Overview = new List<EquipmentData>();
@@ -16,12 +14,11 @@ namespace _FightCode.Config
         private Dictionary<int, EquipmentData> byId;
         private Dictionary<int, List<EquipmentData>> byGroupId;
     
-        public override void OnMapValue()
+        public void OnMappingValue()
         {
         }
 
-#if UNITY_EDITOR
-        public override void OnPostImported()
+        public void OnPostImported()
         {
             for (var i = 0; i < UpgradeConfigs_1.Count; i++)
             {
@@ -29,19 +26,11 @@ namespace _FightCode.Config
                 data.OnImported();
                 UpgradeConfigs_1[i] = data;
             }
-            
-            for (var i = 0; i < Overview.Count; i++)
-            {
-                var data = Overview[i];
-                data.OnImported();
-                Overview[i] = data;
-            }
         }
-#endif
     }
 
     [Serializable]
-    public struct EquipmentData : IKitData
+    public struct EquipmentData 
     {
         public int ID;
         public int GroupID;
@@ -53,16 +42,11 @@ namespace _FightCode.Config
         public EquipmentType Type;
         public EquipmentRarity Rarity;
         public int ActiveSkillID;        
-        public int PassiveSkillID;        
-        
-        public void OnImported()
-        {
-            
-        }
+        public int PassiveSkillID;  
     }
     
     [Serializable]
-    public struct EquipmentUpgradeData : IKitData
+    public struct EquipmentUpgradeData 
     {
         public int ID;
         [SerializeField, HideInInspector] public string Stats; 

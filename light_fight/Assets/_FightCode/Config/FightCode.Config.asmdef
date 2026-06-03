@@ -6,7 +6,8 @@
         "GUID:84651a3751eca9349aac36a66bba901b",
         "GUID:aeb1ce8fbfe71aa4dada5446e8dc9bca",
         "GUID:e590b1c923606d846a63f147c5ff232d",
-        "KITSystem.Formula"
+        "KITSystem.Formula",
+        "GUID:0239619e1e2025b4c8f2fecc8e33feb2"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

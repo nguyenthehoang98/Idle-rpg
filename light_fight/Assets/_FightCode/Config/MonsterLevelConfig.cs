@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using ExcelExtension;
+using _KITSystem.Data;
 using UnityEngine;
 
 namespace _FightCode.Config
 {
-    [ExcelAsset(
-        ExcelPath = "Assets/Excels/MonsterLevelConfig.xlsx",
-        ConfigPath = "Assets/_FightSource/Configs/MonsterLevelConfig.asset")]
-    public class MonsterLevelConfig : BaseConfig
+    [Serializable]
+    public class MonsterLevelConfig : IGameConfig
     {
         [SerializeField] private List<MonsterLevelData> levels = new List<MonsterLevelData>();
     
         private Dictionary<int, MonsterLevelData> byLevel;
     
-        public override void OnMapValue()
+        public void OnMappingValue()
         {
             byLevel = new Dictionary<int, MonsterLevelData>();
 
@@ -23,12 +21,15 @@ namespace _FightCode.Config
                 byLevel.Add(data.Level, data);
             }
         }
+        
+        public void OnPostImported()
+        {
+        }
 
         public bool TryGetMonsterDataByLevel(int level, out MonsterLevelData monsterLevelData)
         {
             return byLevel.TryGetValue(level, out monsterLevelData);
         }
-
     }
 
     [Serializable]

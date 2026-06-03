@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using _FightCode.Battle.Model;
 using _FightCode.Battle.Popup;
 using _FightCode.Battle.View;
 using _FightCode.Config;
-using _KITSystem.ExcelConfig;
-using _KITSystem.Grid;
+using _KITSystem.Data;
 using _KITSystem.Popup;
-using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Entity;
 using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
 using Sirenix.OdinInspector;
-using Unity.Mathematics;
 using UnityEngine;
-using MonsterData = _KITSystem.SkillSystem.Entity.MonsterData;
 
 namespace _FightCode.Battle.Logic
 {
@@ -76,7 +71,7 @@ namespace _FightCode.Battle.Logic
             attract.transform.localPosition = Vector3.zero;
             attract.transform.localScale = Vector3.one;
 
-            monsterConfig = KitConfigManager.Get<MonsterConfig>();
+            monsterConfig = ConfigManager.Get<MonsterConfig>();
             
             movement.Initialize();
             agent.Initialize();
