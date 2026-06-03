@@ -1,0 +1,139 @@
+{
+    "UpgradeConfigs_1": [
+        {
+            "ID": 1001,
+            "Stats": "[1,0,0]",
+            "CUR": "[101,0,0,102,0,0]",
+            "StatFormula": {
+                "id": 0,
+                "a": 0.0,
+                "b": 0.0
+            },
+            "CUR1Formula": {
+                "id": 0,
+                "a": 0.0,
+                "b": 0.0
+            },
+            "CUR2Formula": {
+                "id": 0,
+                "a": 0.0,
+                "b": 0.0
+            }
+        },
+        {
+            "ID": 0,
+            "Stats": "",
+            "CUR": "",
+            "StatFormula": {
+                "id": 0,
+                "a": 0.0,
+                "b": 0.0
+            },
+            "CUR1Formula": {
+                "id": 0,
+                "a": 0.0,
+                "b": 0.0
+            },
+            "CUR2Formula": {
+                "id": 0,
+                "a": 0.0,
+                "b": 0.0
+            }
+        },
+        {
+            "ID": 0,
+            "Stats": "",
+            "CUR": "",
+            "StatFormula": {
+                "id": 0,
+                "a": 0.0,
+                "b": 0.0
+            },
+            "CUR1Formula": {
+                "id": 0,
+                "a": 0.0,
+                "b": 0.0
+            },
+            "CUR2Formula": {
+                "id": 0,
+                "a": 0.0,
+                "b": 0.0
+            }
+        },
+        {
+            "ID": 0,
+            "Stats": "",
+            "CUR": "",
+            "StatFormula": {
+                "id": 0,
+                "a": 0.0,
+                "b": 0.0
+            },
+            "CUR1Formula": {
+                "id": 0,
+                "a": 0.0,
+                "b": 0.0
+            },
+            "CUR2Formula": {
+                "id": 0,
+                "a": 0.0,
+                "b": 0.0
+            }
+        },
+        {
+            "ID": 0,
+            "Stats": "",
+            "CUR": "",
+            "StatFormula": {
+                "id": 0,
+                "a": 0.0,
+                "b": 0.0
+            },
+            "CUR1Formula": {
+                "id": 0,
+                "a": 0.0,
+                "b": 0.0
+            },
+            "CUR2Formula": {
+                "id": 0,
+                "a": 0.0,
+                "b": 0.0
+            }
+        },
+        {
+            "ID": 0,
+            "Stats": "",
+            "CUR": "",
+            "StatFormula": {
+                "id": 0,
+                "a": 0.0,
+                "b": 0.0
+            },
+            "CUR1Formula": {
+                "id": 0,
+                "a": 0.0,
+                "b": 0.0
+            },
+            "CUR2Formula": {
+                "id": 0,
+                "a": 0.0,
+                "b": 0.0
+            }
+        }
+    ],
+    "Overview": [
+        {
+            "ID": 1001,
+            "GroupID": 1001,
+            "Name": "1001",
+            "Prefab": "1001",
+            "Icon": "1001",
+            "MaxLevel": 100,
+            "UpgradeID": 1001,
+            "Type": 0,
+            "Rarity": 0,
+            "ActiveSkillID": 0,
+            "PassiveSkillID": 0
+        }
+    ]
+}

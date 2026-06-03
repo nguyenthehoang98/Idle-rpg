@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _KITSystem.Resource;
+using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -16,16 +17,35 @@ namespace _KITSystem.Data
             {
                 return;
             }
+
+            Type[] allType = TypeUtils.GetAllTypeThatImplement<IGameConfig>();
             
             cache = new Dictionary<Type, IGameConfig>();
+            
             for (int i = 0; i < scriptObjectsPath.Length; i++)
             {
-                int index = i;
-                TextAsset asset = await KitLoaded.LoadAsync<TextAsset>(scriptObjectsPath[i]);
+                Type type = FindType(scriptObjectsPath[i], allType);
+
+                if (type == null) continue;
+
+                string text = (await KitLoaded.LoadAsync<TextAsset>(scriptObjectsPath[i])).text;
+
+                object asset = JsonUtility.FromJson(text, type);
                 
-                // type
-                // data
+                cache[type] = asset as IGameConfig;
             }
+            
+            Debug.Log($"Load success '{scriptObjectsPath.Length}' config files.");
+        }
+
+        private static Type FindType(string typeName, Type[] sources)
+        {
+            foreach (var type in sources)
+            {
+                if (string.Equals(typeName, type.Name)) return type;
+            }
+
+            return null;
         }
 
         public static T Get<T>() where T : class, IGameConfig

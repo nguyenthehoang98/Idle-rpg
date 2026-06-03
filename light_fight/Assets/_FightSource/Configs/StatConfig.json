@@ -1,0 +1,40 @@
+{
+    "Overview": [
+        {
+            "ID": 1,
+            "Name": "Attack",
+            "Value": 12.0,
+            "Modifier": 20.0
+        },
+        {
+            "ID": 2,
+            "Name": "MaxHealth",
+            "Value": 120.0,
+            "Modifier": 1.0
+        },
+        {
+            "ID": 3,
+            "Name": "Defense",
+            "Value": 0.0,
+            "Modifier": 1.0
+        },
+        {
+            "ID": 4,
+            "Name": "AttackSpeed",
+            "Value": 1.0,
+            "Modifier": 0.5
+        },
+        {
+            "ID": 5,
+            "Name": "CritRate",
+            "Value": 0.0,
+            "Modifier": 0.5
+        },
+        {
+            "ID": 6,
+            "Name": "CritDamage",
+            "Value": 1.0,
+            "Modifier": 0.5
+        }
+    ]
+}

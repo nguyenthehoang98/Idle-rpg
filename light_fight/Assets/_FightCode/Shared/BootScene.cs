@@ -28,12 +28,13 @@ namespace _FightCode.Shared
             await ConfigManager.Load(new[]
             {
                 "SkillConfig",
-                "LevelConfig",
-                "MonsterConfig",
-                "WeaponConfig",
+                "EquipmentConfig",
+                "PlayerConfig",
+                "ResourcesConfig",
+                "StatConfig"
             });
 
-            ChangeSceneAsync("Home Scene");
+            /*ChangeSceneAsync("Home Scene");*/
             
             isLoadingScene = true;
         }

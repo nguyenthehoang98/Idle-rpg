@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -20,6 +22,7 @@ namespace _FightCode.Config.Editor
         private HashSet<string> downloading = new HashSet<string>();
 
         private const string EditorPrefsKeyPrefix = "ConfigDownloader_URL_";
+        private const string EditorPrefsKeyFolderPrefix = "ConfigDownloader_Folder";
         private const string PRE_PATH = "https://opensheet.elk.sh/";
         private static readonly string ROOT_FORMAT_PATH = "https://docs.google.com/spreadsheets/d/{0}/edit";
 
@@ -66,12 +69,11 @@ namespace _FightCode.Config.Editor
 
                 GUILayout.Space(50);
 
-                string key = EditorPrefsKeyPrefix + "/download_asset_folder";
-                string folder = EditorPrefs.GetString(key);
+                string folder = EditorPrefs.GetString(EditorPrefsKeyFolderPrefix);
                 string newFolder = EditorGUILayout.TextField(folder);
                 if (newFolder != folder)
                 {
-                    EditorPrefs.SetString(key, newFolder);
+                    EditorPrefs.SetString(EditorPrefsKeyFolderPrefix, newFolder);
                 }
             }
 
@@ -168,10 +170,8 @@ namespace _FightCode.Config.Editor
         private async void DownloadConfig(Type type)
         {
             var fullName = type.FullName;
-
             if (downloading.Contains(fullName))
                 return;
-
             var url = urlMap[fullName];
 
             if (string.IsNullOrWhiteSpace(url))
@@ -186,93 +186,85 @@ namespace _FightCode.Config.Editor
 
             try
             {
-                FieldInfo[] assetFields = type
-                    .GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                bool found = false;
-                foreach (FieldInfo info in assetFields)
+                object target = Activator.CreateInstance(type);
+                var listFields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    .Where(f => f.FieldType.IsGenericType &&
+                                f.FieldType.GetGenericTypeDefinition() == typeof(List<>))
+                    .ToList();
+
+                if (listFields.Count == 0)
                 {
-                    bool flag = !info.FieldType.IsGenericType ||
-                                info.FieldType.GetGenericTypeDefinition() != typeof(List<>);
-                    if (!flag)
+                    statusMap[fullName] = "ERROR: No List<T> fields found";
+                    Debug.LogError("Config type must have at least one [SerializeField] List<T> field");
+                    return;
+                }
+
+                var fieldsDone = 0;
+                foreach (var info in listFields)
+                {
+                    statusMap[fullName] = $"Downloading {info.Name} ({++fieldsDone}/{listFields.Count})...";
+                    Repaint();
+
+                    var request = UnityWebRequest.Get(PRE_PATH + url + "/" + info.Name);
+                    var operation = request.SendWebRequest();
+                    while (!operation.isDone)
+                        await Task.Delay(100);
+
+                    if (request.result != UnityWebRequest.Result.Success)
                     {
-                        found = true;
-                        UnityWebRequestAsyncOperation operation = UnityWebRequest
-                            .Get(PRE_PATH + urlMap[fullName] + "/" + info.Name).SendWebRequest();
-                        while (!operation.isDone)
-                        {
-                            await Task.Delay(1000);
-                        }
-
-                        UnityWebRequest request = operation.webRequest;
-                        if (request.result == UnityWebRequest.Result.Success)
-                        {
-                            Debug.Log(request.downloadHandler.text);
-                            /*Type listType = info.FieldType;
-                            Type elementType = listType.GetGenericArguments()[0];
-                            object defaultValue = Activator.CreateInstance(elementType);
-                            Type wrapperType = typeof(ListWrapper<>).MakeGenericType(elementType);
-                            string wrappedJson = "{ \"data\": " + request.downloadHandler.text + " }";
-                            object wrapper = JsonUtility.FromJson(wrappedJson, wrapperType);
-                            object listValue = wrapperType.GetField("data",
-                                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
-                            ).GetValue(wrapper);
-                            IList list = listValue as IList;
-                            int count = list.Count;
-                            for (int i = count - 1; i >= 0; i--)
-                            {
-                                object item = list[i];
-                                if (Equals(item, defaultValue)) list.RemoveAt(i);
-                            }
-
-                            info.SetValue(config, list);
-                            EditorUtility.SetDirty(target);
-                            AssetDatabase.SaveAssets();*/
-                        }
-                        else
-                        {
-                            Debug.LogError("Error download " + info.Name + ", detail:: " + request.error + "\n" +
-                                           request.result);
-                        }
+                        Debug.LogError($"Failed to download {info.Name}: {request.error}");
+                        request.Dispose();
+                        continue;
                     }
+
+                    var json = request.downloadHandler.text;
+                    request.Dispose();
+
+                    var elementType = info.FieldType.GetGenericArguments()[0];
+                    var wrapperType = typeof(ListWrapper<>).MakeGenericType(elementType);
+                    var wrappedJson = "{ \"data\": " + json + " }";
+                    var wrapper = JsonUtility.FromJson(wrappedJson, wrapperType);
+                    var listValue = wrapperType.GetField("data").GetValue(wrapper);
+                    var list = listValue as IList;
+                    var defaultValue = Activator.CreateInstance(elementType);
+                    for (int i = list.Count - 1; i >= 0; i--)
+                    {
+                        if (Equals(list[i], defaultValue))
+                            list.RemoveAt(i);
+                    }
+                    info.SetValue(target, list);
                 }
 
-                if (!found)
+                var projectPath = Path.GetDirectoryName(Application.dataPath);
+                var folder = EditorPrefs.GetString(EditorPrefsKeyFolderPrefix);
+                var fileName = type.Name + ".json";
+                var savePath = Path.Combine(projectPath, folder, fileName);
+
+                Directory.CreateDirectory(Path.GetDirectoryName(savePath));
+                await File.WriteAllTextAsync(savePath, JsonUtility.ToJson(target, true));
+
+                var relativePath = savePath.Replace(projectPath, "").TrimStart(Path.DirectorySeparatorChar)
+                    .Replace("\\", "/");
+                AssetDatabase.ImportAsset(relativePath);
+                var asset = AssetDatabase.LoadAssetAtPath<TextAsset>(relativePath);
+                if (asset != null)
                 {
-                    Debug.LogError(
-                        "Không có kiểu phù hợp để tìm Spread-Sheet, Yêu cầu object phải sử dụng Atribute [SerializeField] và là có kiểu là List<T>");
+                    EditorGUIUtility.PingObject(asset);
                 }
+
+                statusMap[fullName] = $"OK: Saved to {fileName}";
+                Debug.Log($"Config saved: {savePath}");
             }
             catch (Exception ex)
             {
                 statusMap[fullName] = $"ERROR: {ex.Message}";
+                Debug.LogError(ex);
             }
             finally
             {
                 downloading.Remove(fullName);
                 Repaint();
             }
-        }
-
-        private void SaveConfigToAsset(Type type, string json)
-        {
-            var folderPath = "Assets/_FightCode/Config/Downloads";
-
-            if (!AssetDatabase.IsValidFolder(folderPath))
-            {
-                AssetDatabase.CreateFolder("Assets/_FightCode/Config", "Downloads");
-            }
-
-            var assetPath = $"{folderPath}/{type.Name}.json";
-            System.IO.File.WriteAllText(assetPath, json);
-            AssetDatabase.ImportAsset(assetPath);
-
-            var textAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(assetPath);
-            if (textAsset != null)
-            {
-                EditorGUIUtility.PingObject(textAsset);
-            }
-
-            AssetDatabase.Refresh();
         }
 
         private void DownloadAll()
@@ -286,6 +278,12 @@ namespace _FightCode.Config.Editor
         private static string GetPrefsKey(Type type)
         {
             return $"{EditorPrefsKeyPrefix}{type.FullName}";
+        }
+        
+        [Serializable]
+        class ListWrapper<T>
+        {
+            public List<T> data = new List<T>();
         }
     }
 }

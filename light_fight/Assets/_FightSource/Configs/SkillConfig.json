@@ -1,0 +1,332 @@
+{
+    "Curve_7": [
+        {
+            "ID": 7001,
+            "Path": "Curpath"
+        }
+    ],
+    "Trajectory_6": [
+        {
+            "ID": 6001,
+            "Type": 0,
+            "BulletInitialSpeed": 10.0,
+            "BulletAcceleration": 0.0,
+            "BoomerangCastingCurveID": 0,
+            "BoomerangReturningCurveID": 0,
+            "BlendCurveID": 0,
+            "ParabolicHeightCurveID": 0,
+            "ParabolicDistanceCurveID": 0
+        },
+        {
+            "ID": 6002,
+            "Type": 0,
+            "BulletInitialSpeed": 0.0,
+            "BulletAcceleration": 0.0,
+            "BoomerangCastingCurveID": 7001,
+            "BoomerangReturningCurveID": 7001,
+            "BlendCurveID": 0,
+            "ParabolicHeightCurveID": 0,
+            "ParabolicDistanceCurveID": 0
+        }
+    ],
+    "CollisionTickets_5": [
+        {
+            "ID": 5001,
+            "MaxCollision": 1,
+            "ResetInterval": 0.03400000184774399
+        },
+        {
+            "ID": 5002,
+            "MaxCollision": 1,
+            "ResetInterval": 0.5
+        }
+    ],
+    "Shapes_4": [
+        {
+            "ID": 4001,
+            "ShapeType": 0,
+            "TimerTrigger": 0.0,
+            "OffsetRelative": "",
+            "SquareSize": "[1.1,1.1]",
+            "SquarePivot": 0,
+            "CircleRadius": 0.0,
+            "OffsetRelativePosition": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "Size": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "Radius": 0.0
+        },
+        {
+            "ID": 4002,
+            "ShapeType": 0,
+            "TimerTrigger": 0.0,
+            "OffsetRelative": "",
+            "SquareSize": "[1.1,1.1]",
+            "SquarePivot": 0,
+            "CircleRadius": 0.0,
+            "OffsetRelativePosition": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "Size": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "Radius": 0.0
+        },
+        {
+            "ID": 4003,
+            "ShapeType": 0,
+            "TimerTrigger": 0.0,
+            "OffsetRelative": "",
+            "SquareSize": "[1.1,1.1]",
+            "SquarePivot": 0,
+            "CircleRadius": 0.0,
+            "OffsetRelativePosition": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "Size": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "Radius": 0.0
+        },
+        {
+            "ID": 4004,
+            "ShapeType": 0,
+            "TimerTrigger": 0.0,
+            "OffsetRelative": "",
+            "SquareSize": "[1.1,1.1]",
+            "SquarePivot": 0,
+            "CircleRadius": 0.0,
+            "OffsetRelativePosition": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "Size": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "Radius": 0.0
+        },
+        {
+            "ID": 4005,
+            "ShapeType": 0,
+            "TimerTrigger": 0.0,
+            "OffsetRelative": "",
+            "SquareSize": "[1.1,1.1]",
+            "SquarePivot": 0,
+            "CircleRadius": 0.0,
+            "OffsetRelativePosition": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "Size": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "Radius": 0.0
+        },
+        {
+            "ID": 4006,
+            "ShapeType": 0,
+            "TimerTrigger": 0.0,
+            "OffsetRelative": "",
+            "SquareSize": "",
+            "SquarePivot": 0,
+            "CircleRadius": 1.0,
+            "OffsetRelativePosition": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "Size": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "Radius": 0.0
+        }
+    ],
+    "DamageTickets_3": [
+        {
+            "ID": 3001,
+            "Type": 0,
+            "IsHealthPercent": false
+        },
+        {
+            "ID": 3002,
+            "Type": 0,
+            "IsHealthPercent": true
+        },
+        {
+            "ID": 3003,
+            "Type": 0,
+            "IsHealthPercent": false
+        },
+        {
+            "ID": 3004,
+            "Type": 0,
+            "IsHealthPercent": true
+        }
+    ],
+    "FindTargets_2": [
+        {
+            "ID": 2003,
+            "Type": 0
+        },
+        {
+            "ID": 2005,
+            "Type": 0
+        },
+        {
+            "ID": 2002,
+            "Type": 0
+        },
+        {
+            "ID": 2006,
+            "Type": 0
+        },
+        {
+            "ID": 2007,
+            "Type": 0
+        },
+        {
+            "ID": 2001,
+            "Type": 0
+        },
+        {
+            "ID": 2004,
+            "Type": 0
+        }
+    ],
+    "SkillTriggers_1": [
+        {
+            "ID": 1001,
+            "Type": 0,
+            "Timer": 0.0,
+            "EventID": 0
+        },
+        {
+            "ID": 1002,
+            "Type": 0,
+            "Timer": 0.0,
+            "EventID": 1
+        }
+    ],
+    "Overview": [
+        {
+            "ID": 10001,
+            "Name": "Bow",
+            "LifeTime": 0.800000011920929,
+            "TriggerID": 1001,
+            "DamageTicketID": 3001,
+            "ShapeID": 4001,
+            "CollisionTicketID": 5001,
+            "TrajectoryID": 6001,
+            "SkillIDTriggerOnComplete": 0
+        },
+        {
+            "ID": 10002,
+            "Name": "Plant Bomb",
+            "LifeTime": 0.800000011920929,
+            "TriggerID": 1001,
+            "DamageTicketID": 3001,
+            "ShapeID": 4001,
+            "CollisionTicketID": 5001,
+            "TrajectoryID": 6001,
+            "SkillIDTriggerOnComplete": 0
+        },
+        {
+            "ID": 10003,
+            "Name": "Magic Wand",
+            "LifeTime": 0.800000011920929,
+            "TriggerID": 1001,
+            "DamageTicketID": 3001,
+            "ShapeID": 4001,
+            "CollisionTicketID": 5001,
+            "TrajectoryID": 6001,
+            "SkillIDTriggerOnComplete": 0
+        },
+        {
+            "ID": 10004,
+            "Name": "Ice Gun",
+            "LifeTime": 0.800000011920929,
+            "TriggerID": 1001,
+            "DamageTicketID": 3001,
+            "ShapeID": 4001,
+            "CollisionTicketID": 5001,
+            "TrajectoryID": 6001,
+            "SkillIDTriggerOnComplete": 0
+        },
+        {
+            "ID": 10005,
+            "Name": "Lightning Dagger",
+            "LifeTime": 0.800000011920929,
+            "TriggerID": 1001,
+            "DamageTicketID": 3001,
+            "ShapeID": 4001,
+            "CollisionTicketID": 5001,
+            "TrajectoryID": 6001,
+            "SkillIDTriggerOnComplete": 0
+        },
+        {
+            "ID": 10006,
+            "Name": "Plant Hammer",
+            "LifeTime": 0.800000011920929,
+            "TriggerID": 1001,
+            "DamageTicketID": 3001,
+            "ShapeID": 4001,
+            "CollisionTicketID": 5001,
+            "TrajectoryID": 6001,
+            "SkillIDTriggerOnComplete": 0
+        },
+        {
+            "ID": 10007,
+            "Name": "Lance",
+            "LifeTime": 0.800000011920929,
+            "TriggerID": 1001,
+            "DamageTicketID": 3001,
+            "ShapeID": 4001,
+            "CollisionTicketID": 5001,
+            "TrajectoryID": 6001,
+            "SkillIDTriggerOnComplete": 0
+        },
+        {
+            "ID": 10008,
+            "Name": "Ice Sword",
+            "LifeTime": 0.800000011920929,
+            "TriggerID": 1001,
+            "DamageTicketID": 3001,
+            "ShapeID": 4001,
+            "CollisionTicketID": 5001,
+            "TrajectoryID": 6001,
+            "SkillIDTriggerOnComplete": 0
+        },
+        {
+            "ID": 10009,
+            "Name": "Glove",
+            "LifeTime": 0.800000011920929,
+            "TriggerID": 1001,
+            "DamageTicketID": 3001,
+            "ShapeID": 4001,
+            "CollisionTicketID": 5001,
+            "TrajectoryID": 6001,
+            "SkillIDTriggerOnComplete": 0
+        },
+        {
+            "ID": 10010,
+            "Name": "Potion",
+            "LifeTime": 0.800000011920929,
+            "TriggerID": 1001,
+            "DamageTicketID": 3001,
+            "ShapeID": 4001,
+            "CollisionTicketID": 5001,
+            "TrajectoryID": 6001,
+            "SkillIDTriggerOnComplete": 0
+        }
+    ]
+}
