@@ -46,7 +46,7 @@ namespace _FightCode.Battle.Logic
         {
             view.Equip(weaponId, weaponLevel);
 
-            KitConfigManager.Get<EquipmentConfig>().TryGetEquipmentById(weaponId, out equipmentData);
+            //KitConfigManager.Get<EquipmentConfig>().TryGetEquipmentById(weaponId, out equipmentData);
         }
         
         public void Play()

@@ -69,12 +69,12 @@ namespace _FightCode.Battle.View
 
             EquipmentConfig equipmentConfig = KitConfigManager.Get<EquipmentConfig>();
             
-            if (equipmentConfig.TryGetEquipmentById(weaponId, out EquipmentData weaponData))
+            /*if (equipmentConfig.TryGetEquipmentById(weaponId, out EquipmentData weaponData))
             {
                 GameObject go = await KitLoaded.LoadAsync<GameObject>(weaponData.PrefabName);
             
                 weapon = Instantiate(go, weaponParent).GetComponent<WeaponAnimation>();
-            }
+            }*/
         }
 
         public float Activate(float delayActivate, float timeScale)

@@ -95,7 +95,6 @@
                         Type elementType = listType.GetGenericArguments()[0];
                         object defaultValue = Activator.CreateInstance(elementType);
                         Type wrapperType = typeof(ListWrapper<>).MakeGenericType(elementType);
-                        Debug.Log(request.downloadHandler.text);
                         string wrappedJson = "{ \"data\": " + request.downloadHandler.text + " }";
                         object wrapper = JsonUtility.FromJson(wrappedJson, wrapperType);
                         object listValue = wrapperType.GetField("data",

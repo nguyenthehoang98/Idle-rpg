@@ -24,64 +24,66 @@ namespace _FightCode.Config
             
         }
 
+#if UNITY_EDITOR
         public override void OnPostImported()
         {
-            for (int i = 0; i < Curve_7.Count; i++)
+            for (var i = 0; i < Curve_7.Count; i++)
             {
-                CurveData data = Curve_7[i];
+                var data = Curve_7[i];
                 data.OnImported();
                 Curve_7[i] = data;
             }
 
-            for (int i = 0; i < Trajectory_6.Count; i++)
+            for (var i = 0; i < Trajectory_6.Count; i++)
             {
-                TrajectoryData data = Trajectory_6[i];
+                var data = Trajectory_6[i];
                 data.OnImported();
                 Trajectory_6[i] = data;
             }
 
-            for (int i = 0; i < CollisionTickets_5.Count; i++)
+            for (var i = 0; i < CollisionTickets_5.Count; i++)
             {
-                CollisionTicketData data = CollisionTickets_5[i];
+                var data = CollisionTickets_5[i];
                 data.OnImported();
                 CollisionTickets_5[i] = data;
             }
 
-            for (int i = 0; i < Shapes_4.Count; i++)
+            for (var i = 0; i < Shapes_4.Count; i++)
             {
-                ShapeData data = Shapes_4[i];
+                var data = Shapes_4[i];
                 data.OnImported();
                 Shapes_4[i] = data;
             }
             
-            for (int i = 0; i < DamageTickets_3.Count; i++)
+            for (var i = 0; i < DamageTickets_3.Count; i++)
             {
-                DamageTicketData data = DamageTickets_3[i];
+                var data = DamageTickets_3[i];
                 data.OnImported();
                 DamageTickets_3[i] = data;
             }
             
-            for (int i = 0; i < FindTargets_2.Count; i++)
+            for (var i = 0; i < FindTargets_2.Count; i++)
             {
-                FindTargetData data = FindTargets_2[i];
+                var data = FindTargets_2[i];
                 data.OnImported();
                 FindTargets_2[i] = data;
             }
             
-            for (int i = 0; i < SkillTriggers_1.Count; i++)
+            for (var i = 0; i < SkillTriggers_1.Count; i++)
             {
-                SkillTriggerData data = SkillTriggers_1[i];
+                var data = SkillTriggers_1[i];
                 data.OnImported();
                 SkillTriggers_1[i] = data;
             }
             
-            for (int i = 0; i < Overview.Count; i++)
+            for (var i = 0; i < Overview.Count; i++)
             {
-                SkillData data = Overview[i];
+                var data = Overview[i];
                 data.OnImported();
                 Overview[i] = data;
             }
         }
+#endif
     }
 
     [Serializable]
@@ -145,22 +147,22 @@ namespace _FightCode.Config
 
             if(!string.IsNullOrEmpty(OffsetRelative))
             {
-                string[] splitOffsetRelatives = OffsetRelative.Trim('[', ']').Split(',');
-                if (splitOffsetRelatives.Length == 2)
+                string[] split = OffsetRelative.Trim('[', ']').Split(',');
+                if (split.Length == 2)
                     OffsetRelativePosition = new Vector2(
-                        float.Parse(splitOffsetRelatives[0]),
-                        float.Parse(splitOffsetRelatives[1])
+                        float.Parse(split[0]),
+                        float.Parse(split[1])
                     );
                 else Debug.LogError("OffsetRelative is invalid " + ID);
             }
 
             if(!string.IsNullOrEmpty(SquareSize))
             {
-                string[] splitSquareSize = SquareSize.Trim('[', ']').Split(',');
-                if (splitSquareSize.Length == 2)
+                string[] split = SquareSize.Trim('[', ']').Split(',');
+                if (split.Length == 2)
                     Size = new Vector2(
-                        float.Parse(splitSquareSize[0]),
-                        float.Parse(splitSquareSize[1])
+                        float.Parse(split[0]),
+                        float.Parse(split[1])
                     );
                 else Debug.LogError("SquareSize is invalid " + ID);
             }

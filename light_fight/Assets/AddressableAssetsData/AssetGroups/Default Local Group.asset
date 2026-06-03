@@ -245,11 +245,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: dcab1ad7940d6754fb8230ee31ee6538
-    m_Address: EquipmentUpgradeConfig
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ddcb251d8e52a194c8be1e87b10aad2f
     m_Address: 2030 Monster
     m_ReadOnly: 0
