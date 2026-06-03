@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using DG.DemiEditor.DeGUINodeSystem;
 using ExcelExtension;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace _FightCode.Config
 {
@@ -25,17 +23,80 @@ namespace _FightCode.Config
         {
             
         }
+
+        public override void OnPostImported()
+        {
+            for (int i = 0; i < Curve_7.Count; i++)
+            {
+                CurveData data = Curve_7[i];
+                data.OnImported();
+                Curve_7[i] = data;
+            }
+
+            for (int i = 0; i < Trajectory_6.Count; i++)
+            {
+                TrajectoryData data = Trajectory_6[i];
+                data.OnImported();
+                Trajectory_6[i] = data;
+            }
+
+            for (int i = 0; i < CollisionTickets_5.Count; i++)
+            {
+                CollisionTicketData data = CollisionTickets_5[i];
+                data.OnImported();
+                CollisionTickets_5[i] = data;
+            }
+
+            for (int i = 0; i < Shapes_4.Count; i++)
+            {
+                ShapeData data = Shapes_4[i];
+                data.OnImported();
+                Shapes_4[i] = data;
+            }
+            
+            for (int i = 0; i < DamageTickets_3.Count; i++)
+            {
+                DamageTicketData data = DamageTickets_3[i];
+                data.OnImported();
+                DamageTickets_3[i] = data;
+            }
+            
+            for (int i = 0; i < FindTargets_2.Count; i++)
+            {
+                FindTargetData data = FindTargets_2[i];
+                data.OnImported();
+                FindTargets_2[i] = data;
+            }
+            
+            for (int i = 0; i < SkillTriggers_1.Count; i++)
+            {
+                SkillTriggerData data = SkillTriggers_1[i];
+                data.OnImported();
+                SkillTriggers_1[i] = data;
+            }
+            
+            for (int i = 0; i < Overview.Count; i++)
+            {
+                SkillData data = Overview[i];
+                data.OnImported();
+                Overview[i] = data;
+            }
+        }
     }
 
     [Serializable]
-    public struct CurveData
+    public struct CurveData : IKitData
     {
         public int ID;
         public string Path;
+        
+        public void OnImported()
+        {
+        }
     }
 
     [Serializable]
-    public struct TrajectoryData
+    public struct TrajectoryData : IKitData
     {
         public int ID;
         public TrajectoryType Type;
@@ -46,85 +107,104 @@ namespace _FightCode.Config
         public int BlendCurveID;
         public int ParabolicHeightCurveID;
         public int ParabolicDistanceCurveID;
+        
+        public void OnImported()
+        {
+        }
     }
 
     [Serializable]
-    public struct CollisionTicketData
+    public struct CollisionTicketData : IKitData
     {
         public int ID;
         public int MaxCollision;
         public float ResetInterval;
+        
+        public void OnImported()
+        {
+        }
     }
 
     [Serializable]
-    public struct ShapeData
+    public struct ShapeData : IKitData
     {
         public int ID;
         public ShapeType ShapeType;
         public float TimerTrigger;
-        [SerializeField] private float[] OffsetRelative;
-        [SerializeField] private float[] SquareSize;
+        [SerializeField, HideInInspector] private string OffsetRelative;
+        [SerializeField, HideInInspector] private string SquareSize;
         public SquarePivotType SquarePivot;
-        [SerializeField] private float CircleRadius;
+        [SerializeField, HideInInspector] private float CircleRadius;
+        public Vector2 OffsetRelativePosition;
+        public Vector2 Size;
+        public float Radius;
 
-        public Vector3 OffsetRelativePosition
+        public void OnImported()
         {
-            get
+            Radius = CircleRadius;
+
+            if(!string.IsNullOrEmpty(OffsetRelative))
             {
-                if (OffsetRelative.Length == 2)
-                {
-                    return new Vector3(OffsetRelative[0], OffsetRelative[1]);
-                }
-
-                return Vector3.zero;
+                string[] splitOffsetRelatives = OffsetRelative.Trim('[', ']').Split(',');
+                if (splitOffsetRelatives.Length == 2)
+                    OffsetRelativePosition = new Vector2(
+                        float.Parse(splitOffsetRelatives[0]),
+                        float.Parse(splitOffsetRelatives[1])
+                    );
+                else Debug.LogError("OffsetRelative is invalid " + ID);
             }
-        }
 
-        public Vector2 Size
-        {
-            get
+            if(!string.IsNullOrEmpty(SquareSize))
             {
-                if (SquareSize.Length == 2)
-                {
-                    return new Vector2(SquareSize[0], SquareSize[1]);
-                }
-
-                return Vector2.zero;
+                string[] splitSquareSize = SquareSize.Trim('[', ']').Split(',');
+                if (splitSquareSize.Length == 2)
+                    Size = new Vector2(
+                        float.Parse(splitSquareSize[0]),
+                        float.Parse(splitSquareSize[1])
+                    );
+                else Debug.LogError("SquareSize is invalid " + ID);
             }
-        }
-
-        public float Radius
-        {
-            get => CircleRadius;
         }
     }
 
     [Serializable]
-    public struct DamageTicketData
+    public struct DamageTicketData : IKitData
     {
         public int ID;
         public DamageTickerType Type;
         public bool IsHealthPercent;
+        
+        public void OnImported()
+        {
+        }
     }
 
     [Serializable]
-    public struct FindTargetData
+    public struct FindTargetData : IKitData
     {
         public int ID;
         public FindTargetType Type;
+        
+        public void OnImported()
+        {
+        }
     }
 
     [Serializable]
-    public struct SkillTriggerData
+    public struct SkillTriggerData : IKitData
     {
         public int ID;
         public SkillTriggerType Type;
         public float Timer;
         public int EventID;
+        
+        public void OnImported()
+        {
+        }
     }
 
     [Serializable]
-    public struct SkillData
+    public struct SkillData : IKitData
     {
         public int ID;
         public string Name;
@@ -135,6 +215,10 @@ namespace _FightCode.Config
         public int CollisionTicketID;
         public int TrajectoryID;
         public int SkillIDTriggerOnComplete;
+        
+        public void OnImported()
+        {
+        }
     }
     
     public enum TrajectoryType

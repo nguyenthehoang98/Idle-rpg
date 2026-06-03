@@ -46,4 +46,9 @@ namespace _FightCode.Config
         }
 #endif
     }
+    
+    internal interface IKitData
+    {
+        void OnImported();
+    }
 }

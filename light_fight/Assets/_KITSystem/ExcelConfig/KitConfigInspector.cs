@@ -70,7 +70,7 @@
             base.OnInspectorGUI();
             GUI.enabled = true;
         }
-
+        
         private async void Download()
         {
             Debug.Log($"Downloading {config.GetType().Name}...");
@@ -95,10 +95,10 @@
                         Type elementType = listType.GetGenericArguments()[0];
                         object defaultValue = Activator.CreateInstance(elementType);
                         Type wrapperType = typeof(ListWrapper<>).MakeGenericType(elementType);
+                        Debug.Log(request.downloadHandler.text);
                         string wrappedJson = "{ \"data\": " + request.downloadHandler.text + " }";
                         object wrapper = JsonUtility.FromJson(wrappedJson, wrapperType);
-                        object listValue = wrapperType.GetField(
-                            "data",
+                        object listValue = wrapperType.GetField("data",
                             BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
                         ).GetValue(wrapper);
                         IList list = listValue as IList;
@@ -106,10 +106,7 @@
                         for (int i = count - 1; i >= 0; i--)
                         {
                             object item = list[i];
-                            if (Equals(item, defaultValue))
-                            {
-                                list.RemoveAt(i);
-                            }
+                            if (Equals(item, defaultValue)) list.RemoveAt(i);
                         }
                         info.SetValue(config, list);
                         EditorUtility.SetDirty(target);
@@ -125,6 +122,16 @@
             {
                 Debug.LogError("Không có kiểu phù hợp để tìm Spread-Sheet, Yêu cầu object phải sử dụng Atribute [SerializeField] và là có kiểu là List<T>");
             }
+            
+            try
+            {
+                target.GetType().GetMethod("OnPostImported").Invoke(target, new object[0]);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+
             Debug.Log($"Completed {config.GetType().Name}");
         }
     }
