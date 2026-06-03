@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
  using System;
+ using System.Collections;
  using System.Collections.Generic;
  using System.Reflection;
  using System.Threading.Tasks;
@@ -92,6 +93,7 @@
                     {
                         Type listType = info.FieldType;
                         Type elementType = listType.GetGenericArguments()[0];
+                        object defaultValue = Activator.CreateInstance(elementType);
                         Type wrapperType = typeof(ListWrapper<>).MakeGenericType(elementType);
                         string wrappedJson = "{ \"data\": " + request.downloadHandler.text + " }";
                         object wrapper = JsonUtility.FromJson(wrappedJson, wrapperType);
@@ -99,7 +101,17 @@
                             "data",
                             BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
                         ).GetValue(wrapper);
-                        info.SetValue(config, listValue);
+                        IList list = listValue as IList;
+                        int count = list.Count;
+                        for (int i = count - 1; i >= 0; i--)
+                        {
+                            object item = list[i];
+                            if (Equals(item, defaultValue))
+                            {
+                                list.RemoveAt(i);
+                            }
+                        }
+                        info.SetValue(config, list);
                         EditorUtility.SetDirty(target);
                         AssetDatabase.SaveAssets();
                     }
