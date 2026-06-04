@@ -38,7 +38,7 @@ namespace _FightCode.Battle.Logic
             this.configId = configId;
             this.agent = agent;
             
-            monsterConfig.Find(configId, out var monsterData);
+            //monsterConfig.Find(configId, out var monsterData);
             //AsyncInstantiate(monsterData.path);
         }
 

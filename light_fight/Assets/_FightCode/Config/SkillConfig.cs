@@ -84,10 +84,13 @@ namespace _FightCode.Config
             {
                 string[] split = OffsetRelative.Trim('[', ']').Split(',');
                 if (split.Length == 2)
-                    OffsetRelativePosition = new Vector2(
-                        float.Parse(split[0]),
-                        float.Parse(split[1])
-                    );
+                {
+                    if (float.TryParse(split[0], out float a) && float.TryParse(split[1], out float b))
+                    {
+                        OffsetRelativePosition = new Vector2(a, b);
+                    }
+                    else Debug.LogError("OffsetRelative is invalid " + ID);
+                }
                 else Debug.LogError("OffsetRelative is invalid " + ID);
             }
 
@@ -95,10 +98,13 @@ namespace _FightCode.Config
             {
                 string[] split = SquareSize.Trim('[', ']').Split(',');
                 if (split.Length == 2)
-                    Size = new Vector2(
-                        float.Parse(split[0]),
-                        float.Parse(split[1])
-                    );
+                {
+                    if (float.TryParse(split[0], out float a) && float.TryParse(split[1], out float b))
+                    {
+                        Size = new Vector2(a, b);
+                    }
+                    else Debug.LogError("SquareSize is invalid " + ID);
+                }
                 else Debug.LogError("SquareSize is invalid " + ID);
             }
         }
@@ -133,6 +139,7 @@ namespace _FightCode.Config
     {
         public int ID;
         public string Name;
+        public string Prefab;
         public float LifeTime;
         public int TriggerID;
         public int DamageTicketID;

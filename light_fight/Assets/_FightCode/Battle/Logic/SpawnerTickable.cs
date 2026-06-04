@@ -158,8 +158,8 @@ namespace _FightCode.Battle.Logic
                     
                     int randomIndex = RandomUtils.Range(0, batch.monsters.Count);
                     int monsterID = batch.monsters.ElementAt(randomIndex).Key;
-                    monsterConfig.Find(monsterID, out var monsterData);
-                    onCreateMonster(new RequestCreateMonster(monsterData, position));
+                   // monsterConfig.Find(monsterID, out var monsterData);
+                    //onCreateMonster(new RequestCreateMonster(monsterData, position));
 
                     batch.monsters[monsterID]--;
                     if (batch.monsters[monsterID] <= 0)

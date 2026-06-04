@@ -221,6 +221,7 @@
         {
             "ID": 10001,
             "Name": "Bow",
+            "Prefab": "Bow",
             "LifeTime": 0.800000011920929,
             "TriggerID": 1001,
             "DamageTicketID": 3001,
@@ -232,6 +233,7 @@
         {
             "ID": 10002,
             "Name": "Plant Bomb",
+            "Prefab": "Plant Bomb",
             "LifeTime": 0.800000011920929,
             "TriggerID": 1001,
             "DamageTicketID": 3001,
@@ -243,6 +245,7 @@
         {
             "ID": 10003,
             "Name": "Magic Wand",
+            "Prefab": "Magic Wand",
             "LifeTime": 0.800000011920929,
             "TriggerID": 1001,
             "DamageTicketID": 3001,
@@ -254,6 +257,7 @@
         {
             "ID": 10004,
             "Name": "Ice Gun",
+            "Prefab": "Ice Gun",
             "LifeTime": 0.800000011920929,
             "TriggerID": 1001,
             "DamageTicketID": 3001,
@@ -265,6 +269,7 @@
         {
             "ID": 10005,
             "Name": "Lightning Dagger",
+            "Prefab": "Lightning Dagger",
             "LifeTime": 0.800000011920929,
             "TriggerID": 1001,
             "DamageTicketID": 3001,
@@ -276,6 +281,7 @@
         {
             "ID": 10006,
             "Name": "Plant Hammer",
+            "Prefab": "Plant Hammer",
             "LifeTime": 0.800000011920929,
             "TriggerID": 1001,
             "DamageTicketID": 3001,
@@ -287,6 +293,7 @@
         {
             "ID": 10007,
             "Name": "Lance",
+            "Prefab": "Lance",
             "LifeTime": 0.800000011920929,
             "TriggerID": 1001,
             "DamageTicketID": 3001,
@@ -298,6 +305,7 @@
         {
             "ID": 10008,
             "Name": "Ice Sword",
+            "Prefab": "Ice Sword",
             "LifeTime": 0.800000011920929,
             "TriggerID": 1001,
             "DamageTicketID": 3001,
@@ -309,6 +317,7 @@
         {
             "ID": 10009,
             "Name": "Glove",
+            "Prefab": "Glove",
             "LifeTime": 0.800000011920929,
             "TriggerID": 1001,
             "DamageTicketID": 3001,
@@ -320,6 +329,7 @@
         {
             "ID": 10010,
             "Name": "Potion",
+            "Prefab": "Potion",
             "LifeTime": 0.800000011920929,
             "TriggerID": 1001,
             "DamageTicketID": 3001,

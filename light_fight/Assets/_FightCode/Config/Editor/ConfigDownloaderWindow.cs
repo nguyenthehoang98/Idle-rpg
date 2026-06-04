@@ -26,7 +26,7 @@ namespace _FightCode.Config.Editor
         private const string PRE_PATH = "https://opensheet.elk.sh/";
         private static readonly string ROOT_FORMAT_PATH = "https://docs.google.com/spreadsheets/d/{0}/edit";
 
-        [MenuItem("Tools/Config Downloader")]
+        [MenuItem("Tools/Config/Downloader")]
         public static void ShowWindow()
         {
             var window = GetWindow<ConfigDownloaderWindow>("Config Downloader");
