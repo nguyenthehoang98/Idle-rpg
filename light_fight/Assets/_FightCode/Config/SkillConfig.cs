@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using _KITSystem.Data;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace _FightCode.Config
@@ -24,6 +25,12 @@ namespace _FightCode.Config
 
         public void OnPostImported()
         {
+            for (var i = 0; i < Shapes_4.Count; i++)
+            {
+                var data = Shapes_4[i];
+                data.OnImported();
+                Shapes_4[i] = data;
+            }
         }
     }
 
@@ -62,12 +69,23 @@ namespace _FightCode.Config
         public int ID;
         public ShapeType ShapeType;
         public float TimerTrigger;
-        public float OffsetRelativeX;
-        public float OffsetRelativeY;
-        public float SquareSizeX;
-        public float SquareSizeY;
+        
+        [JsonProperty] private float OffsetRelativeX;
+        [JsonProperty] private float OffsetRelativeY;
+        [JsonProperty] private float SquareSizeX;
+        [JsonProperty] private float SquareSizeY;
+        
         public SquarePivotType SquarePivot;
         public float CircleRadius;
+        
+        [JsonIgnore] public Vector2 OffsetRelative;
+        [JsonIgnore] public Vector2 SquareSize;
+
+        public void OnImported()
+        {
+            OffsetRelative = new Vector2(OffsetRelativeX, OffsetRelativeY);
+            SquareSize = new Vector2(SquareSizeX, SquareSizeY);
+        }
     }
 
     [Serializable]
