@@ -35,8 +35,8 @@ namespace _FightCode.Battle.View
         public event Action<float> OnSpeedChanged;
 
         private BattleSetting setting;
-        private BattleShare share;
-        
+
+        private List<DiceView> diceViews = new List<DiceView>();
         private Queue<Action> queue = new Queue<Action>();
         private float leftValue;
         private float rightValue;
@@ -168,17 +168,22 @@ namespace _FightCode.Battle.View
             }
         }
 
-        public DiceControlView Instantiate(Transform parent)
+        public static DiceControlView Instantiate(DiceControlView prefab, Transform parent, List<DiceView> diceViews) 
         {
-            DiceControlView view = Instantiate(this, parent, false);
+            DiceControlView view = Instantiate(prefab, parent, false);
             view.transform.SetAsFirstSibling();
+            view.diceViews = diceViews;
+            for (int i = 0; i < diceViews.Count; i++)
+            {
+                diceViews[i].transform.SetParent(view.itemGroup.transform);
+                diceViews[i].transform.transform.localScale = Vector3.one;
+            }
             return view;
         }
 
         public void Initialize(BattleShare share, BattleSetting setting)
         {
             this.setting = setting;
-            this.share = share;
             
             Color leftColor = setting.slotColorMinSpeed;
             leftSlider.fillRect.GetComponent<Image>().color = leftColor;
@@ -206,11 +211,6 @@ namespace _FightCode.Battle.View
             for (int i = 0; i < countChildren; i++)
             {
                 transform.GetChild(i).gameObject.SetActive(false);
-            }
-            
-            for (int i = 0; i < setting.totalSlot; i++)
-            {
-                //share.dices[i].Initialize(itemGroup.transform);
             }
             
             yield return null;

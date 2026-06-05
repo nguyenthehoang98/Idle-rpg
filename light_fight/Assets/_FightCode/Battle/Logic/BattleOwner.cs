@@ -73,10 +73,17 @@ namespace _FightCode.Battle.Logic
             movement.Initialize();
             agent.Initialize();
             spawner.Initialize(1, OnCreateMonster);
+            
+            List<DiceView> diceViews = new List<DiceView>();
+            for (int i = 0; i < setting.totalSlot; i++)
+            {
+                diceViews.Add(Object.Instantiate(setting.dice));
+            }
+            
             battle.OnInitialized += OnBattleInitialize;
-            battle.Initialize(share, setting, query);
+            battle.Initialize(share, setting, query, diceViews);
 
-            diceControl = setting.diceControl.Instantiate(canvas.transform);
+            diceControl = DiceControlView.Instantiate(setting.diceControl, canvas.transform, diceViews);
             diceControl.OnInitialized += OnDiceInitialize;
             diceControl.OnSpeedChanged += battle.SetDiceSpeed;  
             

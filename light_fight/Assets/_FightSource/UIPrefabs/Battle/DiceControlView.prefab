@@ -1227,6 +1227,7 @@ MonoBehaviour:
   speed: 2
   offsetUpX: 0.15
   offsetDownX: 0.3
+  multiplierInvertSpeed: 2.5
   rightSlider: {fileID: 2184881255934026838}
   rightFill: {fileID: 5998824871954175155}
   leftSlider: {fileID: 3123787636148982843}
@@ -1239,9 +1240,6 @@ MonoBehaviour:
   - {fileID: 9121296825426045190}
   - {fileID: 2093252561843062238}
   - {fileID: 3419612819858271928}
-  elapsedTime: 0
-  progress: 0
-  color: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &7079024410374350849
 MonoBehaviour:
   m_ObjectHideFlags: 0

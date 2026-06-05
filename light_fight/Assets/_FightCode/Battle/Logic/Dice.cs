@@ -11,18 +11,21 @@ namespace _FightCode.Battle.Logic
     {
         public event Action<int> OnTriggerDice;
 
+        private readonly DiceView view;
+        private readonly float cooldown;
+        private readonly float recoveryTime;
+        
         private float speed;
         private int value;
-        private DiceView view;
-        private BattleSetting setting;
-        private float elapsedTime;
         private Phase phase = Phase.Processing;
+        
+        private float elapsedTime;
 
-        public Dice(BattleShare share, BattleSetting setting)
+        public Dice(BattleSetting setting, DiceView view)
         {
-            this.setting = setting;
-            this.elapsedTime = setting.slotCooldownTime;
-            this.view = Object.Instantiate(setting.dice);
+            this.view = view;
+            elapsedTime = cooldown = setting.slotCooldownTime;
+            recoveryTime = setting.slotRecoveryTime;
             SetSpeed(1);
         }
 
@@ -32,7 +35,7 @@ namespace _FightCode.Battle.Logic
 
             if (phase == Phase.Processing)
             {
-                float f = Mathf.Clamp01((setting.slotCooldownTime - elapsedTime) / setting.slotCooldownTime);
+                float f = Mathf.Clamp01((cooldown - elapsedTime) / cooldown);
                 view.SetProgress(f);
             }
             
@@ -47,13 +50,13 @@ namespace _FightCode.Battle.Logic
                     break;
                 case Phase.Rolling:
                     // todo: post fx
-                    elapsedTime = setting.slotRecoveryTime;
+                    elapsedTime = recoveryTime;
                     phase = Phase.Watting;
                     view.SetValue(value);
                     OnTriggerDice?.Invoke(value);
                     break;
                 case Phase.Watting:
-                    elapsedTime = setting.slotCooldownTime;
+                    elapsedTime = cooldown;
                     phase = Phase.Processing;
                     break;
             }

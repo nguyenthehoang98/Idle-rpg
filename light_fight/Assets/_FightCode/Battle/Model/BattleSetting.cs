@@ -8,7 +8,6 @@ namespace _FightCode.Battle.Model
     [CreateAssetMenu]
     public class BattleSetting : SerializedScriptableObject
     {
-        public float2 worldCenter;
         public float defaultAgentStopDistance = 2;
         [TitleGroup("Slot")]
         public int totalSlot = 4;

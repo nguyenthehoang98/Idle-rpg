@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using _FightCode.Battle.Model;
 using _FightCode.Battle.View;
 using _FightCode.Utils;
@@ -25,13 +26,11 @@ namespace _FightCode.Battle.Logic
         private int totalDiceActivate;
         // {index:number}
         private int[] diceNumbers;
-        private Vector3 center;
 
-        public void Initialize(BattleShare share, BattleSetting setting, IQuery query)
+        public void Initialize(BattleShare share, BattleSetting setting, IQuery query, List<DiceView> diceViews)
         {
             this.share = share;
             this.setting = setting;
-            this.center = new Vector3(setting.worldCenter.x, setting.worldCenter.y);
             this.diceNumbers = new int[setting.totalSlot];
             this.dices = new Dice[setting.totalSlot];
             this.slots = new Slot[Const.MAX_DICE_NUMBER];
@@ -40,7 +39,7 @@ namespace _FightCode.Battle.Logic
             for (int i = 0; i < setting.totalSlot; i++)
             {
                 int index = i;
-                dices[i] = new Dice(share, setting);
+                dices[i] = new Dice(setting, diceViews[index]);
                 dices[i].OnTriggerDice += (i1) =>
                 {
                     TriggerDice(index, i1);

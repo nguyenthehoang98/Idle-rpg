@@ -41,7 +41,7 @@ namespace _FightCode.Shared
                 "StatConfig"
             });
 
-            /*ChangeSceneAsync("Home Scene");*/
+            ChangeSceneAsync("Home Scene");
             
             isLoadingScene = true;
         }

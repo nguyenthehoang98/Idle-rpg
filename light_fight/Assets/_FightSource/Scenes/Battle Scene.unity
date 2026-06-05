@@ -484,7 +484,7 @@ MonoBehaviour:
   isPausedDefault: 1
   useUnscaledTime: 0
   targetFPS: 30
-  loop: 50
+  loop: 1
   maxTicksPerFrame: 5
   tickables:
   - rid: 7993921842490900602
@@ -507,7 +507,6 @@ MonoBehaviour:
         interval: 0.5
         multiplierIgnoreCheckDistance: 0.2
         deltaDistanceStuck: 0.2
-        isInitialized: 0
     - rid: 7993921842490900603
       type: {class: BattleTickable, ns: _FightCode.Battle.Logic, asm: Games.Battle}
       data: 
