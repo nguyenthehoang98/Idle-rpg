@@ -1,0 +1,17 @@
+{
+  "MonsterConfig.Overview.ClassID": "MonsterConfig.Class_1.ID",
+  "MonsterConfig.Overview.ActiveSkillID" : "SkillConfig.Overview.ID",
+  "MonsterConfig.Overview.PassiveSkillID" : "SkillConfig.Overview.ID",
+  
+  "SkillConfig.Overview.TriggerID" : "SkillConfig.SkillTriggers_1.ID",
+  "SkillConfig.Overview.FindTargetID" : "SkillConfig.FindTargets_2.ID",
+  "SkillConfig.Overview.DamageTicketID" : "SkillConfig.DamageTickets_3.ID",
+  "SkillConfig.Overview.ShapeID" : "SkillConfig.Shapes_4.ID",
+  "SkillConfig.Overview.CollisionTicketID" : "SkillConfig.CollisionTickets_5.ID",
+  "SkillConfig.Overview.TrajectoryID" : "SkillConfig.Trajectory_6.ID",
+  "SkillConfig.Overview.SkillIDTriggerOnComplete" : "SkillConfig.Overview.ID",
+  
+  "EquipmentConfig.Overview.UpgradeID" : "EquipmentConfig.UpgradeConfigs_1.ID",
+  "EquipmentConfig.Overview.ActiveSkillID" : "SkillConfig.Overview.ID",
+  "EquipmentConfig.Overview.PassiveSkillID" : "SkillConfig.Overview.ID"
+}

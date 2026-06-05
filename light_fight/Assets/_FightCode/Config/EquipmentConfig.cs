@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using _KITSystem.Data;
 using UnityEngine;
+using Newtonsoft.Json;
 
 namespace _FightCode.Config
 {
@@ -44,40 +45,30 @@ namespace _FightCode.Config
         public int ActiveSkillID;        
         public int PassiveSkillID;  
     }
-    
-    [Serializable]
-    public struct EquipmentUpgradeData 
-    {
-        public int ID;
-        [SerializeField, HideInInspector] public string Stats; 
-        [SerializeField, HideInInspector] public string CUR;
 
-        public LinearFormula StatFormula;
-        public LinearFormula CUR1Formula;
-        public LinearFormula CUR2Formula;
-        
+    [Serializable]
+    public struct EquipmentUpgradeData
+    {
+        [JsonProperty] private int Stat_ID;
+        [JsonProperty] private int Stat_A;
+        [JsonProperty] private int Stat_B;
+        [JsonProperty] private int Cur1_ID;
+        [JsonProperty] private int Cur1_A;
+        [JsonProperty] private int Cur1_B;
+        [JsonProperty] private int Cur2_ID;
+        [JsonProperty] private int Cur2_A;
+        [JsonProperty] private int Cur2_B;
+
+        public int ID;
+        [JsonIgnore] public LinearFormula Stat;
+        [JsonIgnore] public LinearFormula CUR1;
+        [JsonIgnore] public LinearFormula CUR2;
+
         public void OnImported()
         {
-            if(!string.IsNullOrEmpty(Stats))
-            {
-                string[] split = Stats.Trim('[', ']').Split(',');
-                if (split.Length == 3)
-                    StatFormula = new LinearFormula(int.Parse(split[0]), int.Parse(split[1]), int.Parse(split[2]));
-                else Debug.LogError("Stats is invalid " + ID + ", length " + split.Length);
-            }
-            else Debug.LogError("Stats is invalid " + ID);
-            
-            if(!string.IsNullOrEmpty(CUR))
-            {
-                string[] split = CUR.Trim('[', ']').Split(',');
-                if (split.Length == 6)
-                {
-                    CUR1Formula = new LinearFormula(int.Parse(split[0]), int.Parse(split[1]), int.Parse(split[2]));
-                    CUR2Formula = new LinearFormula(int.Parse(split[3]), int.Parse(split[4]), int.Parse(split[5]));
-                }
-                else Debug.LogError("CUR is invalid " + ID + ", length " + split.Length);
-            }
-            else Debug.LogError("CUR is invalid " + ID);
+            Stat = new LinearFormula(Stat_ID, Stat_A, Stat_B);
+            CUR1 = new LinearFormula(Cur1_ID, Cur1_A, Cur1_B);
+            CUR2 = new LinearFormula(Cur2_ID, Cur2_A, Cur2_B);
         }
     }
 

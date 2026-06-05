@@ -24,12 +24,6 @@ namespace _FightCode.Config
 
         public void OnPostImported()
         {
-            for (var i = 0; i < Shapes_4.Count; i++)
-            {
-                var data = Shapes_4[i];
-                data.OnImported();
-                Shapes_4[i] = data;
-            }
         }
     }
 
@@ -68,46 +62,12 @@ namespace _FightCode.Config
         public int ID;
         public ShapeType ShapeType;
         public float TimerTrigger;
-        [SerializeField, HideInInspector] private string OffsetRelative;
-        [SerializeField, HideInInspector] private string SquareSize;
+        public float OffsetRelativeX;
+        public float OffsetRelativeY;
+        public float SquareSizeX;
+        public float SquareSizeY;
         public SquarePivotType SquarePivot;
-        [SerializeField, HideInInspector] private float CircleRadius;
-        public Vector2 OffsetRelativePosition;
-        public Vector2 Size;
-        public float Radius;
-
-        public void OnImported()
-        {
-            Radius = CircleRadius;
-
-            if(!string.IsNullOrEmpty(OffsetRelative))
-            {
-                string[] split = OffsetRelative.Trim('[', ']').Split(',');
-                if (split.Length == 2)
-                {
-                    if (float.TryParse(split[0], out float a) && float.TryParse(split[1], out float b))
-                    {
-                        OffsetRelativePosition = new Vector2(a, b);
-                    }
-                    else Debug.LogError("OffsetRelative is invalid " + ID);
-                }
-                else Debug.LogError("OffsetRelative is invalid " + ID);
-            }
-
-            if(!string.IsNullOrEmpty(SquareSize))
-            {
-                string[] split = SquareSize.Trim('[', ']').Split(',');
-                if (split.Length == 2)
-                {
-                    if (float.TryParse(split[0], out float a) && float.TryParse(split[1], out float b))
-                    {
-                        Size = new Vector2(a, b);
-                    }
-                    else Debug.LogError("SquareSize is invalid " + ID);
-                }
-                else Debug.LogError("SquareSize is invalid " + ID);
-            }
-        }
+        public float CircleRadius;
     }
 
     [Serializable]
@@ -142,6 +102,7 @@ namespace _FightCode.Config
         public string Prefab;
         public float LifeTime;
         public int TriggerID;
+        public int FindTargetID;
         public int DamageTicketID;
         public int ShapeID;
         public int CollisionTicketID;

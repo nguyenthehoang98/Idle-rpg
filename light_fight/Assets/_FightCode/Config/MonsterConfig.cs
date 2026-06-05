@@ -18,12 +18,6 @@ namespace _FightCode.Config
         
         public void OnPostImported()
         {
-            for (var i = 0; i < Overview.Count; i++)
-            {
-                var data = Overview[i];
-                data.OnImported();
-                Overview[i] = data;
-            }
         }
     }
 
@@ -35,71 +29,23 @@ namespace _FightCode.Config
         public string Prefab;
         public int ClassID;
         public float StopDistance;
-        [SerializeField, HideInInspector] private string AttackRange;
+        public float AttackRangeMin;
+        public float AttackRangeMax;
         public int ActiveSkillID;         // kĩ năng active
         public int PassiveSkillID;        // kĩ năng passive
         public float Scale;
         public float ColliderRadius;
-        [SerializeField, HideInInspector] private string ColliderOffset;
-        [SerializeField, HideInInspector] private string HealthBarOffset;
-        [SerializeField, HideInInspector] private string FloatingTextOffset;
+        public float ColliderOffsetX;
+        public float ColliderOffsetY;
+        public float HealthBarOffsetX;
+        public float HealthBarOffsetY;
+        public float FloatingTextOffsetX;
+        public float FloatingTextOffsetY;
         public float KnockbackResistance;
         public float KnockbackResistanceCD;
         public float StunResistance;
         public float StunResistanceCD;
         public string DeathSfx;
-
-        public Vector2 AttackRangeMinMax;
-        public Vector2 CollisionOffsetLocalPosition;
-        public Vector2 HealthBarOffsetLocalPosition;
-        public Vector2 FloatingTextOffsetLocalPosition;
-
-        public void OnImported()
-        {
-            if(!string.IsNullOrEmpty(AttackRange))
-            {
-                string[] split = AttackRange.Trim('[', ']').Split(',');
-                if (split.Length == 2)
-                    AttackRangeMinMax = new Vector2(
-                        float.Parse(split[0]),
-                        float.Parse(split[1])
-                    );
-                else Debug.LogError("AttackRange is invalid " + ID);
-            }
-            
-            if(!string.IsNullOrEmpty(ColliderOffset))
-            {
-                string[] split = ColliderOffset.Trim('[', ']').Split(',');
-                if (split.Length == 2)
-                    CollisionOffsetLocalPosition = new Vector2(
-                        float.Parse(split[0]),
-                        float.Parse(split[1])
-                    );
-                else Debug.LogError("ColliderOffset is invalid " + ID);
-            }
-                
-            if(!string.IsNullOrEmpty(HealthBarOffset))
-            {
-                string[] split = HealthBarOffset.Trim('[', ']').Split(',');
-                if (split.Length == 2)
-                    HealthBarOffsetLocalPosition = new Vector2(
-                        float.Parse(split[0]),
-                        float.Parse(split[1])
-                    );
-                else Debug.LogError("HealthBarOffset is invalid " + ID);
-            }      
-        
-            if(!string.IsNullOrEmpty(FloatingTextOffset))
-            {
-                string[] split = FloatingTextOffset.Trim('[', ']').Split(',');
-                if (split.Length == 2)
-                    FloatingTextOffsetLocalPosition = new Vector2(
-                        float.Parse(split[0]),
-                        float.Parse(split[1])
-                    );
-                else Debug.LogError("FloatingTextOffset is invalid " + ID);
-            }
-        }
     }
     
     [Serializable]

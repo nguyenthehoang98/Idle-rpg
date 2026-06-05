@@ -1,11 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using _KITSystem.Data;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -69,8 +73,8 @@ namespace _FightCode.Config.Editor
 
                 GUILayout.Space(50);
 
-                string folder = EditorPrefs.GetString(EditorPrefsKeyFolderPrefix);
-                string newFolder = EditorGUILayout.TextField(folder);
+                var folder = EditorPrefs.GetString(EditorPrefsKeyFolderPrefix);
+                var newFolder = EditorGUILayout.TextField(folder);
                 if (newFolder != folder)
                 {
                     EditorPrefs.SetString(EditorPrefsKeyFolderPrefix, newFolder);
@@ -186,7 +190,7 @@ namespace _FightCode.Config.Editor
 
             try
             {
-                object target = Activator.CreateInstance(type);
+                var target = Activator.CreateInstance(type);
                 var listFields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                     .Where(f => f.FieldType.IsGenericType &&
                                 f.FieldType.GetGenericTypeDefinition() == typeof(List<>))
@@ -217,22 +221,51 @@ namespace _FightCode.Config.Editor
                         continue;
                     }
 
-                    var json = request.downloadHandler.text;
-                    request.Dispose();
-
+                    var list = (IList)Activator.CreateInstance(info.FieldType);
+                    
                     var elementType = info.FieldType.GetGenericArguments()[0];
-                    var wrapperType = typeof(ListWrapper<>).MakeGenericType(elementType);
-                    var wrappedJson = "{ \"data\": " + json + " }";
-                    var wrapper = JsonUtility.FromJson(wrappedJson, wrapperType);
-                    var listValue = wrapperType.GetField("data").GetValue(wrapper);
-                    var list = listValue as IList;
-                    var defaultValue = Activator.CreateInstance(elementType);
-                    for (int i = list.Count - 1; i >= 0; i--)
+                 
+                    var json = request.downloadHandler.text;
+
+                    foreach (JObject token in JArray.Parse(json))
                     {
-                        if (Equals(list[i], defaultValue))
-                            list.RemoveAt(i);
+                        var item = Activator.CreateInstance(elementType);
+                        
+                        foreach (var field in elementType.GetFields(
+                                     BindingFlags.Instance |
+                                     BindingFlags.Public |
+                                     BindingFlags.NonPublic))
+                        {
+                            if (field.GetCustomAttribute<JsonIgnoreAttribute>() != null) continue;
+                            
+                            if (!token.TryGetValue(field.Name, out var value)) continue;
+                            
+                            if (value.Type == JTokenType.Null) continue;
+
+                            try
+                            {
+                                object fieldValue = ConvertValue(value, field.FieldType);
+
+                                field.SetValue(item, fieldValue);
+                            }
+                            catch (Exception e)
+                            {
+                                Debug.LogError($"[{elementType.Name}] Field '{field.Name}' parse failed. Value={value}. Error={e.Message}");
+                            }
+                        }
+                        
+                        if (IsDefaultObject(item)) continue;
+
+                        list.Add(item);
                     }
+
                     info.SetValue(target, list);
+                        
+                    type.GetMethod("OnPostImported",
+                            BindingFlags.Instance | BindingFlags.Public)
+                        ?.Invoke(target, null);
+
+                    request.Dispose();
                 }
 
                 var projectPath = Path.GetDirectoryName(Application.dataPath);
@@ -241,7 +274,27 @@ namespace _FightCode.Config.Editor
                 var savePath = Path.Combine(projectPath, folder, fileName);
 
                 Directory.CreateDirectory(Path.GetDirectoryName(savePath));
-                await File.WriteAllTextAsync(savePath, JsonUtility.ToJson(target, true));
+                
+                string contents = JsonUtility.ToJson(target, false);
+
+                contents = Regex.Replace(
+                    contents,
+                    @"-?\d+\.\d+",
+                    m =>
+                    {
+                        if (double.TryParse(
+                                m.Value,
+                                NumberStyles.Any,
+                                CultureInfo.InvariantCulture,
+                                out double d))
+                        {
+                            return d.ToString("0.####", CultureInfo.InvariantCulture);
+                        }
+
+                        return m.Value;
+                    });
+
+                await File.WriteAllTextAsync(savePath, contents);
 
                 var relativePath = savePath.Replace(projectPath, "").TrimStart(Path.DirectorySeparatorChar)
                     .Replace("\\", "/");
@@ -266,7 +319,136 @@ namespace _FightCode.Config.Editor
                 Repaint();
             }
         }
+        
+        private static bool IsDefaultObject(object obj)
+        {
+            if (obj == null)
+                return true;
 
+            var type = obj.GetType();
+
+            foreach (var field in type.GetFields(
+                         BindingFlags.Instance |
+                         BindingFlags.Public |
+                         BindingFlags.NonPublic))
+            {
+                if (field.GetCustomAttribute<JsonIgnoreAttribute>() != null)
+                    continue;
+
+                var value = field.GetValue(obj);
+
+                var defaultValue = field.FieldType.IsValueType
+                    ? Activator.CreateInstance(field.FieldType)
+                    : null;
+
+                if (!Equals(value, defaultValue))
+                    return false;
+            }
+
+            return true;
+        }
+        
+        private static object ConvertValue(JToken token, Type targetType)
+        {
+            if (token == null || token.Type == JTokenType.Null)
+            {
+                return targetType.IsValueType
+                    ? Activator.CreateInstance(targetType)
+                    : null;
+            }
+
+            string value = token.ToString();
+
+            if (targetType == typeof(string))
+            {
+                return value;
+            }
+
+            if (targetType == typeof(int))
+            {
+                return int.TryParse(value, out int i) ? i : 0;
+            }
+
+            if (targetType == typeof(long))
+            {
+                return long.TryParse(value, out long l) ? l : 0;
+            }
+
+            if (targetType == typeof(float))
+            {
+                value = value.Replace(',', '.');
+
+                return float.TryParse(
+                    value,
+                    NumberStyles.Any,
+                    CultureInfo.InvariantCulture,
+                    out float f)
+                    ? f
+                    : 0f;
+            }
+
+            if (targetType == typeof(double))
+            {
+                value = value.Replace(',', '.');
+                
+                return double.TryParse(
+                    value,
+                    NumberStyles.Any,
+                    CultureInfo.InvariantCulture,
+                    out double d)
+                    ? d
+                    : 0d;
+            }
+
+            if (targetType == typeof(bool))
+            {
+                value = value.ToLower();
+
+                return value switch
+                {
+                    "1" => true,
+                    "0" => false,
+                    "true" => true,
+                    "false" => false,
+                    "yes" => true,
+                    "no" => false,
+                    _ => false
+                };
+            }
+            
+            if (targetType.IsEnum)
+            {
+                return Enum.TryParse(targetType, value, true, out object enumValue)
+                    ? enumValue
+                    : Activator.CreateInstance(targetType);
+            }
+
+            if (targetType.IsArray)
+            {
+                Type elementType = targetType.GetElementType();
+                
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    return Array.CreateInstance(elementType, 0);
+                }
+
+                JArray array = JArray.Parse(value);
+
+                Array result = Array.CreateInstance(elementType, array.Count);
+
+                for (int i = 0; i < array.Count; i++)
+                {
+                    result.SetValue(
+                        Convert.ChangeType(array[i].ToString(), elementType),
+                        i);
+                }
+
+                return result;
+            }
+            
+            return token.ToObject(targetType);
+        }
+        
         private void DownloadAll()
         {
             foreach (var type in configTypes)
@@ -278,12 +460,6 @@ namespace _FightCode.Config.Editor
         private static string GetPrefsKey(Type type)
         {
             return $"{EditorPrefsKeyPrefix}{type.FullName}";
-        }
-        
-        [Serializable]
-        class ListWrapper<T>
-        {
-            public List<T> data = new List<T>();
         }
     }
 }

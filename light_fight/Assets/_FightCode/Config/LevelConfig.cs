@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using _KITSystem.Data;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace _FightCode.Config
@@ -19,18 +20,6 @@ namespace _FightCode.Config
         
         public void OnPostImported()
         {
-            for (var i = 0; i < Spawn_1.Count; i++)
-            {
-                var data = Spawn_1[i];
-                data.OnImported();
-                Spawn_1[i] = data;
-            }
-            for (var i = 0; i < Overview.Count; i++)
-            {
-                var data = Overview[i];
-                data.OnImported();
-                Overview[i] = data;
-            }
         }
     }
 
@@ -40,42 +29,9 @@ namespace _FightCode.Config
         public int ID; // Id của level
         public int WaveID;
         public int SpawnGroupID;
-        [SerializeField, HideInInspector] private string EquipmentsPool;
-        [SerializeField, HideInInspector] private string SkillBuffsPool;
+        public int[] EquipmentsPool;
+        public int[] SkillBuffsPool;
         public bool BossWave;
-        public int[] EquipmentsID;
-        public int[] SkillBuffsID;
-
-        public void OnImported()
-        {
-            if(!string.IsNullOrEmpty(EquipmentsPool))
-            {
-                string[] split = EquipmentsPool.Trim('[', ']').Split(',');
-                EquipmentsID = new int[split.Length];
-                for (int i = 0; i < split.Length; i++)
-                {
-                    if (int.TryParse(split[i], out int v))
-                    {
-                        EquipmentsID[i] = v;
-                    }
-                    else Debug.LogError("EquipmentsPool is invalid " + ID);
-                }                
-            }
-            
-            if(!string.IsNullOrEmpty(SkillBuffsPool))
-            {
-                string[] split = SkillBuffsPool.Trim('[', ']').Split(',');
-                SkillBuffsID = new int[split.Length];
-                for (int i = 0; i < split.Length; i++)
-                {
-                    if (int.TryParse(split[i], out int v))
-                    {
-                        SkillBuffsID[i] = v;
-                    }
-                    else Debug.LogError("SkillBuffsPool is invalid " + ID);
-                }                
-            }
-        }
     }
     
     [Serializable]
@@ -85,50 +41,16 @@ namespace _FightCode.Config
         public int Power;
         public int MonsterID;
         public int MonsterLevel;
-        [SerializeField, HideInInspector] private string SpawnTimes; // [start->end time]
-        public float AttackScale;
-        public float HealthScale;
-        [SerializeField, HideInInspector] private string PortalsID;
-        public string Distribute;
-        
         /// <summary>
         /// Sẽ có 2 option:
         /// - 1 gia trị => spawn tất cả tại 1 thời điểm
         /// - 2 giá trị => spawn random trong khoảng thời gian đó
         /// </summary>
-        public float[] TriggerSpawnTimes;
-        public int[] SpawnPortalsID;
-
-        public void OnImported()
-        {
-            if(!string.IsNullOrEmpty(SpawnTimes))
-            {
-                string[] split = SpawnTimes.Trim('[', ']').Split(',');
-                if (split.Length == 2 || split.Length == 1)
-                {
-                    TriggerSpawnTimes = new float[split.Length];
-                    for (int i = 0; i < split.Length; i++)
-                    {
-                        if (int.TryParse(split[i], out int v)) TriggerSpawnTimes[i] = v;
-                        else Debug.LogError("SpawnTimes is invalid " + SpawnGroupID);
-                    }
-                }
-                else Debug.LogError("SpawnTimes is invalid " + SpawnGroupID);
-            }
-            else Debug.LogError("SpawnTimes is invalid " + SpawnGroupID);
-            
-            if(!string.IsNullOrEmpty(PortalsID))
-            {
-                string[] split = PortalsID.Trim('[', ']').Split(',');
-                SpawnPortalsID = new int[split.Length];
-                for (int i = 0; i < split.Length; i++)
-                {
-                    if (int.TryParse(split[i], out int v)) SpawnPortalsID[i] = v;
-                    else Debug.LogError("PortalsID is invalid " + SpawnGroupID);
-                }
-            }
-            else Debug.LogError("PortalsID is invalid " + SpawnGroupID);
-        }
+        public float[] SpawnTimes; // [start->end time]
+        public float AttackScale;
+        public float HealthScale;
+        public int[] PortalsID;
+        public string Distribute;
     }
 
     [Serializable]

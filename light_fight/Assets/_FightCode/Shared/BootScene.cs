@@ -1,8 +1,13 @@
+using System.Collections.Generic;
+using _FightCode.Config;
 using _KITSystem.Data;
 using _KITSystem.Utils;
+using Newtonsoft.Json;
+using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using UnityEngine;
+#endif
 
 namespace _FightCode.Shared
 {
@@ -10,7 +15,7 @@ namespace _FightCode.Shared
     {
         private float elapsed = 1;
         private bool isLoadingScene = false;
-        
+
         [SerializeField] private GameObject loadingScene;
         
         protected override void OnNewGame()
@@ -27,10 +32,12 @@ namespace _FightCode.Shared
         {
             await ConfigManager.Load(new[]
             {
-                "SkillConfig",
                 "EquipmentConfig",
+                "LevelConfig",
+                "MonsterConfig",
                 "PlayerConfig",
                 "ResourcesConfig",
+                "SkillConfig",
                 "StatConfig"
             });
 
