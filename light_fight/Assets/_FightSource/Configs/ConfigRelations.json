@@ -13,5 +13,11 @@
   
   "EquipmentConfig.Overview.UpgradeID" : "EquipmentConfig.UpgradeConfigs_1.ID",
   "EquipmentConfig.Overview.ActiveSkillID" : "SkillConfig.Overview.ID",
-  "EquipmentConfig.Overview.PassiveSkillID" : "SkillConfig.Overview.ID"
+  "EquipmentConfig.Overview.PassiveSkillID" : "SkillConfig.Overview.ID",
+
+  "LevelConfig.Overview.SpawnGroupID" : "LevelConfig.Spawn_1.SpawnGroupID",
+  "LevelConfig.Overview.EquipmentsPool" : "EquipmentConfig.Overview.ID", 
+  "LevelConfig.Overview.SkillBuffsPool" : "SkillConfig.Overview.ID",
+  "LevelConfig.Spawn_1.MonsterID" : "MonsterConfig.Overview.ID",
+  "LevelConfig.Spawn_1.PortalsID" : "LevelConfig.Portal_3.ID"
 }

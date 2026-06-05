@@ -17,10 +17,16 @@ namespace _FightCode.Config.Editor
         private List<ValidationError> errors = new List<ValidationError>();
         private bool hasScanned;
         private bool isScanning;
-        private HashSet<string> missingConfigs = new HashSet<string>();
-        private int scannedCount;
 
         private const string EditorPrefsFolderKey = "ConfigValidator_Folder";
+        private static readonly string RelationsFile = "Assets/_FightSource/Configs/ConfigRelations.json";
+
+        private static readonly Dictionary<string, string> FieldAlias = new Dictionary<string, string>
+        {
+            { "EquipmentsPool", "EquipmentsID" },
+            { "SkillBuffsPool", "SkillBuffsID" },
+            { "PortalsID", "SpawnPortalsID" },
+        };
 
         [MenuItem("Tools/Config/Validator")]
         public static void ShowWindow()
@@ -51,9 +57,7 @@ namespace _FightCode.Config.Editor
                 using (new EditorGUI.DisabledGroupScope(isScanning))
                 {
                     if (GUILayout.Button("Scan", GUILayout.Width(80)))
-                    {
                         Scan();
-                    }
                 }
             }
 
@@ -62,30 +66,23 @@ namespace _FightCode.Config.Editor
             if (isScanning)
             {
                 EditorGUILayout.HelpBox("Scanning...", MessageType.Info);
+                return;
             }
-            else if (hasScanned)
-            {
-                foreach (var c in missingConfigs)
-                {
-                    EditorGUILayout.HelpBox($"MISSING: {c} not found in {dataFolder}", MessageType.Warning);
-                }
 
-                if (missingConfigs.Count > 0)
-                    GUILayout.Space(4);
-
-                if (errors.Count == 0)
-                {
-                    EditorGUILayout.HelpBox($"All OK - {scannedCount} configs, no missing references", MessageType.Info);
-                }
-                else
-                {
-                    EditorGUILayout.HelpBox($"Found {errors.Count} missing reference(s) across {scannedCount} configs",
-                        MessageType.Error);
-                }
-            }
+            if (!hasScanned) return;
 
             GUILayout.Space(4);
 
+            if (errors.Count == 0)
+            {
+                EditorGUILayout.HelpBox("All OK — no missing references", MessageType.Info);
+            }
+            else
+            {
+                EditorGUILayout.HelpBox($"Found {errors.Count} missing reference(s)", MessageType.Error);
+            }
+
+            GUILayout.Space(4);
             scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 
             foreach (var error in errors)
@@ -97,11 +94,8 @@ namespace _FightCode.Config.Editor
                         GUILayout.Label(error.SourceType, EditorStyles.boldLabel, GUILayout.Width(150));
                         GUILayout.Label($"Row {error.RowIndex}", GUILayout.Width(60));
                         GUILayout.FlexibleSpace();
-
                         if (GUILayout.Button("Ping", GUILayout.Width(50)))
-                        {
                             PingConfig(error.SourceType);
-                        }
                     }
 
                     EditorGUILayout.LabelField("Field", error.SourceField);
@@ -118,30 +112,31 @@ namespace _FightCode.Config.Editor
         private void PingConfig(string typeName)
         {
             var projectPath = Path.GetDirectoryName(Application.dataPath);
-            var relativePath = Path.Combine(dataFolder, typeName + ".json").Replace("\\", "/");
-            var fullPath = Path.Combine(projectPath, relativePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
-
-            if (File.Exists(fullPath))
+            var rel = Path.Combine(dataFolder, typeName + ".json").Replace("\\", "/");
+            var abs = Path.Combine(projectPath, rel.Replace("/", Path.DirectorySeparatorChar.ToString()));
+            if (File.Exists(abs))
             {
-                AssetDatabase.ImportAsset(relativePath);
-                var asset = AssetDatabase.LoadAssetAtPath<TextAsset>(relativePath);
-                if (asset != null)
-                    EditorGUIUtility.PingObject(asset);
+                AssetDatabase.ImportAsset(rel);
+                var a = AssetDatabase.LoadAssetAtPath<TextAsset>(rel);
+                if (a != null) EditorGUIUtility.PingObject(a);
             }
         }
 
+        // ----------------------------------------------------------------
+        // SCAN
+        // ----------------------------------------------------------------
         private void Scan()
         {
             isScanning = true;
             errors.Clear();
-            missingConfigs.Clear();
             hasScanned = false;
             Repaint();
 
             try
             {
                 var projectPath = Path.GetDirectoryName(Application.dataPath);
-                var assetFolder = Path.Combine(projectPath, dataFolder.Replace("/", Path.DirectorySeparatorChar.ToString()));
+                var assetFolder = Path.Combine(projectPath,
+                    dataFolder.Replace("/", Path.DirectorySeparatorChar.ToString()));
 
                 if (!Directory.Exists(assetFolder))
                 {
@@ -149,90 +144,107 @@ namespace _FightCode.Config.Editor
                     return;
                 }
 
-                var configTypes = TypeCache.GetTypesDerivedFrom<IGameConfig>()
+                // 1. Parse ConfigRelations.json
+                var rawRelations = ParseRelationsFile();
+                if (rawRelations.Count == 0)
+                {
+                    EditorUtility.DisplayDialog("Error", "ConfigRelations.json is empty or not found", "OK");
+                    return;
+                }
+
+                // 2. Collect unique config type names from relations
+                var neededTypes = new HashSet<string>();
+                foreach (var (srcKey, tgtKey) in rawRelations)
+                {
+                    neededTypes.Add(srcKey.config);
+                    neededTypes.Add(tgtKey.config);
+                }
+
+                // 3. Find actual C# types via TypeCache
+                var allConfigTypes = TypeCache.GetTypesDerivedFrom<IGameConfig>()
                     .Where(t => !t.IsAbstract && !t.IsInterface)
                     .ToList();
 
-                var loaded = new Dictionary<Type, object>();
-
-                foreach (var type in configTypes)
+                var typeMap = new Dictionary<string, Type>();
+                foreach (var name in neededTypes)
                 {
-                    var jsonPath = Path.Combine(assetFolder, type.Name + ".json");
+                    var t = allConfigTypes.FirstOrDefault(x => x.Name == name);
+                    if (t != null) typeMap[name] = t;
+                    else Debug.LogWarning($"Type not found: {name}");
+                }
+
+                // 4. Load JSON files for those types
+                var loaded = new Dictionary<Type, object>();
+                foreach (var kv in typeMap)
+                {
+                    var jsonPath = Path.Combine(assetFolder, kv.Key + ".json");
                     if (!File.Exists(jsonPath))
                     {
-                        missingConfigs.Add(type.Name);
+                        Debug.LogWarning($"JSON not found: {jsonPath}");
                         continue;
                     }
 
                     var json = File.ReadAllText(jsonPath);
-                    var obj = JsonUtility.FromJson(json, type);
-                    if (obj != null)
-                        loaded[type] = obj;
+                    var obj = JsonUtility.FromJson(json, kv.Value);
+                    if (obj != null) loaded[kv.Value] = obj;
                 }
 
-                scannedCount = loaded.Count;
-                var lookups = BuildLookups(loaded);
-                var relations = DefineRelations(configTypes);
-
-                foreach (var rel in relations)
+                // 5. Run each relation
+                foreach (var (srcKey, tgtKey) in rawRelations)
                 {
-                    if (!loaded.TryGetValue(rel.SourceType, out var sourceObj)) continue;
-                    if (!loaded.TryGetValue(rel.TargetType, out _))
+                    if (!typeMap.TryGetValue(srcKey.config, out var srcType)) continue;
+                    if (!typeMap.TryGetValue(tgtKey.config, out var tgtType)) continue;
+                    if (!loaded.TryGetValue(srcType, out var srcObj)) continue;
+                    if (!loaded.TryGetValue(tgtType, out var tgtObj)) continue;
+
+                    var srcList = GetListField(srcObj, srcKey.list);
+                    if (srcList == null || srcList.Count == 0) continue;
+
+                    var tgtList = GetListField(tgtObj, tgtKey.list);
+                    if (tgtList == null || tgtList.Count == 0) continue;
+
+                    // Build target set: collect all values of the target field
+                    var tgtSet = new HashSet<int>();
+                    var tgtElemType = tgtList[0].GetType();
+                    var tgtField = tgtElemType.GetField(tgtKey.field,
+                        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                    if (tgtField == null) continue;
+                    foreach (var item in tgtList)
                     {
-                        missingConfigs.Add(rel.TargetType.Name);
-                        continue;
+                        if (tgtField.FieldType == typeof(int))
+                            tgtSet.Add((int)tgtField.GetValue(item));
                     }
 
-                    var sourceList = GetListField(sourceObj, rel.SourceListField);
-                    if (sourceList == null) continue;
+                    if (tgtSet.Count == 0) continue;
 
-                    var targetSet = rel.TargetType == rel.SourceType
-                        ? BuildSetFromList(sourceList, rel.TargetField)
-                        : lookups.GetValueOrDefault((rel.TargetType, rel.TargetListField, rel.TargetField));
+                    // Resolve source field alias
+                    var srcElemType = srcList[0].GetType();
+                    var srcFieldName = ResolveAlias(srcElemType, srcKey.field);
+                    var srcField = srcElemType.GetField(srcFieldName,
+                        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                    if (srcField == null) continue;
 
-                    if (targetSet == null) continue;
-
-                    var rowIndex = 0;
-                    foreach (var item in sourceList)
+                    int row = 0;
+                    foreach (var item in srcList)
                     {
-                        rowIndex++;
+                        row++;
 
-                        if (rel.IsArray)
+                        if (srcField.FieldType == typeof(int))
                         {
-                            var arr = GetIntArrayField(item, rel.SourceField);
-                            if (arr == null) continue;
-                            foreach (var val in arr)
-                            {
-                                if (val <= 0) continue;
-                                if (!targetSet.Contains(val))
-                                {
-                                    errors.Add(new ValidationError
-                                    {
-                                        SourceType = rel.SourceType.Name,
-                                        SourceField = $"{rel.SourceListField}[].{rel.SourceField}[]",
-                                        MissingValue = val,
-                                        RowIndex = rowIndex,
-                                        TargetType = rel.TargetType.Name,
-                                        TargetField = $"{rel.TargetListField}[].{rel.TargetField}"
-                                    });
-                                }
-                            }
+                            var v = (int)srcField.GetValue(item);
+                            if (v <= 0) continue;
+                            if (!tgtSet.Contains(v))
+                                errors.Add(Err(srcKey, srcFieldName, v, row, tgtKey));
                         }
-                        else
+                        else if (srcField.FieldType == typeof(int[]))
                         {
-                            var val = GetIntField(item, rel.SourceField);
-                            if (val <= 0) continue;
-                            if (!targetSet.Contains(val))
+                            var arr = (int[])srcField.GetValue(item);
+                            if (arr == null || arr.Length == 0) continue;
+                            foreach (var v in arr)
                             {
-                                errors.Add(new ValidationError
-                                {
-                                    SourceType = rel.SourceType.Name,
-                                    SourceField = $"{rel.SourceListField}[].{rel.SourceField}",
-                                    MissingValue = val,
-                                    RowIndex = rowIndex,
-                                    TargetType = rel.TargetType.Name,
-                                    TargetField = $"{rel.TargetListField}[].{rel.TargetField}"
-                                });
+                                if (v <= 0) continue;
+                                if (!tgtSet.Contains(v))
+                                    errors.Add(Err(srcKey, srcFieldName + "[]", v, row, tgtKey));
                             }
                         }
                     }
@@ -251,144 +263,117 @@ namespace _FightCode.Config.Editor
             }
         }
 
-        private static Dictionary<(Type, string, string), HashSet<int>> BuildLookups(
-            Dictionary<Type, object> loaded)
+        // ----------------------------------------------------------------
+        // HELPERS
+        // ----------------------------------------------------------------
+
+        private static ValidationError Err(
+            (string config, string list, string field) src, string srcField, int v, int row,
+            (string config, string list, string field) tgt)
         {
-            var result = new Dictionary<(Type, string, string), HashSet<int>>();
-
-            foreach (var (type, obj) in loaded)
+            return new ValidationError
             {
-                var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                foreach (var field in fields)
+                SourceType = src.config,
+                SourceField = $"{src.list}[].{srcField}",
+                MissingValue = v,
+                RowIndex = row,
+                TargetType = tgt.config,
+                TargetField = $"{tgt.list}[].{tgt.field}",
+            };
+        }
+
+        private static string ResolveAlias(Type elemType, string fieldName)
+        {
+            var f = elemType.GetField(fieldName,
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            if (f != null) return fieldName;
+            return FieldAlias.TryGetValue(fieldName, out var a) ? a : fieldName;
+        }
+
+        private static IList GetListField(object obj, string fieldName)
+        {
+            var f = obj.GetType().GetField(fieldName,
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            return f?.GetValue(obj) as IList;
+        }
+
+        // ----------------------------------------------------------------
+        // PARSE ConfigRelations.json
+        // ----------------------------------------------------------------
+
+        private static List<((string config, string list, string field), (string config, string list, string field))>
+            ParseRelationsFile()
+        {
+            var path = Path.Combine(
+                Path.GetDirectoryName(Application.dataPath),
+                RelationsFile.Replace("/", Path.DirectorySeparatorChar.ToString()));
+
+            if (!File.Exists(path))
+            {
+                Debug.LogWarning($"Relations file not found: {path}");
+                return new List<((string, string, string), (string, string, string))>();
+            }
+
+            var json = File.ReadAllText(path);
+            var pairs = ParseFlatJson(json);
+            var result = new List<((string, string, string), (string, string, string))>();
+
+            foreach (var (key, val) in pairs)
+            {
+                var s = key.Split('.');
+                var t = val.Split('.');
+                if (s.Length < 3 || t.Length < 3)
                 {
-                    if (!field.FieldType.IsGenericType ||
-                        field.FieldType.GetGenericTypeDefinition() != typeof(List<>))
-                        continue;
-
-                    var list = field.GetValue(obj) as IList;
-                    if (list == null || list.Count == 0) continue;
-
-                    var elementType = field.FieldType.GetGenericArguments()[0];
-                    var candidates = new[] { "ID", "Level", "SpawnGroupID" };
-
-                    foreach (var candidate in candidates)
-                    {
-                        var idField = elementType.GetField(candidate,
-                            BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                        if (idField == null || idField.FieldType != typeof(int)) continue;
-
-                        var key = (type, field.Name, candidate);
-                        if (!result.ContainsKey(key))
-                            result[key] = new HashSet<int>();
-
-                        foreach (var item in list)
-                        {
-                            var val = (int)idField.GetValue(item);
-                            result[key].Add(val);
-                        }
-
-                        break;
-                    }
+                    Debug.LogWarning($"Skip invalid: {key} → {val}");
+                    continue;
                 }
+
+                result.Add((
+                    (s[0], s[1], string.Join(".", s.Skip(2))),
+                    (t[0], t[1], string.Join(".", t.Skip(2)))
+                ));
             }
 
             return result;
         }
 
-        private static HashSet<int> BuildSetFromList(IList list, string fieldName)
+        private static List<(string Key, string Value)> ParseFlatJson(string json)
         {
-            var set = new HashSet<int>();
-            if (list == null || list.Count == 0) return set;
+            var result = new List<(string, string)>();
+            json = json.Trim();
 
-            var elementType = list[0].GetType();
-            var field = elementType.GetField(fieldName,
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            if (field == null || field.FieldType != typeof(int)) return set;
+            if (json.StartsWith("{")) json = json.Substring(1);
+            if (json.EndsWith("}")) json = json.Substring(0, json.Length - 1);
 
-            foreach (var item in list)
+            int depth = 0, start = 0;
+            var parts = new List<string>();
+            for (int i = 0; i < json.Length; i++)
             {
-                var val = (int)field.GetValue(item);
-                set.Add(val);
+                if (json[i] == '{' || json[i] == '[') depth++;
+                else if (json[i] == '}' || json[i] == ']') depth--;
+                else if (json[i] == ',' && depth == 0)
+                {
+                    parts.Add(json.Substring(start, i - start));
+                    start = i + 1;
+                }
+            }
+            var last = json.Substring(start).Trim();
+            if (last.Length > 0) parts.Add(last);
+
+            foreach (var p in parts)
+            {
+                var ci = p.IndexOf(':');
+                if (ci < 0) continue;
+                result.Add((p.Substring(0, ci).Trim().Trim('"'),
+                            p.Substring(ci + 1).Trim().Trim('"')));
             }
 
-            return set;
+            return result;
         }
 
-        private static IList GetListField(object obj, string fieldName)
-        {
-            var type = obj.GetType();
-            var field = type.GetField(fieldName,
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            return field?.GetValue(obj) as IList;
-        }
-
-        private static int GetIntField(object obj, string fieldName)
-        {
-            var type = obj.GetType();
-            var field = type.GetField(fieldName,
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            if (field == null) return -1;
-            return (int)field.GetValue(obj);
-        }
-
-        private static int[] GetIntArrayField(object obj, string fieldName)
-        {
-            var type = obj.GetType();
-            var field = type.GetField(fieldName,
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            return field?.GetValue(obj) as int[];
-        }
-
-        private static List<Relation> DefineRelations(List<Type> allTypes)
-        {
-            var monster = allTypes.FirstOrDefault(t => t.Name == "MonsterConfig");
-            var monsterClass = allTypes.FirstOrDefault(t => t.Name == "MonsterClassConfig");
-            var monsterLevel = allTypes.FirstOrDefault(t => t.Name == "MonsterLevelConfig");
-            var skill = allTypes.FirstOrDefault(t => t.Name == "SkillConfig");
-            var equipment = allTypes.FirstOrDefault(t => t.Name == "EquipmentConfig");
-            var level = allTypes.FirstOrDefault(t => t.Name == "LevelConfig");
-            var spawn = allTypes.FirstOrDefault(t => t.Name == "SpawnConfig");
-
-            var list = new List<Relation>();
-
-            if (monster != null && monsterClass != null)
-                list.Add(new Relation(monster, "monsters", "ClassID",
-                    monsterClass, "classes", "ID"));
-
-            if (monster != null && skill != null)
-            {
-                list.Add(new Relation(monster, "monsters", "ActiveSkill",
-                    skill, "Overview", "ID"));
-                list.Add(new Relation(monster, "monsters", "PassiveSkill",
-                    skill, "Overview", "ID"));
-            }
-
-            if (equipment != null && skill != null)
-            {
-                list.Add(new Relation(equipment, "Overview", "ActiveSkillID",
-                    skill, "Overview", "ID"));
-                list.Add(new Relation(equipment, "Overview", "PassiveSkillID",
-                    skill, "Overview", "ID"));
-            }
-
-            if (level != null && spawn != null)
-                list.Add(new Relation(level, "levels", "SpawnGroupID",
-                    spawn, "spawns", "SpawnGroupID"));
-
-            if (level != null && equipment != null)
-                list.Add(new Relation(level, "levels", "EquipmentsPool",
-                    equipment, "Overview", "ID") { IsArray = true });
-
-            if (spawn != null && monster != null)
-                list.Add(new Relation(spawn, "spawns", "MonsterID",
-                    monster, "monsters", "ID"));
-
-            if (spawn != null && monsterLevel != null)
-                list.Add(new Relation(spawn, "spawns", "MonsterLevel",
-                    monsterLevel, "levels", "Level"));
-
-            return list;
-        }
+        // ----------------------------------------------------------------
+        // DATA CLASSES
+        // ----------------------------------------------------------------
 
         public class ValidationError
         {
@@ -398,28 +383,6 @@ namespace _FightCode.Config.Editor
             public int RowIndex;
             public string TargetType;
             public string TargetField;
-        }
-
-        public class Relation
-        {
-            public Type SourceType;
-            public string SourceListField;
-            public string SourceField;
-            public Type TargetType;
-            public string TargetListField;
-            public string TargetField;
-            public bool IsArray;
-
-            public Relation(Type sourceType, string sourceList, string sourceField,
-                Type targetType, string targetList, string targetField)
-            {
-                SourceType = sourceType;
-                SourceListField = sourceList;
-                SourceField = sourceField;
-                TargetType = targetType;
-                TargetListField = targetList;
-                TargetField = targetField;
-            }
         }
     }
 }
