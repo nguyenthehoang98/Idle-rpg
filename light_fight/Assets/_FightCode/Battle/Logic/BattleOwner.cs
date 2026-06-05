@@ -4,10 +4,11 @@ using _FightCode.Battle.Popup;
 using _FightCode.Battle.View;
 using _FightCode.Config;
 using _KITSystem.Data;
+using _KITSystem.Entity;
 using _KITSystem.Popup;
 using _KITSystem.Schedule;
+using _KITSystem.SkillSystem;
 using _KITSystem.SkillSystem.Entity;
-using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -84,7 +85,7 @@ namespace _FightCode.Battle.Logic
             diceControl.OnSpeedChanged += battle.SetDiceSpeed;  
             
             // todo: reset global data + register event
-            SkillFactory.Initialize(skill, query);
+            //SkillFactory.Initialize(skill, query);
             EntityManager.OnBehaviour += OnEntityBehaviour;
             spawner.OnWaveCompleted += OnWaveComplete;
 
@@ -162,7 +163,7 @@ namespace _FightCode.Battle.Logic
 
             EntityManager.OnBehaviour -= OnEntityBehaviour;
             EntityManager.Dispose();
-            SkillFactory.Dispose();
+            //SkillFactory.Dispose();
             movement?.Dispose();
             agent?.Dispose();
         }

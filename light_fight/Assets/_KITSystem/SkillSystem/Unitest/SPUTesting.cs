@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using _KITSystem.SkillSystem.Runtime;
+using _KITSystem.SkillSystem.Model;
 using NUnit.Framework;
 
 namespace _KITSystem.SkillSystem.Unitest
@@ -13,7 +13,7 @@ namespace _KITSystem.SkillSystem.Unitest
 
             int actionId = -1;
 
-            spu.RequestAddAction(1, new DummySkillAction(), id => actionId = id);
+            spu.RequestAddAction(1, new DummyAction(), id => actionId = id);
             spu.Tick(0);
 
             Assert.IsTrue(actionId >= 0);
@@ -26,7 +26,7 @@ namespace _KITSystem.SkillSystem.Unitest
 
             int actionId = -1;
 
-            spu.RequestAddAction(1, new DummySkillAction(), id => actionId = id);
+            spu.RequestAddAction(1, new DummyAction(), id => actionId = id);
             spu.Tick(0);
 
             spu.RequestRemoveAction(actionId);
@@ -42,9 +42,9 @@ namespace _KITSystem.SkillSystem.Unitest
 
             int a1 = -1, a2 = -1, a3 = -1;
 
-            spu.RequestAddAction(1, new DummySkillAction(), id => a1 = id);
-            spu.RequestAddAction(1, new DummySkillAction(), id => a2 = id);
-            spu.RequestAddAction(1, new DummySkillAction(), id => a3 = id);
+            spu.RequestAddAction(1, new DummyAction(), id => a1 = id);
+            spu.RequestAddAction(1, new DummyAction(), id => a2 = id);
+            spu.RequestAddAction(1, new DummyAction(), id => a3 = id);
             spu.Tick(0);
 
             spu.RequestRemoveAction(a2);
@@ -61,7 +61,7 @@ namespace _KITSystem.SkillSystem.Unitest
 
             int actionId = -1;
 
-            spu.RequestAddAction(1, new DummySkillAction(), id => actionId = id);
+            spu.RequestAddAction(1, new DummyAction(), id => actionId = id);
 
             // chưa Tick
             Assert.AreEqual(-1, actionId);
@@ -78,7 +78,7 @@ namespace _KITSystem.SkillSystem.Unitest
 
             int actionId = -1;
 
-            spu.RequestAddAction(1, new FinishImmediatelySkillAction(), id => actionId = id);
+            spu.RequestAddAction(1, new FinishImmediatelyAction(), id => actionId = id);
             spu.Tick(0);
 
             // tick thêm để trigger remove
@@ -90,14 +90,14 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void SkillId_ShouldBeReused_AfterAllActionsRemoved()
         {
-            var spu = new SPU();
+            var spu = new Spu();
 
             // create skill
             int skill1 = spu.GenerateSkillInstanceId();
 
             int actionId = -1;
 
-            spu.RequestAddAction(skill1, new DummySkillAction(), id => actionId = id);
+            spu.RequestAddAction(skill1, new DummyAction(), id => actionId = id);
             spu.Tick(0);
 
             // remove action -> skill should be released
@@ -113,11 +113,11 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void SkillId_ShouldNotBeReused_WhenStillHasActions()
         {
-            var spu = new SPU();
+            var spu = new Spu();
 
             int skill1 = spu.GenerateSkillInstanceId();
 
-            spu.RequestAddAction(skill1, new DummySkillAction());
+            spu.RequestAddAction(skill1, new DummyAction());
             spu.Tick(0);
 
             int skill2 = spu.GenerateSkillInstanceId();
@@ -128,20 +128,20 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void ActionId_ShouldNotBeReused()
         {
-            var spu = new SPU();
+            var spu = new Spu();
 
             int skill = spu.GenerateSkillInstanceId();
 
             int a1 = -1;
             int a2 = -1;
 
-            spu.RequestAddAction(skill, new DummySkillAction(), id => a1 = id);
+            spu.RequestAddAction(skill, new DummyAction(), id => a1 = id);
             spu.Tick(0);
 
             spu.RequestRemoveAction(a1);
             spu.Tick(0);
 
-            spu.RequestAddAction(skill, new DummySkillAction(), id => a2 = id);
+            spu.RequestAddAction(skill, new DummyAction(), id => a2 = id);
             spu.Tick(0);
 
             Assert.AreNotEqual(a1, a2);
@@ -150,14 +150,14 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void SkillId_ShouldOnlyBeFreedOnce()
         {
-            var spu = new SPU();
+            var spu = new Spu();
 
             int skill = spu.GenerateSkillInstanceId();
 
             int a1 = -1, a2 = -1;
 
-            spu.RequestAddAction(skill, new DummySkillAction(), id => a1 = id);
-            spu.RequestAddAction(skill, new DummySkillAction(), id => a2 = id);
+            spu.RequestAddAction(skill, new DummyAction(), id => a1 = id);
+            spu.RequestAddAction(skill, new DummyAction(), id => a2 = id);
             spu.Tick(0);
 
             // remove cả 2
@@ -176,7 +176,7 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void SkillId_Reuse_ShouldBeStable_AfterManyCycles()
         {
-            var spu = new SPU();
+            var spu = new Spu();
 
             const int LOOP = 1000;
 
@@ -186,7 +186,7 @@ namespace _KITSystem.SkillSystem.Unitest
 
                 int actionId = -1;
 
-                spu.RequestAddAction(skill, new DummySkillAction(), id => actionId = id);
+                spu.RequestAddAction(skill, new DummyAction(), id => actionId = id);
                 spu.Tick(0);
 
                 spu.RequestRemoveAction(actionId);
@@ -201,7 +201,7 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void SkillId_Reuse_MultipleSkills()
         {
-            var spu = new SPU();
+            var spu = new Spu();
 
             const int COUNT = 100;
 
@@ -219,7 +219,7 @@ namespace _KITSystem.SkillSystem.Unitest
             foreach (var skill in skills)
             {
                 int a = -1;
-                spu.RequestAddAction(skill, new DummySkillAction(), id => a = id);
+                spu.RequestAddAction(skill, new DummyAction(), id => a = id);
                 spu.Tick(0);
                 actionIds.Add(a);
             }
@@ -248,7 +248,7 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void Random_Stress_Test()
         {
-            var spu = new SPU();
+            var spu = new Spu();
             var rnd = new System.Random(123);
 
             var activeActions = new List<int>();
@@ -266,7 +266,7 @@ namespace _KITSystem.SkillSystem.Unitest
                     activeSkills.Add(skill);
 
                     int actionId = -1;
-                    spu.RequestAddAction(skill, new DummySkillAction(), id => actionId = id);
+                    spu.RequestAddAction(skill, new DummyAction(), id => actionId = id);
                     spu.Tick(0);
 
                     activeActions.Add(actionId);
@@ -293,7 +293,7 @@ namespace _KITSystem.SkillSystem.Unitest
         [Test]
         public void ActionId_ShouldAlwaysBeUnique()
         {
-            var spu = new SPU();
+            var spu = new Spu();
 
             var ids = new HashSet<int>();
 
@@ -305,7 +305,7 @@ namespace _KITSystem.SkillSystem.Unitest
 
                 int actionId = -1;
 
-                spu.RequestAddAction(skill, new DummySkillAction(), id => actionId = id);
+                spu.RequestAddAction(skill, new DummyAction(), id => actionId = id);
                 spu.Tick(0);
 
                 Assert.IsFalse(ids.Contains(actionId), $"Duplicate actionId {actionId}");
@@ -317,9 +317,9 @@ namespace _KITSystem.SkillSystem.Unitest
             }
         }
         
-        SPU CreateSPU()
+        Spu CreateSPU()
         {
-            return new SPU();
+            return new Spu();
         }
     }
 
@@ -327,7 +327,7 @@ namespace _KITSystem.SkillSystem.Unitest
     // DUMMY ACTION
     //========================
 
-    class DummySkillAction : ISkillAction
+    class DummyAction : IAction
     {
         public bool IsFinished => false;
         public ActionCompleteReason Reason => ActionCompleteReason.EndLifeCycle;
@@ -342,7 +342,7 @@ namespace _KITSystem.SkillSystem.Unitest
         public void Interrupt() { }
     }
 
-    class FinishImmediatelySkillAction : ISkillAction
+    class FinishImmediatelyAction : IAction
     {
         public bool IsFinished => true;
         public ActionCompleteReason Reason => ActionCompleteReason.EndLifeCycle;

@@ -1,7 +1,7 @@
 ﻿using _FightCode.Battle.Model;
 using _FightCode.Battle.View;
 using _FightCode.Utils;
-using _KITSystem.SkillSystem.Runtime;
+using _KITSystem.Entity;
 using UnityEngine;
 
 namespace _FightCode.Battle.Logic

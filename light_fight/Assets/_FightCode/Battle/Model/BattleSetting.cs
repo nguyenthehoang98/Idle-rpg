@@ -1,5 +1,4 @@
 ﻿using _FightCode.Battle.View;
-using _KITSystem.SkillSystem.Config;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
@@ -34,6 +33,5 @@ namespace _FightCode.Battle.Model
         public IWeaponView weapon;
         public IAttractorView attractor;
         public IDiceControlView diceControl;
-        public SkillFrameConfig skillFrameConfig;
     }
 }

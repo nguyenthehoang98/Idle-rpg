@@ -1,10 +1,10 @@
 ﻿using _KITSystem.Schedule;
-using _KITSystem.SkillSystem.Runtime;
+using _KITSystem.SkillSystem.Model;
 
 namespace _FightCode.Battle.Logic
 {
     [System.Serializable]
-    public class SkillTickable : SPU, ITickable
+    public class SkillTickable : Spu, ITickable
     {
     }
 }

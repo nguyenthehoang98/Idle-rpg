@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using _KITSystem.Entity;
 using _KITSystem.Grid;
 using _KITSystem.SkillSystem.Entity;
-using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace _FightCode.Battle.Logic
 {
@@ -17,9 +18,9 @@ namespace _FightCode.Battle.Logic
             this.agentGrid = agentGrid;
         }
 
-        public void RandomTargetPosition(float2 center, float radius, Func<int, bool> funcFilterEntity, out QueryResult result)
+        public void RandomTargetPosition(Vector2 center, float radius, Func<int, bool> funcFilterEntity, out QueryResult result)
         {
-            int count = agentGrid.QueryAgent(center, new float2(radius, radius), out AgentData[] agents);
+            int count = agentGrid.QueryAgent(center, new Vector2(radius, radius), out AgentData[] agents);
 
             List<AgentData> temp = new List<AgentData>(count);
 
@@ -56,11 +57,11 @@ namespace _FightCode.Battle.Logic
             }
         }
 
-        public void FarthestTargetPosition(float2 center, float radius, Func<int, bool> funcFilterEntity, out QueryResult result)
+        public void FarthestTargetPosition(Vector2 center, float radius, Func<int, bool> funcFilterEntity, out QueryResult result)
         {
             float sqrRadius = radius * radius;
             
-            int count = agentGrid.QueryAgent(center, new float2(radius, radius), out AgentData[] agents);
+            int count = agentGrid.QueryAgent(center, new Vector2(radius, radius), out AgentData[] agents);
             
             float maxDistance = float.MinValue;
             
@@ -95,11 +96,11 @@ namespace _FightCode.Battle.Logic
             }
         }
 
-        public void NearestTargetPosition(float2 center, float radius, Func<int, bool> funcFilterEntity, out QueryResult result)
+        public void NearestTargetPosition(Vector2 center, float radius, Func<int, bool> funcFilterEntity, out QueryResult result)
         {
             float sqrRadius = radius * radius;
             
-            int count = agentGrid.QueryAgent(center, new float2(radius, radius), out AgentData[] agents);
+            int count = agentGrid.QueryAgent(center, new Vector2(radius, radius), out AgentData[] agents);
             
             float minDistance = float.MaxValue;
             
@@ -134,9 +135,9 @@ namespace _FightCode.Battle.Logic
             }
         }
 
-        public List<int> GetEntities(float2 center, Func<int, bool> funcFilterEntity, float radius)
+        public List<int> GetEntities(Vector2 center, Func<int, bool> funcFilterEntity, float radius)
         {
-            float2 signalSize = new float2(radius * 2, radius * 2);
+            Vector2 signalSize = new Vector2(radius * 2, radius * 2);
             
             int count = agentGrid.QueryAgent(center, signalSize, out AgentData[] agents);
             
@@ -156,7 +157,7 @@ namespace _FightCode.Battle.Logic
                 {
                     float totalRadius = radius + agent.radius;
 
-                    float2 delta = agent.position - center;
+                    Vector2 delta = new Vector2(agent.position.x, agent.position.y) - center;
 
                     radiusSq = totalRadius * totalRadius;
 
@@ -170,11 +171,11 @@ namespace _FightCode.Battle.Logic
             return results;
         }
 
-        public List<int> GetEntities(float2 center, Func<int, bool> funcFilterEntity, float2 size)
+        public List<int> GetEntities(Vector2 center, Func<int, bool> funcFilterEntity, Vector2 size)
         {
             int count = agentGrid.QueryAgent(center, size, out AgentData[] agents);
 
-            float2 half = size * 0.5f;
+            Vector2 half = size * 0.5f;
             float left = center.x - half.x;
             float right = center.x + half.x;
             float top = center.y + half.y;
@@ -192,7 +193,7 @@ namespace _FightCode.Battle.Logic
 
                 if (funcFilterEntity(entity))
                 {
-                    float2 p = agent.position;
+                    Vector2 p = agent.position;
 
                     float r = agent.radius;
 

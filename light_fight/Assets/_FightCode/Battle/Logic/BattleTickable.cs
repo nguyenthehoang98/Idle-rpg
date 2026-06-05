@@ -3,8 +3,8 @@ using System.Collections;
 using _FightCode.Battle.Model;
 using _FightCode.Battle.View;
 using _FightCode.Utils;
+using _KITSystem.Entity;
 using _KITSystem.Schedule;
-using _KITSystem.SkillSystem.Runtime;
 using _KITSystem.Utils;
 using UnityEngine;
 
