@@ -1,6 +1,5 @@
 using System;
 using Unity.Mathematics;
-using _KITSystem.Utils;
 using UnityEngine;
 
 namespace _KITSystem.Movement

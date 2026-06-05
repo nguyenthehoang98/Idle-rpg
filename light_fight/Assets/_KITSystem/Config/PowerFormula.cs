@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 
-namespace _FightCode.Config
+namespace _KITSystem.Config
 {
     [System.Serializable]
-    public struct LinearFormula
+    public struct PowerFormula
     {
         [SerializeField] private int id;
         [SerializeField] private float a;
         [SerializeField] private float b;
 
-        public LinearFormula(int id, float a, float b)
+        public PowerFormula(int id, float a, float b)
         {
             this.a = a;
             this.b = b;
@@ -21,9 +21,9 @@ namespace _FightCode.Config
             get { return id; }
         }
 
-        public float Evaluate(int x)
+        public float Evaluate(float x)
         {
-            return a * x + b;
+            return a * Mathf.Pow(x, b);
         }
     }
 }

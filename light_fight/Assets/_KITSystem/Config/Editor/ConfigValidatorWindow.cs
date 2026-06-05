@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using _KITSystem.Data;
 using UnityEditor;
 using UnityEngine;
 
-namespace _FightCode.Config.Editor
+namespace _KITSystem.Config.Editor
 {
     public class ConfigValidatorWindow : EditorWindow
     {

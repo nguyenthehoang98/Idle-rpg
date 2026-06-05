@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using _FightCode.Config;
-using _KITSystem.Data;
+using _KITSystem.Config;
 using _KITSystem.Utils;
 using Newtonsoft.Json;
 using UnityEngine;

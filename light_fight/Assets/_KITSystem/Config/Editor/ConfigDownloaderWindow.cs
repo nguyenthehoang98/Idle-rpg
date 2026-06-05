@@ -7,14 +7,13 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using _KITSystem.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace _FightCode.Config.Editor
+namespace _KITSystem.Config.Editor
 {
     public class ConfigDownloaderWindow : EditorWindow
     {

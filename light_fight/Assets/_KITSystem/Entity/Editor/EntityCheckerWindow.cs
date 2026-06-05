@@ -8,11 +8,11 @@ using System.Text;
 using UnityEditor;
 using UnityEngine;
 
-namespace _KITSystem.SkillSystem.Entity
+namespace _KITSystem.Entity.Editor
 {
-    public sealed class EntityComponentDataCheckerWindow : EditorWindow
+    public sealed class EntityCheckerWindow : EditorWindow
     {
-        private const string MenuPath = "Tools/Skill System/Entity Data Checker";
+        private const string MenuPath = "Tools/Entity/Entity Checker";
         private const double AutoRefreshSeconds = 0.5d;
 
         private readonly List<ComponentSnapshot> componentSnapshots = new();
@@ -33,7 +33,7 @@ namespace _KITSystem.SkillSystem.Entity
         [MenuItem(MenuPath)]
         private static void Open()
         {
-            GetWindow<EntityComponentDataCheckerWindow>("Entity Data Checker");
+            GetWindow<EntityCheckerWindow>("Entity Data Checker");
         }
 
         private void OnEnable()

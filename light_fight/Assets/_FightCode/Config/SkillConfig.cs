@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using _KITSystem.Data;
-using _KITSystem.SkillSystem;
+using _KITSystem.Config;
 using _KITSystem.SkillSystem.Model;
 using Newtonsoft.Json;
 using UnityEngine;

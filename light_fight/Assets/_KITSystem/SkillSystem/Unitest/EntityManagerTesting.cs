@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using _KITSystem.SkillSystem.Entity;
+using _KITSystem.Entity;
 using NUnit.Framework;
 
 namespace _KITSystem.SkillSystem.Unitest

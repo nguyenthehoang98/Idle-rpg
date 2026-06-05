@@ -1,18 +1,16 @@
 {
-    "name": "Game.Config.Editor",
+    "name": "KITSystem.Config",
     "rootNamespace": "",
     "references": [
-        "GUID:606d3cb775deefe44a4256264738aa5b",
-        "GUID:0239619e1e2025b4c8f2fecc8e33feb2"
+        "GUID:de832e2fa4f411e408f63d8caed52dfe",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
-    "autoReferenced": false,
+    "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false

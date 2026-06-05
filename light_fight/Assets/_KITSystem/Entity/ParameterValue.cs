@@ -1,16 +1,21 @@
 using UnityEngine;
 
-namespace _KITSystem.Data
+namespace _KITSystem.Entity
 {
     public struct ParameterValue
     {
         public ParameterType Type;
 
         public int IntValue;
+        
         public float FloatValue;
+        
         public bool BoolValue;
+        
         public string StringValue;
+        
         public Vector2 VectorValue;
+        
         public Vector3 Vector3Value;
 
         public static ParameterValue Int(int value)

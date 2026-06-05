@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using _KITSystem.Data;
+using _KITSystem.Config;
 using Newtonsoft.Json;
 using UnityEngine;
 

@@ -12,7 +12,8 @@ namespace _KITSystem.SkillSystem
     {
         private static HashSet<string> cached = new HashSet<string>();
 
-        public static async Task<int> Create(Spu spu, IQuery query, Vector2 startPosition, Vector2 targetPosition,
+        public static async Task<int> Create(Spu spu, IQuery query, Func<int, bool> onDamageEntity,
+            Vector2 startPosition, Vector2 targetPosition,
             string projectilePrefabPath, float lifeTime,
             DamageTickerType damageTickerType, float damageTickerInterval,
             int maxCollision, float resetCollisionInterval,
@@ -56,11 +57,6 @@ namespace _KITSystem.SkillSystem
                 shapeDuration, circleRadius, squareSize);
             
             GameObject projectile = KitPool.Instantiate(go);
-
-            Func<int, bool> onDamageEntity = entity =>
-            {
-                return false;
-            };
 
             spu.RequestAddAction(instanceSkillId,
                 new CastProjectileAction(spu, lifeTime, shapeAction, trajectoryAction, onDamageEntity, projectile,

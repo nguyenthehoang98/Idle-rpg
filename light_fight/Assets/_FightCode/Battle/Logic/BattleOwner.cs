@@ -3,12 +3,11 @@ using _FightCode.Battle.Model;
 using _FightCode.Battle.Popup;
 using _FightCode.Battle.View;
 using _FightCode.Config;
-using _KITSystem.Data;
+using _KITSystem.Config;
 using _KITSystem.Entity;
 using _KITSystem.Popup;
 using _KITSystem.Schedule;
 using _KITSystem.SkillSystem;
-using _KITSystem.SkillSystem.Entity;
 using _KITSystem.Utils;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -104,18 +103,18 @@ namespace _FightCode.Battle.Logic
             waveSpawnComplete = true;
         }
 
-        private void OnEntityBehaviour(EntityManagerBehaviourParameter parameter)
+        private void OnEntityBehaviour(EntityChangedEvent parameter)
         {
-            int entity = parameter.entity;
+            int entity = parameter.Entity;
             Monster m;
             
-            switch (parameter.type)
+            /*switch (parameter.type)
             {
                 case EntityManagerBehaviourType.BeHit:
                     
                     if (entityToMonster.TryGetValue(entity, out m))
                     {
-                        Vector3 direction = parameter.values[0].Vector3Value;
+                        Vector3 direction = parameter.Values[0].Vector3Value;
                         m.BeHit(direction);
                     }
                     
@@ -139,7 +138,7 @@ namespace _FightCode.Battle.Logic
                     SpawnAction();
                     
                     break;
-            }
+            }*/
         }
 
         private void OnDestroy()

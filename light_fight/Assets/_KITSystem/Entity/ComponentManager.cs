@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace _KITSystem.SkillSystem.Entity
+namespace _KITSystem.Entity
 {
     public static class ComponentManager<T> where T : unmanaged
     {

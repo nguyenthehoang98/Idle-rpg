@@ -1,4 +1,4 @@
-namespace _KITSystem.Data
+namespace _KITSystem.Entity
 {
     public enum ParameterType
     {

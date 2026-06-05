@@ -1,4 +1,3 @@
-using System;
 using Unity.Mathematics;
 
 namespace _KITSystem.Movement

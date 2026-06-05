@@ -1,4 +1,4 @@
-﻿namespace _KITSystem.SkillSystem.Entity
+﻿namespace _KITSystem.Entity
 {
     public struct MonsterData
     {

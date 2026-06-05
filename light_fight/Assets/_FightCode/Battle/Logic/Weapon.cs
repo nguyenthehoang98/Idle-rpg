@@ -3,7 +3,6 @@ using _FightCode.Battle.Model;
 using _FightCode.Battle.View;
 using _FightCode.Config;
 using _KITSystem.Entity;
-using _KITSystem.SkillSystem.Entity;
 using _KITSystem.Utils;
 using UnityEngine;
 

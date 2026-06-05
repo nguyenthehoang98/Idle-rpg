@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using _KITSystem.Data;
 using UnityEngine;
 
-namespace _KITSystem.SkillSystem.Entity
+namespace _KITSystem.Entity
 {
     public static class EntityManager
     {
+        public const int CREATE_EVENT_ID = 100001;
+        public const int REMOVE_EVENT_ID = 100002;
+        
         private static int[] entityVersions = new int[256];
         private static readonly Stack<int> freeIds = new();
         private static int nextId = 1;
         
-        public static event Action<EntityManagerBehaviourParameter> OnBehaviour;
+        public static event Action<EntityChangedEvent> OnBehaviour;
 
         static EntityManager()
         {
@@ -22,15 +24,11 @@ namespace _KITSystem.SkillSystem.Entity
 
         public static int CreateEntity()
         {
-            int id = freeIds.Count > 0 ? freeIds.Pop() : AllocateId();
-            entityVersions[id] = 0;
+            int entity = freeIds.Count > 0 ? freeIds.Pop() : AllocateId();
+            entityVersions[entity] = 0;
             ActiveCount++;
-            OnBehaviour?.Invoke(new EntityManagerBehaviourParameter
-            {
-                type = EntityManagerBehaviourType.Created,
-                entity = id,
-            });
-            return id;
+            OnBehaviour?.Invoke(new EntityChangedEvent(CREATE_EVENT_ID, entity));
+            return entity;
         }
 
         public static void DestroyEntity(int entity)
@@ -46,21 +44,20 @@ namespace _KITSystem.SkillSystem.Entity
             entityVersions[entity] = -1;
             freeIds.Push(entity);
             ActiveCount--;
-            OnBehaviour?.Invoke(new EntityManagerBehaviourParameter
-            {
-                type = EntityManagerBehaviourType.Removed,
-                entity = entity,
-            });
+            OnBehaviour?.Invoke(new EntityChangedEvent(REMOVE_EVENT_ID, entity));
         }
 
-        public static void InvokeBehaviour(int entity, EntityManagerBehaviourType type, params ParameterValue[] values)
+        public static void PostEvent(int eventId, int entity, params ParameterValue[] parameters)
         {
-            OnBehaviour?.Invoke(new EntityManagerBehaviourParameter
+            #if DEBUG
+            if (eventId == CREATE_EVENT_ID || eventId == REMOVE_EVENT_ID)
             {
-                type = type,
-                entity = entity,
-                values = values,
-            });
+                Debug.LogError("EventId đã tồn tại " + eventId);
+                return;
+            }
+            #endif
+            
+            OnBehaviour?.Invoke(new EntityChangedEvent(eventId, entity, parameters));
         }
 
         public static bool IsAlive(int entity)

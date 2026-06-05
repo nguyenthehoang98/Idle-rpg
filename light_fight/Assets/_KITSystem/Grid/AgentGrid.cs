@@ -2,19 +2,15 @@
 using System.Collections.Generic;
 using _KITSystem.Utils;
 using RVO;
-using Sherbert.Framework.Generic;
-using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Random = UnityEngine.Random;
 
 namespace _KITSystem.Grid
 {
     [Serializable]
     public class AgentGrid : IDisposable
     {
-        [TitleGroup("Agent default settings")]
+        [Header("Agent default settings")]
 #if UNITY_EDITOR
         [SerializeField] private bool locked;
         [SerializeField] private bool enableGizmos;
@@ -23,8 +19,6 @@ namespace _KITSystem.Grid
         [SerializeField] private float interval = 0.5f;
         [SerializeField, Range(0.1f, 0.9f)] private float multiplierIgnoreCheckDistance = 0.2f;
         [SerializeField, Range(0.1f, 1.0f)] private float deltaDistanceStuck = 0.2f;
-        [TitleGroup("Debug")] 
-        [SerializeField, DisableIf("@true")] private bool isInitialized;
 
         private Dictionary<int, AgentData> containers = new Dictionary<int, AgentData>();        
         private List<int> agents = new List<int>();
@@ -110,7 +104,6 @@ namespace _KITSystem.Grid
             ignoreCheckNeighborDistanceSq = a * a;
             deltaDistanceStuckSq = deltaDistanceStuck * deltaDistanceStuck;
             OnInitialize();
-            isInitialized = true;
         }
 
         private void ReachedGoal()

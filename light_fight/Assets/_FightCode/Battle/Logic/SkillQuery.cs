@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using _KITSystem.Entity;
 using _KITSystem.Grid;
-using _KITSystem.SkillSystem.Entity;
 using _KITSystem.Utils;
 using Unity.Mathematics;
 using UnityEngine;

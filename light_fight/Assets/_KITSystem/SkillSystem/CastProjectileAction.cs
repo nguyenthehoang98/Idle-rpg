@@ -124,46 +124,4 @@ namespace _KITSystem.SkillSystem
             return onDamageEntity(entity);
         }
     }
-    
-    /*
-        protected bool Damage(int entity, DamageTicket damageTicket)
-        {
-            if (!EntityManager.IsAlive(entity) || !ComponentManager<HealthData>.Has(entity))
-            {
-                return false;
-            }
-
-            ref var health = ref ComponentManager<HealthData>.Get(entity);
-            int dmg = DamageOutput(entity);
-
-            if (damageTicket != null && damageTicket.isHpPercent)
-            {
-                dmg = (int)Math.Ceiling(health.MaxHealth * dmg / 100f);
-            }
-
-            if (dmg <= 0)
-            {
-                return false;
-            }
-
-            health.CurrentHealth -= dmg;
-
-            OnDamageEffect(entity);
-            
-            if (health.CurrentHealth <= 0)
-            {
-                EntityManager.DestroyEntity(entity);
-            }
-
-            return true;
-        }
-
-        private void OnDamageEffect(int entity)
-        {
-            EntityManager.InvokeBehaviour(entity, EntityManagerBehaviourType.BeHit, ParameterValue.Vector3(new Vector3(direction.x, direction.y, 0f)));
-        }
-
-        private int DamageOutput(int entity) => 10;
-    }
-*/
 }
