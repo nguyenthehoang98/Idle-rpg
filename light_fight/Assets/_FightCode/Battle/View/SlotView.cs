@@ -42,9 +42,9 @@ namespace _FightCode.Battle.View
             widthProperty = new MaterialPropertyBlock();
         }
 
-        public SlotView Instantiate(Transform parent, Vector3 localEulerAngles)
+        public static SlotView Instantiate(SlotView prefab, Transform parent, Vector3 localEulerAngles)
         {
-            SlotView osv = Instantiate(this, parent);
+            SlotView osv = Instantiate(prefab, parent);
             osv.transform.localEulerAngles = osv.localEulerAngles = localEulerAngles;
             return osv;
         }

@@ -17,24 +17,30 @@ namespace _FightCode.Battle.Logic
     {
         public event Action OnInitialized;
 
-        private BattleSetting setting;
-        private BattleShare share;
-        private bool isInitialized = false;
+        private bool isInitialized;
         private Dice[] dices;
         private Slot[] slots;
+        private DiceView[] diceViews;
+        private SlotView[] slotViews;
         private AttractorView[] attractors;
+        private float attractorFlyTime;
+        private float minAttractorRadius;
+        private float maxAttractorRadius;
         private int totalDiceActivate;
         // {index:number}
         private int[] diceNumbers;
 
-        public void Initialize(BattleShare share, BattleSetting setting, IQuery query, List<DiceView> diceViews)
+        public void Initialize(BattleShare share, BattleSetting setting, IQuery query, List<DiceView> diceViews, List<SlotView> slotViews)
         {
-            this.share = share;
-            this.setting = setting;
+            this.minAttractorRadius = setting.minAttractorRadius;
+            this.maxAttractorRadius = setting.maxAttractorRadius;
+            this.attractorFlyTime = setting.attractorFlyTime;
             this.diceNumbers = new int[setting.totalSlot];
             this.dices = new Dice[setting.totalSlot];
             this.slots = new Slot[Const.MAX_DICE_NUMBER];
             this.attractors = new AttractorView[setting.totalSlot];
+            this.diceViews = diceViews.ToArray();
+            this.slotViews = slotViews.ToArray();
 
             for (int i = 0; i < setting.totalSlot; i++)
             {
@@ -48,7 +54,7 @@ namespace _FightCode.Battle.Logic
 
             for (int i = 0; i < slots.Length; i++)
             {
-                slots[i] = new Slot(i, share, setting, query);
+                slots[i] = new Slot(i, slotViews[i], share, setting, query);
             }
 
             for (int i = 0; i < attractors.Length; i++)
@@ -87,13 +93,7 @@ namespace _FightCode.Battle.Logic
 
         private void TriggerDice(int triggerDiceIndex, int triggerNumber)
         {
-            if (!isInitialized)
-            {
-#if UNITY_EDITOR
-                Debug.LogError("BattleTickable not initialized");
-#endif
-                return;
-            }
+            if (!isInitialized) return;
 
             totalDiceActivate++;
             diceNumbers[triggerDiceIndex] = triggerNumber - 1;
@@ -110,15 +110,15 @@ namespace _FightCode.Battle.Logic
                     stacks[number]++;
                     int stack = stacks[number]; // begin at 0;
                     
-                    /*Vector3 start = share.dices[i].WorldPosition + Vector3.up * 0.1f;
-                    Vector3 end = share.slots[number].WorldPosition(stack);
-                    Vector3 rot = share.slots[number].WorldEulerAngles(stack);
-                    attractors[i].MoveTo(start, end, rot, stack * delay, setting.attractorFlyTime,
-                        RandomUtils.Range(setting.minAttractorRadius, setting.maxAttractorRadius), 2.5f,
+                    Vector3 start = diceViews[i].WorldPosition + Vector3.up * 0.1f;
+                    Vector3 end = slotViews[number].WorldPosition(stack);
+                    Vector3 rot = slotViews[number].WorldEulerAngles(stack);
+                    attractors[i].MoveTo(start, end, rot, stack * delay, attractorFlyTime,
+                        RandomUtils.Range(minAttractorRadius, maxAttractorRadius), 2.5f,
                         RandomUtils.Range(0.3f, 0.5f), () =>
                         {
                             slot.DoStack(stack);
-                        });*/
+                        });
                 }
                 
                 for (int i = 0; i < stacks.Length; i++)
@@ -128,11 +128,11 @@ namespace _FightCode.Battle.Logic
                     
                     if (stack == 0 && slot.IsPlaying)
                     {
-                        slot.Deactivate(setting.attractorFlyTime + delay);
+                        slot.Deactivate(attractorFlyTime + delay);
                     }
                     else if (stack > 0 && !slot.IsPlaying)
                     {
-                        slot.Activate(setting.attractorFlyTime + (delay + 0.1f) * stack);
+                        slot.Activate(attractorFlyTime + (delay + 0.1f) * stack);
                     }
                 }
 

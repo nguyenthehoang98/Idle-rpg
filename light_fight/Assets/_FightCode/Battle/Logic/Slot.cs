@@ -16,7 +16,7 @@ namespace _FightCode.Battle.Logic
 
         public bool IsPlaying { get; private set; }
 
-        public Slot(int order, BattleShare share, BattleSetting setting, IQuery query)
+        public Slot(int order, SlotView slotView, BattleShare share, BattleSetting setting, IQuery query)
         {
             this.share = share;
             this.setting = setting;
@@ -26,7 +26,7 @@ namespace _FightCode.Battle.Logic
                 Mathf.Sin(angle * Mathf.Deg2Rad)
             );
 
-            view = setting.slot.Instantiate(share.coneParent, new Vector3(0, 0, angle - 90));
+            view = slotView;
             weapon = new Weapon(order, view, share, setting, query, dir);
         }
 

@@ -11,7 +11,6 @@ namespace _FightCode.Battle.Model
     {
         public float timeScale = 1f;
         public BattleOwner owner;
-        public Transform coneParent;
         public Transform attractorParent;
         public AgentGrid agentGrid;
     }

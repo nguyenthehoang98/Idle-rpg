@@ -3,6 +3,7 @@ using _FightCode.Battle.Model;
 using _FightCode.Battle.Popup;
 using _FightCode.Battle.View;
 using _FightCode.Config;
+using _FightCode.Utils;
 using _KITSystem.Config;
 using _KITSystem.Entity;
 using _KITSystem.Popup;
@@ -53,11 +54,11 @@ namespace _FightCode.Battle.Logic
             
             // todo: create instance logic
             IQuery query = new SkillQuery(agent);
+            GameObject coneParent = new GameObject("ConeParent");
             share = new BattleShare
             {
                 owner = this,
                 timeScale = loop,
-                coneParent = new GameObject("ConeParent").transform,
                 attractorParent = new GameObject("AttractorParent", typeof(RectTransform)).transform,
                 agentGrid = agent,
             };
@@ -80,8 +81,16 @@ namespace _FightCode.Battle.Logic
                 diceViews.Add(Object.Instantiate(setting.dice));
             }
             
+            List<SlotView> slotViews = new List<SlotView>();
+            for (int i = 0; i < Const.MAX_DICE_NUMBER; i++)
+            {
+                float angle = -360f / Const.MAX_DICE_NUMBER * i;
+                SlotView view = SlotView.Instantiate(setting.slot, coneParent.transform, new Vector3(0, 0, angle));
+                slotViews.Add(view);
+            }
+            
             battle.OnInitialized += OnBattleInitialize;
-            battle.Initialize(share, setting, query, diceViews);
+            battle.Initialize(share, setting, query, diceViews, slotViews);
 
             diceControl = DiceControlView.Instantiate(setting.diceControl, canvas.transform, diceViews);
             diceControl.OnInitialized += OnDiceInitialize;
