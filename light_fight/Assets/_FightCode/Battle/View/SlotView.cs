@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace _FightCode.Battle.View
 {
-    public class ObjectSlotView : MonoBehaviour, ISlotView
+    public class SlotView : MonoBehaviour
     {
         [TitleGroup("Settings")]
         [SerializeField] private Color[] selectedColors = new Color[4];
@@ -42,9 +42,9 @@ namespace _FightCode.Battle.View
             widthProperty = new MaterialPropertyBlock();
         }
 
-        public ISlotView Instantiate(Transform parent, Vector3 localEulerAngles)
+        public SlotView Instantiate(Transform parent, Vector3 localEulerAngles)
         {
-            ObjectSlotView osv = Instantiate(this, parent);
+            SlotView osv = Instantiate(this, parent);
             osv.transform.localEulerAngles = osv.localEulerAngles = localEulerAngles;
             return osv;
         }
@@ -157,12 +157,12 @@ namespace _FightCode.Battle.View
 
         public Transform WeaponRoot => pivot;
 
-        Vector3 ISlotView.WorldPosition(int stack)
+        public Vector3 WorldPosition(int stack)
         {
             return stars[stack - 1].transform.position;
         }
 
-        Vector3 ISlotView.WorldEulerAngles(int stack)
+        public Vector3 WorldEulerAngles(int stack)
         {
             return localEulerAngles;
         }

@@ -14,7 +14,5 @@ namespace _FightCode.Battle.Model
         public Transform coneParent;
         public Transform attractorParent;
         public AgentGrid agentGrid;
-        public List<IDiceView> dices;
-        public List<ISlotView> slots;
     }
 }

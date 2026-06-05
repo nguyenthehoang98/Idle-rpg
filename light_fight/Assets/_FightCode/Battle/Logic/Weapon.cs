@@ -13,7 +13,7 @@ namespace _FightCode.Battle.Logic
     {
         private IQuery query;
         private BattleShare share;
-        private IWeaponView view;
+        private WeaponView view;
         private BattleSetting setting;
         private float scanRadius;
         private float forwardOffset = 1.5f;
@@ -28,7 +28,7 @@ namespace _FightCode.Battle.Logic
 
         private EquipmentData equipmentData;
 
-        public Weapon(int order, ISlotView slotView, BattleShare share, BattleSetting setting, IQuery query, Vector3 direction)
+        public Weapon(int order, SlotView slotView, BattleShare share, BattleSetting setting, IQuery query, Vector3 direction)
         {
             this.share = share;
             this.query = query;

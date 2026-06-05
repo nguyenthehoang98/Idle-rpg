@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace _FightCode.Battle.View
 {
-    public class ObjectDiceView : MonoBehaviour, IDiceView
+    public class DiceView : MonoBehaviour
     {
         [SerializeField] private DiceRollController rig;
         [SerializeField] private Image imgCooldown;
@@ -16,11 +16,6 @@ namespace _FightCode.Battle.View
         private void Awake()
         {
             RectTransform = transform as RectTransform;
-        }
-
-        public IDiceView Instantiate()
-        {
-            return Instantiate(transform).GetComponent<IDiceView>();
         }
 
         public void Initialize(Transform parent)

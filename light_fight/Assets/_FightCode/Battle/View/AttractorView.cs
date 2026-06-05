@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace _FightCode.Battle.View
 {
-    public class ObjectAttractorView : MonoBehaviour, IAttractorView
+    public class AttractorView : MonoBehaviour
     {
         [SerializeField] private Vector3 localScale = new Vector3(0.35f, 0.35f, 0.35f);
         [SerializeField] private Vector3 to = new Vector3(0.2f, 0.2f, 0.2f);
@@ -24,11 +24,6 @@ namespace _FightCode.Battle.View
         private void OnDestroy()
         {
             if(sequence != null && sequence.IsActive()) sequence.Kill();
-        }
-
-        public IAttractorView Instantiate(Transform parent)
-        {
-            return Instantiate(transform, parent).GetComponent<IAttractorView>();
         }
 
         public void MoveTo(Vector3 start, Vector3 target, Vector3 rot, float flyToTargetDelay, 

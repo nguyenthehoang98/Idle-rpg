@@ -28,10 +28,10 @@ namespace _FightCode.Battle.Model
         [Range(1.1f, 2.0f)] public float minAttractorRadius = 1.1f;
         [Range(1.1f, 2.0f)] public float maxAttractorRadius = 2.0f;
         [TitleGroup("View")]
-        public ISlotView slot;
-        public IDiceView dice;
-        public IWeaponView weapon;
-        public IAttractorView attractor;
-        public IDiceControlView diceControl;
+        public SlotView slot;
+        public DiceView dice;
+        public WeaponView weapon;
+        public AttractorView attractor;
+        public DiceControlView diceControl;
     }
 }

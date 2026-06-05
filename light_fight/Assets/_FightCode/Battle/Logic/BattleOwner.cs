@@ -7,7 +7,6 @@ using _KITSystem.Config;
 using _KITSystem.Entity;
 using _KITSystem.Popup;
 using _KITSystem.Schedule;
-using _KITSystem.SkillSystem;
 using _KITSystem.Utils;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -33,7 +32,7 @@ namespace _FightCode.Battle.Logic
 
         private MonsterConfig monsterConfig;
         
-        private IDiceControlView diceControl;
+        private DiceControlView diceControl;
         private bool waveSpawnComplete = false;
         private int totalEntityInScene = 0;
         private int killed;
@@ -61,8 +60,6 @@ namespace _FightCode.Battle.Logic
                 coneParent = new GameObject("ConeParent").transform,
                 attractorParent = new GameObject("AttractorParent", typeof(RectTransform)).transform,
                 agentGrid = agent,
-                dices = new List<IDiceView>(),
-                slots = new List<ISlotView>(),
             };
            
             Transform attract = share.attractorParent;
@@ -207,7 +204,6 @@ namespace _FightCode.Battle.Logic
 
         private void OnDrawGizmos()
         {
-            if (battle != null) battle.Draw();
             if (monster != null) monster.Draw();
         }
 

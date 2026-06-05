@@ -7,6 +7,7 @@ using _KITSystem.Entity;
 using _KITSystem.Schedule;
 using _KITSystem.Utils;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace _FightCode.Battle.Logic
 {
@@ -20,7 +21,7 @@ namespace _FightCode.Battle.Logic
         private bool isInitialized = false;
         private Dice[] dices;
         private Slot[] slots;
-        private IAttractorView[] attractors;
+        private AttractorView[] attractors;
         private int totalDiceActivate;
         // {index:number}
         private int[] diceNumbers;
@@ -34,7 +35,7 @@ namespace _FightCode.Battle.Logic
             this.diceNumbers = new int[setting.totalSlot];
             this.dices = new Dice[setting.totalSlot];
             this.slots = new Slot[Const.MAX_DICE_NUMBER];
-            this.attractors = new IAttractorView[setting.totalSlot];
+            this.attractors = new AttractorView[setting.totalSlot];
 
             for (int i = 0; i < setting.totalSlot; i++)
             {
@@ -53,7 +54,7 @@ namespace _FightCode.Battle.Logic
 
             for (int i = 0; i < attractors.Length; i++)
             {
-                attractors[i] = setting.attractor.Instantiate(share.attractorParent);
+                attractors[i] = Object.Instantiate(setting.attractor, share.attractorParent);
             }
 
             CoroutineUtils.Run(share.owner, InitCoroutine(share.timeScale));
@@ -110,7 +111,7 @@ namespace _FightCode.Battle.Logic
                     stacks[number]++;
                     int stack = stacks[number]; // begin at 0;
                     
-                    Vector3 start = share.dices[i].WorldPosition + Vector3.up * 0.1f;
+                    /*Vector3 start = share.dices[i].WorldPosition + Vector3.up * 0.1f;
                     Vector3 end = share.slots[number].WorldPosition(stack);
                     Vector3 rot = share.slots[number].WorldEulerAngles(stack);
                     attractors[i].MoveTo(start, end, rot, stack * delay, setting.attractorFlyTime,
@@ -118,7 +119,7 @@ namespace _FightCode.Battle.Logic
                         RandomUtils.Range(0.3f, 0.5f), () =>
                         {
                             slot.DoStack(stack);
-                        });
+                        });*/
                 }
                 
                 for (int i = 0; i < stacks.Length; i++)
@@ -160,15 +161,6 @@ namespace _FightCode.Battle.Logic
             {
                 slots[i].Tick(dt);
             }
-        }
-
-        public void Draw()
-        {
-            if (!isInitialized) return;
-
-#if UNITY_EDITOR
-            foreach (var slot in slots) slot.Draw();
-#endif
         }
     }
 }

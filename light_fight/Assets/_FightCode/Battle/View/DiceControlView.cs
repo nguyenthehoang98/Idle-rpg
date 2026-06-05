@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 namespace _FightCode.Battle.View
 {
-    public class DiceControlView : MonoBehaviour, IDiceControlView
+    public class DiceControlView : MonoBehaviour
     {
         [TitleGroup("Fills", "Settings")]
         [SerializeField, Range(0.01f, 0.2f)] private float deltaMaxValue = 0.2f;
@@ -168,7 +168,7 @@ namespace _FightCode.Battle.View
             }
         }
 
-        public IDiceControlView Instantiate(Transform parent)
+        public DiceControlView Instantiate(Transform parent)
         {
             DiceControlView view = Instantiate(this, parent, false);
             view.transform.SetAsFirstSibling();
@@ -210,7 +210,7 @@ namespace _FightCode.Battle.View
             
             for (int i = 0; i < setting.totalSlot; i++)
             {
-                share.dices[i].Initialize(itemGroup.transform);
+                //share.dices[i].Initialize(itemGroup.transform);
             }
             
             yield return null;
@@ -289,7 +289,7 @@ namespace _FightCode.Battle.View
             
             txtProgress.text = string.Format("{0}%", (int)prevProgress);
             
-            foreach (var dice in share.dices) dice.SetColor(color);
+            //foreach (var dice in share.dices) dice.SetColor(color);
 
             OnSpeedChanged?.Invoke(prevProgress / 100f);
         }

@@ -1,7 +1,7 @@
 using _KITSystem.Utils;
 using UnityEngine;
 
-namespace _FightCode.Config
+namespace _FightCode.Battle.Logic
 {
     public struct Stat
     {

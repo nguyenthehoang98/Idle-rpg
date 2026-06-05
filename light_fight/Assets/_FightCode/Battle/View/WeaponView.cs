@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace _FightCode.Battle.View
 {
-    public class ObjectWeaponView : MonoBehaviour, IWeaponView
+    public class WeaponView : MonoBehaviour
     {
         [TitleGroup("Setting")]
         [SerializeField] private Vector3 localPositionOffsetMin = new Vector3(0,0.2f,0);
@@ -30,9 +30,9 @@ namespace _FightCode.Battle.View
         private int order;
         private BattleSetting setting;
         
-        public IWeaponView Instantiate(int order, BattleSetting setting, int xPivotAngle, int zPivotAngle, ISlotView slotView)
+        public WeaponView Instantiate(int order, BattleSetting setting, int xPivotAngle, int zPivotAngle, SlotView slotView)
         {
-            ObjectWeaponView view = Instantiate(this, slotView.WeaponRoot);
+            WeaponView view = Instantiate(this, slotView.WeaponRoot);
             view.xPivot.localEulerAngles = new Vector3(xPivotAngle, 0, 0);
             view.zPivot.localEulerAngles = new Vector3(0, 0, zPivotAngle);
             view.transform.localPosition = new Vector3(0, 0, -1f);

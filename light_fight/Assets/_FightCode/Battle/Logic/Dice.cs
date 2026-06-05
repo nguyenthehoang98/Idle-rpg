@@ -3,6 +3,7 @@ using _FightCode.Battle.Model;
 using _FightCode.Battle.View;
 using _KITSystem.Utils;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace _FightCode.Battle.Logic
 {
@@ -12,7 +13,7 @@ namespace _FightCode.Battle.Logic
 
         private float speed;
         private int value;
-        private IDiceView view;
+        private DiceView view;
         private BattleSetting setting;
         private float elapsedTime;
         private Phase phase = Phase.Processing;
@@ -21,8 +22,7 @@ namespace _FightCode.Battle.Logic
         {
             this.setting = setting;
             this.elapsedTime = setting.slotCooldownTime;
-            this.view = setting.dice.Instantiate();
-            share.dices.Add(view);
+            this.view = Object.Instantiate(setting.dice);
             SetSpeed(1);
         }
 
