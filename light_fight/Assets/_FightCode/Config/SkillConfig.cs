@@ -93,7 +93,6 @@ namespace _FightCode.Config
     {
         public int ID;
         public DamageTickerType Type;
-        public bool IsHealthPercent;
     }
 
     [Serializable]
