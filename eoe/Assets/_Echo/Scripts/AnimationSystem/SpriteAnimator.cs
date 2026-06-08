@@ -11,30 +11,35 @@ namespace _Echo.Scripts.AnimationSystem
         [SerializeField] private MonsterAnimationAsset walkAnimationAsset;
         [SerializeField] private MonsterAnimationAsset attack1AnimationAsset;
 
+        public event Action<AnimState> OnOneShotAnimationEnd;
+        
         private Dictionary<int, SpriteAnimClip> clipMap;
         private SpriteAnimClip currentClip;
 
         private float timer;
         private int frameIndex;
-
         private float scaleTime = 1f;
+        private bool isPlayingOneShot;
 
-        private AnimState currentState = AnimState.Die;
+        private AnimState currentState;
         private Direction8 currentDirection;
+
+        private AnimState cachedState;
+        private Direction8 cachedDirection;
 
         private void Awake()
         {
             clipMap = new Dictionary<int, SpriteAnimClip>();
-           
+
             void Load(MonsterAnimationAsset asset, AnimState state)
             {
                 if (asset == null) return;
-                    
+
                 foreach (var clip in asset.Clips)
                 {
                     int key = GetKey(state, clip.direction);
                     clipMap[key] = clip;
-                } 
+                }
             }
 
             Load(idleAnimationAsset, AnimState.Idle);
@@ -50,7 +55,7 @@ namespace _Echo.Scripts.AnimationSystem
 
         private void Update()
         {
-            if (currentClip == null || currentClip.frames == null)
+            if (currentClip == null)
                 return;
 
             timer += Time.deltaTime * scaleTime;
@@ -72,27 +77,56 @@ namespace _Echo.Scripts.AnimationSystem
                 }
                 else
                 {
-                    frameIndex = currentClip.frames.Length - 1;
+                    OnOneShotFinished();
+                    return;
                 }
             }
 
-            spriteRenderer.sprite = currentClip.frames[frameIndex];
+            spriteRenderer.sprite =
+                currentClip.frames[frameIndex];
         }
-        
+
+        private void OnOneShotFinished()
+        {
+            isPlayingOneShot = false;
+            
+            OnOneShotAnimationEnd?.Invoke(currentState);
+
+            if (currentState == AnimState.Die) return;
+
+            Play(cachedState, cachedDirection);
+        }
+
         public void SetTimeScale(float timeScale) => scaleTime = timeScale;
 
         public int Play(AnimState state, Direction8 dir)
         {
-            if (state == currentState && dir == currentDirection)
+            int key = GetKey(state, dir);
+
+            if (!clipMap.TryGetValue(key, out var clip))
+                return -2;
+
+            // Nếu đang play OneShot
+            if (isPlayingOneShot)
+            {
+                // Chỉ update animation nền để sau này quay lại
+                if (clip.loop)
+                {
+                    cachedState = state;
+                    cachedDirection = dir;
+                }
+
+                return -3;
+            }
+
+            if (state == currentState &&
+                dir == currentDirection)
                 return -1;
 
             currentState = state;
             currentDirection = dir;
 
-            int key = GetKey(state, dir);
-
-            if (!clipMap.TryGetValue(key, out currentClip))
-                return -2;
+            currentClip = clip;
 
             timer = 0;
             frameIndex = 0;
@@ -100,7 +134,19 @@ namespace _Echo.Scripts.AnimationSystem
             if (currentClip.frames.Length > 0)
             {
                 spriteRenderer.sprite = currentClip.frames[0];
-                spriteRenderer.transform.localScale = new Vector3(currentClip.flip ? -1 : 1, 1, 1);
+                spriteRenderer.transform.localScale =
+                    new Vector3(currentClip.flip ? -1 : 1, 1, 1);
+            }
+
+            // Nếu là OneShot
+            if (!currentClip.loop)
+            {
+                isPlayingOneShot = true;
+            }
+            else
+            {
+                cachedState = state;
+                cachedDirection = dir;
             }
 
             return 0;

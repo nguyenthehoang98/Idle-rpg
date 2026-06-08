@@ -2,7 +2,7 @@
 {
     public enum AnimState
     {
-        Idle,
+        Idle = 0,
         Walk,
         Attack1,
         Attack2,

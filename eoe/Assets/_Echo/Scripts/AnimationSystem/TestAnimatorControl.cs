@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace _Echo.Scripts.AnimationSystem
@@ -7,8 +8,15 @@ namespace _Echo.Scripts.AnimationSystem
         public SpriteAnimator animator;
 
         private AnimState state;
-        
         private Direction8 direction = Direction8.B;
+
+        private void Awake()
+        {
+            animator.OnOneShotAnimationEnd += animState =>
+            {
+                Debug.Log($"OnOneShotAnimationEnd: {animState}");
+            };
+        }
 
         private void Update()
         {
