@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4ab8c128655c0504888f5de5f9a8fb1c
+guid: bfb7adf2de43e7f4186190598dbc32f8
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -71,15 +71,6 @@ TextureImporter:
   - first:
       213: 6452894390169670972
     second: Fairy_Idle_22
-  - first:
-      213: 780043101790790597
-    second: Fairy_Idle_23
-  - first:
-      213: 9031777904010004283
-    second: Fairy_Idle_24
-  - first:
-      213: -431928112404244315
-    second: Fairy_Idle_25
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -192,7 +183,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 640
+        y: 512
         width: 128
         height: 128
       alignment: 9
@@ -214,7 +205,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 128
-        y: 640
+        y: 512
         width: 128
         height: 128
       alignment: 9
@@ -236,7 +227,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 256
-        y: 640
+        y: 512
         width: 128
         height: 128
       alignment: 9
@@ -258,7 +249,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 384
-        y: 640
+        y: 512
         width: 128
         height: 128
       alignment: 9
@@ -280,7 +271,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 512
-        y: 640
+        y: 512
         width: 128
         height: 128
       alignment: 9
@@ -301,8 +292,8 @@ TextureImporter:
       name: Fairy_Idle_5
       rect:
         serializedVersion: 2
-        x: 640
-        y: 640
+        x: 0
+        y: 384
         width: 128
         height: 128
       alignment: 9
@@ -323,8 +314,8 @@ TextureImporter:
       name: Fairy_Idle_6
       rect:
         serializedVersion: 2
-        x: 0
-        y: 512
+        x: 128
+        y: 384
         width: 128
         height: 128
       alignment: 9
@@ -345,8 +336,8 @@ TextureImporter:
       name: Fairy_Idle_7
       rect:
         serializedVersion: 2
-        x: 128
-        y: 512
+        x: 256
+        y: 384
         width: 128
         height: 128
       alignment: 9
@@ -367,8 +358,8 @@ TextureImporter:
       name: Fairy_Idle_8
       rect:
         serializedVersion: 2
-        x: 256
-        y: 512
+        x: 384
+        y: 384
         width: 128
         height: 128
       alignment: 9
@@ -389,8 +380,8 @@ TextureImporter:
       name: Fairy_Idle_9
       rect:
         serializedVersion: 2
-        x: 384
-        y: 512
+        x: 512
+        y: 384
         width: 128
         height: 128
       alignment: 9
@@ -411,8 +402,8 @@ TextureImporter:
       name: Fairy_Idle_10
       rect:
         serializedVersion: 2
-        x: 512
-        y: 512
+        x: 0
+        y: 256
         width: 128
         height: 128
       alignment: 9
@@ -433,8 +424,8 @@ TextureImporter:
       name: Fairy_Idle_11
       rect:
         serializedVersion: 2
-        x: 640
-        y: 512
+        x: 128
+        y: 256
         width: 128
         height: 128
       alignment: 9
@@ -455,8 +446,8 @@ TextureImporter:
       name: Fairy_Idle_12
       rect:
         serializedVersion: 2
-        x: 0
-        y: 384
+        x: 256
+        y: 256
         width: 128
         height: 128
       alignment: 9
@@ -477,8 +468,8 @@ TextureImporter:
       name: Fairy_Idle_13
       rect:
         serializedVersion: 2
-        x: 128
-        y: 384
+        x: 384
+        y: 256
         width: 128
         height: 128
       alignment: 9
@@ -499,8 +490,8 @@ TextureImporter:
       name: Fairy_Idle_14
       rect:
         serializedVersion: 2
-        x: 256
-        y: 384
+        x: 512
+        y: 256
         width: 128
         height: 128
       alignment: 9
@@ -521,8 +512,8 @@ TextureImporter:
       name: Fairy_Idle_15
       rect:
         serializedVersion: 2
-        x: 384
-        y: 384
+        x: 0
+        y: 128
         width: 128
         height: 128
       alignment: 9
@@ -543,8 +534,8 @@ TextureImporter:
       name: Fairy_Idle_16
       rect:
         serializedVersion: 2
-        x: 512
-        y: 384
+        x: 128
+        y: 128
         width: 128
         height: 128
       alignment: 9
@@ -565,8 +556,8 @@ TextureImporter:
       name: Fairy_Idle_17
       rect:
         serializedVersion: 2
-        x: 640
-        y: 384
+        x: 256
+        y: 128
         width: 128
         height: 128
       alignment: 9
@@ -587,8 +578,8 @@ TextureImporter:
       name: Fairy_Idle_18
       rect:
         serializedVersion: 2
-        x: 0
-        y: 256
+        x: 384
+        y: 128
         width: 128
         height: 128
       alignment: 9
@@ -609,8 +600,8 @@ TextureImporter:
       name: Fairy_Idle_19
       rect:
         serializedVersion: 2
-        x: 128
-        y: 256
+        x: 512
+        y: 128
         width: 128
         height: 128
       alignment: 9
@@ -631,8 +622,8 @@ TextureImporter:
       name: Fairy_Idle_20
       rect:
         serializedVersion: 2
-        x: 256
-        y: 256
+        x: 0
+        y: 0
         width: 128
         height: 128
       alignment: 9
@@ -653,8 +644,8 @@ TextureImporter:
       name: Fairy_Idle_21
       rect:
         serializedVersion: 2
-        x: 384
-        y: 256
+        x: 128
+        y: 0
         width: 128
         height: 128
       alignment: 9
@@ -675,8 +666,8 @@ TextureImporter:
       name: Fairy_Idle_22
       rect:
         serializedVersion: 2
-        x: 512
-        y: 256
+        x: 256
+        y: 0
         width: 128
         height: 128
       alignment: 9
@@ -689,72 +680,6 @@ TextureImporter:
       bones: []
       spriteID: c359c2b42494d8950800000000000000
       internalID: 6452894390169670972
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fairy_Idle_23
-      rect:
-        serializedVersion: 2
-        x: 640
-        y: 256
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5c3ebb7711543da00800000000000000
-      internalID: 780043101790790597
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fairy_Idle_24
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 128
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b370dbab622575d70800000000000000
-      internalID: 9031777904010004283
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fairy_Idle_25
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 128
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5a8d3a39bab710af0800000000000000
-      internalID: -431928112404244315
       vertices: []
       indices: 
       edges: []
@@ -789,9 +714,6 @@ TextureImporter:
       Fairy_Idle_20: 5173351172476727925
       Fairy_Idle_21: 8364957002819092974
       Fairy_Idle_22: 6452894390169670972
-      Fairy_Idle_23: 780043101790790597
-      Fairy_Idle_24: 9031777904010004283
-      Fairy_Idle_25: -431928112404244315
       Fairy_Idle_3: -1966174626787877144
       Fairy_Idle_4: -1443692524374306328
       Fairy_Idle_5: -5369163101097309839

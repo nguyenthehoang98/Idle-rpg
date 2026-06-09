@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f34cbd5433294cf4fb689bf7fab12c9c
+guid: 3c46e739dcc81ea418e88123a38f0589
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -71,6 +71,18 @@ TextureImporter:
   - first:
       213: -5631166801541852792
     second: Fairy_Attack_22
+  - first:
+      213: 8297834167869334458
+    second: Fairy_Attack_23
+  - first:
+      213: -2713646235620221218
+    second: Fairy_Attack_24
+  - first:
+      213: 4152370693757437577
+    second: Fairy_Attack_25
+  - first:
+      213: -382871746674362422
+    second: Fairy_Attack_26
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -640,6 +652,72 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Fairy_Attack_21
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 35a946944cd513710800000000000000
+      internalID: 1671220034357467731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fairy_Attack_22
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 881102311a31ad1b0800000000000000
+      internalID: -5631166801541852792
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fairy_Attack_23
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab363fc3634d72370800000000000000
+      internalID: 8297834167869334458
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -670,6 +748,10 @@ TextureImporter:
       Fairy_Attack_20: -266387913338216140
       Fairy_Attack_21: 1671220034357467731
       Fairy_Attack_22: -5631166801541852792
+      Fairy_Attack_23: 8297834167869334458
+      Fairy_Attack_24: -2713646235620221218
+      Fairy_Attack_25: 4152370693757437577
+      Fairy_Attack_26: -382871746674362422
       Fairy_Attack_3: -8731801373118433167
       Fairy_Attack_4: 3742008803550666183
       Fairy_Attack_5: -5788250587813411052
