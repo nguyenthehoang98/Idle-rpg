@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b13b102e02a28e943a543cf70f0558e1
+guid: a3b61fe1f15145845ab42ecfee7fc579
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -74,6 +74,9 @@ TextureImporter:
   - first:
       213: 8297834167869334458
     second: Fairy_Attack_23
+  - first:
+      213: -2713646235620221218
+    second: Fairy_Attack_24
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -709,6 +712,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Fairy_Attack_24
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eded7cf4021375ad0800000000000000
+      internalID: -2713646235620221218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -740,6 +765,7 @@ TextureImporter:
       Fairy_Attack_21: 1671220034357467731
       Fairy_Attack_22: -5631166801541852792
       Fairy_Attack_23: 8297834167869334458
+      Fairy_Attack_24: -2713646235620221218
       Fairy_Attack_3: -8731801373118433167
       Fairy_Attack_4: 3742008803550666183
       Fairy_Attack_5: -5788250587813411052
