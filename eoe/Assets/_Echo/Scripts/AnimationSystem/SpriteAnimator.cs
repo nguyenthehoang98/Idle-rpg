@@ -44,13 +44,12 @@ namespace _Echo.Scripts.AnimationSystem
 
             Load(idleAnimationAsset, AnimState.Idle);
             Load(walkAnimationAsset, AnimState.Walk);
-            Load(attack1AnimationAsset, AnimState.Attack1);
+            Load(attack1AnimationAsset, AnimState.Attack);
         }
 
         private void Start()
         {
             int result = Play(AnimState.Walk, Direction8.T);
-            Debug.Log(result);
         }
 
         private void Update()

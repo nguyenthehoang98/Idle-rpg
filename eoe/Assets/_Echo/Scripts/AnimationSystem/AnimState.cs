@@ -4,8 +4,7 @@
     {
         Idle = 0,
         Walk,
-        Attack1,
-        Attack2,
+        Attack,
         Die
     }
 }

@@ -44,7 +44,7 @@ namespace _Echo.Scripts.AnimationSystem
             // Test attack
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                animator.Play(AnimState.Attack1, direction);
+                animator.Play(AnimState.Attack, direction);
             }
         }
 
