@@ -90,7 +90,7 @@ MonoBehaviour:
     - {fileID: 7115896629727540891, guid: f7ae9a45ea2e8334da083886363f2b2d, type: 3}
     fps: 10
     loop: 1
-    flip: 0
+    flip: 1
   - direction: 6
     frames:
     - {fileID: 8402482631141847844, guid: e5de7eab6744b0948872c44144cef074, type: 3}

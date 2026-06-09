@@ -9,7 +9,7 @@ namespace _Echo.Scripts.AnimationSystem
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] private MonsterAnimationAsset idleAnimationAsset;
         [SerializeField] private MonsterAnimationAsset walkAnimationAsset;
-        [SerializeField] private MonsterAnimationAsset attack1AnimationAsset;
+        [SerializeField] private MonsterAnimationAsset attackAnimationAsset;
 
         public event Action<AnimState> OnOneShotAnimationEnd;
         
@@ -44,7 +44,7 @@ namespace _Echo.Scripts.AnimationSystem
 
             Load(idleAnimationAsset, AnimState.Idle);
             Load(walkAnimationAsset, AnimState.Walk);
-            Load(attack1AnimationAsset, AnimState.Attack);
+            Load(attackAnimationAsset, AnimState.Attack);
         }
 
         private void Start()

@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 3003534215940097356}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -76,12 +76,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 5110583997265973809, guid: 3b4405f8e430afb4b9ad276c9094537c, type: 3}
+  m_Sprite: {fileID: 5110583997265973809, guid: 1fbf1a31274ec6c419b0a511062c4a74, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.64, y: 0.64}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -135,4 +135,4 @@ MonoBehaviour:
   spriteRenderer: {fileID: 5733005202231093315}
   idleAnimationAsset: {fileID: 11400000, guid: f6f8f7bd0b5b1a948b4e80242fd50576, type: 2}
   walkAnimationAsset: {fileID: 11400000, guid: 6d9b8cf80f4baff4c8869a83816217c3, type: 2}
-  attack1AnimationAsset: {fileID: 11400000, guid: 9d5af2f1b002bca4e8ecfa5bcb95a113, type: 2}
+  attackAnimationAsset: {fileID: 11400000, guid: 9d5af2f1b002bca4e8ecfa5bcb95a113, type: 2}
