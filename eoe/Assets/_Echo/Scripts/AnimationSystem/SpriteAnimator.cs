@@ -52,6 +52,7 @@ namespace _Echo.Scripts.AnimationSystem
             int result = Play(AnimState.Walk, Direction8.T);
         }
 
+        // Sau cho cùng update từ 1 tickable để đảm bảo cùng update frame
         private void Update()
         {
             if (currentClip == null)

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46ee8d2bdd1e465fb36cc0e255a87b4b, type: 3}
-  m_Name: Shell Attack 14 Animation Asset
+  m_Name: Shell 1 Attack 14 Animation Asset
   m_EditorClassIdentifier: 
   Clips:
   - direction: 0
