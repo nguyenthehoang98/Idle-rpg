@@ -1,34 +1,34 @@
 fileFormatVersion: 2
-guid: 13353168b5bde5b4aac3ac6f62a300a4
+guid: 4c8fbccf69030d54fb15d632b17b4a76
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -76982044855044179
-    second: pxArt_0
+      213: -4140383551190638945
+    second: Shell_B_Attack pxArt_0
   - first:
-      213: -5346755415570143937
-    second: pxArt_1
+      213: 2587646566361816515
+    second: Shell_B_Attack pxArt_1
   - first:
-      213: -7882119756601822151
-    second: pxArt_2
+      213: -1657165575829269181
+    second: Shell_B_Attack pxArt_2
   - first:
-      213: -1315366324048615049
-    second: pxArt_3
+      213: -5962833981684525773
+    second: Shell_B_Attack pxArt_3
   - first:
-      213: 6132158436090791462
-    second: pxArt_4
+      213: -7936400669612908006
+    second: Shell_B_Attack pxArt_4
   - first:
-      213: 2988058116466503654
-    second: pxArt_5
+      213: -6390796833923545298
+    second: Shell_B_Attack pxArt_5
   - first:
-      213: 7381986449805789511
-    second: pxArt_6
+      213: -6837278508783461663
+    second: Shell_B_Attack pxArt_6
   - first:
-      213: -5441046030368048093
-    second: pxArt_7
+      213: 3413058811997290778
+    second: Shell_B_Attack pxArt_7
   - first:
-      213: -6805422370559118537
-    second: pxArt_8
+      213: 8754348834967358975
+    second: Shell_B_Attack pxArt_8
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -150,10 +150,10 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 716bd08e63c1ccd43b3a94ab1fb3153c
-      internalID: 39348147
+      spriteID: f9e596dc8176a86c0800000000000000
+      internalID: -4140383551190638945
       vertices: []
       indices: 
       edges: []
@@ -172,10 +172,10 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 6bbdc12e7745c744f9eb52c3ec4d1769
-      internalID: 79802220
+      spriteID: 3cd514897da29e320800000000000000
+      internalID: 2587646566361816515
       vertices: []
       indices: 
       edges: []
@@ -194,10 +194,10 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 85dfecd6f13bcc2458f9a83f16730e17
-      internalID: -800290489
+      spriteID: 345d0b650b09009e0800000000000000
+      internalID: -1657165575829269181
       vertices: []
       indices: 
       edges: []
@@ -216,10 +216,10 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: ac9b538738c3bfa4d9f5223ce3d4a5f8
-      internalID: 122223022
+      spriteID: 335d01b0612cf3da0800000000000000
+      internalID: -5962833981684525773
       vertices: []
       indices: 
       edges: []
@@ -238,10 +238,10 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: a686f0b3b50a36849b34fcd6e568c40e
-      internalID: -2123143566
+      spriteID: a12ec8cc3ad3cd190800000000000000
+      internalID: -7936400669612908006
       vertices: []
       indices: 
       edges: []
@@ -260,10 +260,10 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 7a0fa2dc430a0074fbba9085e7f12c2a
-      internalID: 522075378
+      spriteID: e27cb42b3245f47a0800000000000000
+      internalID: -6390796833923545298
       vertices: []
       indices: 
       edges: []
@@ -282,10 +282,10 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 2b1765c9d2d84dd4388040b44da5742b
-      internalID: -1319486900
+      spriteID: 1ea9c85fb6b1d11a0800000000000000
+      internalID: -6837278508783461663
       vertices: []
       indices: 
       edges: []
@@ -304,10 +304,10 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: b3749299829687d40bfd4fbe3487a65d
-      internalID: -2044304548
+      spriteID: a118d9608ee9d5f20800000000000000
+      internalID: 3413058811997290778
       vertices: []
       indices: 
       edges: []
@@ -326,10 +326,10 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 377e80bc4f706c34da60b0c3f8ebeb7e
-      internalID: -604429587
+      spriteID: ffd851402e1bd7970800000000000000
+      internalID: 8754348834967358975
       vertices: []
       indices: 
       edges: []
@@ -338,7 +338,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 6be9d9308b73ec243a058d75be701d3b
+    spriteID: e124f25e87544cc4d8effac3dcc25c7a
     internalID: 0
     vertices: []
     indices: 
@@ -348,15 +348,15 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Shell_B_Attack pxArt_0: 39348147
-      Shell_B_Attack pxArt_1: 79802220
-      Shell_B_Attack pxArt_2: -800290489
-      Shell_B_Attack pxArt_3: 122223022
-      Shell_B_Attack pxArt_4: -2123143566
-      Shell_B_Attack pxArt_5: 522075378
-      Shell_B_Attack pxArt_6: -1319486900
-      Shell_B_Attack pxArt_7: -2044304548
-      Shell_B_Attack pxArt_8: -604429587
+      Shell_B_Attack pxArt_0: -4140383551190638945
+      Shell_B_Attack pxArt_1: 2587646566361816515
+      Shell_B_Attack pxArt_2: -1657165575829269181
+      Shell_B_Attack pxArt_3: -5962833981684525773
+      Shell_B_Attack pxArt_4: -7936400669612908006
+      Shell_B_Attack pxArt_5: -6390796833923545298
+      Shell_B_Attack pxArt_6: -6837278508783461663
+      Shell_B_Attack pxArt_7: 3413058811997290778
+      Shell_B_Attack pxArt_8: 8754348834967358975
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

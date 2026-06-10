@@ -1,34 +1,34 @@
 fileFormatVersion: 2
-guid: 13353168b5bde5b4aac3ac6f62a300a4
+guid: 2c6251d7acca457489501065eeceea81
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -76982044855044179
-    second: pxArt_0
+      213: 5269779695986249080
+    second: Shell_TR_Idle pxArt_0
   - first:
-      213: -5346755415570143937
-    second: pxArt_1
+      213: -6760442492893083569
+    second: Shell_TR_Idle pxArt_1
   - first:
-      213: -7882119756601822151
-    second: pxArt_2
+      213: 7325499524303842688
+    second: Shell_TR_Idle pxArt_2
   - first:
-      213: -1315366324048615049
-    second: pxArt_3
+      213: -6321936773943099165
+    second: Shell_TR_Idle pxArt_3
   - first:
-      213: 6132158436090791462
-    second: pxArt_4
+      213: -2674352732035316960
+    second: Shell_TR_Idle pxArt_4
   - first:
-      213: 2988058116466503654
-    second: pxArt_5
+      213: -6280758899188893549
+    second: Shell_TR_Idle pxArt_5
   - first:
-      213: 7381986449805789511
-    second: pxArt_6
+      213: -8770865332579134867
+    second: Shell_TR_Idle pxArt_6
   - first:
-      213: -5441046030368048093
-    second: pxArt_7
+      213: 6047803442721677907
+    second: Shell_TR_Idle pxArt_7
   - first:
-      213: -6805422370559118537
-    second: pxArt_8
+      213: -7245536623947075484
+    second: Shell_TR_Idle pxArt_8
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -137,7 +137,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Shell_B_Attack pxArt_0
+      name: Shell_TR_Idle pxArt_0
       rect:
         serializedVersion: 2
         x: 0
@@ -150,16 +150,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 716bd08e63c1ccd43b3a94ab1fb3153c
-      internalID: 39348147
+      spriteID: 87d83d786b4022940800000000000000
+      internalID: 5269779695986249080
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shell_B_Attack pxArt_1
+      name: Shell_TR_Idle pxArt_1
       rect:
         serializedVersion: 2
         x: 64
@@ -172,16 +172,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 6bbdc12e7745c744f9eb52c3ec4d1769
-      internalID: 79802220
+      spriteID: f48c6aefe551e22a0800000000000000
+      internalID: -6760442492893083569
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shell_B_Attack pxArt_2
+      name: Shell_TR_Idle pxArt_2
       rect:
         serializedVersion: 2
         x: 128
@@ -194,16 +194,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 85dfecd6f13bcc2458f9a83f16730e17
-      internalID: -800290489
+      spriteID: 08d6c64510769a560800000000000000
+      internalID: 7325499524303842688
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shell_B_Attack pxArt_3
+      name: Shell_TR_Idle pxArt_3
       rect:
         serializedVersion: 2
         x: 0
@@ -216,16 +216,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: ac9b538738c3bfa4d9f5223ce3d4a5f8
-      internalID: 122223022
+      spriteID: 3e084a8cff7f348a0800000000000000
+      internalID: -6321936773943099165
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shell_B_Attack pxArt_4
+      name: Shell_TR_Idle pxArt_4
       rect:
         serializedVersion: 2
         x: 64
@@ -238,16 +238,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: a686f0b3b50a36849b34fcd6e568c40e
-      internalID: -2123143566
+      spriteID: 02380fa0c5ac2ead0800000000000000
+      internalID: -2674352732035316960
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shell_B_Attack pxArt_5
+      name: Shell_TR_Idle pxArt_5
       rect:
         serializedVersion: 2
         x: 128
@@ -260,16 +260,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 7a0fa2dc430a0074fbba9085e7f12c2a
-      internalID: 522075378
+      spriteID: 398f8fdde0346d8a0800000000000000
+      internalID: -6280758899188893549
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shell_B_Attack pxArt_6
+      name: Shell_TR_Idle pxArt_6
       rect:
         serializedVersion: 2
         x: 0
@@ -282,16 +282,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 2b1765c9d2d84dd4388040b44da5742b
-      internalID: -1319486900
+      spriteID: d6215d63370a74680800000000000000
+      internalID: -8770865332579134867
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shell_B_Attack pxArt_7
+      name: Shell_TR_Idle pxArt_7
       rect:
         serializedVersion: 2
         x: 64
@@ -304,16 +304,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: b3749299829687d40bfd4fbe3487a65d
-      internalID: -2044304548
+      spriteID: 3526fc2403d1ee350800000000000000
+      internalID: 6047803442721677907
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shell_B_Attack pxArt_8
+      name: Shell_TR_Idle pxArt_8
       rect:
         serializedVersion: 2
         x: 128
@@ -326,10 +326,10 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 377e80bc4f706c34da60b0c3f8ebeb7e
-      internalID: -604429587
+      spriteID: 4603d8a34dea27b90800000000000000
+      internalID: -7245536623947075484
       vertices: []
       indices: 
       edges: []
@@ -338,7 +338,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 6be9d9308b73ec243a058d75be701d3b
+    spriteID: 1a76d62ea9bb9574b90f632903906921
     internalID: 0
     vertices: []
     indices: 
@@ -348,15 +348,15 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Shell_B_Attack pxArt_0: 39348147
-      Shell_B_Attack pxArt_1: 79802220
-      Shell_B_Attack pxArt_2: -800290489
-      Shell_B_Attack pxArt_3: 122223022
-      Shell_B_Attack pxArt_4: -2123143566
-      Shell_B_Attack pxArt_5: 522075378
-      Shell_B_Attack pxArt_6: -1319486900
-      Shell_B_Attack pxArt_7: -2044304548
-      Shell_B_Attack pxArt_8: -604429587
+      Shell_TR_Idle pxArt_0: 5269779695986249080
+      Shell_TR_Idle pxArt_1: -6760442492893083569
+      Shell_TR_Idle pxArt_2: 7325499524303842688
+      Shell_TR_Idle pxArt_3: -6321936773943099165
+      Shell_TR_Idle pxArt_4: -2674352732035316960
+      Shell_TR_Idle pxArt_5: -6280758899188893549
+      Shell_TR_Idle pxArt_6: -8770865332579134867
+      Shell_TR_Idle pxArt_7: 6047803442721677907
+      Shell_TR_Idle pxArt_8: -7245536623947075484
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
