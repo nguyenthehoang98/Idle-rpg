@@ -31,6 +31,9 @@ public class PixelateCaptureManager : MonoBehaviour
     private int _currentFrame = 0;
 
     [SerializeField]
+    private int _maxFrame = 0;
+
+    [SerializeField]
     private Camera _captureCamera = null;
 
     [SerializeField]
@@ -269,7 +272,7 @@ public class PixelateCaptureManager : MonoBehaviour
 
         foreach (AnimationClip animClip in _sourceClips)
         {
-            var numFrames = (int)(animClip.length * _framesPerSecond);
+            var numFrames = Mathf.Clamp((int)(animClip.length * _framesPerSecond), 0, _maxFrame);
             var gridCellCount = SqrtCeil(numFrames);
             var atlasSize = new Vector2Int(_cellSize.x * gridCellCount, _cellSize.y * gridCellCount);
             var atlasPos = new Vector2Int(0, atlasSize.y - _cellSize.y);

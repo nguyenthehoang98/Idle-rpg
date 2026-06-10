@@ -119,6 +119,9 @@ public class PixelateEditor : Editor
 
                         var previewFrameProp = serializedObject.FindProperty("_currentFrame");
                         var numFrames = (int)(sourceClip.length * fpsProp.intValue) + 1;
+                        
+                        var maxFrameProp = serializedObject.FindProperty("_maxFrame");
+                        EditorGUILayout.IntSlider("Max Frame", maxFrameProp.intValue, 0, numFrames - 1);
 
                         using (var changeScope = new EditorGUI.ChangeCheckScope())
                         {
