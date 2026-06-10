@@ -7,6 +7,7 @@ namespace _Echo.Scripts.AnimationSystem
     public class TestSpawn : MonoBehaviour
     {
         public SpriteAnimator animatorPrefab;
+        public float stopDistance = 2.5f;
         
         private List<SpriteAnimator> animators = new List<SpriteAnimator>();
         private Stack<SpriteAnimator> free = new Stack<SpriteAnimator>();
@@ -33,7 +34,7 @@ namespace _Echo.Scripts.AnimationSystem
                 Vector3 position = animator.transform.position + direction.normalized * Time.deltaTime;
                 animator.transform.position = position;
 
-                if (position.magnitude < 3f)
+                if (position.magnitude < stopDistance)
                 {
                     animators.RemoveAt(i);
                     animator.gameObject.SetActive(false);
