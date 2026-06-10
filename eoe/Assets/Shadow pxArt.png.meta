@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 8f49f90c89454f547932a8e839bb9d08
+guid: 4438b2cf19cfb2440a05c9962e40fc3d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8760818837797632639
-    second: Gemini_Generated_Image_tp9fdhtp9fdhtp9f 1_0
+      213: -7194188367403773865
+    second: Circle pxArt_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Gemini_Generated_Image_tp9fdhtp9fdhtp9f 1_0
+      name: Circle pxArt_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1080
-        height: 1920
+        x: 18
+        y: 12
+        width: 370
+        height: 370
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 185858f0fa15b6680800000000000000
-      internalID: -8760818837797632639
+      spriteID: 75096a9dbcb192c90800000000000000
+      internalID: -7194188367403773865
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Gemini_Generated_Image_tp9fdhtp9fdhtp9f 1_0: -8760818837797632639
+      Circle pxArt_0: -7194188367403773865
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
