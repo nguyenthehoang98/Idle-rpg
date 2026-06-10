@@ -56,6 +56,14 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 2a51ed8b744b86d429cfe88eab3e50b5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTexA:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTexB:
         m_Texture: {fileID: 2800000, guid: bced444e5a9688141ac88f5acab1f28d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -74,14 +82,21 @@ Material:
     m_Ints: []
     m_Floats: []
     m_Colors:
+    - _ColorDark: {r: 0, g: 0, b: 0, a: 0}
+    - _ColorEarth: {r: 0, g: 0, b: 0, a: 0}
+    - _ColorFire: {r: 0, g: 0, b: 0, a: 1}
+    - _ColorHeart: {r: 0, g: 0, b: 0, a: 0}
+    - _ColorLight: {r: 0.0009765625, g: 0.0009765625, b: 0.0009765625, a: 0}
+    - _ColorWater: {r: 0, g: 0, b: 0, a: 1}
+    - _ColorWind: {r: 0, g: 0, b: 0, a: 1}
     - _GlowColor: {r: 1, g: 0, b: 0, a: 1}
-    - _GlowColor_1: {r: 5.992157, g: 0.04491659, b: 0.13100317, a: 0.2509804}
-    - _GlowColor_2: {r: 0, g: 2.3512213, b: 8.47419, a: 0.2509804}
-    - _GlowColor_3: {r: 0.085134104, g: 5.9921565, b: 0.03901142, a: 0.2509804}
-    - _GlowColor_4: {r: 5.992157, g: 5.2708364, b: 0, a: 0.2509804}
-    - _GlowColor_5: {r: 4.3279657, g: 1.4889437, b: 0.43713427, a: 0.2509804}
-    - _GlowColor_6: {r: 0, g: 7.79768, b: 8.47419, a: 0.2509804}
-    - _GlowColor_7: {r: 1, g: 1, b: 1, a: 0.2509804}
+    - _GlowColor_1: {r: 0.7490196, g: 0.0042054257, b: 0.012265494, a: 0.2509804}
+    - _GlowColor_2: {r: 0, g: 0.20782058, b: 0.7490197, a: 0.2509804}
+    - _GlowColor_3: {r: 0.17026821, g: 11.984313, b: 0.07802284, a: 0.2509804}
+    - _GlowColor_4: {r: 0.7490197, g: 0.65885454, b: 0, a: 1}
+    - _GlowColor_5: {r: 11.984314, g: 4.122946, b: 1.2104425, a: 0.2509804}
+    - _GlowColor_6: {r: 0, g: 0.68922406, b: 0.7490196, a: 1}
+    - _GlowColor_7: {r: 5.992157, g: 5.992157, b: 5.992157, a: 0.2509804}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &4476106648414552445
