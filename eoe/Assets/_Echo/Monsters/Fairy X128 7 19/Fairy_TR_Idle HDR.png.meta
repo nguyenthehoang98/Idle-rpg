@@ -1,82 +1,76 @@
 fileFormatVersion: 2
-guid: a3b61fe1f15145845ab42ecfee7fc579
+guid: 3eee00825dba59a40a3db2f7a286cc52
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4593930814976636606
-    second: Fairy_Attack_0
+      213: -994819550333492009
+    second: Fairy_TR_Idle hdr_0
   - first:
-      213: 875092946378771723
-    second: Fairy_Attack_1
+      213: 926980074989480721
+    second: Fairy_TR_Idle hdr_1
   - first:
-      213: 4325449112720839841
-    second: Fairy_Attack_2
+      213: -6908707678181079201
+    second: Fairy_TR_Idle hdr_2
   - first:
-      213: -8731801373118433167
-    second: Fairy_Attack_3
+      213: -1602148577621983397
+    second: Fairy_TR_Idle hdr_3
   - first:
-      213: 3742008803550666183
-    second: Fairy_Attack_4
+      213: 2852973026518665903
+    second: Fairy_TR_Idle hdr_4
   - first:
-      213: -5788250587813411052
-    second: Fairy_Attack_5
+      213: 8146742134986011216
+    second: Fairy_TR_Idle hdr_5
   - first:
-      213: 2965769781518583717
-    second: Fairy_Attack_6
+      213: -9195001685750768247
+    second: Fairy_TR_Idle hdr_6
   - first:
-      213: 5069408361522920851
-    second: Fairy_Attack_7
+      213: -8099977112561645923
+    second: Fairy_TR_Idle hdr_7
   - first:
-      213: 8106192929134891324
-    second: Fairy_Attack_8
+      213: -5240818555975792157
+    second: Fairy_TR_Idle hdr_8
   - first:
-      213: 456300462273755139
-    second: Fairy_Attack_9
+      213: -2369744307311272745
+    second: Fairy_TR_Idle hdr_9
   - first:
-      213: 2758262181505543823
-    second: Fairy_Attack_10
+      213: -986389700008217978
+    second: Fairy_TR_Idle hdr_10
   - first:
-      213: -5191576597845309037
-    second: Fairy_Attack_11
+      213: 8570429268531720756
+    second: Fairy_TR_Idle hdr_11
   - first:
-      213: -6050858464188213703
-    second: Fairy_Attack_12
+      213: 1882688931365745769
+    second: Fairy_TR_Idle hdr_12
   - first:
-      213: -7178608324527938277
-    second: Fairy_Attack_13
+      213: -3841365436915903220
+    second: Fairy_TR_Idle hdr_13
   - first:
-      213: 7716368077035985487
-    second: Fairy_Attack_14
+      213: 3354528733688877295
+    second: Fairy_TR_Idle hdr_14
   - first:
-      213: 6315750290929896659
-    second: Fairy_Attack_15
+      213: -3343717176510306610
+    second: Fairy_TR_Idle hdr_15
   - first:
-      213: -5686569209988473212
-    second: Fairy_Attack_16
+      213: -2420017960189082102
+    second: Fairy_TR_Idle hdr_16
   - first:
-      213: 3515673560777028898
-    second: Fairy_Attack_17
+      213: -4150188726756226881
+    second: Fairy_TR_Idle hdr_17
   - first:
-      213: -3214314225906235301
-    second: Fairy_Attack_18
+      213: -8111919445692283645
+    second: Fairy_TR_Idle hdr_18
   - first:
-      213: 4326164154939251437
-    second: Fairy_Attack_19
+      213: -999163779275810291
+    second: Fairy_TR_Idle hdr_19
   - first:
-      213: -266387913338216140
-    second: Fairy_Attack_20
+      213: 570103497183178634
+    second: Fairy_TR_Idle hdr_20
   - first:
-      213: 1671220034357467731
-    second: Fairy_Attack_21
+      213: 4735473795207710402
+    second: Fairy_TR_Idle hdr_21
   - first:
-      213: -5631166801541852792
-    second: Fairy_Attack_22
-  - first:
-      213: 8297834167869334458
-    second: Fairy_Attack_23
-  - first:
-      213: -2713646235620221218
-    second: Fairy_Attack_24
+      213: 7822752693455647891
+    second: Fairy_TR_Idle hdr_22
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -120,7 +114,7 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
@@ -147,9 +141,9 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 2
-    compressionQuality: 50
-    crunchedCompression: 0
+    textureCompression: 3
+    compressionQuality: 100
+    crunchedCompression: 1
     allowsAlphaSplitting: 0
     overridden: 0
     ignorePlatformSupport: 0
@@ -185,551 +179,507 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Fairy_Attack_0
+      name: Fairy_TR_Idle HDR_0
       rect:
         serializedVersion: 2
         x: 0
         y: 512
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 249c89273441f30c0800000000000000
-      internalID: -4593930814976636606
+      spriteID: 0dec52b7f4ea7934e8c2f8f804bd7ef3
+      internalID: 1388606585
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_1
+      name: Fairy_TR_Idle HDR_1
       rect:
         serializedVersion: 2
         x: 128
         y: 512
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: b0d4b56f564f42c00800000000000000
-      internalID: 875092946378771723
+      spriteID: 9a98d3499c9e76c469535d3fc4baa026
+      internalID: -854947522
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_2
+      name: Fairy_TR_Idle HDR_2
       rect:
         serializedVersion: 2
         x: 256
         y: 512
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 1a411c10d05170c30800000000000000
-      internalID: 4325449112720839841
+      spriteID: ad1bd8c63f848bd4d812112ef7f356b6
+      internalID: 1223757215
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_3
+      name: Fairy_TR_Idle HDR_3
       rect:
         serializedVersion: 2
         x: 384
         y: 512
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 178f10a0ae862d680800000000000000
-      internalID: -8731801373118433167
+      spriteID: ce146e1a15f6f434da438225e47115fd
+      internalID: 799580634
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_4
+      name: Fairy_TR_Idle HDR_4
       rect:
         serializedVersion: 2
         x: 512
         y: 512
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7cd950a4e294ee330800000000000000
-      internalID: 3742008803550666183
+      spriteID: 74153434314f6b5498267df28d8f4793
+      internalID: 2026614069
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_5
+      name: Fairy_TR_Idle HDR_5
       rect:
         serializedVersion: 2
         x: 0
         y: 384
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 4178f6202c00cafa0800000000000000
-      internalID: -5788250587813411052
+      spriteID: 2f36180c077178747975697a309b0558
+      internalID: 1346730146
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_6
+      name: Fairy_TR_Idle HDR_6
       rect:
         serializedVersion: 2
         x: 128
         y: 384
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 5a7c00927e7882920800000000000000
-      internalID: 2965769781518583717
+      spriteID: efca74a8edf94b349ba4f8f5e5974c52
+      internalID: -2037962445
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_7
+      name: Fairy_TR_Idle HDR_7
       rect:
         serializedVersion: 2
         x: 256
         y: 384
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 39df7f1cb082a5640800000000000000
-      internalID: 5069408361522920851
+      spriteID: 514931a222b91134ba6b57aa5174fed5
+      internalID: 377914393
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_8
+      name: Fairy_TR_Idle HDR_8
       rect:
         serializedVersion: 2
         x: 384
         y: 384
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c315ed5458bfe7070800000000000000
-      internalID: 8106192929134891324
+      spriteID: fff0c546ddb924744b91af7ba0558ccb
+      internalID: 796223472
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_9
+      name: Fairy_TR_Idle HDR_9
       rect:
         serializedVersion: 2
         x: 512
         y: 384
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 3087ca45ada155600800000000000000
-      internalID: 456300462273755139
+      spriteID: aa566370e83a12a49b95bc3c7abede54
+      internalID: 236305382
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_10
+      name: Fairy_TR_Idle HDR_10
       rect:
         serializedVersion: 2
         x: 0
         y: 256
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f8e280617d0574620800000000000000
-      internalID: 2758262181505543823
+      spriteID: 231de34fdebaee0428b3698c115447fa
+      internalID: 804685428
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_11
+      name: Fairy_TR_Idle HDR_11
       rect:
         serializedVersion: 2
         x: 128
         y: 256
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 39903352790d3f7b0800000000000000
-      internalID: -5191576597845309037
+      spriteID: 2aa7a422d20552a48a0fce50db4be804
+      internalID: 1602622490
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_12
+      name: Fairy_TR_Idle HDR_12
       rect:
         serializedVersion: 2
         x: 256
         y: 256
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 93655ef1948070ca0800000000000000
-      internalID: -6050858464188213703
+      spriteID: ace082ddc831b054e86282d330b9fb65
+      internalID: -273765
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_13
+      name: Fairy_TR_Idle HDR_13
       rect:
         serializedVersion: 2
         x: 384
         y: 256
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: b15a9d243c5706c90800000000000000
-      internalID: -7178608324527938277
+      spriteID: 0d38f6e5b9dfab64d9e428e454d5c352
+      internalID: 1522850863
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_14
+      name: Fairy_TR_Idle HDR_14
       rect:
         serializedVersion: 2
         x: 512
         y: 256
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f4ad4eb02eb061b60800000000000000
-      internalID: 7716368077035985487
+      spriteID: f190f40415031ea4b944b43f8c60c8b5
+      internalID: 486130821
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_15
+      name: Fairy_TR_Idle HDR_15
       rect:
         serializedVersion: 2
         x: 0
         y: 128
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 3dc42f46d6d06a750800000000000000
-      internalID: 6315750290929896659
+      spriteID: f4fa53c2ec85afb45a855541abfe883a
+      internalID: 224752614
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_16
+      name: Fairy_TR_Idle HDR_16
       rect:
         serializedVersion: 2
         x: 128
         y: 128
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 48e96f7ae6f3511b0800000000000000
-      internalID: -5686569209988473212
+      spriteID: 2a0d0c0fb0e01d444af80e4f0cb98e6a
+      internalID: -1839879483
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_17
+      name: Fairy_TR_Idle HDR_17
       rect:
         serializedVersion: 2
         x: 256
         y: 128
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 225f8580a7e2ac030800000000000000
-      internalID: 3515673560777028898
+      spriteID: 9e75ce02379c57443a330b6e8f4d6206
+      internalID: 652223377
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_18
+      name: Fairy_TR_Idle HDR_18
       rect:
         serializedVersion: 2
         x: 384
         y: 128
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: b58cf50ed367463d0800000000000000
-      internalID: -3214314225906235301
+      spriteID: a6d6747007994fd42a0559889dcaf613
+      internalID: 841727601
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_19
+      name: Fairy_TR_Idle HDR_19
       rect:
         serializedVersion: 2
         x: 512
         y: 128
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: dea9e2fb06f990c30800000000000000
-      internalID: 4326164154939251437
+      spriteID: 5e7941e0b6418c54fbf4b9ad233d336e
+      internalID: -2030238741
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_20
+      name: Fairy_TR_Idle HDR_20
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 431a40daa999d4cf0800000000000000
-      internalID: -266387913338216140
+      spriteID: 16ab16f63d5905940b3f4a819d9b9d39
+      internalID: 1853106119
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_21
+      name: Fairy_TR_Idle HDR_21
       rect:
         serializedVersion: 2
         x: 128
         y: 0
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 35a946944cd513710800000000000000
-      internalID: 1671220034357467731
+      spriteID: 57cef2cf9ba9ff84eba4a5920b620e5e
+      internalID: 605515054
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_22
+      name: Fairy_TR_Idle HDR_22
       rect:
         serializedVersion: 2
         x: 256
         y: 0
         width: 128
         height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 881102311a31ad1b0800000000000000
-      internalID: -5631166801541852792
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fairy_Attack_23
-      rect:
-        serializedVersion: 2
-        x: 384
-        y: 0
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ab363fc3634d72370800000000000000
-      internalID: 8297834167869334458
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fairy_Attack_24
-      rect:
-        serializedVersion: 2
-        x: 512
-        y: 0
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: eded7cf4021375ad0800000000000000
-      internalID: -2713646235620221218
+      spriteID: 3e087df8a0e7ab740b854ba1afe20475
+      internalID: 92039615
       vertices: []
       indices: 
       edges: []
@@ -738,7 +688,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: f1d52b9822db226468ff18309b709977
     internalID: 0
     vertices: []
     indices: 
@@ -748,31 +698,29 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Fairy_Attack_0: -4593930814976636606
-      Fairy_Attack_1: 875092946378771723
-      Fairy_Attack_10: 2758262181505543823
-      Fairy_Attack_11: -5191576597845309037
-      Fairy_Attack_12: -6050858464188213703
-      Fairy_Attack_13: -7178608324527938277
-      Fairy_Attack_14: 7716368077035985487
-      Fairy_Attack_15: 6315750290929896659
-      Fairy_Attack_16: -5686569209988473212
-      Fairy_Attack_17: 3515673560777028898
-      Fairy_Attack_18: -3214314225906235301
-      Fairy_Attack_19: 4326164154939251437
-      Fairy_Attack_2: 4325449112720839841
-      Fairy_Attack_20: -266387913338216140
-      Fairy_Attack_21: 1671220034357467731
-      Fairy_Attack_22: -5631166801541852792
-      Fairy_Attack_23: 8297834167869334458
-      Fairy_Attack_24: -2713646235620221218
-      Fairy_Attack_3: -8731801373118433167
-      Fairy_Attack_4: 3742008803550666183
-      Fairy_Attack_5: -5788250587813411052
-      Fairy_Attack_6: 2965769781518583717
-      Fairy_Attack_7: 5069408361522920851
-      Fairy_Attack_8: 8106192929134891324
-      Fairy_Attack_9: 456300462273755139
+      Fairy_TR_Idle HDR_0: 1388606585
+      Fairy_TR_Idle HDR_1: -854947522
+      Fairy_TR_Idle HDR_10: 804685428
+      Fairy_TR_Idle HDR_11: 1602622490
+      Fairy_TR_Idle HDR_12: -273765
+      Fairy_TR_Idle HDR_13: 1522850863
+      Fairy_TR_Idle HDR_14: 486130821
+      Fairy_TR_Idle HDR_15: 224752614
+      Fairy_TR_Idle HDR_16: -1839879483
+      Fairy_TR_Idle HDR_17: 652223377
+      Fairy_TR_Idle HDR_18: 841727601
+      Fairy_TR_Idle HDR_19: -2030238741
+      Fairy_TR_Idle HDR_2: 1223757215
+      Fairy_TR_Idle HDR_20: 1853106119
+      Fairy_TR_Idle HDR_21: 605515054
+      Fairy_TR_Idle HDR_22: 92039615
+      Fairy_TR_Idle HDR_3: 799580634
+      Fairy_TR_Idle HDR_4: 2026614069
+      Fairy_TR_Idle HDR_5: 1346730146
+      Fairy_TR_Idle HDR_6: -2037962445
+      Fairy_TR_Idle HDR_7: 377914393
+      Fairy_TR_Idle HDR_8: 796223472
+      Fairy_TR_Idle HDR_9: 236305382
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

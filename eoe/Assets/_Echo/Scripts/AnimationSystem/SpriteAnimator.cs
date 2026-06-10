@@ -6,7 +6,11 @@ namespace _Echo.Scripts.AnimationSystem
 {
     public class SpriteAnimator : MonoBehaviour
     {
+        [SerializeField] private Material defaultMaterial;
+        [SerializeField] private Material hdrMaterial;
         [SerializeField] private SpriteRenderer spriteRenderer;
+        [SerializeField, ColorUsage(true, true)] private Color hdrColor;
+        
         [SerializeField] private MonsterAnimationAsset idleAnimationAsset;
         [SerializeField] private MonsterAnimationAsset walkAnimationAsset;
         [SerializeField] private MonsterAnimationAsset attackAnimationAsset;
@@ -15,6 +19,9 @@ namespace _Echo.Scripts.AnimationSystem
         
         private Dictionary<int, SpriteAnimClip> clipMap;
         private SpriteAnimClip currentClip;
+        private MaterialPropertyBlock mainTexturePropertyBlock;
+        private MaterialPropertyBlock hdrTexturePropertyBlock;
+        private MaterialPropertyBlock hdrColorPropertyBlock;
 
         private float timer;
         private int frameIndex;
@@ -30,6 +37,10 @@ namespace _Echo.Scripts.AnimationSystem
         private void Awake()
         {
             clipMap = new Dictionary<int, SpriteAnimClip>();
+
+            mainTexturePropertyBlock = new MaterialPropertyBlock();
+            hdrTexturePropertyBlock = new MaterialPropertyBlock();
+            hdrColorPropertyBlock = new MaterialPropertyBlock();
 
             void Load(MonsterAnimationAsset asset, AnimState state)
             {
@@ -82,8 +93,7 @@ namespace _Echo.Scripts.AnimationSystem
                 }
             }
 
-            spriteRenderer.sprite =
-                currentClip.frames[frameIndex];
+            spriteRenderer.sprite = currentClip.frames[frameIndex];
         }
 
         private void OnOneShotFinished()
@@ -147,6 +157,25 @@ namespace _Echo.Scripts.AnimationSystem
             {
                 cachedState = state;
                 cachedDirection = dir;
+            }
+
+            Material material = currentClip.textureHDR != null ? hdrMaterial : defaultMaterial;
+            
+            spriteRenderer.sharedMaterial = material;
+
+            if (currentClip.textureHDR != null)
+            {
+                spriteRenderer.GetPropertyBlock(mainTexturePropertyBlock);
+                mainTexturePropertyBlock.SetTexture("_MainTex", currentClip.frames[0].texture);
+                spriteRenderer.SetPropertyBlock(mainTexturePropertyBlock);
+                
+                spriteRenderer.GetPropertyBlock(hdrTexturePropertyBlock);
+                hdrTexturePropertyBlock.SetTexture("_GlowTex", currentClip.textureHDR);
+                spriteRenderer.SetPropertyBlock(hdrTexturePropertyBlock);
+
+                spriteRenderer.GetPropertyBlock(hdrColorPropertyBlock);
+                hdrColorPropertyBlock.SetColor("_GlowColor", hdrColor);
+                spriteRenderer.SetPropertyBlock(hdrColorPropertyBlock);
             }
 
             return 0;

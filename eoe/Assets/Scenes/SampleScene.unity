@@ -1131,17 +1131,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1222756866}
     m_Modifications:
+    - target: {fileID: 217796371668104951, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
+      propertyPath: hdrColor.b
+      value: 0.25204012
+      objectReference: {fileID: 0}
+    - target: {fileID: 217796371668104951, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
+      propertyPath: hdrColor.g
+      value: 1.8941262
+      objectReference: {fileID: 0}
+    - target: {fileID: 217796371668104951, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
+      propertyPath: hdrColor.r
+      value: 0.34600186
+      objectReference: {fileID: 0}
     - target: {fileID: 2779578027577397205, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
       propertyPath: m_Name
       value: Fairy Animator
       objectReference: {fileID: 0}
     - target: {fileID: 6044377920606304389, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.862
+      value: 0.875
       objectReference: {fileID: 0}
     - target: {fileID: 6044377920606304389, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.531
+      value: -0.139
       objectReference: {fileID: 0}
     - target: {fileID: 6044377920606304389, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1175,6 +1187,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7577668092877755869, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: e9d9d2033f4c8d64aae5907d3771bd18, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

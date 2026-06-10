@@ -45,7 +45,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b61bffda884949ed841efda69c9fd500, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultMaterial: {fileID: 2100000, guid: e9d9d2033f4c8d64aae5907d3771bd18, type: 2}
+  hdrMaterial: {fileID: 2100000, guid: e4fd61a6633a9004284109ac84a0c3fd, type: 2}
   spriteRenderer: {fileID: 7577668092877755869}
+  hdrColor: {r: 1.2075472, g: 0.59200686, b: 0.11961552, a: 1}
   idleAnimationAsset: {fileID: 11400000, guid: 34ed3887f9b2fdc479ceacf9cbb75dd8, type: 2}
   walkAnimationAsset: {fileID: 11400000, guid: 34ed3887f9b2fdc479ceacf9cbb75dd8, type: 2}
   attackAnimationAsset: {fileID: 11400000, guid: 7e2026acbd63b77489765f064d50d121, type: 2}

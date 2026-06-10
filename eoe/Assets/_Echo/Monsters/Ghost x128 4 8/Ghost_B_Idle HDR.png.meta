@@ -1,82 +1,82 @@
 fileFormatVersion: 2
-guid: a3b61fe1f15145845ab42ecfee7fc579
+guid: 83b2ff8d3b800674b991dc95781af7c5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4593930814976636606
-    second: Fairy_Attack_0
+      213: 3325762361690681700
+    second: Ghost_B_Idle HDR_0
   - first:
-      213: 875092946378771723
-    second: Fairy_Attack_1
+      213: -3094430114450066937
+    second: Ghost_B_Idle HDR_1
   - first:
-      213: 4325449112720839841
-    second: Fairy_Attack_2
+      213: 6212335038294365825
+    second: Ghost_B_Idle HDR_2
   - first:
-      213: -8731801373118433167
-    second: Fairy_Attack_3
+      213: -4835544991224264424
+    second: Ghost_B_Idle HDR_3
   - first:
-      213: 3742008803550666183
-    second: Fairy_Attack_4
+      213: -8422563229212601411
+    second: Ghost_B_Idle HDR_4
   - first:
-      213: -5788250587813411052
-    second: Fairy_Attack_5
+      213: 8374113430596678342
+    second: Ghost_B_Idle HDR_5
   - first:
-      213: 2965769781518583717
-    second: Fairy_Attack_6
+      213: 8120912972668885348
+    second: Ghost_B_Idle HDR_6
   - first:
-      213: 5069408361522920851
-    second: Fairy_Attack_7
+      213: -990167923217657444
+    second: Ghost_B_Idle HDR_7
   - first:
-      213: 8106192929134891324
-    second: Fairy_Attack_8
+      213: 4340187995961959192
+    second: Ghost_B_Idle HDR_8
   - first:
-      213: 456300462273755139
-    second: Fairy_Attack_9
+      213: -1175666136867627885
+    second: Ghost_B_Idle HDR_9
   - first:
-      213: 2758262181505543823
-    second: Fairy_Attack_10
+      213: -8473285339644025014
+    second: Ghost_B_Idle HDR_10
   - first:
-      213: -5191576597845309037
-    second: Fairy_Attack_11
+      213: 1199151854763678861
+    second: Ghost_B_Idle HDR_11
   - first:
-      213: -6050858464188213703
-    second: Fairy_Attack_12
+      213: -675274594008720684
+    second: Ghost_B_Idle HDR_12
   - first:
-      213: -7178608324527938277
-    second: Fairy_Attack_13
+      213: -4576550428397688570
+    second: Ghost_B_Idle HDR_13
   - first:
-      213: 7716368077035985487
-    second: Fairy_Attack_14
+      213: 7181138858741633580
+    second: Ghost_B_Idle HDR_14
   - first:
-      213: 6315750290929896659
-    second: Fairy_Attack_15
+      213: 6717282145384146232
+    second: Ghost_B_Idle HDR_15
   - first:
-      213: -5686569209988473212
-    second: Fairy_Attack_16
+      213: -2421039394451277785
+    second: Ghost_B_Idle HDR_16
   - first:
-      213: 3515673560777028898
-    second: Fairy_Attack_17
+      213: 5931426842033703565
+    second: Ghost_B_Idle HDR_17
   - first:
-      213: -3214314225906235301
-    second: Fairy_Attack_18
+      213: -7862991449810781859
+    second: Ghost_B_Idle HDR_18
   - first:
-      213: 4326164154939251437
-    second: Fairy_Attack_19
+      213: 6134284864345491122
+    second: Ghost_B_Idle HDR_19
   - first:
-      213: -266387913338216140
-    second: Fairy_Attack_20
+      213: -4275813819635146124
+    second: Ghost_B_Idle HDR_20
   - first:
-      213: 1671220034357467731
-    second: Fairy_Attack_21
+      213: 2772025426165653081
+    second: Ghost_B_Idle HDR_21
   - first:
-      213: -5631166801541852792
-    second: Fairy_Attack_22
+      213: -3630905843230707414
+    second: Ghost_B_Idle HDR_22
   - first:
-      213: 8297834167869334458
-    second: Fairy_Attack_23
+      213: 6670983270345359657
+    second: Ghost_B_Idle HDR_23
   - first:
-      213: -2713646235620221218
-    second: Fairy_Attack_24
+      213: -2551017237427529797
+    second: Ghost_B_Idle HDR_24
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -120,7 +120,7 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
@@ -147,9 +147,9 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 2
+    textureCompression: 1
     compressionQuality: 50
-    crunchedCompression: 0
+    crunchedCompression: 1
     allowsAlphaSplitting: 0
     overridden: 0
     ignorePlatformSupport: 0
@@ -185,551 +185,551 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Fairy_Attack_0
+      name: Ghost_B_Idle HDR_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 512
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 22
+        y: 543
+        width: 59
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 249c89273441f30c0800000000000000
-      internalID: -4593930814976636606
+      spriteID: 461ffef4f3b772e20800000000000000
+      internalID: 3325762361690681700
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_1
+      name: Ghost_B_Idle HDR_1
       rect:
         serializedVersion: 2
-        x: 128
-        y: 512
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 150
+        y: 545
+        width: 59
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b0d4b56f564f42c00800000000000000
-      internalID: 875092946378771723
+      spriteID: 702bee5b4306e05d0800000000000000
+      internalID: -3094430114450066937
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_2
+      name: Ghost_B_Idle HDR_2
       rect:
         serializedVersion: 2
-        x: 256
-        y: 512
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 278
+        y: 545
+        width: 59
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1a411c10d05170c30800000000000000
-      internalID: 4325449112720839841
+      spriteID: 1869f3f8dc5a63650800000000000000
+      internalID: 6212335038294365825
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_3
+      name: Ghost_B_Idle HDR_3
       rect:
         serializedVersion: 2
-        x: 384
-        y: 512
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 405
+        y: 542
+        width: 60
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 178f10a0ae862d680800000000000000
-      internalID: -8731801373118433167
+      spriteID: 81988a64371b4ecb0800000000000000
+      internalID: -4835544991224264424
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_4
+      name: Ghost_B_Idle HDR_4
       rect:
         serializedVersion: 2
-        x: 512
-        y: 512
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 533
+        y: 543
+        width: 59
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7cd950a4e294ee330800000000000000
-      internalID: 3742008803550666183
+      spriteID: db314802e5b0d1b80800000000000000
+      internalID: -8422563229212601411
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_5
+      name: Ghost_B_Idle HDR_5
       rect:
         serializedVersion: 2
-        x: 0
-        y: 384
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 21
+        y: 417
+        width: 57
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4178f6202c00cafa0800000000000000
-      internalID: -5788250587813411052
+      spriteID: 6c2fa831cc3d63470800000000000000
+      internalID: 8374113430596678342
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_6
+      name: Ghost_B_Idle HDR_6
       rect:
         serializedVersion: 2
-        x: 128
-        y: 384
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 150
+        y: 418
+        width: 55
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5a7c00927e7882920800000000000000
-      internalID: 2965769781518583717
+      spriteID: 4695acb725743b070800000000000000
+      internalID: 8120912972668885348
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_7
+      name: Ghost_B_Idle HDR_7
       rect:
         serializedVersion: 2
-        x: 256
-        y: 384
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 278
+        y: 418
+        width: 54
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 39df7f1cb082a5640800000000000000
-      internalID: 5069408361522920851
+      spriteID: c9110ac15873242f0800000000000000
+      internalID: -990167923217657444
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_8
+      name: Ghost_B_Idle HDR_8
       rect:
         serializedVersion: 2
-        x: 384
-        y: 384
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 407
+        y: 414
+        width: 53
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c315ed5458bfe7070800000000000000
-      internalID: 8106192929134891324
+      spriteID: 8132abdacf17b3c30800000000000000
+      internalID: 4340187995961959192
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_9
+      name: Ghost_B_Idle HDR_9
       rect:
         serializedVersion: 2
-        x: 512
-        y: 384
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 536
+        y: 414
+        width: 52
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3087ca45ada155600800000000000000
-      internalID: 456300462273755139
+      spriteID: 39c9c81a0e13fafe0800000000000000
+      internalID: -1175666136867627885
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_10
+      name: Ghost_B_Idle HDR_10
       rect:
         serializedVersion: 2
-        x: 0
-        y: 256
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 24
+        y: 287
+        width: 52
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f8e280617d0574620800000000000000
-      internalID: 2758262181505543823
+      spriteID: a472ef180e7d86a80800000000000000
+      internalID: -8473285339644025014
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_11
+      name: Ghost_B_Idle HDR_11
       rect:
         serializedVersion: 2
-        x: 128
-        y: 256
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 153
+        y: 286
+        width: 52
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 39903352790d3f7b0800000000000000
-      internalID: -5191576597845309037
+      spriteID: d8c90fe224e34a010800000000000000
+      internalID: 1199151854763678861
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_12
+      name: Ghost_B_Idle HDR_12
       rect:
         serializedVersion: 2
-        x: 256
-        y: 256
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 281
+        y: 285
+        width: 52
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 93655ef1948070ca0800000000000000
-      internalID: -6050858464188213703
+      spriteID: 4da9342a551f0a6f0800000000000000
+      internalID: -675274594008720684
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_13
+      name: Ghost_B_Idle HDR_13
       rect:
         serializedVersion: 2
-        x: 384
-        y: 256
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 409
+        y: 282
+        width: 55
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b15a9d243c5706c90800000000000000
-      internalID: -7178608324527938277
+      spriteID: 609a1ba02a3dc70c0800000000000000
+      internalID: -4576550428397688570
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_14
+      name: Ghost_B_Idle HDR_14
       rect:
         serializedVersion: 2
-        x: 512
-        y: 256
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 537
+        y: 284
+        width: 56
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f4ad4eb02eb061b60800000000000000
-      internalID: 7716368077035985487
+      spriteID: c229c06aeb788a360800000000000000
+      internalID: 7181138858741633580
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_15
+      name: Ghost_B_Idle HDR_15
       rect:
         serializedVersion: 2
-        x: 0
-        y: 128
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 25
+        y: 159
+        width: 58
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3dc42f46d6d06a750800000000000000
-      internalID: 6315750290929896659
+      spriteID: 83522b38584983d50800000000000000
+      internalID: 6717282145384146232
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_16
+      name: Ghost_B_Idle HDR_16
       rect:
         serializedVersion: 2
-        x: 128
-        y: 128
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 154
+        y: 161
+        width: 59
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 48e96f7ae6f3511b0800000000000000
-      internalID: -5686569209988473212
+      spriteID: 728318a7f7db66ed0800000000000000
+      internalID: -2421039394451277785
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_17
+      name: Ghost_B_Idle HDR_17
       rect:
         serializedVersion: 2
-        x: 256
-        y: 128
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 282
+        y: 163
+        width: 60
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 225f8580a7e2ac030800000000000000
-      internalID: 3515673560777028898
+      spriteID: d8ac2aa6949a05250800000000000000
+      internalID: 5931426842033703565
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_18
+      name: Ghost_B_Idle HDR_18
       rect:
         serializedVersion: 2
-        x: 384
-        y: 128
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 410
+        y: 159
+        width: 61
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b58cf50ed367463d0800000000000000
-      internalID: -3214314225906235301
+      spriteID: d593812bfea01e290800000000000000
+      internalID: -7862991449810781859
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_19
+      name: Ghost_B_Idle HDR_19
       rect:
         serializedVersion: 2
-        x: 512
-        y: 128
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 538
+        y: 161
+        width: 60
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: dea9e2fb06f990c30800000000000000
-      internalID: 4326164154939251437
+      spriteID: 2b64e52559b512550800000000000000
+      internalID: 6134284864345491122
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_20
+      name: Ghost_B_Idle HDR_20
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 26
+        y: 34
+        width: 60
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 431a40daa999d4cf0800000000000000
-      internalID: -266387913338216140
+      spriteID: 472e0fa3cf149a4c0800000000000000
+      internalID: -4275813819635146124
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_21
+      name: Ghost_B_Idle HDR_21
       rect:
         serializedVersion: 2
-        x: 128
-        y: 0
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 153
+        y: 37
+        width: 60
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 35a946944cd513710800000000000000
-      internalID: 1671220034357467731
+      spriteID: 95e54f23076387620800000000000000
+      internalID: 2772025426165653081
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_22
+      name: Ghost_B_Idle HDR_22
       rect:
         serializedVersion: 2
-        x: 256
-        y: 0
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 281
+        y: 34
+        width: 59
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 881102311a31ad1b0800000000000000
-      internalID: -5631166801541852792
+      spriteID: a21f7597f5e6c9dc0800000000000000
+      internalID: -3630905843230707414
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_23
+      name: Ghost_B_Idle HDR_23
       rect:
         serializedVersion: 2
-        x: 384
-        y: 0
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 408
+        y: 30
+        width: 59
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ab363fc3634d72370800000000000000
-      internalID: 8297834167869334458
+      spriteID: 9214283a0f7149c50800000000000000
+      internalID: 6670983270345359657
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy_Attack_24
+      name: Ghost_B_Idle HDR_24
       rect:
         serializedVersion: 2
-        x: 512
-        y: 0
-        width: 128
-        height: 128
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 535
+        y: 29
+        width: 59
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: eded7cf4021375ad0800000000000000
-      internalID: -2713646235620221218
+      spriteID: bb7db33a657f89cd0800000000000000
+      internalID: -2551017237427529797
       vertices: []
       indices: 
       edges: []
@@ -748,31 +748,31 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Fairy_Attack_0: -4593930814976636606
-      Fairy_Attack_1: 875092946378771723
-      Fairy_Attack_10: 2758262181505543823
-      Fairy_Attack_11: -5191576597845309037
-      Fairy_Attack_12: -6050858464188213703
-      Fairy_Attack_13: -7178608324527938277
-      Fairy_Attack_14: 7716368077035985487
-      Fairy_Attack_15: 6315750290929896659
-      Fairy_Attack_16: -5686569209988473212
-      Fairy_Attack_17: 3515673560777028898
-      Fairy_Attack_18: -3214314225906235301
-      Fairy_Attack_19: 4326164154939251437
-      Fairy_Attack_2: 4325449112720839841
-      Fairy_Attack_20: -266387913338216140
-      Fairy_Attack_21: 1671220034357467731
-      Fairy_Attack_22: -5631166801541852792
-      Fairy_Attack_23: 8297834167869334458
-      Fairy_Attack_24: -2713646235620221218
-      Fairy_Attack_3: -8731801373118433167
-      Fairy_Attack_4: 3742008803550666183
-      Fairy_Attack_5: -5788250587813411052
-      Fairy_Attack_6: 2965769781518583717
-      Fairy_Attack_7: 5069408361522920851
-      Fairy_Attack_8: 8106192929134891324
-      Fairy_Attack_9: 456300462273755139
+      Ghost_B_Idle HDR_0: 3325762361690681700
+      Ghost_B_Idle HDR_1: -3094430114450066937
+      Ghost_B_Idle HDR_10: -8473285339644025014
+      Ghost_B_Idle HDR_11: 1199151854763678861
+      Ghost_B_Idle HDR_12: -675274594008720684
+      Ghost_B_Idle HDR_13: -4576550428397688570
+      Ghost_B_Idle HDR_14: 7181138858741633580
+      Ghost_B_Idle HDR_15: 6717282145384146232
+      Ghost_B_Idle HDR_16: -2421039394451277785
+      Ghost_B_Idle HDR_17: 5931426842033703565
+      Ghost_B_Idle HDR_18: -7862991449810781859
+      Ghost_B_Idle HDR_19: 6134284864345491122
+      Ghost_B_Idle HDR_2: 6212335038294365825
+      Ghost_B_Idle HDR_20: -4275813819635146124
+      Ghost_B_Idle HDR_21: 2772025426165653081
+      Ghost_B_Idle HDR_22: -3630905843230707414
+      Ghost_B_Idle HDR_23: 6670983270345359657
+      Ghost_B_Idle HDR_24: -2551017237427529797
+      Ghost_B_Idle HDR_3: -4835544991224264424
+      Ghost_B_Idle HDR_4: -8422563229212601411
+      Ghost_B_Idle HDR_5: 8374113430596678342
+      Ghost_B_Idle HDR_6: 8120912972668885348
+      Ghost_B_Idle HDR_7: -990167923217657444
+      Ghost_B_Idle HDR_8: 4340187995961959192
+      Ghost_B_Idle HDR_9: -1175666136867627885
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
