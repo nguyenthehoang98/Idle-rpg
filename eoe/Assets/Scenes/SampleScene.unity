@@ -843,27 +843,31 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 217796371668104951, guid: 370120651b5d2f045aea3562485d223c, type: 3}
       propertyPath: hdrColor.b
-      value: 0.1483907
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 217796371668104951, guid: 370120651b5d2f045aea3562485d223c, type: 3}
       propertyPath: hdrColor.g
-      value: 0.7344223
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 217796371668104951, guid: 370120651b5d2f045aea3562485d223c, type: 3}
       propertyPath: hdrColor.r
-      value: 1.4980394
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2779578027577397205, guid: 370120651b5d2f045aea3562485d223c, type: 3}
       propertyPath: m_Name
       value: Ghost Animator
       objectReference: {fileID: 0}
+    - target: {fileID: 2779578027577397205, guid: 370120651b5d2f045aea3562485d223c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6044377920606304389, guid: 370120651b5d2f045aea3562485d223c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.918
+      value: -0.889
       objectReference: {fileID: 0}
     - target: {fileID: 6044377920606304389, guid: 370120651b5d2f045aea3562485d223c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.14
+      value: 0.547
       objectReference: {fileID: 0}
     - target: {fileID: 6044377920606304389, guid: 370120651b5d2f045aea3562485d223c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -945,7 +949,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.1, z: 0}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 338315506}
@@ -1060,19 +1064,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 217796371668104951, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
       propertyPath: hdrColor.b
-      value: 0.19933519
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 217796371668104951, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
       propertyPath: hdrColor.g
-      value: 1.4980394
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 217796371668104951, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
       propertyPath: hdrColor.r
-      value: 0.2736483
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2779578027577397205, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
       propertyPath: m_Name
       value: Fairy Animator
+      objectReference: {fileID: 0}
+    - target: {fileID: 2779578027577397205, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6044377920606304389, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
       propertyPath: m_LocalPosition.x

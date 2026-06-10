@@ -1,15 +1,15 @@
 fileFormatVersion: 2
-guid: 2a51ed8b744b86d429cfe88eab3e50b5
+guid: 35542a46f89a17e43aa61234876d7be3
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7074628928614564657
-    second: pxArt (2)_0
+      213: -8049738596340491021
+    second: texture_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 0
+    enableMipMap: 1
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -55,9 +55,9 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 1
+  alphaIsTransparency: 0
   spriteTessellationDetail: -1
-  textureType: 8
+  textureType: 0
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1
@@ -113,12 +113,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: pxArt (2)_0
+      name: texture_0
       rect:
         serializedVersion: 2
-        x: 2
+        x: 0
         y: 0
-        width: 357
+        width: 256
         height: 256
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 13306cf07812e2260800000000000000
-      internalID: 7074628928614564657
+      spriteID: 3fc9f5e5565994090800000000000000
+      internalID: -8049738596340491021
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      pxArt (2)_0: 7074628928614564657
+      texture_0: -8049738596340491021
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
