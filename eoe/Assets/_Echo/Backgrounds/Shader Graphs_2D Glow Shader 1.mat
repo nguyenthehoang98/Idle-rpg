@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_2D Glow Shader
+  m_Name: Shader Graphs_2D Glow Shader 1
   m_Shader: {fileID: -6465566751694194690, guid: e4fd918b401f9fd4e80f638cbd6af407, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -28,31 +28,31 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GlowTex_1:
-        m_Texture: {fileID: 2800000, guid: 4584d3b4144ca994cbe4aa162ec21f24, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GlowTex_2:
-        m_Texture: {fileID: 2800000, guid: 1832ea00b6dd41c4594d4be344ed4854, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GlowTex_3:
-        m_Texture: {fileID: 2800000, guid: e1f003e171d899d42baf4287d8a09607, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GlowTex_4:
-        m_Texture: {fileID: 2800000, guid: 662c32778e624f041942552527c9a874, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GlowTex_5:
-        m_Texture: {fileID: 2800000, guid: cec317671664c7340889cac30fac707d, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GlowTex_6:
-        m_Texture: {fileID: 2800000, guid: 9171cd65d210a4844b7d8358ce8924fa, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GlowTex_7:
-        m_Texture: {fileID: 2800000, guid: 66a312633ba94ab4ca4d9fba3d372e5b, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
