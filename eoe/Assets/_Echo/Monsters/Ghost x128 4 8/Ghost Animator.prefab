@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6044377920606304389}
   - component: {fileID: 217796371668104951}
   m_Layer: 0
-  m_Name: Fairy Animator
+  m_Name: Ghost Animator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,9 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 7577668092877755869}
-  idleAnimationAsset: {fileID: 11400000, guid: 38a01374b48e275449d8a9b67d3da831, type: 2}
-  walkAnimationAsset: {fileID: 11400000, guid: 38a01374b48e275449d8a9b67d3da831, type: 2}
-  attackAnimationAsset: {fileID: 11400000, guid: b0c5f1836bc3e6448ac32627469cc214, type: 2}
+  idleAnimationAsset: {fileID: 11400000, guid: 34ed3887f9b2fdc479ceacf9cbb75dd8, type: 2}
+  walkAnimationAsset: {fileID: 11400000, guid: 34ed3887f9b2fdc479ceacf9cbb75dd8, type: 2}
+  attackAnimationAsset: {fileID: 11400000, guid: 7e2026acbd63b77489765f064d50d121, type: 2}
 --- !u!1 &3701955450315542303
 GameObject:
   m_ObjectHideFlags: 0
@@ -74,8 +74,8 @@ Transform:
   m_GameObject: {fileID: 3701955450315542303}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.45, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3822782809006836269}
@@ -157,7 +157,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -5468960565006146794, guid: bfb7adf2de43e7f4186190598dbc32f8, type: 3}
+  m_Sprite: {fileID: 3765702155137962334, guid: bfc5703b3bbe970409dcbc6fc7fdac81, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
