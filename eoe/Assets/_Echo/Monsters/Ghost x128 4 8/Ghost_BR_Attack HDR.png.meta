@@ -1,43 +1,55 @@
 fileFormatVersion: 2
-guid: 645c682189811f14bb5357a3f798fff1
+guid: 79b01eca1e917774eb25ec1400cb6513
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7665551903230560262
-    second: Ghost_Attack_0
+      213: 3360890852978034811
+    second: Ghost_BR_Attack HDR_0
   - first:
-      213: -8112511770569250453
-    second: Ghost_Attack_1
+      213: 4533386482832854808
+    second: Ghost_BR_Attack HDR_1
   - first:
-      213: 4787653234132779539
-    second: Ghost_Attack_2
+      213: 551997054305241885
+    second: Ghost_BR_Attack HDR_2
   - first:
-      213: -2925426228753754065
-    second: Ghost_Attack_3
+      213: 4623639958681229334
+    second: Ghost_BR_Attack HDR_3
   - first:
-      213: 6178397648295401960
-    second: Ghost_Attack_4
+      213: 2584742372375445486
+    second: Ghost_BR_Attack HDR_4
   - first:
-      213: -7106075455542343736
-    second: Ghost_Attack_5
+      213: -9141692437982928800
+    second: Ghost_BR_Attack HDR_5
   - first:
-      213: -3414736500038189804
-    second: Ghost_Attack_6
+      213: -6867406102552951114
+    second: Ghost_BR_Attack HDR_6
   - first:
-      213: -5344383324327347873
-    second: Ghost_Attack_7
+      213: 9113689172077844061
+    second: Ghost_BR_Attack HDR_7
   - first:
-      213: -818759816081455209
-    second: Ghost_Attack_8
+      213: -6765528889300842999
+    second: Ghost_BR_Attack HDR_8
   - first:
-      213: 255365936135701021
-    second: Ghost_Attack_9
+      213: -6953729135947242906
+    second: Ghost_BR_Attack HDR_9
   - first:
-      213: 3938167026059114442
-    second: Ghost_Attack_10
+      213: 2203740263423682729
+    second: Ghost_BR_Attack HDR_10
   - first:
-      213: 3954090067453418379
-    second: Ghost_Attack_11
+      213: -5750535247024591709
+    second: Ghost_BR_Attack HDR_11
+  - first:
+      213: -8575110757314928038
+    second: Ghost_BR_Attack HDR_12
+  - first:
+      213: 7617862412928267269
+    second: Ghost_BR_Attack HDR_13
+  - first:
+      213: 966757421422886135
+    second: Ghost_BR_Attack HDR_14
+  - first:
+      213: 3812596056025439539
+    second: Ghost_BR_Attack HDR_15
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -70,7 +82,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -81,7 +93,7 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
@@ -108,7 +120,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -146,7 +158,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Ghost_R_Attack_0
+      name: Ghost_BR_Attack HDR_0
       rect:
         serializedVersion: 2
         x: 0
@@ -159,16 +171,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 0d23713d8676d0e4193f4d87c2fd46fd
-      internalID: 593782489
+      spriteID: b788d9c8c6844ae20800000000000000
+      internalID: 3360890852978034811
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_R_Attack_1
+      name: Ghost_BR_Attack HDR_1
       rect:
         serializedVersion: 2
         x: 128
@@ -181,16 +193,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: cd603a4be41eaf54faa4480f6386ecad
-      internalID: 1060236007
+      spriteID: 81f4fcabcf2d9ee30800000000000000
+      internalID: 4533386482832854808
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_R_Attack_2
+      name: Ghost_BR_Attack HDR_2
       rect:
         serializedVersion: 2
         x: 256
@@ -203,16 +215,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 3180c2b4192c5de46860c78548cbac34
-      internalID: 167075724
+      spriteID: d1b0de2756619a700800000000000000
+      internalID: 551997054305241885
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_R_Attack_3
+      name: Ghost_BR_Attack HDR_3
       rect:
         serializedVersion: 2
         x: 384
@@ -225,16 +237,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 6dbb57762e4d57f499c9b7a43703b88c
-      internalID: 1801087586
+      spriteID: 6181f7a9b087a2040800000000000000
+      internalID: 4623639958681229334
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_R_Attack_4
+      name: Ghost_BR_Attack HDR_4
       rect:
         serializedVersion: 2
         x: 0
@@ -247,16 +259,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 0200564d13370e6449b11fe7eccf850f
-      internalID: 183263995
+      spriteID: eefb65d3e79ded320800000000000000
+      internalID: 2584742372375445486
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_R_Attack_5
+      name: Ghost_BR_Attack HDR_5
       rect:
         serializedVersion: 2
         x: 128
@@ -269,16 +281,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 8a3ec2669cadf2049bbcccffb4372460
-      internalID: 122619567
+      spriteID: 0602724992f222180800000000000000
+      internalID: -9141692437982928800
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_R_Attack_6
+      name: Ghost_BR_Attack HDR_6
       rect:
         serializedVersion: 2
         x: 256
@@ -291,16 +303,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 8020b842d7f906a47af4117bf05a5446
-      internalID: 13545649
+      spriteID: 6b64bf8e88212b0a0800000000000000
+      internalID: -6867406102552951114
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_R_Attack_7
+      name: Ghost_BR_Attack HDR_7
       rect:
         serializedVersion: 2
         x: 384
@@ -313,16 +325,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 1f87641a0c47cc84f9f43b0c11180f2e
-      internalID: -247070561
+      spriteID: d56160ff3045a7e70800000000000000
+      internalID: 9113689172077844061
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_R_Attack_8
+      name: Ghost_BR_Attack HDR_8
       rect:
         serializedVersion: 2
         x: 0
@@ -335,16 +347,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 8ab005f080784624ca426b8a02e99899
-      internalID: 1510818844
+      spriteID: 906849b02530c12a0800000000000000
+      internalID: -6765528889300842999
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_R_Attack_9
+      name: Ghost_BR_Attack HDR_9
       rect:
         serializedVersion: 2
         x: 128
@@ -357,16 +369,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 514ce32ebaae15b4599314e1b6a861f6
-      internalID: -20224048
+      spriteID: 662a49b71346f7f90800000000000000
+      internalID: -6953729135947242906
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_R_Attack_10
+      name: Ghost_BR_Attack HDR_10
       rect:
         serializedVersion: 2
         x: 256
@@ -379,16 +391,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 94666da5da67ead449004c8903379fe9
-      internalID: 772470540
+      spriteID: 9a8289af712459e10800000000000000
+      internalID: 2203740263423682729
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_R_Attack_11
+      name: Ghost_BR_Attack HDR_11
       rect:
         serializedVersion: 2
         x: 384
@@ -401,16 +413,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 361c87d372bab16498ccb22010eee7dd
-      internalID: -640507628
+      spriteID: 3ac6cb419aef130b0800000000000000
+      internalID: -5750535247024591709
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_R_Attack_12
+      name: Ghost_BR_Attack HDR_12
       rect:
         serializedVersion: 2
         x: 0
@@ -423,16 +435,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 604501dd5df399f40ad8fe3baccc0a27
-      internalID: -170321223
+      spriteID: a52ec98f2361ff880800000000000000
+      internalID: -8575110757314928038
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_R_Attack_13
+      name: Ghost_BR_Attack HDR_13
       rect:
         serializedVersion: 2
         x: 128
@@ -445,16 +457,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: ecc49e5f514f0a844aa38607ce99911b
-      internalID: -92463701
+      spriteID: 504b36ed08518b960800000000000000
+      internalID: 7617862412928267269
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_R_Attack_14
+      name: Ghost_BR_Attack HDR_14
       rect:
         serializedVersion: 2
         x: 256
@@ -467,16 +479,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 8d2cf97674ef7a441bd4a0ff3a16f832
-      internalID: 171800889
+      spriteID: 7fc32efa0cc9a6d00800000000000000
+      internalID: 966757421422886135
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_R_Attack_15
+      name: Ghost_BR_Attack HDR_15
       rect:
         serializedVersion: 2
         x: 384
@@ -489,10 +501,10 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 38230a446c0dd0f4fb8435709c319191
-      internalID: -1374501917
+      spriteID: 33d9377b9ef09e430800000000000000
+      internalID: 3812596056025439539
       vertices: []
       indices: 
       edges: []
@@ -501,7 +513,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: ef7d38238b06f094d86bdff1dafad587
+    spriteID: 173828016ad03e6498b002fadfabffde
     internalID: 0
     vertices: []
     indices: 
@@ -511,22 +523,22 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Ghost_R_Attack_0: 593782489
-      Ghost_R_Attack_1: 1060236007
-      Ghost_R_Attack_10: 772470540
-      Ghost_R_Attack_11: -640507628
-      Ghost_R_Attack_12: -170321223
-      Ghost_R_Attack_13: -92463701
-      Ghost_R_Attack_14: 171800889
-      Ghost_R_Attack_15: -1374501917
-      Ghost_R_Attack_2: 167075724
-      Ghost_R_Attack_3: 1801087586
-      Ghost_R_Attack_4: 183263995
-      Ghost_R_Attack_5: 122619567
-      Ghost_R_Attack_6: 13545649
-      Ghost_R_Attack_7: -247070561
-      Ghost_R_Attack_8: 1510818844
-      Ghost_R_Attack_9: -20224048
+      Ghost_BR_Attack HDR_0: 3360890852978034811
+      Ghost_BR_Attack HDR_1: 4533386482832854808
+      Ghost_BR_Attack HDR_10: 2203740263423682729
+      Ghost_BR_Attack HDR_11: -5750535247024591709
+      Ghost_BR_Attack HDR_12: -8575110757314928038
+      Ghost_BR_Attack HDR_13: 7617862412928267269
+      Ghost_BR_Attack HDR_14: 966757421422886135
+      Ghost_BR_Attack HDR_15: 3812596056025439539
+      Ghost_BR_Attack HDR_2: 551997054305241885
+      Ghost_BR_Attack HDR_3: 4623639958681229334
+      Ghost_BR_Attack HDR_4: 2584742372375445486
+      Ghost_BR_Attack HDR_5: -9141692437982928800
+      Ghost_BR_Attack HDR_6: -6867406102552951114
+      Ghost_BR_Attack HDR_7: 9113689172077844061
+      Ghost_BR_Attack HDR_8: -6765528889300842999
+      Ghost_BR_Attack HDR_9: -6953729135947242906
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
