@@ -112,6 +112,13 @@ Material:
     - _ColorLight: {r: 0.0009765625, g: 0.0009765625, b: 0.0009765625, a: 0}
     - _ColorWater: {r: 0, g: 0, b: 0, a: 1}
     - _ColorWind: {r: 0, g: 0, b: 0, a: 1}
+    - _Color_1: {r: 0.25, g: 0, b: 0, a: 0}
+    - _Color_2: {r: 0.2075472, g: 1, b: 0.2075472, a: 0}
+    - _Color_3: {r: 0, g: 0, b: 1, a: 0}
+    - _Color_4: {r: 1, g: 1, b: 0, a: 0}
+    - _Color_5: {r: 1, g: 0, b: 1, a: 0}
+    - _Color_6: {r: 0.007843138, g: 1, b: 0.945098, a: 0}
+    - _Color_7: {r: 1, g: 1, b: 1, a: 0}
     - _G1_Color: {r: 0, g: 0, b: 1, a: 1}
     - _G2_Color: {r: 1, g: 1, b: 1, a: 0}
     - _GlowColor: {r: 1, g: 0, b: 0, a: 1}

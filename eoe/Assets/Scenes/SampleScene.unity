@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 338315506}
   - component: {fileID: 338315505}
+  - component: {fileID: 338315507}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -208,6 +209,35 @@ Transform:
   - {fileID: 1990648474}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &338315507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338315504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b5e36483ced6204b802e6c8f0877813, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotRenderer: {fileID: 1990648475}
+  inactiveColors:
+  - {r: 0.5, g: 0, b: 0, a: 1}
+  - {r: 0, g: 0.5, b: 0, a: 1}
+  - {r: 0, g: 0, b: 0.5, a: 1}
+  - {r: 0.5, g: 0.5, b: 0, a: 1}
+  - {r: 0.5, g: 0, b: 0.5, a: 1}
+  - {r: 0, g: 0.5, b: 0.5, a: 1}
+  - {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  activeColors:
+  - {r: 2, g: 0, b: 0, a: 1}
+  - {r: 0, g: 2, b: 0, a: 1}
+  - {r: 0, g: 0, b: 2, a: 1}
+  - {r: 2, g: 2, b: 0, a: 1}
+  - {r: 2, g: 0, b: 2, a: 1}
+  - {r: 0, g: 2, b: 2, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &368065530
 GameObject:
   m_ObjectHideFlags: 0
@@ -539,7 +569,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &856225014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -585,7 +615,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &940305756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -757,7 +787,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1330023696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -803,7 +833,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1475080867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -847,11 +877,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 217796371668104951, guid: 370120651b5d2f045aea3562485d223c, type: 3}
       propertyPath: hdrColor.g
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 217796371668104951, guid: 370120651b5d2f045aea3562485d223c, type: 3}
       propertyPath: hdrColor.r
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2779578027577397205, guid: 370120651b5d2f045aea3562485d223c, type: 3}
       propertyPath: m_Name
@@ -863,11 +893,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6044377920606304389, guid: 370120651b5d2f045aea3562485d223c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.889
+      value: -0.9
       objectReference: {fileID: 0}
     - target: {fileID: 6044377920606304389, guid: 370120651b5d2f045aea3562485d223c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.547
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6044377920606304389, guid: 370120651b5d2f045aea3562485d223c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1068,7 +1098,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 217796371668104951, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
       propertyPath: hdrColor.g
-      value: 2
+      value: 1.25
       objectReference: {fileID: 0}
     - target: {fileID: 217796371668104951, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
       propertyPath: hdrColor.r
@@ -1084,11 +1114,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6044377920606304389, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.875
+      value: 0.9
       objectReference: {fileID: 0}
     - target: {fileID: 6044377920606304389, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.139
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6044377920606304389, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
       propertyPath: m_LocalPosition.z
