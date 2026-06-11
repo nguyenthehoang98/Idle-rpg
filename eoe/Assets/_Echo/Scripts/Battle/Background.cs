@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,7 +6,7 @@ namespace _Echo.Scripts.Battle
     public class Background : MonoBehaviour
     {
         public SpriteRenderer slotRenderer;
-
+        
         [SerializeField, ColorUsage(true, true)] 
         private Color[] inactiveColors;
         [SerializeField, ColorUsage(true, true)]
@@ -16,7 +15,7 @@ namespace _Echo.Scripts.Battle
         private MaterialPropertyBlock[] propertyBlocks;
         private Coroutine[] coroutines;
 
-        private void Start()
+        private void Awake()
         {
             propertyBlocks = new MaterialPropertyBlock[7]
             {
@@ -25,35 +24,6 @@ namespace _Echo.Scripts.Battle
                 new MaterialPropertyBlock()
             };
             coroutines = new Coroutine[7];
-            
-            Deactivate(0, 0);
-            Deactivate(1, 0);
-            Deactivate(2, 0);
-            Deactivate(3, 0);
-            Deactivate(4, 0);
-            Deactivate(5, 0);
-            Deactivate(6, 0);
-        }
-
-        private void Update()
-        {
-            float duration = 0.5f;
-
-            if (Input.GetKeyDown(KeyCode.Alpha1)) Activate(0, duration);
-            if (Input.GetKeyDown(KeyCode.Alpha2)) Activate(1, duration);
-            if (Input.GetKeyDown(KeyCode.Alpha3)) Activate(2, duration);
-            if (Input.GetKeyDown(KeyCode.Alpha4)) Activate(3, duration);
-            if (Input.GetKeyDown(KeyCode.Alpha5)) Activate(4, duration);
-            if (Input.GetKeyDown(KeyCode.Alpha6)) Activate(5, duration);
-            if (Input.GetKeyDown(KeyCode.Alpha7)) Activate(6, duration);
-
-            if (Input.GetKeyDown(KeyCode.F1)) Deactivate(0, duration);
-            if (Input.GetKeyDown(KeyCode.F2)) Deactivate(1, duration);
-            if (Input.GetKeyDown(KeyCode.F3)) Deactivate(2, duration);
-            if (Input.GetKeyDown(KeyCode.F4)) Deactivate(3, duration);
-            if (Input.GetKeyDown(KeyCode.F5)) Deactivate(4, duration);
-            if (Input.GetKeyDown(KeyCode.F6)) Deactivate(5, duration);
-            if (Input.GetKeyDown(KeyCode.F7)) Deactivate(6, duration);
         }
 
         public void Activate(int slotIndex, float duration)

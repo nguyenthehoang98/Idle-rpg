@@ -4,24 +4,20 @@ using UnityEngine;
 
 namespace _Echo.Scripts.AnimationSystem
 {
-    public class SpriteAnimator : MonoBehaviour
+    public class CharacterAnimator : MonoBehaviour
     {
-        [SerializeField] private Material defaultMaterial;
-        [SerializeField] private Material hdrMaterial;
         [SerializeField] private SpriteRenderer spriteRenderer;
-        [SerializeField, ColorUsage(true, true)] private Color hdrColor;
-        
         [SerializeField] private MonsterAnimationAsset idleAnimationAsset;
         [SerializeField] private MonsterAnimationAsset walkAnimationAsset;
         [SerializeField] private MonsterAnimationAsset attackAnimationAsset;
 
-        public event Action<AnimState> OnOneShotAnimationEnd;
-        
+        public event Action<AnimState> OnAnimationEnd;
+        public event Action<(Texture defaultTexture, Texture hdrTexture)> OnAnimationStart;
+       
+        public bool IsPaused { get; set; }
+
         private Dictionary<int, SpriteAnimClip> clipMap;
         private SpriteAnimClip currentClip;
-        private MaterialPropertyBlock mainTexturePropertyBlock;
-        private MaterialPropertyBlock hdrTexturePropertyBlock;
-        private MaterialPropertyBlock hdrColorPropertyBlock;
 
         private float timer;
         private int frameIndex;
@@ -37,10 +33,6 @@ namespace _Echo.Scripts.AnimationSystem
         private void Awake()
         {
             clipMap = new Dictionary<int, SpriteAnimClip>();
-
-            mainTexturePropertyBlock = new MaterialPropertyBlock();
-            hdrTexturePropertyBlock = new MaterialPropertyBlock();
-            hdrColorPropertyBlock = new MaterialPropertyBlock();
 
             void Load(MonsterAnimationAsset asset, AnimState state)
             {
@@ -58,16 +50,13 @@ namespace _Echo.Scripts.AnimationSystem
             Load(attackAnimationAsset, AnimState.Attack);
         }
 
-        private void Start()
-        {
-            int result = Play(AnimState.Walk, Direction8.T);
-        }
-
         // Sau cho cùng update từ 1 tickable để đảm bảo cùng update frame
         private void Update()
         {
             if (currentClip == null)
                 return;
+
+            if (IsPaused) return;
 
             timer += Time.deltaTime * scaleTime;
 
@@ -100,7 +89,7 @@ namespace _Echo.Scripts.AnimationSystem
         {
             isPlayingOneShot = false;
             
-            OnOneShotAnimationEnd?.Invoke(currentState);
+            OnAnimationEnd?.Invoke(currentState);
 
             if (currentState == AnimState.Die) return;
 
@@ -159,25 +148,8 @@ namespace _Echo.Scripts.AnimationSystem
                 cachedDirection = dir;
             }
 
-            Material material = currentClip.textureHDR != null ? hdrMaterial : defaultMaterial;
+            OnAnimationStart?.Invoke((currentClip.frames[0].texture, currentClip.textureHDR));
             
-            spriteRenderer.sharedMaterial = material;
-
-            if (currentClip.textureHDR != null)
-            {
-                spriteRenderer.GetPropertyBlock(mainTexturePropertyBlock);
-                mainTexturePropertyBlock.SetTexture("_MainTex", currentClip.frames[0].texture);
-                spriteRenderer.SetPropertyBlock(mainTexturePropertyBlock);
-                
-                spriteRenderer.GetPropertyBlock(hdrTexturePropertyBlock);
-                hdrTexturePropertyBlock.SetTexture("_GlowTex", currentClip.textureHDR);
-                spriteRenderer.SetPropertyBlock(hdrTexturePropertyBlock);
-
-                spriteRenderer.GetPropertyBlock(hdrColorPropertyBlock);
-                hdrColorPropertyBlock.SetColor("_GlowColor", hdrColor);
-                spriteRenderer.SetPropertyBlock(hdrColorPropertyBlock);
-            }
-
             return 0;
         }
 

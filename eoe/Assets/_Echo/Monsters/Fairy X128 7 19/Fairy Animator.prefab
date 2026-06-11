@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6044377920606304389}
   - component: {fileID: 217796371668104951}
+  - component: {fileID: 7212217114402931541}
+  - component: {fileID: 1891883845553915528}
   m_Layer: 0
   m_Name: Fairy Animator
   m_TagString: Untagged
@@ -45,13 +47,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b61bffda884949ed841efda69c9fd500, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultMaterial: {fileID: 2100000, guid: e9d9d2033f4c8d64aae5907d3771bd18, type: 2}
-  hdrMaterial: {fileID: 2100000, guid: e4fd61a6633a9004284109ac84a0c3fd, type: 2}
   spriteRenderer: {fileID: 7577668092877755869}
-  hdrColor: {r: 0, g: 1.1353016, b: 0, a: 1}
   idleAnimationAsset: {fileID: 11400000, guid: 38a01374b48e275449d8a9b67d3da831, type: 2}
   walkAnimationAsset: {fileID: 11400000, guid: 38a01374b48e275449d8a9b67d3da831, type: 2}
   attackAnimationAsset: {fileID: 11400000, guid: b0c5f1836bc3e6448ac32627469cc214, type: 2}
+--- !u!114 &7212217114402931541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2779578027577397205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bedd6e83eb1f4de0a2348e1b1d894de6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 7577668092877755869}
+  defaultMaterial: {fileID: 2100000, guid: e9d9d2033f4c8d64aae5907d3771bd18, type: 2}
+  hdrMaterial: {fileID: 2100000, guid: e4fd61a6633a9004284109ac84a0c3fd, type: 2}
+  hdrColor: {r: 0, g: 2, b: 0, a: 1}
+--- !u!114 &1891883845553915528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2779578027577397205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90badb3a5eaf4d1facb382412f22146f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 217796371668104951}
+  renderer: {fileID: 7212217114402931541}
 --- !u!1 &3701955450315542303
 GameObject:
   m_ObjectHideFlags: 0
