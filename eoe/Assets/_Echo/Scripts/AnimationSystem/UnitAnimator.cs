@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace _Echo.Scripts.AnimationSystem
 {
-    public class CharacterAnimator : MonoBehaviour
+    public class UnitAnimator : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] private MonsterAnimationAsset idleAnimationAsset;
@@ -15,13 +15,13 @@ namespace _Echo.Scripts.AnimationSystem
         public event Action<(Texture defaultTexture, Texture hdrTexture)> OnAnimationStart;
        
         public bool IsPaused { get; set; }
+        public float TimeScale { get; set; } = 1f;
 
         private Dictionary<int, SpriteAnimClip> clipMap;
         private SpriteAnimClip currentClip;
 
         private float timer;
         private int frameIndex;
-        private float scaleTime = 1f;
         private bool isPlayingOneShot;
 
         private AnimState currentState;
@@ -58,7 +58,7 @@ namespace _Echo.Scripts.AnimationSystem
 
             if (IsPaused) return;
 
-            timer += Time.deltaTime * scaleTime;
+            timer += Time.deltaTime * TimeScale;
 
             float frameTime = 1f / currentClip.fps;
 
@@ -96,7 +96,10 @@ namespace _Echo.Scripts.AnimationSystem
             Play(cachedState, cachedDirection);
         }
 
-        public void SetTimeScale(float timeScale) => scaleTime = timeScale;
+        public int Play(AnimState state, Vector3 position, Vector3 destination)
+        {
+            return Play(state, GetDirection(position, destination));
+        }
 
         public int Play(AnimState state, Direction8 dir)
         {
@@ -156,6 +159,22 @@ namespace _Echo.Scripts.AnimationSystem
         private int GetKey(AnimState state, Direction8 dir)
         {
             return ((int)state << 8) | (int)dir;
+        }
+        
+        static Direction8 GetDirection(Vector3 position, Vector3 destination)
+        {
+            Vector3 delta = destination - position;
+
+            float angle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
+
+            if (angle >= -22.5f && angle < 22.5f) return Direction8.R;
+            if (angle >= 22.5f && angle < 67.5f) return Direction8.TR;
+            if (angle >= 67.5f && angle < 112.5f) return Direction8.T;
+            if (angle >= 112.5f && angle < 157.5f) return Direction8.TL;
+            if (angle >= 157.5f || angle < -157.5f) return Direction8.L;
+            if (angle >= -157.5f && angle < -112.5f) return Direction8.BL;
+            if (angle >= -112.5f && angle < -67.5f) return Direction8.B;
+            return Direction8.BR;
         }
     }
 }

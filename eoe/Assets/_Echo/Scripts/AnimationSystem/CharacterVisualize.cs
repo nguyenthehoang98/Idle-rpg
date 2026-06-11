@@ -4,8 +4,8 @@ namespace _Echo.Scripts.AnimationSystem
 {
     public class CharacterVisualize : MonoBehaviour
     {
-        [SerializeField] private CharacterAnimator animator;
-        [SerializeField] private new CharacterRenderer renderer;
+        [SerializeField] private UnitAnimator animator;
+        [SerializeField] private new UnitRenderer renderer;
 
         private void Awake()
         {
