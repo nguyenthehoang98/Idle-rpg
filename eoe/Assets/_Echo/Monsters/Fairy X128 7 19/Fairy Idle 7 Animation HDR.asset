@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46ee8d2bdd1e465fb36cc0e255a87b4b, type: 3}
-  m_Name: Fairy Idle 7 Animation Asset
+  m_Name: Fairy Idle 7 Animation HDR
   m_EditorClassIdentifier: 
   Clips:
   - direction: 0
-    textureHDR: {fileID: 0}
+    textureHDR: {fileID: 2800000, guid: 74a32bffa5d1a7342aa6c712243ef803, type: 3}
     frames:
     - {fileID: -5468960565006146794, guid: f31765505f3c74d4cbec8744dd481361, type: 3}
     - {fileID: 8378295968600706385, guid: f31765505f3c74d4cbec8744dd481361, type: 3}
@@ -43,7 +43,7 @@ MonoBehaviour:
     loop: 1
     flip: 0
   - direction: 1
-    textureHDR: {fileID: 0}
+    textureHDR: {fileID: 2800000, guid: 3eee00825dba59a40a3db2f7a286cc52, type: 3}
     frames:
     - {fileID: -5468960565006146794, guid: c013640bb57bb564695099e34e534021, type: 3}
     - {fileID: 8378295968600706385, guid: c013640bb57bb564695099e34e534021, type: 3}
@@ -72,7 +72,7 @@ MonoBehaviour:
     loop: 1
     flip: 0
   - direction: 2
-    textureHDR: {fileID: 0}
+    textureHDR: {fileID: 2800000, guid: 3add4ef454d3c4c4888960c1ae24d7cd, type: 3}
     frames:
     - {fileID: -5468960565006146794, guid: 7240dfcf85f2c3546b48f07212eeb7f2, type: 3}
     - {fileID: 8378295968600706385, guid: 7240dfcf85f2c3546b48f07212eeb7f2, type: 3}
@@ -101,7 +101,7 @@ MonoBehaviour:
     loop: 1
     flip: 0
   - direction: 3
-    textureHDR: {fileID: 0}
+    textureHDR: {fileID: 2800000, guid: 35d1ba059419f8b47b205ab3ea704fdd, type: 3}
     frames:
     - {fileID: -5468960565006146794, guid: 5d05fef2c228145479e2b76364fd9618, type: 3}
     - {fileID: 8378295968600706385, guid: 5d05fef2c228145479e2b76364fd9618, type: 3}
@@ -130,7 +130,7 @@ MonoBehaviour:
     loop: 1
     flip: 0
   - direction: 4
-    textureHDR: {fileID: 0}
+    textureHDR: {fileID: 2800000, guid: b6a2d4aac36f63a45a141eb7a76ffb8a, type: 3}
     frames:
     - {fileID: -5468960565006146794, guid: bfb7adf2de43e7f4186190598dbc32f8, type: 3}
     - {fileID: 8378295968600706385, guid: bfb7adf2de43e7f4186190598dbc32f8, type: 3}
@@ -159,7 +159,7 @@ MonoBehaviour:
     loop: 1
     flip: 0
   - direction: 5
-    textureHDR: {fileID: 0}
+    textureHDR: {fileID: 2800000, guid: 35d1ba059419f8b47b205ab3ea704fdd, type: 3}
     frames:
     - {fileID: -5468960565006146794, guid: 5d05fef2c228145479e2b76364fd9618, type: 3}
     - {fileID: 8378295968600706385, guid: 5d05fef2c228145479e2b76364fd9618, type: 3}
@@ -188,7 +188,7 @@ MonoBehaviour:
     loop: 1
     flip: 1
   - direction: 6
-    textureHDR: {fileID: 0}
+    textureHDR: {fileID: 2800000, guid: 3add4ef454d3c4c4888960c1ae24d7cd, type: 3}
     frames:
     - {fileID: -5468960565006146794, guid: 7240dfcf85f2c3546b48f07212eeb7f2, type: 3}
     - {fileID: 8378295968600706385, guid: 7240dfcf85f2c3546b48f07212eeb7f2, type: 3}
@@ -217,7 +217,7 @@ MonoBehaviour:
     loop: 1
     flip: 1
   - direction: 7
-    textureHDR: {fileID: 0}
+    textureHDR: {fileID: 2800000, guid: 3eee00825dba59a40a3db2f7a286cc52, type: 3}
     frames:
     - {fileID: -5468960565006146794, guid: c013640bb57bb564695099e34e534021, type: 3}
     - {fileID: 8378295968600706385, guid: c013640bb57bb564695099e34e534021, type: 3}

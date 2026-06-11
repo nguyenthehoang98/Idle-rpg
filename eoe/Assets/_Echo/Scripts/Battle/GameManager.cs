@@ -15,8 +15,7 @@ namespace _Echo.Scripts.Battle
                 if (i < characters.Length)
                 {
                     CharacterVisualize character = characters[i];
-                    if (character != null)
-                        character.PlayAnimation(AnimState.Idle, Direction8.B);
+                    if (character != null) character.Animator.Play(AnimState.Idle, Direction8.B);
                 }
 
                 Deactivate(i, 0);
@@ -42,6 +41,15 @@ namespace _Echo.Scripts.Battle
             if (Input.GetKeyDown(KeyCode.F5)) Deactivate(4, duration);
             if (Input.GetKeyDown(KeyCode.F6)) Deactivate(5, duration);
             if (Input.GetKeyDown(KeyCode.F7)) Deactivate(6, duration);
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                for (int i = 0; i < characters.Length; i++)
+                {
+                    var character = characters[i];
+                    if (character != null) character.Animator.Play(AnimState.Attack);
+                }
+            }
         }
 
         void Activate(int slotIndex, float duration)

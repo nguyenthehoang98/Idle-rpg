@@ -1,82 +1,91 @@
 fileFormatVersion: 2
-guid: 9fb30546832b57c4db4412bd3649622f
+guid: bd89b23cc966bb843b862b6bb75e3afb
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5815908421283614877
-    second: Ghost_TR_Idle HDR_0
+      213: -7343437244609438072
+    second: Fairy_TR_Attack HDR_0
   - first:
-      213: 1385740025067421726
-    second: Ghost_TR_Idle HDR_1
+      213: -8068118538571705649
+    second: Fairy_TR_Attack HDR_1
   - first:
-      213: 1078941773338542435
-    second: Ghost_TR_Idle HDR_2
+      213: -2240525875433905375
+    second: Fairy_TR_Attack HDR_2
   - first:
-      213: -4251608188692945656
-    second: Ghost_TR_Idle HDR_3
+      213: 4714573439459891068
+    second: Fairy_TR_Attack HDR_3
   - first:
-      213: 1244262032475437648
-    second: Ghost_TR_Idle HDR_4
+      213: -8148277563458511884
+    second: Fairy_TR_Attack HDR_4
   - first:
-      213: -4784680607410630938
-    second: Ghost_TR_Idle HDR_5
+      213: -21527596565949993
+    second: Fairy_TR_Attack HDR_5
   - first:
-      213: -3313935042163783721
-    second: Ghost_TR_Idle HDR_6
+      213: -6563028096537693378
+    second: Fairy_TR_Attack HDR_6
   - first:
-      213: 8857979495164527609
-    second: Ghost_TR_Idle HDR_7
+      213: 25074832272084762
+    second: Fairy_TR_Attack HDR_7
   - first:
-      213: -3527118319341775237
-    second: Ghost_TR_Idle HDR_8
+      213: 3522924655130838219
+    second: Fairy_TR_Attack HDR_8
   - first:
-      213: 4322127640108684171
-    second: Ghost_TR_Idle HDR_9
+      213: 5868868166250596986
+    second: Fairy_TR_Attack HDR_9
   - first:
-      213: -8823751359531039715
-    second: Ghost_TR_Idle HDR_10
+      213: -1363776117985864043
+    second: Fairy_TR_Attack HDR_10
   - first:
-      213: 2010246595224325005
-    second: Ghost_TR_Idle HDR_11
+      213: -3549943593130821084
+    second: Fairy_TR_Attack HDR_11
   - first:
-      213: 4008792329060026875
-    second: Ghost_TR_Idle HDR_12
+      213: -6746567177692389052
+    second: Fairy_TR_Attack HDR_12
   - first:
-      213: -2443960334119378129
-    second: Ghost_TR_Idle HDR_13
+      213: 3008574582864824080
+    second: Fairy_TR_Attack HDR_13
   - first:
-      213: -5678934523589134691
-    second: Ghost_TR_Idle HDR_14
+      213: 4754155303904479701
+    second: Fairy_TR_Attack HDR_14
   - first:
-      213: 2023227964132761362
-    second: Ghost_TR_Idle HDR_15
+      213: 7430022354355344690
+    second: Fairy_TR_Attack HDR_15
   - first:
-      213: -7900285218020172057
-    second: Ghost_TR_Idle HDR_16
+      213: 3788784700465718446
+    second: Fairy_TR_Attack HDR_16
   - first:
-      213: 7537582822324492678
-    second: Ghost_TR_Idle HDR_17
+      213: 1547614361360709075
+    second: Fairy_TR_Attack HDR_17
   - first:
-      213: -7482678638296721122
-    second: Ghost_TR_Idle HDR_18
+      213: 1600240714317572670
+    second: Fairy_TR_Attack HDR_18
   - first:
-      213: 1655403752908127342
-    second: Ghost_TR_Idle HDR_19
+      213: -876288450945984617
+    second: Fairy_TR_Attack HDR_19
   - first:
-      213: -1317752577827408869
-    second: Ghost_TR_Idle HDR_20
+      213: -6938094597347391737
+    second: Fairy_TR_Attack HDR_20
   - first:
-      213: -135563555520808562
-    second: Ghost_TR_Idle HDR_21
+      213: -2168562896642348126
+    second: Fairy_TR_Attack HDR_21
   - first:
-      213: -7763929981028508222
-    second: Ghost_TR_Idle HDR_22
+      213: -2242061972412460448
+    second: Fairy_TR_Attack HDR_22
   - first:
-      213: -8022200693750782805
-    second: Ghost_TR_Idle HDR_23
+      213: 529725840321138357
+    second: Fairy_TR_Attack HDR_23
   - first:
-      213: -8936413692093507638
-    second: Ghost_TR_Idle HDR_24
+      213: 5737294165188623010
+    second: Fairy_TR_Attack HDR_24
+  - first:
+      213: -583525212106297061
+    second: Fairy_TR_Attack HDR_25
+  - first:
+      213: -1313381843814969059
+    second: Fairy_TR_Attack HDR_26
+  - first:
+      213: 6661657089042122866
+    second: Fairy_TR_Attack HDR_27
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -147,8 +156,8 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
+    textureCompression: 3
+    compressionQuality: 100
     crunchedCompression: 1
     allowsAlphaSplitting: 0
     overridden: 0
@@ -185,7 +194,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_0
+      name: Fairy_TR_Attack HDR_0
       rect:
         serializedVersion: 2
         x: 0
@@ -200,14 +209,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 36fef27da1eb94fa0800000000000000
-      internalID: -5815908421283614877
+      spriteID: 88e5ea4bbbed61a90800000000000000
+      internalID: -7343437244609438072
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_1
+      name: Fairy_TR_Attack HDR_1
       rect:
         serializedVersion: 2
         x: 128
@@ -222,14 +231,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e104f29f5332b3310800000000000000
-      internalID: 1385740025067421726
+      spriteID: fc290b69fe8480090800000000000000
+      internalID: -8068118538571705649
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_2
+      name: Fairy_TR_Attack HDR_2
       rect:
         serializedVersion: 2
         x: 256
@@ -244,14 +253,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3618c2d83db29fe00800000000000000
-      internalID: 1078941773338542435
+      spriteID: 123e0bc469d08e0e0800000000000000
+      internalID: -2240525875433905375
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_3
+      name: Fairy_TR_Attack HDR_3
       rect:
         serializedVersion: 2
         x: 384
@@ -266,14 +275,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 805a0dcd0e04ff4c0800000000000000
-      internalID: -4251608188692945656
+      spriteID: c779f7670978d6140800000000000000
+      internalID: 4714573439459891068
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_4
+      name: Fairy_TR_Attack HDR_4
       rect:
         serializedVersion: 2
         x: 512
@@ -288,14 +297,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 05a3435e9b1844110800000000000000
-      internalID: 1244262032475437648
+      spriteID: 4fb15ca3ab08bee80800000000000000
+      internalID: -8148277563458511884
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_5
+      name: Fairy_TR_Attack HDR_5
       rect:
         serializedVersion: 2
         x: 0
@@ -310,14 +319,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6eec69f7656699db0800000000000000
-      internalID: -4784680607410630938
+      spriteID: 7d191d5d3c483bff0800000000000000
+      internalID: -21527596565949993
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_6
+      name: Fairy_TR_Attack HDR_6
       rect:
         serializedVersion: 2
         x: 128
@@ -332,14 +341,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7d7cb1b13a98202d0800000000000000
-      internalID: -3313935042163783721
+      spriteID: e3376f6f7b07be4a0800000000000000
+      internalID: -6563028096537693378
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_7
+      name: Fairy_TR_Attack HDR_7
       rect:
         serializedVersion: 2
         x: 256
@@ -354,14 +363,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9f3c9f45b6dddea70800000000000000
-      internalID: 8857979495164527609
+      spriteID: a1f41665d65195000800000000000000
+      internalID: 25074832272084762
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_8
+      name: Fairy_TR_Attack HDR_8
       rect:
         serializedVersion: 2
         x: 384
@@ -376,14 +385,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b765cd673982d0fc0800000000000000
-      internalID: -3527118319341775237
+      spriteID: bc40a8ffe41f3e030800000000000000
+      internalID: 3522924655130838219
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_9
+      name: Fairy_TR_Attack HDR_9
       rect:
         serializedVersion: 2
         x: 512
@@ -398,14 +407,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b83539660384bfb30800000000000000
-      internalID: 4322127640108684171
+      spriteID: a7a07faa088627150800000000000000
+      internalID: 5868868166250596986
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_10
+      name: Fairy_TR_Attack HDR_10
       rect:
         serializedVersion: 2
         x: 0
@@ -420,14 +429,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d1448c483ecbb8580800000000000000
-      internalID: -8823751359531039715
+      spriteID: 5969a46a8d4e21de0800000000000000
+      internalID: -1363776117985864043
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_11
+      name: Fairy_TR_Attack HDR_11
       rect:
         serializedVersion: 2
         x: 128
@@ -442,14 +451,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d8bc84ba0a4d5eb10800000000000000
-      internalID: 2010246595224325005
+      spriteID: 42a73c64c111cbec0800000000000000
+      internalID: -3549943593130821084
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_12
+      name: Fairy_TR_Attack HDR_12
       rect:
         serializedVersion: 2
         x: 256
@@ -464,14 +473,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: bf90fef326712a730800000000000000
-      internalID: 4008792329060026875
+      spriteID: 441e55095e06f52a0800000000000000
+      internalID: -6746567177692389052
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_13
+      name: Fairy_TR_Attack HDR_13
       rect:
         serializedVersion: 2
         x: 384
@@ -486,14 +495,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f236ba7560f451ed0800000000000000
-      internalID: -2443960334119378129
+      spriteID: 0174deb94aa90c920800000000000000
+      internalID: 3008574582864824080
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_14
+      name: Fairy_TR_Attack HDR_14
       rect:
         serializedVersion: 2
         x: 512
@@ -508,14 +517,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d9674ca932f5031b0800000000000000
-      internalID: -5678934523589134691
+      spriteID: 5d904407f072af140800000000000000
+      internalID: 4754155303904479701
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_15
+      name: Fairy_TR_Attack HDR_15
       rect:
         serializedVersion: 2
         x: 0
@@ -530,14 +539,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 21f15c52d13f31c10800000000000000
-      internalID: 2023227964132761362
+      spriteID: 235df8027fdbc1760800000000000000
+      internalID: 7430022354355344690
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_16
+      name: Fairy_TR_Attack HDR_16
       rect:
         serializedVersion: 2
         x: 128
@@ -552,14 +561,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7ee53a3a37c8c5290800000000000000
-      internalID: -7900285218020172057
+      spriteID: ea4a1b97c97749430800000000000000
+      internalID: 3788784700465718446
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_17
+      name: Fairy_TR_Attack HDR_17
       rect:
         serializedVersion: 2
         x: 256
@@ -574,14 +583,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 689dcbd14afda9860800000000000000
-      internalID: 7537582822324492678
+      spriteID: 3d5b232ef0b3a7510800000000000000
+      internalID: 1547614361360709075
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_18
+      name: Fairy_TR_Attack HDR_18
       rect:
         serializedVersion: 2
         x: 384
@@ -596,14 +605,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e199be36c6f282890800000000000000
-      internalID: -7482678638296721122
+      spriteID: e3a24048372353610800000000000000
+      internalID: 1600240714317572670
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_19
+      name: Fairy_TR_Attack HDR_19
       rect:
         serializedVersion: 2
         x: 512
@@ -618,14 +627,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e6cffeb41fc29f610800000000000000
-      internalID: 1655403752908127342
+      spriteID: 7975690fb4cc6d3f0800000000000000
+      internalID: -876288450945984617
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_20
+      name: Fairy_TR_Attack HDR_20
       rect:
         serializedVersion: 2
         x: 0
@@ -640,14 +649,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b14fdb0230766bde0800000000000000
-      internalID: -1317752577827408869
+      spriteID: 7074d0b29bfe6bf90800000000000000
+      internalID: -6938094597347391737
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_21
+      name: Fairy_TR_Attack HDR_21
       rect:
         serializedVersion: 2
         x: 128
@@ -662,14 +671,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e8971bc1aa16e1ef0800000000000000
-      internalID: -135563555520808562
+      spriteID: 2ab6a88f887b7e1e0800000000000000
+      internalID: -2168562896642348126
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_22
+      name: Fairy_TR_Attack HDR_22
       rect:
         serializedVersion: 2
         x: 256
@@ -684,14 +693,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2cd5acb31daf04490800000000000000
-      internalID: -7763929981028508222
+      spriteID: 06291f9d38892e0e0800000000000000
+      internalID: -2242061972412460448
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_23
+      name: Fairy_TR_Attack HDR_23
       rect:
         serializedVersion: 2
         x: 384
@@ -706,14 +715,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ba4a714f8fa6ba090800000000000000
-      internalID: -8022200693750782805
+      spriteID: 5becfac58d6f95700800000000000000
+      internalID: 529725840321138357
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ghost_TR_Idle HDR_24
+      name: Fairy_TR_Attack HDR_24
       rect:
         serializedVersion: 2
         x: 512
@@ -728,8 +737,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ac754dc181b7bf380800000000000000
-      internalID: -8936413692093507638
+      spriteID: 2aa3dff45a6fe9f40800000000000000
+      internalID: 5737294165188623010
       vertices: []
       indices: 
       edges: []
@@ -738,7 +747,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: c03adbecb30d6b2469cfddcfff88ff56
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -748,31 +757,31 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Ghost_TR_Idle HDR_0: -5815908421283614877
-      Ghost_TR_Idle HDR_1: 1385740025067421726
-      Ghost_TR_Idle HDR_10: -8823751359531039715
-      Ghost_TR_Idle HDR_11: 2010246595224325005
-      Ghost_TR_Idle HDR_12: 4008792329060026875
-      Ghost_TR_Idle HDR_13: -2443960334119378129
-      Ghost_TR_Idle HDR_14: -5678934523589134691
-      Ghost_TR_Idle HDR_15: 2023227964132761362
-      Ghost_TR_Idle HDR_16: -7900285218020172057
-      Ghost_TR_Idle HDR_17: 7537582822324492678
-      Ghost_TR_Idle HDR_18: -7482678638296721122
-      Ghost_TR_Idle HDR_19: 1655403752908127342
-      Ghost_TR_Idle HDR_2: 1078941773338542435
-      Ghost_TR_Idle HDR_20: -1317752577827408869
-      Ghost_TR_Idle HDR_21: -135563555520808562
-      Ghost_TR_Idle HDR_22: -7763929981028508222
-      Ghost_TR_Idle HDR_23: -8022200693750782805
-      Ghost_TR_Idle HDR_24: -8936413692093507638
-      Ghost_TR_Idle HDR_3: -4251608188692945656
-      Ghost_TR_Idle HDR_4: 1244262032475437648
-      Ghost_TR_Idle HDR_5: -4784680607410630938
-      Ghost_TR_Idle HDR_6: -3313935042163783721
-      Ghost_TR_Idle HDR_7: 8857979495164527609
-      Ghost_TR_Idle HDR_8: -3527118319341775237
-      Ghost_TR_Idle HDR_9: 4322127640108684171
+      Fairy_TR_Attack HDR_0: -7343437244609438072
+      Fairy_TR_Attack HDR_1: -8068118538571705649
+      Fairy_TR_Attack HDR_10: -1363776117985864043
+      Fairy_TR_Attack HDR_11: -3549943593130821084
+      Fairy_TR_Attack HDR_12: -6746567177692389052
+      Fairy_TR_Attack HDR_13: 3008574582864824080
+      Fairy_TR_Attack HDR_14: 4754155303904479701
+      Fairy_TR_Attack HDR_15: 7430022354355344690
+      Fairy_TR_Attack HDR_16: 3788784700465718446
+      Fairy_TR_Attack HDR_17: 1547614361360709075
+      Fairy_TR_Attack HDR_18: 1600240714317572670
+      Fairy_TR_Attack HDR_19: -876288450945984617
+      Fairy_TR_Attack HDR_2: -2240525875433905375
+      Fairy_TR_Attack HDR_20: -6938094597347391737
+      Fairy_TR_Attack HDR_21: -2168562896642348126
+      Fairy_TR_Attack HDR_22: -2242061972412460448
+      Fairy_TR_Attack HDR_23: 529725840321138357
+      Fairy_TR_Attack HDR_24: 5737294165188623010
+      Fairy_TR_Attack HDR_3: 4714573439459891068
+      Fairy_TR_Attack HDR_4: -8148277563458511884
+      Fairy_TR_Attack HDR_5: -21527596565949993
+      Fairy_TR_Attack HDR_6: -6563028096537693378
+      Fairy_TR_Attack HDR_7: 25074832272084762
+      Fairy_TR_Attack HDR_8: 3522924655130838219
+      Fairy_TR_Attack HDR_9: 5868868166250596986
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

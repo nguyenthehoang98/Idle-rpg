@@ -188,10 +188,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_0
       rect:
         serializedVersion: 2
-        x: 22
-        y: 543
-        width: 59
-        height: 53
+        x: 0
+        y: 512
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -210,10 +210,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_1
       rect:
         serializedVersion: 2
-        x: 150
-        y: 545
-        width: 59
-        height: 52
+        x: 128
+        y: 512
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -232,10 +232,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_2
       rect:
         serializedVersion: 2
-        x: 278
-        y: 545
-        width: 59
-        height: 52
+        x: 256
+        y: 512
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -254,10 +254,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_3
       rect:
         serializedVersion: 2
-        x: 405
-        y: 542
-        width: 60
-        height: 57
+        x: 384
+        y: 512
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -276,10 +276,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_4
       rect:
         serializedVersion: 2
-        x: 533
-        y: 543
-        width: 59
-        height: 57
+        x: 512
+        y: 512
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -298,10 +298,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_5
       rect:
         serializedVersion: 2
-        x: 21
-        y: 417
-        width: 57
-        height: 56
+        x: 0
+        y: 384
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -320,10 +320,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_6
       rect:
         serializedVersion: 2
-        x: 150
-        y: 418
-        width: 55
-        height: 54
+        x: 128
+        y: 384
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -342,10 +342,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_7
       rect:
         serializedVersion: 2
-        x: 278
-        y: 418
-        width: 54
-        height: 54
+        x: 256
+        y: 384
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -364,10 +364,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_8
       rect:
         serializedVersion: 2
-        x: 407
-        y: 414
-        width: 53
-        height: 57
+        x: 384
+        y: 384
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -386,10 +386,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_9
       rect:
         serializedVersion: 2
-        x: 536
-        y: 414
-        width: 52
-        height: 56
+        x: 512
+        y: 384
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -408,10 +408,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_10
       rect:
         serializedVersion: 2
-        x: 24
-        y: 287
-        width: 52
-        height: 54
+        x: 0
+        y: 256
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -430,10 +430,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_11
       rect:
         serializedVersion: 2
-        x: 153
-        y: 286
-        width: 52
-        height: 53
+        x: 128
+        y: 256
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -452,10 +452,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_12
       rect:
         serializedVersion: 2
-        x: 281
-        y: 285
-        width: 52
-        height: 54
+        x: 256
+        y: 256
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -474,10 +474,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_13
       rect:
         serializedVersion: 2
-        x: 409
-        y: 282
-        width: 55
-        height: 57
+        x: 384
+        y: 256
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -496,10 +496,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_14
       rect:
         serializedVersion: 2
-        x: 537
-        y: 284
-        width: 56
-        height: 55
+        x: 512
+        y: 256
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -518,10 +518,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_15
       rect:
         serializedVersion: 2
-        x: 25
-        y: 159
-        width: 58
-        height: 54
+        x: 0
+        y: 128
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -540,10 +540,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_16
       rect:
         serializedVersion: 2
-        x: 154
-        y: 161
-        width: 59
-        height: 53
+        x: 128
+        y: 128
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -562,10 +562,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_17
       rect:
         serializedVersion: 2
-        x: 282
-        y: 163
-        width: 60
-        height: 52
+        x: 256
+        y: 128
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -584,10 +584,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_18
       rect:
         serializedVersion: 2
-        x: 410
-        y: 159
-        width: 61
-        height: 56
+        x: 384
+        y: 128
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -606,10 +606,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_19
       rect:
         serializedVersion: 2
-        x: 538
-        y: 161
-        width: 60
-        height: 54
+        x: 512
+        y: 128
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -628,10 +628,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_20
       rect:
         serializedVersion: 2
-        x: 26
-        y: 34
-        width: 60
-        height: 53
+        x: 0
+        y: 0
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -650,10 +650,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_21
       rect:
         serializedVersion: 2
-        x: 153
-        y: 37
-        width: 60
-        height: 50
+        x: 128
+        y: 0
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -672,10 +672,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_22
       rect:
         serializedVersion: 2
-        x: 281
-        y: 34
-        width: 59
-        height: 52
+        x: 256
+        y: 0
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -694,10 +694,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_23
       rect:
         serializedVersion: 2
-        x: 408
-        y: 30
-        width: 59
-        height: 55
+        x: 384
+        y: 0
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -716,10 +716,10 @@ TextureImporter:
       name: Ghost_B_Idle HDR_24
       rect:
         serializedVersion: 2
-        x: 535
-        y: 29
-        width: 59
-        height: 55
+        x: 512
+        y: 0
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -738,7 +738,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: edd82dd023bb9f844aaf95c9c5863b0c
     internalID: 0
     vertices: []
     indices: 

@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46ee8d2bdd1e465fb36cc0e255a87b4b, type: 3}
-  m_Name: Ghost Attack 8 Animation Asset
+  m_Name: Ghost Attack 8 Animation HDR
   m_EditorClassIdentifier: 
   Clips:
   - direction: 0
-    textureHDR: {fileID: 2800000, guid: 5416627d528cef24e8f3ae458c8c5e9b, type: 3}
+    textureHDR: {fileID: 2800000, guid: ffee8ef312fa1cb4d8671371a76dcc42, type: 3}
     frames:
     - {fileID: -7665551903230560262, guid: ebc532c0654d2a64f8233f57dca42eb0, type: 3}
     - {fileID: -8112511770569250453, guid: ebc532c0654d2a64f8233f57dca42eb0, type: 3}
@@ -36,7 +36,7 @@ MonoBehaviour:
     loop: 0
     flip: 0
   - direction: 1
-    textureHDR: {fileID: 0}
+    textureHDR: {fileID: 2800000, guid: aa6d9c98e5111b34aa090fc3fcfa53f9, type: 3}
     frames:
     - {fileID: -7665551903230560262, guid: 3ac8d49ac5be28b418d8ea1e867cf2cd, type: 3}
     - {fileID: -8112511770569250453, guid: 3ac8d49ac5be28b418d8ea1e867cf2cd, type: 3}
@@ -98,7 +98,7 @@ MonoBehaviour:
     loop: 0
     flip: 0
   - direction: 4
-    textureHDR: {fileID: 0}
+    textureHDR: {fileID: 2800000, guid: c58244c35a4abba4f98280855d86e6d1, type: 3}
     frames:
     - {fileID: -7665551903230560262, guid: c3a99ed76d3a70540a485ff6c8043997, type: 3}
     - {fileID: -8112511770569250453, guid: c3a99ed76d3a70540a485ff6c8043997, type: 3}
@@ -160,7 +160,7 @@ MonoBehaviour:
     loop: 0
     flip: 1
   - direction: 7
-    textureHDR: {fileID: 0}
+    textureHDR: {fileID: 2800000, guid: aa6d9c98e5111b34aa090fc3fcfa53f9, type: 3}
     frames:
     - {fileID: -7665551903230560262, guid: 3ac8d49ac5be28b418d8ea1e867cf2cd, type: 3}
     - {fileID: -8112511770569250453, guid: 3ac8d49ac5be28b418d8ea1e867cf2cd, type: 3}

@@ -96,8 +96,17 @@ namespace _Echo.Scripts.AnimationSystem
             Play(cachedState, cachedDirection);
         }
 
+        public int Play(AnimState state)
+        {
+            if (IsPaused) return -1;
+            
+            return Play(state, currentDirection);
+        }
+        
         public int Play(AnimState state, Vector3 position, Vector3 destination)
         {
+            if (IsPaused) return -1;
+            
             return Play(state, GetDirection(position, destination));
         }
 

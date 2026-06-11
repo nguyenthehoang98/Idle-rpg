@@ -48,8 +48,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 7577668092877755869}
-  idleAnimationAsset: {fileID: 11400000, guid: 38a01374b48e275449d8a9b67d3da831, type: 2}
-  walkAnimationAsset: {fileID: 11400000, guid: 38a01374b48e275449d8a9b67d3da831, type: 2}
+  idleAnimationAsset: {fileID: 11400000, guid: 87d72cab5fe2a094784a1527aefaa951, type: 2}
+  walkAnimationAsset: {fileID: 0}
   attackAnimationAsset: {fileID: 11400000, guid: b0c5f1836bc3e6448ac32627469cc214, type: 2}
 --- !u!114 &7212217114402931541
 MonoBehaviour:
@@ -66,7 +66,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 7577668092877755869}
   defaultMaterial: {fileID: 2100000, guid: e9d9d2033f4c8d64aae5907d3771bd18, type: 2}
   hdrMaterial: {fileID: 2100000, guid: e4fd61a6633a9004284109ac84a0c3fd, type: 2}
-  hdrColor: {r: 0, g: 2, b: 0, a: 1}
+  hdrColor: {r: 0, g: 1.5, b: 0, a: 1}
 --- !u!114 &1891883845553915528
 MonoBehaviour:
   m_ObjectHideFlags: 0

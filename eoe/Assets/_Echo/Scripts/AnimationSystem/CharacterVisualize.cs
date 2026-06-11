@@ -7,6 +7,8 @@ namespace _Echo.Scripts.AnimationSystem
         [SerializeField] private UnitAnimator animator;
         [SerializeField] private new UnitRenderer renderer;
 
+        public UnitAnimator Animator => animator;
+
         private void Awake()
         {
             animator.OnAnimationStart += AnimationStart;
@@ -15,11 +17,6 @@ namespace _Echo.Scripts.AnimationSystem
         private void AnimationStart((Texture defaultTexture, Texture hdrTexture) tuple)
         {
             renderer.SetTexture(tuple.defaultTexture, tuple.hdrTexture, tuple.hdrTexture == null);
-        }
-
-        public int PlayAnimation(AnimState state, Direction8 direction)
-        {
-            return animator.Play(state, direction);
         }
 
         public void Activate(float duration)
