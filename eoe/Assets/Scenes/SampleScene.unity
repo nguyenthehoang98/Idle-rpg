@@ -520,38 +520,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3526481546610530644, guid: 8caef1a77159208409b703a70f5f88c7, type: 3}
-      propertyPath: m_SceneBindings.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3526481546610530644, guid: 8caef1a77159208409b703a70f5f88c7, type: 3}
-      propertyPath: m_SceneBindings.Array.data[2].key
-      value: 
-      objectReference: {fileID: 2022935999136699789, guid: 83471a285065eb847bb0ca3b88ab2bf7, type: 2}
-    - target: {fileID: 3526481546610530644, guid: 8caef1a77159208409b703a70f5f88c7, type: 3}
-      propertyPath: m_SceneBindings.Array.data[2].value
-      value: 
-      objectReference: {fileID: 2041184504}
-    - target: {fileID: 3526481546610530644, guid: 8caef1a77159208409b703a70f5f88c7, type: 3}
-      propertyPath: m_ExposedReferences.m_References.Array.size
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 3526481546610530644, guid: 8caef1a77159208409b703a70f5f88c7, type: 3}
-      propertyPath: m_ExposedReferences.m_References.Array.data[3].first
-      value: 3aed6f8687f1a8c43abf4d0f2acab5ea
-      objectReference: {fileID: 0}
-    - target: {fileID: 3526481546610530644, guid: 8caef1a77159208409b703a70f5f88c7, type: 3}
-      propertyPath: m_ExposedReferences.m_References.Array.data[4].first
-      value: d86a03de11304344d9398a7c373e2cb3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3526481546610530644, guid: 8caef1a77159208409b703a70f5f88c7, type: 3}
-      propertyPath: m_ExposedReferences.m_References.Array.data[5].first
-      value: cc12fee6cb05ae64f8d47d46a04bf21e
-      objectReference: {fileID: 0}
-    - target: {fileID: 3526481546610530644, guid: 8caef1a77159208409b703a70f5f88c7, type: 3}
-      propertyPath: m_ExposedReferences.m_References.Array.data[4].second
-      value: 
-      objectReference: {fileID: 2041184504}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1085,11 +1053,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &2041184504 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7270817519538946440, guid: 8caef1a77159208409b703a70f5f88c7, type: 3}
-  m_PrefabInstance: {fileID: 1137506453}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4596609020608989111
 PrefabInstance:
   m_ObjectHideFlags: 0

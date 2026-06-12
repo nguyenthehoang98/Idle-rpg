@@ -92,6 +92,30 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 7270817519538946440}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7270817519538946440}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!320 &4646487071899269772
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -107,9 +131,15 @@ PlayableDirector:
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
   m_SceneBindings:
-  - key: {fileID: 3796729486264932954, guid: 3633c07f736c5084a9abb3d6879d57d6, type: 2}
+  - key: {fileID: 0}
+    value: {fileID: 4811706376593403344}
+  - key: {fileID: -4375750978056229881, guid: 3633c07f736c5084a9abb3d6879d57d6, type: 2}
     value: {fileID: 7270817519538946440}
-  - key: {fileID: -2541155495019015329, guid: 3633c07f736c5084a9abb3d6879d57d6, type: 2}
+  - key: {fileID: -1138292730191492588, guid: 3633c07f736c5084a9abb3d6879d57d6, type: 2}
+    value: {fileID: 7283102737577418847}
+  - key: {fileID: -2025734617030488300, guid: 3633c07f736c5084a9abb3d6879d57d6, type: 2}
+    value: {fileID: 7270817519538946440}
+  - key: {fileID: -4663228764017719998, guid: 3633c07f736c5084a9abb3d6879d57d6, type: 2}
     value: {fileID: 7283102737577418847}
   m_ExposedReferences:
     m_References: []
@@ -536,7 +566,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4811706376593403344
 Transform:
   m_ObjectHideFlags: 0
@@ -646,7 +676,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6613561770980096061
 Transform:
   m_ObjectHideFlags: 0
@@ -5514,10 +5544,13 @@ PlayableDirector:
     value: {fileID: 2989341122998574031}
   - key: {fileID: 5554763677149829674, guid: 83471a285065eb847bb0ca3b88ab2bf7, type: 2}
     value: {fileID: 2735756086521966264}
+  - key: {fileID: 0}
+    value: {fileID: 7270817519538946440}
   m_ExposedReferences:
     m_References:
     - a474eceb9d160ca4da52b7b1fc0c4245: {fileID: 0}
     - a5d20404ddc11804688d46caef359ba6: {fileID: 2989341122998574031}
     - 571651972f7903f428005e8da2c54b8d: {fileID: 0}
+    - 3aed6f8687f1a8c43abf4d0f2acab5ea: {fileID: 7270817519538946440}
     - d86a03de11304344d9398a7c373e2cb3: {fileID: 7270817519538946440}
     - cc12fee6cb05ae64f8d47d46a04bf21e: {fileID: 0}
