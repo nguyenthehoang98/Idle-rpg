@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1031409653120422263}
   - component: {fileID: 3527308216053339795}
+  - component: {fileID: 4646487071899269772}
   m_Layer: 0
   m_Name: Butterfly
   m_TagString: Untagged
@@ -52,10 +53,10 @@ MonoBehaviour:
   onStart:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7270817519538946440}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 4646487071899269772}
+        m_TargetAssemblyTypeName: UnityEngine.Playables.PlayableDirector, UnityEngine
+        m_MethodName: Play
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -67,6 +68,18 @@ MonoBehaviour:
   onComplete:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 4646487071899269772}
+        m_TargetAssemblyTypeName: UnityEngine.Playables.PlayableDirector, UnityEngine
+        m_MethodName: Stop
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 3526481546610530644}
         m_TargetAssemblyTypeName: UnityEngine.Playables.PlayableDirector, UnityEngine
         m_MethodName: Play
@@ -79,18 +92,27 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 7270817519538946440}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+--- !u!320 &4646487071899269772
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 821249291768270283}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: 3633c07f736c5084a9abb3d6879d57d6, type: 2}
+  m_InitialState: 0
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: 3796729486264932954, guid: 3633c07f736c5084a9abb3d6879d57d6, type: 2}
+    value: {fileID: 7270817519538946440}
+  - key: {fileID: -2541155495019015329, guid: 3633c07f736c5084a9abb3d6879d57d6, type: 2}
+    value: {fileID: 7283102737577418847}
+  m_ExposedReferences:
+    m_References: []
 --- !u!1 &1483913248451566195
 GameObject:
   m_ObjectHideFlags: 0
@@ -514,7 +536,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4811706376593403344
 Transform:
   m_ObjectHideFlags: 0
@@ -5451,7 +5473,7 @@ GameObject:
   - component: {fileID: 8154169670228279913}
   - component: {fileID: 3526481546610530644}
   m_Layer: 0
-  m_Name: End Timeline
+  m_Name: Timeline End
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

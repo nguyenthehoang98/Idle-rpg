@@ -24,7 +24,7 @@ namespace _Echo.Scripts
         IEnumerator Lerp(Vector3 start, Vector3 end)
         {
             onStart?.Invoke();
-            
+
             transform.position = start;
      
             Vector2 direction = end - start;
