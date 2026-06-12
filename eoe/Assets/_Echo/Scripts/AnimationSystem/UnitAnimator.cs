@@ -25,10 +25,10 @@ namespace _Echo.Scripts.AnimationSystem
         private bool isPlayingOneShot;
 
         private AnimState currentState;
-        private Direction8 currentDirection;
+        private Direction currentDirection;
 
         private AnimState cachedState;
-        private Direction8 cachedDirection;
+        private Direction cachedDirection;
 
         private void Awake()
         {
@@ -107,11 +107,13 @@ namespace _Echo.Scripts.AnimationSystem
         {
             if (IsPaused) return -1;
             
-            return Play(state, GetDirection(position, destination));
+            return Play(state, DirectionExtensions.GetDirection(position, destination));
         }
 
-        public int Play(AnimState state, Direction8 dir)
+        public int Play(AnimState state, Direction dir)
         {
+            if (IsPaused) return -1;
+            
             int key = GetKey(state, dir);
 
             if (!clipMap.TryGetValue(key, out var clip))
@@ -130,9 +132,8 @@ namespace _Echo.Scripts.AnimationSystem
                 return -3;
             }
 
-            if (state == currentState &&
-                dir == currentDirection)
-                return -1;
+            if (state == currentState && dir == currentDirection)
+                return -4;
 
             currentState = state;
             currentDirection = dir;
@@ -162,28 +163,12 @@ namespace _Echo.Scripts.AnimationSystem
 
             OnAnimationStart?.Invoke((currentClip.frames[0].texture, currentClip.textureHDR));
             
-            return 0;
+            return 1;
         }
 
-        private int GetKey(AnimState state, Direction8 dir)
+        private int GetKey(AnimState state, Direction dir)
         {
             return ((int)state << 8) | (int)dir;
-        }
-        
-        static Direction8 GetDirection(Vector3 position, Vector3 destination)
-        {
-            Vector3 delta = destination - position;
-
-            float angle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
-
-            if (angle >= -22.5f && angle < 22.5f) return Direction8.R;
-            if (angle >= 22.5f && angle < 67.5f) return Direction8.TR;
-            if (angle >= 67.5f && angle < 112.5f) return Direction8.T;
-            if (angle >= 112.5f && angle < 157.5f) return Direction8.TL;
-            if (angle >= 157.5f || angle < -157.5f) return Direction8.L;
-            if (angle >= -157.5f && angle < -112.5f) return Direction8.BL;
-            if (angle >= -112.5f && angle < -67.5f) return Direction8.B;
-            return Direction8.BR;
         }
     }
 }

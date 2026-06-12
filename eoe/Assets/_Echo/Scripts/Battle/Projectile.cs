@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace _Echo.Scripts
+namespace _Echo.Scripts.Battle
 {
     public class Projectile : MonoBehaviour
     {
@@ -10,15 +10,10 @@ namespace _Echo.Scripts
         public float radius = 3;
         public UnityEvent onStart;
         public UnityEvent onComplete;
-    
-        void Update()
+
+        public void SetDirection(Vector3 dir)
         {
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                StartCoroutine(Lerp(Vector3.zero,
-                    new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized * radius)
-                );
-            }
+            StartCoroutine(Lerp(transform.position, dir.normalized * radius));
         }
 
         IEnumerator Lerp(Vector3 start, Vector3 end)

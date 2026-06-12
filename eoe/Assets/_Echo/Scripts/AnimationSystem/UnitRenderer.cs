@@ -25,8 +25,6 @@ namespace _Echo.Scripts.AnimationSystem
             mainTexturePropertyBlock = new MaterialPropertyBlock();
             hdrTexturePropertyBlock = new MaterialPropertyBlock();
             hdrColorPropertyBlock = new MaterialPropertyBlock();
-            
-            Debug.Log(@"Khi tấn công thì mới bật HDR cho đẹp. active thì chỉnh Saturation thôi");
         }
 
         public void Activate(float duration)

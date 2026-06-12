@@ -79,6 +79,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90badb3a5eaf4d1facb382412f22146f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  projectile: {fileID: 3527308216053339795, guid: 8caef1a77159208409b703a70f5f88c7, type: 3}
+  muzzlePositionOffset: {x: 0, y: 0.35, z: 0}
+  delayInitProjectile: 0.2
   animator: {fileID: 217796371668104951}
   renderer: {fileID: 7212217114402931541}
 --- !u!1 &3701955450315542303
