@@ -1,3 +1,6 @@
+using System;
+using _Games.GamePlay.AnimationSystem;
+using _Games.GamePlay.SpawnerSystem;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using UnityEngine;
@@ -10,6 +13,21 @@ namespace _Games.GamePlay
         [SerializeField] private Pedestal pedestal;
         [SerializeField] private Character[] characters;
 
+        private SpawnerTickable spawner;
+        private int totalMonsterAlive = 0;
+
+        private void Awake()
+        {
+            owner.TryGetTickable(out spawner);
+            spawner.OnSpawnCompleted += waveIndex =>
+            {
+                Debug.Log($"Complete wave {waveIndex} - {spawner.IsCompleted}");
+            };
+
+            Monster.OnMonsterEnable += MonsterEnable;
+            Monster.OnMonsterDisable += MonsterDisable;
+        }
+
         private void Start()
         {
             AssetBundleManager.SetLocationBundle(true);
@@ -20,24 +38,45 @@ namespace _Games.GamePlay
         {
             float duration = 0.5f;
 
-            if (Input.GetKeyDown(KeyCode.Alpha1)) Activate(0, duration);
-            if (Input.GetKeyDown(KeyCode.Alpha2)) Activate(1, duration);
-            if (Input.GetKeyDown(KeyCode.Alpha3)) Activate(2, duration);
-            if (Input.GetKeyDown(KeyCode.Alpha4)) Activate(3, duration);
-            if (Input.GetKeyDown(KeyCode.Alpha5)) Activate(4, duration);
-            if (Input.GetKeyDown(KeyCode.Alpha6)) Activate(5, duration);
-            if (Input.GetKeyDown(KeyCode.Alpha7)) Activate(6, duration);
+            if (Input.GetKeyDown(KeyCode.Alpha1)) HeroActivate(0, duration);
+            if (Input.GetKeyDown(KeyCode.Alpha2)) HeroActivate(1, duration);
+            if (Input.GetKeyDown(KeyCode.Alpha3)) HeroActivate(2, duration);
+            if (Input.GetKeyDown(KeyCode.Alpha4)) HeroActivate(3, duration);
+            if (Input.GetKeyDown(KeyCode.Alpha5)) HeroActivate(4, duration);
+            if (Input.GetKeyDown(KeyCode.Alpha6)) HeroActivate(5, duration);
+            if (Input.GetKeyDown(KeyCode.Alpha7)) HeroActivate(6, duration);
 
-            if (Input.GetKeyDown(KeyCode.F1)) Deactivate(0, duration);
-            if (Input.GetKeyDown(KeyCode.F2)) Deactivate(1, duration);
-            if (Input.GetKeyDown(KeyCode.F3)) Deactivate(2, duration);
-            if (Input.GetKeyDown(KeyCode.F4)) Deactivate(3, duration);
-            if (Input.GetKeyDown(KeyCode.F5)) Deactivate(4, duration);
-            if (Input.GetKeyDown(KeyCode.F6)) Deactivate(5, duration);
-            if (Input.GetKeyDown(KeyCode.F7)) Deactivate(6, duration);
+            if (Input.GetKeyDown(KeyCode.F1)) HeroDeactivate(0, duration);
+            if (Input.GetKeyDown(KeyCode.F2)) HeroDeactivate(1, duration);
+            if (Input.GetKeyDown(KeyCode.F3)) HeroDeactivate(2, duration);
+            if (Input.GetKeyDown(KeyCode.F4)) HeroDeactivate(3, duration);
+            if (Input.GetKeyDown(KeyCode.F5)) HeroDeactivate(4, duration);
+            if (Input.GetKeyDown(KeyCode.F6)) HeroDeactivate(5, duration);
+            if (Input.GetKeyDown(KeyCode.F7)) HeroDeactivate(6, duration);
         }
 
-        void Activate(int slotIndex, float duration)
+        private void OnDestroy()
+        {
+            Monster.OnMonsterEnable -= MonsterEnable;
+            Monster.OnMonsterDisable -= MonsterDisable;
+        }
+
+        private void MonsterDisable(Monster monster)
+        {
+            totalMonsterAlive--;
+
+            if (totalMonsterAlive == 0 && spawner.IsPaused)
+            {
+                spawner.IsPaused = false;
+            }
+        }
+
+        private void MonsterEnable(Monster monster)
+        {
+            totalMonsterAlive++;
+        }
+        
+        private void HeroActivate(int slotIndex, float duration)
         {
             if (slotIndex < 0 || slotIndex > 6) return;
 
@@ -48,7 +87,7 @@ namespace _Games.GamePlay
             if (character != null) character.Activate(duration);
         }
 
-        void Deactivate(int slotIndex, float duration)
+        private void HeroDeactivate(int slotIndex, float duration)
         {
             if (slotIndex < 0 || slotIndex > 6) return;
             

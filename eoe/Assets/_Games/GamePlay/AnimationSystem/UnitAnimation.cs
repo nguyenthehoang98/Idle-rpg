@@ -10,11 +10,13 @@ namespace _Games.GamePlay.AnimationSystem
         public event Action<State, Direction> OnAnimationTrigger; 
         public event Action<State, Direction> OnAnimationEnd; 
         
-        private SpriteRenderer renderer;
-        private Dictionary<int, AnimationClipData> clips = new Dictionary<int, AnimationClipData>();
+        private readonly SpriteRenderer renderer;
+        
+        private readonly Dictionary<int, AnimationClipData> clips = new Dictionary<int, AnimationClipData>();
+        
         private AnimationClipData currentClipData;
 
-        public bool IsPaused { get; set; } = true;
+        public bool IsPaused { get; set; } = false;
         public float TimeScale { get; set; } = 1f;
 
         private float elapsedTime;
@@ -28,13 +30,13 @@ namespace _Games.GamePlay.AnimationSystem
             this.renderer = renderer;
         }
 
-        public void Import(AnimationAsset asset, State state)
+        public void Import(AnimationAsset asset, State animationState)
         {
             if (asset == null) return;
 
             foreach (var clipData in asset.Clips)
             {
-                clips[GetKey(state, clipData.direction)] = clipData;
+                clips[GetKey(animationState, clipData.direction)] = clipData;
             }
         }
         

@@ -39,3 +39,28 @@ MonoBehaviour:
       SpawnStartTime: 4
       SpawnEndTime: 7
       Portals: 03000000
+  - SpawnsData:
+    - Monster: Shell_1.Prefab
+      Total: 4
+      Radius: 0
+      SpawnStartTime: 1
+      SpawnEndTime: 4
+      Portals: 0200000003000000
+    - Monster: Shell_2.Prefab
+      Total: 4
+      Radius: 0
+      SpawnStartTime: 2
+      SpawnEndTime: 5
+      Portals: 0100000003000000
+    - Monster: Spike_1.Prefab
+      Total: 5
+      Radius: 0
+      SpawnStartTime: 3
+      SpawnEndTime: 6
+      Portals: 0200000000000000
+    - Monster: Spike_2.Prefab
+      Total: 6
+      Radius: 0
+      SpawnStartTime: 4
+      SpawnEndTime: 7
+      Portals: 0300000001000000

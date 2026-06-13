@@ -13,8 +13,13 @@ namespace _Games.GamePlay.SpawnerSystem
     [Serializable]
     public class SpawnerTickable : ITickable
     {
+        public event Action<int> OnSpawnCompleted;
+
         public Transform[] portals;
         public LevelAsset levelAsset;
+
+        public bool IsPaused { get; set; } = false;
+        public bool IsCompleted { get; private set; } = false;
 
         private Data[] temps;
         private HashSet<GameObject> monsterObjects = new HashSet<GameObject>();
@@ -47,11 +52,11 @@ namespace _Games.GamePlay.SpawnerSystem
             if (wave >= 0 && wave < levelAsset.WavesData.Length)
             {
                 waveIndex = wave;
-                
+
                 currentWaveData = levelAsset.WavesData[waveIndex];
 
                 SpawnData[] spawnsData = currentWaveData.SpawnsData;
-                
+
                 temps = new Data[spawnsData.Length];
 
                 for (int i = 0; i < spawnsData.Length; i++)
@@ -60,46 +65,78 @@ namespace _Games.GamePlay.SpawnerSystem
 
                     temps[i] = new Data(spawnData.SpawnStartTime, spawnData.SpawnEndTime, spawnData.Total);
                 }
-                
+
                 return true;
             }
+            else
+            {
+                IsCompleted = true;
 
-            return false;
+                return false;
+            }
         }
 
         public void Tick(float deltaTime)
         {
+            if (IsPaused || IsCompleted) return;
+
+            bool isWaveCompleted = true;
+
             for (var i = 0; i < currentWaveData.SpawnsData.Length; i++)
             {
                 SpawnData spawnData = currentWaveData.SpawnsData[i];
-                
+
                 Data data = temps[i];
 
-                if (data.ShouldSpawn(deltaTime)) Spawn(spawnData);
+                int count = data.Spawn(deltaTime);
+
+                if (count > 0)
+                {
+                    for (int j = 0; j < count; j++)
+                    {
+                        Spawn(spawnData);
+                    }
+                }
+                
+                if (!data.IsFinished) isWaveCompleted = false;
 
                 temps[i] = data;
+            }
+
+            if (isWaveCompleted)
+            {
+                IsPaused = true;
+
+                int wave = waveIndex;
+
+                waveIndex++;
+
+                LoadWaveData(waveIndex);
+
+                OnSpawnCompleted?.Invoke(wave);
             }
         }
 
         private async void Spawn(SpawnData data)
         {
             int portalIndex = data.Portals[0];
+            
             if (data.Portals.Length > 1)
             {
-                portalIndex = RandomUtils.Range(0, data.Portals.Length - 1);
+                portalIndex = RandomUtils.Range(0, data.Portals.Length);
             }
-            
+
             Vector3 position = portals[portalIndex].position + new Vector3(
                 RandomUtils.Range(-data.Radius, data.Radius),
                 RandomUtils.Range(-data.Radius, data.Radius)
             );
-            
-            
+
+
             GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(data.Monster);
 
             GameObject instance = Pool.Instantiate(go);
             instance.transform.position = position;
-            
+
             instance.GetComponent<Monster>().Initialize();
         }
 
@@ -116,48 +153,48 @@ namespace _Games.GamePlay.SpawnerSystem
             }
         }
 
+        [Serializable]
         private struct Data
         {
-            private readonly int total;
-            private readonly float interval;
-            
+            private int total;
+
             private readonly float startTime;
             private readonly float endTime;
 
-            private int count;
+            private int spawnedCount;
             private float elapsedTime;
-            private float intervalElapsedTime;
 
             public Data(float startTime, float endTime, int total)
             {
                 this.startTime = startTime;
                 this.endTime = endTime;
-                this.interval = (endTime - startTime) / total;
                 this.total = total;
-                intervalElapsedTime = elapsedTime = 0;
-                count = 0;
+                spawnedCount = 0;
+                elapsedTime = 0;
             }
 
-            public bool ShouldSpawn(float deltaTime)
+            public int Spawn(float deltaTime)
             {
-                if (count > total) return false;
-                
                 elapsedTime += deltaTime;
 
-                if (elapsedTime >= startTime && elapsedTime <= endTime)
-                {
-                    intervalElapsedTime += deltaTime;
+                if (elapsedTime < startTime) return 0;
 
-                    if (intervalElapsedTime >= interval)
-                    {
-                        intervalElapsedTime = 0;
-                        count++;
-                        return true;
-                    }
-                }
+                float duration = endTime - startTime;
 
-                return false;
+                if (duration <= 0 || total <= 0) return 0;
+
+                float progress = Mathf.Clamp01((elapsedTime - startTime) / duration);
+
+                int expectedCount = Mathf.FloorToInt(progress * total);
+
+                int spawnCount = expectedCount - spawnedCount;
+
+                spawnedCount = expectedCount;
+
+                return spawnCount;
             }
+
+            public bool IsFinished => spawnedCount >= total;
         }
     }
 }

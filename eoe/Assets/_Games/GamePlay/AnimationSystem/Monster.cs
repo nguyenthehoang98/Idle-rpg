@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using _KITSystem.Resource;
 using UnityEngine;
 
 namespace _Games.GamePlay.AnimationSystem
@@ -7,13 +8,16 @@ namespace _Games.GamePlay.AnimationSystem
     public class Monster : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer spriteRenderer;
-        [SerializeField] private int sortingOrderOffset;
+        [SerializeField] private MonsterData monsterData;
         [Header("Animation")]
         [SerializeField] private AnimationAsset idleAnimationAsset;
         [SerializeField] private AnimationAsset walkAnimationAsset;
         [SerializeField] private AnimationAsset attackAnimationAsset;
 
         private UnitAnimation unitAnimation;
+
+        public static event Action<Monster> OnMonsterEnable;
+        public static event Action<Monster> OnMonsterDisable;
 
         private void OnEnable()
         {
@@ -23,6 +27,7 @@ namespace _Games.GamePlay.AnimationSystem
             unitAnimation.Import(idleAnimationAsset, State.Idle);
             unitAnimation.Import(walkAnimationAsset, State.Walk);
             unitAnimation.Import(attackAnimationAsset, State.Attack);
+            
             AnimationTickable.Add(unitAnimation);
         }
 
@@ -32,16 +37,38 @@ namespace _Games.GamePlay.AnimationSystem
             unitAnimation = null;
         }
 
+        private void Update()
+        {
+            Vector3 position = transform.position;
+            Vector3 direction = -position.normalized;
+            
+            position += direction * (Time.deltaTime * monsterData.speed);
+            transform.position = position;
+
+            if (position.magnitude <= 0.1f) Destroy();
+        }
+
         public void Initialize()
         {
-            unitAnimation.PlayAnimation(State.Walk, DirectionExtensions.GetDirection(transform.position, Vector3.zero));
+            Direction direction = DirectionExtensions.GetDirection(transform.position, Vector3.zero);
+            
+            unitAnimation.PlayAnimation(State.Walk, direction);
+            
+            OnMonsterEnable?.Invoke(this);
+        }
+
+        private void Destroy()
+        {
+            OnMonsterDisable?.Invoke(this);
+            
+            Pool.Destroy(gameObject);
         }
         
         IEnumerator AutoSort()
         {
             while (true)
             {
-                spriteRenderer.sortingOrder = Mathf.RoundToInt(-transform.position.y * 100) + sortingOrderOffset;
+                spriteRenderer.sortingOrder = Mathf.RoundToInt(-transform.position.y * 100);
  
                 yield return new WaitForSeconds(1f);
             }

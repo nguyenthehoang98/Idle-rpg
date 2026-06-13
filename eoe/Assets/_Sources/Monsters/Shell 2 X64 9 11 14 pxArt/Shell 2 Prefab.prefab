@@ -221,7 +221,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 5733005202231093315}
-  sortingOrderOffset: 0
+  monsterData:
+    speed: 2
   idleAnimationAsset: {fileID: 11400000, guid: 94406ddb51eb2eb428018f9787d7c2f3, type: 2}
   walkAnimationAsset: {fileID: 11400000, guid: 6ea869cabbd640248bb9a6c2b0d19108, type: 2}
   attackAnimationAsset: {fileID: 11400000, guid: 6b3e16d8104ff494f948e166499a7f71, type: 2}

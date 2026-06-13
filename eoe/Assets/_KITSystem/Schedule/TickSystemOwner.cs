@@ -94,7 +94,7 @@ namespace _KITSystem.Schedule
 
         public bool TryGetTickable<T>(out T tickable) where T : ITickable
         {
-            for (int i = 0; i < tickableCount; i++)
+            for (int i = 0; i < tickables.Count; i++)
             {
                 if (tickables[i] is T tt)
                 {
