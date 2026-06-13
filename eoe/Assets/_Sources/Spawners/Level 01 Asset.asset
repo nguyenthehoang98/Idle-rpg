@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 284ef0e3615f45f69542d78013932a59, type: 3}
   m_Name: Level 01 Asset
   m_EditorClassIdentifier: 
+  backgroundPrefab: {fileID: 1449747424383493735, guid: f6db63895a065f3418ea87550eba0ec3, type: 3}
   WavesData:
   - SpawnsData:
     - Monster: Shell_1.Prefab

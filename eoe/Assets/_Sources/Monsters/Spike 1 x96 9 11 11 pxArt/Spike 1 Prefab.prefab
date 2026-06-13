@@ -183,7 +183,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3928156047109935594}
-  - component: {fileID: 8831164604959619005}
   - component: {fileID: 6528345145382351771}
   m_Layer: 0
   m_Name: Spike 1 Prefab
@@ -209,22 +208,6 @@ Transform:
   - {fileID: 816510479806183797}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8831164604959619005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8402466721107291187}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b61bffda884949ed841efda69c9fd500, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 2967433900225439082}
-  idleAnimationAsset: {fileID: 11400000, guid: 632051a33ddd76e4e9e8ffa380f6169a, type: 2}
-  walkAnimationAsset: {fileID: 11400000, guid: c0a2148680d267e44bfa8775eef93016, type: 2}
-  attackAnimationAsset: {fileID: 11400000, guid: e9b725eb00c002a449bc6dd7ef66c888, type: 2}
 --- !u!114 &6528345145382351771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,6 +220,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 166ff787e2284e0a9594d8a36266dc14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoSortLayer: 1
-  offset: 0
   spriteRenderer: {fileID: 2967433900225439082}
+  sortingOrderOffset: 0
+  idleAnimationAsset: {fileID: 11400000, guid: 632051a33ddd76e4e9e8ffa380f6169a, type: 2}
+  walkAnimationAsset: {fileID: 11400000, guid: c0a2148680d267e44bfa8775eef93016, type: 2}
+  attackAnimationAsset: {fileID: 11400000, guid: e9b725eb00c002a449bc6dd7ef66c888, type: 2}

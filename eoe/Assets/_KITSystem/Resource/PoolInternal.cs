@@ -56,6 +56,7 @@ namespace _KITSystem.Resource
             ActiveCount++;
 #endif
             GameObject go = pool.Get();
+
             return go;
         }
 

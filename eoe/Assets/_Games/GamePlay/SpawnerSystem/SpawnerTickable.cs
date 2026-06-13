@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using _Games.GamePlay.AnimationSystem;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using _KITSystem.Utils;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace _Games.GamePlay.SpawnerSystem
 {
@@ -34,6 +36,8 @@ namespace _Games.GamePlay.SpawnerSystem
                     }
                 }
             }
+
+            Object.Instantiate(levelAsset.backgroundPrefab).transform.position = Vector3.zero;
 
             LoadWaveData(0);
         }
@@ -95,6 +99,8 @@ namespace _Games.GamePlay.SpawnerSystem
 
             GameObject instance = Pool.Instantiate(go);
             instance.transform.position = position;
+            
+            instance.GetComponent<Monster>().Initialize();
         }
 
         public void Dispose()

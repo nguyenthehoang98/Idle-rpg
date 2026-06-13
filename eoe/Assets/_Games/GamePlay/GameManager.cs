@@ -1,4 +1,3 @@
-using _Games.GamePlay.AnimationSystem;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using UnityEngine;
@@ -13,17 +12,6 @@ namespace _Games.GamePlay
 
         private void Start()
         {
-            for (int i = 0; i < 7; i++)
-            {
-                if (i < characters.Length)
-                {
-                    Character character = characters[i];
-                    if (character != null) character.Animator.Play(State.Idle, Direction.B);
-                }
-
-                Deactivate(i, 0);
-            }
-            
             AssetBundleManager.SetLocationBundle(true);
             owner.Initialize();
         }

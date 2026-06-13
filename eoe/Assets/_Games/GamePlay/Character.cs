@@ -17,16 +17,14 @@ namespace _Games.GamePlay
         public float delayInitProjectile;
         
         [Header("References")]
-        [SerializeField] private UnitAnimator animator;
         [SerializeField] private new HDRRenderer renderer;
 
-        public UnitAnimator Animator => animator;
 
         private Queue<Vector3> queue = new Queue<Vector3>();
 
         private void Awake()
         {
-            animator.OnAnimationStart += AnimationStart;
+            /*animator.OnAnimationStart += AnimationStart;
             animator.OnAnimationTrigger += state =>
             {
                 if(state == State.Attack && queue.Count > 0) CastProjectile();
@@ -34,7 +32,7 @@ namespace _Games.GamePlay
             animator.OnAnimationEnd += state =>
             {
                 if (state == State.Attack) animator.Play(State.Idle);
-            };
+            };*/
         }
 
         private void Start()
@@ -74,7 +72,7 @@ namespace _Games.GamePlay
                 {
                     Vector3 destination = monster.transform.position;
                     
-                    animator.Play(State.Attack, position, destination);
+                    //animator.Play(State.Attack, position, destination);
                     
                     queue.Enqueue(destination);
                 }
@@ -88,13 +86,13 @@ namespace _Games.GamePlay
 
         public void Activate(float duration)
         {
-            animator.IsPaused = false;
+            //animator.IsPaused = false;
             renderer.Activate(duration);
         }
 
         public void Deactivate(float duration)
         {
-            animator.IsPaused = true;
+            //animator.IsPaused = true;
             renderer.Deactivate(duration);
         }
 

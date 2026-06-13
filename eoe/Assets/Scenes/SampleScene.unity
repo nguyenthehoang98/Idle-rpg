@@ -297,9 +297,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1222756866}
     m_Modifications:
+    - target: {fileID: 570044809494041100, guid: 370120651b5d2f045aea3562485d223c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2779578027577397205, guid: 370120651b5d2f045aea3562485d223c, type: 3}
       propertyPath: m_Name
       value: Ghost
+      objectReference: {fileID: 0}
+    - target: {fileID: 3602814796064569749, guid: 370120651b5d2f045aea3562485d223c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6044377920606304389, guid: 370120651b5d2f045aea3562485d223c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -357,7 +365,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 1584175560}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90badb3a5eaf4d1facb382412f22146f, type: 3}
   m_Name: 
@@ -422,6 +430,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8159367043824894802, guid: d346a46e3dff9934b8a0fb1c70051cdd, type: 3}
+      propertyPath: tickables.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8159367043824894802, guid: d346a46e3dff9934b8a0fb1c70051cdd, type: 3}
+      propertyPath: 'tickables.Array.data[3]'
+      value: 607416706617049156
+      objectReference: {fileID: 0}
+    - target: {fileID: 8159367043824894802, guid: d346a46e3dff9934b8a0fb1c70051cdd, type: 3}
+      propertyPath: 'managedReferences[607416706617049156]'
+      value: Assembly-CSharp _Games.GamePlay.AnimationTickable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -435,6 +455,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1222756866}
     m_Modifications:
+    - target: {fileID: 1891883845553915528, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2779578027577397205, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
       propertyPath: m_Name
       value: Fairy
@@ -479,6 +503,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7212217114402931541, guid: 5a1b008cf2199034f8588b0e33d51c61, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -495,7 +523,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 4596609020608989111}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90badb3a5eaf4d1facb382412f22146f, type: 3}
   m_Name: 
