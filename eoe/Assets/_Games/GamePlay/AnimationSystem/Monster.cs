@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using _Games.GamePlay.SpawnerSystem;
 using _KITSystem.Resource;
 using UnityEngine;
 
@@ -34,18 +35,8 @@ namespace _Games.GamePlay.AnimationSystem
         private void OnDisable()
         {
             AnimationTickable.Remove(unitAnimation);
-            unitAnimation = null;
-        }
-
-        private void Update()
-        {
-            Vector3 position = transform.position;
-            Vector3 direction = -position.normalized;
             
-            position += direction * (Time.deltaTime * monsterData.speed);
-            transform.position = position;
-
-            if (position.magnitude <= 0.1f) Destroy();
+            unitAnimation = null;
         }
 
         public void Initialize()
@@ -54,11 +45,15 @@ namespace _Games.GamePlay.AnimationSystem
             
             unitAnimation.PlayAnimation(State.Walk, direction);
             
+            AgentTickable.Add(this);
+            
             OnMonsterEnable?.Invoke(this);
         }
 
-        private void Destroy()
+        public void Destroy()
         {
+            AgentTickable.Remove(this);
+            
             OnMonsterDisable?.Invoke(this);
             
             Pool.Destroy(gameObject);

@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace Utils
+namespace _KITSystem.Utils
 {
     public static class MathUtils
     {

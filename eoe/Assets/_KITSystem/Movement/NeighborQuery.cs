@@ -6,7 +6,6 @@ namespace _KITSystem.Movement
 {
     internal class NeighborQuery
     {
-        private float cellSize;
         private float invCellSize;
 
         private readonly Dictionary<int, List<int>> grid = new(256);
@@ -16,7 +15,6 @@ namespace _KITSystem.Movement
 
         public NeighborQuery(float cellSize)
         {
-            this.cellSize = cellSize;
             invCellSize = 1f / cellSize;
         }
 

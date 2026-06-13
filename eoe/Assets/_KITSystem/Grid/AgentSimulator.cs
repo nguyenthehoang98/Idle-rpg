@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using _KITSystem.Utils;
 using RVO;
 using Unity.Mathematics;
 using UnityEngine;
-using Utils;
 
 namespace _KITSystem.Grid
 {
@@ -12,9 +12,9 @@ namespace _KITSystem.Grid
     {
         [Header("Agent default settings")]
 #if UNITY_EDITOR
-        [SerializeField] private bool locked;
         [SerializeField] private bool enableGizmos;
 #endif
+        [SerializeField] private float2 destination;
         [SerializeField] private float defaultAgentRadius = 0.5f;
         [SerializeField] private float interval = 0.5f;
         [SerializeField, Range(0.1f, 0.9f)] private float multiplierIgnoreCheckDistance = 0.2f;
@@ -27,14 +27,10 @@ namespace _KITSystem.Grid
         private float ignoreCheckNeighborDistanceSq;
         private float deltaDistanceStuckSq;
         
-        protected virtual void OnInitialize()
-        { 
-        }
-
-        public void Tick(float deltaTime)
+        public virtual void Tick(float deltaTime)
         {
-            if (locked) return;
             simulator.SetTimeStep(deltaTime);
+            
             simulator.EnsureCompleted();
 
 #if UNITY_EDITOR
@@ -42,7 +38,9 @@ namespace _KITSystem.Grid
 #endif
             // todo: logic update
             SetPreferredVelocities();
+            
             ReachedGoal();
+            
             simulator.DoStep();
         }
         
@@ -64,10 +62,10 @@ namespace _KITSystem.Grid
             return index;
         }
         
-        protected void StopAgent(int agentId)
+        protected void StopAgent(int agent)
         {
-            simulator.SetAgentMaxSpeed(agentId, 0);
-            simulator.SetAgentPrefVelocity(agentId, float2.zero);
+            simulator.SetAgentMaxSpeed(agent, 0);
+            simulator.SetAgentPrefVelocity(agent, float2.zero);
         }
 
         private void DrawLine(float deltaTime)
@@ -103,7 +101,6 @@ namespace _KITSystem.Grid
             float a = 2 * (1 + multiplierIgnoreCheckDistance) * defaultAgentRadius;
             ignoreCheckNeighborDistanceSq = a * a;
             deltaDistanceStuckSq = deltaDistanceStuck * deltaDistanceStuck;
-            OnInitialize();
         }
 
         private void ReachedGoal()
@@ -184,7 +181,7 @@ namespace _KITSystem.Grid
             foreach (int agent in agents)
             {
                 float2 position = simulator.GetAgentPosition(agent);
-                float2 goalVector = MathUtils.NormalizeSafe(-position);
+                float2 goalVector = MathUtils.NormalizeSafe(destination - position);
                 if (containers[agent].isStopped)
                 {
                 }
@@ -195,23 +192,29 @@ namespace _KITSystem.Grid
             }
         }
 
-        public AgentData CreateAgent(int entityId, Vector2 position, float radius, float speed, float stopDistance)
+        public AgentData CreateAgent(Vector2 position, float radius, float speed, float stopDistance)
         {
             simulator.EnsureCompleted();
+            
             int agent = simulator.AddAgent(position);
+            
             simulator.SetAgentRadius(agent, radius);
             simulator.SetAgentMaxSpeed(agent, speed);
+            
             agents.Add(agent);
+            
             AgentData data = new AgentData
             {
-                entity = entityId,
                 agent = agent,
                 radius = radius,
                 stopDistanceSq = stopDistance * stopDistance,
                 position = new float2(position.x, position.y)
             };
+            
             containers.Add(agent, data);
+            
             grid.Insert(agent, position);
+            
             return data;
         }
 
@@ -220,14 +223,14 @@ namespace _KITSystem.Grid
             return containers.TryGetValue(agent, out agentData);
         }
         
-        public void DestroyAgent(int agentId)
+        public void DestroyAgent(int agent)
         {
-            if (agents.Remove(agentId))
+            if (agents.Remove(agent))
             {
                 simulator.EnsureCompleted();
-                simulator.RemoveAgent(agentId);
-                grid.Remove(agentId);
-                containers.Remove(agentId);
+                simulator.RemoveAgent(agent);
+                grid.Remove(agent);
+                containers.Remove(agent);
             }
         }
         
@@ -240,7 +243,6 @@ namespace _KITSystem.Grid
     [Serializable]
     public struct AgentData
     {
-        public int entity;
         public int agent;
         
         public float2 position;

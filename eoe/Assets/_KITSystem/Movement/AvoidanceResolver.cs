@@ -2,7 +2,6 @@
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
-using Utils;
 
 namespace _KITSystem.Movement
 {

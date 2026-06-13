@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using _KITSystem.Resource;
 using _KITSystem.SkillSystem.Core;
+using _KITSystem.Utils;
 using UnityEngine;
-using Utils;
 
 namespace _KITSystem.SkillSystem.Imp
 {

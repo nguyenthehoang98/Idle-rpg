@@ -1,5 +1,5 @@
+using _KITSystem.Utils;
 using UnityEngine;
-using Utils;
 
 namespace _KITSystem.SkillSystem.Core
 {

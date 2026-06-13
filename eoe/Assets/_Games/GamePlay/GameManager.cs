@@ -19,7 +19,7 @@ namespace _Games.GamePlay
         private void Awake()
         {
             owner.TryGetTickable(out spawner);
-            spawner.OnSpawnCompleted += waveIndex =>
+            spawner.OnWaveSpawnCompleted += waveIndex =>
             {
                 Debug.Log($"Complete wave {waveIndex} - {spawner.IsCompleted}");
             };

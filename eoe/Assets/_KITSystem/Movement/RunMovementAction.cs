@@ -3,7 +3,6 @@ using System.Runtime.CompilerServices;
 using Unity.Mathematics;
 using _KITSystem.Utils;
 using UnityEngine;
-using Utils;
 
 namespace _KITSystem.Movement
 {

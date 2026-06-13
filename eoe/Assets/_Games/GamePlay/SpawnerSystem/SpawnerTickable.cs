@@ -13,7 +13,7 @@ namespace _Games.GamePlay.SpawnerSystem
     [Serializable]
     public class SpawnerTickable : ITickable
     {
-        public event Action<int> OnSpawnCompleted;
+        public event Action<int> OnWaveSpawnCompleted;
 
         public Transform[] portals;
         public LevelAsset levelAsset;
@@ -113,7 +113,7 @@ namespace _Games.GamePlay.SpawnerSystem
 
                 LoadWaveData(waveIndex);
 
-                OnSpawnCompleted?.Invoke(wave);
+                OnWaveSpawnCompleted?.Invoke(wave);
             }
         }
 
@@ -130,7 +130,6 @@ namespace _Games.GamePlay.SpawnerSystem
                 RandomUtils.Range(-data.Radius, data.Radius),
                 RandomUtils.Range(-data.Radius, data.Radius)
             );
-
 
             GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(data.Monster);
 

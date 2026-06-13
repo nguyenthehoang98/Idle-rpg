@@ -432,15 +432,51 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8159367043824894802, guid: d346a46e3dff9934b8a0fb1c70051cdd, type: 3}
       propertyPath: tickables.Array.size
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8159367043824894802, guid: d346a46e3dff9934b8a0fb1c70051cdd, type: 3}
       propertyPath: 'tickables.Array.data[3]'
       value: 607416706617049156
       objectReference: {fileID: 0}
     - target: {fileID: 8159367043824894802, guid: d346a46e3dff9934b8a0fb1c70051cdd, type: 3}
+      propertyPath: 'tickables.Array.data[4]'
+      value: 607416710454575166
+      objectReference: {fileID: 0}
+    - target: {fileID: 8159367043824894802, guid: d346a46e3dff9934b8a0fb1c70051cdd, type: 3}
       propertyPath: 'managedReferences[607416706617049156]'
       value: Assembly-CSharp _Games.GamePlay.AnimationTickable
+      objectReference: {fileID: 0}
+    - target: {fileID: 8159367043824894802, guid: d346a46e3dff9934b8a0fb1c70051cdd, type: 3}
+      propertyPath: 'managedReferences[607416710454575166]'
+      value: Assembly-CSharp _Games.GamePlay.AgentTickable
+      objectReference: {fileID: 0}
+    - target: {fileID: 8159367043824894802, guid: d346a46e3dff9934b8a0fb1c70051cdd, type: 3}
+      propertyPath: managedReferences[607416710454575166].interval
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8159367043824894802, guid: d346a46e3dff9934b8a0fb1c70051cdd, type: 3}
+      propertyPath: managedReferences[607416710454575166].enableGizmos
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8159367043824894802, guid: d346a46e3dff9934b8a0fb1c70051cdd, type: 3}
+      propertyPath: managedReferences[607416710454575166].destination.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8159367043824894802, guid: d346a46e3dff9934b8a0fb1c70051cdd, type: 3}
+      propertyPath: managedReferences[607416710454575166].destination.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8159367043824894802, guid: d346a46e3dff9934b8a0fb1c70051cdd, type: 3}
+      propertyPath: managedReferences[607416710454575166].defaultAgentRadius
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8159367043824894802, guid: d346a46e3dff9934b8a0fb1c70051cdd, type: 3}
+      propertyPath: managedReferences[607416710454575166].deltaDistanceStuck
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8159367043824894802, guid: d346a46e3dff9934b8a0fb1c70051cdd, type: 3}
+      propertyPath: managedReferences[607416710454575166].multiplierIgnoreCheckDistance
+      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
