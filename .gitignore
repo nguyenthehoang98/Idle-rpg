@@ -3,3 +3,5 @@ eoe/Temp
 eoe/Logs
 eoe/UserSettings
 *.csproj
+eoe/obj
+eoe/.idea

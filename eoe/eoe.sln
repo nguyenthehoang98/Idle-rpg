@@ -1,19 +1,31 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KITSystem.Schedule", "KITSystem.Schedule.csproj", "{8a9804cd-fe49-8582-7235-899a010bd7d4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolbarExtender.Editor", "ToolbarExtender.Editor.csproj", "{7af9ad24-b843-5219-70e5-dd426dd1f7e0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KITSystem.Resource", "KITSystem.Resource.csproj", "{5f94133b-60c4-6b7d-9a2b-790f832dba1f}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{d7a4512b-087c-58c6-53a3-e78a39bfab5b}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{4dd4ef79-982d-5f7d-50a3-76c461eba1aa}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KITSystem.Utils", "KITSystem.Utils.csproj", "{71b6c30f-a19b-06f6-b613-54da6efe0a78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8a9804cd-fe49-8582-7235-899a010bd7d4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8a9804cd-fe49-8582-7235-899a010bd7d4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7af9ad24-b843-5219-70e5-dd426dd1f7e0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7af9ad24-b843-5219-70e5-dd426dd1f7e0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5f94133b-60c4-6b7d-9a2b-790f832dba1f}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5f94133b-60c4-6b7d-9a2b-790f832dba1f}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{d7a4512b-087c-58c6-53a3-e78a39bfab5b}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{d7a4512b-087c-58c6-53a3-e78a39bfab5b}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4dd4ef79-982d-5f7d-50a3-76c461eba1aa}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4dd4ef79-982d-5f7d-50a3-76c461eba1aa}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71b6c30f-a19b-06f6-b613-54da6efe0a78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71b6c30f-a19b-06f6-b613-54da6efe0a78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
