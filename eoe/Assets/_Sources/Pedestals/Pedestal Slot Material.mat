@@ -1,0 +1,148 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Pedestal Slot Material
+  m_Shader: {fileID: -6465566751694194690, guid: e4fd918b401f9fd4e80f638cbd6af407, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _ARGBTex2:
+        m_Texture: {fileID: 2800000, guid: d4cf7bbb53650404ca575ad1e1213164, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _CenterTex:
+        m_Texture: {fileID: 2800000, guid: 66a312633ba94ab4ca4d9fba3d372e5b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GlowTex:
+        m_Texture: {fileID: 2800000, guid: bced444e5a9688141ac88f5acab1f28d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GlowTex_1:
+        m_Texture: {fileID: 2800000, guid: 4584d3b4144ca994cbe4aa162ec21f24, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GlowTex_2:
+        m_Texture: {fileID: 2800000, guid: 1832ea00b6dd41c4594d4be344ed4854, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GlowTex_3:
+        m_Texture: {fileID: 2800000, guid: e1f003e171d899d42baf4287d8a09607, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GlowTex_4:
+        m_Texture: {fileID: 2800000, guid: 662c32778e624f041942552527c9a874, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GlowTex_5:
+        m_Texture: {fileID: 2800000, guid: cec317671664c7340889cac30fac707d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GlowTex_6:
+        m_Texture: {fileID: 2800000, guid: 9171cd65d210a4844b7d8358ce8924fa, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GlowTex_7:
+        m_Texture: {fileID: 2800000, guid: 66a312633ba94ab4ca4d9fba3d372e5b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: bced444e5a9688141ac88f5acab1f28d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTexA:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTexB:
+        m_Texture: {fileID: 2800000, guid: bced444e5a9688141ac88f5acab1f28d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RGBTex:
+        m_Texture: {fileID: 2800000, guid: 35542a46f89a17e43aa61234876d7be3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RGBTex1:
+        m_Texture: {fileID: 2800000, guid: 35542a46f89a17e43aa61234876d7be3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RGBTex2:
+        m_Texture: {fileID: 2800000, guid: d4cf7bbb53650404ca575ad1e1213164, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats: []
+    m_Colors:
+    - _A2_Color: {r: 1.4142135, g: 1.4142135, b: 1.4142135, a: 0}
+    - _B1_Color: {r: 0, g: 1, b: 0, a: 0}
+    - _B2_Color: {r: 1, g: 0, b: 1, a: 0}
+    - _ColorDark: {r: 0, g: 0, b: 0, a: 0}
+    - _ColorEarth: {r: 0, g: 0, b: 0, a: 0}
+    - _ColorFire: {r: 0, g: 0, b: 0, a: 1}
+    - _ColorHeart: {r: 0, g: 0, b: 0, a: 0}
+    - _ColorLight: {r: 0.0009765625, g: 0.0009765625, b: 0.0009765625, a: 0}
+    - _ColorWater: {r: 0, g: 0, b: 0, a: 1}
+    - _ColorWind: {r: 0, g: 0, b: 0, a: 1}
+    - _Color_1: {r: 0.25, g: 0, b: 0, a: 0}
+    - _Color_2: {r: 0.2075472, g: 1, b: 0.2075472, a: 0}
+    - _Color_3: {r: 0, g: 0, b: 1, a: 0}
+    - _Color_4: {r: 1, g: 1, b: 0, a: 0}
+    - _Color_5: {r: 1, g: 0, b: 1, a: 0}
+    - _Color_6: {r: 0.007843138, g: 1, b: 0.945098, a: 0}
+    - _Color_7: {r: 1, g: 1, b: 1, a: 0}
+    - _G1_Color: {r: 0, g: 0, b: 1, a: 1}
+    - _G2_Color: {r: 1, g: 1, b: 1, a: 0}
+    - _GlowColor: {r: 1, g: 0, b: 0, a: 1}
+    - _GlowColor_1: {r: 0.7490196, g: 0.0042054257, b: 0.012265494, a: 0.2509804}
+    - _GlowColor_2: {r: 0, g: 0.20782058, b: 0.7490197, a: 0.2509804}
+    - _GlowColor_3: {r: 0.17026821, g: 11.984313, b: 0.07802284, a: 0.2509804}
+    - _GlowColor_4: {r: 0.7490197, g: 0.65885454, b: 0, a: 1}
+    - _GlowColor_5: {r: 11.984314, g: 4.122946, b: 1.2104425, a: 0.2509804}
+    - _GlowColor_6: {r: 0, g: 0.68922406, b: 0.7490196, a: 1}
+    - _GlowColor_7: {r: 0, g: 0, b: 0, a: 0.2509804}
+    - _R1_Color: {r: 1, g: 0, b: 0, a: 1}
+    - _R2_Color: {r: 1, g: 1, b: 0, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!114 &4476106648414552445
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 10

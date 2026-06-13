@@ -20,7 +20,7 @@ namespace _KITSystem.Resource
             return GetAsset<T>(assetName, false);
         }
 
-        public UniTask<T> GetThenAsset<T>(string assetName) where T : Object
+        public UniTask<T> GetAssetCached<T>(string assetName) where T : Object
         {
             return GetAsset<T>(assetName, true);
         }

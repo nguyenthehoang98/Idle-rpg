@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using _Games.AnimationSystem;
+using _Games.GamePlay.AnimationSystem;
 using _KITSystem.Utils;
 using UnityEngine;
 using Object = UnityEngine.Object;

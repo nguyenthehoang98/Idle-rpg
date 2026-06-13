@@ -246,6 +246,17 @@ namespace _KITSystem.SkillSystem.Core
             version++;
             return true;
         }
+        
+        public void Dispose()
+        {
+            pendingCommands = null;
+            mapActionsIndex = null;
+            mapActionIdToIndex = null;;
+            freeIds = null;
+            activeActions = null;
+            pendingActionRemoved = null;
+            pendingReasonActionRemoved = null;
+        }
     }
     
     public partial class Spu

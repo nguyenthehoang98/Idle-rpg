@@ -33,9 +33,9 @@ namespace _KITSystem.Resource
                 return UniTask.FromResult<T>(null);
         }
 
-        public static UniTask<T> GetThenAsset<T>(string assetName) where T : UnityEngine.Object
+        public static UniTask<T> GetAssetCached<T>(string assetName) where T : UnityEngine.Object
         {
-            if (isInitialized) return loader.GetThenAsset<T>(assetName);
+            if (isInitialized) return loader.GetAssetCached<T>(assetName);
             else
                 return UniTask.FromResult<T>(null);
         }

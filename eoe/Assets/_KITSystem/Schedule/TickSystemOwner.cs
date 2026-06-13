@@ -1,39 +1,43 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace _KITSystem.Schedule
 {
     public class TickSystemOwner : MonoBehaviour
     {
-        [SerializeField] private bool isPausedDefault = true;
         [SerializeField] private bool useUnscaledTime = false;
         [SerializeField] private int targetFPS = 30;
         [SerializeField, Range(1, 50)] protected float loop = 1;
         [SerializeField, Range(1, 20)] private int maxTicksPerFrame = 5;
-        [SerializeReference] public ITickable[] tickables;
+        [SerializeReference] public List<ITickable> tickables = new List<ITickable>();
 
         private float tickInterval;
         private float accumulator;
-        private bool isPaused;
         private int tickableCount;
 
-        public bool IsPaused
+        public bool IsPaused { private get; set; } = true;
+
+        public async void Initialize()
         {
-            get => isPaused;
-            set => isPaused = value;
+            for (int i = 0; i < tickables.Count; i++)
+            {
+                await tickables[i].Initialize();
+            }
+
+            IsPaused = false;
         }
 
         private void Awake()
         {
-            isPaused = isPausedDefault;
             Application.runInBackground = true;
             Application.targetFrameRate = 60;
             tickInterval = 1f / targetFPS;
-            tickableCount = tickables.Length;
+            tickableCount = tickables.Count;
         }
 
-        void Update()
+        private void Update()
         {
-            if (isPaused) return;
+            if (IsPaused) return;
 
             float deltaTime = useUnscaledTime
                 ? Time.unscaledDeltaTime
@@ -63,7 +67,15 @@ namespace _KITSystem.Schedule
                 }
             }
         }
-        
+
+        private void OnDisable()
+        {
+            foreach (var tickable in tickables)
+            {
+                tickable.Dispose();
+            }
+        }
+
         private void OnApplicationFocus(bool hasFocus)
         {
             if (!hasFocus)

@@ -1,11 +1,14 @@
-using _Games.AnimationSystem;
+using _Games.GamePlay.AnimationSystem;
+using _KITSystem.Resource;
+using _KITSystem.Schedule;
 using UnityEngine;
 
 namespace _Games.GamePlay
 {
     public class GameManager : MonoBehaviour
     {
-        [SerializeField] private Background background;
+        [SerializeField] private TickSystemOwner owner;
+        [SerializeField] private Pedestal pedestal;
         [SerializeField] private Character[] characters;
 
         private void Start()
@@ -20,6 +23,9 @@ namespace _Games.GamePlay
 
                 Deactivate(i, 0);
             }
+            
+            AssetBundleManager.SetLocationBundle(true);
+            owner.Initialize();
         }
 
         private void Update()
@@ -47,7 +53,7 @@ namespace _Games.GamePlay
         {
             if (slotIndex < 0 || slotIndex > 6) return;
 
-            background.Activate(slotIndex, duration);
+            pedestal.Activate(slotIndex, duration);
 
             if (slotIndex > 5) return;
             var character = characters[slotIndex];
@@ -58,7 +64,7 @@ namespace _Games.GamePlay
         {
             if (slotIndex < 0 || slotIndex > 6) return;
             
-            background.Deactivate(slotIndex, duration);
+            pedestal.Deactivate(slotIndex, duration);
 
             if (slotIndex > 5) return;
             var character = characters[slotIndex];

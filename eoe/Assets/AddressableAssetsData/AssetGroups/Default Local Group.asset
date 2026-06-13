@@ -15,8 +15,28 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 06731347fde61c84a8d7658e84d90d43
   m_SerializeEntries:
+  - m_GUID: 7fe29af3266401d43b6258a3a880c894
+    m_Address: Shell_1.Prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8caef1a77159208409b703a70f5f88c7
     m_Address: Butterfly.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d31cec3e2839b274c8cdcb4897339f90
+    m_Address: Spike_1.Prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fa24c9091ad29124c9ad8b888c3239d9
+    m_Address: Shell_2.Prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fcdd3a87b6ced544094c7ef98f0bd77a
+    m_Address: Spike_2.Prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
