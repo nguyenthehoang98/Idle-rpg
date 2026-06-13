@@ -13,7 +13,7 @@ namespace _Echo.Scripts.AnimationSystem
 
         public event Action<AnimState> OnAnimationTrigger; 
         public event Action<AnimState> OnAnimationEnd;
-        public event Action<(Texture defaultTexture, Texture hdrTexture)> OnAnimationStart;
+        public event Action<(Texture normal, Texture hdr)> OnAnimationStart;
        
         public bool IsPaused { get; set; }
         public float TimeScale { get; set; } = 1f;
@@ -23,14 +23,9 @@ namespace _Echo.Scripts.AnimationSystem
 
         private float timer;
         private int frameIndex;
-        private bool isPlayingOneShot;
 
         private AnimState currentState;
         private Direction currentDirection;
-
-        private AnimState cachedState;
-        private Direction cachedDirection;
-
         private void Awake()
         {
             clipMap = new Dictionary<int, SpriteAnimClip>();
@@ -93,13 +88,7 @@ namespace _Echo.Scripts.AnimationSystem
 
         private void OnOneShotFinished()
         {
-            isPlayingOneShot = false;
-            
             OnAnimationEnd?.Invoke(currentState);
-
-            if (currentState == AnimState.Die) return;
-
-            Play(cachedState, cachedDirection);
         }
 
         public int Play(AnimState state)
@@ -113,7 +102,13 @@ namespace _Echo.Scripts.AnimationSystem
         {
             if (IsPaused) return -1;
             
-            return Play(state, DirectionExtensions.GetDirection(position, destination));
+            Direction direction = DirectionExtensions.GetDirection(position, destination);;
+            if(state == AnimState.Attack)
+            {
+                Debug.DrawLine(position, destination, Color.red, 2);
+            }
+
+            return Play(state, direction);
         }
 
         public int Play(AnimState state, Direction dir)
@@ -124,19 +119,6 @@ namespace _Echo.Scripts.AnimationSystem
 
             if (!clipMap.TryGetValue(key, out var clip))
                 return -2;
-
-            // Nếu đang play OneShot
-            if (isPlayingOneShot)
-            {
-                // Chỉ update animation nền để sau này quay lại
-                if (clip.loop)
-                {
-                    cachedState = state;
-                    cachedDirection = dir;
-                }
-
-                return -3;
-            }
 
             if (state == currentState && dir == currentDirection)
                 return -4;
@@ -154,17 +136,6 @@ namespace _Echo.Scripts.AnimationSystem
                 spriteRenderer.sprite = currentClip.frames[0];
                 spriteRenderer.transform.localScale =
                     new Vector3(currentClip.flip ? -1 : 1, 1, 1);
-            }
-
-            // Nếu là OneShot
-            if (!currentClip.loop)
-            {
-                isPlayingOneShot = true;
-            }
-            else
-            {
-                cachedState = state;
-                cachedDirection = dir;
             }
 
             OnAnimationStart?.Invoke((currentClip.frames[0].texture, currentClip.textureHDR));

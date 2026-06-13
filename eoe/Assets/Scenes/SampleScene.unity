@@ -748,6 +748,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ghost
       objectReference: {fileID: 0}
+    - target: {fileID: 3602814796064569749, guid: 370120651b5d2f045aea3562485d223c, type: 3}
+      propertyPath: cooldown
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6044377920606304389, guid: 370120651b5d2f045aea3562485d223c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.9

@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 7577668092877755869}
   idleAnimationAsset: {fileID: 11400000, guid: 34ed3887f9b2fdc479ceacf9cbb75dd8, type: 2}
-  walkAnimationAsset: {fileID: 11400000, guid: 34ed3887f9b2fdc479ceacf9cbb75dd8, type: 2}
+  walkAnimationAsset: {fileID: 0}
   attackAnimationAsset: {fileID: 11400000, guid: 7e2026acbd63b77489765f064d50d121, type: 2}
 --- !u!114 &570044809494041100
 MonoBehaviour:
@@ -64,7 +64,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 7577668092877755869}
-  defaultMaterial: {fileID: 2100000, guid: e9d9d2033f4c8d64aae5907d3771bd18, type: 2}
+  normalMaterial: {fileID: 2100000, guid: e9d9d2033f4c8d64aae5907d3771bd18, type: 2}
   hdrMaterial: {fileID: 2100000, guid: e4fd61a6633a9004284109ac84a0c3fd, type: 2}
   hdrColor: {r: 0, g: 2, b: 2, a: 1}
 --- !u!114 &3602814796064569749
@@ -79,6 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90badb3a5eaf4d1facb382412f22146f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cooldown: 2
   projectile: {fileID: 1979361292425467940, guid: 9c9ccd249ecdbff46a97da0ee781c4f0, type: 3}
   muzzlePositionOffset: {x: 0, y: 0.35, z: 0}
   delayInitProjectile: 0.2

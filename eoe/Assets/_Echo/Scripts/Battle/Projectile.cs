@@ -11,35 +11,35 @@ namespace _Echo.Scripts.Battle
         public UnityEvent onStart;
         public UnityEvent onComplete;
 
-        public void SetDirection(Vector3 dir)
+        public void SetDestination(Vector3 destination)
         {
-            StartCoroutine(Lerp(transform.position, dir.normalized * radius));
+            StartCoroutine(Translate(destination));
         }
 
-        IEnumerator Lerp(Vector3 start, Vector3 end)
+        IEnumerator Translate(Vector3 destination)
         {
             onStart?.Invoke();
 
-            transform.position = start;
-     
-            Vector2 direction = end - start;
+            Vector3 startPosition = transform.position;
+            
+            Vector3 direction = (destination - startPosition).normalized;
         
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
             transform.eulerAngles = new Vector3(0, 0, angle - 90);
-        
+            
             float elapsed = 0f;
 
             while (elapsed < duration)
             {
-                elapsed += Time.deltaTime;
-            
-                transform.position = Vector3.Lerp(start, end, Mathf.Clamp01(elapsed / duration));
+                float dt = Time.deltaTime;
+                
+                elapsed += dt;
+
+                transform.position += direction * (dt * radius);
             
                 yield return null;
             }
-        
-            transform.position = end;
             
             onComplete?.Invoke();
         }

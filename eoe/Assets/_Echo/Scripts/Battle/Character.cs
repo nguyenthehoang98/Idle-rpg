@@ -1,84 +1,91 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using _Echo.Scripts.AnimationSystem;
 using _KITSystem.Utils;
 using UnityEngine;
+using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 namespace _Echo.Scripts.Battle
 {
     public class Character : MonoBehaviour
     {
+        public float cooldown = 2;
+        
+        [Header("Projectile")]
         public Projectile projectile;
         public Vector3 muzzlePositionOffset;
         public float delayInitProjectile;
         
         [Header("References")]
         [SerializeField] private UnitAnimator animator;
-        [SerializeField] private new UnitRenderer renderer;
+        [SerializeField] private new HDRRenderer renderer;
 
         public UnitAnimator Animator => animator;
-        private Direction direction;
+
+        private Queue<Vector3> queue = new Queue<Vector3>();
 
         private void Awake()
         {
             animator.OnAnimationStart += AnimationStart;
             animator.OnAnimationTrigger += state =>
             {
-                if(state == AnimState.Attack) CastProjectile(new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f)));
+                if(state == AnimState.Attack && queue.Count > 0) CastProjectile();
+            };
+            animator.OnAnimationEnd += state =>
+            {
+                if (state == AnimState.Attack) animator.Play(AnimState.Idle);
             };
         }
-        
-        private void Update()
+
+        private void Start()
         {
-            int horizontal = (int)Input.GetAxisRaw("Horizontal");
-            
-            int vertical = (int)Input.GetAxisRaw("Vertical");
-
-            bool isMoving = horizontal != 0 || vertical != 0;
-
-            if (isMoving)
-            {
-                direction = GetDirection(horizontal, vertical);
-
-                animator.Play(AnimState.Idle, direction);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                int result = animator.Play(AnimState.Attack, direction);
-            }
+            StartCoroutine(AutoCastIE());
         }
-        
-        private Direction GetDirection(int horizontal, int vertical)
+
+        private IEnumerator AutoCastIE()
         {
-            if (horizontal == 0 && vertical == 1)
-                return Direction.T;
+            while (true)
+            {
+                yield return new WaitForSeconds(cooldown);
 
-            if (horizontal == 1 && vertical == 1)
-                return Direction.TR;
+                Vector3 position = transform.position + muzzlePositionOffset;
+                
+                Monster[] monsters = Object.FindObjectsByType<Monster>(FindObjectsSortMode.None);
+                
+                float minDistance = float.MaxValue;
+                
+                Monster monster = null;
+                
+                foreach (var m in monsters)
+                {
+                    Vector3 p = m.transform.position;
 
-            if (horizontal == 1 && vertical == 0)
-                return Direction.R;
+                    float d = Vector3.Distance(position, p);
 
-            if (horizontal == 1 && vertical == -1)
-                return Direction.BR;
+                    if (d < minDistance)
+                    {
+                        minDistance = d;
+                        
+                        monster = m;
+                    }
+                }
 
-            if (horizontal == 0 && vertical == -1)
-                return Direction.B;
-
-            if (horizontal == -1 && vertical == -1)
-                return Direction.BL;
-
-            if (horizontal == -1 && vertical == 0)
-                return Direction.L;
-
-            if (horizontal == -1 && vertical == 1)
-                return Direction.TL;
-
-            return direction;
+                if (monster != null)
+                {
+                    Vector3 destination = monster.transform.position;
+                    
+                    animator.Play(AnimState.Attack, position, destination);
+                    
+                    queue.Enqueue(destination);
+                }
+            }
         }
 
         private void AnimationStart((Texture defaultTexture, Texture hdrTexture) tuple)
         {
-            renderer.SetTexture(tuple.defaultTexture, tuple.hdrTexture, tuple.hdrTexture == null);
+            renderer.SetTexture(tuple.defaultTexture, tuple.hdrTexture);
         }
 
         public void Activate(float duration)
@@ -93,19 +100,22 @@ namespace _Echo.Scripts.Battle
             renderer.Deactivate(duration);
         }
 
-        private void CastProjectile(Vector3 target)
+        private void CastProjectile()
         {
-            Vector3 finalPosition = transform.position + muzzlePositionOffset;
-            float duration = projectile.duration;
+            Vector3 position = transform.position + muzzlePositionOffset;
+            Vector3 destination = queue.Dequeue();
             Projectile p = null;
+            
             this.WaitInvoke(delayInitProjectile, () =>
             {
-                p = Instantiate(projectile, finalPosition, Quaternion.identity);
-                p.SetDirection(target - finalPosition);
+                p = Instantiate(projectile, position, Quaternion.identity);
+                p.SetDestination(destination - position);
+                Debug.DrawLine(position, destination, Color.yellow, 2);
             });
-            this.WaitInvoke(delayInitProjectile + duration, () =>
+            
+            this.WaitInvoke(delayInitProjectile + projectile.duration, () =>
             {
-                if(p != null) Object.Destroy(p.gameObject);
+                if (p != null) Object.Destroy(p.gameObject);
             });
         }
     }

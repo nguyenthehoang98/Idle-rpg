@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _Echo.Scripts.AnimationSystem
 {
-    public class UnitSortingLayer : MonoBehaviour
+    public class Monster : MonoBehaviour
     {
         [SerializeField] private bool autoSortLayer;
         [SerializeField] private int offset;

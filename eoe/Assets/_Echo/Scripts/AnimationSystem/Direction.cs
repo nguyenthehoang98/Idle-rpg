@@ -19,7 +19,6 @@ namespace _Echo.Scripts.AnimationSystem
         public static Direction GetDirection(Vector3 position, Vector3 destination)
         {
             Vector3 delta = destination - position;
-
             float angle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
 
             if (angle >= -22.5f && angle < 22.5f) return Direction.R;
