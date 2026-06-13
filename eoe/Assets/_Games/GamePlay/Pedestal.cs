@@ -42,7 +42,15 @@ namespace _Games.GamePlay
                 currentColors[i] = inactiveColors[i];
             }
         }
-        
+
+        private void Start()
+        {
+            for (int i = 0; i < 7; i++)
+            {
+                Deactivate(i, 0);
+            }
+        }
+
         private void LateUpdate()
         {
             bool shouldApplyColor = false;

@@ -79,22 +79,20 @@ namespace _Games.GamePlay.AnimationSystem
             }
         }
 
-        public bool PlayAnimation(State animationState)
+        public int PlayAnimation(State animationState)
         {
-            if (IsPaused) return false;
-            
             return PlayAnimation(animationState, direction);
         }
 
-        public bool PlayAnimation(State animationState, Direction animationDirection)
+        public int PlayAnimation(State animationState, Direction animationDirection)
         {
-            if (IsPaused) return false;
+            if (IsPaused) return -1;
 
             if (animationState == state && animationDirection == direction)
-                return false;
+                return -2;
 
             if (!clips.TryGetValue(GetKey(animationState, animationDirection), out var clip))
-                return false;
+                return -3;
             
             state = animationState;
             direction = animationDirection;
@@ -111,7 +109,7 @@ namespace _Games.GamePlay.AnimationSystem
             
             OnAnimationStart?.Invoke(state, direction);
 
-            return true;
+            return 1;
         }
 
         private static int GetKey(State state, Direction dir)

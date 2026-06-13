@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using _Games.GamePlay.AnimationSystem;
+using _KITSystem.Entity;
 using _KITSystem.Grid;
-using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using _KITSystem.Utils;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _Games.GamePlay
@@ -15,6 +16,7 @@ namespace _Games.GamePlay
     {
         private List<Data> list = new List<Data>();
         private Dictionary<Monster, Data> container = new Dictionary<Monster, Data>();
+        private Dictionary<int, int> agentToEntity = new Dictionary<int, int>();
         private Queue<Data> additionalQueue = new Queue<Data>();
         private Queue<Data> removeQueue = new Queue<Data>();
         
@@ -73,25 +75,42 @@ namespace _Games.GamePlay
 
         public static void Add(Monster unit) => instance.AddPrivate(unit);
 
+        public static int Query(float2 position, float2 size, out AgentData[] agentsData)
+        {
+            return instance.QueryAgent(position, size, out agentsData);
+        }
+        
         public static void Remove(Monster unit) => instance.RemovePrivate(unit);
+
+        public static int GetEntity(int agent)
+        {
+            return instance.agentToEntity.GetValueOrDefault(agent, -1);
+        }
 
         void AddPrivate(Monster unit)
         {
             int agent = CreateAgent(unit.transform.position, 0.2f, 2, RandomUtils.Range(1.6f, 2.6f)).agent;
             Data data = new Data(unit, agent);
+            int entity = EntityManager.NewEntity();
             
+            agentToEntity.Add(agent, entity);
             container.Add(unit, data);
             additionalQueue.Enqueue(data);
         }
         
         void RemovePrivate(Monster unit)
         {
-            if (container.Remove(unit, out Data data)) removeQueue.Enqueue(data);
+            if (container.Remove(unit, out Data data))
+            {
+                removeQueue.Enqueue(data);
+                agentToEntity.Remove(data.Agent);
+            }
         }
 
         class Data
         {
             public Monster Monster;
+            
             public int Agent;
 
             public Data(Monster monster, int agent)

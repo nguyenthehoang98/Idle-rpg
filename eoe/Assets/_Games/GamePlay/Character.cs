@@ -1,118 +1,108 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using _Games.GamePlay.AnimationSystem;
+using _Games.GamePlay.SkillSystem;
 using _KITSystem.Utils;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace _Games.GamePlay
 {
     public class Character : MonoBehaviour
     {
-        public float cooldown = 2;
-        
-        [Header("Projectile")]
-        public Projectile projectile;
-        public Vector3 muzzlePositionOffset;
-        public float delayInitProjectile;
-        
-        [Header("References")]
-        [SerializeField] private new HDRRenderer renderer;
+        [Header("Renderer")]
+        [SerializeField] private SpriteRenderer spriteRenderer;
+        [SerializeField] private HDRRenderer hdrRenderer;
+        [Header("Skill")]
+        [SerializeField] private SkillAsset skillAsset;
+        [Header("Animation")]
+        [SerializeField] private AnimationAsset idleAnimationAsset;
+        [SerializeField] private AnimationAsset attackAnimationAsset;
 
-
-        private Queue<Vector3> queue = new Queue<Vector3>();
+        private UnitAnimation unitAnimation;
+        private readonly Queue<Action> actionQueue = new Queue<Action>();
 
         private void Awake()
         {
-            /*animator.OnAnimationStart += AnimationStart;
-            animator.OnAnimationTrigger += state =>
+            unitAnimation = new UnitAnimation(spriteRenderer);
+            unitAnimation.Import(idleAnimationAsset, State.Idle);
+            unitAnimation.Import(attackAnimationAsset, State.Attack);
+            unitAnimation.OnAnimationStart += (state, direction) =>
             {
-                if(state == State.Attack && queue.Count > 0) CastProjectile();
+                AnimationClipData[] clips =
+                    state == State.Attack ? attackAnimationAsset.Clips : idleAnimationAsset.Clips;
+
+                for (int i = 0; i < clips.Length; i++)
+                {
+                    AnimationClipData clipData = clips[i];
+
+                    if (clipData.direction == direction)
+                    {
+                        hdrRenderer.SetTexture(clipData.frames[0].texture, clipData.textureHDR);
+                    }
+                }
             };
-            animator.OnAnimationEnd += state =>
+            unitAnimation.OnAnimationTrigger += (state, direction) =>
             {
-                if (state == State.Attack) animator.Play(State.Idle);
-            };*/
+                if (state == State.Attack && actionQueue.Count > 0) actionQueue.Dequeue().Invoke();
+            };
+            unitAnimation.OnAnimationEnd += (state, direction) =>
+            {
+                bool shouldIdle = true;
+                if (state == State.Attack && shouldIdle) unitAnimation.PlayAnimation(State.Idle);
+            };
         }
 
         private void Start()
         {
-            StartCoroutine(AutoCastIE());
+            StartCoroutine(AutoCast());
         }
 
-        private IEnumerator AutoCastIE()
+        public void Initialize()
+        {
+            AnimationTickable.Add(unitAnimation);
+        }
+
+        public void Destroy()
+        {
+            AnimationTickable.Remove(unitAnimation);
+            
+            unitAnimation = null;
+        }
+
+        private IEnumerator AutoCast()
         {
             while (true)
             {
-                yield return new WaitForSeconds(cooldown);
+                yield return new WaitForSeconds(2);
+                
+                Vector3 position = transform.position;
+                Vector3 destination = new Vector3(RandomUtils.Range(-1f, 1f), RandomUtils.Range(-1f, 1f)).normalized * 5;
 
-                Vector3 position = transform.position + muzzlePositionOffset;
+                int result = unitAnimation.PlayAnimation(State.Attack, DirectionExtensions.GetDirection(position, destination));
                 
-                Monster[] monsters = Object.FindObjectsByType<Monster>(FindObjectsSortMode.None);
-                
-                float minDistance = float.MaxValue;
-                
-                Monster monster = null;
-                
-                foreach (var m in monsters)
+                if (result > 0)
                 {
-                    Vector3 p = m.transform.position;
-
-                    float d = Vector3.Distance(position, p);
-
-                    if (d < minDistance)
+                    Action action = () =>
                     {
-                        minDistance = d;
-                        
-                        monster = m;
-                    }
-                }
-
-                if (monster != null)
-                {
-                    Vector3 destination = monster.transform.position;
-                    
-                    //animator.Play(State.Attack, position, destination);
-                    
-                    queue.Enqueue(destination);
+                        Debug.Log("CastSkill");
+                        SkillTickable.CastSkill(skillAsset.SkillData, position, destination);
+                    };
+                    actionQueue.Enqueue(action);
                 }
             }
         }
 
-        private void AnimationStart((Texture defaultTexture, Texture hdrTexture) tuple)
-        {
-            renderer.SetTexture(tuple.defaultTexture, tuple.hdrTexture);
-        }
-
         public void Activate(float duration)
         {
-            //animator.IsPaused = false;
-            renderer.Activate(duration);
+            unitAnimation.IsPaused = false;
+            hdrRenderer.Activate(duration);
         }
 
         public void Deactivate(float duration)
         {
-            //animator.IsPaused = true;
-            renderer.Deactivate(duration);
-        }
-
-        private void CastProjectile()
-        {
-            Vector3 position = transform.position + muzzlePositionOffset;
-            Vector3 destination = queue.Dequeue();
-            Projectile p = null;
-            
-            this.WaitInvoke(delayInitProjectile, () =>
-            {
-                p = Instantiate(projectile, position, Quaternion.identity);
-                p.SetDestination(destination - position);
-                Debug.DrawLine(position, destination, Color.yellow, 2);
-            });
-            
-            this.WaitInvoke(delayInitProjectile + projectile.duration, () =>
-            {
-                if (p != null) Object.Destroy(p.gameObject);
-            });
+            unitAnimation.IsPaused = true;
+            hdrRenderer.Deactivate(duration);
         }
     }
 }

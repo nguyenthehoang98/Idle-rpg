@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace _KITSystem.Schedule
@@ -17,14 +18,16 @@ namespace _KITSystem.Schedule
 
         public bool IsPaused { private get; set; } = true;
 
-        public async void Initialize()
+        public async Task Initialize()
         {
             for (int i = 0; i < tickables.Count; i++)
             {
                 await tickables[i].Initialize();
             }
-
+            
             IsPaused = false;
+
+            await Task.CompletedTask;
         }
 
         private void Awake()

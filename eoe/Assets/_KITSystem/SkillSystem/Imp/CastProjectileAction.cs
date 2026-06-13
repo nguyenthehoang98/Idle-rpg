@@ -13,12 +13,13 @@ namespace _KITSystem.SkillSystem.Imp
         private readonly BaseTrajectory trajectory;
         private readonly DamageTickerType damageTickerType;
         private readonly float damageTickerInterval;
-        private readonly int maxCollision;
+        private readonly int limitNumberCollisions;
         private readonly float resetCollisionInterval;
         private readonly Func<int, bool> onDamageEntity;
 
+        public event Action OnComplete;
+        
         private GameObject projectile;
-
         private HashSet<int> collisions;
         private int totalCollisions;
         private float collisionResetElapsedTime;
@@ -31,14 +32,14 @@ namespace _KITSystem.SkillSystem.Imp
         public CastProjectileAction(Spu spu, float lifeTime, BaseCollider collider, BaseTrajectory trajectory,
             Func<int, bool> onDamageEntity,
             GameObject projectile, DamageTickerType damageTickerType, float damageTickerInterval,
-            int maxCollision, float resetCollisionInterval) : base(spu, lifeTime)
+            int limitNumberCollisions, float resetCollisionInterval) : base(spu, lifeTime)
         {
             this.onDamageEntity = onDamageEntity;
             this.collider = collider;
             this.trajectory = trajectory;
             this.projectile = projectile;
             this.damageTickerType = damageTickerType;
-            this.maxCollision = maxCollision;
+            this.limitNumberCollisions = limitNumberCollisions;
             this.resetCollisionInterval = resetCollisionInterval > 0 ? resetCollisionInterval : float.MaxValue;
             this.damageTickerInterval = damageTickerInterval;
             this.collisions = new HashSet<int>();
@@ -78,7 +79,7 @@ namespace _KITSystem.SkillSystem.Imp
 
                     totalCollisions++;
 
-                    if (totalCollisions == maxCollision)
+                    if (totalCollisions == limitNumberCollisions)
                     {
                         EndLifeCycle();
                         return;
@@ -91,12 +92,10 @@ namespace _KITSystem.SkillSystem.Imp
         {
             base.OnStop();
 
-            if (projectile != null)
-            {
-                Pool.Destroy(projectile.gameObject);
-
-                projectile = null;
-            }
+            projectile = null;
+            
+            OnComplete?.Invoke();
+            OnComplete = null;
         }
 
         private bool TryDamage(int entity)

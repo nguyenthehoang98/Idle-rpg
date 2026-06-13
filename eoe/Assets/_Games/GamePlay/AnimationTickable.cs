@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using _Games.GamePlay.AnimationSystem;
 using _KITSystem.Schedule;
+using UnityEngine;
 
 namespace _Games.GamePlay
 {
@@ -14,10 +15,11 @@ namespace _Games.GamePlay
         private Queue<UnitAnimation> removeQueue = new Queue<UnitAnimation>();
 
         private static AnimationTickable instance;
-        
+
         public Task Initialize()
         {
             instance = this;
+            
             return Task.CompletedTask;
         }
 
@@ -59,11 +61,15 @@ namespace _Games.GamePlay
         public static void Add(UnitAnimation unitAnimation)
         {
             if (instance != null) instance.additionalQueue.Enqueue(unitAnimation);
+            else
+                Debug.LogError("Instance AnimationTickable is null");
         }
 
         public static void Remove(UnitAnimation unitAnimation)
         {
-            if(instance != null) instance.removeQueue.Enqueue(unitAnimation);
+            if (instance != null) instance.removeQueue.Enqueue(unitAnimation);
+            else
+                Debug.LogError("Instance AnimationTickable is null");
         }
     }
 }

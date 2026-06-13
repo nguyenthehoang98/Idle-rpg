@@ -1,5 +1,6 @@
 using System;
 using _KITSystem.SkillSystem.Core;
+using UnityEngine;
 
 namespace _Games.GamePlay.SkillSystem
 {
@@ -7,10 +8,23 @@ namespace _Games.GamePlay.SkillSystem
     public struct SkillData
     {
         public float LifeTime;
-        public float DelayInitProjectileTime;
         public string Projectile;
         public FindTargetData FindTarget;
         public TrajectoryData Trajectory;
+        public DamageTickerData DamageTicker;
+        public ColliderData Collider;
+    }
+
+    [Serializable]
+    public struct ColliderData
+    {
+        public float TimerTrigger;
+        public float Duration;
+        public int LimitNumberCollisions;
+        public float ResetCollisionInterval;
+        public ColliderType Type;
+        public float Radius;
+        public Vector2 RelativePosition;
     }
 
     [Serializable]
@@ -40,8 +54,20 @@ namespace _Games.GamePlay.SkillSystem
         }
     }
 
+    [Serializable]
+    public struct DamageTickerData
+    {
+        public DamageTickerType Type;
+        public float DamageTickerInterval;
+    }
+
     public enum TrajectoryType
     {
         Bullet = 1,
+    }
+
+    public enum ColliderType
+    {
+        Circle
     }
 }

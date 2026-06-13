@@ -247,7 +247,7 @@ namespace _KITSystem.SkillSystem.Core
             return true;
         }
         
-        public void Dispose()
+        public virtual void Dispose()
         {
             pendingCommands = null;
             mapActionsIndex = null;

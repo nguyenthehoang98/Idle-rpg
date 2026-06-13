@@ -25,6 +25,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9c9ccd249ecdbff46a97da0ee781c4f0
+    m_Address: Scythe.Prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d31cec3e2839b274c8cdcb4897339f90
     m_Address: Spike_1.Prefab
     m_ReadOnly: 0

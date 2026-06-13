@@ -1,4 +1,3 @@
-using System;
 using _Games.GamePlay.AnimationSystem;
 using _Games.GamePlay.SpawnerSystem;
 using _KITSystem.Resource;
@@ -7,6 +6,7 @@ using UnityEngine;
 
 namespace _Games.GamePlay
 {
+    [DefaultExecutionOrder(-1000)]
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private TickSystemOwner owner;
@@ -28,10 +28,24 @@ namespace _Games.GamePlay
             Monster.OnMonsterDisable += MonsterDisable;
         }
 
-        private void Start()
+        private async void Start()
         {
             AssetBundleManager.SetLocationBundle(true);
-            owner.Initialize();
+            
+            await owner.Initialize();
+            
+            for (int i = 0; i < characters.Length; i++)
+            {
+                if (i < characters.Length)
+                {
+                    Character character = characters[i];
+                    if (character != null)
+                    {
+                        character.Initialize();
+                        HeroDeactivate(i, 0);
+                    }
+                }
+            }
         }
 
         private void Update()

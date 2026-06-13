@@ -4,7 +4,6 @@ using _KITSystem.Utils;
 using RVO;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace _KITSystem.Grid
 {

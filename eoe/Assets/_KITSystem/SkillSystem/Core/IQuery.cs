@@ -7,19 +7,14 @@ namespace _KITSystem.SkillSystem.Core
     public interface IQuery
     {
         void FindTarget(FindTargetType type, Vector2 center, float radius, Func<int, bool> funcFilterEntity, out QueryResult result);
+
         List<int> GetAllEntities(Vector2 center, Vector2 size, Func<int, bool> funcFilterEntity);
     }
     
-    public readonly struct QueryResult
+    public struct QueryResult
     {
-        public readonly QueryEntityData Primary;
-        public readonly QueryEntityData Secondary;
-
-        public QueryResult(QueryEntityData primary, QueryEntityData secondary)
-        {
-            Primary = primary;
-            Secondary = secondary;
-        }
+        public QueryEntityData Primary;
+        public QueryEntityData Secondary;
     }
 
     public readonly struct QueryEntityData
