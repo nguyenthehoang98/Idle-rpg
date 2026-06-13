@@ -15,12 +15,15 @@ namespace _Echo.Scripts.Battle
         [SerializeField] private new UnitRenderer renderer;
 
         public UnitAnimator Animator => animator;
-
         private Direction direction;
 
         private void Awake()
         {
             animator.OnAnimationStart += AnimationStart;
+            animator.OnAnimationTrigger += state =>
+            {
+                if(state == AnimState.Attack) CastProjectile(new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f)));
+            };
         }
         
         private void Update()
@@ -41,10 +44,6 @@ namespace _Echo.Scripts.Battle
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 int result = animator.Play(AnimState.Attack, direction);
-                if (result > 0)
-                {
-                    CastProjectile(new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f)));
-                }
             }
         }
         

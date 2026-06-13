@@ -11,6 +11,7 @@ namespace _Echo.Scripts.AnimationSystem
         [SerializeField] private MonsterAnimationAsset walkAnimationAsset;
         [SerializeField] private MonsterAnimationAsset attackAnimationAsset;
 
+        public event Action<AnimState> OnAnimationTrigger; 
         public event Action<AnimState> OnAnimationEnd;
         public event Action<(Texture defaultTexture, Texture hdrTexture)> OnAnimationStart;
        
@@ -83,6 +84,11 @@ namespace _Echo.Scripts.AnimationSystem
             }
 
             spriteRenderer.sprite = currentClip.frames[frameIndex];
+
+            if (frameIndex == currentClip.frameEvent)
+            {
+                OnAnimationTrigger?.Invoke(currentState);
+            }
         }
 
         private void OnOneShotFinished()

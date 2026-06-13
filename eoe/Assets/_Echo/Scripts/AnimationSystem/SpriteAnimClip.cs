@@ -8,6 +8,7 @@ namespace _Echo.Scripts.AnimationSystem
     {
         public Direction direction;
         public Texture textureHDR;
+        [HideInInspector] public int frameEvent = -1;
         public Sprite[] frames;
         public float fps = 12;
         public bool loop = true;
