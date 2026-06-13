@@ -4,6 +4,7 @@ using _KITSystem.Utils;
 using RVO;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _KITSystem.Grid
 {
@@ -16,9 +17,10 @@ namespace _KITSystem.Grid
 #endif
         [SerializeField] private float2 destination;
         [SerializeField] private float defaultAgentRadius = 0.5f;
-        [SerializeField] private float interval = 0.5f;
-        [SerializeField, Range(0.1f, 0.9f)] private float multiplierIgnoreCheckDistance = 0.2f;
-        [SerializeField, Range(0.1f, 1.0f)] private float deltaDistanceStuck = 0.2f;
+        [SerializeField, Range(0.1f, 0.9f), Tooltip("Hệ số bỏ qua việc kiểm tra khoảng cách")]
+        private float deltaIgnoreCheckNeighborDistance = 0.2f;
+        [SerializeField, Range(0.1f, 1.0f), Tooltip("Khoảng cách bắt đầu kiểm soát việc tắc nghẽn di chuyển")]
+        private float deltaStuckDistance = 0.2f;
 
         private Dictionary<int, AgentData> containers = new Dictionary<int, AgentData>();        
         private List<int> agents = new List<int>();
@@ -98,9 +100,9 @@ namespace _KITSystem.Grid
             simulator = new Simulator();
             simulator.SetTimeStep(0.25f);
             simulator.SetAgentDefaults(5f, 10, 10f, 10f, defaultAgentRadius, 1f, float2.zero);
-            float a = 2 * (1 + multiplierIgnoreCheckDistance) * defaultAgentRadius;
+            float a = 2 * (1 + deltaIgnoreCheckNeighborDistance) * defaultAgentRadius;
             ignoreCheckNeighborDistanceSq = a * a;
-            deltaDistanceStuckSq = deltaDistanceStuck * deltaDistanceStuck;
+            deltaDistanceStuckSq = deltaStuckDistance * deltaStuckDistance;
         }
 
         private void ReachedGoal()
@@ -166,11 +168,11 @@ namespace _KITSystem.Grid
                     temp.stuckFrames = 0;
                 }
 
-                if (temp.stuckFrames >= 10)
+                /*if (temp.stuckFrames >= 10)
                 {
                     temp.isStopped = true;
                     StopAgent(agent);
-                }
+                }*/
 
                 containers[agent] = temp;
             }

@@ -5,6 +5,7 @@ using _Games.GamePlay.AnimationSystem;
 using _KITSystem.Grid;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;
+using _KITSystem.Utils;
 using UnityEngine;
 
 namespace _Games.GamePlay
@@ -45,7 +46,7 @@ namespace _Games.GamePlay
                     {
                         data.Monster.transform.position = new Vector3(agent.position.x, agent.position.y);
 
-                        if (agent.isStopped) RemovePrivate(data.Monster);
+                        //if (agent.isStopped) RemovePrivate(data.Monster);
                     }
                 }
                 else
@@ -76,7 +77,7 @@ namespace _Games.GamePlay
 
         void AddPrivate(Monster unit)
         {
-            int agent = CreateAgent(unit.transform.position, 0.2f, 2, 3).agent;
+            int agent = CreateAgent(unit.transform.position, 0.2f, 2, RandomUtils.Range(1.6f, 2.6f)).agent;
             Data data = new Data(unit, agent);
             
             container.Add(unit, data);
