@@ -11,7 +11,6 @@ namespace _Games.GamePlay
     {
         [SerializeField] private TickSystemOwner owner;
         [SerializeField] private Pedestal pedestal;
-        [SerializeField] private Character[] characters;
 
         private SpawnerTickable spawner;
         private int totalMonsterAlive = 0;
@@ -31,42 +30,34 @@ namespace _Games.GamePlay
         private async void Start()
         {
             AssetBundleManager.SetLocationBundle(true);
-            
+
             await owner.Initialize();
-            
-            for (int i = 0; i < characters.Length; i++)
-            {
-                if (i < characters.Length)
-                {
-                    Character character = characters[i];
-                    if (character != null)
-                    {
-                        character.Initialize();
-                        HeroDeactivate(i, 0);
-                    }
-                }
-            }
         }
 
         private void Update()
         {
-            float duration = 0.5f;
+            float duration = 0.2f;
 
-            if (Input.GetKeyDown(KeyCode.Alpha1)) HeroActivate(0, duration);
-            if (Input.GetKeyDown(KeyCode.Alpha2)) HeroActivate(1, duration);
-            if (Input.GetKeyDown(KeyCode.Alpha3)) HeroActivate(2, duration);
-            if (Input.GetKeyDown(KeyCode.Alpha4)) HeroActivate(3, duration);
-            if (Input.GetKeyDown(KeyCode.Alpha5)) HeroActivate(4, duration);
-            if (Input.GetKeyDown(KeyCode.Alpha6)) HeroActivate(5, duration);
-            if (Input.GetKeyDown(KeyCode.Alpha7)) HeroActivate(6, duration);
+            if (Input.GetKeyDown(KeyCode.F1)) SetWeapon(0, 1, duration);
+            if (Input.GetKeyDown(KeyCode.F2)) SetWeapon(0, 2, duration);
+            if (Input.GetKeyDown(KeyCode.F3)) SetWeapon(0, 3, duration);
 
-            if (Input.GetKeyDown(KeyCode.F1)) HeroDeactivate(0, duration);
-            if (Input.GetKeyDown(KeyCode.F2)) HeroDeactivate(1, duration);
-            if (Input.GetKeyDown(KeyCode.F3)) HeroDeactivate(2, duration);
-            if (Input.GetKeyDown(KeyCode.F4)) HeroDeactivate(3, duration);
-            if (Input.GetKeyDown(KeyCode.F5)) HeroDeactivate(4, duration);
-            if (Input.GetKeyDown(KeyCode.F6)) HeroDeactivate(5, duration);
-            if (Input.GetKeyDown(KeyCode.F7)) HeroDeactivate(6, duration);
+            if (Input.GetKeyDown(KeyCode.F4)) SetWeapon(1, 1, duration);
+            if (Input.GetKeyDown(KeyCode.F5)) SetWeapon(1, 2, duration);
+            if (Input.GetKeyDown(KeyCode.F6)) SetWeapon(1, 3, duration);
+
+            if (Input.GetKeyDown(KeyCode.F7)) SetWeapon(2, 1, duration);
+            if (Input.GetKeyDown(KeyCode.F8)) SetWeapon(2, 2, duration);
+            if (Input.GetKeyDown(KeyCode.F9)) SetWeapon(2, 3, duration);
+
+            if (Input.GetKeyDown(KeyCode.F10)) SetWeapon(3, 1, duration);
+            if (Input.GetKeyDown(KeyCode.F11)) SetWeapon(3, 2, duration);
+            if (Input.GetKeyDown(KeyCode.F12)) SetWeapon(3, 3, duration);
+
+            if (Input.GetKeyDown(KeyCode.Alpha1)) SetWeapon(0, 0, duration);
+            if (Input.GetKeyDown(KeyCode.Alpha2)) SetWeapon(1, 0, duration);
+            if (Input.GetKeyDown(KeyCode.Alpha3)) SetWeapon(2, 0, duration);
+            if (Input.GetKeyDown(KeyCode.Alpha4)) SetWeapon(3, 0, duration);
         }
 
         private void OnDestroy()
@@ -89,27 +80,12 @@ namespace _Games.GamePlay
         {
             totalMonsterAlive++;
         }
-        
-        private void HeroActivate(int slotIndex, float duration)
+
+        private void SetWeapon(int slot, int level, float duration)
         {
-            if (slotIndex < 0 || slotIndex > 6) return;
+            if (slot < 0 || slot > 4) return;
 
-            pedestal.Activate(slotIndex, duration);
-
-            if (slotIndex > 5) return;
-            var character = characters[slotIndex];
-            if (character != null) character.Activate(duration);
-        }
-
-        private void HeroDeactivate(int slotIndex, float duration)
-        {
-            if (slotIndex < 0 || slotIndex > 6) return;
-            
-            pedestal.Deactivate(slotIndex, duration);
-
-            if (slotIndex > 5) return;
-            var character = characters[slotIndex];
-            if (character != null) character.Deactivate(duration);
+            pedestal.SetWeapon(slot, level, duration, Time.deltaTime);
         }
     }
 }

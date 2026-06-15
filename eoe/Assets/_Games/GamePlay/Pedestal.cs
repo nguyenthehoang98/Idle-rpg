@@ -6,137 +6,167 @@ namespace _Games.GamePlay
 {
     public class Pedestal : MonoBehaviour
     {
-        public SpriteRenderer slotRenderer;
-
-        [SerializeField, ColorUsage(true, true)]
-        private Color[] inactiveColors = new Color[7];
-
-        [SerializeField, ColorUsage(true, true)]
-        private Color[] activeColors = new Color[7];
-
-        private MaterialPropertyBlock propertyBlock;
-        private Coroutine[] coroutines;
-        
-        private readonly Color[] currentColors = new Color[7];
-        private readonly bool[] triggered = new bool[7];
-
-        private static readonly int[] ColorPropIds =
+        [Serializable]
+        private class Renderer
         {
-            Shader.PropertyToID("_Color_1"),
-            Shader.PropertyToID("_Color_2"),
-            Shader.PropertyToID("_Color_3"),
-            Shader.PropertyToID("_Color_4"),
-            Shader.PropertyToID("_Color_5"),
-            Shader.PropertyToID("_Color_6"),
-            Shader.PropertyToID("_Color_7"),
-        };
+            public Transform pivot;
+            public SpriteRenderer weapon;
+            public SpriteRenderer outline;
+            public SpriteRenderer highlight;
+            public Vector2 offset;
+            public Color inactive;
+            public Color active1;
+            public Color active2;
+
+            public IEnumerator Inactive(float duration, float deltaTime)
+            {
+                float elapsedTime = 0;
+
+                Vector3 position = pivot.position;
+                Color weaponColor = weapon.color;
+                Color outlineColor = outline.color;
+                Color highlightColor = highlight.color;
+                    
+                while (elapsedTime < duration)
+                {
+                    elapsedTime += deltaTime;
+                        
+                    float t = Mathf.Clamp01(elapsedTime / duration);
+
+                    pivot.position = Vector3.Lerp(position, Vector3.zero, t);
+                    weapon.color = Color.Lerp(weaponColor, inactive, t);
+                    outline.color = Color.Lerp(outlineColor, inactive, t);
+                    highlightColor.a = 1 - t;
+                        
+                    yield return null;
+                }
+
+                highlightColor.a = 0;
+                highlight.color = highlightColor;
+                pivot.position = Vector3.zero;
+                weapon.color = inactive;
+                outline.color = inactive;
+            }
+
+            public IEnumerator Level1(float duration, float deltaTime)
+            {
+                Vector3 position = pivot.position;
+                Color weaponColor = weapon.color;
+                Color outlineColor = outline.color;
+                Color highlightColor = highlight.color;
+
+                float elapsedTime = 0;
+                    
+                while (elapsedTime < duration)
+                {
+                    elapsedTime += deltaTime;
+                        
+                    float t = Mathf.Clamp01(elapsedTime / duration);
+
+                    pivot.position = Vector3.Lerp(position, offset, t);
+                    weapon.color = Color.Lerp(weaponColor, inactive, t);
+                    outline.color = Color.Lerp(outlineColor, inactive, t);
+                    highlightColor.a = Mathf.Lerp(highlightColor.a, 0, t);
+
+                    yield return null;
+                }
+                
+                highlightColor.a = 0;
+                highlight.color = highlightColor;
+                pivot.position = offset;
+                weapon.color = active1;
+                outline.color = active1;
+            }
+
+            public IEnumerator Level2(float duration, float deltaTime)
+            {
+                Vector3 position = pivot.position;
+                Color weaponColor = weapon.color;
+                Color outlineColor = outline.color;
+                Color highlightColor = highlight.color;
+                    
+                float elapsedTime = 0;
+                    
+                while (elapsedTime < duration)
+                {
+                    elapsedTime += deltaTime;
+                        
+                    float t = Mathf.Clamp01(elapsedTime / duration);
+
+                    pivot.position = Vector3.Lerp(position, offset, t);
+                    weapon.color = Color.Lerp(weaponColor, active2, t);
+                    outline.color = Color.Lerp(outlineColor, active2, t);
+                    highlightColor.a = Mathf.Lerp(highlightColor.a, 0, t);
+
+                    yield return null;
+                }
+                
+                highlightColor.a = 0;
+                highlight.color = highlightColor;
+                pivot.position = offset;
+                weapon.color = active2;
+                outline.color = active2;
+            }
+
+            public IEnumerator Level3(float duration, float deltaTime)
+            {
+                Vector3 position = pivot.position;
+                Color weaponColor = weapon.color;
+                Color outlineColor = outline.color;
+                Color highlightColor = highlight.color;
+                    
+                float elapsedTime = 0;
+                    
+                while (elapsedTime < duration)
+                {
+                    elapsedTime += deltaTime;
+                        
+                    float t = Mathf.Clamp01(elapsedTime / duration);
+
+                    pivot.position = Vector3.Lerp(position, offset, t);
+                    weapon.color = Color.Lerp(weaponColor, active2, t);
+                    outline.color = Color.Lerp(outlineColor, active1, t);
+                    highlightColor.a = t;
+
+                    yield return null;
+                }
+                    
+                highlightColor.a = 1;
+                highlight.color = highlightColor;
+                pivot.position = offset;
+                weapon.color = active2;
+                outline.color = active1;
+            }
+        }
+
+        [SerializeField] private Renderer[] renderers = new Renderer[0];
+
+        private Coroutine[] coroutines;
 
         private void Awake()
         {
-            propertyBlock = new MaterialPropertyBlock();
-          
-            coroutines = new Coroutine[7];
-            
-            for (int i = 0; i < 7; i++)
-            {
-                currentColors[i] = inactiveColors[i];
-            }
+            coroutines = new Coroutine[renderers.Length];
         }
 
         private void Start()
         {
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < renderers.Length; i++)
             {
-                Deactivate(i, 0);
+                StartCoroutine(renderers[i].Inactive(0, 1));
             }
         }
 
-        private void LateUpdate()
+        public void SetWeapon(int slot, int level, float duration, float deltaTime)
         {
-            bool shouldApplyColor = false;
-            
-            foreach (var boolean in triggered)
-            {
-                if (boolean)
-                {
-                    shouldApplyColor = true;
-                    break;
-                }
-            }
-
-            if (!shouldApplyColor) return;
-            
-            slotRenderer.GetPropertyBlock(propertyBlock);
-
-            for (int i = 0; i < 7; i++)
-            {
-                propertyBlock.SetColor(ColorPropIds[i], currentColors[i]);
-            }
-
-            slotRenderer.SetPropertyBlock(propertyBlock);
-        }
-
-        public void Activate(int slotIndex, float duration)
-        {
-            if (slotIndex < 0 || slotIndex > 6) return;
-            
-            Coroutine coroutine = coroutines[slotIndex];
-
+            Coroutine coroutine = coroutines[slot];
             if (coroutine != null) StopCoroutine(coroutine);
-            
-            triggered[slotIndex] = true;
 
-            coroutines[slotIndex] = StartCoroutine(
-                LerpColor(slotIndex, activeColors[slotIndex], duration, () =>
-                {
-                    triggered[slotIndex] = false;
-                })
-            );
-        }
+            Renderer r = renderers[slot];
 
-        public void Deactivate(int slotIndex, float duration)
-        {
-            if (slotIndex < 0 || slotIndex > 6) return;
-
-            Coroutine coroutine = coroutines[slotIndex];
-
-            if (coroutine != null) StopCoroutine(coroutine);
-            
-            triggered[slotIndex] = true;
-
-            coroutines[slotIndex] = StartCoroutine(
-                LerpColor(slotIndex, inactiveColors[slotIndex], duration, () =>
-                {
-                    triggered[slotIndex] = false;
-                })
-            );
-        }
-
-        IEnumerator LerpColor(int slotIndex, Color targetColor, float duration, Action onComplete)
-        {
-            float elapsed = 0f;
-
-            Color startColor = currentColors[slotIndex];
-
-            if (duration <= 0)
-            {
-                currentColors[slotIndex] = targetColor;
-            }
-            else
-            {
-                while (elapsed <= duration)
-                {
-                    elapsed += Time.deltaTime;
-
-                    float t = Mathf.Clamp01(elapsed / duration);
-
-                    currentColors[slotIndex] = Color.Lerp(startColor, targetColor, t);
-                    
-                    yield return null;
-                }
-            }
-            
-            onComplete?.Invoke();
+            if(level == 0)  coroutines[slot] = StartCoroutine(r.Inactive(duration, deltaTime));
+            else if (level == 1) coroutines[slot] = StartCoroutine(r.Level1(duration, deltaTime));
+            else if (level == 2) coroutines[slot] = StartCoroutine(r.Level2(duration, deltaTime));
+            else if (level == 3) coroutines[slot] = StartCoroutine(r.Level3(duration, deltaTime));
         }
     }
 }
