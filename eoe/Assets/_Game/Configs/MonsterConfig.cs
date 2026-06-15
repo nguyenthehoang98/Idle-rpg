@@ -19,9 +19,9 @@ namespace _Game.Configs
         {
             cached = new Dictionary<int, MonsterData>();
 
-            foreach (var monsterData in monsters)
+            foreach (var data in monsters)
             {
-                cached.Add(monsterData.id, monsterData);
+                if (!cached.TryAdd(data.id, data)) Debug.LogError($"Duplicate monster '{data.id}'");
             }
         }
 
@@ -46,11 +46,13 @@ namespace _Game.Configs
                     {
                         monsters.Add(new MonsterData
                         {
-                            id = b.id,
+                            id = data.id,
                             prefabName = b.prefabName,
                             speed = b.speed * data.scaleSpeed,
                             radius = b.radius * data.scaleRadius,
-                            color = data.color
+                            color = data.color,
+                            scale = data.scaleRadius,
+                            stopDistance = data.stopDistance,
                         });
                         found = true;
                         break;
@@ -73,13 +75,15 @@ namespace _Game.Configs
         public int id;
         public string prefabName;
         public float speed;
+        public float scale;
         public float radius;
+        public float stopDistance;
         public Color color;
     }
 
     [Serializable] struct BaseMonsterData
     {
-        public int id;
+        public string id;
         public string prefabName;
         public float speed;
         public float radius;
@@ -88,11 +92,12 @@ namespace _Game.Configs
     [Serializable] struct MonsterScaleData
     {
         public int id;
-        public int baseId;
+        public string baseId;
         public float scaleRadius;
         public float scaleSpeed;
         [JsonProperty] private string hex;
         public Color color;
+        public float stopDistance;
 
         public void OnImported()
         {

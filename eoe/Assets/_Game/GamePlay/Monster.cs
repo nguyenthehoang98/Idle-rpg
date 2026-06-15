@@ -31,10 +31,10 @@ namespace _Game.GamePlay
 
         public void Initialize(MonsterData monsterData)
         {
-            AgentTickable.Add(this);
+            AgentTickable.Add(this, monsterData);
 
             spriteRenderer.color = monsterData.color;
-            scaler.transform.localScale = Vector3.one * monsterData.radius; 
+            scaler.transform.localScale = Vector3.one * monsterData.scale; 
             
             OnMonsterEnable?.Invoke(this);
         }

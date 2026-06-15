@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using _Game.Configs;
 using _KITSystem.Entity;
 using _KITSystem.Grid;
 using _KITSystem.Schedule;
@@ -13,6 +14,7 @@ namespace _Game.GamePlay
     [Serializable]
     public class AgentTickable : AgentSimulator, ITickable
     {
+        public float stopDistance = 1.6f;
         private List<Data> list = new List<Data>();
         private Dictionary<Monster, Data> container = new Dictionary<Monster, Data>();
         private Dictionary<int, int> agentToEntity = new Dictionary<int, int>();
@@ -72,7 +74,7 @@ namespace _Game.GamePlay
             instance = null;
         }
 
-        public static void Add(Monster unit) => instance.AddPrivate(unit);
+        public static void Add(Monster unit, MonsterData monsterData) => instance.AddPrivate(unit, monsterData);
 
         public static int Query(float2 position, float2 size, out AgentData[] agentsData)
         {
@@ -86,9 +88,11 @@ namespace _Game.GamePlay
             return instance.agentToEntity.GetValueOrDefault(agent, -1);
         }
 
-        void AddPrivate(Monster unit)
+        void AddPrivate(Monster unit, MonsterData monsterData)
         {
-            int agent = CreateAgent(unit.transform.position, 0.2f, 2, RandomUtils.Range(1.6f, 2.6f)).agent;
+            int agent = CreateAgent(
+                unit.transform.position, monsterData.radius, monsterData.speed,
+                stopDistance + monsterData.stopDistance).agent;
             Data data = new Data(unit, agent);
             int entity = EntityManager.NewEntity();
             

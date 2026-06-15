@@ -33,7 +33,7 @@ namespace _Game.GamePlay
         {
             AssetBundleManager.SetLocationBundle(true);
 
-            await ConfigManager.Load(new string[] { "MonsterConfig" });
+            await ConfigManager.Load(new string[] { "MonsterConfig", "LevelConfig" });
 
             spawner.SetLevel(1);
             

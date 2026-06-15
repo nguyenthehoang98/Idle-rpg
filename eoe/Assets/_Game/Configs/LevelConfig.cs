@@ -19,9 +19,9 @@ namespace _Game.Configs
         {
             cached = new Dictionary<int, LevelData>();
 
-            foreach (var levelData in levels)
-            {
-                cached.Add(levelData.levelId, levelData);
+            foreach (var data in levels)
+            {  
+                if (!cached.TryAdd(data.levelId, data)) Debug.LogError($"Duplicate level '{data.levelId}'");
             }
         }
 

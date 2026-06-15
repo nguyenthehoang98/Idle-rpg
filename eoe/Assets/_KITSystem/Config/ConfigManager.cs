@@ -37,8 +37,12 @@ namespace _KITSystem.Config
                 string text = (await AssetBundleManager.GetAsset<TextAsset>(scriptObjectsPath[i])).text;
 
                 object asset = JsonUtility.FromJson(text, type);
+                
+                IGameConfig config = asset as IGameConfig;
+                
+                config.OnMappingValue();
 
-                cache[type] = asset as IGameConfig;
+                cache[type] = config;
             }
 
             Debug.Log($"Load success '{scriptObjectsPath.Length}' config files.");
