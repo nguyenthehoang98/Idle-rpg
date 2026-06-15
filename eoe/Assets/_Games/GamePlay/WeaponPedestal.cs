@@ -75,7 +75,10 @@ namespace _Games.GamePlay
 
                     yield return null;
                     
-                    SkillTickable.CastSkill(skillAsset.SkillData, weapon.MuzzlePosition, destination);                    
+                    weapon.Attack(() =>
+                    {
+                        SkillTickable.CastSkill(skillAsset.SkillData, weapon.MuzzlePosition, destination); 
+                    });
                 }
             }
         }

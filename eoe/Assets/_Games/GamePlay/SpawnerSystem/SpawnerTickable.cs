@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using _Games.GamePlay.AnimationSystem;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using _KITSystem.Utils;

@@ -44,7 +44,7 @@ TagManager:
   - name: Monster
     uniqueID: 3571737467
     locked: 0
-  - name: Hero
+  - name: Weapon
     uniqueID: 2095058935
     locked: 0
   m_RenderingLayers:

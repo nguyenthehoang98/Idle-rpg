@@ -1,4 +1,3 @@
-using _Games.GamePlay.AnimationSystem;
 using _Games.GamePlay.SpawnerSystem;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;

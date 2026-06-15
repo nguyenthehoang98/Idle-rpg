@@ -15,8 +15,8 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 06731347fde61c84a8d7658e84d90d43
   m_SerializeEntries:
-  - m_GUID: 7fe29af3266401d43b6258a3a880c894
-    m_Address: Shell_1.Prefab
+  - m_GUID: 657ea2369aa9dfb4bb725144df43c996
+    m_Address: crossbow.projectile
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -30,18 +30,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d31cec3e2839b274c8cdcb4897339f90
-    m_Address: Spike_1.Prefab
+  - m_GUID: a19e8157504dcd94abba8af9ebc32d6b
+    m_Address: u001.002
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fa24c9091ad29124c9ad8b888c3239d9
-    m_Address: Shell_2.Prefab
+  - m_GUID: c081aa9714a235b4da83775124f93fba
+    m_Address: u001.003
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fcdd3a87b6ced544094c7ef98f0bd77a
-    m_Address: Spike_2.Prefab
+  - m_GUID: c9985e83710019c48b35af845ec7e9f9
+    m_Address: u001.001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
