@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -12,11 +13,13 @@ namespace _KITSystem.Schedule
         [SerializeField, Range(1, 20)] private int maxTicksPerFrame = 5;
         [SerializeReference] public List<ITickable> tickables = new List<ITickable>();
 
-        private float tickInterval;
         private float accumulator;
         private int tickableCount;
 
+        public event Action<float> OnScaleTimeChanged; 
+
         public bool IsPaused { private get; set; } = true;
+        public float TickInterval { get; private set; }
 
         public async Task Initialize()
         {
@@ -34,7 +37,7 @@ namespace _KITSystem.Schedule
         {
             Application.runInBackground = true;
             Application.targetFrameRate = 60;
-            tickInterval = 1f / targetFPS;
+            TickInterval = 1f / targetFPS;
             tickableCount = tickables.Count;
         }
 
@@ -50,14 +53,14 @@ namespace _KITSystem.Schedule
             
             int tickExecuted = 0;
 
-            while (accumulator >= tickInterval)
+            while (accumulator >= TickInterval)
             {
                 for (int i = 0; i < tickableCount; i++)
                 {
-                    tickables[i].Tick(tickInterval);
+                    tickables[i].Tick(TickInterval);
                 }
 
-                accumulator -= tickInterval;
+                accumulator -= TickInterval;
 
                 tickExecuted++;
 

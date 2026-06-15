@@ -1,4 +1,3 @@
-using Unity.Collections;
 using UnityEngine;
 
 namespace _Games.GamePlay
@@ -18,21 +17,24 @@ namespace _Games.GamePlay
         {
             for (int i = 0; i < weapons.Length; i++)
             {
-                StartCoroutine(weapons[i].Setup(0, 0, 1));
+                StartCoroutine(weapons[i].Setup(0, 0));
             }
         }
 
-        public void SetWeaponLevel(int slot, int level, float duration, float deltaTime)
+        public void SetWeaponLevel(int slot, int level, float duration)
         {
             if (slot < 0 || slot > 4) return;
             if (level < 0 || level > 3) return;
             
-            Coroutine coroutine = coroutines[slot];
-            
-            if (coroutine != null) 
-                StopCoroutine(coroutine);
-            
-            coroutines[slot] = StartCoroutine(weapons[slot].Setup(level, duration, deltaTime));
+            StartCoroutine(weapons[slot].Setup(level, duration));
+        }
+
+        public void SetWeaponDeltaTime(float deltaTime)
+        {
+            for (int i = 0; i < weapons.Length; i++)
+            {
+                weapons[i].DeltaTime = deltaTime;
+            }
         }
     }
 }

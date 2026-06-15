@@ -17,6 +17,7 @@ namespace _Games.GamePlay
 
         private void Awake()
         {
+            owner.OnScaleTimeChanged += pedestal.SetWeaponDeltaTime;
             owner.TryGetTickable(out spawner);
             spawner.OnWaveSpawnCompleted += waveIndex =>
             {
@@ -30,6 +31,8 @@ namespace _Games.GamePlay
         private async void Start()
         {
             AssetBundleManager.SetLocationBundle(true);
+            
+            pedestal.SetWeaponDeltaTime(owner.TickInterval);
 
             await owner.Initialize();
         }
@@ -83,7 +86,7 @@ namespace _Games.GamePlay
 
         private void SetWeapon(int slot, int level, float duration)
         {
-            pedestal.SetWeaponLevel(slot, level, duration, Time.deltaTime);
+            pedestal.SetWeaponLevel(slot, level, duration);
         }
     }
 }
