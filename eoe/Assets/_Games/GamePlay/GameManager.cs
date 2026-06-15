@@ -36,7 +36,7 @@ namespace _Games.GamePlay
 
         private void Update()
         {
-            float duration = 0.2f;
+            float duration = 0.1f;
 
             if (Input.GetKeyDown(KeyCode.F1)) SetWeapon(0, 1, duration);
             if (Input.GetKeyDown(KeyCode.F2)) SetWeapon(0, 2, duration);
@@ -83,9 +83,7 @@ namespace _Games.GamePlay
 
         private void SetWeapon(int slot, int level, float duration)
         {
-            if (slot < 0 || slot > 4) return;
-
-            pedestal.SetWeapon(slot, level, duration, Time.deltaTime);
+            pedestal.SetWeaponLevel(slot, level, duration, Time.deltaTime);
         }
     }
 }
