@@ -8,8 +8,11 @@ namespace _Game.GamePlay
 {
     public class Monster : MonoBehaviour
     {
+        static readonly int Death = Animator.StringToHash("Death");
+        
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] private Transform scaler;
+        [SerializeField] private Animator animator;
 
         public static event Action<Monster> OnMonsterEnable;
         public static event Action<Monster> OnMonsterDisable;
@@ -45,6 +48,11 @@ namespace _Game.GamePlay
             
             OnMonsterDisable?.Invoke(this);
             
+            animator.Play(Death);
+        }
+
+        public void Release()
+        {
             Pool.Destroy(gameObject);
         }
     }
