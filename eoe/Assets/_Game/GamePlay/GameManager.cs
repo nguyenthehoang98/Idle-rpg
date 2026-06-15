@@ -1,18 +1,16 @@
-using _Game.Configs;
-using _Games.GamePlay.SpawnerSystem;
+using _Game.GamePlay.SpawnerSystem;
 using _KITSystem.Config;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using UnityEngine;
 
-namespace _Games.GamePlay
+namespace _Game.GamePlay
 {
     [DefaultExecutionOrder(-1000)]
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private TickSystemOwner owner;
         [SerializeField] private Pedestal pedestal;
-        public MonsterConfig monsterConfig;
 
         private SpawnerTickable spawner;
         private int totalMonsterAlive = 0;
@@ -21,6 +19,7 @@ namespace _Games.GamePlay
         {
             owner.OnScaleTimeChanged += pedestal.SetWeaponDeltaTime;
             owner.TryGetTickable(out spawner);
+            
             spawner.OnWaveSpawnCompleted += waveIndex =>
             {
                 Debug.Log($"Complete wave {waveIndex} - {spawner.IsCompleted}");
@@ -36,7 +35,7 @@ namespace _Games.GamePlay
 
             await ConfigManager.Load(new string[] { "MonsterConfig" });
 
-            monsterConfig = ConfigManager.Get<MonsterConfig>();
+            spawner.SetLevel(1);
             
             pedestal.SetWeaponDeltaTime(owner.TickInterval);
 

@@ -2,7 +2,7 @@ using _KITSystem.Resource;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace _Games.GamePlay
+namespace _Game.GamePlay
 {
     public class Projectile : MonoBehaviour
     {

@@ -6,7 +6,7 @@ using _KITSystem.SkillSystem.Core;
 using _KITSystem.SkillSystem.Imp;
 using UnityEngine;
 
-namespace _Games.GamePlay.SkillSystem
+namespace _Game.GamePlay.SkillSystem
 {
     [System.Serializable]
     public class SkillTickable : Spu, ITickable

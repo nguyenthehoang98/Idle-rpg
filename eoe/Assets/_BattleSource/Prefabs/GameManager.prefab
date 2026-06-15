@@ -66,33 +66,32 @@ MonoBehaviour:
   loop: 1
   maxTicksPerFrame: 5
   tickables:
-  - rid: 607416706617049155
-  - rid: 607416710454575166
-  - rid: 607416711934640191
+  - rid: 607416756985921604
+  - rid: 607416756985921605
+  - rid: 607416756985921606
   references:
     version: 2
     RefIds:
-    - rid: 607416706617049155
-      type: {class: SpawnerTickable, ns: _Games.GamePlay.SpawnerSystem, asm: Assembly-CSharp}
+    - rid: 607416756985921604
+      type: {class: SpawnerTickable, ns: _Game.GamePlay.SpawnerSystem, asm: Assembly-CSharp}
       data:
         portals:
         - {fileID: 5789132838415313941}
         - {fileID: 2135249399407668750}
         - {fileID: 4888078640278676709}
         - {fileID: 5471167485039841132}
-        levelAsset: {fileID: 11400000, guid: e9280b3a66cdca446803ef7791810d0e, type: 2}
-    - rid: 607416710454575166
-      type: {class: AgentTickable, ns: _Games.GamePlay, asm: Assembly-CSharp}
+    - rid: 607416756985921605
+      type: {class: AgentTickable, ns: _Game.GamePlay, asm: Assembly-CSharp}
       data:
         enableGizmos: 1
         destination:
           x: 0
           y: 0
-        defaultAgentRadius: 0.5
+        defaultAgentRadius: 0.3
         deltaIgnoreCheckNeighborDistance: 0.2
-        deltaStuckDistance: 0.1
-    - rid: 607416711934640191
-      type: {class: SkillTickable, ns: _Games.GamePlay.SkillSystem, asm: Assembly-CSharp}
+        deltaStuckDistance: 0.2
+    - rid: 607416756985921606
+      type: {class: SkillTickable, ns: _Game.GamePlay.SkillSystem, asm: Assembly-CSharp}
       data: 
 --- !u!1001 &1282919408025891082
 PrefabInstance:

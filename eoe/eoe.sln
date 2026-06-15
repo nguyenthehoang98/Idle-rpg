@@ -15,6 +15,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RVO2", "RVO2.csproj", "{ba5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KITSystem.Utils", "KITSystem.Utils.csproj", "{71b6c30f-a19b-06f6-b613-54da6efe0a78}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game.Configs", "Game.Configs.csproj", "{3a7ce517-10cf-3f2f-21f2-3d908b934266}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game.Config.Editor", "Game.Config.Editor.csproj", "{0aa0bc16-460d-0b25-e4e8-0f5cfb8cbd6e}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KITSystem.Config", "KITSystem.Config.csproj", "{f1679ffa-ca06-ccfe-5984-8030709d552e}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +40,12 @@ Global
 		{ba5c38fb-8d33-84ac-f1aa-c47ce2020c64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71b6c30f-a19b-06f6-b613-54da6efe0a78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{71b6c30f-a19b-06f6-b613-54da6efe0a78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3a7ce517-10cf-3f2f-21f2-3d908b934266}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3a7ce517-10cf-3f2f-21f2-3d908b934266}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0aa0bc16-460d-0b25-e4e8-0f5cfb8cbd6e}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0aa0bc16-460d-0b25-e4e8-0f5cfb8cbd6e}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{f1679ffa-ca06-ccfe-5984-8030709d552e}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{f1679ffa-ca06-ccfe-5984-8030709d552e}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

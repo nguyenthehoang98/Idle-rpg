@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace _Games.GamePlay
+namespace _Game.GamePlay
 {
     public class Weapon : MonoBehaviour
     {

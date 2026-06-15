@@ -6,7 +6,7 @@ using _KITSystem.SkillSystem.Core;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace _Games.GamePlay
+namespace _Game.GamePlay
 {
     [Serializable]
     public class EntityQuery : IQuery

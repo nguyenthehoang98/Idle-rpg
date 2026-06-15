@@ -2,7 +2,7 @@ using System;
 using _KITSystem.SkillSystem.Core;
 using UnityEngine;
 
-namespace _Games.GamePlay.SkillSystem
+namespace _Game.GamePlay.SkillSystem
 {
     [Serializable]
     public struct SkillData

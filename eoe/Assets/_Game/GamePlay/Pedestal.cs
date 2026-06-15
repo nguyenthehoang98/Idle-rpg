@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace _Games.GamePlay
+namespace _Game.GamePlay
 {
     public class Pedestal : MonoBehaviour
     {

@@ -12,9 +12,17 @@ namespace _Game.Configs
         [SerializeField] private List<MonsterData> monsters = new List<MonsterData>();
         [JsonProperty] private List<MonsterScaleData> monster_scale = new List<MonsterScaleData>();
         [JsonProperty] private List<BaseMonsterData>  monster_base = new List<BaseMonsterData>();
+
+        private Dictionary<int, MonsterData> cached;
         
         public void OnMappingValue()
         {
+            cached = new Dictionary<int, MonsterData>();
+
+            foreach (var monsterData in monsters)
+            {
+                cached.Add(monsterData.id, monsterData);
+            }
         }
 
         public void OnPostImported()
@@ -34,14 +42,14 @@ namespace _Game.Configs
                 bool found = false;
                 foreach (var b in monster_base)
                 {
-                    if (b.id == data.base_id)
+                    if (b.id == data.baseId)
                     {
                         monsters.Add(new MonsterData
                         {
                             id = b.id,
-                            prefabName = b.prefab_name,
-                            speed = b.speed * data.scale_speed,
-                            radius = b.radius * data.scale_radius,
+                            prefabName = b.prefabName,
+                            speed = b.speed * data.scaleSpeed,
+                            radius = b.radius * data.scaleRadius,
                             color = data.color
                         });
                         found = true;
@@ -49,8 +57,13 @@ namespace _Game.Configs
                     }
                 }
 
-                if (!found) Debug.LogError($"Not found monster data with id '{data.id}', base '{data.base_id}'");
+                if (!found) Debug.LogError($"Not found monster data with id '{data.id}', base '{data.baseId}'");
             }
+        }
+
+        public bool TryGetMonsterData(int monsterId, out MonsterData monsterData)
+        {
+            return cached.TryGetValue(monsterId, out monsterData);
         }
     }
 
@@ -67,7 +80,7 @@ namespace _Game.Configs
     [Serializable] struct BaseMonsterData
     {
         public int id;
-        public string prefab_name;
+        public string prefabName;
         public float speed;
         public float radius;
     }
@@ -75,9 +88,9 @@ namespace _Game.Configs
     [Serializable] struct MonsterScaleData
     {
         public int id;
-        public int base_id;
-        public float scale_radius;
-        public float scale_speed;
+        public int baseId;
+        public float scaleRadius;
+        public float scaleSpeed;
         [JsonProperty] private string hex;
         public Color color;
 

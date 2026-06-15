@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace _Games.GamePlay.SkillSystem
+namespace _Game.GamePlay.SkillSystem
 {
     [CreateAssetMenu]
     public class SkillAsset : ScriptableObject

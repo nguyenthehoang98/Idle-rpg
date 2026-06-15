@@ -1,9 +1,9 @@
 using System.Collections;
-using _Games.GamePlay.SkillSystem;
+using _Game.GamePlay.SkillSystem;
 using _KITSystem.Utils;
 using UnityEngine;
 
-namespace _Games.GamePlay
+namespace _Game.GamePlay
 {
     public class WeaponPedestal : MonoBehaviour
     {

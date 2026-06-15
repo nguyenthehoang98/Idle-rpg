@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
+using _Game.Configs;
 using _KITSystem.Resource;
 using UnityEngine;
 
-namespace _Games.GamePlay
+namespace _Game.GamePlay
 {
     public class Monster : MonoBehaviour
     {
@@ -28,9 +29,12 @@ namespace _Games.GamePlay
             }
         }
 
-        public void Initialize()
+        public void Initialize(MonsterData monsterData)
         {
             AgentTickable.Add(this);
+
+            spriteRenderer.color = monsterData.color;
+            scaler.transform.localScale = Vector3.one * monsterData.radius; 
             
             OnMonsterEnable?.Invoke(this);
         }
