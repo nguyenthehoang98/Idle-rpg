@@ -1,4 +1,7 @@
 using System;
+using _Game.Configs;
+using _Game.GamePlay.SkillSystem;
+using _KITSystem.Config;
 using UnityEngine;
 
 namespace _Game.GamePlay
@@ -6,12 +9,15 @@ namespace _Game.GamePlay
     public class Weapon : MonoBehaviour
     {
         private static readonly int ATTACK = Animator.StringToHash("Attack");
-        
+
+        public int skillId;
         [SerializeField] private Transform muzzle;
         [SerializeField] private new SpriteRenderer renderer;
         [SerializeField] private Animator animator;
 
-        private Action onAttack;
+        private SkillData skillData;
+        private Vector3 destination;
+        private bool attacking;
 
         public Color Color
         {
@@ -19,23 +25,28 @@ namespace _Game.GamePlay
             set => renderer.color = value;
         }
 
-        public void Attack(Action action)
+        private void Start()
         {
-            onAttack = action;
+            bool found = ConfigManager.Get<SkillConfig>().TryGetSkill(skillId, out skillData);
+            if (!found) Debug.LogError($"Skill '{skillId}' not found");
+        }
+
+        public void Attack(Vector3 target)
+        {
+            attacking = true;
+            destination = target;
             animator.Play(ATTACK);
         }
 
         public void ExecutePrivate()
         {
-            if (onAttack != null)
+            if (attacking)
             {
-                onAttack.Invoke();
-                onAttack = null;
+                attacking = false;
+                SkillTickable.CastSkill(skillData, muzzle.position, destination); 
             }
         }
         
-        public Vector3 MuzzlePosition => muzzle.position;
-
         public float EulerAngleZ
         {
             get => transform.eulerAngles.z;

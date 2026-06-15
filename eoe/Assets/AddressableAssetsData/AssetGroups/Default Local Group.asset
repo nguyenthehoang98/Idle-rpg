@@ -15,13 +15,28 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 06731347fde61c84a8d7658e84d90d43
   m_SerializeEntries:
+  - m_GUID: 63318507e8a351540b9009ada670c16d
+    m_Address: whirlpool-shuriken.projectile
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 657ea2369aa9dfb4bb725144df43c996
     m_Address: crossbow.projectile
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6bf1ba476caaa974c97935ff2802d076
+    m_Address: barbed-spear.projectile
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 73762136d49bf3541bfd3470211f6cf4
     m_Address: MonsterConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9d243a56b9b672c44876b3ae492e4507
+    m_Address: broken-bottle.projectile
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -32,6 +47,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: da47545e2a842514ba076f556fbe83ba
     m_Address: LevelConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f1f8e97a3411c6d4cb992f88d760301c
+    m_Address: SkillConfig
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

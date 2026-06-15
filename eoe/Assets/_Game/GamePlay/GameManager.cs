@@ -12,14 +12,13 @@ namespace _Game.GamePlay
         [SerializeField] private TickSystemOwner owner;
         [SerializeField] private Pedestal pedestal;
 
+        private Pedestal pedestalInstance;
         private SpawnerTickable spawner;
         private int totalMonsterAlive = 0;
 
         private void Awake()
         {
-            owner.OnScaleTimeChanged += pedestal.SetWeaponDeltaTime;
             owner.TryGetTickable(out spawner);
-            
             spawner.OnWaveSpawnCompleted += waveIndex =>
             {
                 Debug.Log($"Complete wave {waveIndex} - {spawner.IsCompleted}");
@@ -33,11 +32,13 @@ namespace _Game.GamePlay
         {
             AssetBundleManager.SetLocationBundle(true);
 
-            await ConfigManager.Load(new string[] { "MonsterConfig", "LevelConfig" });
+            await ConfigManager.Load(new string[] { "MonsterConfig", "LevelConfig", "SkillConfig" });
 
             spawner.SetLevel(1);
             
-            pedestal.SetWeaponDeltaTime(owner.TickInterval);
+            pedestalInstance = Object.Instantiate(pedestal, transform);
+            pedestalInstance.SetWeaponDeltaTime(owner.TickInterval);
+            owner.OnScaleTimeChanged += pedestalInstance.SetWeaponDeltaTime;
 
             await owner.Initialize();
         }
@@ -91,7 +92,7 @@ namespace _Game.GamePlay
 
         private void SetWeapon(int slot, int level, float duration)
         {
-            pedestal.SetWeaponLevel(slot, level, duration);
+            pedestalInstance.SetWeaponLevel(slot, level, duration);
         }
     }
 }

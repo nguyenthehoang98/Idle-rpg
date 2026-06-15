@@ -78,6 +78,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9793e5c503604adeb230652f6e6be7d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillId: 10004
   muzzle: {fileID: 6840394804273914522}
   renderer: {fileID: 3076512560167869910}
   animator: {fileID: 863737758894708003}

@@ -32,7 +32,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9147463124575669898}
-  - {fileID: 4871641558072709601}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1975200471960847820
@@ -48,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 2652596796157564998}
-  pedestal: {fileID: 8746396436990090622}
+  pedestal: {fileID: 7542589703931767924, guid: d5ac05e73da0dd74498e9728726f982c, type: 3}
 --- !u!114 &2652596796157564998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102,83 +101,10 @@ MonoBehaviour:
         defaultAgentRadius: 0.3
         deltaIgnoreCheckNeighborDistance: 0.2
         deltaStuckDistance: 0.2
-        stopDistance: 1.6
+        stopDistance: 2
     - rid: 607416756985921606
       type: {class: SkillTickable, ns: _Game.GamePlay.SkillSystem, asm: Assembly-CSharp}
       data: 
---- !u!1001 &1282919408025891082
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 572811796040990161}
-    m_Modifications:
-    - target: {fileID: 5933022227776807147, guid: d5ac05e73da0dd74498e9728726f982c, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5933022227776807147, guid: d5ac05e73da0dd74498e9728726f982c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5933022227776807147, guid: d5ac05e73da0dd74498e9728726f982c, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5933022227776807147, guid: d5ac05e73da0dd74498e9728726f982c, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5933022227776807147, guid: d5ac05e73da0dd74498e9728726f982c, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5933022227776807147, guid: d5ac05e73da0dd74498e9728726f982c, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5933022227776807147, guid: d5ac05e73da0dd74498e9728726f982c, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5933022227776807147, guid: d5ac05e73da0dd74498e9728726f982c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5933022227776807147, guid: d5ac05e73da0dd74498e9728726f982c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5933022227776807147, guid: d5ac05e73da0dd74498e9728726f982c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8178624502641149624, guid: d5ac05e73da0dd74498e9728726f982c, type: 3}
-      propertyPath: m_Name
-      value: Pedestal Prefab
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: d5ac05e73da0dd74498e9728726f982c, type: 3}
---- !u!4 &4871641558072709601 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5933022227776807147, guid: d5ac05e73da0dd74498e9728726f982c, type: 3}
-  m_PrefabInstance: {fileID: 1282919408025891082}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8746396436990090622 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7542589703931767924, guid: d5ac05e73da0dd74498e9728726f982c, type: 3}
-  m_PrefabInstance: {fileID: 1282919408025891082}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b5e36483ced6204b802e6c8f0877813, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &3490567588095763399
 PrefabInstance:
   m_ObjectHideFlags: 0

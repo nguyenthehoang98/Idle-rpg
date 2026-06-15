@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using _Game.Configs;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Core;
@@ -35,20 +37,20 @@ namespace _Game.GamePlay.SkillSystem
 
         async void CastSkillPrivate(SkillData skillData, Vector3 position, Vector3 destination)
         {
-            ColliderData colliderData = skillData.Collider;
+            ColliderData colliderData = skillData.collider;
             BaseCollider collider = new CircleCollider(
-                query, colliderData.RelativePosition, colliderData.TimerTrigger,
-                colliderData.Duration, colliderData.Radius
+                query, colliderData.relativePosition, colliderData.timerTrigger,
+                colliderData.duration, colliderData.radius
             );
-            TrajectoryData trajectoryData = skillData.Trajectory;
-            BaseTrajectory trajectory = new BulletTrajectory(trajectoryData.BulletInitialSpeed,
-                trajectoryData.BulletAcceleration, position, destination
+            TrajectoryData trajectoryData = skillData.trajectory;
+            BaseTrajectory trajectory = new BulletTrajectory(trajectoryData.bulletInitSpeed,
+                trajectoryData.bulletInitSpeed, position, destination
             );
             GameObject go = null;
-            if (!string.IsNullOrEmpty(skillData.Projectile))
+            if (!string.IsNullOrEmpty(skillData.prefabName))
             {
-                go = await AssetBundleManager.GetAssetCached<GameObject>(skillData.Projectile);
-                if (projectilesName.Add(skillData.Projectile))
+                go = await AssetBundleManager.GetAssetCached<GameObject>(skillData.prefabName);
+                if (projectilesName.Add(skillData.prefabName))
                 {
                     Pool.RegisterPool(go, true);
                     projectilesObject.Add(go);
@@ -58,10 +60,13 @@ namespace _Game.GamePlay.SkillSystem
                 go.transform.position = position;
             }
 
-            DamageTickerData damageTicket = skillData.DamageTicker;
-            CastProjectileAction action = new CastProjectileAction(this, skillData.LifeTime, collider, trajectory,
-                DamageEntity, go, damageTicket.Type, damageTicket.DamageTickerInterval,
-                colliderData.LimitNumberCollisions, colliderData.ResetCollisionInterval
+            DamageTickerData damageTicket = skillData.damageTicker;
+            _KITSystem.SkillSystem.Core.DamageTickerType dtt = Enum.Parse<_KITSystem.SkillSystem.Core.DamageTickerType>(
+                damageTicket.type.ToString()
+            );
+            CastProjectileAction action = new CastProjectileAction(this, skillData.lifeTime, collider, trajectory,
+                DamageEntity, go, dtt, damageTicket.ticketInterval,
+                colliderData.limitNumberCollision, colliderData.resetCollisionInterval
             );
 
             if (go != null)

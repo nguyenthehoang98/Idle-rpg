@@ -7,7 +7,6 @@ namespace _Game.GamePlay
 {
     public class WeaponPedestal : MonoBehaviour
     {
-        public SkillAsset skillAsset;
         [SerializeField] private Transform pivot;     
         [SerializeField] private Vector2 offsetPosition;
         [SerializeField] private SpriteRenderer highlight;
@@ -75,10 +74,7 @@ namespace _Game.GamePlay
 
                     yield return null;
                     
-                    weapon.Attack(() =>
-                    {
-                        SkillTickable.CastSkill(skillAsset.SkillData, weapon.MuzzlePosition, destination); 
-                    });
+                    weapon.Attack(destination);
                 }
             }
         }
