@@ -1,4 +1,6 @@
+using _Game.Configs;
 using _Games.GamePlay.SpawnerSystem;
+using _KITSystem.Config;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using UnityEngine;
@@ -10,6 +12,7 @@ namespace _Games.GamePlay
     {
         [SerializeField] private TickSystemOwner owner;
         [SerializeField] private Pedestal pedestal;
+        public MonsterConfig monsterConfig;
 
         private SpawnerTickable spawner;
         private int totalMonsterAlive = 0;
@@ -30,6 +33,10 @@ namespace _Games.GamePlay
         private async void Start()
         {
             AssetBundleManager.SetLocationBundle(true);
+
+            await ConfigManager.Load(new string[] { "MonsterConfig" });
+
+            monsterConfig = ConfigManager.Get<MonsterConfig>();
             
             pedestal.SetWeaponDeltaTime(owner.TickInterval);
 

@@ -6,8 +6,6 @@ namespace _Games.GamePlay
 {
     public class Projectile : MonoBehaviour
     {
-        [SerializeField] private float duration = 0.5f;
-        [SerializeField] private float radius = 3;
         [SerializeField] private UnityEvent onStart;
         [SerializeField] private UnityEvent onComplete;
 

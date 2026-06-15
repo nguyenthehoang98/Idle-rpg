@@ -8,6 +8,7 @@ namespace _Games.GamePlay
     public class Monster : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer spriteRenderer;
+        [SerializeField] private Transform scaler;
 
         public static event Action<Monster> OnMonsterEnable;
         public static event Action<Monster> OnMonsterDisable;
