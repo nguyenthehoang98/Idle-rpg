@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using _Game.Configs;
+using _KITSystem.Entity;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Core;
@@ -10,7 +11,7 @@ using UnityEngine;
 
 namespace _Game.GamePlay.SkillSystem
 {
-    [System.Serializable]
+    [Serializable]
     public class SkillTickable : Spu, ITickable
     {
         private IQuery query = new EntityQuery();
@@ -33,6 +34,12 @@ namespace _Game.GamePlay.SkillSystem
                 instance.CastSkillPrivate(skillData, position, destination);
             else
                 Debug.LogError("Instance AnimationTickable is null");
+        }
+
+        public static void FindTarget(FindTargetType type, Vector2 center, float radius,
+            Func<int, bool> funcFilterEntity, out QueryResult result)
+        {
+            instance.query.FindTarget(type, center, radius, funcFilterEntity, out result);
         }
 
         async void CastSkillPrivate(SkillData skillData, Vector3 position, Vector3 destination)
@@ -92,6 +99,12 @@ namespace _Game.GamePlay.SkillSystem
 
         private bool DamageEntity(int entity)
         {
+            bool alive = EntityManager.IsEntityAlive(entity);
+
+            if (!alive) return false;
+            
+            AgentTickable.Remove(entity);
+            
             return true;
         }
 

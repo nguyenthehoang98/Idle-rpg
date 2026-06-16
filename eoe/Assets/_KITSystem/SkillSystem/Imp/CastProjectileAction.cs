@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using _KITSystem.Resource;
 using _KITSystem.SkillSystem.Core;
-using _KITSystem.Utils;
 using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Imp
@@ -25,9 +23,6 @@ namespace _KITSystem.SkillSystem.Imp
         private float collisionResetElapsedTime;
 
         private float damageTickerElapsedTime;
-
-        private Vector2 previousPosition;
-        private Vector2 direction;
 
         public CastProjectileAction(Spu spu, float lifeTime, BaseCollider collider, BaseTrajectory trajectory,
             Func<int, bool> onDamageEntity,
@@ -60,8 +55,6 @@ namespace _KITSystem.SkillSystem.Imp
             damageTickerElapsedTime += deltaTime;
 
             Vector2 position = this.trajectory.EvaluatePosition(deltaTime);
-            direction = MathUtils.NormalizeSafe(position - previousPosition);
-            previousPosition = position;
 
             projectile.transform.position = position;
 
@@ -69,7 +62,13 @@ namespace _KITSystem.SkillSystem.Imp
 
             List<int> results = collider.Collision(position);
 
-            if (results != null && results.Count > 0)
+            bool hit = results != null && results.Count > 0;
+
+#if UNITY_EDITOR
+            collider.Gizmos(position, hit ? Color.red : Color.green, deltaTime);
+#endif
+            
+            if (hit)
             {
                 foreach (var entity in results)
                 {

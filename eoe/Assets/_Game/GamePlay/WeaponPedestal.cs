@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using _Game.GamePlay.SkillSystem;
+using _KITSystem.Schedule;
+using _KITSystem.SkillSystem.Core;
 using _KITSystem.Utils;
 using UnityEngine;
 
@@ -26,10 +29,6 @@ namespace _Game.GamePlay
         [SerializeField] private Color weaponActive1;
         [SerializeField] private Color weaponActive2;
         [SerializeField] private Color weaponActive3;
-        [SerializeField] private float weaponRotationDuration = 0.15f;
-        [SerializeField] private AnimationCurve weaponRotationCurve;
-
-        private int currentLevel;
 
         public float DeltaTime { get; set; }
 
@@ -40,49 +39,13 @@ namespace _Game.GamePlay
 
         private void Start()
         {
-            StartCoroutine(AutoCast());
+            TickSystemOwner owner = FindAnyObjectByType<TickSystemOwner>();
+            DeltaTime = owner.TickInterval;
+            weapon.TimeScale = owner.Loop;
         }
         
-        private IEnumerator AutoCast()
-        {
-            while (true)
-            {
-                yield return new WaitForSeconds(2);
-                
-                if (currentLevel != 0)
-                {
-                    Vector3 position = pivot.position;
-                    Vector3 destination = new Vector3(RandomUtils.Range(-1f, 1f), RandomUtils.Range(-1f, 1f)).normalized * 5;
-                    Vector3 direction = (destination - position).normalized;
-                    
-                    float angleCurrent = weapon.EulerAngleZ;
-                    float angleTarget = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
-                    float elapsedTime = 0;
-                    while (elapsedTime < weaponRotationDuration)
-                    {
-                        elapsedTime += DeltaTime;
-                        float t = Mathf.Clamp01(elapsedTime / weaponRotationDuration);
-                        float s = weaponRotationCurve.Evaluate(t);
-                        float angle = Mathf.LerpAngle(angleCurrent, angleTarget, s);
-                        weapon.EulerAngleZ = angle;
-
-                        yield return new WaitForSeconds(DeltaTime);
-                    }
-
-                    weapon.transform.rotation = Quaternion.Euler(0, 0, angleTarget);
-
-                    yield return null;
-                    
-                    weapon.Attack(destination);
-                }
-            }
-        }
-
         public IEnumerator Setup(int level, float duration)
         {
-            currentLevel = level;
-            
             Vector3 position = pivot.position;
             Color weaponColor = weapon.Color;
             Color outlineColor = outline.color;
@@ -123,6 +86,8 @@ namespace _Game.GamePlay
             outline.color = outlineColorTarget;
             background.color = backgroundColorTarget;
             highlight.color = highlightColorTarget;
+
+            weapon.IsActivated = level > 0;
         }
     }
 }

@@ -48,9 +48,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillId: 10003
+  cooldown: 0
+  attackSpeed: 1
   muzzle: {fileID: 8204246242730764255}
   renderer: {fileID: 2737666712095415740}
   animator: {fileID: 5454211044248282011}
+  weaponRotationDuration: 0
+  weaponRotationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!95 &5454211044248282011
 Animator:
   serializedVersion: 7

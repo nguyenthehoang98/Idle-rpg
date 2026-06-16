@@ -20,6 +20,7 @@ namespace _KITSystem.Schedule
 
         public bool IsPaused { private get; set; } = true;
         public float TickInterval { get; private set; }
+        public float Loop => loop;
 
         public async Task Initialize()
         {

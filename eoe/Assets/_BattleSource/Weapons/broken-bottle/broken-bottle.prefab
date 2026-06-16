@@ -48,9 +48,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillId: 10002
+  cooldown: 0.1
+  attackSpeed: 1
+  triggerTime: 0.2
   muzzle: {fileID: 8874377710416636525}
   renderer: {fileID: 4770636224285169073}
   animator: {fileID: 1014593974388200124}
+  weaponRotationDuration: 0.15
+  weaponRotationCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!95 &1014593974388200124
 Animator:
   serializedVersion: 7

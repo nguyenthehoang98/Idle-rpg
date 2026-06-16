@@ -9,6 +9,7 @@ namespace _Game.GamePlay
     public class Monster : MonoBehaviour
     {
         static readonly int Death = Animator.StringToHash("Death");
+        static readonly int Initialize_ = Animator.StringToHash("Initialize");
         
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] private Transform scaler;
@@ -38,6 +39,7 @@ namespace _Game.GamePlay
 
             spriteRenderer.color = monsterData.color;
             scaler.transform.localScale = Vector3.one * monsterData.scale; 
+            animator.Play(Initialize_);
             
             OnMonsterEnable?.Invoke(this);
         }

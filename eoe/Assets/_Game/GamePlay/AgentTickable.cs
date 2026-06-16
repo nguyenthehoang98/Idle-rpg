@@ -16,8 +16,9 @@ namespace _Game.GamePlay
     {
         public float stopDistance = 1.6f;
         private List<Data> list = new List<Data>();
-        private Dictionary<Monster, Data> container = new Dictionary<Monster, Data>();
+        private Dictionary<Monster, Data> monsterToData = new Dictionary<Monster, Data>();
         private Dictionary<int, int> agentToEntity = new Dictionary<int, int>();
+        private Dictionary<int, Monster> entityToMonster = new Dictionary<int, Monster>();
         private Queue<Data> additionalQueue = new Queue<Data>();
         private Queue<Data> removeQueue = new Queue<Data>();
         
@@ -74,39 +75,50 @@ namespace _Game.GamePlay
             instance = null;
         }
 
-        public static void Add(Monster unit, MonsterData monsterData) => instance.AddPrivate(unit, monsterData);
+        public static void Add(Monster monster, MonsterData monsterData) => instance.AddPrivate(monster, monsterData);
 
         public static int Query(float2 position, float2 size, out AgentData[] agentsData)
         {
             return instance.QueryAgent(position, size, out agentsData);
         }
         
-        public static void Remove(Monster unit) => instance.RemovePrivate(unit);
+        public static void Remove(Monster monster) => instance.RemovePrivate(monster);
+
+        public static void Remove(int entity) => instance.RemovePrivate(entity);
 
         public static int GetEntity(int agent)
         {
             return instance.agentToEntity.GetValueOrDefault(agent, -1);
         }
 
-        void AddPrivate(Monster unit, MonsterData monsterData)
+        void AddPrivate(Monster monster, MonsterData monsterData)
         {
             int agent = CreateAgent(
-                unit.transform.position, monsterData.radius, monsterData.speed,
+                monster.transform.position, monsterData.radius, monsterData.speed,
                 stopDistance + monsterData.stopDistance).agent;
-            Data data = new Data(unit, agent);
+            Data data = new Data(monster, agent);
             int entity = EntityManager.NewEntity();
             
             agentToEntity.Add(agent, entity);
-            container.Add(unit, data);
+            monsterToData.Add(monster, data);
+            entityToMonster.Add(entity, monster);
             additionalQueue.Enqueue(data);
         }
         
-        void RemovePrivate(Monster unit)
+        void RemovePrivate(Monster monster)
         {
-            if (container.Remove(unit, out Data data))
+            if (monsterToData.Remove(monster, out Data data))
             {
                 removeQueue.Enqueue(data);
                 agentToEntity.Remove(data.Agent);
+            }
+        }
+        
+        void RemovePrivate(int entity)
+        {
+            if (entityToMonster.Remove(entity, out Monster monster))
+            {
+                RemovePrivate(monster);
             }
         }
 
