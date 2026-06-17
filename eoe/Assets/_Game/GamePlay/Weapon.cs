@@ -1,6 +1,8 @@
 using System.Collections;
 using _Game.Configs;
 using _Game.GamePlay.SkillSystem;
+using _Game.GamePlay.SoundSystem;
+using _KITSystem.Resource;
 using _KITSystem.SkillSystem.Core;
 using UnityEngine;
 
@@ -15,12 +17,11 @@ namespace _Game.GamePlay
         [SerializeField] private float weaponRotationDuration = 0.15f;
         [SerializeField] private AnimationCurve weaponRotationCurve;
 
-        private float Cooldown { get; set; } = 0.1f;
-        private float AttackSpeed { get; set; } = 1.0f;
         private float TimeScale { get; set; } = 1;
         private float DeltaTime { get; set; } = 0.0334f;
         public bool IsActivated { private get; set; } = false;
         private SkillData SkillData { get; set; }
+        private WeaponData WeaponData { get; set; }
         
         private Vector3 destination;
         private bool attacking;
@@ -32,9 +33,8 @@ namespace _Game.GamePlay
 
         public void Initialize(WeaponData weaponData, float timeScale, float deltaTime)
         {
+            WeaponData = weaponData;
             SkillData = weaponData.skillData;
-            Cooldown = weaponData.cooldown;
-            AttackSpeed = weaponData.attackSpeed;
             TimeScale = timeScale;
             DeltaTime = deltaTime;
             StartCoroutine(AutoAttack());
@@ -44,7 +44,7 @@ namespace _Game.GamePlay
         {
             while (true)
             {
-                yield return new WaitForSeconds(Cooldown / TimeScale);
+                yield return new WaitForSeconds(WeaponData.cooldown / TimeScale);
 
                 if (attacking || !IsActivated) continue;
 
@@ -108,7 +108,7 @@ namespace _Game.GamePlay
 
                 transform.eulerAngles = new Vector3(0, 0, angleTo);
                 animator.Play(Attack, 0, 0);
-                animator.speed = TimeScale * AttackSpeed;
+                animator.speed = TimeScale * WeaponData.attackSpeed;
                 attacking = true;
                 yield return null;
             }
@@ -119,11 +119,19 @@ namespace _Game.GamePlay
             return true;
         }
 
-        public void ExecutePrivate()
+        public async void ExecutePrivate()
         {
             if (attacking)
             {
                 SkillTickable.CastSkill(SkillData, muzzle != null ? muzzle.position : Vector3.zero, destination);
+                
+                AudioClip clip = null;
+                if (!string.IsNullOrEmpty(WeaponData.attackAudioClip))
+                {
+                    clip = await AssetBundleManager.GetAssetCached<AudioClip>(WeaponData.attackAudioClip);
+                }
+                SoundManager.Instance.PlayOneShot(clip, WeaponData.attackVolume);
+                
                 attacking = false;
             }
         }

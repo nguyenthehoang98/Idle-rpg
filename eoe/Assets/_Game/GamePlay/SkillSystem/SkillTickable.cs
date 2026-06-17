@@ -165,9 +165,9 @@ namespace _Game.GamePlay.SkillSystem
 
                     health.CurrentHealth -= damage;
 
-                    if (AgentTickable.TryGetMonster(e, out Monster monster))
+                    if (health.CurrentHealth > 0 && AgentTickable.TryGetMonster(e, out Monster monster))
                     {
-                        monster.BeBit();
+                        monster.BeHit();
                     }
             
                     OnPostDamage?.Invoke(skillData, damage);
@@ -189,9 +189,9 @@ namespace _Game.GamePlay.SkillSystem
             
                 health.CurrentHealth -= damage;
 
-                if (AgentTickable.TryGetMonster(entity, out Monster monster))
+                if (health.CurrentHealth > 0 && AgentTickable.TryGetMonster(entity, out Monster monster))
                 {
-                    monster.BeBit();
+                    monster.BeHit();
                 }
             
                 OnPostDamage?.Invoke(skillData, damage);

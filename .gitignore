@@ -5,3 +5,5 @@ eoe/UserSettings
 *.csproj
 eoe/obj
 eoe/.idea
+eoe/Assets/AudioClip
+eoe/Assets/AudioClip.meta

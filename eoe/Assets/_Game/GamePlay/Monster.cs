@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using _Game.Configs;
+using _Game.GamePlay.SoundSystem;
 using _KITSystem.Resource;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ namespace _Game.GamePlay
         public static event Action<Monster> OnMonsterEnable;
         public static event Action<Monster> OnMonsterDisable;
 
+        private MonsterData monsterData;
         private Vector3 targetPosition;
         private Vector3 previousPosition;
         private float elapsedTime;
@@ -57,12 +59,13 @@ namespace _Game.GamePlay
             transform.position = Vector3.Lerp(previousPosition, targetPosition, Mathf.Clamp01(elapsedTime / deltaTime));
         }
 
-        public void Initialize(MonsterData monsterData)
+        public void Initialize(MonsterData data)
         {
-            AgentTickable.Add(this, monsterData);
+            AgentTickable.Add(this, data);
 
-            spriteRenderer.color = monsterData.color;
-            scaler.transform.localScale = Vector3.one * monsterData.scale; 
+            monsterData = data;
+            spriteRenderer.color = data.color;
+            scaler.transform.localScale = Vector3.one * data.scale; 
             animator.Play(Initialize_);
             
             OnMonsterEnable?.Invoke(this);
@@ -70,14 +73,30 @@ namespace _Game.GamePlay
             isInitialized = true;
         }
 
-        public void BeBit()
+        public async void BeHit()
         {
             animator.Play(BeHit_, 0, 0);
+
+            AudioClip clip = null;
+            if (!string.IsNullOrEmpty(monsterData.beHitAudioClip))
+            {
+                clip = await AssetBundleManager.GetAssetCached<AudioClip>(monsterData.beHitAudioClip);
+            }
+
+            SoundManager.Instance.PlayOneShot(clip, monsterData.beHitVolume);
         }
 
-        public void Destroy()
+        public async void Destroy()
         {
             isInitialized = false;
+
+            AudioClip clip = null;
+            if (!string.IsNullOrEmpty(monsterData.deathAudioClip))
+            {
+                clip = await AssetBundleManager.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
+            }
+
+            SoundManager.Instance.PlayOneShot(clip, monsterData.deathVolume);
             
             AgentTickable.Remove(this);
             

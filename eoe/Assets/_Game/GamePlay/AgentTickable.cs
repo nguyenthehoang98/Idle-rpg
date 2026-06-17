@@ -70,6 +70,7 @@ namespace _Game.GamePlay
         public override void Dispose()
         {
             base.Dispose();
+            
             instance = null;
         }
 
