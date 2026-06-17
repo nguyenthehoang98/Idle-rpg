@@ -24,10 +24,6 @@ namespace _Game.GamePlay
         [SerializeField] private Color outlineActive3;
         [Header("Weapon")]
         [SerializeField] private Transform weaponParent;
-        [SerializeField] private Color weaponInactive;
-        [SerializeField] private Color weaponActive1;
-        [SerializeField] private Color weaponActive2;
-        [SerializeField] private Color weaponActive3;
 
         public float DeltaTime { get; set; }
 
@@ -61,10 +57,6 @@ namespace _Game.GamePlay
             Color highlightColorTarget = highlightColor;
             highlightColorTarget.a = level == 3 ? 1 : 0;
             Color backgroundColorTarget = level == 0 ? backgroundInactive : backgroundActive;
-            Color weaponColorTarget = weaponInactive;
-            if (level == 1) weaponColorTarget = weaponActive1;
-            else if (level == 2) weaponColorTarget = weaponActive2;
-            else if (level == 3) weaponColorTarget = weaponActive3;
             Color outlineColorTarget = outlineInactive;
             if (level == 1) outlineColorTarget = outlineActive1;
             else if (level == 2) outlineColorTarget = outlineActive2;

@@ -8,14 +8,6 @@ namespace _Game.GamePlay
     {
         [SerializeField] private WeaponPedestal[] weapons = new WeaponPedestal[0];
 
-        private void Start()
-        {
-            for (int i = 0; i < weapons.Length; i++)
-            {
-                StartCoroutine(weapons[i].Setup(0, 0));
-            }
-        }
-
         public async UniTask Initialize(WeaponData[] weaponsData, float timeScale, float deltaTime)
         {
             for (int i = 0; i < weapons.Length; i++)
@@ -23,7 +15,7 @@ namespace _Game.GamePlay
                 var pedestal = weapons[i];
                 if (i < weaponsData.Length)
                     await pedestal.Initialize(weaponsData[i], timeScale, deltaTime);
-                StartCoroutine(pedestal.Setup(0, 0));
+                StartCoroutine(pedestal.Setup(i, 0));
             }
         }
 
