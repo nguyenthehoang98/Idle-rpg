@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Diagnostics;
 using _Game.Configs;
 using _Game.GamePlay.SkillSystem;
 using _KITSystem.Config;
@@ -94,8 +92,14 @@ namespace _Game.GamePlay
                 float angleTo = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
                 float elapsedTime = 0;
+                
+                float angleDelta = Mathf.Abs(Mathf.DeltaAngle(angleFrom, angleTo));
 
-                float dynamicDuration = Mathf.Lerp(0, weaponRotationDuration, Mathf.Abs(angleFrom - angleTo) / 180f);
+                float dynamicDuration = Mathf.Lerp(
+                    0f,
+                    weaponRotationDuration,
+                    angleDelta / 180f
+                );
 
                 while (elapsedTime <= dynamicDuration)
                 {
