@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
+using System.Diagnostics;
 using _Game.Configs;
 using _Game.GamePlay.SkillSystem;
 using _KITSystem.Config;
 using _KITSystem.SkillSystem.Core;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace _Game.GamePlay
 {
@@ -57,8 +59,6 @@ namespace _Game.GamePlay
 
                 if (attacking || !IsActivated) continue;
 
-                Debug.Log($"{Time.time} rot 1");
-                
                 FindTargetType type = FindTargetType.Filter;
                 if(skillData.findTarget.type == FindTargetData.FilterType.Farthest)
                     type = FindTargetType.Farthest;
@@ -83,7 +83,10 @@ namespace _Game.GamePlay
                     destination = result.Secondary.Position;
                 }
 
-                if (entity == -1) continue;
+                if (entity == -1)
+                {
+                    continue;
+                }
 
                 Vector3 direction = destination - position;
                 
@@ -109,13 +112,9 @@ namespace _Game.GamePlay
                 }
                 
                 transform.eulerAngles = new Vector3(0, 0, angleTo);
-                
-                animator.Play(ATTACK);
+                animator.Play(ATTACK, 0, 0);
                 animator.speed = TimeScale * attackSpeed;
                 attacking = true;
-
-                Debug.Log($"{Time.time} rot 2");
-                
                 yield return null;
             }
         }
@@ -129,7 +128,6 @@ namespace _Game.GamePlay
         {
             if (attacking)
             {
-                Debug.Log($"{Time.time} atk");
                 SkillTickable.CastSkill(skillData, muzzle.position, destination); 
                 attacking = false;
             }
