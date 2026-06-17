@@ -134,17 +134,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9793e5c503604adeb230652f6e6be7d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillId: 10001
-  cooldown: 0.1
-  attackSpeed: 1
-  triggerTime: 0.2
   muzzle: {fileID: 6645185820330861347}
-  renderer: {fileID: 8073928009660662538}
   animator: {fileID: 4867602730252614029}
-  weaponRotationDuration: 0.15
+  weaponRotationDuration: 0.1
   weaponRotationCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -158,7 +171,7 @@ Animator:
   m_GameObject: {fileID: 2918972232330829932}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: d9e093255072bf84c84a519fdac05a18, type: 2}
+  m_Controller: {fileID: 9100000, guid: 5a214e032328a8842a26ed04fcc6b09f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

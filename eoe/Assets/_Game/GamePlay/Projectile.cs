@@ -1,17 +1,24 @@
 using _KITSystem.Resource;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace _Game.GamePlay
 {
     public class Projectile : MonoBehaviour
     {
-        [SerializeField] private UnityEvent onStart;
-        [SerializeField] private UnityEvent onComplete;
-
-        public void Initialize() => onStart.Invoke();
+        static readonly int Death = Animator.StringToHash("Death");
+        static readonly int Initialize_ = Animator.StringToHash("Initialize");
         
-        public void Destroy() => onComplete?.Invoke();
+        [SerializeField] private Animator animator;
+
+        public void Initialize()
+        {
+            animator.Play(Initialize_);
+        }
+
+        public void Destroy()
+        {
+            animator.Play(Death);
+        }
 
         public void Release()
         {

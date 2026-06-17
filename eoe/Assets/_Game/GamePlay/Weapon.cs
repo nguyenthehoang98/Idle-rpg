@@ -12,9 +12,7 @@ namespace _Game.GamePlay
     {
         private static readonly int Attack = Animator.StringToHash("Attack");
 
-
         [SerializeField] private Transform muzzle;
-        [SerializeField] private new SpriteRenderer renderer;
         [SerializeField] private Animator animator;
         [SerializeField] private float weaponRotationDuration = 0.15f;
         [SerializeField] private AnimationCurve weaponRotationCurve;
@@ -25,14 +23,9 @@ namespace _Game.GamePlay
         private float DeltaTime { get; set; } = 0.0334f;
         public bool IsActivated { private get; set; } = false;
         private SkillData SkillData { get; set; }
+        
         private Vector3 destination;
         private bool attacking;
-
-        public Color Color
-        {
-            get => renderer.color;
-            set => renderer.color = value;
-        }
 
         private void Awake()
         {

@@ -58,7 +58,6 @@ namespace _Game.GamePlay
         public IEnumerator Setup(int level, float duration)
         {
             Vector3 position = pivot.position;
-            Color weaponColor = weapon != null ? weapon.Color : Color.clear;
             Color outlineColor = outline.color;
             Color highlightColor = highlight.color;
             Color backgroundColor = background.color;
@@ -84,7 +83,6 @@ namespace _Game.GamePlay
                 float t = Mathf.Clamp01(elapsedTime / duration);
 
                 pivot.position = Vector3.Lerp(position, positionTarget, t);
-                if (weapon != null) weapon.Color = Color.Lerp(weaponColor, weaponColorTarget, t);
                 outline.color = Color.Lerp(outlineColor, outlineColorTarget, t);
                 background.color = Color.Lerp(backgroundColor, backgroundColorTarget, t);
                 highlight.color = Color.Lerp(highlightColor, highlightColorTarget, t);
@@ -93,7 +91,6 @@ namespace _Game.GamePlay
             }
 
             pivot.position = positionTarget;
-            if (weapon != null) weapon.Color = weaponColorTarget;
             outline.color = outlineColorTarget;
             background.color = backgroundColorTarget;
             highlight.color = highlightColorTarget;
