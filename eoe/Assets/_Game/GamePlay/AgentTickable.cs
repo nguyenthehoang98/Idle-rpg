@@ -48,9 +48,7 @@ namespace _Game.GamePlay
                 {
                     if (TryGetAgent(data.Agent, out AgentData agent))
                     {
-                        data.Monster.transform.position = new Vector3(agent.position.x, agent.position.y);
-
-                        //if (agent.isStopped) RemovePrivate(data.Monster);
+                        data.Monster.SetPosition(new Vector3(agent.position.x, agent.position.y), deltaTime);
                     }
                 }
                 else
@@ -131,9 +129,8 @@ namespace _Game.GamePlay
 
         class Data
         {
-            public Monster Monster;
-            
-            public int Agent;
+            public readonly Monster Monster;
+            public readonly int Agent;
 
             public Data(Monster monster, int agent)
             {

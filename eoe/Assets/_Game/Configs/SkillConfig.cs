@@ -16,6 +16,7 @@ namespace _Game.Configs
         [JsonProperty] private List<TrajectoryData> trajectories = new List<TrajectoryData>();
         [JsonProperty] private List<FindTargetData> findTargets = new List<FindTargetData>();
         [JsonProperty] private List<DamageTickerData> damageTickers = new List<DamageTickerData>();
+        [JsonProperty] private List<ExtraData> extras = new List<ExtraData>();
 
         private Dictionary<int, SkillData> cached;
         
@@ -91,6 +92,20 @@ namespace _Game.Configs
                 if (!found)
                     Debug.LogError($"Not found skill at '{skill.skillId}', damageTicker id '{skill.damageTickerId}'");
                 
+                found = false;
+                foreach (var e in extras)
+                {
+                    if (skill.extraId == e.id)
+                    {
+                        skill.extra = e;
+                        found = true;
+                        break;
+                    }
+                }
+                
+                if (!found)
+                    Debug.LogError($"Not found skill at '{skill.skillId}', extra id '{skill.extraId}'");
+                
 
                 skills[i] = skill;
             }
@@ -118,11 +133,31 @@ namespace _Game.Configs
         [JsonProperty, NonSerialized] public string trajectoryId;
         [JsonProperty, NonSerialized] public string colliderId;
         [JsonProperty, NonSerialized] public string damageTickerId;
+        [JsonProperty, NonSerialized] public string extraId;
 
         public FindTargetData findTarget;
         public TrajectoryData trajectory;
         public ColliderData collider;
         public DamageTickerData damageTicker;
+        
+        // runtime
+        public ExtraData extra;
+    }
+
+    [Serializable]
+    public struct ExtraData
+    {
+        [NonSerialized] public string id;
+        
+        public int spreadProjectileCount;
+        public float spreadAngleStep;
+        
+        public int parallelProjectileCount;
+        public float parallelDistanceStep;
+        
+        public bool isExplosive;
+        public float explosiveRadius;
+        public string explosivePrefabName;
     }
 
     [Serializable]

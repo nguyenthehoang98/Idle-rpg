@@ -13,7 +13,7 @@ namespace _KITSystem.SkillSystem.Imp
         private readonly float damageTickerInterval;
         private readonly int limitNumberCollisions;
         private readonly float resetCollisionInterval;
-        private readonly Func<int, bool> onDamageEntity;
+        private readonly Func<int, Vector2, bool> onDamageEntity;
 
         public event Action OnComplete;
         
@@ -25,7 +25,7 @@ namespace _KITSystem.SkillSystem.Imp
         private float damageTickerElapsedTime;
 
         public CastProjectileAction(Spu spu, float lifeTime, BaseCollider collider, BaseTrajectory trajectory,
-            Func<int, bool> onDamageEntity,
+            Func<int, Vector2, bool> onDamageEntity,
             GameObject projectile, DamageTickerType damageTickerType, float damageTickerInterval,
             int limitNumberCollisions, float resetCollisionInterval) : base(spu, lifeTime)
         {
@@ -74,7 +74,7 @@ namespace _KITSystem.SkillSystem.Imp
                 {
                     if (damageTickerType == DamageTickerType.DamageOverTime && !this.collisions.Add(entity)) continue;
 
-                    if (!TryDamage(entity)) continue;
+                    if (!TryDamage(position, entity)) continue;
 
                     totalCollisions++;
 
@@ -97,15 +97,15 @@ namespace _KITSystem.SkillSystem.Imp
             OnComplete = null;
         }
 
-        private bool TryDamage(int entity)
+        private bool TryDamage(Vector2 position, int entity)
         {
             switch (damageTickerType)
             {
                 case DamageTickerType.Instant:
-                    return Damage(entity);
+                    return Damage(position, entity);
                 case DamageTickerType.DamageOverTime:
                     if (damageTickerElapsedTime < damageTickerInterval) return false;
-                    if (Damage(entity))
+                    if (Damage(position, entity))
                     {
                         damageTickerElapsedTime = 0;
                         return true;
@@ -118,9 +118,9 @@ namespace _KITSystem.SkillSystem.Imp
             }
         }
 
-        private bool Damage(int entity)
+        private bool Damage(Vector2 position, int entity)
         {
-            return onDamageEntity(entity);
+            return onDamageEntity(entity, position);
         }
     }
 }

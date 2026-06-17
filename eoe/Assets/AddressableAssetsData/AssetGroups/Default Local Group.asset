@@ -55,6 +55,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a49d6006a6b616e4283e750a4cda8744
+    m_Address: aura.1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c41c2dc3a96aaff46ba52cf76f173dbf
     m_Address: broken-bottle.weapon
     m_ReadOnly: 0

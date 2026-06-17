@@ -18,6 +18,12 @@ namespace _Game.GamePlay
 
         public static event Action<Monster> OnMonsterEnable;
         public static event Action<Monster> OnMonsterDisable;
+
+        private Vector3 targetPosition;
+        private Vector3 previousPosition;
+        private float elapsedTime;
+        private float deltaTime;
+        private bool isInitialized;
   
         void Start()
         {
@@ -34,6 +40,23 @@ namespace _Game.GamePlay
             }
         }
 
+        public void SetPosition(Vector3 position, float deltaTime)
+        {
+            this.previousPosition = transform.position;
+            this.targetPosition = position;
+            this.deltaTime = deltaTime;
+            this.elapsedTime = 0;
+        }
+
+        private void FixedUpdate()
+        {
+            if (!isInitialized) return;
+
+            elapsedTime += Time.fixedDeltaTime;
+
+            transform.position = Vector3.Lerp(previousPosition, targetPosition, Mathf.Clamp01(elapsedTime / deltaTime));
+        }
+
         public void Initialize(MonsterData monsterData)
         {
             AgentTickable.Add(this, monsterData);
@@ -43,6 +66,8 @@ namespace _Game.GamePlay
             animator.Play(Initialize_);
             
             OnMonsterEnable?.Invoke(this);
+            
+            isInitialized = true;
         }
 
         public void BeBit()
@@ -52,6 +77,8 @@ namespace _Game.GamePlay
 
         public void Destroy()
         {
+            isInitialized = false;
+            
             AgentTickable.Remove(this);
             
             OnMonsterDisable?.Invoke(this);
