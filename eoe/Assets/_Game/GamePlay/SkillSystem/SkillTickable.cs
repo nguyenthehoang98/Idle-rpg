@@ -18,8 +18,8 @@ namespace _Game.GamePlay.SkillSystem
     {
         private IQuery query = new EntityQuery();
 
-        private HashSet<GameObject> projectilesObject = new HashSet<GameObject>();
-        private HashSet<string> projectilesName = new HashSet<string>();
+        private HashSet<GameObject> objects = new HashSet<GameObject>();
+        private HashSet<string> objectsName = new HashSet<string>();
 
         public event Action<SkillData, int> OnPostDamage; 
         
@@ -103,10 +103,10 @@ namespace _Game.GamePlay.SkillSystem
             if (!string.IsNullOrEmpty(skillData.prefabName))
             {
                 go = await AssetBundleManager.GetAssetCached<GameObject>(skillData.prefabName);
-                if (projectilesName.Add(skillData.prefabName))
+                if (objectsName.Add(skillData.prefabName))
                 {
                     Pool.RegisterPool(go, true);
-                    projectilesObject.Add(go);
+                    objects.Add(go);
                 }
 
                 go = Pool.Instantiate(go);
@@ -171,6 +171,8 @@ namespace _Game.GamePlay.SkillSystem
                     }
             
                     OnPostDamage?.Invoke(skillData, damage);
+                    
+                    SpawnTextDamage(damage, position);
             
                     if (health.CurrentHealth <= 0) AgentTickable.Remove(e);
                 }
@@ -193,6 +195,8 @@ namespace _Game.GamePlay.SkillSystem
                 }
             
                 OnPostDamage?.Invoke(skillData, damage);
+                
+                SpawnTextDamage(damage, position);
             
                 if (health.CurrentHealth <= 0) AgentTickable.Remove(entity);
             }
@@ -206,7 +210,7 @@ namespace _Game.GamePlay.SkillSystem
             
             GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(prefabName);
 
-            if (projectilesName.Add(prefabName))
+            if (objectsName.Add(prefabName))
             {
                 Pool.RegisterPool(go, true);
             }
@@ -216,6 +220,20 @@ namespace _Game.GamePlay.SkillSystem
             
             Aura aura = o.GetComponent<Aura>();
             aura.Scale(radius);
+        }
+
+        private async void SpawnTextDamage(int damage, Vector3 position)
+        {
+            string textDamage = "TextDamage";
+            GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(textDamage);
+            if (objectsName.Add(textDamage))
+            {
+                objects.Add(go);
+                Pool.RegisterPool(go, true);
+            }
+            TextDamage ins = Pool.Instantiate(go).GetComponent<TextDamage>();
+            ins.transform.position = position;
+            ins.Execute(damage);
         }
         
         private void Gizmos(Vector3 position, float radius, Color color, float deltaTime)
@@ -237,19 +255,19 @@ namespace _Game.GamePlay.SkillSystem
         {
             base.Dispose();
 
-            foreach (var name in projectilesName)
+            foreach (var name in objectsName)
             {
                 AssetBundleManager.UnCache(name);
             }
 
-            projectilesName = null;
+            objectsName = null;
 
-            foreach (var go in projectilesObject)
+            foreach (var go in objects)
             {
                 Pool.UnRegisterPool(go);
             }
 
-            projectilesObject = null;
+            objects = null;
 
             instance = null;
         }

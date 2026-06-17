@@ -1,0 +1,25 @@
+using _KITSystem.Resource;
+using TMPro;
+using UnityEngine;
+
+namespace _Game.GamePlay
+{
+    public class TextDamage : MonoBehaviour
+    {
+        private static readonly int Play = Animator.StringToHash("Play");
+        
+        [SerializeField] private TextMeshProUGUI txtDamage;
+        [SerializeField] private Animator animator;
+
+        public void Execute(int damage)
+        {
+            txtDamage.text = damage.ToString();
+            animator.Play(Play, 0, 0);
+        }
+        
+        public void Release()
+        {
+            Pool.Destroy(gameObject);
+        } 
+    }
+}
