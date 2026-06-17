@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: -8131404885806324784}
   - component: {fileID: 4867602730252614029}
   m_Layer: 0
-  m_Name: barbed-spear
+  m_Name: barbed-spear.weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

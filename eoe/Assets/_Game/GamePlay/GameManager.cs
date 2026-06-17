@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using _Game.Configs;
 using _Game.GamePlay.SpawnerSystem;
 using _KITSystem.Config;
 using _KITSystem.Resource;
@@ -11,7 +13,8 @@ namespace _Game.GamePlay
     {
         [SerializeField] private TickSystemOwner owner;
         [SerializeField] private Pedestal pedestal;
-
+        [SerializeField] private int[] weaponsId = new int[4];
+        
         private Pedestal pedestalInstance;
         private SpawnerTickable spawner;
         private int totalMonsterAlive = 0;
@@ -32,14 +35,25 @@ namespace _Game.GamePlay
         {
             AssetBundleManager.SetLocationBundle(true);
 
-            await ConfigManager.Load(new string[] { "MonsterConfig", "LevelConfig", "SkillConfig" });
+            await ConfigManager.Load(new string[] { "MonsterConfig", "LevelConfig", "WeaponConfig" });
 
-            spawner.SetLevel(1);
+            MonsterConfig monsterConfig = ConfigManager.Get<MonsterConfig>();
+            LevelConfig levelConfig = ConfigManager.Get<LevelConfig>();
+            levelConfig.TryGetLevelData(1, out LevelData levelData);
+            spawner.SetLevel(levelData, monsterConfig);
             
             pedestalInstance = Object.Instantiate(pedestal, transform);
             pedestalInstance.SetWeaponDeltaTime(owner.TickInterval);
             owner.OnScaleTimeChanged += pedestalInstance.SetWeaponDeltaTime;
 
+            WeaponConfig weaponConfig = ConfigManager.Get<WeaponConfig>();
+            List<WeaponData> datas = new List<WeaponData>();
+            foreach (var weaponId in weaponsId)
+            {
+                if (weaponConfig.TryGetWeaponData(weaponId, out WeaponData weaponData))
+                    datas.Add(weaponData);
+            }
+            await pedestalInstance.Initialize(datas.ToArray(), owner.Loop, owner.TickInterval);
             await owner.Initialize();
         }
 

@@ -30,18 +30,14 @@ namespace _Game.GamePlay.SpawnerSystem
         private MonsterConfig monsterConfig;
         private LevelData levelData;
         
-        public bool SetLevel(int levelId)
+        public void SetLevel(LevelData levelData, MonsterConfig monsterConfig)
         {
-            bool found = ConfigManager.Get<LevelConfig>().TryGetLevelData(levelId, out levelData);
-            if (!found)
-                Debug.LogError($"Not found level data '{levelId}'");
-            return found;
+            this.levelData = levelData;
+            this.monsterConfig = monsterConfig;
         }
 
         public async Task Initialize()
         {
-            monsterConfig = ConfigManager.Get<MonsterConfig>();
-
             foreach (var waveData in levelData.waves)
             {
                 foreach (var spawnData in waveData.spawns)

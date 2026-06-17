@@ -1,10 +1,14 @@
 using System;
 using System.Collections;
+using _Game.Configs;
 using _Game.GamePlay.SkillSystem;
+using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Core;
 using _KITSystem.Utils;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace _Game.GamePlay
 {
@@ -24,7 +28,7 @@ namespace _Game.GamePlay
         [SerializeField] private Color outlineActive2;
         [SerializeField] private Color outlineActive3;
         [Header("Weapon")]
-        [SerializeField] private Weapon weapon;
+        [SerializeField] private Transform weaponParent;
         [SerializeField] private Color weaponInactive;
         [SerializeField] private Color weaponActive1;
         [SerializeField] private Color weaponActive2;
@@ -32,22 +36,29 @@ namespace _Game.GamePlay
 
         public float DeltaTime { get; set; }
 
+        private Weapon weapon;
+
         private void Awake()
         {
             DeltaTime = Time.deltaTime;
         }
 
-        private void Start()
+        public async UniTask Initialize(WeaponData weaponData, float timeScale, float deltaTime)
         {
-            TickSystemOwner owner = FindAnyObjectByType<TickSystemOwner>();
-            DeltaTime = owner.TickInterval;
-            weapon.TimeScale = owner.Loop;
+            DeltaTime = deltaTime;
+            var go = await AssetBundleManager.GetAsset<GameObject>(weaponData.prefabName);
+            weapon = Object.Instantiate(go, weaponParent).GetComponent<Weapon>();
+            weapon.transform.localPosition = Vector3.zero;
+            weapon.transform.rotation = Quaternion.identity;
+            weapon.transform.localScale = Vector3.one;
+            weapon.Initialize(weaponData, timeScale, deltaTime);
+            await UniTask.CompletedTask;
         }
-        
+
         public IEnumerator Setup(int level, float duration)
         {
             Vector3 position = pivot.position;
-            Color weaponColor = weapon.Color;
+            Color weaponColor = weapon != null ? weapon.Color : Color.clear;
             Color outlineColor = outline.color;
             Color highlightColor = highlight.color;
             Color backgroundColor = background.color;
@@ -64,30 +75,30 @@ namespace _Game.GamePlay
             if (level == 1) outlineColorTarget = outlineActive1;
             else if (level == 2) outlineColorTarget = outlineActive2;
             else if (level == 3) outlineColorTarget = outlineActive3;
-            
+
             float elapsedTime = 0;
             while (elapsedTime < duration)
             {
                 elapsedTime += DeltaTime;
-                        
+
                 float t = Mathf.Clamp01(elapsedTime / duration);
-                
+
                 pivot.position = Vector3.Lerp(position, positionTarget, t);
-                weapon.Color = Color.Lerp(weaponColor, weaponColorTarget, t);
+                if (weapon != null) weapon.Color = Color.Lerp(weaponColor, weaponColorTarget, t);
                 outline.color = Color.Lerp(outlineColor, outlineColorTarget, t);
                 background.color = Color.Lerp(backgroundColor, backgroundColorTarget, t);
                 highlight.color = Color.Lerp(highlightColor, highlightColorTarget, t);
-                
+
                 yield return new WaitForSeconds(DeltaTime);
             }
-            
+
             pivot.position = positionTarget;
-            weapon.Color = weaponColorTarget;
+            if (weapon != null) weapon.Color = weaponColorTarget;
             outline.color = outlineColorTarget;
             background.color = backgroundColorTarget;
             highlight.color = highlightColorTarget;
 
-            weapon.IsActivated = level > 0;
+            if (weapon != null) weapon.IsActivated = level > 0;
         }
     }
 }

@@ -80,6 +80,10 @@ namespace _Game.Configs
             }
         }
 
+        public void OnValidateLinkConfig()
+        {
+        }
+
         public bool TryGetLevelData(int levelId, out LevelData levelData)
         {
             return cached.TryGetValue(levelId, out levelData);

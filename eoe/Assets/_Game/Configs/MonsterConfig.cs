@@ -63,6 +63,10 @@ namespace _Game.Configs
             }
         }
 
+        public void OnValidateLinkConfig()
+        {
+        }
+
         public bool TryGetMonsterData(int monsterId, out MonsterData monsterData)
         {
             return cached.TryGetValue(monsterId, out monsterData);

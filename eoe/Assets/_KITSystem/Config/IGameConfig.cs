@@ -4,5 +4,6 @@
     {
         void OnMappingValue();
         void OnPostImported();
+        void OnValidateLinkConfig();
     }
 }

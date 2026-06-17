@@ -1,3 +1,5 @@
+using _Game.Configs;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace _Game.GamePlay
@@ -6,18 +8,22 @@ namespace _Game.GamePlay
     {
         [SerializeField] private WeaponPedestal[] weapons = new WeaponPedestal[0];
 
-        private Coroutine[] coroutines;
-
-        private void Awake()
-        {
-            coroutines = new Coroutine[weapons.Length];
-        }
-
         private void Start()
         {
             for (int i = 0; i < weapons.Length; i++)
             {
                 StartCoroutine(weapons[i].Setup(0, 0));
+            }
+        }
+
+        public async UniTask Initialize(WeaponData[] weaponsData, float timeScale, float deltaTime)
+        {
+            for (int i = 0; i < weapons.Length; i++)
+            {
+                var pedestal = weapons[i];
+                if (i < weaponsData.Length)
+                    await pedestal.Initialize(weaponsData[i], timeScale, deltaTime);
+                StartCoroutine(pedestal.Setup(0, 0));
             }
         }
 

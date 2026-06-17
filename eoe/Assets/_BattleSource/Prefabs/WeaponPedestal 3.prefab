@@ -205,7 +205,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8226899081841784857}
-  - {fileID: 3834494695930406061}
+  - {fileID: 6344909512719989277}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8762900941781747699
@@ -220,7 +220,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44c97a275e6e4419a9fbf930846dd379, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillAsset: {fileID: 11400000, guid: 0742e217c756d1c418f4b9e10eef0227, type: 2}
   pivot: {fileID: 841717453720100740}
   offsetPosition: {x: 0, y: -0.1}
   highlight: {fileID: 3590392825686658531}
@@ -232,45 +231,11 @@ MonoBehaviour:
   outlineActive1: {r: 0.16078432, g: 0.40000004, b: 0.16078432, a: 1}
   outlineActive2: {r: 0.2392157, g: 0.8000001, b: 0.2392157, a: 1}
   outlineActive3: {r: 0, g: 0, b: 0, a: 1}
-  weapon: {fileID: 1691276963125436459}
+  weaponParent: {fileID: 6344909512719989277}
   weaponInactive: {r: 0.09019608, g: 0.10196079, b: 0.09019608, a: 1}
   weaponActive1: {r: 0.16078432, g: 0.40000004, b: 0.16078432, a: 1}
   weaponActive2: {r: 0.2392157, g: 0.8000001, b: 0.2392157, a: 1}
   weaponActive3: {r: 0.2392157, g: 0.8000001, b: 0.2392157, a: 1}
-  weaponRotationDuration: 0.2
-  weaponRotationCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 3.7920797
-      outSlope: 3.7920797
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.0877193
-    - serializedVersion: 3
-      time: 0.6
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!1 &6561233737454718495
 GameObject:
   m_ObjectHideFlags: 0
@@ -360,76 +325,34 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1001 &9185339283900818951
-PrefabInstance:
+--- !u!1 &9002608647240546124
+GameObject:
   m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 841717453720100740}
-    m_Modifications:
-    - target: {fileID: 2860664647740254950, guid: c41c2dc3a96aaff46ba52cf76f173dbf, type: 3}
-      propertyPath: m_Name
-      value: broken-bottle prefab
-      objectReference: {fileID: 0}
-    - target: {fileID: 5354285131652940458, guid: c41c2dc3a96aaff46ba52cf76f173dbf, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5354285131652940458, guid: c41c2dc3a96aaff46ba52cf76f173dbf, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 5354285131652940458, guid: c41c2dc3a96aaff46ba52cf76f173dbf, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5354285131652940458, guid: c41c2dc3a96aaff46ba52cf76f173dbf, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5354285131652940458, guid: c41c2dc3a96aaff46ba52cf76f173dbf, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5354285131652940458, guid: c41c2dc3a96aaff46ba52cf76f173dbf, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5354285131652940458, guid: c41c2dc3a96aaff46ba52cf76f173dbf, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5354285131652940458, guid: c41c2dc3a96aaff46ba52cf76f173dbf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5354285131652940458, guid: c41c2dc3a96aaff46ba52cf76f173dbf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5354285131652940458, guid: c41c2dc3a96aaff46ba52cf76f173dbf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: c41c2dc3a96aaff46ba52cf76f173dbf, type: 3}
---- !u!114 &1691276963125436459 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7494128345483691564, guid: c41c2dc3a96aaff46ba52cf76f173dbf, type: 3}
-  m_PrefabInstance: {fileID: 9185339283900818951}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9793e5c503604adeb230652f6e6be7d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &3834494695930406061 stripped
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6344909512719989277}
+  m_Layer: 0
+  m_Name: weapon-parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6344909512719989277
 Transform:
-  m_CorrespondingSourceObject: {fileID: 5354285131652940458, guid: c41c2dc3a96aaff46ba52cf76f173dbf, type: 3}
-  m_PrefabInstance: {fileID: 9185339283900818951}
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9002608647240546124}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.7, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 841717453720100740}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -70,8 +70,15 @@ namespace _KITSystem.Config.Editor
                     DownloadAll();
                 }
 
-                GUILayout.Space(50);
+                GUILayout.Space(10);
 
+                if (GUILayout.Button("Validate All", GUILayout.Width(100)))
+                {
+                    ValidateAll();
+                }
+                
+                GUILayout.Space(10);
+                
                 var folder = EditorPrefs.GetString(EditorPrefsKeyFolderPrefix);
                 var newFolder = EditorGUILayout.TextField(folder);
                 if (newFolder != folder)
@@ -275,7 +282,6 @@ namespace _KITSystem.Config.Editor
                 Directory.CreateDirectory(Path.GetDirectoryName(savePath));
                 
                 string contents = JsonUtility.ToJson(target, false);
-
                 contents = Regex.Replace(
                     contents,
                     @"-?\d+\.\d+",
@@ -446,6 +452,65 @@ namespace _KITSystem.Config.Editor
             }
             
             return token.ToObject(targetType);
+        }
+
+        private async void ValidateAll()
+        {
+            var folder = EditorPrefs.GetString(EditorPrefsKeyFolderPrefix);
+            var projectPath = Path.GetDirectoryName(Application.dataPath);
+            foreach (var type in configTypes)
+            {
+                string fullName = type.FullName;
+                statusMap[fullName] = $"Pending: Validate to {type.Name}.json";
+                
+                string filePath = Path.Combine(folder, type.Name + ".json");
+                TextAsset asset = AssetDatabase.LoadAssetAtPath<TextAsset>(filePath);
+                if (asset != null)
+                {
+                    object target = JsonUtility.FromJson(asset.text, type);
+                    if (target != null)
+                    {
+                        type.GetMethod("OnValidateLinkConfig",
+                                BindingFlags.Instance | BindingFlags.Public)
+                            ?.Invoke(target, null);
+                        string contents = JsonUtility.ToJson(target, false);
+                        contents = Regex.Replace(
+                            contents,
+                            @"-?\d+\.\d+",
+                            m =>
+                            {
+                                if (double.TryParse(
+                                        m.Value,
+                                        NumberStyles.Any,
+                                        CultureInfo.InvariantCulture,
+                                        out double d))
+                                {
+                                    return d.ToString("0.####", CultureInfo.InvariantCulture);
+                                }
+
+                                return m.Value;
+                            });
+
+                        string savePath = Path.Combine(projectPath, filePath);
+                        await File.WriteAllTextAsync(savePath, contents);
+                        AssetDatabase.ImportAsset(filePath);
+                        if (asset != null)
+                        {
+                            EditorGUIUtility.PingObject(asset);
+                        }
+                        
+                        statusMap[fullName] = $"OK: Validate to {type.Name}.json";
+                    }
+                    else
+                    {
+                        statusMap[fullName] = $"ERROR: Error parse json to object {type}";
+                    }
+                }
+                else
+                {
+                    statusMap[fullName] = $"ERROR: Not found config at '{filePath}'";
+                }
+            }
         }
         
         private void DownloadAll()

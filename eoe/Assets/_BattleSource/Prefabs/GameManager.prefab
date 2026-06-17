@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owner: {fileID: 2652596796157564998}
   pedestal: {fileID: 7542589703931767924, guid: d5ac05e73da0dd74498e9728726f982c, type: 3}
+  weaponsId: e9030000ea030000eb030000ec030000
 --- !u!114 &2652596796157564998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,7 +63,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useUnscaledTime: 0
   targetFPS: 30
-  loop: 5
+  loop: 1
   maxTicksPerFrame: 5
   tickables:
   - rid: 607416756985921604

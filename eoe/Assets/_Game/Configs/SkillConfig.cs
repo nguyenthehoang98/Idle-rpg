@@ -6,7 +6,9 @@ using UnityEngine;
 
 namespace _Game.Configs
 {
+#if UNITY_EDITOR
     [Serializable]
+    // không dùng cho runtime
     public class SkillConfig : IGameConfig
     {
         [SerializeField] private List<SkillData> skills = new List<SkillData>();
@@ -94,11 +96,16 @@ namespace _Game.Configs
             }
         }
 
-        public bool TryGetSkill(int skillId, out SkillData skill)
+        public void OnValidateLinkConfig()
+        {
+        }
+
+        public bool TryGetSkillOnEditor(int skillId, out SkillData skill)
         {
             return cached.TryGetValue(skillId, out skill);
         }
-    }
+    }    
+#endif
 
     [Serializable]
     public struct SkillData

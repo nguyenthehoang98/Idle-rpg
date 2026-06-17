@@ -51,7 +51,7 @@ namespace _Game.GamePlay.SkillSystem
             );
             TrajectoryData trajectoryData = skillData.trajectory;
             BaseTrajectory trajectory = new BulletTrajectory(trajectoryData.bulletInitSpeed,
-                trajectoryData.bulletInitSpeed, position, destination
+                trajectoryData.bulletAcceleration, position, destination
             );
             GameObject go = null;
             if (!string.IsNullOrEmpty(skillData.prefabName))
