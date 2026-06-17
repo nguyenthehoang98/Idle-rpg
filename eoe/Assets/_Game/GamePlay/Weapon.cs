@@ -1,10 +1,8 @@
 using System.Collections;
 using _Game.Configs;
 using _Game.GamePlay.SkillSystem;
-using _KITSystem.Config;
 using _KITSystem.SkillSystem.Core;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace _Game.GamePlay
 {
@@ -56,7 +54,7 @@ namespace _Game.GamePlay
                 else if (SkillData.findTarget.type == FindTargetData.FilterType.Nearest)
                     type = FindTargetType.Nearest;
 
-                Vector3 position = muzzle.position;
+                Vector3 position = muzzle != null ? muzzle.position : Vector3.zero;
 
                 SkillTickable.FindTarget(type, new Vector2(position.x, position.y),
                     SkillData.findTarget.radius, FilterEntity, out var result);
@@ -125,7 +123,7 @@ namespace _Game.GamePlay
         {
             if (attacking)
             {
-                SkillTickable.CastSkill(SkillData, muzzle.position, destination);
+                SkillTickable.CastSkill(SkillData, muzzle != null ? muzzle.position : Vector3.zero, destination);
                 attacking = false;
             }
         }

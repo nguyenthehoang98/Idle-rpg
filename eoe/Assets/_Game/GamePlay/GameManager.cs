@@ -1,10 +1,13 @@
+using System;
 using System.Collections.Generic;
 using _Game.Configs;
+using _Game.GamePlay.SkillSystem;
 using _Game.GamePlay.SpawnerSystem;
 using _KITSystem.Config;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace _Game.GamePlay
 {
@@ -14,13 +17,22 @@ namespace _Game.GamePlay
         [SerializeField] private TickSystemOwner owner;
         [SerializeField] private Pedestal pedestal;
         [SerializeField] private int[] weaponsId = new int[4];
-        
+
+        private Dictionary<int, int> damageReport = new Dictionary<int, int>();
         private Pedestal pedestalInstance;
         private SpawnerTickable spawner;
         private int totalMonsterAlive = 0;
 
         private void Awake()
         {
+            owner.TryGetTickable(out SkillTickable skillTickable);
+            skillTickable.OnPostDamage += (data, damage) =>
+            {
+                if (!damageReport.TryAdd(data.skillId, damage))
+                {
+                    damageReport[data.skillId] += damage;
+                }
+            };
             owner.TryGetTickable(out spawner);
             spawner.OnWaveSpawnCompleted += waveIndex =>
             {
@@ -56,6 +68,31 @@ namespace _Game.GamePlay
             await pedestalInstance.Initialize(datas.ToArray(), owner.Loop, owner.TickInterval);
             await owner.Initialize();
         }
+
+#if UNITY_EDITOR
+        private GUIStyle labelStyle;
+
+        private void OnGUI()
+        {
+            if (labelStyle == null)
+            {
+                labelStyle = new GUIStyle(GUI.skin.label);
+                labelStyle.alignment = TextAnchor.MiddleCenter;
+            }
+
+            // Font size = 3% chiều cao màn hình
+            labelStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.03f);
+
+            int i = 0;
+            foreach (var pair in damageReport)
+            {
+                GUI.Label(new Rect(50, 20 + i * 110, Screen.width, 100),
+                    $"{pair.Key}:{pair.Value}", labelStyle
+                );
+                i++;
+            }
+        }
+#endif
 
         private void Update()
         {

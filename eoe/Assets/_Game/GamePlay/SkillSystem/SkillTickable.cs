@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using _BattleSource.Entity;
 using _Game.Configs;
 using _KITSystem.Entity;
 using _KITSystem.Resource;
@@ -19,6 +20,8 @@ namespace _Game.GamePlay.SkillSystem
         private HashSet<GameObject> projectilesObject = new HashSet<GameObject>();
         private HashSet<string> projectilesName = new HashSet<string>();
 
+        public event Action<SkillData, int> OnPostDamage; 
+        
         private static SkillTickable instance;
         
         public Task Initialize()
@@ -72,7 +75,7 @@ namespace _Game.GamePlay.SkillSystem
                 damageTicket.type.ToString()
             );
             CastProjectileAction action = new CastProjectileAction(this, skillData.lifeTime, collider, trajectory,
-                DamageEntity, go, dtt, damageTicket.ticketInterval,
+                entity => DamageEntity(skillData, entity), go, dtt, damageTicket.ticketInterval,
                 colliderData.limitNumberCollision, colliderData.resetCollisionInterval
             );
 
@@ -97,13 +100,26 @@ namespace _Game.GamePlay.SkillSystem
             RequestAddAction(1, action);
         }
 
-        private bool DamageEntity(int entity)
+        private bool DamageEntity(SkillData skillData, int entity)
         {
             bool alive = EntityManager.IsEntityAlive(entity);
 
             if (!alive) return false;
+
+            ref HealthData health = ref ComponentManager<HealthData>.Get(entity);
+
+            int damage = 20;
             
-            AgentTickable.Remove(entity);
+            health.CurrentHealth -= damage;
+
+            if (AgentTickable.TryGetMonster(entity, out Monster monster))
+            {
+                monster.BeBit();
+            }
+            
+            OnPostDamage?.Invoke(skillData, damage);
+            
+            if (health.CurrentHealth <= 0) AgentTickable.Remove(entity);
             
             return true;
         }

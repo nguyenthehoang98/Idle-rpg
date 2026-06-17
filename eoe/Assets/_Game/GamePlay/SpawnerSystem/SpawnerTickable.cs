@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using _Game.Configs;
-using _KITSystem.Config;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using _KITSystem.Utils;

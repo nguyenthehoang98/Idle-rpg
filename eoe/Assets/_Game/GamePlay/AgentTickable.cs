@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using _BattleSource.Entity;
 using _Game.Configs;
 using _KITSystem.Entity;
 using _KITSystem.Grid;
 using _KITSystem.Schedule;
-using _KITSystem.Utils;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -77,6 +77,11 @@ namespace _Game.GamePlay
 
         public static void Add(Monster monster, MonsterData monsterData) => instance.AddPrivate(monster, monsterData);
 
+        public static bool TryGetMonster(int entity, out Monster monster)
+        {
+            return instance.entityToMonster.TryGetValue(entity, out monster);
+        }
+
         public static int Query(float2 position, float2 size, out AgentData[] agentsData)
         {
             return instance.QueryAgent(position, size, out agentsData);
@@ -98,6 +103,8 @@ namespace _Game.GamePlay
                 stopDistance + monsterData.stopDistance).agent;
             Data data = new Data(monster, agent);
             int entity = EntityManager.NewEntity();
+            
+            ComponentManager<HealthData>.Add(entity, new HealthData(100));
             
             agentToEntity.Add(agent, entity);
             monsterToData.Add(monster, data);

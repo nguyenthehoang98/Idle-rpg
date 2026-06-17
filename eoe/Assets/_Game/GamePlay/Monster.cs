@@ -10,6 +10,7 @@ namespace _Game.GamePlay
     {
         static readonly int Death = Animator.StringToHash("Death");
         static readonly int Initialize_ = Animator.StringToHash("Initialize");
+        static readonly int BeHit_ = Animator.StringToHash("Behit");
         
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] private Transform scaler;
@@ -42,6 +43,11 @@ namespace _Game.GamePlay
             animator.Play(Initialize_);
             
             OnMonsterEnable?.Invoke(this);
+        }
+
+        public void BeBit()
+        {
+            animator.Play(BeHit_, 0, 0);
         }
 
         public void Destroy()
