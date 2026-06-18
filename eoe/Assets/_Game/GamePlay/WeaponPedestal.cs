@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using _Game.Configs;
 using _KITSystem.Resource;
@@ -9,21 +10,20 @@ namespace _Game.GamePlay
 {
     public class WeaponPedestal : MonoBehaviour
     {
+        [SerializeField] private int groupColorId;
         [SerializeField] private Transform pivot;     
         [SerializeField] private Vector2 offsetPosition;
         [SerializeField] private SpriteRenderer highlight;
-        [Header("Background")]
         [SerializeField] private SpriteRenderer background;
-        [SerializeField] private Color backgroundInactive = Color.gray;
-        [SerializeField] private Color backgroundActive = Color.white;
-        [Header("Outline")]
         [SerializeField] private SpriteRenderer outline;
-        [SerializeField] private Color outlineInactive;
-        [SerializeField] private Color outlineActive1;
-        [SerializeField] private Color outlineActive2;
-        [SerializeField] private Color outlineActive3;
-        [Header("Weapon")]
         [SerializeField] private Transform weaponParent;
+        
+        private Color backgroundInactive = Color.gray;
+        private Color backgroundActive = Color.white;
+        private Color outlineInactive;
+        private Color outlineActive1;
+        private Color outlineActive2;
+        private Color outlineActive3;
 
         public float DeltaTime { get; set; }
 
@@ -32,6 +32,15 @@ namespace _Game.GamePlay
         private void Awake()
         {
             DeltaTime = Time.deltaTime;
+        }
+
+        private void Start()
+        {
+            ColorSetting.Instance.TryGetColor(groupColorId, out var colorData);
+            outlineInactive = colorData.inactiveColor;
+            outlineActive1 = colorData.activeColor1;
+            outlineActive2 = colorData.activeColor2;
+            outlineActive3 = colorData.activeColor2;
         }
 
         public async UniTask Initialize(WeaponData weaponData, float timeScale, float deltaTime)

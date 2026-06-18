@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using _Game.Configs;
 using _Game.GamePlay.SkillSystem;
@@ -48,7 +47,8 @@ namespace _Game.GamePlay
             AssetBundleManager.SetLocationBundle(true);
 
             await ConfigManager.Load(new string[] { "MonsterConfig", "LevelConfig", "WeaponConfig" });
-
+            ColorSetting setting = ColorSetting.Instance;
+            
             MonsterConfig monsterConfig = ConfigManager.Get<MonsterConfig>();
             LevelConfig levelConfig = ConfigManager.Get<LevelConfig>();
             levelConfig.TryGetLevelData(1, out LevelData levelData);
@@ -65,8 +65,10 @@ namespace _Game.GamePlay
                 if (weaponConfig.TryGetWeaponData(weaponId, out WeaponData weaponData))
                     datas.Add(weaponData);
             }
-            await pedestalInstance.Initialize(datas.ToArray(), owner.Loop, owner.TickInterval);
+            
             await owner.Initialize();
+            await pedestalInstance.Initialize(datas.ToArray(), owner.Loop, owner.TickInterval);
+            owner.IsPaused = false;
         }
 
 #if UNITY_EDITOR

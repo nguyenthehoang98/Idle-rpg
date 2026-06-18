@@ -28,8 +28,6 @@ namespace _KITSystem.Schedule
             {
                 await tickables[i].Initialize();
             }
-            
-            IsPaused = false;
 
             await Task.CompletedTask;
         }
