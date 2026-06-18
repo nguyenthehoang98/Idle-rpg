@@ -1,9 +1,9 @@
-using System;
 using System.Collections.Generic;
 using _Game.Configs;
 using _KITSystem.Utils;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace _Game.GamePlay.View
@@ -11,6 +11,7 @@ namespace _Game.GamePlay.View
     public class BattleUIManager : MonoBehaviour
     {
         private const int MAX = 4;
+        [FormerlySerializedAs("triggerCollection")] [SerializeField] private ElementTriggerScroll triggerScroll;
         [SerializeField] private Button btnPush;
         [SerializeField] private Element[] elements = new Element[4];
         [SerializeField] private Image imgHealthFill;
@@ -57,6 +58,14 @@ namespace _Game.GamePlay.View
                 {
                     element.Inactive();
                 }
+
+                for (var i = 0; i < collections.Count; i++)
+                {
+                    colorSetting.TryGetColor(collections[i], out ColorData colorData);
+                    
+                    triggerScroll.Push(colorData.activeColor);
+                }
+
                 collections.Clear();
             }
 
@@ -65,6 +74,7 @@ namespace _Game.GamePlay.View
             for (var i = 0; i < collections.Count; i++)
             {
                 colorSetting.TryGetColor(collections[i], out ColorData colorData);
+                
                 elements[i].Active(colorData.activeColor);
             }
         }
