@@ -5,12 +5,21 @@ namespace _Game.GamePlay.View
 {
     public class Element : MonoBehaviour
     {
-        [SerializeField] private Image imgOutline;
         [SerializeField] private Image imgCore;
 
-        public void Execute(Color coreColor, Color outlineColor)
+        private void Awake()
         {
-            imgOutline.color = outlineColor;
+            Inactive();
+        }
+
+        public void Inactive()
+        {
+            imgCore.gameObject.SetActive(false);
+        }
+
+        public void Active(Color coreColor)
+        {
+            imgCore.gameObject.SetActive(true);
             imgCore.color = coreColor;
         }
     }

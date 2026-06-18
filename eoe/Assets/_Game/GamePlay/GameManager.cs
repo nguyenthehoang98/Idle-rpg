@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using _Game.Configs;
 using _Game.GamePlay.SkillSystem;
 using _Game.GamePlay.SpawnerSystem;
+using _Game.GamePlay.View;
 using _KITSystem.Config;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;
@@ -15,6 +16,7 @@ namespace _Game.GamePlay
     {
         [SerializeField] private TickSystemOwner owner;
         [SerializeField] private Pedestal pedestal;
+        [SerializeField] private BattleUIManager uiManager;
         [SerializeField] private int[] weaponsId = new int[4];
 
         private Dictionary<int, int> damageReport = new Dictionary<int, int>();
@@ -68,6 +70,7 @@ namespace _Game.GamePlay
             
             await owner.Initialize();
             await pedestalInstance.Initialize(datas.ToArray(), owner.Loop, owner.TickInterval);
+            uiManager.Initialize();
             owner.IsPaused = false;
         }
 

@@ -1,16 +1,16 @@
 fileFormatVersion: 2
-guid: b1dbac55ba1f85f4cae4ce4b36612f35
+guid: 88d98d8a42c323b4c896d5471b76c63e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3242618354212987026
-    second: square-outline-bold_0
+      213: 5359986216648080172
+    second: Rectangle 5_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
-    sRGBTexture: 0
+    sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
     borderMipMap: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: square-outline-bold_0
+      name: Rectangle 5_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 128
-        height: 128
+        width: 580
+        height: 40
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 290e6098638100d20800000000000000
-      internalID: 3242618354212987026
+      spriteID: c2b7c4cc01f726a40800000000000000
+      internalID: 5359986216648080172
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      square-outline-bold_0: 3242618354212987026
+      Rectangle 5_0: 5359986216648080172
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
