@@ -13,16 +13,14 @@ namespace _Game.GamePlay
         [SerializeField] private Transform pivot;     
         [SerializeField] private Vector2 offsetPosition;
         [SerializeField] private SpriteRenderer background;
-        [SerializeField] private PedestalPath path;
+        [SerializeField] private PedestalPath[] paths;
         [SerializeField] private SpriteRenderer outline;
         [SerializeField] private Transform weaponParent;
         
-        private Color backgroundInactive = Color.gray;
+        private Color backgroundInactive = new Color(0.7f, 0.7f, 0.7f);
         private Color backgroundActive = Color.white;
         private Color outlineInactive;
-        private Color outlineActive1;
-        private Color outlineActive2;
-        private Color outlineActive3;
+        private Color outlineActive;
 
         public float DeltaTime { get; set; }
 
@@ -31,16 +29,17 @@ namespace _Game.GamePlay
         private void Awake()
         {
             DeltaTime = Time.deltaTime;
-            path.gameObject.SetActive(false);
+            for (int i = 0; i < paths.Length; i++)
+            {
+                paths[i].gameObject.SetActive(false);
+            }
         }
 
         private void Start()
         {
             ColorSetting.Instance.TryGetColor(groupColorId, out var colorData);
             outlineInactive = colorData.inactiveColor;
-            outlineActive1 = colorData.activeColor1;
-            outlineActive2 = colorData.activeColor2;
-            outlineActive3 = colorData.activeColor2;
+            outlineActive = colorData.activeColor;
         }
 
         public async UniTask Initialize(WeaponData weaponData, float timeScale, float deltaTime)
@@ -70,12 +69,13 @@ namespace _Game.GamePlay
 
             Vector3 positionTarget = level == 0 ? Vector3.zero : offsetPosition;
             Color backgroundColorTarget = level == 0 ? backgroundInactive : backgroundActive;
-            Color outlineColorTarget = outlineInactive;
-            if (level == 1) outlineColorTarget = outlineActive1;
-            else if (level == 2) outlineColorTarget = outlineActive2;
-            else if (level == 3) outlineColorTarget = outlineActive3;
+            Color outlineColorTarget = level == 0 ? outlineInactive : outlineActive;
 
-            path.gameObject.SetActive(level == 3);
+            for (int i = 0; i < paths.Length; i++)
+            {
+                paths[i].gameObject.SetActive(false);
+                if(i < level - 1) paths[i].gameObject.SetActive(true);
+            }
 
             float elapsedTime = 0;
             while (elapsedTime < duration)

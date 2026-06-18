@@ -9,8 +9,7 @@ namespace _Game.Configs
     {
         public int id;
         public Color inactiveColor;
-        public Color activeColor1;
-        public Color activeColor2;
+        public Color activeColor;
     }
 
     [CreateAssetMenu]
