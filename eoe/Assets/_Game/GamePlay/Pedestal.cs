@@ -15,7 +15,7 @@ namespace _Game.GamePlay
                 var pedestal = weapons[i];
                 if (i < weaponsData.Length)
                     await pedestal.Initialize(weaponsData[i], timeScale, deltaTime);
-                StartCoroutine(pedestal.Setup(i, 0));
+                StartCoroutine(pedestal.Setup(1, 0));
             }
         }
 

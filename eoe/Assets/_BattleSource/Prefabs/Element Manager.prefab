@@ -164,7 +164,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b65c348386b41599f03f23b7befa5ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imgOutline: {fileID: 3060029332702900011}
   imgCore: {fileID: 5277592628287077838}
 --- !u!1 &4264756333382568933
 GameObject:
@@ -255,7 +254,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b65c348386b41599f03f23b7befa5ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imgOutline: {fileID: 2955871265237325154}
   imgCore: {fileID: 3944303707637999825}
 --- !u!1 &4905577460030167556
 GameObject:
@@ -341,7 +339,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9004449571460440497}
-  - component: {fileID: 5167535986482281645}
   m_Layer: 5
   m_Name: Element Manager
   m_TagString: Untagged
@@ -372,36 +369,6 @@ RectTransform:
   m_AnchoredPosition: {x: -100, y: 130}
   m_SizeDelta: {x: 380, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &5167535986482281645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5214852546027941765}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2766ccc1a0d5894a9a30379c52e05cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  elements:
-  - {fileID: 2585635062344697551}
-  - {fileID: 8797875881331953926}
-  - {fileID: 1098388889247027830}
-  - {fileID: 2937175691127818501}
-  datas:
-  - coreColor: {r: 1, g: 0, b: 0, a: 1}
-    outlineColor: {r: 0.4, g: 0.16078432, b: 0.16078432, a: 1}
-    inactiveColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
-  - coreColor: {r: 1, g: 0, b: 0, a: 1}
-    outlineColor: {r: 0.40000004, g: 0.16078432, b: 0.16078432, a: 1}
-    inactiveColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
-  - coreColor: {r: 1, g: 0, b: 0, a: 1}
-    outlineColor: {r: 0.40000004, g: 0.16078432, b: 0.16078432, a: 1}
-    inactiveColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
-  - coreColor: {r: 1, g: 0, b: 0, a: 1}
-    outlineColor: {r: 0.40000004, g: 0.16078432, b: 0.16078432, a: 1}
-    inactiveColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
 --- !u!1 &5486568835441968443
 GameObject:
   m_ObjectHideFlags: 0
@@ -566,7 +533,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b65c348386b41599f03f23b7befa5ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imgOutline: {fileID: 4952337950193305871}
   imgCore: {fileID: 6169936276333772092}
 --- !u!1 &6580242155963893793
 GameObject:
@@ -732,5 +698,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b65c348386b41599f03f23b7befa5ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imgOutline: {fileID: 1663373184483173490}
   imgCore: {fileID: 4361805624725602137}
