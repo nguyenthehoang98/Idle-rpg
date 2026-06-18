@@ -71,31 +71,6 @@ namespace _Game.GamePlay
             owner.IsPaused = false;
         }
 
-#if UNITY_EDITOR
-        private GUIStyle labelStyle;
-
-        private void OnGUI()
-        {
-            if (labelStyle == null)
-            {
-                labelStyle = new GUIStyle(GUI.skin.label);
-                labelStyle.alignment = TextAnchor.MiddleCenter;
-            }
-
-            // Font size = 3% chiều cao màn hình
-            labelStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.03f);
-
-            int i = 0;
-            foreach (var pair in damageReport)
-            {
-                GUI.Label(new Rect(50, 20 + i * 110, Screen.width, 100),
-                    $"{pair.Key}:{pair.Value}", labelStyle
-                );
-                i++;
-            }
-        }
-#endif
-
         private void Update()
         {
             float duration = 0.1f;

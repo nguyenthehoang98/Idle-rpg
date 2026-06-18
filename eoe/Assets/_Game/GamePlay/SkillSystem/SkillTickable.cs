@@ -8,7 +8,6 @@ using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Core;
 using _KITSystem.SkillSystem.Imp;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace _Game.GamePlay.SkillSystem
@@ -147,10 +146,10 @@ namespace _Game.GamePlay.SkillSystem
         {
             if (skillData.extra.isExplosive)
             {
-                Vector2 size = new Vector2(skillData.extra.explosiveRadius, skillData.extra.explosiveRadius);
+                Vector2 size = new Vector2(skillData.extra.explosiveRadius / 2f, skillData.extra.explosiveRadius / 2f);
 
 #if UNITY_EDITOR
-                Gizmos(position, skillData.extra.explosiveRadius * 2, Color.yellow, 1 / 30f);
+                GizmosLine.Circle(position, skillData.extra.explosiveRadius, Color.yellow, 1 / 30f);
 #endif
 
                 SpawnAura(skillData.extra.explosivePrefabName, position, skillData.extra.explosiveRadius);
@@ -234,21 +233,6 @@ namespace _Game.GamePlay.SkillSystem
             TextDamage ins = Pool.Instantiate(go).GetComponent<TextDamage>();
             ins.transform.position = position;
             ins.Execute(damage);
-        }
-        
-        private void Gizmos(Vector3 position, float radius, Color color, float deltaTime)
-        {
-            Vector2 center = position;
-            int segments = 12;
-            float angleStep = 360f / segments;
-            Vector2 prevPoint = center + new Vector2(Mathf.Cos(0f), Mathf.Sin(0f)) * radius;
-            for (int i = 1; i <= segments; i++)
-            {
-                float angle = angleStep * i;
-                Vector2 newPoint = center + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
-                Debug.DrawLine(new Vector3(prevPoint.x, prevPoint.y), new Vector3(newPoint.x, newPoint.y), color, deltaTime);
-                prevPoint = newPoint;
-            }
         }
         
         public override void Dispose()

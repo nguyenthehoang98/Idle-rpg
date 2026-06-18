@@ -55,8 +55,9 @@ namespace _Game.GamePlay
                     type = FindTargetType.Nearest;
 
                 Vector3 position = muzzle != null ? muzzle.position : Vector3.zero;
-
-                SkillTickable.FindTarget(type, new Vector2(position.x, position.y),
+                Vector3 center = Vector3.zero;
+                
+                SkillTickable.FindTarget(type, Vector2.zero, 
                     SkillData.findTarget.radius, FilterEntity, out var result);
 
                 int entity = -1;
@@ -74,7 +75,16 @@ namespace _Game.GamePlay
 
                 if (entity == -1)
                 {
+#if UNITY_EDITOR
+                    GizmosLine.Circle(center, SkillData.findTarget.radius, Color.red, WeaponData.cooldown / TimeScale, 36);
+#endif
                     continue;
+                }
+                else
+                {
+#if UNITY_EDITOR
+                    GizmosLine.Circle(center, SkillData.findTarget.radius, Color.green, WeaponData.cooldown / TimeScale, 36);
+#endif
                 }
 
                 Vector3 direction = destination - position;
