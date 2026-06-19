@@ -69,21 +69,36 @@ namespace _Game.GamePlay.View
             
             if (collections.Count == MAX)
             {
+                Dictionary<int, int> dictCount = new Dictionary<int, int>();
                 for (var i = 0; i < collections.Count; i++)
                 {
+                    int id = collections[i];
+                    if (!dictCount.TryAdd(id, 1)) dictCount[id]++;
+                }
+
+                for (var i = 0; i < collections.Count; i++)
+                {
+                    float delay = 0.1f;
+                    float smooth = RandomUtils.Range(0.3f, 0.5f);
+                    float offsetY = 2.5f;
+                    float radius = RandomUtils.Range(1.1f, 2.0f);
+                    float duration = 1.2f;
+                    
+                    int id = collections[i];
+                    int stack = dictCount[id];
                     Element element = elements[i];
                     Vector3 startPosition = element.transform.position;
-                    Vector3 endPosition = attractorsTarget[collections[i]].transform.position;
+                    Vector3 endPosition = attractorsTarget[id].transform.position;
                     Vector3 rot = new Vector3(0, 0, 45);
-                    colorSetting.TryGetColor(collections[i], out ColorData colorData);
-                    element.MoveTo(
-                        startPosition, endPosition, rot, 0.1f, 0.7f,
-                        0.5f, 1, 0.5f, () =>
+                    colorSetting.TryGetColor(id, out ColorData colorData);
+                    element.MoveTo(startPosition, endPosition, rot,
+                        stack * delay, duration, radius, offsetY, smooth, () =>
                         {
                             element.Inactive();
                             scroll.Push(colorData.activeColor);
                         }
                     );
+                    dictCount[id]--;
                 }
 
                 collections.Clear();
