@@ -36,7 +36,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 63318507e8a351540b9009ada670c16d
-    m_Address: whirlpool-shuriken.projectile
+    m_Address: shuriken.projectile
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -56,7 +56,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 93996bcbcd6f7ba4799f0c3474ccf49d
-    m_Address: whirlpool-shuriken.weapon
+    m_Address: shuriken.weapon
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

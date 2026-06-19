@@ -49,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   muzzle: {fileID: 8204246242730764255}
   animator: {fileID: 5454211044248282011}
+  animationClipDuration: 0.5
   weaponRotationDuration: 0.1
   weaponRotationCurve:
     serializedVersion: 2
@@ -179,6 +180,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -200,6 +203,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2095058935
   m_SortingLayer: 2
   m_SortingOrder: 2

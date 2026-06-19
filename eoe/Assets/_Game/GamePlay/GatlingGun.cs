@@ -9,9 +9,16 @@ namespace _Game.GamePlay
         [SerializeField] private Transform[] muzzles;
 
         private int muzzleIndex;
+        private bool shouldRandom;
 
         protected override Vector3 GetDestination(Vector3 from, Vector3 to)
         {
+            if (!shouldRandom)
+            {
+                shouldRandom = true;
+                return to;
+            }
+            
             float randomAngle = Random.Range(-angleRandom, angleRandom);
 
             Vector3 dir = to - from;
@@ -20,6 +27,11 @@ namespace _Game.GamePlay
             dir = Quaternion.Euler(0, 0, randomAngle) * dir.normalized;
 
             return from + dir * distance;
+        }
+
+        protected override void OnPlay()
+        {
+            shouldRandom = false;
         }
 
         protected override void OnExecute()

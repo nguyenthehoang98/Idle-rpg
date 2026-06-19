@@ -23,7 +23,7 @@ namespace _Game.GamePlay
         public bool IsActivated { private get; set; } = false;
         private SkillData SkillData { get; set; }
         private WeaponData WeaponData { get; set; }
-        
+
         private Vector3 destination;
         private bool attacking;
 
@@ -63,7 +63,7 @@ namespace _Game.GamePlay
                 Vector3 position = MuzzlePosition();
                 Vector3 center = Vector3.zero;
                 
-                SkillTickable.FindTarget(type, Vector2.zero, 
+                SkillTickable.FindTarget(type, center, position,
                     SkillData.findTarget.radius, FilterEntity, out var result);
 
                 int entity = -1;
@@ -111,7 +111,7 @@ namespace _Game.GamePlay
                     angleDelta / 180f
                 );
 
-                while (elapsedTime <= dynamicDuration)
+                while (elapsedTime <= dynamicDuration && IsActivated)
                 {
                     float dt = DeltaTime / TimeScale;
 
@@ -124,6 +124,10 @@ namespace _Game.GamePlay
 
                     yield return new WaitForSeconds(dt);
                 }
+
+                if (!IsActivated) yield break;
+
+                OnPlay();
 
                 transform.eulerAngles = new Vector3(0, 0, angleTo);
 
@@ -150,7 +154,7 @@ namespace _Game.GamePlay
 
         public async void ExecutePrivate()
         {
-            if (attacking)
+            if (attacking && IsActivated)
             {
                 Vector3 position = MuzzlePosition();
                 Vector3 target = GetDestination(position, destination);
@@ -165,6 +169,10 @@ namespace _Game.GamePlay
 
                 OnExecute();
             }
+        }
+
+        protected virtual void OnPlay()
+        {
         }
 
         protected virtual void OnExecute()

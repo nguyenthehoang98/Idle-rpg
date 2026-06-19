@@ -6,6 +6,6 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: whirlpool-shuriken.projectile animator
+  m_Name: shuriken.projectile animator
   m_Controller: {fileID: 9100000, guid: 32472db3c90ec9e4d906c6c0bef5e41d, type: 2}
   m_Clips: []

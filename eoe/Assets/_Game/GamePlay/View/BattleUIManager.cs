@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using _Game.Configs;
 using _KITSystem.Utils;
@@ -9,6 +10,10 @@ namespace _Game.GamePlay.View
 {
     public class BattleUIManager : MonoBehaviour
     {
+        public event Action<int> OnElementChanged;
+        public event Action OnElementStartReset; 
+        public event Action OnElementStopReset; 
+        
         private const int MAX = 4;
         [SerializeField] private Transform[] attractorsTarget = new Transform[0];
         [SerializeField] private ElementScroll scroll;
@@ -29,16 +34,19 @@ namespace _Game.GamePlay.View
             btnPush.onClick.AddListener(PushOut);
         }
 
+        private void Start()
+        {
+            collections.Add(0);
+            collections.Add(1);
+            collections.Add(2);
+            collections.Add(3);
+        }
+
         public void Initialize()
         {
             isInitialized = true;
             colorSetting = ColorSetting.Instance;
-            
-            for (var i = 0; i < 4; i++)
-            {
-                colorSetting.TryGetColor(i, out ColorData colorData);
-                scroll.Push(colorData.activeColor);
-            }
+            FlyAttractor();
         }
 
         private void Update()
@@ -69,39 +77,7 @@ namespace _Game.GamePlay.View
             
             if (collections.Count == MAX)
             {
-                Dictionary<int, int> dictCount = new Dictionary<int, int>();
-                for (var i = 0; i < collections.Count; i++)
-                {
-                    int id = collections[i];
-                    if (!dictCount.TryAdd(id, 1)) dictCount[id]++;
-                }
-
-                for (var i = 0; i < collections.Count; i++)
-                {
-                    float delay = 0.1f;
-                    float smooth = RandomUtils.Range(0.3f, 0.5f);
-                    float offsetY = 2.5f;
-                    float radius = RandomUtils.Range(1.1f, 2.0f);
-                    float duration = 1.2f;
-                    
-                    int id = collections[i];
-                    int stack = dictCount[id];
-                    Element element = elements[i];
-                    Vector3 startPosition = element.transform.position;
-                    Vector3 endPosition = attractorsTarget[id].transform.position;
-                    Vector3 rot = new Vector3(0, 0, 45);
-                    colorSetting.TryGetColor(id, out ColorData colorData);
-                    element.MoveTo(startPosition, endPosition, rot,
-                        stack * delay, duration, radius, offsetY, smooth, () =>
-                        {
-                            element.Inactive();
-                            scroll.Push(colorData.activeColor);
-                        }
-                    );
-                    dictCount[id]--;
-                }
-
-                collections.Clear();
+                FlyAttractor();
             }
         }
         
@@ -119,6 +95,50 @@ namespace _Game.GamePlay.View
             {
                 elements[i].Inactive();
             }
+        }
+
+        private void FlyAttractor()
+        {
+            OnElementStartReset?.Invoke();
+            
+            Dictionary<int, int> dictCount = new Dictionary<int, int>();
+            for (var i = 0; i < collections.Count; i++)
+            {
+                int id = collections[i];
+                if (!dictCount.TryAdd(id, 1)) dictCount[id]++;
+            }
+
+            int t = 0;
+            for (var i = 0; i < collections.Count; i++)
+            {
+                t++;
+                float delay = 0.1f;
+                float smooth = RandomUtils.Range(0.3f, 0.5f);
+                float offsetY = 2.5f;
+                float radius = RandomUtils.Range(1.1f, 2.0f);
+                float duration = 1.2f;
+                    
+                int id = collections[i];
+                int stack = dictCount[id];
+                Element element = elements[i];
+                Vector3 startPosition = element.transform.position;
+                Vector3 endPosition = attractorsTarget[id].transform.position;
+                Vector3 rot = new Vector3(0, 0, 45);
+                colorSetting.TryGetColor(id, out ColorData colorData);
+                element.MoveTo(startPosition, endPosition, rot,
+                    stack * delay, duration, radius, offsetY, smooth, () =>
+                    {
+                        element.Inactive();
+                        OnElementChanged?.Invoke(id);
+                        scroll.Push(colorData.activeColor);
+                        t--;
+                        if (t == 0) OnElementStopReset?.Invoke();
+                    }
+                );
+                dictCount[id]--;
+            }
+
+            collections.Clear();
         }
     }
 }

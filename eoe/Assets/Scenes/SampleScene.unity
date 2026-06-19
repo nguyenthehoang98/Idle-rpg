@@ -366,7 +366,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1975200471960847820, guid: a4ed3ca9dff680d49bf970d21541f77e, type: 3}
-      propertyPath: 'weaponsId.Array.data[3]'
+      propertyPath: 'weaponsId.Array.data[2]'
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7785509714523337864, guid: a4ed3ca9dff680d49bf970d21541f77e, type: 3}

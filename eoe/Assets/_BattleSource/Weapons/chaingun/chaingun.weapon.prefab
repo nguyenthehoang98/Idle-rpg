@@ -164,7 +164,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  angleRandom: 7.5
+  angleRandom: 5
   muzzles:
   - {fileID: 8874377710416636525}
   - {fileID: 4452814616985109905}

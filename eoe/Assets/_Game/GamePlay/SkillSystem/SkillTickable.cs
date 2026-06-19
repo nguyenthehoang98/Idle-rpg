@@ -81,10 +81,10 @@ namespace _Game.GamePlay.SkillSystem
                 Debug.LogError("Instance AnimationTickable is null");
         }
 
-        public static void FindTarget(FindTargetType type, Vector2 center, float radius,
+        public static void FindTarget(FindTargetType type, Vector2 center, Vector2 pivot, float radius,
             Func<int, bool> funcFilterEntity, out QueryResult result)
         {
-            instance.query.FindTarget(type, center, radius, funcFilterEntity, out result);
+            instance.query.FindTarget(type, center, pivot, radius, funcFilterEntity, out result);
         }
 
         async void CastSkillPrivate(SkillData skillData, Vector3 position, Vector3 destination)

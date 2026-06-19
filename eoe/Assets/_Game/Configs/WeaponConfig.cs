@@ -38,13 +38,14 @@ namespace _Game.Configs
 
             for (int i = 0; i < weapons.Count; i++)
             {
-                WeaponData weapon = weapons[i];
-                if (skillConfig.TryGetSkillOnEditor(weapon.skillId, out var skillData))
+                WeaponData weaponData = weapons[i];
+                if (skillConfig.TryGetSkillOnEditor(weaponData.skillId, out var skillData))
                 {
-                    weapon.skillData = skillData;
+                    weaponData.skillData = skillData;
+                    weaponData.skillData.prefabName = weaponData.projectileName;
                 }
-                else Debug.LogError($"Not found skill '{weapon.skillId}' at weapon '{weapon.id}'");
-                weapons[i] = weapon;
+                else Debug.LogError($"Not found skill '{weaponData.skillId}' at weapon '{weaponData.id}'");
+                weapons[i] = weaponData;
             }
 #endif
         }
@@ -60,6 +61,7 @@ namespace _Game.Configs
     {
         public int id;
         public string prefabName;
+        public string projectileName;
         public int skillId;
         public float cooldown;
         public float attackSpeed;

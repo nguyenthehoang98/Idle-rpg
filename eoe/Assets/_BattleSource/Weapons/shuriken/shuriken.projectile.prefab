@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 4450257695063790433}
   - component: {fileID: 7280874626361627578}
   m_Layer: 0
-  m_Name: whirlpool-shuriken.projectile
+  m_Name: shuriken.projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

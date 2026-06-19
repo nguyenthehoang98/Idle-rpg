@@ -76,7 +76,7 @@ namespace _Game.GamePlay
                 paths[i].gameObject.SetActive(false);
                 if(i < level - 1) paths[i].gameObject.SetActive(true);
             }
-
+            
             float elapsedTime = 0;
             while (elapsedTime < duration)
             {

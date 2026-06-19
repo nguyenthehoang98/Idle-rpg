@@ -8,6 +8,8 @@ namespace _Game.GamePlay
     {
         [SerializeField] private WeaponPedestal[] weapons = new WeaponPedestal[0];
 
+        private Coroutine[] coroutines = new Coroutine[4];
+
         public async UniTask Initialize(WeaponData[] weaponsData, float timeScale, float deltaTime)
         {
             for (int i = 0; i < weapons.Length; i++)
@@ -15,7 +17,9 @@ namespace _Game.GamePlay
                 var pedestal = weapons[i];
                 if (i < weaponsData.Length)
                     await pedestal.Initialize(weaponsData[i], timeScale, deltaTime);
-                StartCoroutine(pedestal.Setup(1, 0));
+
+                if (coroutines[i] != null) StopCoroutine(coroutines[i]);
+                coroutines[i] = StartCoroutine(pedestal.Setup(0, 0));
             }
         }
 
@@ -24,7 +28,8 @@ namespace _Game.GamePlay
             if (slot < 0 || slot > 4) return;
             if (level < 0 || level > 3) return;
             
-            StartCoroutine(weapons[slot].Setup(level, duration));
+            if (coroutines[slot] != null) StopCoroutine(coroutines[slot]);
+            coroutines[slot] = StartCoroutine(weapons[slot].Setup(level, duration));
         }
 
         public void SetWeaponDeltaTime(float deltaTime)

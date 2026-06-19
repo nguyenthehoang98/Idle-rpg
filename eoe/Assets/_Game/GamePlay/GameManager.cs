@@ -7,7 +7,6 @@ using _KITSystem.Config;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace _Game.GamePlay
 {
@@ -18,6 +17,8 @@ namespace _Game.GamePlay
         [SerializeField] private Pedestal pedestal;
         [SerializeField] private BattleUIManager uiManager;
         [SerializeField] private int[] weaponsId = new int[4];
+
+        private const int MAX = 4;
 
         private Dictionary<int, int> damageReport = new Dictionary<int, int>();
         private SpawnerTickable spawner;
@@ -41,6 +42,37 @@ namespace _Game.GamePlay
 
             Monster.OnMonsterEnable += MonsterEnable;
             Monster.OnMonsterDisable += MonsterDisable;
+
+            uiManager.OnElementStartReset += StartReset;
+            uiManager.OnElementChanged += ElementChanged;
+            uiManager.OnElementStopReset += StopReset;
+        }
+
+        private Dictionary<int, int> elementStackNumber = new Dictionary<int, int>();
+
+        private void StartReset()
+        {
+            elementStackNumber.Clear();
+        }
+
+        private void ElementChanged(int id)
+        {
+            if (!elementStackNumber.TryAdd(id, 1))
+            {
+                elementStackNumber[id]++;
+            }
+            
+            pedestal.SetWeaponLevel(id, elementStackNumber[id], 0.3f);
+        }
+
+        private void StopReset()
+        {
+            for (int i = 0; i < MAX; i++)
+            {
+                if (elementStackNumber.ContainsKey(i)) continue;
+                
+                pedestal.SetWeaponLevel(i, 0, 0.3f);
+            }
         }
 
         private async void Start()
