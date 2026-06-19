@@ -20,7 +20,6 @@ namespace _Game.GamePlay
         [SerializeField] private int[] weaponsId = new int[4];
 
         private Dictionary<int, int> damageReport = new Dictionary<int, int>();
-        private Pedestal pedestalInstance;
         private SpawnerTickable spawner;
         private int totalMonsterAlive = 0;
 
@@ -56,9 +55,8 @@ namespace _Game.GamePlay
             levelConfig.TryGetLevelData(1, out LevelData levelData);
             spawner.SetLevel(levelData, monsterConfig);
             
-            pedestalInstance = Object.Instantiate(pedestal, transform);
-            pedestalInstance.SetWeaponDeltaTime(owner.TickInterval);
-            owner.OnScaleTimeChanged += pedestalInstance.SetWeaponDeltaTime;
+            pedestal.SetWeaponDeltaTime(owner.TickInterval);
+            owner.OnScaleTimeChanged += pedestal.SetWeaponDeltaTime;
 
             WeaponConfig weaponConfig = ConfigManager.Get<WeaponConfig>();
             List<WeaponData> datas = new List<WeaponData>();
@@ -69,7 +67,7 @@ namespace _Game.GamePlay
             }
             
             await owner.Initialize();
-            await pedestalInstance.Initialize(datas.ToArray(), owner.Loop, owner.TickInterval);
+            await pedestal.Initialize(datas.ToArray(), owner.Loop, owner.TickInterval);
             uiManager.Initialize();
             owner.IsPaused = false;
         }
@@ -123,7 +121,7 @@ namespace _Game.GamePlay
 
         private void SetWeapon(int slot, int level, float duration)
         {
-            pedestalInstance.SetWeaponLevel(slot, level, duration);
+            pedestal.SetWeaponLevel(slot, level, duration);
         }
     }
 }

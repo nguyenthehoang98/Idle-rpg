@@ -3,11 +3,11 @@ using UnityEngine.UI;
 
 namespace _Game.GamePlay.View
 {
-    public class Element : MonoBehaviour
+    public class Element : ObjectAttractor
     {
         [SerializeField] private Image imgCore;
 
-        private void Awake()
+        protected override void Awake()
         {
             Inactive();
         }

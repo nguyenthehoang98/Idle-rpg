@@ -3,7 +3,6 @@ using _Game.Configs;
 using _KITSystem.Utils;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace _Game.GamePlay.View
@@ -11,6 +10,7 @@ namespace _Game.GamePlay.View
     public class BattleUIManager : MonoBehaviour
     {
         private const int MAX = 4;
+        [SerializeField] private Transform[] attractorsTarget = new Transform[0];
         [SerializeField] private ElementScroll scroll;
         [SerializeField] private Button btnPush;
         [SerializeField] private Element[] elements = new Element[4];
@@ -58,23 +58,6 @@ namespace _Game.GamePlay.View
 
         private void PushStack()
         {
-            if (collections.Count == MAX)
-            {
-                foreach (var element in elements)
-                {
-                    element.Inactive();
-                }
-
-                for (var i = 0; i < collections.Count; i++)
-                {
-                    colorSetting.TryGetColor(collections[i], out ColorData colorData);
-                    
-                    scroll.Push(colorData.activeColor);
-                }
-
-                collections.Clear();
-            }
-
             collections.Add(RandomUtils.Range(0, MAX));
 
             for (var i = 0; i < collections.Count; i++)
@@ -82,6 +65,28 @@ namespace _Game.GamePlay.View
                 colorSetting.TryGetColor(collections[i], out ColorData colorData);
                 
                 elements[i].Active(colorData.activeColor);
+            }
+            
+            if (collections.Count == MAX)
+            {
+                for (var i = 0; i < collections.Count; i++)
+                {
+                    Element element = elements[i];
+                    Vector3 startPosition = element.transform.position;
+                    Vector3 endPosition = attractorsTarget[collections[i]].transform.position;
+                    Vector3 rot = new Vector3(0, 0, 45);
+                    colorSetting.TryGetColor(collections[i], out ColorData colorData);
+                    element.MoveTo(
+                        startPosition, endPosition, rot, 0.1f, 0.7f,
+                        0.5f, 1, 0.5f, () =>
+                        {
+                            element.Inactive();
+                            scroll.Push(colorData.activeColor);
+                        }
+                    );
+                }
+
+                collections.Clear();
             }
         }
         
