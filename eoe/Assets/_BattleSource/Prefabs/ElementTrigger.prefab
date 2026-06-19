@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 4684152430520963955}
   - component: {fileID: 6817992048428570734}
   m_Layer: 5
-  m_Name: Element Trigger Cell View
+  m_Name: ElementTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

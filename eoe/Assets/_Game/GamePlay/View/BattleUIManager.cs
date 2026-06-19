@@ -11,7 +11,7 @@ namespace _Game.GamePlay.View
     public class BattleUIManager : MonoBehaviour
     {
         private const int MAX = 4;
-        [FormerlySerializedAs("triggerCollection")] [SerializeField] private ElementTriggerScroll triggerScroll;
+        [SerializeField] private ElementScroll scroll;
         [SerializeField] private Button btnPush;
         [SerializeField] private Element[] elements = new Element[4];
         [SerializeField] private Image imgHealthFill;
@@ -33,6 +33,12 @@ namespace _Game.GamePlay.View
         {
             isInitialized = true;
             colorSetting = ColorSetting.Instance;
+            
+            for (var i = 0; i < 4; i++)
+            {
+                colorSetting.TryGetColor(i, out ColorData colorData);
+                scroll.Push(colorData.activeColor);
+            }
         }
 
         private void Update()
@@ -63,7 +69,7 @@ namespace _Game.GamePlay.View
                 {
                     colorSetting.TryGetColor(collections[i], out ColorData colorData);
                     
-                    triggerScroll.Push(colorData.activeColor);
+                    scroll.Push(colorData.activeColor);
                 }
 
                 collections.Clear();

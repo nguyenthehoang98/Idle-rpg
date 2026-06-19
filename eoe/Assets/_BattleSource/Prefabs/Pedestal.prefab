@@ -3004,7 +3004,7 @@ GameObject:
   - component: {fileID: 5933022227776807147}
   - component: {fileID: 7542589703931767924}
   m_Layer: 0
-  m_Name: Pedestal Prefab
+  m_Name: Pedestal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
