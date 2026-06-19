@@ -357,6 +357,18 @@ PrefabInstance:
       propertyPath: uiManager
       value: 
       objectReference: {fileID: 1283415080}
+    - target: {fileID: 1975200471960847820, guid: a4ed3ca9dff680d49bf970d21541f77e, type: 3}
+      propertyPath: 'weaponsId.Array.data[0]'
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1975200471960847820, guid: a4ed3ca9dff680d49bf970d21541f77e, type: 3}
+      propertyPath: 'weaponsId.Array.data[1]'
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1975200471960847820, guid: a4ed3ca9dff680d49bf970d21541f77e, type: 3}
+      propertyPath: 'weaponsId.Array.data[3]'
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7785509714523337864, guid: a4ed3ca9dff680d49bf970d21541f77e, type: 3}
       propertyPath: m_Name
       value: GameManager

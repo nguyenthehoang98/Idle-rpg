@@ -16,7 +16,8 @@ namespace _KITSystem.SkillSystem.Imp
         private readonly Func<int, Vector2, bool> onDamageEntity;
 
         public event Action OnComplete;
-        
+
+        private Vector2 previousPosition;
         private GameObject projectile;
         private HashSet<int> collisions;
         private int totalCollisions;
@@ -40,6 +41,7 @@ namespace _KITSystem.SkillSystem.Imp
             this.collisions = new HashSet<int>();
             this.collisionResetElapsedTime = this.damageTickerElapsedTime = 0;
             this.totalCollisions = 0;
+            this.previousPosition = projectile.transform.position;
         }
 
         protected override void OnUpdate(float deltaTime)
@@ -55,8 +57,13 @@ namespace _KITSystem.SkillSystem.Imp
             damageTickerElapsedTime += deltaTime;
 
             Vector2 position = this.trajectory.EvaluatePosition(deltaTime);
-
+            Vector2 direction = position - previousPosition;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            
             projectile.transform.position = position;
+            projectile.transform.rotation =  Quaternion.Euler(0, 0, angle + 90f);
+            
+            previousPosition = position;
 
             collider.Tick(deltaTime);
 

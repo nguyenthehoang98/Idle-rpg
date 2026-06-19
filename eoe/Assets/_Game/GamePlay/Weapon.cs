@@ -14,6 +14,7 @@ namespace _Game.GamePlay
 
         [SerializeField] private Transform muzzle;
         [SerializeField] private Animator animator;
+        [SerializeField] private float animationClipDuration;
         [SerializeField] private float weaponRotationDuration = 0.15f;
         [SerializeField] private AnimationCurve weaponRotationCurve;
 
@@ -29,6 +30,11 @@ namespace _Game.GamePlay
         private void Awake()
         {
             DeltaTime = Time.deltaTime;
+        }
+
+        private void Start()
+        {
+            animator.enabled = false;
         }
 
         public void Initialize(WeaponData weaponData, float timeScale, float deltaTime)
@@ -54,7 +60,7 @@ namespace _Game.GamePlay
                 else if (SkillData.findTarget.type == FindTargetData.FilterType.Nearest)
                     type = FindTargetType.Nearest;
 
-                Vector3 position = muzzle != null ? muzzle.position : Vector3.zero;
+                Vector3 position = MuzzlePosition();
                 Vector3 center = Vector3.zero;
                 
                 SkillTickable.FindTarget(type, Vector2.zero, 
@@ -88,6 +94,9 @@ namespace _Game.GamePlay
                 }
 
                 Vector3 direction = destination - position;
+#if UNITY_EDITOR
+                Debug.DrawRay(position, direction.normalized * SkillData.findTarget.radius, Color.magenta, 1);
+#endif
 
                 float angleFrom = transform.eulerAngles.z;
                 float angleTo = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
@@ -117,10 +126,20 @@ namespace _Game.GamePlay
                 }
 
                 transform.eulerAngles = new Vector3(0, 0, angleTo);
+
+                animator.enabled = true;
+                
                 animator.Play(Attack, 0, 0);
+                
                 animator.speed = TimeScale * WeaponData.attackSpeed;
+                
                 attacking = true;
-                yield return null;
+                
+                yield return new WaitForSeconds(animationClipDuration / animator.speed);
+
+                animator.enabled = false;
+                
+                attacking = false;
             }
         }
 
@@ -133,7 +152,9 @@ namespace _Game.GamePlay
         {
             if (attacking)
             {
-                SkillTickable.CastSkill(SkillData, muzzle != null ? muzzle.position : Vector3.zero, destination);
+                Vector3 position = MuzzlePosition();
+                Vector3 target = GetDestination(position, destination);
+                SkillTickable.CastSkill(SkillData, position, target);
                 
                 AudioClip clip = null;
                 if (!string.IsNullOrEmpty(WeaponData.attackAudioClip))
@@ -141,9 +162,23 @@ namespace _Game.GamePlay
                     clip = await AssetBundleManager.GetAssetCached<AudioClip>(WeaponData.attackAudioClip);
                 }
                 SoundManager.Instance.PlayOneShot(clip, WeaponData.attackVolume);
-                
-                attacking = false;
+
+                OnExecute();
             }
+        }
+
+        protected virtual void OnExecute()
+        {
+        }
+
+        protected virtual Vector3 GetDestination(Vector3 from, Vector3 to)
+        {
+            return to;
+        }
+        
+        protected virtual Vector3 MuzzlePosition()
+        {
+            return muzzle != null ? muzzle.position : Vector3.zero;
         }
     }
 }
