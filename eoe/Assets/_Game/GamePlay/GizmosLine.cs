@@ -6,6 +6,7 @@ namespace _Game.GamePlay
     {
         public static void Circle(Vector3 center, float radius, Color color, float deltaTime, int segments = 12)
         {
+#if UNITY_EDITOR
             Vector3 prev = center + Vector3.right * radius;
             for (int i = 1; i <= segments; i++)
             {
@@ -15,6 +16,7 @@ namespace _Game.GamePlay
                 Debug.DrawLine(prev, next, color, deltaTime);
                 prev = next;
             }
+#endif
         }
     }
 }

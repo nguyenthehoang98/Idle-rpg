@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using _Game.Configs;
 using _Game.GamePlay.SkillSystem;
 using _Game.GamePlay.SoundSystem;
@@ -6,6 +8,7 @@ using _KITSystem.Resource;
 using _KITSystem.SkillSystem.Core;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace _Game.GamePlay
 {
@@ -27,6 +30,9 @@ namespace _Game.GamePlay
 
         private Vector3 destination;
         private bool attacking;
+        
+        private HashSet<GameObject> objects = new HashSet<GameObject>();
+        private HashSet<string> objectsName = new HashSet<string>();
 
         private void Awake()
         {
@@ -38,6 +44,23 @@ namespace _Game.GamePlay
             animator.enabled = false;
         }
 
+        private void OnDestroy()
+        {
+            foreach (var assetName in objectsName)
+            {
+                AssetBundleManager.UnCache(assetName);
+            }
+
+            objectsName = null;
+
+            foreach (var go in objects)
+            {
+                Pool.UnRegisterPool(go);
+            }
+
+            objects = null;
+        }
+
         public async UniTask Initialize(WeaponData weaponData, float timeScale, float deltaTime)
         {
             WeaponData = weaponData;
@@ -47,17 +70,31 @@ namespace _Game.GamePlay
 
             if (!string.IsNullOrEmpty(WeaponData.prefabName))
             {
-                await AssetBundleManager.GetAssetCached<GameObject>(weaponData.prefabName);
+                GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(weaponData.prefabName);
+                if (go != null)
+                {
+                    objects.Add(go);
+                    objectsName.Add(WeaponData.prefabName);
+                }
             }
 
             if (!string.IsNullOrEmpty(WeaponData.attackAudioClip))
             {
-                await AssetBundleManager.GetAssetCached<AudioClip>(WeaponData.attackAudioClip);
+                AudioClip audioClip = await AssetBundleManager.GetAssetCached<AudioClip>(WeaponData.attackAudioClip);
+                if (audioClip != null)
+                {
+                    objectsName.Add(WeaponData.attackAudioClip);
+                }
             }
 
             if (!string.IsNullOrEmpty(WeaponData.projectileName))
             {
-                await AssetBundleManager.GetAssetCached<GameObject>(WeaponData.projectileName);
+                GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(WeaponData.projectileName);
+                if (go != null)
+                {
+                    objects.Add(go);
+                    objectsName.Add(WeaponData.projectileName);
+                }
             }
 
             StartCoroutine(AutoAttack());
@@ -70,7 +107,7 @@ namespace _Game.GamePlay
                 yield return new WaitForSeconds(WeaponData.cooldown / TimeScale);
 
                 if (attacking || !IsActivated) continue;
-
+                
                 FindTargetType type = FindTargetType.Filter;
                 if (SkillData.findTarget.type == FindTargetData.FilterType.Farthest)
                     type = FindTargetType.Farthest;
@@ -174,6 +211,7 @@ namespace _Game.GamePlay
             if (attacking && IsActivated)
             {
                 AudioClip clip = null;
+                
                 if (!string.IsNullOrEmpty(WeaponData.attackAudioClip))
                 {
                     clip = await AssetBundleManager.GetAssetCached<AudioClip>(WeaponData.attackAudioClip);

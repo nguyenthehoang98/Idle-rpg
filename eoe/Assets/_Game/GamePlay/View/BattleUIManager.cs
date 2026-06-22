@@ -121,7 +121,7 @@ namespace _Game.GamePlay.View
                 int id = collections[i];
                 int stack = dictCount[id];
                 Element element = elements[i];
-                Vector3 startPosition = element.transform.position;
+                Vector3 startPosition = element.OriginalPosition;
                 Vector3 endPosition = attractorsTarget[id].transform.position;
                 Vector3 rot = new Vector3(0, 0, 45);
                 colorSetting.TryGetColor(id, out ColorData colorData);

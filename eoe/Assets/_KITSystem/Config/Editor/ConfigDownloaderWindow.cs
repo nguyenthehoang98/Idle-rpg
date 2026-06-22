@@ -138,7 +138,7 @@ namespace _KITSystem.Config.Editor
                     {
                         if (GUILayout.Button(isDownloading ? "..." : "Download", GUILayout.Width(80)))
                         {
-                            DownloadConfig(type);
+                            DownloadConfig(type, ValidateAll);
                         }
                     }
 
@@ -177,7 +177,7 @@ namespace _KITSystem.Config.Editor
             GUILayout.Space(2);
         }
 
-        private async void DownloadConfig(Type type)
+        private async void DownloadConfig(Type type, Action onComplete)
         {
             var fullName = type.FullName;
             if (downloading.Contains(fullName))
@@ -322,6 +322,7 @@ namespace _KITSystem.Config.Editor
             {
                 downloading.Remove(fullName);
                 Repaint();
+                onComplete?.Invoke();
             }
         }
         
@@ -515,9 +516,15 @@ namespace _KITSystem.Config.Editor
         
         private void DownloadAll()
         {
+            int count = 0;
             foreach (var type in configTypes)
             {
-                DownloadConfig(type);
+                DownloadConfig(type, () =>
+                {
+                    count++;
+
+                    if (count == configTypes.Count) ValidateAll();
+                });
             }
         }
 

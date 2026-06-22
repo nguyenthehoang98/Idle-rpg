@@ -18,19 +18,21 @@ namespace _Game.GamePlay.View
 
         protected virtual void Awake()
         {
-            Debug.LogError(@"Thiếu trail");
+            Debug.Log(@"Thiếu trail");
             visual.gameObject.SetActive(false);
             //trail.enabled = false;
-        }
-
-        private void Start()
-        {
             originalPosition = visual.position;
+            Debug.Log(originalPosition);
         }
 
         public void ResetPosition()
         {
             visual.position = originalPosition;
+        }
+
+        public Vector3 OriginalPosition
+        {
+            get { return originalPosition; }
         }
 
         public void MoveTo(Vector3 start, Vector3 target, Vector3 rot, float flyToTargetDelay,
@@ -39,9 +41,9 @@ namespace _Game.GamePlay.View
         {
             if (sequence != null && sequence.IsPlaying()) sequence.Kill();
 
-            visual.transform.localScale = localScale;
-            visual.transform.rotation = Quaternion.Euler(0, 0, 0);
-            visual.transform.position = start;
+            visual.localScale = localScale;
+            visual.rotation = Quaternion.Euler(0, 0, 0);
+            visual.position = start;
             Active();
 
             bool completed = false;
@@ -52,8 +54,7 @@ namespace _Game.GamePlay.View
             Vector3 normal = Vector3.Cross(dir, Vector3.forward);
 
             sequence = DOTween.Sequence()
-                .Append(DOVirtual.Float(0, 1f, d, t => { visual.position = Vector3.Lerp(start, begin, t); })
-                    .SetEase(Ease.InOutSine))
+                .Append(DOVirtual.Float(0, 1f, d, t => { visual.position = Vector3.Lerp(start, begin, t); }).SetEase(Ease.InOutSine))
                 .AppendInterval(d)
                 .AppendInterval(flyToTargetDelay)
                 .Append(DOVirtual.Float(0, 1, duration - d, t =>
