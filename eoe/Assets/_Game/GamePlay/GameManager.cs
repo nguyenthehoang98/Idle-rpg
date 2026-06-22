@@ -20,25 +20,24 @@ namespace _Game.GamePlay
 
         private const int MAX = 4;
 
-        private Dictionary<int, int> damageReport = new Dictionary<int, int>();
+        private readonly Dictionary<int, int> elementStackNumber = new Dictionary<int, int>();
+        private readonly Dictionary<int, int> damageReport = new Dictionary<int, int>();
         private SpawnerTickable spawner;
+        private SkillTickable skillTickable;
+        private PlayerConfig playerConfig;
+        private PlayerRuntimeData player;
         private int totalMonsterAlive = 0;
 
         private void Awake()
         {
-            owner.TryGetTickable(out SkillTickable skillTickable);
-            skillTickable.OnPostDamage += (data, damage) =>
-            {
-                if (!damageReport.TryAdd(data.skillId, damage))
-                {
-                    damageReport[data.skillId] += damage;
-                }
-            };
+            owner.TryGetTickable(out skillTickable);
             owner.TryGetTickable(out spawner);
-            spawner.OnWaveSpawnCompleted += waveIndex =>
-            {
-                Debug.Log($"Complete wave {waveIndex} - {spawner.IsCompleted}");
-            };
+
+            player = new PlayerRuntimeData();
+            
+            skillTickable.OnPostDamage += PostDamage;
+            skillTickable.OnPostEarnExp += EarnExp;
+            spawner.OnWaveSpawnCompleted += WaveSpawnCompleted;
 
             Monster.OnMonsterEnable += MonsterEnable;
             Monster.OnMonsterDisable += MonsterDisable;
@@ -48,40 +47,14 @@ namespace _Game.GamePlay
             uiManager.OnElementStopReset += StopReset;
         }
 
-        private Dictionary<int, int> elementStackNumber = new Dictionary<int, int>();
-
-        private void StartReset()
-        {
-            elementStackNumber.Clear();
-        }
-
-        private void ElementChanged(int id)
-        {
-            if (!elementStackNumber.TryAdd(id, 1))
-            {
-                elementStackNumber[id]++;
-            }
-            
-            pedestal.SetWeaponLevel(id, elementStackNumber[id], 0.3f);
-        }
-
-        private void StopReset()
-        {
-            for (int i = 0; i < MAX; i++)
-            {
-                if (elementStackNumber.ContainsKey(i)) continue;
-                
-                pedestal.SetWeaponLevel(i, 0, 0.3f);
-            }
-        }
-
         private async void Start()
         {
             AssetBundleManager.SetLocationBundle(true);
 
-            await ConfigManager.Load(new string[] { "MonsterConfig", "LevelConfig", "WeaponConfig" });
+            await ConfigManager.Load(new string[] { "MonsterConfig", "LevelConfig", "WeaponConfig", "PlayerConfig" });
+          
             ColorSetting setting = ColorSetting.Instance;
-            
+            playerConfig = ConfigManager.Get<PlayerConfig>();
             MonsterConfig monsterConfig = ConfigManager.Get<MonsterConfig>();
             LevelConfig levelConfig = ConfigManager.Get<LevelConfig>();
             levelConfig.TryGetLevelData(1, out LevelData levelData);
@@ -132,8 +105,48 @@ namespace _Game.GamePlay
 
         private void OnDestroy()
         {
+            skillTickable.OnPostDamage -= PostDamage;
+            skillTickable.OnPostEarnExp -= EarnExp;
+            spawner.OnWaveSpawnCompleted -= WaveSpawnCompleted;
+            
             Monster.OnMonsterEnable -= MonsterEnable;
             Monster.OnMonsterDisable -= MonsterDisable;
+
+            uiManager.OnElementStartReset -= StartReset;
+            uiManager.OnElementChanged -= ElementChanged;
+            uiManager.OnElementStopReset -= StopReset;
+        }
+
+        private void SetWeapon(int slot, int level, float duration)
+        {
+            pedestal.SetWeaponLevel(slot, level, duration);
+        }
+
+        // Callback
+        
+        private void StartReset()
+        {
+            elementStackNumber.Clear();
+        }
+
+        private void ElementChanged(int id)
+        {
+            if (!elementStackNumber.TryAdd(id, 1))
+            {
+                elementStackNumber[id]++;
+            }
+            
+            pedestal.SetWeaponLevel(id, elementStackNumber[id], 0.3f);
+        }
+
+        private void StopReset()
+        {
+            for (int i = 0; i < MAX; i++)
+            {
+                if (elementStackNumber.ContainsKey(i)) continue;
+                
+                pedestal.SetWeaponLevel(i, 0, 0.3f);
+            }
         }
 
         private void MonsterDisable(Monster monster)
@@ -151,9 +164,37 @@ namespace _Game.GamePlay
             totalMonsterAlive++;
         }
 
-        private void SetWeapon(int slot, int level, float duration)
+        private void PostDamage(SkillData source, int damage)
         {
-            pedestal.SetWeaponLevel(slot, level, duration);
+            if (!damageReport.TryAdd(source.skillId, damage))
+            {
+                damageReport[source.skillId] += damage;
+            }
+        }
+
+        private void EarnExp(int exp)
+        {
+            player.CurrentExp += exp;
+
+            if (playerConfig.TryGetExp(player.CurrentLevel + 1, out var data))
+            {
+                if (player.CurrentExp >= data.exp)
+                {
+                    player.CurrentLevel += 1;
+                    player.CurrentExp -= data.exp;
+                    LevelUp();
+                }
+            }
+        }
+
+        private void LevelUp()
+        {
+            Debug.Log("Level " + player.CurrentLevel);
+        }
+
+        private void WaveSpawnCompleted(int waveIndex)
+        {
+            Debug.Log($"Complete wave {waveIndex} - {spawner.IsCompleted}");
         }
     }
 }

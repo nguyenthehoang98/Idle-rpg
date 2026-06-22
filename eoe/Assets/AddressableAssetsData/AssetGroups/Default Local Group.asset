@@ -30,6 +30,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5d6ddb7f70cb4de4fb354a518020c358
+    m_Address: PlayerConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5e72816dd5009fd48a8d00445211b4b7
     m_Address: impact_wood_01.wav
     m_ReadOnly: 0

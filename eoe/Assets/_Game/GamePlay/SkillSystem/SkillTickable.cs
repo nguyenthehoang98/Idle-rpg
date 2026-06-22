@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using _BattleSource.Entity;
 using _Game.Configs;
+using _KITSystem.Config;
 using _KITSystem.Entity;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;
@@ -22,7 +23,8 @@ namespace _Game.GamePlay.SkillSystem
         private HashSet<GameObject> objects = new HashSet<GameObject>();
         private HashSet<string> objectsName = new HashSet<string>();
 
-        public event Action<SkillData, int> OnPostDamage; 
+        public event Action<SkillData, int> OnPostDamage;
+        public event Action<int> OnPostEarnExp;
         
         private static SkillTickable instance;
         
@@ -88,6 +90,38 @@ namespace _Game.GamePlay.SkillSystem
             }
             else
                 Debug.LogError("Instance AnimationTickable is null");
+        }
+
+        private bool CalculatorDamage(SkillData skillData, Vector3 position, int entity)
+        {
+            bool alive = EntityManager.IsEntityAlive(entity);
+
+            if (!alive) return false;
+
+            ref HealthData health = ref ComponentManager<HealthData>.Get(entity);
+
+            int damage = 100;
+            
+            health.CurrentHealth -= damage;
+
+            bool found = AgentTickable.TryGetMonster(entity, out Monster monster);
+
+            if (found && health.CurrentHealth > 0) monster.BeHit();
+            
+            OnPostDamage?.Invoke(skillData, damage);
+                
+            SpawnTextDamage(damage, position);
+
+            if (health.CurrentHealth <= 0)
+            {
+                MonsterRuntimeData mrd = ComponentManager<MonsterRuntimeData>.Get(entity);
+                
+                OnPostEarnExp?.Invoke(mrd.Exp);
+                
+                AgentTickable.Remove(entity);
+            }
+
+            return true;
         }
 
         public static void FindTarget(FindTargetType type, Vector2 center, Vector2 pivot, float radius,
@@ -175,44 +209,12 @@ namespace _Game.GamePlay.SkillSystem
 
                 foreach (var e in entities)
                 {
-                    ref HealthData health = ref ComponentManager<HealthData>.Get(e);
-
-                    int damage = 50;
-
-                    health.CurrentHealth -= damage;
-
-                    bool found = AgentTickable.TryGetMonster(e, out Monster monster);
-
-                    if (found && health.CurrentHealth > 0) monster.BeHit();
-            
-                    OnPostDamage?.Invoke(skillData, damage);
-                    
-                    SpawnTextDamage(damage, position);
-            
-                    if (health.CurrentHealth <= 0) AgentTickable.Remove(e);
+                    CalculatorDamage(skillData, position, e);
                 }
             }
             else
             {
-                bool alive = EntityManager.IsEntityAlive(entity);
-
-                if (!alive) return false;
-
-                ref HealthData health = ref ComponentManager<HealthData>.Get(entity);
-
-                int damage = 100;
-            
-                health.CurrentHealth -= damage;
-
-                bool found = AgentTickable.TryGetMonster(entity, out Monster monster);
-
-                if (found && health.CurrentHealth > 0) monster.BeHit();
-            
-                OnPostDamage?.Invoke(skillData, damage);
-                
-                SpawnTextDamage(damage, position);
-            
-                if (health.CurrentHealth <= 0) AgentTickable.Remove(entity);
+                return CalculatorDamage(skillData, position, entity);
             }
             
             return true;

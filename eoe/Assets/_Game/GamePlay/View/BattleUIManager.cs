@@ -131,6 +131,7 @@ namespace _Game.GamePlay.View
                         element.Inactive();
                         OnElementChanged?.Invoke(id);
                         scroll.Push(colorData.activeColor);
+                        element.ResetPosition();
                         t--;
                         if (t == 0) OnElementStopReset?.Invoke();
                     }

@@ -156,9 +156,14 @@ namespace _Game.GamePlay.SpawnerSystem
             
             instance.transform.position = position;
 
-            monsterConfig.TryGetMonsterData(data.monsterId, out var monsterData);
+            monsterConfig.TryGetMonsterData(data.monsterId, out MonsterData monsterData);
            
-            await instance.GetComponent<Monster>().Initialize(monsterData);
+            await instance.GetComponent<Monster>().Initialize(monsterData, new MonsterScaleStatData
+            {
+                AttackScale = data.monsterAttackScale,
+                HealthScale = data.monsterHealthScale,
+                ExpScale = data.monsterExpScale
+            });
         }
 
         public void Dispose()

@@ -74,7 +74,10 @@ namespace _Game.GamePlay
             instance = null;
         }
 
-        public static void Add(Monster monster, MonsterData monsterData) => instance.AddPrivate(monster, monsterData);
+        public static void Add(Monster monster, MonsterScaleStatData scaleStat, MonsterData monsterData)
+        {
+            instance.AddPrivate(monster, scaleStat, monsterData);
+        }
 
         public static bool TryGetMonster(int entity, out Monster monster)
         {
@@ -95,15 +98,20 @@ namespace _Game.GamePlay
             return instance.agentToEntity.GetValueOrDefault(agent, -1);
         }
 
-        void AddPrivate(Monster monster, MonsterData monsterData)
+        void AddPrivate(Monster monster, MonsterScaleStatData scaleStat, MonsterData monsterData)
         {
             int agent = CreateAgent(
                 monster.transform.position, monsterData.radius, monsterData.speed,
                 stopDistance + monsterData.stopDistance).agent;
             Data data = new Data(monster, agent);
             int entity = EntityManager.NewEntity();
+
+            int health = Mathf.CeilToInt(monsterData.health * scaleStat.HealthScale);
+            int attack = Mathf.CeilToInt(monsterData.attack * scaleStat.AttackScale);
+            int exp = Mathf.CeilToInt(monsterData.exp * scaleStat.ExpScale);
             
-            ComponentManager<HealthData>.Add(entity, new HealthData(100));
+            ComponentManager<HealthData>.Add(entity, new HealthData(health));
+            ComponentManager<MonsterRuntimeData>.Add(entity, new MonsterRuntimeData(exp));
             
             agentToEntity.Add(agent, entity);
             monsterToData.Add(monster, data);

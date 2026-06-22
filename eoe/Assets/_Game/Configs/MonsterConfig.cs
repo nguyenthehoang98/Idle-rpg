@@ -55,7 +55,9 @@ namespace _Game.Configs
                             stopDistance = data.stopDistance,
                             deathAudioClip = b.deathAudioClip,
                             deathVolume = b.deathVolume,
-                            waitAfterPlayDeathAudio = b.waitAfterPlayDeathAudio,
+                            exp = data.expScale * b.exp,
+                            attack = data.attackScale * b.attack,
+                            health = data.healthScale * b.health,
                         });
                         found = true;
                         break;
@@ -88,18 +90,22 @@ namespace _Game.Configs
         public Color color;
         public string deathAudioClip;
         public float deathVolume;
-        public float waitAfterPlayDeathAudio;
+        public float attack;
+        public float health;
+        public float exp;
     }
 
     [Serializable] struct BaseMonsterData
     {
         public string id;
+        public int health;
+        public int attack;
+        public int exp;
         public string prefabName;
         public float speed;
         public float radius;
         public string deathAudioClip;
         public float deathVolume;
-        public float waitAfterPlayDeathAudio;
     }
     
     [Serializable] struct MonsterScaleData
@@ -111,10 +117,20 @@ namespace _Game.Configs
         [JsonProperty] private string hex;
         public Color color;
         public float stopDistance;
+        public float healthScale;
+        public float attackScale;
+        public float expScale;
 
         public void OnImported()
         {
             ColorUtility.TryParseHtmlString(hex, out color);
         }
+    }
+
+    public struct MonsterScaleStatData
+    {
+        public float AttackScale;
+        public float HealthScale;
+        public float ExpScale;
     }
 }

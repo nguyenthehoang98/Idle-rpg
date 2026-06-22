@@ -21,7 +21,7 @@ namespace _Game.GamePlay
         public static event Action<Monster> OnMonsterEnable;
         public static event Action<Monster> OnMonsterDisable;
 
-        private MonsterData monsterData;
+        private MonsterData MonsterData { get; set; }
         private Vector3 targetPosition;
         private Vector3 previousPosition;
         private float elapsedTime;
@@ -60,18 +60,18 @@ namespace _Game.GamePlay
             transform.position = Vector3.Lerp(previousPosition, targetPosition, Mathf.Clamp01(elapsedTime / deltaTime));
         }
 
-        public async UniTask Initialize(MonsterData data)
+        public async UniTask Initialize(MonsterData monsterData, MonsterScaleStatData scaleStat)
         {
-            AgentTickable.Add(this, data);
+            AgentTickable.Add(this, scaleStat, monsterData);
 
-            monsterData = data;
-            spriteRenderer.color = data.color;
-            scaler.transform.localScale = Vector3.one * data.scale; 
+            this.MonsterData = monsterData;
+            spriteRenderer.color = monsterData.color;
+            scaler.transform.localScale = Vector3.one * monsterData.scale; 
             animator.Play(Initialize_);
             
-            if (!string.IsNullOrEmpty(monsterData.deathAudioClip))
+            if (!string.IsNullOrEmpty(this.MonsterData.deathAudioClip))
             { 
-                await AssetBundleManager.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
+                await AssetBundleManager.GetAssetCached<AudioClip>(this.MonsterData.deathAudioClip);
             }
             
             OnMonsterEnable?.Invoke(this);
@@ -95,15 +95,12 @@ namespace _Game.GamePlay
             OnMonsterDisable?.Invoke(this);
             
             AudioClip clip = null;
-            if (!string.IsNullOrEmpty(monsterData.deathAudioClip))
+            if (!string.IsNullOrEmpty(MonsterData.deathAudioClip))
             {
-                clip = await AssetBundleManager.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
+                clip = await AssetBundleManager.GetAssetCached<AudioClip>(MonsterData.deathAudioClip);
             }
 
-            SoundManager.Instance.PlayOneShot(clip, monsterData.deathVolume);
-                    
-            if (monsterData.waitAfterPlayDeathAudio > 0)
-                await UniTask.WaitForSeconds(monsterData.waitAfterPlayDeathAudio);
+            SoundManager.Instance.PlayOneShot(clip, MonsterData.deathVolume);
 
             animator.Play(Death);
         }

@@ -179,9 +179,6 @@ namespace _Game.GamePlay
                     clip = await AssetBundleManager.GetAssetCached<AudioClip>(WeaponData.attackAudioClip);
                 }
                 SoundManager.Instance.PlayOneShot(clip, WeaponData.attackVolume);
-
-                if (WeaponData.waitAfterPlayAttackAudio > 0)
-                    await UniTask.WaitForSeconds(WeaponData.waitAfterPlayAttackAudio);
                 
                 Vector3 position = MuzzlePosition();
                 

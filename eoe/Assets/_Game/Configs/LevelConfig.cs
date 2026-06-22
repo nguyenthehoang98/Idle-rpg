@@ -116,6 +116,7 @@ namespace _Game.Configs
         public int totalMonster;
         public float monsterAttackScale;
         public float monsterHealthScale;
+        public float monsterExpScale;
         public float spawnRadius;
         public float startTime;
         public float endTime;
