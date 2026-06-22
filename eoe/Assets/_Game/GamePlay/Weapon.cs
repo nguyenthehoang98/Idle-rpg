@@ -221,8 +221,13 @@ namespace _Game.GamePlay
                 Vector3 position = MuzzlePosition();
                 
                 Vector3 target = GetDestination(position, destination);
+
+                SkillStatData statData = new SkillStatData
+                {
+                    Attack = WeaponData.attack
+                };
                 
-                SkillTickable.CastSkill(SkillData, position, target);
+                SkillTickable.CastSkill(SkillData, statData, position, target);
 
                 OnExecute();
             }

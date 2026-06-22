@@ -65,6 +65,7 @@ namespace _Game.Configs
         public int skillId;
         public float cooldown;
         public float attackSpeed;
+        public int attack;
         public SkillData skillData;
         public string attackAudioClip;
         public float attackVolume;

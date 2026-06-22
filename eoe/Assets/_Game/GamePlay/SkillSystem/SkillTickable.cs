@@ -42,7 +42,7 @@ namespace _Game.GamePlay.SkillSystem
             await Task.CompletedTask;
         }
 
-        public static void CastSkill(SkillData skillData, Vector3 position, Vector3 destination)
+        public static void CastSkill(SkillData skillData, SkillStatData statData, Vector3 position, Vector3 destination)
         {
             if (instance != null)
             {
@@ -63,7 +63,7 @@ namespace _Game.GamePlay.SkillSystem
                         Vector3 offsetPos = position + perpendicular * offset;
                         Vector3 offsetDest = destination + perpendicular * offset;
 
-                        instance.CastSkillPrivate(skillData, offsetPos, offsetDest);
+                        instance.CastSkillPrivate(skillData, statData, offsetPos, offsetDest);
                     }
                     
                     extra = true;
@@ -80,19 +80,19 @@ namespace _Game.GamePlay.SkillSystem
 
                         Vector3 dir = Quaternion.Euler(0, 0, angle) * direction;
 
-                        instance.CastSkillPrivate(skillData, position, position + dir * 100f);
+                        instance.CastSkillPrivate(skillData, statData, position, position + dir * 100f);
                     }
                     
                     extra = true;
                 }
                 
-                if(!extra) instance.CastSkillPrivate(skillData, position, destination);
+                if(!extra) instance.CastSkillPrivate(skillData, statData, position, destination);
             }
             else
                 Debug.LogError("Instance AnimationTickable is null");
         }
 
-        private bool CalculatorDamage(SkillData skillData, Vector3 position, int entity)
+        private bool CalculatorDamage(SkillData skillData, SkillStatData statData, Vector3 position, int entity)
         {
             bool alive = EntityManager.IsEntityAlive(entity);
 
@@ -100,7 +100,7 @@ namespace _Game.GamePlay.SkillSystem
 
             ref HealthData health = ref ComponentManager<HealthData>.Get(entity);
 
-            int damage = 100;
+            int damage = statData.Attack;
             
             health.CurrentHealth -= damage;
 
@@ -130,7 +130,7 @@ namespace _Game.GamePlay.SkillSystem
             instance.query.FindTarget(type, center, pivot, radius, funcFilterEntity, out result);
         }
 
-        async void CastSkillPrivate(SkillData skillData, Vector3 position, Vector3 destination)
+        async void CastSkillPrivate(SkillData skillData, SkillStatData statData, Vector3 position, Vector3 destination)
         {
             ColliderData colliderData = skillData.collider;
             BaseCollider collider = new CircleCollider(
@@ -167,7 +167,7 @@ namespace _Game.GamePlay.SkillSystem
                 damageTicket.type.ToString()
             );
             CastProjectileAction action = new CastProjectileAction(this, skillData.lifeTime, collider, trajectory,
-                (entity, pos) => DamageEntity(skillData, pos, entity), projectile, dtt, damageTicket.ticketInterval,
+                (entity, pos) => DamageEntity(skillData, statData, pos, entity), projectile, dtt, damageTicket.ticketInterval,
                 colliderData.limitNumberCollision, colliderData.resetCollisionInterval
             );
 
@@ -193,7 +193,7 @@ namespace _Game.GamePlay.SkillSystem
             RequestAddAction(1, action);
         }
 
-        private bool DamageEntity(SkillData skillData, Vector2 position, int entity)
+        private bool DamageEntity(SkillData skillData, SkillStatData statData, Vector2 position, int entity)
         {
             if (skillData.extra.isExplosive)
             {
@@ -209,12 +209,12 @@ namespace _Game.GamePlay.SkillSystem
 
                 foreach (var e in entities)
                 {
-                    CalculatorDamage(skillData, position, e);
+                    CalculatorDamage(skillData, statData, position, e);
                 }
             }
             else
             {
-                return CalculatorDamage(skillData, position, entity);
+                return CalculatorDamage(skillData, statData, position, entity);
             }
             
             return true;

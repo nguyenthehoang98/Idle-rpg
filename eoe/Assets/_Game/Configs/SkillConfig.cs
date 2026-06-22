@@ -121,6 +121,11 @@ namespace _Game.Configs
         }
     }    
 #endif
+    
+    public struct SkillStatData
+    {
+        public int Attack;
+    }
 
     [Serializable]
     public struct SkillData
