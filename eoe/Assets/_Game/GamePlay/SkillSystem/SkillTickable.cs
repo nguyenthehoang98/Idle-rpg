@@ -15,6 +15,8 @@ namespace _Game.GamePlay.SkillSystem
     [Serializable]
     public class SkillTickable : Spu, ITickable
     {
+        private const string TEXT_DAMAGE = "TextDamage";
+        
         private IQuery query = new EntityQuery();
 
         private HashSet<GameObject> objects = new HashSet<GameObject>();
@@ -24,11 +26,18 @@ namespace _Game.GamePlay.SkillSystem
         
         private static SkillTickable instance;
         
-        public Task Initialize()
+        public async Task Initialize()
         {
             instance = this;
             
-            return Task.CompletedTask;
+            GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(TEXT_DAMAGE);
+            if (objectsName.Add(TEXT_DAMAGE))
+            {
+                objects.Add(go);
+                Pool.RegisterPool(go, true);
+            }
+
+            await Task.CompletedTask;
         }
 
         public static void CastSkill(SkillData skillData, Vector3 position, Vector3 destination)
@@ -102,6 +111,7 @@ namespace _Game.GamePlay.SkillSystem
             if (!string.IsNullOrEmpty(skillData.prefabName))
             {
                 go = await AssetBundleManager.GetAssetCached<GameObject>(skillData.prefabName);
+                
                 if (objectsName.Add(skillData.prefabName))
                 {
                     Pool.RegisterPool(go, true);
@@ -111,13 +121,19 @@ namespace _Game.GamePlay.SkillSystem
                 go = Pool.Instantiate(go);
                 go.transform.position = position;
             }
+            
+            go.transform.position = position;
+
+            Projectile projectile = go.GetComponent<Projectile>();
+            
+            if (projectile == null) Debug.LogError($"Projectile Component is null at '{go.name}'");
 
             DamageTickerData damageTicket = skillData.damageTicker;
             _KITSystem.SkillSystem.Core.DamageTickerType dtt = Enum.Parse<_KITSystem.SkillSystem.Core.DamageTickerType>(
                 damageTicket.type.ToString()
             );
             CastProjectileAction action = new CastProjectileAction(this, skillData.lifeTime, collider, trajectory,
-                (entity, pos) => DamageEntity(skillData, pos, entity), go, dtt, damageTicket.ticketInterval,
+                (entity, pos) => DamageEntity(skillData, pos, entity), projectile, dtt, damageTicket.ticketInterval,
                 colliderData.limitNumberCollision, colliderData.resetCollisionInterval
             );
 
@@ -135,6 +151,7 @@ namespace _Game.GamePlay.SkillSystem
                 if (go != null)
                 {
                     Projectile p = go.GetComponent<Projectile>();
+
                     if (p != null) p.Destroy();
                 }
             };
@@ -164,10 +181,9 @@ namespace _Game.GamePlay.SkillSystem
 
                     health.CurrentHealth -= damage;
 
-                    if (health.CurrentHealth > 0 && AgentTickable.TryGetMonster(e, out Monster monster))
-                    {
-                        monster.BeHit();
-                    }
+                    bool found = AgentTickable.TryGetMonster(e, out Monster monster);
+
+                    if (found && health.CurrentHealth > 0) monster.BeHit();
             
                     OnPostDamage?.Invoke(skillData, damage);
                     
@@ -184,14 +200,13 @@ namespace _Game.GamePlay.SkillSystem
 
                 ref HealthData health = ref ComponentManager<HealthData>.Get(entity);
 
-                int damage = 50;
+                int damage = 100;
             
                 health.CurrentHealth -= damage;
 
-                if (health.CurrentHealth > 0 && AgentTickable.TryGetMonster(entity, out Monster monster))
-                {
-                    monster.BeHit();
-                }
+                bool found = AgentTickable.TryGetMonster(entity, out Monster monster);
+
+                if (found && health.CurrentHealth > 0) monster.BeHit();
             
                 OnPostDamage?.Invoke(skillData, damage);
                 
@@ -223,13 +238,7 @@ namespace _Game.GamePlay.SkillSystem
 
         private async void SpawnTextDamage(int damage, Vector3 position)
         {
-            string textDamage = "TextDamage";
-            GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(textDamage);
-            if (objectsName.Add(textDamage))
-            {
-                objects.Add(go);
-                Pool.RegisterPool(go, true);
-            }
+            GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(TEXT_DAMAGE);
             TextDamage ins = Pool.Instantiate(go).GetComponent<TextDamage>();
             ins.transform.position = position;
             ins.Execute(damage);

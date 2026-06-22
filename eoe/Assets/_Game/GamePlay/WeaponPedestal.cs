@@ -50,7 +50,7 @@ namespace _Game.GamePlay
             weapon.transform.localPosition = Vector3.zero;
             weapon.transform.rotation = Quaternion.identity;
             weapon.transform.localScale = Vector3.one;
-            weapon.Initialize(weaponData, timeScale, deltaTime);
+            await weapon.Initialize(weaponData, timeScale, deltaTime);
             await UniTask.CompletedTask;
         }
 

@@ -4,6 +4,7 @@ using _Game.GamePlay.SkillSystem;
 using _Game.GamePlay.SoundSystem;
 using _KITSystem.Resource;
 using _KITSystem.SkillSystem.Core;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace _Game.GamePlay
@@ -37,12 +38,28 @@ namespace _Game.GamePlay
             animator.enabled = false;
         }
 
-        public void Initialize(WeaponData weaponData, float timeScale, float deltaTime)
+        public async UniTask Initialize(WeaponData weaponData, float timeScale, float deltaTime)
         {
             WeaponData = weaponData;
             SkillData = weaponData.skillData;
             TimeScale = timeScale;
             DeltaTime = deltaTime;
+
+            if (!string.IsNullOrEmpty(WeaponData.prefabName))
+            {
+                await AssetBundleManager.GetAssetCached<GameObject>(weaponData.prefabName);
+            }
+
+            if (!string.IsNullOrEmpty(WeaponData.attackAudioClip))
+            {
+                await AssetBundleManager.GetAssetCached<AudioClip>(WeaponData.attackAudioClip);
+            }
+
+            if (!string.IsNullOrEmpty(WeaponData.projectileName))
+            {
+                await AssetBundleManager.GetAssetCached<GameObject>(WeaponData.projectileName);
+            }
+
             StartCoroutine(AutoAttack());
         }
 
@@ -156,16 +173,21 @@ namespace _Game.GamePlay
         {
             if (attacking && IsActivated)
             {
-                Vector3 position = MuzzlePosition();
-                Vector3 target = GetDestination(position, destination);
-                SkillTickable.CastSkill(SkillData, position, target);
-                
                 AudioClip clip = null;
                 if (!string.IsNullOrEmpty(WeaponData.attackAudioClip))
                 {
                     clip = await AssetBundleManager.GetAssetCached<AudioClip>(WeaponData.attackAudioClip);
                 }
                 SoundManager.Instance.PlayOneShot(clip, WeaponData.attackVolume);
+
+                if (WeaponData.waitAfterPlayAttackAudio > 0)
+                    await UniTask.WaitForSeconds(WeaponData.waitAfterPlayAttackAudio);
+                
+                Vector3 position = MuzzlePosition();
+                
+                Vector3 target = GetDestination(position, destination);
+                
+                SkillTickable.CastSkill(SkillData, position, target);
 
                 OnExecute();
             }

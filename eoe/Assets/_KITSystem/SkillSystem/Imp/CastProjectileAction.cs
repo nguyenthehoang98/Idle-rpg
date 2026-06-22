@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _Game.GamePlay;
 using _KITSystem.SkillSystem.Core;
 using UnityEngine;
 
@@ -17,8 +18,7 @@ namespace _KITSystem.SkillSystem.Imp
 
         public event Action OnComplete;
 
-        private Vector2 previousPosition;
-        private GameObject projectile;
+        private Projectile projectile;
         private HashSet<int> collisions;
         private int totalCollisions;
         private float collisionResetElapsedTime;
@@ -27,7 +27,7 @@ namespace _KITSystem.SkillSystem.Imp
 
         public CastProjectileAction(Spu spu, float lifeTime, BaseCollider collider, BaseTrajectory trajectory,
             Func<int, Vector2, bool> onDamageEntity,
-            GameObject projectile, DamageTickerType damageTickerType, float damageTickerInterval,
+            Projectile projectile, DamageTickerType damageTickerType, float damageTickerInterval,
             int limitNumberCollisions, float resetCollisionInterval) : base(spu, lifeTime)
         {
             this.onDamageEntity = onDamageEntity;
@@ -41,7 +41,6 @@ namespace _KITSystem.SkillSystem.Imp
             this.collisions = new HashSet<int>();
             this.collisionResetElapsedTime = this.damageTickerElapsedTime = 0;
             this.totalCollisions = 0;
-            this.previousPosition = projectile.transform.position;
         }
 
         protected override void OnUpdate(float deltaTime)
@@ -57,13 +56,8 @@ namespace _KITSystem.SkillSystem.Imp
             damageTickerElapsedTime += deltaTime;
 
             Vector2 position = this.trajectory.EvaluatePosition(deltaTime);
-            Vector2 direction = position - previousPosition;
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             
-            projectile.transform.position = position;
-            projectile.transform.rotation =  Quaternion.Euler(0, 0, angle + 90f);
-            
-            previousPosition = position;
+            projectile.SetPosition(position, deltaTime);
 
             collider.Tick(deltaTime);
 
@@ -88,6 +82,7 @@ namespace _KITSystem.SkillSystem.Imp
                     if (totalCollisions == limitNumberCollisions)
                     {
                         EndLifeCycle();
+                        
                         return;
                     }
                 }
@@ -101,6 +96,7 @@ namespace _KITSystem.SkillSystem.Imp
             projectile = null;
             
             OnComplete?.Invoke();
+            
             OnComplete = null;
         }
 

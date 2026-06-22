@@ -41,12 +41,16 @@ namespace _KITSystem.Resource
 
         private async UniTask<T> GetAsset<T>(string assetName, bool cached) where T : Object
         {
-            if (Dictionary.TryGetValue(assetName, out var entry))
+            if (cached && Dictionary.TryGetValue(assetName, out var entry))
             {
                 return entry.Asset as T;
             }
 
             AsyncOperationHandle<T> handle;
+
+#if UNITY_EDITOR
+            string stackTrace = UnityEngine.StackTraceUtility.ExtractStackTrace();
+#endif
 
             try
             {
@@ -58,7 +62,7 @@ namespace _KITSystem.Resource
 
                 if (asset == null)
                 {
-                    Debug.LogError($"[KitLoaded] Asset at path '{assetName}' is null.");
+                    Debug.LogError($"[KitLoaded] Asset at path '{assetName}' is null. \n\n{stackTrace}");
 
                     return null;
                 }
@@ -67,7 +71,7 @@ namespace _KITSystem.Resource
                 {
                     Dictionary[assetName] = new CacheEntry(handle, asset);
 #if UNITY_EDITOR
-                    Debug.Log($"[KitLoaded] Cached asset: {assetName}");
+                    Debug.Log($"[KitLoaded] Cached asset: {assetName}\n\n{stackTrace}");
 #endif
                 }
                 else
@@ -80,7 +84,7 @@ namespace _KITSystem.Resource
             }
             catch (Exception e)
             {
-                Debug.LogError($"[KitLoaded] Failed to load asset '{typeof(T)}' at path '{assetName}'");
+                Debug.LogError($"[KitLoaded] Failed to load asset '{typeof(T)}' at path '{assetName}'\n\n{stackTrace}");
                 Debug.LogError(e);
                 return null;
             }

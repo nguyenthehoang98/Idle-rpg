@@ -68,5 +68,6 @@ namespace _Game.Configs
         public SkillData skillData;
         public string attackAudioClip;
         public float attackVolume;
+        public float waitAfterPlayAttackAudio;
     }
 }

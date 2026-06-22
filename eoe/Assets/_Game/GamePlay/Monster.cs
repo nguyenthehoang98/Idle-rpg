@@ -3,6 +3,7 @@ using System.Collections;
 using _Game.Configs;
 using _Game.GamePlay.SoundSystem;
 using _KITSystem.Resource;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace _Game.GamePlay
@@ -59,7 +60,7 @@ namespace _Game.GamePlay
             transform.position = Vector3.Lerp(previousPosition, targetPosition, Mathf.Clamp01(elapsedTime / deltaTime));
         }
 
-        public void Initialize(MonsterData data)
+        public async UniTask Initialize(MonsterData data)
         {
             AgentTickable.Add(this, data);
 
@@ -68,28 +69,31 @@ namespace _Game.GamePlay
             scaler.transform.localScale = Vector3.one * data.scale; 
             animator.Play(Initialize_);
             
+            if (!string.IsNullOrEmpty(monsterData.deathAudioClip))
+            { 
+                await AssetBundleManager.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
+            }
+            
             OnMonsterEnable?.Invoke(this);
             
             isInitialized = true;
         }
 
-        public async void BeHit()
+        public void BeHit()
         {
             animator.Play(BeHit_, 0, 0);
-
-            AudioClip clip = null;
-            if (!string.IsNullOrEmpty(monsterData.beHitAudioClip))
-            {
-                clip = await AssetBundleManager.GetAssetCached<AudioClip>(monsterData.beHitAudioClip);
-            }
-
-            SoundManager.Instance.PlayOneShot(clip, monsterData.beHitVolume);
         }
 
         public async void Destroy()
         {
+            if (!isInitialized) return;
+            
             isInitialized = false;
-
+            
+            AgentTickable.Remove(this);
+            
+            OnMonsterDisable?.Invoke(this);
+            
             AudioClip clip = null;
             if (!string.IsNullOrEmpty(monsterData.deathAudioClip))
             {
@@ -97,11 +101,10 @@ namespace _Game.GamePlay
             }
 
             SoundManager.Instance.PlayOneShot(clip, monsterData.deathVolume);
-            
-            AgentTickable.Remove(this);
-            
-            OnMonsterDisable?.Invoke(this);
-            
+                    
+            if (monsterData.waitAfterPlayDeathAudio > 0)
+                await UniTask.WaitForSeconds(monsterData.waitAfterPlayDeathAudio);
+
             animator.Play(Death);
         }
 

@@ -53,10 +53,9 @@ namespace _Game.Configs
                             color = data.color,
                             scale = data.scaleRadius,
                             stopDistance = data.stopDistance,
-                            beHitAudioClip = b.beHitAudioClip,
-                            beHitVolume = b.beHitVolume,
                             deathAudioClip = b.deathAudioClip,
                             deathVolume = b.deathVolume,
+                            waitAfterPlayDeathAudio = b.waitAfterPlayDeathAudio,
                         });
                         found = true;
                         break;
@@ -87,10 +86,9 @@ namespace _Game.Configs
         public float radius;
         public float stopDistance;
         public Color color;
-        public string beHitAudioClip;
-        public float beHitVolume;
         public string deathAudioClip;
         public float deathVolume;
+        public float waitAfterPlayDeathAudio;
     }
 
     [Serializable] struct BaseMonsterData
@@ -99,10 +97,9 @@ namespace _Game.Configs
         public string prefabName;
         public float speed;
         public float radius;
-        public string beHitAudioClip;
-        public float beHitVolume;
         public string deathAudioClip;
         public float deathVolume;
+        public float waitAfterPlayDeathAudio;
     }
     
     [Serializable] struct MonsterScaleData

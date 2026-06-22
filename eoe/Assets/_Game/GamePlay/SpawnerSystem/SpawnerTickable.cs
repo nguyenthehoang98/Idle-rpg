@@ -138,7 +138,7 @@ namespace _Game.GamePlay.SpawnerSystem
             }
         }
 
-        private void Spawn(SpawnData data)
+        private async void Spawn(SpawnData data)
         {
             int portalIndex = data.portals[0];
             
@@ -157,7 +157,8 @@ namespace _Game.GamePlay.SpawnerSystem
             instance.transform.position = position;
 
             monsterConfig.TryGetMonsterData(data.monsterId, out var monsterData);
-            instance.GetComponent<Monster>().Initialize(monsterData);
+           
+            await instance.GetComponent<Monster>().Initialize(monsterData);
         }
 
         public void Dispose()
