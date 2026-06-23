@@ -123,6 +123,8 @@ namespace _Game.Configs
 
         public void OnImported()
         {
+            Debug.Log(hex);
+            Debug.Log(color);
             ColorUtility.TryParseHtmlString(hex, out color);
         }
     }
