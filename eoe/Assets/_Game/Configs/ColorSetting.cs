@@ -18,19 +18,15 @@ namespace _Game.Configs
         [SerializeField] private ColorData[] datas = new ColorData[4];
 
         private Dictionary<int, ColorData> cached;
-        
-        private static ColorSetting instance;
 
-        public static ColorSetting Instance
+        public static ColorSetting Instance { get; private set; }
+
+        public static void Load()
         {
-            get
+            if (Instance == null)
             {
-                if (instance == null)
-                {
-                    instance = Resources.Load<ColorSetting>("ColorSetting");
-                    instance.OnMapValue();
-                }
-                return instance;
+                Instance = Resources.Load<ColorSetting>("ColorSetting");
+                Instance.OnMapValue();
             }
         }
 

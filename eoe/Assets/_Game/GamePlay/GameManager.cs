@@ -6,6 +6,7 @@ using _Game.GamePlay.View;
 using _KITSystem.Config;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;
+using _KITSystem.Utils;
 using UnityEngine;
 
 namespace _Game.GamePlay
@@ -52,12 +53,6 @@ namespace _Game.GamePlay
 
         private async void Start()
         {
-            AssetBundleManager.SetLocationBundle(true);
-
-            await ConfigManager.Load(new string[] { "MonsterConfig", "LevelConfig", "WeaponConfig", "PlayerConfig" });
-
-            ColorSetting setting = ColorSetting.Instance;
-
             weaponConfig = ConfigManager.Get<WeaponConfig>();
             playerConfig = ConfigManager.Get<PlayerConfig>();
             MonsterConfig monsterConfig = ConfigManager.Get<MonsterConfig>();
@@ -80,6 +75,8 @@ namespace _Game.GamePlay
             allWeapons = await pedestal.Initialize(weaponConfig, weaponsId, owner.Loop, owner.TickInterval);
             uiManager.Initialize();
             owner.IsPaused = false;
+            
+            KitEntryScene.Instance.HideLoadingScene();
         }
 
         private void OnDestroy()
