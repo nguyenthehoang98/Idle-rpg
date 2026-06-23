@@ -125,6 +125,8 @@ namespace _Game.Configs
     public struct SkillStatData
     {
         public int Attack;
+        public float ExplosiveDamagePercent;
+        public float KillInstantBelowHealthPercent;
     }
 
     [Serializable]
@@ -162,7 +164,11 @@ namespace _Game.Configs
         
         public bool isExplosive;
         public float explosiveRadius;
+        public float explosiveDamagePercent;
         public string explosivePrefabName;
+
+        public bool isKillInstant;
+        public float killInstantBelowHealthPercent;
     }
 
     [Serializable]

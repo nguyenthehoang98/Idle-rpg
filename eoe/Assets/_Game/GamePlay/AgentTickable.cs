@@ -27,7 +27,9 @@ namespace _Game.GamePlay
         public new Task Initialize()
         {
             base.Initialize();
+            
             instance = this;
+            
             return Task.CompletedTask;
         }
 
@@ -76,25 +78,58 @@ namespace _Game.GamePlay
 
         public static void Add(Monster monster, MonsterScaleStatData scaleStat, MonsterData monsterData)
         {
-            instance.AddPrivate(monster, scaleStat, monsterData);
+#if !UNITY_EDITOR
+            if (instance == null) return;       
+#endif
+            instance.AddPrivate(monster, scaleStat, monsterData);            
+
         }
 
         public static bool TryGetMonster(int entity, out Monster monster)
         {
+#if !UNITY_EDITOR
+            if (instance == null)
+            {
+                monster = null;
+                return false;
+            }   
+#endif
             return instance.entityToMonster.TryGetValue(entity, out monster);
         }
 
         public static int Query(float2 position, float2 size, out AgentData[] agentsData)
         {
+#if !UNITY_EDITOR
+            if (instance == null)
+            {
+                agentsData = null;
+                return 0;
+            }       
+#endif
             return instance.QueryAgent(position, size, out agentsData);
         }
-        
-        public static void Remove(Monster monster) => instance.RemovePrivate(monster);
 
-        public static void Remove(int entity) => instance.RemovePrivate(entity);
+        public static void Remove(Monster monster)
+        {
+#if !UNITY_EDITOR
+            if (instance == null) return;       
+#endif
+            instance.RemovePrivate(monster);
+        }
+
+        public static void Remove(int entity)
+        {
+#if !UNITY_EDITOR
+            if (instance == null) return;       
+#endif
+            instance.RemovePrivate(entity);
+        }
 
         public static int GetEntity(int agent)
         {
+#if !UNITY_EDITOR
+            if (instance == null) return -1;       
+#endif
             return instance.agentToEntity.GetValueOrDefault(agent, -1);
         }
 

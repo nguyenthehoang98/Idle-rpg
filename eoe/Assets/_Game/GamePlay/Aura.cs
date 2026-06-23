@@ -10,11 +10,6 @@ namespace _Game.GamePlay
         [SerializeField] private Transform root;
         [SerializeField] private Animator animator;
 
-        private void Awake()
-        {
-            Pool.RegisterPool(gameObject, true);
-        }
-
         public void Scale(float scale)
         {
             root.localScale = Vector3.one * scale;

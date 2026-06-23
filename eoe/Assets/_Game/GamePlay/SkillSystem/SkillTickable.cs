@@ -33,9 +33,8 @@ namespace _Game.GamePlay.SkillSystem
             instance = this;
             
             GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(TEXT_DAMAGE);
-            if (objectsName.Add(TEXT_DAMAGE))
+            if (objectsName.Add(TEXT_DAMAGE) && objects.Add(go))
             {
-                objects.Add(go);
                 Pool.RegisterPool(go, true);
             }
 
@@ -92,7 +91,7 @@ namespace _Game.GamePlay.SkillSystem
                 Debug.LogError("Instance AnimationTickable is null");
         }
 
-        private bool CalculatorDamage(SkillData skillData, SkillStatData statData, Vector3 position, int entity)
+        private bool CalculatorDamage(SkillData skillData, SkillStatData statData, Vector3 position, int entity, float scaleDamage)
         {
             bool alive = EntityManager.IsEntityAlive(entity);
 
@@ -112,7 +111,11 @@ namespace _Game.GamePlay.SkillSystem
                 
             SpawnTextDamage(damage, position);
 
-            if (health.CurrentHealth <= 0)
+            float killInstantBelowHealthPercent = skillData.extra.killInstantBelowHealthPercent + statData.KillInstantBelowHealthPercent;
+            bool shouldKillMonster = skillData.extra.isKillInstant &&
+                                     ((float)health.CurrentHealth / health.MaxHealth) <= killInstantBelowHealthPercent;
+
+            if (health.CurrentHealth <= 0 && shouldKillMonster)
             {
                 MonsterRuntimeData mrd = ComponentManager<MonsterRuntimeData>.Get(entity);
                 
@@ -146,14 +149,12 @@ namespace _Game.GamePlay.SkillSystem
             {
                 go = await AssetBundleManager.GetAssetCached<GameObject>(skillData.prefabName);
                 
-                if (objectsName.Add(skillData.prefabName))
+                if (objectsName.Add(skillData.prefabName) && objects.Add(go))
                 {
                     Pool.RegisterPool(go, true);
-                    objects.Add(go);
                 }
 
                 go = Pool.Instantiate(go);
-                go.transform.position = position;
             }
             
             go.transform.position = position;
@@ -207,14 +208,16 @@ namespace _Game.GamePlay.SkillSystem
               
                 List<int> entities = query.GetAllEntities(position, size, EntityManager.IsEntityAlive);
 
+                float explosiveDamageScale = skillData.extra.explosiveDamagePercent + statData.ExplosiveDamagePercent;
+
                 foreach (var e in entities)
                 {
-                    CalculatorDamage(skillData, statData, position, e);
+                    CalculatorDamage(skillData, statData, position, e, e == entity ? 1.0f: explosiveDamageScale);
                 }
             }
             else
             {
-                return CalculatorDamage(skillData, statData, position, entity);
+                return CalculatorDamage(skillData, statData, position, entity, 1.0f);
             }
             
             return true;
@@ -226,7 +229,7 @@ namespace _Game.GamePlay.SkillSystem
             
             GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(prefabName);
 
-            if (objectsName.Add(prefabName))
+            if (objectsName.Add(prefabName) && objects.Add(go))
             {
                 Pool.RegisterPool(go, true);
             }
