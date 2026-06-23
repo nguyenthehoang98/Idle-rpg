@@ -95,6 +95,172 @@ namespace _KITSystem.SkillSystem
             action.EndLifeCycle();
             Assert.AreEqual(ActionCompleteReason.EndLifeCycle, action.Reason);
         }
+
+        [Test]
+        public void Interrupt_AlreadyFinished_DoesNotChangeReason()
+        {
+            var action = new TestAction(new Spu(), 10f);
+            action.Start();
+            action.EndLifeCycle();
+            action.Interrupt();
+            Assert.AreEqual(ActionCompleteReason.EndLifeCycle, action.Reason);
+        }
+
+        [Test]
+        public void Interrupt_Idempotent()
+        {
+            var action = new TestAction(new Spu(), 10f);
+            action.Start();
+            action.Interrupt();
+            action.Interrupt();
+            Assert.AreEqual(ActionCompleteReason.Interrupt, action.Reason);
+        }
+
+        [Test]
+        public void Start_DoesNotFinish()
+        {
+            var action = new TestAction(new Spu(), 10f);
+            action.Start();
+            Assert.IsFalse(action.IsFinished);
+            Assert.AreEqual(ActionCompleteReason.Undefined, action.Reason);
+        }
+
+        [Test]
+        public void Tick_LifeTimeZero_ImmediateFinish()
+        {
+            var action = new TestAction(new Spu(), 0f);
+            action.Start();
+            action.Tick(0f);
+            Assert.IsTrue(action.IsFinished);
+            Assert.AreEqual(ActionCompleteReason.EndLifeCycle, action.Reason);
+        }
+
+        [Test]
+        public void Tick_ExactLifeTime_Finishes()
+        {
+            var action = new TestAction(new Spu(), 5f);
+            action.Start();
+            action.Tick(5f);
+            Assert.IsTrue(action.IsFinished);
+            Assert.AreEqual(ActionCompleteReason.EndLifeCycle, action.Reason);
+        }
+
+        [Test]
+        public void Tick_MultiplePartial_AccumulatesToLifeTime()
+        {
+            var action = new TestAction(new Spu(), 3f);
+            action.Start();
+
+            action.Tick(1f);
+            Assert.IsFalse(action.IsFinished);
+
+            action.Tick(1f);
+            Assert.IsFalse(action.IsFinished);
+
+            action.Tick(1f);
+            Assert.IsTrue(action.IsFinished);
+            Assert.AreEqual(ActionCompleteReason.EndLifeCycle, action.Reason);
+        }
+
+        [Test]
+        public void Tick_MultiplePartial_ExceedsLifeTime()
+        {
+            var action = new TestAction(new Spu(), 3f);
+            action.Start();
+
+            action.Tick(1f);
+            action.Tick(1f);
+            action.Tick(1.5f);
+            Assert.IsTrue(action.IsFinished);
+        }
+
+        [Test]
+        public void Reason_DefaultsToUndefined()
+        {
+            var action = new TestAction(new Spu(), 10f);
+            Assert.AreEqual(ActionCompleteReason.Undefined, action.Reason);
+        }
+
+        [Test]
+        public void Tick_WithoutStart_StillAccumulatesLifeTime()
+        {
+            var action = new TestAction(new Spu(), 1f);
+            action.Tick(1.5f);
+            Assert.IsTrue(action.IsFinished);
+        }
+
+        [Test]
+        public void Interrupt_ThenStop_StopStillCalled()
+        {
+            var action = new TestAction(new Spu(), 10f);
+            action.Start();
+            action.Interrupt();
+            action.Stop();
+            Assert.AreEqual(1, action.StopCallCount);
+        }
+
+        [Test]
+        public void EndLifeCycle_ThenStop_StopStillCalled()
+        {
+            var action = new TestAction(new Spu(), 10f);
+            action.Start();
+            action.EndLifeCycle();
+            action.Stop();
+            Assert.AreEqual(1, action.StopCallCount);
+        }
+
+        [Test]
+        public void OnUpdate_ReceivesDeltaTimeWhenNotFinished()
+        {
+            var action = new TestAction(new Spu(), 5f);
+            action.Start();
+            action.Tick(2f);
+            Assert.AreEqual(1, action.UpdateCallCount);
+        }
+
+        [Test]
+        public void OnUpdate_NotCalledAfterFinished()
+        {
+            var action = new TestAction(new Spu(), 1f);
+            action.Start();
+            action.Tick(2f);
+            int before = action.UpdateCallCount;
+            action.Tick(1f);
+            Assert.AreEqual(before, action.UpdateCallCount);
+        }
+
+        [Test]
+        public void EndLifeCycle_PreventsLifeTimeAutoFinish()
+        {
+            var action = new TestAction(new Spu(), 2f);
+            action.Start();
+            action.EndLifeCycle();
+            action.Tick(3f);
+            Assert.IsTrue(action.IsFinished);
+            Assert.AreEqual(ActionCompleteReason.EndLifeCycle, action.Reason);
+        }
+
+        [Test]
+        public void Interrupt_PreventsLifeTimeAutoFinish()
+        {
+            var action = new TestAction(new Spu(), 2f);
+            action.Start();
+            action.Interrupt();
+            action.Tick(3f);
+            Assert.IsTrue(action.IsFinished);
+            Assert.AreEqual(ActionCompleteReason.Interrupt, action.Reason);
+        }
+
+        [Test]
+        public void MultipleTicks_UpdateCalledEachTime()
+        {
+            var action = new TestAction(new Spu(), 10f);
+            action.Start();
+            action.Tick(1f);
+            action.Tick(1f);
+            action.Tick(1f);
+            Assert.AreEqual(3, action.UpdateCallCount);
+        }
     }
 }
 #endif
