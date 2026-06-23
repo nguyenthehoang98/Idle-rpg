@@ -71,6 +71,7 @@ namespace _Game.Configs
         public bool TryGetUpgradeWeapon(int weaponId, int level, UpgradeType type, out List<WeaponUpgradeData> list)
         {
             int key = HashCode.Combine(weaponId, level, type);
+            
             return cachedUpgrade.TryGetValue(key, out list);
         }
     }
@@ -117,7 +118,6 @@ namespace _Game.Configs
         public void Increase(WeaponUpgradeData data)
         {
             attackSpeed += data.attackSpeed;
-            critDamage += data.critDamage;
             critChance += data.critChance;
             critDamage += data.critDamage;
             bounceCount += data.bounceCount;
@@ -137,7 +137,6 @@ namespace _Game.Configs
         public void Decrease(WeaponUpgradeData data)
         {
             attackSpeed -= data.attackSpeed;
-            critDamage -= data.critDamage;
             critChance -= data.critChance;
             critDamage -= data.critDamage;
             bounceCount -= data.bounceCount;

@@ -32,7 +32,6 @@ namespace _Game.Configs
 
         public void OnPostImported()
         {
-            Debug.LogError(JsonConvert.SerializeObject(extras));
             for (int i = 0; i < skills.Count; i++)
             {
                 SkillData skill = skills[i];
@@ -164,7 +163,7 @@ namespace _Game.Configs
     [Serializable]
     public struct ExtraData
     {
-        public string id;
+        [JsonProperty, NonSerialized] public string id;
         
         public int spreadProjectileCount;
         public float spreadAngleStep;
@@ -182,7 +181,7 @@ namespace _Game.Configs
     [Serializable]
     public struct ColliderData
     {
-        [NonSerialized] public string id;
+        [JsonProperty, NonSerialized] public string id;
 
         public float timerTrigger;
         public float duration;
@@ -196,7 +195,7 @@ namespace _Game.Configs
     [Serializable]
     public struct TrajectoryData
     {
-        [NonSerialized] public string id;
+        [JsonProperty, NonSerialized] public string id;
         
         public TrajectoryType type;
         public float bulletInitSpeed;
@@ -206,7 +205,7 @@ namespace _Game.Configs
     [Serializable]
     public struct FindTargetData
     {
-        [NonSerialized] public string id;
+        [JsonProperty, NonSerialized] public string id;
         
         public FilterType type;
         public float radius;
