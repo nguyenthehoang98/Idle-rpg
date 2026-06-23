@@ -1,4 +1,5 @@
 using _Game.Configs;
+using _Game.GamePlay.Manager;
 using _KITSystem.Config;
 using _KITSystem.Resource;
 using _KITSystem.Utils;
@@ -31,6 +32,9 @@ namespace _Game.Entry
             AssetBundleManager.SetLocationBundle(true);
             
             await ConfigManager.Load(new string[] { "MonsterConfig", "LevelConfig", "WeaponConfig", "PlayerConfig" });
+
+            AssetBundleManager.GetAssetCached<GameObject>(Const.TEXT_DAMAGE_NORMAL);
+            AssetBundleManager.GetAssetCached<GameObject>(Const.TEXT_DAMAGE_CRITICAL);
 
             ColorSetting.Load();
 

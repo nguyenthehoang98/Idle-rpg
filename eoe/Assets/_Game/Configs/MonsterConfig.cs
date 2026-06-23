@@ -128,11 +128,4 @@ namespace _Game.Configs
             ColorUtility.TryParseHtmlString(hex, out color);
         }
     }
-
-    public struct MonsterScaleStatData
-    {
-        public float AttackScale;
-        public float HealthScale;
-        public float ExpScale;
-    }
 }

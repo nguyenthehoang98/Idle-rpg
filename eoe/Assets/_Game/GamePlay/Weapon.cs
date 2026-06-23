@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using _Game.Configs;
-using _Game.GamePlay.SkillSystem;
-using _Game.GamePlay.SoundSystem;
+using _Game.GamePlay.Manager;
 using _KITSystem.Resource;
 using _KITSystem.SkillSystem.Core;
 using Cysharp.Threading.Tasks;
@@ -20,18 +19,19 @@ namespace _Game.GamePlay
         [SerializeField] private float weaponRotationDuration = 0.15f;
         [SerializeField] private AnimationCurve weaponRotationCurve;
 
-        public int WeaponId => WeaponData.id;
+        public int WeaponId => weaponData.id;
         public int CurrentLevel { get; private set; }
-                
-        private SkillData SkillData { get; set; }
-        private WeaponData WeaponData { get; set; }
-        private float TimeScale { get; set; } = 1;
-        private float DeltaTime { get; set; } = 0.0334f;
-        private bool IsActivated { get; set; }
+        
+        private IQuery query = new EntityQuery();
+        private SkillData skillData;
+        private WeaponData weaponData;
+        private float timeScale = 1;
+        private float deltaTime = 0.0334f;
+        private bool isActivated;
 
         private Vector3 destination;
         private bool attacking;
-        
+
         private HashSet<GameObject> objects = new HashSet<GameObject>();
         private HashSet<string> objectsName = new HashSet<string>();
 
@@ -42,7 +42,7 @@ namespace _Game.GamePlay
 
         private void Awake()
         {
-            DeltaTime = Time.deltaTime;
+            deltaTime = Time.deltaTime;
         }
 
         private void Start()
@@ -67,41 +67,42 @@ namespace _Game.GamePlay
             objects = null;
         }
 
-        public async UniTask Initialize(WeaponData weaponData, WeaponUpgradeData powerx2, WeaponUpgradeData powerx3, float timeScale, float deltaTime)
+        public async UniTask Initialize(WeaponData weaponData, WeaponUpgradeData powerx2, WeaponUpgradeData powerx3,
+            float timeScale, float deltaTime)
         {
             powerX2 = powerx2;
             powerX3 = powerx3;
-            WeaponData = weaponData;
-            SkillData = weaponData.skillData;
-            TimeScale = timeScale;
-            DeltaTime = deltaTime;
+            this.weaponData = weaponData;
+            skillData = weaponData.skillData;
+            this.timeScale = timeScale;
+            this.deltaTime = deltaTime;
             current = new WeaponUpgradeData();
-            if (!string.IsNullOrEmpty(WeaponData.prefabName))
+            if (!string.IsNullOrEmpty(this.weaponData.prefabName))
             {
                 GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(weaponData.prefabName);
                 if (go != null)
                 {
                     objects.Add(go);
-                    objectsName.Add(WeaponData.prefabName);
+                    objectsName.Add(this.weaponData.prefabName);
                 }
             }
 
-            if (!string.IsNullOrEmpty(WeaponData.attackAudioClip))
+            if (!string.IsNullOrEmpty(this.weaponData.attackAudioClip))
             {
-                AudioClip audioClip = await AssetBundleManager.GetAssetCached<AudioClip>(WeaponData.attackAudioClip);
+                AudioClip audioClip = await AssetBundleManager.GetAssetCached<AudioClip>(this.weaponData.attackAudioClip);
                 if (audioClip != null)
                 {
-                    objectsName.Add(WeaponData.attackAudioClip);
+                    objectsName.Add(this.weaponData.attackAudioClip);
                 }
             }
 
-            if (!string.IsNullOrEmpty(WeaponData.projectileName))
+            if (!string.IsNullOrEmpty(this.weaponData.projectileName))
             {
-                GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(WeaponData.projectileName);
+                GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(this.weaponData.projectileName);
                 if (go != null)
                 {
                     objects.Add(go);
-                    objectsName.Add(WeaponData.projectileName);
+                    objectsName.Add(this.weaponData.projectileName);
                 }
             }
 
@@ -111,8 +112,8 @@ namespace _Game.GamePlay
         public void SetLevel(int level)
         {
             CurrentLevel = level;
-            IsActivated = level > 0;
-            
+            isActivated = level > 0;
+
             RefreshUpgradeData();
         }
 
@@ -129,26 +130,26 @@ namespace _Game.GamePlay
             if (CurrentLevel == 2) current.Increase(powerX2);
             if (CurrentLevel == 3) current.Increase(powerX3);
         }
-        
+
         private IEnumerator AutoAttack()
         {
             while (true)
             {
-                yield return new WaitForSeconds(WeaponData.cooldown * (1 - current.cooldownReduce) / TimeScale);
+                yield return new WaitForSeconds(weaponData.cooldown * (1 - current.cooldownReduce) / timeScale);
 
-                if (attacking || !IsActivated) continue;
-                
+                if (attacking || !isActivated) continue;
+
                 FindTargetType type = FindTargetType.Filter;
-                if (SkillData.findTarget.type == FindTargetData.FilterType.Farthest)
+                if (skillData.findTarget.type == FindTargetData.FilterType.Farthest)
                     type = FindTargetType.Farthest;
-                else if (SkillData.findTarget.type == FindTargetData.FilterType.Nearest)
+                else if (skillData.findTarget.type == FindTargetData.FilterType.Nearest)
                     type = FindTargetType.Nearest;
 
                 Vector3 position = MuzzlePosition();
                 Vector3 center = Vector3.zero;
-                
-                SkillTickable.FindTarget(type, center, position,
-                    SkillData.findTarget.radius, FilterEntity, out var result);
+
+                float radius = skillData.findTarget.radius;
+                query.FindTarget(type, center, position, radius, FilterEntity, out var result);
 
                 int entity = -1;
                 destination = Vector3.zero;
@@ -166,20 +167,20 @@ namespace _Game.GamePlay
                 if (entity == -1)
                 {
 #if UNITY_EDITOR
-                    GizmosLine.Circle(center, SkillData.findTarget.radius, Color.red, WeaponData.cooldown / TimeScale, 36);
+                    GizmosLine.Circle(center, radius, Color.red, weaponData.cooldown / timeScale, 36);
 #endif
                     continue;
                 }
                 else
                 {
 #if UNITY_EDITOR
-                    GizmosLine.Circle(center, SkillData.findTarget.radius, Color.green, WeaponData.cooldown / TimeScale, 36);
+                    GizmosLine.Circle(center, radius, Color.green, weaponData.cooldown / timeScale, 36);
 #endif
                 }
 
                 Vector3 direction = destination - position;
 #if UNITY_EDITOR
-                Debug.DrawRay(position, direction.normalized * SkillData.findTarget.radius, Color.magenta, 1);
+                Debug.DrawRay(position, direction.normalized * skillData.findTarget.radius, Color.magenta, 1);
 #endif
 
                 float angleFrom = transform.eulerAngles.z;
@@ -195,9 +196,9 @@ namespace _Game.GamePlay
                     angleDelta / 180f
                 );
 
-                while (elapsedTime <= dynamicDuration && IsActivated)
+                while (elapsedTime <= dynamicDuration && isActivated)
                 {
-                    float dt = DeltaTime / TimeScale;
+                    float dt = deltaTime / timeScale;
 
                     elapsedTime += dt;
                     float t = Mathf.Clamp01(elapsedTime / dynamicDuration);
@@ -209,26 +210,26 @@ namespace _Game.GamePlay
                     yield return new WaitForSeconds(dt);
                 }
 
-                if (!IsActivated) yield break;
+                if (!isActivated) yield break;
 
                 OnPlay();
 
                 transform.eulerAngles = new Vector3(0, 0, angleTo);
 
                 animator.enabled = true;
-                
+
                 animator.Play(Attack, 0, 0);
 
-                float attackSpeed = WeaponData.attackSpeed + current.attackSpeed;
-                
-                animator.speed = TimeScale * attackSpeed;
-                
+                float attackSpeed = weaponData.attackSpeed + current.attackSpeed;
+
+                animator.speed = timeScale * attackSpeed;
+
                 attacking = true;
-                
+
                 yield return new WaitForSeconds(animationClipDuration / animator.speed);
 
                 animator.enabled = false;
-                
+
                 attacking = false;
             }
         }
@@ -240,37 +241,38 @@ namespace _Game.GamePlay
 
         public async void ExecutePrivate()
         {
-            if (attacking && IsActivated)
+            if (attacking && isActivated)
             {
                 AudioClip clip = null;
-                
-                if (!string.IsNullOrEmpty(WeaponData.attackAudioClip))
+
+                if (!string.IsNullOrEmpty(weaponData.attackAudioClip))
                 {
-                    clip = await AssetBundleManager.GetAssetCached<AudioClip>(WeaponData.attackAudioClip);
+                    clip = await AssetBundleManager.GetAssetCached<AudioClip>(weaponData.attackAudioClip);
                 }
-                SoundManager.Instance.PlayOneShot(clip, WeaponData.attackVolume);
-                
+
+                SoundManager.Instance.PlayOneShot(clip, weaponData.attackVolume);
+
                 Vector3 position = MuzzlePosition();
-                
+
                 Vector3 target = GetDestination(position, destination);
 
-                SkillStatData statData = new SkillStatData
+                SkillRuntimeData runtimeData = new SkillRuntimeData
                 {
-                    Attack = (1 + current.damagePercent) * WeaponData.attack,
-                    CritChance = current.critChance + WeaponData.critChance,
-                    CritDamage = current.critDamage + WeaponData.critDamage,
+                    Attack = (1 + current.damagePercent) * weaponData.attack,
+                    CritChance = current.critChance + weaponData.critChance,
+                    CritDamage = current.critDamage + weaponData.critDamage,
                     ParallelCount = current.parallelCount,
                     SpreadCount = current.spreadCount,
                     SpreadDamagePercent = current.spreadDamagePercent,
                     PiercingCount = current.piercingCount,
                     ExplosiveRadius = current.explosiveRadius,
                     ExplosiveDamagePercent = current.explosiveDamagePercent,
-                    BounceCount =  current.bounceCount,
+                    BounceCount = current.bounceCount,
                     BounceDamagePercent = current.bounceDamagePercent,
                     KillInstantBelowHealthPercent = current.killInstantBelowHealthPercent,
                 };
-                
-                SkillTickable.CastSkill(SkillData, statData, position, target);
+
+                SkillManager.CastSkill(skillData, runtimeData, position, target);
 
                 OnExecute();
             }
@@ -288,7 +290,7 @@ namespace _Game.GamePlay
         {
             return to;
         }
-        
+
         protected virtual Vector3 MuzzlePosition()
         {
             return muzzle != null ? muzzle.position : Vector3.zero;

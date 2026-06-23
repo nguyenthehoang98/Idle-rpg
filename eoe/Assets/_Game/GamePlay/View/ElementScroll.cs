@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace _Game.GamePlay
+namespace _Game.GamePlay.View
 {
     public class ElementScroll : MonoBehaviour
     {
@@ -15,8 +15,6 @@ namespace _Game.GamePlay
 
         private float currentOffset;
         private bool isAnimating;
-
-        private const int VISIBLE_COUNT = 4;
 
         private void OnValidate()
         {

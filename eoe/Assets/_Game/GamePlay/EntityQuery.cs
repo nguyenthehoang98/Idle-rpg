@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _Game.GamePlay.Manager;
 using _KITSystem.Entity;
 using _KITSystem.Grid;
 using _KITSystem.SkillSystem.Core;
@@ -16,7 +17,7 @@ namespace _Game.GamePlay
         {
             float sqrRadius = radius * radius;
 
-            int count = AgentTickable.Query(center, new float2(radius, radius), out AgentData[] agents);
+            int count = AgentManager.Query_Agent(center, new float2(radius, radius), out AgentData[] agents);
 
             float maxDistance = float.MinValue;
             float minDistance = float.MaxValue;
@@ -27,7 +28,7 @@ namespace _Game.GamePlay
             {
                 AgentData data = agents[i];
 
-                int entity = AgentTickable.GetEntity(data.agent);
+                if (!MonsterEntityManager.TryGetEntity(data.agent, out int entity)) continue;
 
                 if (!EntityManager.IsEntityAlive(entity)) continue;
 
@@ -68,7 +69,7 @@ namespace _Game.GamePlay
 
         public List<int> GetAllEntities(Vector2 center, Vector2 size, Func<int, bool> funcFilterEntity)
         {
-            int count = AgentTickable.Query(center, size, out AgentData[] agents);
+            int count = AgentManager.Query_Agent(center, size, out AgentData[] agents);
 
             float2 half = size * 0.5f;
             float left = center.x - half.x;
@@ -82,7 +83,7 @@ namespace _Game.GamePlay
             {
                 AgentData data = agents[i];
 
-                int entity = AgentTickable.GetEntity(data.agent);
+                if (!MonsterEntityManager.TryGetEntity(data.agent, out int entity)) continue;
 
                 if (!EntityManager.IsEntityAlive(entity)) continue;
 

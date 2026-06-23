@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace _Game.GamePlay.SpawnerSystem
+namespace _Game.GamePlay
 {
     [Serializable]
     public struct SpawnTimer

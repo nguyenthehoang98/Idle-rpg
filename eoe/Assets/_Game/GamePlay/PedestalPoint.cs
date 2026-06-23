@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _Game.GamePlay
 {
-    public class PedestalPath : MonoBehaviour
+    public class PedestalPoint : MonoBehaviour
     {
         [SerializeField] private Transform[] waypoints;
         [SerializeField] private Transform point;

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace _Game.GamePlay
+namespace _Game.GamePlay.View
 {
     public class ElementTrigger : MonoBehaviour
     {

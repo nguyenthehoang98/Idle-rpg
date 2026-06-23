@@ -1,4 +1,4 @@
-namespace _Game.GamePlay
+namespace _Game.GamePlay.Manager
 {
     public struct PlayerRuntimeData
     {

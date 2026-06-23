@@ -13,7 +13,7 @@ namespace _Game.GamePlay
         [SerializeField] private Transform pivot;     
         [SerializeField] private Vector2 offsetPosition;
         [SerializeField] private SpriteRenderer background;
-        [SerializeField] private PedestalPath[] paths;
+        [SerializeField] private PedestalPoint[] paths;
         [SerializeField] private SpriteRenderer outline;
         [SerializeField] private Transform weaponParent;
         

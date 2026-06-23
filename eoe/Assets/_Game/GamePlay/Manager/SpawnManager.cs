@@ -2,73 +2,81 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using _Game.Configs;
+using _KITSystem.Config;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using _KITSystem.Utils;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace _Game.GamePlay.SpawnerSystem
+namespace _Game.GamePlay.Manager
 {
     [Serializable]
-    public class SpawnerTickable : ITickable
+    public sealed class SpawnManager : ITickable
     {
-        public event Action<int> OnWaveSpawnCompleted;
+        [SerializeField] private Transform[] portals;
 
-        public Transform[] portals;
+        public event Action<int> OnWaveSpawnCompleted;
 
         public bool IsPaused { get; set; }
         public bool IsCompleted { get; private set; }
 
         private SpawnTimer[] temps;
-        private Dictionary<int, GameObject> cachedMonsterIdToGameObject = new Dictionary<int, GameObject>();
-        private HashSet<string> monsterPrefabsName = new HashSet<string>();
+        private Dictionary<int, GameObject> cachedMonster = new Dictionary<int, GameObject>();
+        private HashSet<string> names = new HashSet<string>();
+        private MonsterConfig monsterConfig;
         private WaveData currentWaveData;
+        private LevelData levelData;
         private int waveIndex;
 
-        private MonsterConfig monsterConfig;
-        private LevelData levelData;
-        
-        public void SetLevel(LevelData levelData, MonsterConfig monsterConfig)
+        public void SetLevel(int level)
         {
-            this.levelData = levelData;
-            this.monsterConfig = monsterConfig;
+            monsterConfig = ConfigManager.Get<MonsterConfig>();
+            LevelConfig levelConfig = ConfigManager.Get<LevelConfig>();
+            levelConfig.TryGetLevelData(level, out levelData);
         }
 
         public async Task Initialize()
         {
-            foreach (var waveData in levelData.waves)
+            GameObject go;
+
+            for (int wave = 0; wave < levelData.waves.Length; wave++)
             {
-                foreach (var spawnData in waveData.spawns)
+                WaveData waveData = levelData.waves[wave];
+
+                for (int spawn = 0; spawn < waveData.spawns.Length; spawn++)
                 {
+                    SpawnData spawnData = waveData.spawns[spawn];
+
                     int monsterId = spawnData.monsterId;
-                    if (cachedMonsterIdToGameObject.ContainsKey(monsterId))
-                        continue;
+
+                    if (cachedMonster.ContainsKey(monsterId)) continue;
 
                     bool found = monsterConfig.TryGetMonsterData(monsterId, out var monsterData);
                     if (!found)
                     {
                         Debug.LogError($"Not found monster data with id '{monsterId}'");
-
-                        return;
+                        continue;
                     }
 
-                    GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(monsterData.prefabName);
-                    Pool.RegisterPool(go, true);
-                    ;
+                    go = await AssetBundleManager.GetAssetCached<GameObject>(monsterData.prefabName);
 
-                    monsterPrefabsName.Add(monsterData.prefabName);
-                    cachedMonsterIdToGameObject.Add(monsterId, go);
+                    if (names.Add(monsterData.prefabName) && cachedMonster.TryAdd(monsterId, go))
+                    {
+                        Pool.RegisterPool(go, true);
+                    }
                 }
             }
 
-            GameObject bgGo = await AssetBundleManager.GetAsset<GameObject>(levelData.backgroundPrefabName);
-            Object.Instantiate(bgGo).transform.position = Vector3.zero;
+            go = await AssetBundleManager.GetAsset<GameObject>(levelData.backgroundPrefabName);
+            Object.Instantiate(go).transform.position = Vector3.zero;
 
-            LoadWaveData(0);
+            LoadWave(0);
+
+            await Task.CompletedTask;
         }
 
-        private bool LoadWaveData(int wave)
+        private bool LoadWave(int wave)
         {
             if (wave >= 0 && wave < levelData.waves.Length)
             {
@@ -89,12 +97,10 @@ namespace _Game.GamePlay.SpawnerSystem
 
                 return true;
             }
-            else
-            {
-                IsCompleted = true;
 
-                return false;
-            }
+            IsCompleted = true;
+
+            return false;
         }
 
         public void Tick(float deltaTime)
@@ -118,7 +124,7 @@ namespace _Game.GamePlay.SpawnerSystem
                         Spawn(spawnData);
                     }
                 }
-                
+
                 if (!data.IsFinished) isWaveCompleted = false;
 
                 temps[i] = data;
@@ -132,13 +138,13 @@ namespace _Game.GamePlay.SpawnerSystem
 
                 waveIndex++;
 
-                LoadWaveData(waveIndex);
+                LoadWave(waveIndex);
 
                 OnWaveSpawnCompleted?.Invoke(wave);
             }
         }
 
-        private async void Spawn(SpawnData data)
+        private void Spawn(SpawnData data)
         {
             int portalIndex = data.portals[0];
             
@@ -152,35 +158,38 @@ namespace _Game.GamePlay.SpawnerSystem
                 RandomUtils.Range(-data.spawnRadius, data.spawnRadius)
             );
             
-            GameObject instance = Pool.Instantiate(cachedMonsterIdToGameObject[data.monsterId]);
+            GameObject instance = Pool.Instantiate(cachedMonster[data.monsterId]);
             
             instance.transform.position = position;
 
             monsterConfig.TryGetMonsterData(data.monsterId, out MonsterData monsterData);
-           
-            await instance.GetComponent<Monster>().Initialize(monsterData, new MonsterScaleStatData
+            
+            Monster monster = instance.GetComponent<Monster>();
+            MonsterRuntimeData runtimeData = new MonsterRuntimeData
             {
                 AttackScale = data.monsterAttackScale,
                 HealthScale = data.monsterHealthScale,
                 ExpScale = data.monsterExpScale
-            });
+            };
+            
+            AgentManager.Create_Agent(monster, runtimeData, monsterData);
         }
-
+        
         public void Dispose()
         {
-            foreach (var pair in cachedMonsterIdToGameObject)
+            foreach (var pair in cachedMonster)
             {
                 Pool.UnRegisterPool(pair.Value);
             }
 
-            cachedMonsterIdToGameObject = null;
-            
-            foreach (var name in monsterPrefabsName)
+            cachedMonster = null;
+
+            foreach (var name in names)
             {
                 AssetBundleManager.UnCache(name);
             }
 
-            monsterPrefabsName = null;
+            names = null;
         }
     }
 }

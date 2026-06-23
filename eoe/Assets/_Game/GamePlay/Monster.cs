@@ -1,19 +1,18 @@
 using System;
 using System.Collections;
 using _Game.Configs;
-using _Game.GamePlay.SoundSystem;
+using _Game.GamePlay.Manager;
 using _KITSystem.Resource;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace _Game.GamePlay
 {
     public class Monster : MonoBehaviour
     {
-        static readonly int Death = Animator.StringToHash("Death");
-        static readonly int Initialize_ = Animator.StringToHash("Initialize");
-        static readonly int BeHit_ = Animator.StringToHash("Behit");
-        
+        static readonly int _Death = Animator.StringToHash("Death");
+        static readonly int _Initialize = Animator.StringToHash("Initialize");
+        static readonly int _BeHit = Animator.StringToHash("Behit");
+
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] private Transform scaler;
         [SerializeField] private Animator animator;
@@ -21,24 +20,24 @@ namespace _Game.GamePlay
         public static event Action<Monster> OnMonsterEnable;
         public static event Action<Monster> OnMonsterDisable;
 
-        private MonsterData MonsterData { get; set; }
+        private MonsterData monsterData;
         private Vector3 targetPosition;
         private Vector3 previousPosition;
         private float elapsedTime;
         private float deltaTime;
         private bool isInitialized;
-  
-        void Start()
+
+        private void OnEnable()
         {
-            StartCoroutine(AutoSort());
+            StartCoroutine(AutoSort());            
         }
-        
-        IEnumerator AutoSort()
+
+        private IEnumerator AutoSort()
         {
             while (true)
             {
                 spriteRenderer.sortingOrder = Mathf.RoundToInt(-transform.position.y * 100);
- 
+
                 yield return new WaitForSeconds(1f);
             }
         }
@@ -60,49 +59,40 @@ namespace _Game.GamePlay
             transform.position = Vector3.Lerp(previousPosition, targetPosition, Mathf.Clamp01(elapsedTime / deltaTime));
         }
 
-        public async UniTask Initialize(MonsterData monsterData, MonsterScaleStatData scaleStat)
+        public void Initialize(MonsterData monsterData)
         {
-            AgentTickable.Add(this, scaleStat, monsterData);
+            this.monsterData = monsterData;
 
-            this.MonsterData = monsterData;
             spriteRenderer.color = monsterData.color;
-            scaler.transform.localScale = Vector3.one * monsterData.scale; 
-            animator.Play(Initialize_);
-            
-            if (!string.IsNullOrEmpty(this.MonsterData.deathAudioClip))
-            { 
-                await AssetBundleManager.GetAssetCached<AudioClip>(this.MonsterData.deathAudioClip);
-            }
-            
+            scaler.transform.localScale = Vector3.one * monsterData.scale;
+
+            animator.Play(_Initialize);
+
             OnMonsterEnable?.Invoke(this);
-            
+
             isInitialized = true;
         }
 
         public void BeHit()
         {
-            animator.Play(BeHit_, 0, 0);
+            animator.Play(_BeHit, 0, 0);
         }
 
         public async void Destroy()
         {
             if (!isInitialized) return;
-            
+
             isInitialized = false;
-            
-            AgentTickable.Remove(this);
-            
-            OnMonsterDisable?.Invoke(this);
-            
-            AudioClip clip = null;
-            if (!string.IsNullOrEmpty(MonsterData.deathAudioClip))
+
+            if (!string.IsNullOrEmpty(monsterData.deathAudioClip))
             {
-                clip = await AssetBundleManager.GetAssetCached<AudioClip>(MonsterData.deathAudioClip);
+                AudioClip clip = await AssetBundleManager.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
+                SoundManager.Instance.PlayOneShot(clip, monsterData.deathVolume);
             }
 
-            SoundManager.Instance.PlayOneShot(clip, MonsterData.deathVolume);
+            animator.Play(_Death);
 
-            animator.Play(Death);
+            OnMonsterDisable?.Invoke(this);
         }
 
         public void Release()

@@ -1,5 +1,6 @@
 #if UNITY_INCLUDE_TESTS
 using System.Collections.Generic;
+using _Game.GamePlay;
 using _KITSystem.SkillSystem.Core;
 using NUnit.Framework;
 using UnityEngine;
@@ -47,9 +48,9 @@ namespace _KITSystem.SkillSystem
             }
         }
 
-        private static _Game.GamePlay.Projectile CreateDummyProjectile()
+        private static Projectile CreateDummyProjectile()
         {
-            return new GameObject("TestProjectile").AddComponent<_Game.GamePlay.Projectile>();
+            return new GameObject("TestProjectile").AddComponent<Projectile>();
         }
 
         [Test]

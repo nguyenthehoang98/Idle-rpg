@@ -6,7 +6,7 @@ namespace _Game.GamePlay
     public class Projectile : MonoBehaviour
     {
         static readonly int Death = Animator.StringToHash("Death");
-        static readonly int Initialize_ = Animator.StringToHash("Initialize");
+        static readonly int _Initialize = Animator.StringToHash("Initialize");
         
         [SerializeField] private Animator animator;
 
@@ -19,7 +19,7 @@ namespace _Game.GamePlay
         
         public void Initialize()
         {
-            animator.Play(Initialize_);
+            animator.Play(_Initialize);
 
             elapsedTime = 0;
             targetPosition = previousPosition = transform.position;

@@ -122,22 +122,6 @@ namespace _Game.Configs
     }    
 #endif
     
-    public struct SkillStatData
-    {
-        public float Attack;
-        public float CritChance;
-        public float CritDamage;
-        public int ParallelCount;
-        public int SpreadCount;
-        public float SpreadDamagePercent;
-        public int PiercingCount;
-        public float ExplosiveRadius;
-        public float ExplosiveDamagePercent;
-        public int BounceCount;
-        public float BounceDamagePercent;
-        public float KillInstantBelowHealthPercent;
-    }
-
     [Serializable]
     public struct SkillData
     {
@@ -165,17 +149,9 @@ namespace _Game.Configs
     {
         [JsonProperty, NonSerialized] public string id;
         
-        public int spreadProjectileCount;
         public float spreadAngleStep;
-        
-        public int parallelProjectileCount;
         public float parallelDistanceStep;
-        
-        public float explosiveRadius;
-        public float explosiveDamagePercent;
         public string explosivePrefabName;
-
-        public float killInstantBelowHealthPercent;
     }
 
     [Serializable]
