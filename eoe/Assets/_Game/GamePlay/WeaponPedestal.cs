@@ -42,7 +42,7 @@ namespace _Game.GamePlay
             outlineActive = colorData.activeColor;
         }
 
-        public async UniTask Initialize(WeaponData weaponData, float timeScale, float deltaTime)
+        public async UniTask<Weapon> Initialize(WeaponData weaponData, WeaponUpgradeData powerx2, WeaponUpgradeData powerx3, float timeScale, float deltaTime)
         {
             DeltaTime = deltaTime;
             var go = await AssetBundleManager.GetAsset<GameObject>(weaponData.prefabName);
@@ -50,8 +50,8 @@ namespace _Game.GamePlay
             weapon.transform.localPosition = Vector3.zero;
             weapon.transform.rotation = Quaternion.identity;
             weapon.transform.localScale = Vector3.one;
-            await weapon.Initialize(weaponData, timeScale, deltaTime);
-            await UniTask.CompletedTask;
+            await weapon.Initialize(weaponData, powerx2, powerx3, timeScale, deltaTime);
+            return weapon;
         }
 
         public IEnumerator Setup(int level, float duration)
@@ -95,7 +95,7 @@ namespace _Game.GamePlay
             outline.color = outlineColorTarget;
             background.color = backgroundColorTarget;
 
-            if (weapon != null) weapon.IsActivated = level > 0;
+            if (weapon != null) weapon.SetLevel(level);
         }
     }
 }

@@ -68,8 +68,6 @@ namespace _Game.GamePlay
 
         public List<int> GetAllEntities(Vector2 center, Vector2 size, Func<int, bool> funcFilterEntity)
         {
-            Debug.Log(@"Debug kiểm tra lại bán kính xem đúng ko");
-            
             int count = AgentTickable.Query(center, size, out AgentData[] agents);
 
             float2 half = size * 0.5f;

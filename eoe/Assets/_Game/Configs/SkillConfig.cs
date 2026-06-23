@@ -32,6 +32,7 @@ namespace _Game.Configs
 
         public void OnPostImported()
         {
+            Debug.LogError(JsonConvert.SerializeObject(extras));
             for (int i = 0; i < skills.Count; i++)
             {
                 SkillData skill = skills[i];
@@ -124,8 +125,17 @@ namespace _Game.Configs
     
     public struct SkillStatData
     {
-        public int Attack;
+        public float Attack;
+        public float CritChance;
+        public float CritDamage;
+        public int ParallelCount;
+        public int SpreadCount;
+        public float SpreadDamagePercent;
+        public int PiercingCount;
+        public float ExplosiveRadius;
         public float ExplosiveDamagePercent;
+        public int BounceCount;
+        public float BounceDamagePercent;
         public float KillInstantBelowHealthPercent;
     }
 
@@ -154,7 +164,7 @@ namespace _Game.Configs
     [Serializable]
     public struct ExtraData
     {
-        [NonSerialized] public string id;
+        public string id;
         
         public int spreadProjectileCount;
         public float spreadAngleStep;
@@ -162,12 +172,10 @@ namespace _Game.Configs
         public int parallelProjectileCount;
         public float parallelDistanceStep;
         
-        public bool isExplosive;
         public float explosiveRadius;
         public float explosiveDamagePercent;
         public string explosivePrefabName;
 
-        public bool isKillInstant;
         public float killInstantBelowHealthPercent;
     }
 

@@ -111,8 +111,48 @@ namespace _Game.Configs
         public float critChance;
         public float critDamage;
         public int bounceCount;
-        public float bonceDamagePercent;
+        public float bounceDamagePercent;
         public float killInstantBelowHealthPercent;
+
+        public void Increase(WeaponUpgradeData data)
+        {
+            attackSpeed += data.attackSpeed;
+            critDamage += data.critDamage;
+            critChance += data.critChance;
+            critDamage += data.critDamage;
+            bounceCount += data.bounceCount;
+            bounceDamagePercent += data.bounceDamagePercent;
+            killInstantBelowHealthPercent += data.killInstantBelowHealthPercent;
+            projectileSize += data.projectileSize;
+            damagePercent += data.damagePercent;
+            explosiveDamagePercent += data.explosiveDamagePercent;
+            spreadDamagePercent += data.spreadDamagePercent;
+            piercingCount += data.piercingCount;
+            explosiveRadius += data.explosiveRadius;
+            spreadCount += data.spreadCount;
+            parallelCount += data.parallelCount;
+            cooldownReduce += data.cooldownReduce;
+        }
+        
+        public void Decrease(WeaponUpgradeData data)
+        {
+            attackSpeed -= data.attackSpeed;
+            critDamage -= data.critDamage;
+            critChance -= data.critChance;
+            critDamage -= data.critDamage;
+            bounceCount -= data.bounceCount;
+            bounceDamagePercent -= data.bounceDamagePercent;
+            killInstantBelowHealthPercent -= data.killInstantBelowHealthPercent;
+            projectileSize -= data.projectileSize;
+            damagePercent -= data.damagePercent;
+            explosiveDamagePercent -= data.explosiveDamagePercent;
+            spreadDamagePercent -= data.spreadDamagePercent;
+            piercingCount -= data.piercingCount;
+            explosiveRadius -= data.explosiveRadius;
+            spreadCount -= data.spreadCount;
+            parallelCount -= data.parallelCount;
+            cooldownReduce -= data.cooldownReduce;
+        }
     }
 
     public enum UpgradeType

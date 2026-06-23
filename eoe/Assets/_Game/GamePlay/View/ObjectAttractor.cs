@@ -22,7 +22,6 @@ namespace _Game.GamePlay.View
             visual.gameObject.SetActive(false);
             //trail.enabled = false;
             originalPosition = visual.position;
-            Debug.Log(originalPosition);
         }
 
         public void ResetPosition()

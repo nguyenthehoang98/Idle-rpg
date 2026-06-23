@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using _Game.Configs;
@@ -8,7 +7,6 @@ using _KITSystem.Resource;
 using _KITSystem.SkillSystem.Core;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace _Game.GamePlay
 {
@@ -22,17 +20,25 @@ namespace _Game.GamePlay
         [SerializeField] private float weaponRotationDuration = 0.15f;
         [SerializeField] private AnimationCurve weaponRotationCurve;
 
-        private float TimeScale { get; set; } = 1;
-        private float DeltaTime { get; set; } = 0.0334f;
-        public bool IsActivated { private get; set; } = false;
+        public int WeaponId => WeaponData.id;
+        public int CurrentLevel { get; private set; }
+                
         private SkillData SkillData { get; set; }
         private WeaponData WeaponData { get; set; }
+        private float TimeScale { get; set; } = 1;
+        private float DeltaTime { get; set; } = 0.0334f;
+        private bool IsActivated { get; set; }
 
         private Vector3 destination;
         private bool attacking;
         
         private HashSet<GameObject> objects = new HashSet<GameObject>();
         private HashSet<string> objectsName = new HashSet<string>();
+
+        private WeaponUpgradeData current;
+        private WeaponUpgradeData levelUp;
+        private WeaponUpgradeData powerX2;
+        private WeaponUpgradeData powerX3;
 
         private void Awake()
         {
@@ -61,13 +67,15 @@ namespace _Game.GamePlay
             objects = null;
         }
 
-        public async UniTask Initialize(WeaponData weaponData, float timeScale, float deltaTime)
+        public async UniTask Initialize(WeaponData weaponData, WeaponUpgradeData powerx2, WeaponUpgradeData powerx3, float timeScale, float deltaTime)
         {
+            powerX2 = powerx2;
+            powerX3 = powerx3;
             WeaponData = weaponData;
             SkillData = weaponData.skillData;
             TimeScale = timeScale;
             DeltaTime = deltaTime;
-
+            current = new WeaponUpgradeData();
             if (!string.IsNullOrEmpty(WeaponData.prefabName))
             {
                 GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(weaponData.prefabName);
@@ -100,11 +108,33 @@ namespace _Game.GamePlay
             StartCoroutine(AutoAttack());
         }
 
+        public void SetLevel(int level)
+        {
+            CurrentLevel = level;
+            IsActivated = level > 0;
+            
+            RefreshUpgradeData();
+        }
+
+        public void Increase(WeaponUpgradeData upgradeData)
+        {
+            levelUp.Increase(upgradeData);
+
+            RefreshUpgradeData();
+        }
+
+        private void RefreshUpgradeData()
+        {
+            current = levelUp;
+            if (CurrentLevel == 2) current.Increase(powerX2);
+            if (CurrentLevel == 3) current.Increase(powerX3);
+        }
+        
         private IEnumerator AutoAttack()
         {
             while (true)
             {
-                yield return new WaitForSeconds(WeaponData.cooldown / TimeScale);
+                yield return new WaitForSeconds(WeaponData.cooldown * (1 - current.cooldownReduce) / TimeScale);
 
                 if (attacking || !IsActivated) continue;
                 
@@ -188,8 +218,10 @@ namespace _Game.GamePlay
                 animator.enabled = true;
                 
                 animator.Play(Attack, 0, 0);
+
+                float attackSpeed = WeaponData.attackSpeed + current.attackSpeed;
                 
-                animator.speed = TimeScale * WeaponData.attackSpeed;
+                animator.speed = TimeScale * attackSpeed;
                 
                 attacking = true;
                 
@@ -224,7 +256,18 @@ namespace _Game.GamePlay
 
                 SkillStatData statData = new SkillStatData
                 {
-                    Attack = WeaponData.attack
+                    Attack = (1 + current.damagePercent) * WeaponData.attack,
+                    CritChance = current.critChance + WeaponData.critChance,
+                    CritDamage = current.critDamage + WeaponData.critDamage,
+                    ParallelCount = current.parallelCount,
+                    SpreadCount = current.spreadCount,
+                    SpreadDamagePercent = current.spreadDamagePercent,
+                    PiercingCount = current.piercingCount,
+                    ExplosiveRadius = current.explosiveRadius,
+                    ExplosiveDamagePercent = current.explosiveDamagePercent,
+                    BounceCount =  current.bounceCount,
+                    BounceDamagePercent = current.bounceDamagePercent,
+                    KillInstantBelowHealthPercent = current.killInstantBelowHealthPercent,
                 };
                 
                 SkillTickable.CastSkill(SkillData, statData, position, target);

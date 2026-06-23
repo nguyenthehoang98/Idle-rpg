@@ -1,8 +1,8 @@
 namespace _Game.GamePlay
 {
-    public class PlayerRuntimeData
+    public struct PlayerRuntimeData
     {
-        public int CurrentExp { get; set; } = 0;
-        public int CurrentLevel { get; set; } = 1;
+        public int CurrentExp;
+        public int CurrentLevel;
     }
 }

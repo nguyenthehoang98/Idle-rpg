@@ -14,7 +14,8 @@ namespace _Game.GamePlay
         private Vector3 previousPosition;
         private float elapsedTime;
         private float deltaTime;
-        private bool isInitialized = false;
+        private bool isRunning = false;
+        private bool shouldDestroy = false;
         
         public void Initialize()
         {
@@ -23,7 +24,8 @@ namespace _Game.GamePlay
             elapsedTime = 0;
             targetPosition = previousPosition = transform.position;
             
-            isInitialized = true;
+            shouldDestroy = false;
+            isRunning = true;
         }
 
         public void SetPosition(Vector3 position, float deltaTime)
@@ -40,18 +42,22 @@ namespace _Game.GamePlay
 
         private void FixedUpdate()
         {
-            if (!isInitialized) return;
+            if (!isRunning) return;
 
             elapsedTime += Time.fixedDeltaTime;
 
-            transform.position = Vector3.Lerp(previousPosition, targetPosition, Mathf.Clamp01(elapsedTime / deltaTime));
+            float t = Mathf.Clamp01(elapsedTime / deltaTime);
+
+            transform.position = Vector3.Lerp(previousPosition, targetPosition, t);
+
+            if (t >= 1.0f && shouldDestroy) isRunning = false;
         }
 
         public void Destroy()
         {
-            if (!isInitialized) return;
+            if (shouldDestroy) return;
             
-            isInitialized = false;
+            shouldDestroy = true;
             
             animator.Play(Death);
         }

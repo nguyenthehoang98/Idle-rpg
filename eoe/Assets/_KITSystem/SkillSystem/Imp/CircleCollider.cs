@@ -23,17 +23,19 @@ namespace _KITSystem.SkillSystem.Imp
         
         public override void Gizmos(Vector3 position, Color color, float deltaTime)
         {
-            Vector2 center = GetPosition(new Vector2(position.x, position.y));
+#if UNITY_EDITOR
             int segments = 12;
-            float angleStep = 360f / segments;
-            Vector2 prevPoint = center + new Vector2(Mathf.Cos(0f), Mathf.Sin(0f)) * radius;
+            Vector3 center = position;
+            Vector3 prev = center + Vector3.right * radius;
             for (int i = 1; i <= segments; i++)
             {
-                float angle = angleStep * i;
-                Vector2 newPoint = center + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
-                Debug.DrawLine(new Vector3(prevPoint.x, prevPoint.y), new Vector3(newPoint.x, newPoint.y), color, deltaTime);
-                prevPoint = newPoint;
+                float t = i / (float)segments;
+                float angle = t * Mathf.PI * 2f;
+                Vector3 next = center + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+                Debug.DrawLine(prev, next, color, deltaTime);
+                prev = next;
             }
+#endif
         }
     }
 }

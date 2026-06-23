@@ -20,11 +20,14 @@ namespace _Game.GamePlay
 
         private const int MAX = 4;
 
+        private readonly Dictionary<int, TotalWeaponUpgradeData> upgradeDatas = new Dictionary<int, TotalWeaponUpgradeData>();
         private readonly Dictionary<int, int> elementStackNumber = new Dictionary<int, int>();
         private readonly Dictionary<int, int> damageReport = new Dictionary<int, int>();
+        private List<Weapon> allWeapons;
         private SpawnerTickable spawner;
         private SkillTickable skillTickable;
         private PlayerConfig playerConfig;
+        private WeaponConfig weaponConfig;
         private PlayerRuntimeData player;
         private int totalMonsterAlive = 0;
 
@@ -52,55 +55,31 @@ namespace _Game.GamePlay
             AssetBundleManager.SetLocationBundle(true);
 
             await ConfigManager.Load(new string[] { "MonsterConfig", "LevelConfig", "WeaponConfig", "PlayerConfig" });
-          
+
             ColorSetting setting = ColorSetting.Instance;
+
+            weaponConfig = ConfigManager.Get<WeaponConfig>();
             playerConfig = ConfigManager.Get<PlayerConfig>();
             MonsterConfig monsterConfig = ConfigManager.Get<MonsterConfig>();
             LevelConfig levelConfig = ConfigManager.Get<LevelConfig>();
             levelConfig.TryGetLevelData(1, out LevelData levelData);
             spawner.SetLevel(levelData, monsterConfig);
-            
+
             pedestal.SetWeaponDeltaTime(owner.TickInterval);
             owner.OnScaleTimeChanged += pedestal.SetWeaponDeltaTime;
 
-            WeaponConfig weaponConfig = ConfigManager.Get<WeaponConfig>();
-            List<WeaponData> datas = new List<WeaponData>();
             foreach (var weaponId in weaponsId)
             {
-                if (weaponConfig.TryGetWeaponData(weaponId, out WeaponData weaponData))
-                    datas.Add(weaponData);
+                if (weaponConfig.TryGetUpgradeWeapon(weaponId, 1, UpgradeType.LevelUp, out var list))
+                {
+                    upgradeDatas.Add(weaponId, new TotalWeaponUpgradeData { level = 1, levelups = list});
+                }
             }
-            
+
             await owner.Initialize();
-            await pedestal.Initialize(datas.ToArray(), owner.Loop, owner.TickInterval);
+            allWeapons = await pedestal.Initialize(weaponConfig, weaponsId, owner.Loop, owner.TickInterval);
             uiManager.Initialize();
             owner.IsPaused = false;
-        }
-
-        private void Update()
-        {
-            float duration = 0.1f;
-
-            if (Input.GetKeyDown(KeyCode.F1)) SetWeapon(0, 1, duration);
-            if (Input.GetKeyDown(KeyCode.F2)) SetWeapon(0, 2, duration);
-            if (Input.GetKeyDown(KeyCode.F3)) SetWeapon(0, 3, duration);
-
-            if (Input.GetKeyDown(KeyCode.F4)) SetWeapon(1, 1, duration);
-            if (Input.GetKeyDown(KeyCode.F5)) SetWeapon(1, 2, duration);
-            if (Input.GetKeyDown(KeyCode.F6)) SetWeapon(1, 3, duration);
-
-            if (Input.GetKeyDown(KeyCode.F7)) SetWeapon(2, 1, duration);
-            if (Input.GetKeyDown(KeyCode.F8)) SetWeapon(2, 2, duration);
-            if (Input.GetKeyDown(KeyCode.F9)) SetWeapon(2, 3, duration);
-
-            if (Input.GetKeyDown(KeyCode.F10)) SetWeapon(3, 1, duration);
-            if (Input.GetKeyDown(KeyCode.F11)) SetWeapon(3, 2, duration);
-            if (Input.GetKeyDown(KeyCode.F12)) SetWeapon(3, 3, duration);
-
-            if (Input.GetKeyDown(KeyCode.Alpha1)) SetWeapon(0, 0, duration);
-            if (Input.GetKeyDown(KeyCode.Alpha2)) SetWeapon(1, 0, duration);
-            if (Input.GetKeyDown(KeyCode.Alpha3)) SetWeapon(2, 0, duration);
-            if (Input.GetKeyDown(KeyCode.Alpha4)) SetWeapon(3, 0, duration);
         }
 
         private void OnDestroy()
@@ -117,26 +96,20 @@ namespace _Game.GamePlay
             uiManager.OnElementStopReset -= StopReset;
         }
 
-        private void SetWeapon(int slot, int level, float duration)
-        {
-            pedestal.SetWeaponLevel(slot, level, duration);
-        }
-
-        // Callback
-        
         private void StartReset()
         {
             elementStackNumber.Clear();
         }
 
-        private void ElementChanged(int id)
+        private void ElementChanged(int slot)
         {
-            if (!elementStackNumber.TryAdd(id, 1))
+            if (!elementStackNumber.TryAdd(slot, 1))
             {
-                elementStackNumber[id]++;
+                elementStackNumber[slot]++;
             }
-            
-            pedestal.SetWeaponLevel(id, elementStackNumber[id], 0.3f);
+
+            int level = elementStackNumber[slot];
+            pedestal.SetWeaponLevel(slot, level, 0.3f);
         }
 
         private void StopReset()
@@ -190,11 +163,48 @@ namespace _Game.GamePlay
         private void LevelUp()
         {
             Debug.Log("Level " + player.CurrentLevel);
+
+            int id = 1003;
+            foreach (var weapon in allWeapons)
+            {
+                if (weapon.WeaponId == id)
+                {
+                    if (upgradeDatas.TryGetValue(id, out var data))
+                    {
+                        if (data.levelups.Count > 0)
+                        {
+                            weapon.Increase(data.levelups[0]);
+                            data.levelups.RemoveAt(0);
+                        }
+                        else
+                        {
+                            if(weaponConfig.TryGetUpgradeWeapon(id, data.level+1, UpgradeType.LevelUp, out var list))
+                            {
+                                data.levelups = list;
+                                data.level++;
+                                
+                                weapon.Increase(data.levelups[0]);
+                                data.levelups.RemoveAt(0);
+                            }
+                        }
+
+                        upgradeDatas[id] = data;
+                    }
+
+                    break;
+                }
+            }
         }
 
         private void WaveSpawnCompleted(int waveIndex)
         {
             Debug.Log($"Complete wave {waveIndex} - {spawner.IsCompleted}");
+        }
+
+        struct TotalWeaponUpgradeData
+        {
+            public int level;
+            public List<WeaponUpgradeData> levelups;
         }
     }
 }

@@ -66,7 +66,7 @@ namespace _Game.GamePlay.View
 
         private void PushStack()
         {
-            collections.Add(RandomUtils.Range(0, MAX));
+            collections.Add(RandomUtils.Range(2, MAX));
 
             for (var i = 0; i < collections.Count; i++)
             {

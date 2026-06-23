@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using _BattleSource.Entity;
 using _Game.Configs;
-using _KITSystem.Config;
 using _KITSystem.Entity;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Core;
 using _KITSystem.SkillSystem.Imp;
+using _KITSystem.Utils;
 using UnityEngine;
 
 namespace _Game.GamePlay.SkillSystem
@@ -49,11 +49,13 @@ namespace _Game.GamePlay.SkillSystem
                 
                 bool extra = false;
 
-                if (skillData.extra.parallelProjectileCount > 0)
+                if (skillData.extra.parallelProjectileCount > 0 || statData.ParallelCount > 0)
                 {
-                    int count = skillData.extra.parallelProjectileCount + 1;
-                    float spacing = skillData.extra.parallelDistanceStep;
+                    int count = skillData.extra.parallelProjectileCount + statData.ParallelCount + 1;
+                    
                     Vector3 perpendicular = new Vector3(-direction.y, direction.x, 0);
+                    
+                    float spacing = skillData.extra.parallelDistanceStep;
                     
                     for (int i = 0; i < count; i++)
                     {
@@ -62,15 +64,16 @@ namespace _Game.GamePlay.SkillSystem
                         Vector3 offsetPos = position + perpendicular * offset;
                         Vector3 offsetDest = destination + perpendicular * offset;
 
-                        instance.CastSkillPrivate(skillData, statData, offsetPos, offsetDest);
+                        instance.CastSkillPrivate(skillData, statData, offsetPos, offsetDest, 1);
                     }
                     
                     extra = true;
                 }
 
-                if (skillData.extra.spreadProjectileCount > 0)
+                if (skillData.extra.spreadProjectileCount > 0 || statData.SpreadCount > 0)
                 {
-                    int count = skillData.extra.spreadProjectileCount + 1;
+                    int count = skillData.extra.spreadProjectileCount + statData.SpreadCount + 1;
+                    
                     float angleStep = skillData.extra.spreadAngleStep;
                     
                     for (int i = 0; i < count; i++)
@@ -79,13 +82,13 @@ namespace _Game.GamePlay.SkillSystem
 
                         Vector3 dir = Quaternion.Euler(0, 0, angle) * direction;
 
-                        instance.CastSkillPrivate(skillData, statData, position, position + dir * 100f);
+                        instance.CastSkillPrivate(skillData, statData, position, position + dir * 100f, 1);
                     }
                     
                     extra = true;
                 }
                 
-                if(!extra) instance.CastSkillPrivate(skillData, statData, position, destination);
+                if(!extra) instance.CastSkillPrivate(skillData, statData, position, destination, 1);
             }
             else
                 Debug.LogError("Instance AnimationTickable is null");
@@ -99,7 +102,7 @@ namespace _Game.GamePlay.SkillSystem
 
             ref HealthData health = ref ComponentManager<HealthData>.Get(entity);
 
-            int damage = statData.Attack;
+            int damage = Mathf.CeilToInt(GetDamage(statData) * scaleDamage);
             
             health.CurrentHealth -= damage;
 
@@ -112,10 +115,10 @@ namespace _Game.GamePlay.SkillSystem
             SpawnTextDamage(damage, position);
 
             float killInstantBelowHealthPercent = skillData.extra.killInstantBelowHealthPercent + statData.KillInstantBelowHealthPercent;
-            bool shouldKillMonster = skillData.extra.isKillInstant &&
-                                     ((float)health.CurrentHealth / health.MaxHealth) <= killInstantBelowHealthPercent;
+            
+            bool shouldKillMonster = ((float)health.CurrentHealth / health.MaxHealth) <= killInstantBelowHealthPercent;
 
-            if (health.CurrentHealth <= 0 && shouldKillMonster)
+            if (health.CurrentHealth <= 0 || shouldKillMonster)
             {
                 MonsterRuntimeData mrd = ComponentManager<MonsterRuntimeData>.Get(entity);
                 
@@ -127,23 +130,51 @@ namespace _Game.GamePlay.SkillSystem
             return true;
         }
 
+        private float GetDamage(SkillStatData statData)
+        {
+            bool crit = RandomUtils.Value <= statData.CritChance;
+            return statData.Attack * (1 + (crit ? statData.CritDamage : 0));
+        }
+
         public static void FindTarget(FindTargetType type, Vector2 center, Vector2 pivot, float radius,
             Func<int, bool> funcFilterEntity, out QueryResult result)
         {
             instance.query.FindTarget(type, center, pivot, radius, funcFilterEntity, out result);
         }
 
-        async void CastSkillPrivate(SkillData skillData, SkillStatData statData, Vector3 position, Vector3 destination)
+        async void CastSkillPrivate(SkillData skillData, SkillStatData statData, Vector3 position, Vector3 destination, float scaleDmg)
         {
             ColliderData colliderData = skillData.collider;
-            BaseCollider collider = new CircleCollider(
-                query, colliderData.relativePosition, colliderData.timerTrigger,
-                colliderData.duration, colliderData.radius
-            );
+            BaseCollider collider = null;
+
+            switch (colliderData.type)
+            {
+                case ColliderType.Circle:
+                    collider = new CircleCollider(
+                        query, colliderData.relativePosition, colliderData.timerTrigger,
+                        colliderData.duration, colliderData.radius
+                    );
+                    break;
+                default:
+                    Debug.LogError($"Collider Type not supported {colliderData.type}");
+                    break;
+            }
+            
             TrajectoryData trajectoryData = skillData.trajectory;
-            BaseTrajectory trajectory = new BulletTrajectory(trajectoryData.bulletInitSpeed,
-                trajectoryData.bulletAcceleration, position, destination
-            );
+            BaseTrajectory trajectory = null;
+
+            switch (trajectoryData.type)
+            {
+                case TrajectoryType.Bullet:
+                    trajectory = new BulletTrajectory(trajectoryData.bulletInitSpeed,
+                        trajectoryData.bulletAcceleration, position, destination
+                    );
+                    break;
+                default:
+                    Debug.LogError($"Trajectory Type not supported {trajectoryData.type}");
+                    break;
+            }
+            
             GameObject go = null;
             if (!string.IsNullOrEmpty(skillData.prefabName))
             {
@@ -196,15 +227,17 @@ namespace _Game.GamePlay.SkillSystem
 
         private bool DamageEntity(SkillData skillData, SkillStatData statData, Vector2 position, int entity)
         {
-            if (skillData.extra.isExplosive)
+            if (skillData.extra.explosiveRadius > 0 || statData.ExplosiveRadius > 0)
             {
-                Vector2 size = new Vector2(skillData.extra.explosiveRadius / 2f, skillData.extra.explosiveRadius / 2f);
+                float radius = skillData.extra.explosiveRadius + statData.ExplosiveRadius;
+                
+                Vector2 size = new Vector2(radius / 2f, radius / 2f);
 
 #if UNITY_EDITOR
-                GizmosLine.Circle(position, skillData.extra.explosiveRadius, Color.yellow, 1 / 30f);
+                GizmosLine.Circle(position, radius, Color.yellow, 1 / 30f);
 #endif
 
-                SpawnAura(skillData.extra.explosivePrefabName, position, skillData.extra.explosiveRadius);
+                SpawnAura(skillData.extra.explosivePrefabName, position, radius);
               
                 List<int> entities = query.GetAllEntities(position, size, EntityManager.IsEntityAlive);
 
