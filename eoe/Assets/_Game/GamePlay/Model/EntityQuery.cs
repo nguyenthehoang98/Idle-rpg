@@ -12,7 +12,7 @@ namespace _Game.GamePlay.Model
     [Serializable]
     public class EntityQuery : IQuery
     {
-        public void FindTarget(FindTargetType type, Vector2 center, Vector2 pivot, float radius, Func<int, bool> funcFilterEntity,
+        public void FindTarget(FindTargetType type, Vector2 center, float radius, Func<int, float2, bool> funcFilterEntity,
             out QueryResult result)
         {
             float sqrRadius = radius * radius;
@@ -36,7 +36,7 @@ namespace _Game.GamePlay.Model
                 {
                     case FindTargetType.Farthest:
                     case FindTargetType.Nearest:
-                        float dsq = math.distancesq(pivot, data.position);
+                        float dsq = math.distancesq(center, data.position);
 
                         if (dsq > sqrRadius) continue;
 
@@ -53,7 +53,7 @@ namespace _Game.GamePlay.Model
                             minDistance = dsq;
                         }
 
-                        if (funcFilterEntity(entity))
+                        if (funcFilterEntity(entity, data.position))
                         {
                             result.Primary = new QueryEntityData(entity, data.position);
                             continue;

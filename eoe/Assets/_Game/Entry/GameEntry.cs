@@ -34,9 +34,6 @@ namespace _Game.Entry
             
             await ConfigManager.Load(new string[] { "MonsterConfig", "LevelConfig", "WeaponConfig", "PlayerConfig" });
 
-            AssetBundleManager.GetAssetCached<GameObject>(Const.TEXT_DAMAGE_NORMAL);
-            AssetBundleManager.GetAssetCached<GameObject>(Const.TEXT_DAMAGE_CRITICAL);
-
             ColorSetting.Load();
 
             ChangeSceneAsync("GameplayScene");

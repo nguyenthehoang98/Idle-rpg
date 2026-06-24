@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace _KITSystem.SkillSystem.Core
 {
     public abstract class BaseAction : IAction

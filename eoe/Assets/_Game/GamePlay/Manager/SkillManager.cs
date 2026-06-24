@@ -12,6 +12,7 @@ using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Core;
 using _KITSystem.SkillSystem.Imp;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace _Game.GamePlay.Manager
@@ -50,8 +51,7 @@ namespace _Game.GamePlay.Manager
             instance = null;
         }
 
-        public static void CastSkill(SkillData skillData, SkillRuntimeData runtimeData, Vector3 position,
-            Vector3 destination)
+        public static void CastSkill(SkillData skillData, SkillRuntimeData runtimeData, Vector3 position, Vector3 destination)
         {
             if (instance == null)
             {
@@ -126,12 +126,28 @@ namespace _Game.GamePlay.Manager
 
             TrajectoryData trajectoryData = skillData.trajectory;
             BaseTrajectory trajectory = null;
+            float lifetimeProjectile = 0;
+            float distanceDelta = Vector3.Distance(position, Vector3.zero);
+            
             switch (trajectoryData.type)
             {
                 case TrajectoryType.Bullet:
-                    trajectory = new BulletTrajectory(trajectoryData.bulletInitSpeed,
-                        trajectoryData.bulletAcceleration, position, destination
-                    );
+                    // s=0.5at2 + vt
+                    float s = skillData.findTarget.radius - distanceDelta;
+                    float v = trajectoryData.bulletInitSpeed;
+                    float a = trajectoryData.bulletAcceleration;
+
+                    if (a > 0)
+                    {
+                        float dt = v * v + 2f * a * s;
+                        if (dt >= 0) lifetimeProjectile = (-v + Mathf.Sqrt(dt)) / a;
+                    }
+                    else
+                    {
+                        lifetimeProjectile = s / v;
+                    }
+                    
+                    trajectory = new BulletTrajectory(v, a, position, destination);
                     break;
                 default:
                     Debug.LogError($"Trajectory Type not supported {trajectoryData.type}");
@@ -146,7 +162,7 @@ namespace _Game.GamePlay.Manager
             if (names.Add(skillData.impactName))
                 Pool.RegisterPool(impact, true);
 
-            go = Pool.Instantiate(go);
+            go = Pool.Instantiate(go, false);
             go.transform.position = position;
 
             Projectile projectile = go.GetComponent<Projectile>();
@@ -157,20 +173,27 @@ namespace _Game.GamePlay.Manager
                 damageTicket.type.ToString()
             );
 
-            CastProjectileAction action = new CastProjectileAction(this, skillData.lifeTime, collider, trajectory,
+            if (lifetimeProjectile <= 0) lifetimeProjectile = skillData.lifeTime;
+            
+            CastProjectileAction action = new CastProjectileAction(this, lifetimeProjectile, collider, trajectory,
                 (entity, pos) => OnDamageEntityFunction(skillData, runtimeData, entity, pos, scaleDamage),
                 projectile, dtt, damageTicket.ticketInterval,
                 colliderData.limitNumberCollision, colliderData.resetCollisionInterval
             );
             action.OnComplete += () =>
             {
-                Pool.Instantiate(impact, true).transform.position = projectile.TargetPosition;
+                if(action.Reason == ActionCompleteReason.Interrupt)
+                {
+                    Pool.Instantiate(impact, true).transform.position = projectile.TargetPosition;
+                }
                 projectile.Destroy();
             };
 
-            projectile.Initialize();
-
             RequestAddAction(1, action);
+
+            projectile.Initialize();
+            
+            projectile.gameObject.SetActive(true);
         }
 
         private bool OnDamageEntityFunction(SkillData skillData, SkillRuntimeData runtimeData, int entity,

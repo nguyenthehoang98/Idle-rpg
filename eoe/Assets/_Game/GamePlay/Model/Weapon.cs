@@ -7,6 +7,7 @@ using _Game.GamePlay.Utils;
 using _KITSystem.Resource;
 using _KITSystem.SkillSystem.Core;
 using Cysharp.Threading.Tasks;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _Game.GamePlay.Model
@@ -79,15 +80,21 @@ namespace _Game.GamePlay.Model
             attackSpeed = weaponData.attackSpeed;
             attackVolume = weaponData.attackVolume;
             query = new EntityQuery();
+            
+            GameObject go = null;
 
             if (names.Add(skillData.prefabName))
             {
-                await AssetBundleManager.GetAssetCached<GameObject>(skillData.prefabName);
+                go = await AssetBundleManager.GetAssetCached<GameObject>(skillData.prefabName);
+                Pool.RegisterPool(go, true);
+                Pool.Destroy(Pool.Instantiate(go));
             }
 
             if (names.Add(skillData.impactName))
             {
-                await AssetBundleManager.GetAssetCached<GameObject>(skillData.impactName);
+                go = await AssetBundleManager.GetAssetCached<GameObject>(skillData.impactName);
+                Pool.RegisterPool(go, true);
+                Pool.Destroy(Pool.Instantiate(go));
             }
 
             if (names.Add(weaponData.attackAudioClip))
@@ -168,7 +175,12 @@ namespace _Game.GamePlay.Model
                 Vector3 position = MuzzlePosition();
                 Vector3 center = Vector3.zero;
                 float radius = skillData.findTarget.radius;
-                query.FindTarget(type, center, position, radius, FilterEntity, out QueryResult result);
+                float sqrRadius = radius * radius;
+                query.FindTarget(type, center, radius, (entity, float2) =>
+                {
+                    float d = math.lengthsq(float2);
+                    return d <= sqrRadius;
+                }, out QueryResult result);
 
                 int entity = -1;
                 destination = Vector3.zero;
@@ -250,11 +262,6 @@ namespace _Game.GamePlay.Model
 
         protected virtual void OnExecute()
         {
-        }
-        
-        protected virtual bool FilterEntity(int entity)
-        {
-            return true;
         }
     }
 }

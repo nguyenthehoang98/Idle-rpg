@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using _Game.Configs;
 using _Game.GamePlay.Data;
 using _Game.GamePlay.Model;
+using _Game.GamePlay.Utils;
 using _Game.GamePlay.View;
 using _KITSystem.Config;
 using _KITSystem.Resource;
@@ -50,6 +51,16 @@ namespace _Game.GamePlay.Manager
             playerConfig = ConfigManager.Get<PlayerConfig>();
             weaponConfig = ConfigManager.Get<WeaponConfig>();
             player = new PlayerRuntimeData();
+
+            // load 
+            GameObject go = null;
+            go = await AssetBundleManager.GetAssetCached<GameObject>(Const.TEXT_DAMAGE_NORMAL);
+            Pool.RegisterPool(go, true);
+            Pool.Destroy(Pool.Instantiate(go));
+            
+            go = await AssetBundleManager.GetAssetCached<GameObject>(Const.TEXT_DAMAGE_CRITICAL);
+            Pool.RegisterPool(go, true);
+            Pool.Destroy(Pool.Instantiate(go));
             
             spawnManager.SetLevel(1);
 

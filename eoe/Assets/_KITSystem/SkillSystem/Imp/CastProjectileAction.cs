@@ -82,7 +82,7 @@ namespace _KITSystem.SkillSystem.Imp
 
                     if (totalCollisions == limitNumberCollisions)
                     {
-                        EndLifeCycle();
+                        Interrupt();
                         
                         return;
                     }

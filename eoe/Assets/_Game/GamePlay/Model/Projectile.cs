@@ -1,4 +1,6 @@
+using System;
 using _KITSystem.Resource;
+using _KITSystem.Utils;
 using UnityEngine;
 
 namespace _Game.GamePlay.Model
@@ -7,6 +9,9 @@ namespace _Game.GamePlay.Model
     {
         public Vector3 TargetPosition { get; private set; }
         public Vector3 PreviousPosition { get; private set; }
+
+        [SerializeField] private TrailRenderer trailRenderer;
+        
         private float elapsedTime;
         private float deltaTime;
         private bool isRunning = false;
@@ -21,11 +26,16 @@ namespace _Game.GamePlay.Model
             isRunning = true;
         }
 
-        public void SetPosition(Vector3 position, float deltaTime)
+        private void OnEnable()
+        {
+            this.WaitNextFrame(() => { trailRenderer.enabled = true; });
+        }
+
+        public void SetPosition(Vector3 position, float dt)
         {
             this.PreviousPosition = transform.position;
             this.TargetPosition = position;
-            this.deltaTime = deltaTime;
+            this.deltaTime = dt;
             this.elapsedTime = 0;
             
             Vector3 direction = position - PreviousPosition;
@@ -56,6 +66,8 @@ namespace _Game.GamePlay.Model
             if (shouldDestroy) return;
             
             shouldDestroy = true;
+
+            trailRenderer.enabled = false;
         }
     }
 }

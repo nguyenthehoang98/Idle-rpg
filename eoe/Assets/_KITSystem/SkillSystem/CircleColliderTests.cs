@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using _KITSystem.SkillSystem.Core;
 using NUnit.Framework;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _KITSystem.SkillSystem
@@ -22,8 +23,7 @@ namespace _KITSystem.SkillSystem
                 this.size = size;
             }
 
-            public void FindTarget(FindTargetType type, Vector2 center, Vector2 pivot, float radius,
-                Func<int, bool> funcFilterEntity, out QueryResult result)
+            public void FindTarget(FindTargetType type, Vector2 center, float radius, Func<int, float2, bool> funcFilterEntity, out QueryResult result)
             {
                 result = new QueryResult();
             }
