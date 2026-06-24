@@ -4,6 +4,11 @@ namespace _Game.GamePlay.Utils
 {
     public static class GizmosLine
     {
+        public static void Line(Vector3 center, Vector3 to, Color color, float deltaTime)
+        {
+            Debug.DrawLine(center, to, color, deltaTime);
+        }
+        
         public static void Circle(Vector3 center, float radius, Color color, float deltaTime, int segments = 12)
         {
 #if UNITY_EDITOR

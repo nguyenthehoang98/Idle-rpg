@@ -7,6 +7,7 @@ using _Game.GamePlay.Model;
 using _KITSystem.Grid;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;
+using Cysharp.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -139,14 +140,14 @@ namespace _Game.GamePlay.Manager
             instance.DestroyAgent_Private(agent);
         }
 
-        private async void CreateAgent_Private(Monster monster, MonsterRuntimeData runtimeData, MonsterData monsterData)
+        private void CreateAgent_Private(Monster monster, MonsterRuntimeData runtimeData, MonsterData monsterData)
         {
             int agent = CreateAgent(
                 monster.transform.position, monsterData.radius, monsterData.speed,
                 stopDistance + monsterData.stopDistance
             ).agent;
             
-            await monster.Initialize(monsterData);
+            monster.Initialize(monsterData);
             
             Temp temp = new Temp(monster, agent);
             additional.Enqueue(temp);

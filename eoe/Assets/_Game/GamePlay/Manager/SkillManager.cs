@@ -25,13 +25,11 @@ namespace _Game.GamePlay.Manager
         public event Action<PostEarnExpParams> OnPostEarnExp;
 
         private IQuery query;
-        private HashSet<GameObject> objects;
         private HashSet<string> names;
 
         public Task Initialize()
         {
             query = new EntityQuery();
-            objects = new HashSet<GameObject>();
             names = new HashSet<string>();
 
             instance = this;
@@ -41,13 +39,6 @@ namespace _Game.GamePlay.Manager
         public override void Dispose()
         {
             base.Dispose();
-
-            foreach (var go in objects)
-            {
-                Pool.UnRegisterPool(go);
-            }
-
-            objects = null;
 
             foreach (var name in names)
             {
@@ -148,11 +139,11 @@ namespace _Game.GamePlay.Manager
             }
 
             GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(skillData.prefabName);
-            if (names.Add(skillData.prefabName) && objects.Add(go))
+            if (names.Add(skillData.prefabName))
                 Pool.RegisterPool(go, true);
             
             GameObject impact = await AssetBundleManager.GetAssetCached<GameObject>(skillData.impactName);
-            if (names.Add(skillData.impactName) && objects.Add(impact))
+            if (names.Add(skillData.impactName))
                 Pool.RegisterPool(impact, true);
 
             go = Pool.Instantiate(go);
@@ -167,7 +158,7 @@ namespace _Game.GamePlay.Manager
             );
 
             CastProjectileAction action = new CastProjectileAction(this, skillData.lifeTime, collider, trajectory,
-                (entity, pos) => OnDamageEntityFunction(skillData, runtimeData, entity, position, scaleDamage),
+                (entity, pos) => OnDamageEntityFunction(skillData, runtimeData, entity, pos, scaleDamage),
                 projectile, dtt, damageTicket.ticketInterval,
                 colliderData.limitNumberCollision, colliderData.resetCollisionInterval
             );
@@ -220,6 +211,16 @@ namespace _Game.GamePlay.Manager
             }
             else
             {
+#if UNITY_EDITOR
+                GizmosLine.Line(position - new Vector3(0.25f, 0.25f),
+                    position + new Vector3(0.25f, 0.25f),
+                    Color.yellow, 0.1f
+                );
+                GizmosLine.Line(position + new Vector3(-0.25f, 0.25f),
+                    position + new Vector3(0.25f, -0.25f),
+                    Color.yellow, 0.1f
+                );
+#endif
                 return CalculatorDamage(skillData, runtimeData, entity, position, scaleDamage);
             }
 
@@ -275,10 +276,7 @@ namespace _Game.GamePlay.Manager
 
             GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(prefabName);
 
-            if (names.Add(prefabName) && objects.Add(go))
-            {
-                Pool.RegisterPool(go, true);
-            }
+            if (names.Add(prefabName)) Pool.RegisterPool(go, true);
 
             GameObject o = Pool.Instantiate(go);
             o.transform.position = position;
@@ -288,8 +286,7 @@ namespace _Game.GamePlay.Manager
 
         private async void SpawnTextDamage(int damage, bool critical, Vector3 position)
         {
-            GameObject go =
-                await AssetBundleManager.GetAssetCached<GameObject>(critical
+            GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(critical
                     ? Const.TEXT_DAMAGE_CRITICAL
                     : Const.TEXT_DAMAGE_NORMAL);
 

@@ -61,6 +61,18 @@ namespace _Game.Configs
                 else Debug.LogError($"Not found skill '{weaponData.skillId}' at weapon '{weaponData.id}'");
                 weapons[i] = weaponData;
             }
+
+            foreach (var weaponData in weapons)
+            {
+                if (string.IsNullOrEmpty(weaponData.prefabName))
+                    Debug.LogError($"Prefab name is empty at weapon '{weaponData.id}'");
+                if(string.IsNullOrEmpty(weaponData.projectileName))
+                    Debug.LogError($"Projectile name is empty at weapon '{weaponData.id}'");
+                if(string.IsNullOrEmpty(weaponData.impactName))
+                    Debug.LogError($"Impact name is empty at weapon '{weaponData.id}'");
+                if(string.IsNullOrEmpty(weaponData.attackAudioClip))
+                    Debug.LogError($"Attack audio is empty at weapon '{weaponData.id}'");
+            }
 #endif
         }
 

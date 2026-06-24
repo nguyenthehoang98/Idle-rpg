@@ -17,13 +17,8 @@ namespace _Game.GamePlay.Manager
 
         private void Awake()
         {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
             Instance = this;
+            
             audioSource = GetComponent<AudioSource>();
             
             DontDestroyOnLoad(gameObject);
@@ -33,13 +28,11 @@ namespace _Game.GamePlay.Manager
         {
             if (clip == null)
             {
-                Debug.LogWarning($"{nameof(SoundManager)}::{nameof(PlayOneShot)} - Clip is null.");
+                Debug.LogWarning($"{nameof(SoundManager)}::PlayOneShot - Clip is null.");
                 return;
             }
 
-            interval = interval < 0f
-                ? defaultPlayInterval
-                : interval;
+            interval = interval < 0f ? defaultPlayInterval : interval;
 
             if (lastPlayTimes.TryGetValue(clip, out float lastPlayTime))
             {

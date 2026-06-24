@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using _Game.Configs;
 using _Game.GamePlay.Manager;
 using _KITSystem.Resource;
@@ -33,12 +34,12 @@ namespace _Game.GamePlay.Model
 
             transform.position = Vector3.Lerp(previousPosition, targetPosition, Mathf.Clamp01(elapsedTime / deltaTime));
         }
-        
-        public async UniTask Initialize(MonsterData monsterData)
+
+        public async void Initialize(MonsterData monsterData)
         {
             await GetComponent<MonsterSkin>().UpdateSkin(monsterData.skin);
             
-            if (!string.IsNullOrEmpty(monsterData.deathAudioClip) && deathAudioClip == null)
+            if (deathAudioClip == null)
             {
                 deathAudioClip = await AssetBundleManager.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
             }
@@ -73,7 +74,7 @@ namespace _Game.GamePlay.Model
         {
             if (!isInitialized) return;
             
-            if(deathAudioClip != null) SoundManager.Instance.PlayOneShot(deathAudioClip, deathVolume);
+            SoundManager.Instance.PlayOneShot(deathAudioClip, deathVolume);
             
             OnMonsterDisable?.Invoke(this);
             

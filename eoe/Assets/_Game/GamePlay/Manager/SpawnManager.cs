@@ -8,6 +8,7 @@ using _KITSystem.Config;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using _KITSystem.Utils;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -71,6 +72,16 @@ namespace _Game.GamePlay.Manager
                     {
                         Pool.RegisterPool(go, true);
                     }
+
+                    if (names.Add(monsterData.skin))
+                    {
+                        await AssetBundleManager.GetAssetCached<Sprite>(monsterData.skin);
+                    }
+                    
+                    if (names.Add(monsterData.deathAudioClip))
+                    {
+                        await AssetBundleManager.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
+                    }
                 }
             }
 
@@ -125,10 +136,7 @@ namespace _Game.GamePlay.Manager
 
                 if (count > 0)
                 {
-                    for (int j = 0; j < count; j++)
-                    {
-                        Spawn(spawnData);
-                    }
+                    for (int j = 0; j < count; j++) Spawn(spawnData);
                 }
 
                 if (!data.IsFinished) isWaveCompleted = false;

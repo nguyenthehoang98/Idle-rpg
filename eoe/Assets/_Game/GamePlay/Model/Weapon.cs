@@ -21,7 +21,6 @@ namespace _Game.GamePlay.Model
         [SerializeField] private AnimationCurve rotationCurve;
         [SerializeField] private float rotationDuration;
 
-        private HashSet<GameObject> objects = new HashSet<GameObject>();
         private HashSet<string> names = new HashSet<string>();
 
         private SkillData skillData;
@@ -65,13 +64,6 @@ namespace _Game.GamePlay.Model
             }
 
             names = null;
-
-            foreach (var go in objects)
-            {
-                Pool.UnRegisterPool(go);
-            }
-
-            objects = null;
         }
 
         public async UniTask Initialize(WeaponData weaponData, WeaponUpgradeData upgradeDataX2, WeaponUpgradeData upgradeDataX3)
@@ -88,20 +80,19 @@ namespace _Game.GamePlay.Model
             attackVolume = weaponData.attackVolume;
             query = new EntityQuery();
 
-            if (!string.IsNullOrEmpty(weaponData.projectileName))
+            if (names.Add(skillData.prefabName))
             {
-                GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(weaponData.projectileName);
-                if (go != null)
-                {
-                    objects.Add(go);
-                    names.Add(weaponData.projectileName);
-                }
+                await AssetBundleManager.GetAssetCached<GameObject>(skillData.prefabName);
             }
 
-            if (!string.IsNullOrEmpty(weaponData.attackAudioClip))
+            if (names.Add(skillData.impactName))
             {
-                AudioClip audioClip = await AssetBundleManager.GetAssetCached<AudioClip>(weaponData.attackAudioClip);
-                if (audioClip != null) names.Add(weaponData.attackAudioClip);
+                await AssetBundleManager.GetAssetCached<GameObject>(skillData.impactName);
+            }
+
+            if (names.Add(weaponData.attackAudioClip))
+            {
+                attackAudioClip = await AssetBundleManager.GetAssetCached<AudioClip>(weaponData.attackAudioClip);
             }
 
             StartCoroutine(AutoAttack());
@@ -117,7 +108,7 @@ namespace _Game.GamePlay.Model
         {
             if (!isActivated || !isAttacking) return;
 
-            if (attackAudioClip != null) SoundManager.Instance.PlayOneShot(attackAudioClip, attackVolume);
+            SoundManager.Instance.PlayOneShot(attackAudioClip, attackVolume);
 
             Vector3 muzzlePosition = MuzzlePosition();
             Vector3 destinationPosition = Destination(muzzlePosition, destination);
