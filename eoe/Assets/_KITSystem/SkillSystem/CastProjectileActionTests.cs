@@ -1,6 +1,7 @@
 #if UNITY_INCLUDE_TESTS
 using System.Collections.Generic;
 using _Game.GamePlay;
+using _Game.GamePlay.Model;
 using _KITSystem.SkillSystem.Core;
 using NUnit.Framework;
 using UnityEngine;

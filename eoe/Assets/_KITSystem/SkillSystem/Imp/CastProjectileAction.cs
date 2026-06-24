@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _Game.GamePlay;
+using _Game.GamePlay.Model;
 using _KITSystem.SkillSystem.Core;
 using UnityEngine;
 

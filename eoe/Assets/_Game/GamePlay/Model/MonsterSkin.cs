@@ -2,7 +2,7 @@ using _KITSystem.Resource;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace _Game._GamePlay
+namespace _Game.GamePlay.Model
 {
     public class MonsterSkin : MonoBehaviour
     {

@@ -127,7 +127,8 @@ namespace _Game.Configs
     {
         public int skillId;
         public float lifeTime;
-        public string prefabName;
+        public string prefabName; // Đọc từ weapon. monster
+        public string impactName; // Đọc từ weapon. monster
         
         [JsonProperty, NonSerialized] public string findTargetId;
         [JsonProperty, NonSerialized] public string trajectoryId;

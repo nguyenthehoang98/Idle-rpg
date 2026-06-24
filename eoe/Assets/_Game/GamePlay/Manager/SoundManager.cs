@@ -25,6 +25,8 @@ namespace _Game.GamePlay.Manager
 
             Instance = this;
             audioSource = GetComponent<AudioSource>();
+            
+            DontDestroyOnLoad(gameObject);
         }
 
         public void PlayOneShot(AudioClip clip, float volume = 1f, float interval = -1f)

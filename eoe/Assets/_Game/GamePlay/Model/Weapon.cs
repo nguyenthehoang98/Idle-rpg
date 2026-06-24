@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using _Game.Configs;
-using _Game.GamePlay;
+using _Game.GamePlay.Data;
 using _Game.GamePlay.Manager;
+using _Game.GamePlay.Utils;
 using _KITSystem.Resource;
 using _KITSystem.SkillSystem.Core;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace _Game._GamePlay
+namespace _Game.GamePlay.Model
 {
     public class Weapon : MonoBehaviour
     {
@@ -159,7 +160,13 @@ namespace _Game._GamePlay
 
                 yield return new WaitForSeconds(cooldown / TimeScale);
 
-                if (isAttacking || !isActivated) continue;
+                if (isAttacking || !isActivated)
+                {
+#if UNITY_EDITOR
+                    //Debug.LogWarning($"Weapon {name} in active '{isActivated}', attack '{isAttacking}'");    
+#endif
+                    continue;
+                }
 
                 FindTargetType type = FindTargetType.Filter;
                 if (skillData.findTarget.type == FindTargetData.FilterType.Farthest)
@@ -193,6 +200,7 @@ namespace _Game._GamePlay
                 {
 #if UNITY_EDITOR
                     GizmosLine.Circle(center, radius, Color.red, gizmosDeltaTime, 36);
+                    //Debug.LogWarning($"Weapon {name} not found target");
 #endif
                     continue;
                 }
@@ -236,6 +244,8 @@ namespace _Game._GamePlay
                 float speed = attackSpeed + current.attackSpeed;
 
                 animator.speed = TimeScale * speed;
+
+                isAttacking = true;
             }
         }
 

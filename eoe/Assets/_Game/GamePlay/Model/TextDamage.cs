@@ -2,7 +2,7 @@ using _KITSystem.Resource;
 using TMPro;
 using UnityEngine;
 
-namespace _Game.GamePlay
+namespace _Game.GamePlay.Model
 {
     public class TextDamage : MonoBehaviour
     {

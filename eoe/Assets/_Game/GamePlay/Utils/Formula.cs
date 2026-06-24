@@ -1,6 +1,7 @@
+using _Game.GamePlay.Data;
 using _KITSystem.Utils;
 
-namespace _Game.GamePlay.Manager
+namespace _Game.GamePlay.Utils
 {
     public static class Formula
     {

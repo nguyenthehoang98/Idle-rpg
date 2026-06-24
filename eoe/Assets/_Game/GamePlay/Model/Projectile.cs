@@ -1,17 +1,12 @@
 using _KITSystem.Resource;
 using UnityEngine;
 
-namespace _Game.GamePlay
+namespace _Game.GamePlay.Model
 {
     public class Projectile : MonoBehaviour
     {
-        static readonly int Death = Animator.StringToHash("Death");
-        static readonly int _Initialize = Animator.StringToHash("Initialize");
-        
-        [SerializeField] private Animator animator;
-
-        private Vector3 targetPosition;
-        private Vector3 previousPosition;
+        public Vector3 TargetPosition { get; private set; }
+        public Vector3 PreviousPosition { get; private set; }
         private float elapsedTime;
         private float deltaTime;
         private bool isRunning = false;
@@ -19,10 +14,8 @@ namespace _Game.GamePlay
         
         public void Initialize()
         {
-            animator.Play(_Initialize);
-
             elapsedTime = 0;
-            targetPosition = previousPosition = transform.position;
+            TargetPosition = PreviousPosition = transform.position;
             
             shouldDestroy = false;
             isRunning = true;
@@ -30,12 +23,12 @@ namespace _Game.GamePlay
 
         public void SetPosition(Vector3 position, float deltaTime)
         {
-            this.previousPosition = transform.position;
-            this.targetPosition = position;
+            this.PreviousPosition = transform.position;
+            this.TargetPosition = position;
             this.deltaTime = deltaTime;
             this.elapsedTime = 0;
             
-            Vector3 direction = position - previousPosition;
+            Vector3 direction = position - PreviousPosition;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             transform.rotation =  Quaternion.Euler(0, 0, angle + 90f);
         }
@@ -48,9 +41,14 @@ namespace _Game.GamePlay
 
             float t = Mathf.Clamp01(elapsedTime / deltaTime);
 
-            transform.position = Vector3.Lerp(previousPosition, targetPosition, t);
+            transform.position = Vector3.Lerp(PreviousPosition, TargetPosition, t);
 
-            if (t >= 1.0f && shouldDestroy) isRunning = false;
+            if (t >= 1.0f && shouldDestroy)
+            {
+                Pool.Destroy(gameObject);
+                
+                isRunning = false;
+            }
         }
 
         public void Destroy()
@@ -58,13 +56,6 @@ namespace _Game.GamePlay
             if (shouldDestroy) return;
             
             shouldDestroy = true;
-            
-            animator.Play(Death);
-        }
-
-        public void Release()
-        {
-            Pool.Destroy(gameObject);
         }
     }
 }

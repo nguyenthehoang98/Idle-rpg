@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using _BattleSource.Entity;
-using _Game._GamePlay;
 using _Game.Configs;
+using _Game.GamePlay.Data;
+using _Game.GamePlay.Entity;
+using _Game.GamePlay.Model;
+using _Game.GamePlay.Utils;
 using _KITSystem.Entity;
 using _KITSystem.Grid;
 using _KITSystem.Resource;
@@ -148,6 +150,10 @@ namespace _Game.GamePlay.Manager
             GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(skillData.prefabName);
             if (names.Add(skillData.prefabName) && objects.Add(go))
                 Pool.RegisterPool(go, true);
+            
+            GameObject impact = await AssetBundleManager.GetAssetCached<GameObject>(skillData.impactName);
+            if (names.Add(skillData.impactName) && objects.Add(impact))
+                Pool.RegisterPool(impact, true);
 
             go = Pool.Instantiate(go);
             go.transform.position = position;
@@ -165,7 +171,11 @@ namespace _Game.GamePlay.Manager
                 projectile, dtt, damageTicket.ticketInterval,
                 colliderData.limitNumberCollision, colliderData.resetCollisionInterval
             );
-            action.OnComplete += () => { projectile.Destroy(); };
+            action.OnComplete += () =>
+            {
+                Pool.Instantiate(impact, true).transform.position = projectile.TargetPosition;
+                projectile.Destroy();
+            };
 
             projectile.Initialize();
 
@@ -273,7 +283,7 @@ namespace _Game.GamePlay.Manager
             GameObject o = Pool.Instantiate(go);
             o.transform.position = position;
 
-            o.GetComponent<Aura>().Scale(radius);
+            //o.GetComponent<Aura>().Scale(radius);
         }
 
         private async void SpawnTextDamage(int damage, bool critical, Vector3 position)

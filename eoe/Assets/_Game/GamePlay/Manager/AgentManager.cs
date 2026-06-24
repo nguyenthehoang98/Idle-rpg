@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using _Game._GamePlay;
 using _Game.Configs;
+using _Game.GamePlay.Data;
+using _Game.GamePlay.Model;
 using _KITSystem.Grid;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;

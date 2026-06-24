@@ -5,7 +5,7 @@ using _KITSystem.Resource;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace _Game._GamePlay
+namespace _Game.GamePlay.Model
 {
     [RequireComponent(typeof(MonsterSkin))]
     [RequireComponent(typeof(MonsterSortingLayer))]
@@ -78,10 +78,7 @@ namespace _Game._GamePlay
             OnMonsterDisable?.Invoke(this);
             
             isInitialized = false;
-        }
-
-        public void Release()
-        {
+            
             Pool.Destroy(gameObject);
         }
     }

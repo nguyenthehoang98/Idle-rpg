@@ -1,6 +1,7 @@
 using System.Collections.Generic;
-using _BattleSource.Entity;
 using _Game.Configs;
+using _Game.GamePlay.Data;
+using _Game.GamePlay.Entity;
 using _KITSystem.Entity;
 using UnityEngine;
 

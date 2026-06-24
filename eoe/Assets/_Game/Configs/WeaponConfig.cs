@@ -56,6 +56,7 @@ namespace _Game.Configs
                 {
                     weaponData.skillData = skillData;
                     weaponData.skillData.prefabName = weaponData.projectileName;
+                    weaponData.skillData.impactName = weaponData.impactName;
                 }
                 else Debug.LogError($"Not found skill '{weaponData.skillId}' at weapon '{weaponData.id}'");
                 weapons[i] = weaponData;
@@ -71,8 +72,13 @@ namespace _Game.Configs
         public bool TryGetUpgradeWeapon(int weaponId, int level, UpgradeType type, out List<WeaponUpgradeData> list)
         {
             int key = HashCode.Combine(weaponId, level, type);
-            
-            return cachedUpgrade.TryGetValue(key, out list);
+
+            if (cachedUpgrade.TryGetValue(key, out list))
+            {
+                return list.Count > 0;
+            }
+
+            return false;
         }
     }
     
@@ -82,6 +88,7 @@ namespace _Game.Configs
         public int id;
         public string prefabName;
         public string projectileName;
+        public string impactName;
         public int skillId;
         public float cooldown;
         public float attackSpeed;

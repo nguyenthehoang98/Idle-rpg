@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 
 namespace _KITSystem.Resource
@@ -50,6 +51,7 @@ namespace _KITSystem.Resource
 
 #if UNITY_EDITOR
             string stackTrace = UnityEngine.StackTraceUtility.ExtractStackTrace();
+            Stopwatch sw = Stopwatch.StartNew();
 #endif
 
             try
@@ -67,11 +69,15 @@ namespace _KITSystem.Resource
                     return null;
                 }
 
+#if UNITY_EDITOR
+                sw.Stop();
+#endif
+                
                 if (cached)
                 {
                     Dictionary[assetName] = new CacheEntry(handle, asset);
 #if UNITY_EDITOR
-                    Debug.Log($"[KitLoaded] Cached asset: {assetName}\n\n{stackTrace}");
+                    Debug.Log($"[KitLoaded] Cached asset: {assetName}, duration '{sw.ElapsedMilliseconds}'ms\n\n{stackTrace}");
 #endif
                 }
                 else
@@ -84,6 +90,9 @@ namespace _KITSystem.Resource
             }
             catch (Exception e)
             {
+#if UNITY_EDITOR
+                sw.Stop();
+#endif
                 Debug.LogError($"[KitLoaded] Failed to load asset '{typeof(T)}' at path '{assetName}'\n\n{stackTrace}");
                 Debug.LogError(e);
                 return null;

@@ -2,7 +2,7 @@ using System;
 using _Game.Configs;
 using UnityEngine;
 
-namespace _Game.GamePlay.Manager
+namespace _Game.GamePlay.View
 {
     public class UpgradeCardUIPicker : MonoBehaviour
     {

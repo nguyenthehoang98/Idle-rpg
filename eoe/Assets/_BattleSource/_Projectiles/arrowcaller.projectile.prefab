@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4724804207875695}
   - component: {fileID: 96061268324235159}
+  - component: {fileID: -2834292764587312897}
   m_Layer: 10
   m_Name: arrowcaller.projectile
   m_TagString: Bullet
@@ -152,6 +153,19 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 0
+--- !u!114 &-2834292764587312897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d310ff3e519bd0e4a8f724ec24dc56d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.Model.Projectile
+  animator: {fileID: 0}
 --- !u!1 &1730242686860875
 GameObject:
   m_ObjectHideFlags: 0

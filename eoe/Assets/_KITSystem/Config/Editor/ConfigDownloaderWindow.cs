@@ -222,7 +222,7 @@ namespace _KITSystem.Config.Editor
 
                     if (request.result != UnityWebRequest.Result.Success)
                     {
-                        Debug.LogError($"Failed to download {info.Name}: {request.error}");
+                        Debug.LogError($"Failed to download '{info.Name}' error '{request.error}'");
                         request.Dispose();
                         continue;
                     }
