@@ -9,10 +9,12 @@ namespace _Game.Configs
     public class PlayerConfig : IGameConfig
     {
         [SerializeField] private List<HeroData> heros = new List<HeroData>();
+        [SerializeField] private List<WingData> wings = new List<WingData>();
         [SerializeField] private List<PlayerExpData> exp = new List<PlayerExpData>();
 
         private Dictionary<int, PlayerExpData> cachedExp;
         private Dictionary<int, HeroData> cachedHero;
+        private Dictionary<int, WingData> cachedWing;
         
         public void OnMappingValue()
         {
@@ -27,10 +29,30 @@ namespace _Game.Configs
             {
                 cachedHero.Add(hero.id, hero);
             }
+            
+            cachedWing = new Dictionary<int, WingData>();
+            foreach (var wing in wings)
+            {
+                cachedWing.Add(wing.id, wing);
+            }
         }
 
         public void OnPostImported()
         {
+            foreach (var heroData in heros)
+            {
+                bool found = false;
+                foreach (var wingData in wings)
+                {
+                    if (wingData.id == heroData.wingId)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) Debug.LogError($"Not found wing data '{heroData.wingId}' at hero {heroData.id}");
+            }
         }
 
         public void OnValidateLinkConfig()
@@ -40,6 +62,11 @@ namespace _Game.Configs
         public bool TryGetHero(int heroId, out HeroData data)
         {
             return cachedHero.TryGetValue(heroId, out data);
+        }
+
+        public bool TryGetWing(int wingId, out WingData data)
+        {
+            return cachedWing.TryGetValue(wingId, out data);
         }
 
         public bool TryGetExp(int level, out PlayerExpData data)
@@ -53,6 +80,13 @@ namespace _Game.Configs
     {
         public int id;
         public string prefabName;
+        public int wingId;
+    }
+
+    [Serializable]
+    public struct WingData
+    {
+        public int id;
         public string wingName;
     }
 

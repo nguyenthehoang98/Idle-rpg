@@ -104,15 +104,15 @@ namespace _Game.GamePlay.Manager
 
         private async UniTask BuildHero(int heroId)
         {
-            if (playerConfig.TryGetHero(heroId, out var heroData))
+            if (playerConfig.TryGetHero(heroId, out HeroData heroData))
             {
                 GameObject go = null;
                 go = await AssetBundleManager.GetAsset<GameObject>(heroData.prefabName);
                 Object.Instantiate(go, Vector3.zero, Quaternion.identity);
 
-                if (!string.IsNullOrEmpty(heroData.wingName))
+                if (playerConfig.TryGetWing(heroData.wingId, out WingData wingData) && !string.IsNullOrEmpty(wingData.wingName))
                 {
-                    go = await AssetBundleManager.GetAsset<GameObject>(heroData.wingName);
+                    go = await AssetBundleManager.GetAsset<GameObject>(wingData.wingName);
                     Object.Instantiate(go, Vector3.zero, Quaternion.identity);
                 }
             }
