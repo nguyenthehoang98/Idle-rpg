@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using _Game._GamePlay2;
+using _Game._GamePlay;
 using _Game.Configs;
 using _KITSystem.Config;
 using _KITSystem.Resource;
@@ -73,7 +73,7 @@ namespace _Game.GamePlay.Manager
                 }
             }
 
-            go = await AssetBundleManager.GetAsset<GameObject>(levelData.backgroundPrefabName);
+            go = await AssetBundleManager.GetAsset<GameObject>(levelData.backgroundName);
             Object.Instantiate(go).transform.position = Vector3.zero;
 
             LoadWave(0);
@@ -97,7 +97,7 @@ namespace _Game.GamePlay.Manager
                 {
                     SpawnData spawnData = spawnsData[i];
 
-                    temps[i] = new SpawnTimer(spawnData.startTime, spawnData.endTime, spawnData.totalMonster);
+                    temps[i] = new SpawnTimer(spawnData.startTime, spawnData.endTime, spawnData.total);
                 }
 
                 return true;
@@ -159,8 +159,8 @@ namespace _Game.GamePlay.Manager
             }
 
             Vector3 position = portals[portalIndex].position + new Vector3(
-                RandomUtils.Range(-data.spawnRadius, data.spawnRadius),
-                RandomUtils.Range(-data.spawnRadius, data.spawnRadius)
+                RandomUtils.Range(-data.radius, data.radius),
+                RandomUtils.Range(-data.radius, data.radius)
             );
             
             GameObject instance = Pool.Instantiate(cachedMonster[data.monsterId]);
@@ -173,9 +173,9 @@ namespace _Game.GamePlay.Manager
             
             MonsterRuntimeData runtimeData = new MonsterRuntimeData
             {
-                AttackScale = data.monsterAttackScale,
-                HealthScale = data.monsterHealthScale,
-                ExpScale = data.monsterExpScale
+                AttackScale = data.attackScale,
+                HealthScale = data.healthScale,
+                ExpScale = data.expScale
             };
             
             AgentManager.Create_Agent(monster, runtimeData, monsterData);

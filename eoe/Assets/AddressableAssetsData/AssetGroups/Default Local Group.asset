@@ -16,7 +16,7 @@ MonoBehaviour:
   m_GUID: 06731347fde61c84a8d7658e84d90d43
   m_SerializeEntries:
   - m_GUID: 04193c3487da7734e9f2f321bac5e1b4
-    m_Address: background
+    m_Address: 1.background
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -51,12 +51,17 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6514f5dc8d7e67b479ebe203c49f411a
-    m_Address: hero_diamond
+    m_Address: diamond.hero
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 73762136d49bf3541bfd3470211f6cf4
     m_Address: MonsterConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 760c0532b6c46a748acd75b593570460
+    m_Address: shotgun_orange.weapon
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -75,13 +80,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9f0e94d71243e974685f5bcea515820b
+    m_Address: shotgun_green.weapon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a03f9cc7a4b8e1541938e12b1245283c
     m_Address: TextDamageNormal
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b041ac6ff62a5bf45aa32fcdc04658d8
-    m_Address: wing9
+    m_Address: 9.wing
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -115,8 +125,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ebb3d4b1741cbe443a31802a04a155c7
+    m_Address: arrowcaller.projectile
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f0e8072150d245143aac9ac7c463891f
-    m_Address: m_brain
+    m_Address: brain.monster
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

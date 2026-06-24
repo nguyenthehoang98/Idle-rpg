@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace _Game._GamePlay2
+namespace _Game._GamePlay
 {
     public class MonsterSortingLayer : MonoBehaviour
     {

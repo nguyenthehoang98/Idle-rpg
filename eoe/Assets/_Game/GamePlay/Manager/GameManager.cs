@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using _Game._GamePlay2;
+using _Game._GamePlay;
 using _Game.Configs;
 using _KITSystem.Config;
 using _KITSystem.Resource;
@@ -14,8 +14,8 @@ namespace _Game.GamePlay.Manager
     public sealed class GameManager : MonoBehaviour
     {
         [SerializeField] private UpgradeCardUIPicker cardUIPicker;
+        [SerializeField] private int[] equipments = new int[4];
 
-        private readonly Coroutine[] coroutines = new Coroutine[4];
         private Dictionary<int, Weapon> weaponContainer = new Dictionary<int, Weapon>();
         private Dictionary<int, int> damageMemory = new Dictionary<int, int>();
         private TickSystemOwner owner;
@@ -33,8 +33,7 @@ namespace _Game.GamePlay.Manager
             owner.TryGetTickable(out skillManager);
             owner.TryGetTickable(out spawnManager);
             
-            player = new PlayerRuntimeData();
-
+            owner.OnChangeScaleTime += OnChangeScaleTime;
             skillManager.OnPostDamage += PostDamage;
             skillManager.OnPostEarnExp += EarnExp;
             
@@ -48,20 +47,28 @@ namespace _Game.GamePlay.Manager
         {
             playerConfig = ConfigManager.Get<PlayerConfig>();
             weaponConfig = ConfigManager.Get<WeaponConfig>();
+            player = new PlayerRuntimeData();
             
             spawnManager.SetLevel(1);
 
             await BuildHero(10);
 
+            for (int i = 0; i < equipments.Length; i++)
+            {
+                await Equip(equipments[i]);
+            }
+
             await owner.Initialize();
             
             owner.IsPaused = false;
+            owner.Loop = 1;
             
             KitEntryScene.Instance.HideLoadingScene();
         }
 
         private void OnDestroy()
         {
+            owner.OnChangeScaleTime -= OnChangeScaleTime;
             skillManager.OnPostDamage -= PostDamage;
             skillManager.OnPostEarnExp -= EarnExp;
             
@@ -71,28 +78,28 @@ namespace _Game.GamePlay.Manager
             cardUIPicker.OnPickCard -= PickCard;
         }
 
-        public async UniTask Equip(int weaponId)
+        private async UniTask Equip(int weaponId)
         {
             if (weaponConfig.TryGetWeaponData(weaponId, out WeaponData weaponData))
             {
-                int count = weaponContainer.Count;
-                
                 if (!weaponConfig.TryGetUpgradeWeapon(weaponId, 0, UpgradeType.PowerX2, out var list1)) 
                     Debug.LogError($"Not found upgrade weapon x2 with '{weaponId}'");
                     
                 if (!weaponConfig.TryGetUpgradeWeapon(weaponId, 0, UpgradeType.PowerX3, out var list2)) 
                     Debug.LogError($"Not found upgrade weapon x3 with '{weaponId}'");
 
-                /*Weapon weapon = await pedestals[count].Initialize(weaponData, list1[0], list2[0], owner.Loop, owner.TickInterval);
+                GameObject go = await AssetBundleManager.GetAsset<GameObject>(weaponData.prefabName);
+                go = Object.Instantiate(go, Vector3.zero, Quaternion.identity);
 
-                await pedestals[count].Setup(0, 0);*/
+                Weapon weapon = go.GetComponent<Weapon>();
+                await weapon.Initialize(weaponData, list1[0], list2[0]);
 
-                //weaponContainer[weaponId] = weapon;
+                weaponContainer[weaponId] = weapon;
             }
             else Debug.LogError($"Not found weapon '{weaponId}'");
         }
 
-        public void SetWeaponLevel(int slot, int level, float duration)
+        /*private void SetWeaponLevel(int slot, int level, float duration)
         {
             if (slot >= 0 && slot <= 3 && level >= 0 && level <= 2)
             {
@@ -100,7 +107,7 @@ namespace _Game.GamePlay.Manager
                
                 //coroutines[slot] = StartCoroutine(pedestals[slot].Setup(level, duration));
             }
-        }
+        }*/
 
         private async UniTask BuildHero(int heroId)
         {
@@ -122,17 +129,18 @@ namespace _Game.GamePlay.Manager
 
         private void OnChangeScaleTime(float deltaTime)
         {
-            /*foreach (var pedestal in pedestals)
+            foreach (var pair in weaponContainer)
             {
-                pedestal.DeltaTime = deltaTime;
-            }*/
+                pair.Value.TimeScale = owner.Loop;
+                pair.Value.DeltaTime = owner.TickInterval / owner.Loop;
+            }
         }
 
         private void PickCard(WeaponUpgradeData @params)
         {
             if (weaponContainer.TryGetValue(@params.id, out Weapon weapon))
             {
-                weapon.Increase(@params);
+                weapon.IncreaseUpgradeData(@params);
             }
         }
 

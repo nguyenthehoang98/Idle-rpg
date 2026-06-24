@@ -4,6 +4,7 @@ using _KITSystem.Config;
 using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Game.Configs
 {
@@ -31,15 +32,15 @@ namespace _Game.Configs
             for (int i = 0; i < waves.Count; i++)
             {
                 WaveData data = waves[i];
-                data.spawns = new SpawnData[data.spawnGroupId.Length];
+                data.spawns = new SpawnData[data.groupsId.Length];
                 
-                for (var j = 0; j < data.spawnGroupId.Length; j++)
+                for (var j = 0; j < data.groupsId.Length; j++)
                 {
-                    string spawnGroupId = data.spawnGroupId[j];
+                    string spawnGroupId = data.groupsId[j];
                     bool found = false;
                     foreach (var spawnData in spawns)
                     {
-                        if (string.Equals(spawnData.spawnGroupId, spawnGroupId))
+                        if (string.Equals(spawnData.groupId, spawnGroupId))
                         {
                             found = true;
                             data.spawns[j] = spawnData;
@@ -100,7 +101,7 @@ namespace _Game.Configs
                     {
                         if (monsterConfig.TryGetMonsterData(spawnData.monsterId, out MonsterData monsterData)) continue;
                         
-                        Debug.LogError($"Not found monster id '{spawnData.monsterId}' at spawn group id '{waveData.spawnGroupId}'");
+                        Debug.LogError($"Not found monster id '{spawnData.monsterId}' at spawn group id '{waveData.groupsId}'");
                     }
                 }
             }
@@ -118,7 +119,7 @@ namespace _Game.Configs
     {
         public int levelId;
         public string levelName;
-        public string backgroundPrefabName;
+        public string backgroundName;
         public WaveData[] waves;
         [JsonProperty, HideInInspector] public string[] wavesId;
     }
@@ -127,20 +128,20 @@ namespace _Game.Configs
     public struct WaveData
     {
         public string waveId;
-        [JsonProperty, HideInInspector] public string[] spawnGroupId;
+        [JsonProperty, HideInInspector] public string[] groupsId;
         public SpawnData[] spawns;
     }
 
     [Serializable]
     public struct SpawnData
     {
-        public string spawnGroupId;
+        public string groupId;
         public int monsterId;
-        public int totalMonster;
-        public float monsterAttackScale;
-        public float monsterHealthScale;
-        public float monsterExpScale;
-        public float spawnRadius;
+        public int total;
+        public float attackScale;
+        public float healthScale;
+        public float expScale;
+        public float radius;
         public float startTime;
         public float endTime;
         public int[] portals;

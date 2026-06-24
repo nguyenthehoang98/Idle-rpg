@@ -95,11 +95,11 @@ namespace _Game.Configs
             var config = new LevelConfig();
             var spawns = new List<SpawnData>
             {
-                new SpawnData { spawnGroupId = "sg1", monsterId = 1, totalMonster = 5 },
+                new SpawnData { groupId = "sg1", monsterId = 1, total = 5 },
             };
             var waves = new List<WaveData>
             {
-                new WaveData { waveId = "w1", spawnGroupId = new[] { "sg1" } },
+                new WaveData { waveId = "w1", groupsId = new[] { "sg1" } },
             };
             var levels = new List<LevelData>
             {
@@ -117,7 +117,7 @@ namespace _Game.Configs
             Assert.AreEqual(1, level.waves.Length);
             Assert.AreEqual("w1", level.waves[0].waveId);
             Assert.AreEqual(1, level.waves[0].spawns.Length);
-            Assert.AreEqual("sg1", level.waves[0].spawns[0].spawnGroupId);
+            Assert.AreEqual("sg1", level.waves[0].spawns[0].groupId);
             Assert.AreEqual(1, level.waves[0].spawns[0].monsterId);
         }
 
@@ -191,7 +191,7 @@ namespace _Game.Configs
             {
                 new BaseMonsterData
                 {
-                    id = "goblin_base", prefabName = "Goblin", speed = 2f, radius = 0.5f,
+                    prefabName = "Goblin", speed = 2f, radius = 0.5f,
                     attack = 10, health = 50, exp = 20, deathAudioClip = "goblin_death", deathVolume = 0.8f
                 }
             };
@@ -199,7 +199,7 @@ namespace _Game.Configs
             {
                 new MonsterScaleData
                 {
-                    id = 1, baseId = "goblin_base", scaleSpeed = 1.2f, scaleRadius = 1.5f,
+                    id = 1, baseId = "Goblin", scaleSpeed = 1.2f, scaleRadius = 1.5f,
                     healthScale = 2f, attackScale = 1.5f, expScale = 1.0f,
                     stopDistance = 0.3f
                 }

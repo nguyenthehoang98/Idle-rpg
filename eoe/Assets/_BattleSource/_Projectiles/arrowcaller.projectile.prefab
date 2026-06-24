@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4724804207875695}
   - component: {fileID: 96061268324235159}
   m_Layer: 10
-  m_Name: p_arrowcaller
+  m_Name: arrowcaller.projectile
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

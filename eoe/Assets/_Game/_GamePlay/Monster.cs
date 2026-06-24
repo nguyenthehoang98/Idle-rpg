@@ -5,7 +5,7 @@ using _KITSystem.Resource;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace _Game._GamePlay2
+namespace _Game._GamePlay
 {
     [RequireComponent(typeof(MonsterSkin))]
     [RequireComponent(typeof(MonsterSortingLayer))]

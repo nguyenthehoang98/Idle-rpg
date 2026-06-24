@@ -732,6 +732,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.Manager.GameManager
   cardUIPicker: {fileID: 589538882}
+  equipments: e9030000000000000000000000000000
 --- !u!114 &1708898552
 MonoBehaviour:
   m_ObjectHideFlags: 0

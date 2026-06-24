@@ -16,9 +16,20 @@ namespace _KITSystem.Schedule
         private float accumulator;
         private int tickableCount;
 
+        public event Action<float> OnChangeScaleTime;
+
         public bool IsPaused { private get; set; } = true;
         public float TickInterval { get; private set; }
-        public float Loop => loop;
+
+        public float Loop
+        {
+            get => loop;
+            set
+            {
+                loop = value;
+                OnChangeScaleTime?.Invoke(value);
+            }
+        }
 
         public async Task Initialize()
         {
@@ -47,7 +58,7 @@ namespace _KITSystem.Schedule
                 : Time.deltaTime;
 
             accumulator += deltaTime * loop;
-            
+
             int tickExecuted = 0;
 
             while (accumulator >= TickInterval)
@@ -65,7 +76,7 @@ namespace _KITSystem.Schedule
                 if (tickExecuted >= maxTicksPerFrame * loop)
                 {
                     accumulator = 0f;
-                    
+
                     break;
                 }
             }
@@ -86,7 +97,7 @@ namespace _KITSystem.Schedule
                 accumulator = 0f;
             }
         }
-        
+
         private void OnApplicationPause(bool pauseStatus)
         {
             if (pauseStatus)

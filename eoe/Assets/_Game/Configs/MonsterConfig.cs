@@ -41,7 +41,7 @@ namespace _Game.Configs
                 bool found = false;
                 foreach (var b in monster_base)
                 {
-                    if (b.id == data.baseId)
+                    if (b.prefabName == data.baseId)
                     {
                         monsters.Add(new MonsterData
                         {
@@ -96,7 +96,6 @@ namespace _Game.Configs
 
     [Serializable] struct BaseMonsterData
     {
-        public string id;
         public int health;
         public int attack;
         public int exp;

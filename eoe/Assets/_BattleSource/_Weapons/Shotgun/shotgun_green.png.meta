@@ -1,22 +1,22 @@
 fileFormatVersion: 2
-guid: 470e0b356c719924fa6f45e004bcbf33
+guid: 2dd9e666ffaca10439384efd3e21d290
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4376441107099585863
-    second: Shotgun_SS_HL_0
+      213: 227373769315181076
+    second: Shotgun_SS_DR_0
   - first:
-      213: -4343467426619965763
-    second: Shotgun_SS_HL_1
+      213: 3031517091819600030
+    second: Shotgun_SS_DR_1
   - first:
-      213: -7355470741819134345
-    second: Shotgun_SS_HL_2
+      213: 5541755943682703461
+    second: Shotgun_SS_DR_2
   - first:
-      213: -3732520400395328997
-    second: Shotgun_SS_HL_3
+      213: -5895708553408856693
+    second: Shotgun_SS_DR_3
   - first:
-      213: -3735854490984957934
-    second: Shotgun_SS_HL_4
+      213: -2408145737783670259
+    second: Shotgun_SS_DR_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -58,11 +58,11 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 0
-  spritePivot: {x: 0.5, y: 0.5}
+  alignment: 9
+  spritePivot: {x: 0, y: 0.32}
   spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
@@ -125,7 +125,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Shotgun_SS_HL_0
+      name: Shotgun_SS_DR_0
       rect:
         serializedVersion: 2
         x: 0
@@ -140,14 +140,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 74d8611effd3cbc30800000000000000
-      internalID: 4376441107099585863
+      spriteID: 412e54f0d3bc72300800000000000000
+      internalID: 227373769315181076
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shotgun_SS_HL_1
+      name: Shotgun_SS_DR_1
       rect:
         serializedVersion: 2
         x: 28
@@ -162,14 +162,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: dbe36de5367e8b3c0800000000000000
-      internalID: -4343467426619965763
+      spriteID: e98be6cbbbc121a20800000000000000
+      internalID: 3031517091819600030
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shotgun_SS_HL_2
+      name: Shotgun_SS_DR_2
       rect:
         serializedVersion: 2
         x: 56
@@ -184,14 +184,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 77e671ec45e1ce990800000000000000
-      internalID: -7355470741819134345
+      spriteID: 5600e175ba548ec40800000000000000
+      internalID: 5541755943682703461
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shotgun_SS_HL_3
+      name: Shotgun_SS_DR_3
       rect:
         serializedVersion: 2
         x: 84
@@ -206,14 +206,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b12a989b87c633cc0800000000000000
-      internalID: -3732520400395328997
+      spriteID: b8d35d6be4c3e2ea0800000000000000
+      internalID: -5895708553408856693
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shotgun_SS_HL_4
+      name: Shotgun_SS_DR_4
       rect:
         serializedVersion: 2
         x: 112
@@ -228,8 +228,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2183b444224972cc0800000000000000
-      internalID: -3735854490984957934
+      spriteID: d0a880cd53c849ed0800000000000000
+      internalID: -2408145737783670259
       vertices: []
       indices: 
       edges: []
@@ -238,7 +238,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: b583c2b9c140af6439a7929fab0a3d9b
+    spriteID: f608342b0484fdf4a959a9bd0015b7be
     internalID: 0
     vertices: []
     indices: 
@@ -250,11 +250,11 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":5.0,"y":1.0},"gridSpriteSize":{"x":28.0,"y":28.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Shotgun_SS_HL_0: 4376441107099585863
-      Shotgun_SS_HL_1: -4343467426619965763
-      Shotgun_SS_HL_2: -7355470741819134345
-      Shotgun_SS_HL_3: -3732520400395328997
-      Shotgun_SS_HL_4: -3735854490984957934
+      Shotgun_SS_DR_0: 227373769315181076
+      Shotgun_SS_DR_1: 3031517091819600030
+      Shotgun_SS_DR_2: 5541755943682703461
+      Shotgun_SS_DR_3: -5895708553408856693
+      Shotgun_SS_DR_4: -2408145737783670259
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
