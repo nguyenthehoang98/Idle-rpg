@@ -15,13 +15,33 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 06731347fde61c84a8d7658e84d90d43
   m_SerializeEntries:
+  - m_GUID: 04193c3487da7734e9f2f321bac5e1b4
+    m_Address: background
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 11093f1620fa70a419f8349093fa7af0
     m_Address: WeaponConfig
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 39a7bdec2bdd0d4458f00737187f8553
-    m_Address: m_brain_4
+  - m_GUID: 21e656f72c926ee45bc6df67ca059bbe
+    m_Address: BrainMonster-9.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3900d2897eb8ca14ba96c8ba92fdd4e0
+    m_Address: TextDamageCritical
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 503d1299770633e47a201fc377a8a970
+    m_Address: BrainMonster-10.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 504f78bf0d5db45429c8c08409dcb9d5
+    m_Address: BrainMonster-3.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -30,8 +50,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 71b18f7261bace942bbc0c1d4e9320f0
-    m_Address: m_brain_2
+  - m_GUID: 6514f5dc8d7e67b479ebe203c49f411a
+    m_Address: hero_diamond
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -40,33 +60,48 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7a09bcd33825a5741bf5990dcbb72593
-    m_Address: m_brain_7
+  - m_GUID: 86b64b43844b7f14e9e458c1177e89c8
+    m_Address: BrainMonster-6.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8f98374729d008e4f8771ba042888feb
-    m_Address: m_brain_9
+  - m_GUID: 960f666a89a896e42ae2e231883f32a2
+    m_Address: BrainMonster-2.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9e29b4b5865b83d4c8b99e8d6108f99f
-    m_Address: m_brain_10
+  - m_GUID: 99878ae207b8ae845af621be4030c378
+    m_Address: BrainMonster-4.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a206d9e0e4e57d64da3aaf1122fcc68e
-    m_Address: m_brain_6
+  - m_GUID: a03f9cc7a4b8e1541938e12b1245283c
+    m_Address: TextDamageNormal
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b3213783ac8a6004c943cd4d37958fd2
-    m_Address: Assets/_BattleSource/_Monsters/Brain/m_brain_11.prefab
+  - m_GUID: b041ac6ff62a5bf45aa32fcdc04658d8
+    m_Address: wing9
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d7c869300fb9cb44eb521a4f02f44233
-    m_Address: m_brain_5
+  - m_GUID: ba586012bc56bf844b43a9090c408870
+    m_Address: BrainMonster-11.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c19f41bf9b3396546972b7e70a3dc2d5
+    m_Address: BrainMonster-8.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c3e537bc3eb157d47beade063894478b
+    m_Address: BrainMonster-7.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c891f9ddf66145b47a575fa28a8ec208
+    m_Address: BrainMonster-1.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -75,23 +110,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ebfdf5b22df48d14fa196cfe06fdbe0e
-    m_Address: m_brain_8
+  - m_GUID: e7c0f6f0dc237f74d972b111f0df97e2
+    m_Address: BrainMonster-5.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f0e8072150d245143aac9ac7c463891f
-    m_Address: m_brain_1
+    m_Address: m_brain
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f1f8e97a3411c6d4cb992f88d760301c
     m_Address: SkillConfig
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f9f60389463d37e4281fe3b1fe26701c
-    m_Address: m_brain_3
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

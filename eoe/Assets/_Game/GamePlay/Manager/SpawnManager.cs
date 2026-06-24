@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using _Game._GamePlay2;
 using _Game.Configs;
 using _KITSystem.Config;
 using _KITSystem.Resource;
@@ -32,7 +33,9 @@ namespace _Game.GamePlay.Manager
         public void SetLevel(int level)
         {
             monsterConfig = ConfigManager.Get<MonsterConfig>();
+            
             LevelConfig levelConfig = ConfigManager.Get<LevelConfig>();
+            
             levelConfig.TryGetLevelData(level, out levelData);
         }
 
@@ -61,7 +64,9 @@ namespace _Game.GamePlay.Manager
 
                     go = await AssetBundleManager.GetAssetCached<GameObject>(monsterData.prefabName);
 
-                    if (names.Add(monsterData.prefabName) && cachedMonster.TryAdd(monsterId, go))
+                    cachedMonster.TryAdd(monsterId, go);
+                    
+                    if (names.Add(monsterData.prefabName))
                     {
                         Pool.RegisterPool(go, true);
                     }
@@ -165,6 +170,7 @@ namespace _Game.GamePlay.Manager
             monsterConfig.TryGetMonsterData(data.monsterId, out MonsterData monsterData);
             
             Monster monster = instance.GetComponent<Monster>();
+            
             MonsterRuntimeData runtimeData = new MonsterRuntimeData
             {
                 AttackScale = data.monsterAttackScale,

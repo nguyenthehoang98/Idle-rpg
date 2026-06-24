@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using _Game._GamePlay2;
 using _Game.Configs;
 using _KITSystem.Config;
+using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
@@ -12,7 +14,6 @@ namespace _Game.GamePlay.Manager
     public sealed class GameManager : MonoBehaviour
     {
         [SerializeField] private UpgradeCardUIPicker cardUIPicker;
-        [SerializeField] private WeaponPedestal[] pedestals = new WeaponPedestal[Const.MAX_WEAPON_SLOT];
 
         private readonly Coroutine[] coroutines = new Coroutine[4];
         private Dictionary<int, Weapon> weaponContainer = new Dictionary<int, Weapon>();
@@ -43,14 +44,19 @@ namespace _Game.GamePlay.Manager
             cardUIPicker.OnPickCard += PickCard;
         }
 
-        private void Start()
+        private async void Start()
         {
             playerConfig = ConfigManager.Get<PlayerConfig>();
             weaponConfig = ConfigManager.Get<WeaponConfig>();
             
             spawnManager.SetLevel(1);
+
+            await BuildHero(10);
+
+            await owner.Initialize();
             
             owner.IsPaused = false;
+            
             KitEntryScene.Instance.HideLoadingScene();
         }
 
@@ -77,11 +83,11 @@ namespace _Game.GamePlay.Manager
                 if (!weaponConfig.TryGetUpgradeWeapon(weaponId, 0, UpgradeType.PowerX3, out var list2)) 
                     Debug.LogError($"Not found upgrade weapon x3 with '{weaponId}'");
 
-                Weapon weapon = await pedestals[count].Initialize(weaponData, list1[0], list2[0], owner.Loop, owner.TickInterval);
+                /*Weapon weapon = await pedestals[count].Initialize(weaponData, list1[0], list2[0], owner.Loop, owner.TickInterval);
 
-                await pedestals[count].Setup(0, 0);
+                await pedestals[count].Setup(0, 0);*/
 
-                weaponContainer[weaponId] = weapon;
+                //weaponContainer[weaponId] = weapon;
             }
             else Debug.LogError($"Not found weapon '{weaponId}'");
         }
@@ -91,7 +97,24 @@ namespace _Game.GamePlay.Manager
             if (slot >= 0 && slot <= 3 && level >= 0 && level <= 2)
             {
                 StopCoroutine(coroutines[slot]);
-                coroutines[slot] = StartCoroutine(pedestals[slot].Setup(level, duration));
+               
+                //coroutines[slot] = StartCoroutine(pedestals[slot].Setup(level, duration));
+            }
+        }
+
+        private async UniTask BuildHero(int heroId)
+        {
+            if (playerConfig.TryGetHero(heroId, out var heroData))
+            {
+                GameObject go = null;
+                go = await AssetBundleManager.GetAsset<GameObject>(heroData.prefabName);
+                Object.Instantiate(go, Vector3.zero, Quaternion.identity);
+
+                if (!string.IsNullOrEmpty(heroData.wingName))
+                {
+                    go = await AssetBundleManager.GetAsset<GameObject>(heroData.wingName);
+                    Object.Instantiate(go, Vector3.zero, Quaternion.identity);
+                }
             }
         }
         
@@ -99,10 +122,10 @@ namespace _Game.GamePlay.Manager
 
         private void OnChangeScaleTime(float deltaTime)
         {
-            foreach (var pedestal in pedestals)
+            /*foreach (var pedestal in pedestals)
             {
                 pedestal.DeltaTime = deltaTime;
-            }
+            }*/
         }
 
         private void PickCard(WeaponUpgradeData @params)

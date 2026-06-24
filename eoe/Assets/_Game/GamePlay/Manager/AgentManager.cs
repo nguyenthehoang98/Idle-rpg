@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using _Game._GamePlay2;
 using _Game.Configs;
 using _KITSystem.Grid;
 using _KITSystem.Resource;
@@ -46,6 +47,7 @@ namespace _Game.GamePlay.Manager
                     if (TryGetAgent(temp.Agent, out var agent))
                     {
                         Vector3 position = new Vector3(agent.position.x, agent.position.y);
+                        
                         temp.Monster.SetPosition(position, deltaTime);
                     }
                 }
@@ -136,25 +138,20 @@ namespace _Game.GamePlay.Manager
             instance.DestroyAgent_Private(agent);
         }
 
-        private void CreateAgent_Private(Monster monster, MonsterRuntimeData runtimeData, MonsterData monsterData)
+        private async void CreateAgent_Private(Monster monster, MonsterRuntimeData runtimeData, MonsterData monsterData)
         {
             int agent = CreateAgent(
                 monster.transform.position, monsterData.radius, monsterData.speed,
                 stopDistance + monsterData.stopDistance
             ).agent;
             
-            monster.Initialize(monsterData);
+            await monster.Initialize(monsterData);
             
             Temp temp = new Temp(monster, agent);
             additional.Enqueue(temp);
             container.Add(agent, temp);
             
             MonsterEntityManager.CreateEntity(agent, runtimeData, monsterData);
-
-            if (!string.IsNullOrEmpty(monsterData.deathAudioClip))
-            {
-                AssetBundleManager.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
-            }
         }
 
         private void DestroyAgent_Private(int agent)

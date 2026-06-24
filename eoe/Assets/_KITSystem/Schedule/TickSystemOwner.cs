@@ -16,8 +16,6 @@ namespace _KITSystem.Schedule
         private float accumulator;
         private int tickableCount;
 
-        public event Action<float> OnScaleTimeChanged; 
-
         public bool IsPaused { private get; set; } = true;
         public float TickInterval { get; private set; }
         public float Loop => loop;

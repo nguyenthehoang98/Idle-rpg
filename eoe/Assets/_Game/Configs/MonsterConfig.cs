@@ -30,7 +30,6 @@ namespace _Game.Configs
             for (var i = 0; i < monster_scale.Count; i++)
             {
                 var data = monster_scale[i];
-                data.OnImported();
                 monster_scale[i] = data;
             }
 
@@ -47,10 +46,10 @@ namespace _Game.Configs
                         monsters.Add(new MonsterData
                         {
                             id = data.id,
+                            skin = data.skin,
                             prefabName = b.prefabName,
                             speed = b.speed * data.scaleSpeed,
                             radius = b.radius * data.scaleRadius,
-                            color = data.color,
                             scale = data.scaleRadius,
                             stopDistance = data.stopDistance,
                             deathAudioClip = b.deathAudioClip,
@@ -83,11 +82,11 @@ namespace _Game.Configs
     {
         public int id;
         public string prefabName;
+        public string skin;
         public float speed;
         public float scale;
         public float radius;
         public float stopDistance;
-        public Color color;
         public string deathAudioClip;
         public float deathVolume;
         public float attack;
@@ -112,20 +111,12 @@ namespace _Game.Configs
     {
         public int id;
         public string baseId;
+        public string skin;
         public float scaleRadius;
         public float scaleSpeed;
-        [JsonProperty] private string hex;
-        public Color color;
         public float stopDistance;
         public float healthScale;
         public float attackScale;
         public float expScale;
-
-        public void OnImported()
-        {
-            Debug.Log(hex);
-            Debug.Log(color);
-            ColorUtility.TryParseHtmlString(hex, out color);
-        }
     }
 }

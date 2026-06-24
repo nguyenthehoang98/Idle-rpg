@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using _KITSystem.Config;
 using Newtonsoft.Json;
+using UnityEditor;
 using UnityEngine;
 
 namespace _Game.Configs
@@ -82,6 +83,28 @@ namespace _Game.Configs
 
         public void OnValidateLinkConfig()
         {
+#if UNITY_EDITOR
+            TextAsset asset = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/_BattleSource/Configs/MonsterConfig.json");
+            
+            MonsterConfig monsterConfig = JsonUtility.FromJson<MonsterConfig>(asset.text);
+            
+            monsterConfig.OnMappingValue();
+
+            for (int i = 0; i < levels.Count; i++)
+            {
+                LevelData levelData = levels[i];
+                
+                foreach (var waveData in levelData.waves)
+                {
+                    foreach (var spawnData in waveData.spawns)
+                    {
+                        if (monsterConfig.TryGetMonsterData(spawnData.monsterId, out MonsterData monsterData)) continue;
+                        
+                        Debug.LogError($"Not found monster id '{spawnData.monsterId}' at spawn group id '{waveData.spawnGroupId}'");
+                    }
+                }
+            }
+#endif
         }
 
         public bool TryGetLevelData(int levelId, out LevelData levelData)

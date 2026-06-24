@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 202526934e931ea47aea9db7cad43895
+guid: 4a3df5b39dbce9346a6d77dd73ac4543
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Noto Sans Condensed
+  - Pixelify Sans
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
