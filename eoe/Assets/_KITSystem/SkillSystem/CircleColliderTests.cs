@@ -23,7 +23,8 @@ namespace _KITSystem.SkillSystem
                 this.size = size;
             }
 
-            public void FindTarget(FindTargetType type, Vector2 center, float radius, Func<int, float2, bool> funcFilterEntity, out QueryResult result)
+            public void FindTarget(FindTargetType type, Vector2 center, Vector2 pivot, float radius, Func<int, float2, bool> funcFilterEntity,
+                out QueryResult result)
             {
                 result = new QueryResult();
             }

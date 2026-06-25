@@ -178,7 +178,7 @@ namespace _Game.GamePlay.Model
                 Vector3 center = Vector3.zero;
                 float radius = skillData.findTarget.radius;
                 float sqrRadius = radius * radius;
-                query.FindTarget(type, center, radius, (entity, float2) =>
+                query.FindTarget(type, center, position, radius, (entity, float2) =>
                 {
                     float d = math.lengthsq(float2);
                     return d <= sqrRadius;
