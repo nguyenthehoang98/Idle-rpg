@@ -1,6 +1,5 @@
 using System;
 using _KITSystem.Resource;
-using _KITSystem.Utils;
 using UnityEngine;
 
 namespace _Game.GamePlay.Model
@@ -16,7 +15,12 @@ namespace _Game.GamePlay.Model
         private float deltaTime;
         private bool isRunning = false;
         private bool shouldDestroy = false;
-        
+
+        private void OnEnable()
+        {
+            if (trailRenderer != null) trailRenderer.emitting = true;
+        }
+
         public void Initialize()
         {
             elapsedTime = 0;
@@ -24,11 +28,6 @@ namespace _Game.GamePlay.Model
             
             shouldDestroy = false;
             isRunning = true;
-        }
-
-        private void OnEnable()
-        {
-            this.WaitNextFrame(() => { trailRenderer.enabled = true; });
         }
 
         public void SetPosition(Vector3 position, float dt)
@@ -67,7 +66,12 @@ namespace _Game.GamePlay.Model
             
             shouldDestroy = true;
 
-            trailRenderer.enabled = false;
+            if (trailRenderer != null)
+            {
+                trailRenderer.enabled = false;
+                
+                trailRenderer.Clear();
+            }
         }
     }
 }

@@ -9,8 +9,8 @@ namespace _KITSystem.Schedule
     {
         [SerializeField] private bool useUnscaledTime = false;
         [SerializeField] private int targetFPS = 30;
-        [SerializeField, Range(1, 50)] protected float loop = 1;
-        [SerializeField, Range(1, 20)] private int maxTicksPerFrame = 5;
+        [SerializeField, Range(1, 30)] protected float loop = 1;
+        [SerializeField, Range(1, 10)] private int maxTicksPerFrame = 5;
         [SerializeReference] public List<ITickable> tickables = new List<ITickable>();
 
         private float accumulator;
@@ -20,6 +20,7 @@ namespace _KITSystem.Schedule
 
         public bool IsPaused { private get; set; } = true;
         public float TickInterval { get; private set; }
+        public float Time {get; private set;}
 
         public float Loop
         {
@@ -30,6 +31,13 @@ namespace _KITSystem.Schedule
                 OnChangeScaleTime?.Invoke(value);
             }
         }
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if(Application.isPlaying) OnChangeScaleTime?.Invoke(loop);
+        }
+#endif
 
         public async Task Initialize()
         {
@@ -54,8 +62,8 @@ namespace _KITSystem.Schedule
             if (IsPaused) return;
 
             float deltaTime = useUnscaledTime
-                ? Time.unscaledDeltaTime
-                : Time.deltaTime;
+                ? UnityEngine.Time.unscaledDeltaTime
+                : UnityEngine.Time.deltaTime;
 
             accumulator += deltaTime * loop;
 
@@ -69,6 +77,7 @@ namespace _KITSystem.Schedule
                 }
 
                 accumulator -= TickInterval;
+                Time += TickInterval;
 
                 tickExecuted++;
 

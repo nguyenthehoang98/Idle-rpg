@@ -134,16 +134,6 @@ namespace _Game.GamePlay.Manager
             else Debug.LogError($"Not found weapon_prefab '{weaponData.prefabName}'");
         }
 
-        /*private void SetWeaponLevel(int slot, int level, float duration)
-        {
-            if (slot >= 0 && slot <= 3 && level >= 0 && level <= 2)
-            {
-                StopCoroutine(coroutines[slot]);
-               
-                //coroutines[slot] = StartCoroutine(pedestals[slot].Setup(level, duration));
-            }
-        }*/
-
         private async UniTask BuildHero(int heroId)
         {
             if (playerConfig.TryGetHero(heroId, out HeroData heroData))
@@ -204,7 +194,6 @@ namespace _Game.GamePlay.Manager
                 player.CurrentExp -= data.exp;
                 
                 cardUIPicker.Show();
-                Debug.Log("pause");
             }
         }
 
