@@ -73,7 +73,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  rotationDuration: 0.15
+  rotationDuration: 0.25
 --- !u!95 &7520168727774107366
 Animator:
   serializedVersion: 7

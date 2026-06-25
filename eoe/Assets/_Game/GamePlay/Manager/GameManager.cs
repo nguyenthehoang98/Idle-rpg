@@ -18,6 +18,7 @@ namespace _Game.GamePlay.Manager
     {
         [SerializeField] private UpgradeCardUIPicker cardUIPicker;
         [SerializeField] private int[] equipments = new int[4];
+        [SerializeField] private Transform[] slots = new Transform[4];
 
         private Dictionary<int, Weapon> weaponContainer = new Dictionary<int, Weapon>();
         private Dictionary<int, int> damageMemory = new Dictionary<int, int>();
@@ -29,6 +30,7 @@ namespace _Game.GamePlay.Manager
         private PlayerRuntimeData player;
 
         private int totalMonsterAlive;
+        private int currentWeaponSlot;
 
         private void Awake()
         {
@@ -113,14 +115,19 @@ namespace _Game.GamePlay.Manager
                     Debug.LogError($"Not found upgrade weapon x3 with '{weaponId}'");
 
                 GameObject go = await AssetBundleManager.GetAsset<GameObject>(weaponData.prefabName);
-                go = Object.Instantiate(go, Vector3.zero, Quaternion.identity);
+                go = Object.Instantiate(go, slots[currentWeaponSlot]);
+                go.transform.localPosition = Vector3.zero;
+
+                float flip = currentWeaponSlot % 2 == 0 ? 1 : -1;
+                
+                currentWeaponSlot++;
 
                 Weapon weapon = go.GetComponent<Weapon>();
                 if(weapon == null) Debug.LogError($"Gameobject '{go}' not attach Weapon component");
                 
                 WeaponUpgradeData upgradeDataX2 = list1[0];
                 WeaponUpgradeData upgradeDataX3 = list2[0];
-                await weapon.Initialize(weaponData, upgradeDataX2, upgradeDataX3);
+                await weapon.Initialize(weaponData, upgradeDataX2, upgradeDataX3, flip);
 
                 weaponContainer[weaponId] = weapon;
             }

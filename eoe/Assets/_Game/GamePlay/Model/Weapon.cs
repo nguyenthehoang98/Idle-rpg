@@ -67,7 +67,7 @@ namespace _Game.GamePlay.Model
             names = null;
         }
 
-        public async UniTask Initialize(WeaponData weaponData, WeaponUpgradeData upgradeDataX2, WeaponUpgradeData upgradeDataX3)
+        public async UniTask Initialize(WeaponData weaponData, WeaponUpgradeData upgradeDataX2, WeaponUpgradeData upgradeDataX3, float faceFlip)
         {
             powerX2 = upgradeDataX2;
             powerX3 = upgradeDataX3;
@@ -82,6 +82,8 @@ namespace _Game.GamePlay.Model
             query = new EntityQuery();
             
             GameObject go = null;
+            
+            rotatePivot.localScale = new Vector3(faceFlip, 1, 1);
 
             if (names.Add(skillData.prefabName))
             {
@@ -241,6 +243,7 @@ namespace _Game.GamePlay.Model
                 OnAttack();
 
                 rotatePivot.eulerAngles = new Vector3(0, 0, angleTo);
+                rotatePivot.localScale = new Vector3(1, Mathf.Abs(angleTo) <= 90 ? 1 : -1f, 1);
                 
                 animator.Play(AttackAnimator, 0, 0);
 
