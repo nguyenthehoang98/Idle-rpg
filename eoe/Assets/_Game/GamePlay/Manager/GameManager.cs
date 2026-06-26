@@ -10,13 +10,19 @@ using _KITSystem.Schedule;
 using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 namespace _Game.GamePlay.Manager
 {
     [RequireComponent(typeof(TickSystemOwner))]
     public sealed class GameManager : MonoBehaviour
     {
+        [SerializeField] private Button btnPushEquipment;
         [SerializeField] private UpgradeCardUIPicker cardUIPicker;
+        [SerializeField] private Energy energy;
+        [SerializeField] private EquipmentQueue equipmentQueue;
+        
         [SerializeField] private int[] equipments = new int[4];
         [SerializeField] private Transform[] slots = new Transform[4];
 
@@ -34,6 +40,8 @@ namespace _Game.GamePlay.Manager
 
         private void Awake()
         {
+            energy.enabled = false;
+            
             owner = GetComponent<TickSystemOwner>();
             owner.TryGetTickable(out skillManager);
             owner.TryGetTickable(out spawnManager);
@@ -46,6 +54,9 @@ namespace _Game.GamePlay.Manager
             Monster.OnMonsterDisable += MonsterDisable;
 
             cardUIPicker.OnPickCard += PickCard;
+            energy.OnFill += FillEnergy;
+
+            btnPushEquipment.onClick.AddListener(() => { equipmentQueue.Decrease(); });
         }
 
         private async void Start()
@@ -68,6 +79,8 @@ namespace _Game.GamePlay.Manager
 
             await BuildHero(10);
 
+            await equipmentQueue.Init(weaponConfig, equipments);
+
             await owner.Initialize();
 
             for (int i = 0; i < equipments.Length; i++)
@@ -83,6 +96,8 @@ namespace _Game.GamePlay.Manager
                 pair.Value.WeaponLevel = 2;
             }
             
+            energy.enabled = true;
+            
             KitEntryScene.Instance.HideLoadingScene();
         }
 
@@ -96,6 +111,7 @@ namespace _Game.GamePlay.Manager
             Monster.OnMonsterDisable -= MonsterDisable;
             
             cardUIPicker.OnPickCard -= PickCard;
+            energy.OnFill -= FillEnergy;
         }
 
         private async UniTask Equip(int weaponId)
@@ -152,6 +168,8 @@ namespace _Game.GamePlay.Manager
         
         // callback
 
+        private void FillEnergy() => equipmentQueue.Increase();
+        
         private void OnChangeScaleTime(float deltaTime)
         {
             foreach (var pair in weaponContainer)

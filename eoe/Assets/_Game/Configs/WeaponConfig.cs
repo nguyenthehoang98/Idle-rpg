@@ -101,6 +101,7 @@ namespace _Game.Configs
         public string prefabName;
         public string projectileName;
         public string impactName;
+        public string iconName;
         public int skillId;
         public float cooldown;
         public float attackSpeed;
