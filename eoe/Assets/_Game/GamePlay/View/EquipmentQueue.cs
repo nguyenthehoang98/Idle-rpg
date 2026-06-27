@@ -22,7 +22,7 @@ namespace _Game.GamePlay.View
         public event Action OnQueueFull;
 
         private List<int> list; //key
-        private int[] slots;
+        private int[] temp; // 
         private Dictionary<int, WeaponData> container;
         private List<int> equipments;
 
@@ -48,23 +48,23 @@ namespace _Game.GamePlay.View
                 }
             }
             
-            slots = new int[equipments.Count];
+            temp = new int[equipments.Count];
         }
 
         public void Increase()
         {
-            NativeList<int> temp = new NativeList<int>(slots.Length, Allocator.Temp);
+            NativeList<int> temp = new NativeList<int>(this.temp.Length, Allocator.Temp);
             
-            for (int i = 0; i < slots.Length; i++)
+            for (int i = 0; i < this.temp.Length; i++)
             {
-                if (slots[i] < 3) temp.Add(i);
+                if (this.temp[i] < 3) temp.Add(i);
             }
             
             int idx = RandomUtils.Range(0, temp.Length);
 
             temp.Dispose();
 
-            slots[idx]++;
+            this.temp[idx]++;
             
             int item = equipments[idx];
             
@@ -88,9 +88,11 @@ namespace _Game.GamePlay.View
             });
         }
         
+        public List<int> GetAllEquipment() => list;
+        
         public void Clear()
         {
-            Array.Clear(slots, 0, slots.Length);
+            Array.Clear(temp, 0, temp.Length);
             list.Clear();
         }
 

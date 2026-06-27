@@ -190,6 +190,19 @@ namespace _Game.GamePlay.Manager
 
             this.WaitInvoke(d, () =>
             {
+                Dictionary<int, int> dict = new Dictionary<int, int>();
+
+                List<int> list = equipmentQueue.GetAllEquipment();
+                foreach (var id in list)
+                {
+                    if (!dict.TryAdd(id, 1)) dict[id]++;
+                }
+
+                foreach (var pair in dict)
+                {
+                    weaponContainer[pair.Key].WeaponLevel = pair.Value;
+                }
+                
                 this.WaitNextFrame(equipmentQueue.Clear);
             });
         }

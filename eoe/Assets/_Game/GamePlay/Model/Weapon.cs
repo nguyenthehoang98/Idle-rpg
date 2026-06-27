@@ -17,7 +17,14 @@ namespace _Game.GamePlay.Model
     public class Weapon : MonoBehaviour
     {
         private static readonly int AttackAnimator = Animator.StringToHash("Attack");
+        private static readonly int OutlineColor = Shader.PropertyToID("_OutlineColor");
 
+        [Header("Outline")]
+        [SerializeField] private SpriteRenderer spOutline;
+        [SerializeField] private Color color2 = new Color(1, 1, 0, 1);
+        [SerializeField] private Color color3 = new Color(1, 0, 1, 1);
+        [SerializeField] private float outlineColorDuration = 0.2f;
+        [Header("Element")]
         [SerializeField] private Transform muzzle;
         [SerializeField] private Animator animator;
         [SerializeField] private Transform rotatePivot;
@@ -34,6 +41,8 @@ namespace _Game.GamePlay.Model
         private WeaponUpgradeData powerX3;
 
         private IQuery query;
+        private Coroutine coroutine;
+        private MaterialPropertyBlock propertyBlock;
         private AudioClip attackAudioClip;
         private float attackVolume;
         
@@ -54,12 +63,21 @@ namespace _Game.GamePlay.Model
         {
             set
             {
+                bool shouldUpdateOutlineColor = level != value;
+                
                 level = value;
+                
                 isActivated = value > 0;
-                RefreshUpgradeData();
+                
+                RefreshUpgradeData(shouldUpdateOutlineColor);
             }
         }
-        
+
+        private void Awake()
+        {
+            propertyBlock = new MaterialPropertyBlock();
+        }
+
         private void OnDestroy()
         {
             foreach (var assetName in names)
@@ -108,12 +126,15 @@ namespace _Game.GamePlay.Model
             }
 
             StartCoroutine(AutoAttack());
+            
+            RefreshUpgradeData(true);
         }
 
         public void IncreaseUpgradeData(WeaponUpgradeData upgradeData)
         {
             levelUp.Increase(upgradeData);
-            RefreshUpgradeData();
+            
+            RefreshUpgradeData(false);
         }
         
         public void ExecuteAnimation()
@@ -148,11 +169,48 @@ namespace _Game.GamePlay.Model
             isAttacking = false;
         }
 
-        private void RefreshUpgradeData()
+        private void RefreshUpgradeData(bool updateOutline)
         {
             current = levelUp;
-            if (level == 2) current.Increase(powerX2);
-            else if (level == 3) current.Increase(powerX3);
+            Color color = Color.clear;
+
+            if (level == 2)
+            {
+                current.Increase(powerX2);
+                color = color2;
+            }
+            else if (level == 3)
+            {
+                current.Increase(powerX3);
+                color = color3;
+            }
+
+            if (updateOutline)
+            {
+                if (coroutine != null) StopCoroutine(coroutine);
+                coroutine = StartCoroutine(ChangeColor(color));
+            }
+        }
+
+        private IEnumerator ChangeColor(Color targetColor)
+        {
+            float elapsedTime = 0f;
+
+            spOutline.GetPropertyBlock(propertyBlock);
+            Color color = propertyBlock.GetColor(OutlineColor);
+            
+            while (elapsedTime < outlineColorDuration)
+            {
+                elapsedTime += DeltaTime;
+
+                float t = Mathf.Clamp01(elapsedTime / outlineColorDuration);
+
+                propertyBlock.SetColor(OutlineColor, Color.Lerp(color, targetColor, t));
+
+                spOutline.SetPropertyBlock(propertyBlock);
+                
+                yield return new WaitForSeconds(DeltaTime);
+            }
         }
 
         private IEnumerator AutoAttack()

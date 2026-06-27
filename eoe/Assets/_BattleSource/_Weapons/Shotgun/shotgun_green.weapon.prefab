@@ -46,6 +46,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 908ee781e0a58ae42b2d53367951931e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game._GamePlay.Weapon
+  spOutline: {fileID: 7591456589375980081}
+  color2: {r: 1, g: 1, b: 0, a: 1}
+  color3: {r: 1, g: 0, b: 1, a: 1}
+  outlineColorDuration: 0.2
   muzzle: {fileID: 6900292614292365982}
   animator: {fileID: 417439057925282555}
   rotatePivot: {fileID: 154186919891485008}
