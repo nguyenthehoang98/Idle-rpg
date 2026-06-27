@@ -30,6 +30,8 @@ namespace _Game.GamePlay.View
             } 
         }
 
+        public bool IsPressing => pressing;
+
         private Button button;
         private Vector3 originScale;
         private bool hasStart;

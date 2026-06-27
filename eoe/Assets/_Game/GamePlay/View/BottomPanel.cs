@@ -15,51 +15,63 @@ namespace _Game.GamePlay.View
         private void Awake()
         {
             equipmentQueue.OnFill += Fill;
+            equipmentQueue.OnQueueFull += QueueFull;
             hammerAnimation.OnCompleted += HammerComplete;
             btnHammer.OnClicked += ClickHammer;
+        }
+
+        private void Start()
+        {
+            btnHammer.IsBlockInput = true;
+            SetHammerInactive();
         }
 
         private void OnDestroy()
         {
             equipmentQueue.OnFill -= Fill;
+            equipmentQueue.OnQueueFull -= QueueFull;
             hammerAnimation.OnCompleted -= HammerComplete;
             btnHammer.OnClicked -= ClickHammer;
+        }
+
+        private void QueueFull()
+        {
+            btnHammer.IsBlockInput = true;
+            SetHammerInactive();
         }
 
         private void ClickHammer()
         {
             btnHammer.IsBlockInput = true;
-            equipmentQueue.Decrease();
-            hammerAnimation.Play();
+            float f = hammerAnimation.Play();
+            equipmentQueue.Decrease(f);
             RefreshUI();
         }
 
         private void HammerComplete()
         {
-            btnHammer.IsBlockInput = false;
+            btnHammer.IsBlockInput = equipmentQueue.GetAllEquipment().Count == 0;
             RefreshUI();
         }
 
         private void Fill()
         {
+            if (!btnHammer.IsPressing && btnHammer.IsBlockInput) btnHammer.IsBlockInput = false;
             RefreshUI();
         }
 
         private void RefreshUI()
         {
-            if (!btnHammer.IsBlockInput && equipmentQueue.GetAllEquipment().Count > 0)
+            bool f1 = btnHammer.IsBlockInput;
+            bool f2 = equipmentQueue.GetAllEquipment().Count > 0;
+            if (!f1 && f2)
             {
                 SetHammerActive();
             }
             else
             {
-                SetHammerActive();
+                SetHammerInactive();
             }
-        }
-
-        private void Start()
-        {
-            SetHammerInactive();
         }
 
         private void SetHammerActive() => btnHammer.GetComponent<Image>().sprite = spHammerActive;

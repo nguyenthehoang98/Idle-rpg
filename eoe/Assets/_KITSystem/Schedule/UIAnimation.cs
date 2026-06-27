@@ -23,17 +23,18 @@ namespace _KITSystem.Schedule
         private void Awake()
         {
             frameRateDeltaTime = 1f / frameRate;
-           
-            Stop();
+            image.enabled = false;
+            isPlaying = false;
         }
 
-        public void Play()
+        public float Play()
         {
             isPlaying = true;
             currentFrame = 0;
             elapsedTime = 0f;
             image.enabled = true;
             SetFrame(currentFrame);
+            return 0.25f;
         }
 
         public void Stop()

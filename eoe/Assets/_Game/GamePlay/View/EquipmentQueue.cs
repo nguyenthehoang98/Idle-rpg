@@ -103,11 +103,16 @@ namespace _Game.GamePlay.View
             list.Clear();
         }
 
-        public void Decrease()
+        public void Decrease(float duration)
         {
-            if (list.Count > 0) list.RemoveAt(0);
-            
-            RefreshUI();
+            float d = 0.35f;
+            if (list.Count > 0)
+            {
+                list.RemoveAt(0);
+                this.WaitInvoke(duration, () => { slots[0].SetDissolve(0.25f); });
+            }
+
+            this.WaitInvoke(duration + d, RefreshUI);
         }
 
         public bool TryGetWeaponData(int idx, out WeaponData weaponData)
