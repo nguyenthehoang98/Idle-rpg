@@ -30,6 +30,7 @@ namespace _Game.GamePlay.Manager
         private Dictionary<int, Weapon> weaponContainer = new Dictionary<int, Weapon>();
         private Dictionary<int, int> damageMemory = new Dictionary<int, int>();
         private TickSystemOwner owner;
+        private UITickable uiTickable;
         private SpawnManager spawnManager;
         private SkillManager skillManager;
         private WeaponConfig weaponConfig;
@@ -46,6 +47,7 @@ namespace _Game.GamePlay.Manager
             owner = GetComponent<TickSystemOwner>();
             owner.TryGetTickable(out skillManager);
             owner.TryGetTickable(out spawnManager);
+            owner.TryGetTickable(out uiTickable);
             
             owner.OnChangeScaleTime += OnChangeScaleTime;
             skillManager.OnPostDamage += PostDamage;
@@ -59,6 +61,8 @@ namespace _Game.GamePlay.Manager
             equipmentQueue.OnQueueFull += QueueFull;
 
             btnPushEquipment.onClick.AddListener(() => { equipmentQueue.Decrease(); });
+            
+            uiTickable.AddTick(energy);
         }
 
         private async void Start()
@@ -81,19 +85,19 @@ namespace _Game.GamePlay.Manager
 
             await BuildHero(10);
 
-            await equipmentQueue.Init(weaponConfig, equipments);
-
             await owner.Initialize();
 
             for (int i = 0; i < equipments.Length; i++)
             {
                 await Equip(equipments[i]);
             }
+
+            await equipmentQueue.Init(weaponConfig, equipments);
+
+            await UniTask.WaitForSeconds(1);
             
             owner.IsPaused = false;
             owner.Loop = 1;
-
-            QueueFull();
             
             energy.enabled = true;
             
@@ -171,19 +175,23 @@ namespace _Game.GamePlay.Manager
         private void QueueFull()
         {
             float d = 0;
+            float speed = owner.Loop;
             for (int i = 0; i < Const.MAX_WEAPON_SLOT; i++)
             {
                 int index = i;
                 float f1 = 0.1f * i;
+                f1 /= speed;
                 float f2 = 0.1f + 0.1f * i;
+                f2 /= speed;
                 float f3 = 0.5f + 0.1f * i;
-                this.WaitInvoke(f1, () => { equipmentActivation.ReleaseAnimation(index); });
-                this.WaitInvoke(f2, () => { equipmentQueue.PushAnimation(index); });
+                f3 /= speed;
+                this.WaitInvoke(f1, () => { equipmentActivation.ReleaseAnimation(index, speed); });
+                this.WaitInvoke(f2, () => { equipmentQueue.PushAnimation(index, speed); });
                 this.WaitInvoke(f3, () =>
                 {
                     if (equipmentQueue.TryGetWeaponData(index, out WeaponData weaponData))
                         equipmentActivation.SetWeapon(index, weaponData);
-                    equipmentActivation.IdleAnimation(index);
+                    equipmentActivation.IdleAnimation(index, speed);
                 });
                 d = Mathf.Max(d, f1, f2, f3);
             }
@@ -203,7 +211,7 @@ namespace _Game.GamePlay.Manager
                     weaponContainer[pair.Key].WeaponLevel = pair.Value;
                 }
                 
-                this.WaitNextFrame(equipmentQueue.Clear);
+                equipmentQueue.Clear();
             });
         }
 

@@ -1,10 +1,11 @@
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace _Game.GamePlay.View
 {
-    public class Energy : MonoBehaviour
+    public class Energy : MonoBehaviour, IViewTick
     {
         [SerializeField] private Image imgProgress;
         [SerializeField] private float duration = 1;
@@ -13,14 +14,16 @@ namespace _Game.GamePlay.View
         
         public event Action OnFill;
 
-        private void Awake()
+        public Task Initialize()
         {
-            imgProgress.fillAmount = 0;            
+            imgProgress.fillAmount = 0;   
+          
+            return Task.CompletedTask;
         }
 
-        void Update()
+        public void Tick(float deltaTime)
         {
-            elapsedTime += Time.deltaTime;
+            elapsedTime += deltaTime;
             
             float f = Mathf.Clamp01(elapsedTime / duration);
 

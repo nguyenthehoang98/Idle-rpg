@@ -13,9 +13,19 @@ namespace _Game.GamePlay.View
         [SerializeField] private Animator[] animators = new Animator[4];
         [SerializeField] private Image[] imgEquipments;
 
-        public void IdleAnimation(int idx) => animators[idx].Play(SlotIdle);
+        public void IdleAnimation(int idx, float speed)
+        {
+            Animator anim = animators[idx];
+            anim.Play(SlotIdle);
+            anim.speed = speed;
+        }
 
-        public void ReleaseAnimation(int idx) => animators[idx].Play(SlotRelease);
+        public void ReleaseAnimation(int idx, float speed)
+        {
+            Animator anim = animators[idx];
+            anim.Play(SlotRelease);
+            anim.speed = speed;
+        }
 
         public async void SetWeapon(int idx, WeaponData data)
         {

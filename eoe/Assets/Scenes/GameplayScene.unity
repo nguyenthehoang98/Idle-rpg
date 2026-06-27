@@ -3323,6 +3323,7 @@ MonoBehaviour:
   - rid: 607416954887602262
   - rid: 607416954887602263
   - rid: 607417000826765380
+  - rid: 607417022919213138
   references:
     version: 2
     RefIds:
@@ -3355,6 +3356,9 @@ MonoBehaviour:
         stopDistance: 1.6
     - rid: 607417000826765380
       type: {class: SkillManager, ns: _Game.GamePlay.Manager, asm: Assembly-CSharp}
+      data: 
+    - rid: 607417022919213138
+      type: {class: UITickable, ns: _Game.GamePlay.View, asm: Assembly-CSharp}
       data: 
 --- !u!1 &1740821504
 GameObject:

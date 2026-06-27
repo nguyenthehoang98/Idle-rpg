@@ -22,7 +22,7 @@ namespace _Game.GamePlay.View
         public event Action OnQueueFull;
 
         private List<int> list; //key
-        private int[] temp; // 
+        private int[] array; // 
         private Dictionary<int, WeaponData> container;
         private List<int> equipments;
 
@@ -48,23 +48,31 @@ namespace _Game.GamePlay.View
                 }
             }
             
-            temp = new int[equipments.Count];
+            array = new int[equipments.Count];
+
+            for (int i = 0; i < Const.MAX_WEAPON_SLOT; i++)
+            {
+                int idx = i % equipments.Count;
+                list.Add(equipments[idx]);
+            }
+            
+            OnQueueFull?.Invoke();
         }
 
         public void Increase()
         {
-            NativeList<int> temp = new NativeList<int>(this.temp.Length, Allocator.Temp);
+            NativeList<int> temp = new NativeList<int>(array.Length, Allocator.Temp);
             
-            for (int i = 0; i < this.temp.Length; i++)
+            for (int i = 0; i < array.Length; i++)
             {
-                if (this.temp[i] < 3) temp.Add(i);
+                if (array[i] < 3) temp.Add(i);
             }
             
             int idx = RandomUtils.Range(0, temp.Length);
 
             temp.Dispose();
 
-            this.temp[idx]++;
+            array[idx]++;
             
             int item = equipments[idx];
             
@@ -78,21 +86,20 @@ namespace _Game.GamePlay.View
             }
         }
 
-        public void PushAnimation(int idx)
+        public void PushAnimation(int idx, float speed)
         {
-            animators[idx].Play(SlotPush);
-         
-            this.WaitInvoke(slotPushDuration, () =>
-            {
-                imgEquipments[idx].enabled = false;
-            });
+            Animator anim = animators[idx];
+            anim.Play(SlotPush);
+            anim.speed = speed;
+
+            this.WaitInvoke(slotPushDuration / speed, () => { imgEquipments[idx].enabled = false; });
         }
-        
+
         public List<int> GetAllEquipment() => list;
         
         public void Clear()
         {
-            Array.Clear(temp, 0, temp.Length);
+            Array.Clear(array, 0, array.Length);
             list.Clear();
         }
 
