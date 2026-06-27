@@ -109,6 +109,24 @@ namespace _KITSystem.Resource
             return o.GetComponent<T>();
         }
 
+        public static GameObject Instantiate(GameObject ins, Vector3 pos, bool active)
+        {
+            string code = ins.name;
+            if (dictionary.TryGetValue(code, out PoolInternal pool))
+            {
+                GameObject o = pool.Reuse();
+                o.transform.position = pos;
+                o.SetActive(active);
+                return o;
+            }
+
+            GameObject obj = UnityEngine.Object.Instantiate(ins);
+            obj.transform.position = pos;
+            obj.SetActive(active);
+            obj.name = ins.name;
+            return obj;
+        }
+        
         public static GameObject Instantiate(GameObject ins, bool active)
         {
             string code = ins.name;

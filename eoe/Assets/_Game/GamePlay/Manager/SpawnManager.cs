@@ -158,7 +158,7 @@ namespace _Game.GamePlay.Manager
             }
         }
 
-        private void Spawn(SpawnData data)
+        private async void Spawn(SpawnData data)
         {
             int portalIndex = data.portals[0];
             
@@ -172,10 +172,8 @@ namespace _Game.GamePlay.Manager
                 RandomUtils.Range(-data.radius, data.radius)
             );
             
-            GameObject instance = Pool.Instantiate(cachedMonster[data.monsterId]);
+            GameObject instance = Pool.Instantiate(cachedMonster[data.monsterId], position, false);
             
-            instance.transform.position = position;
-
             monsterConfig.TryGetMonsterData(data.monsterId, out MonsterData monsterData);
             
             Monster monster = instance.GetComponent<Monster>();

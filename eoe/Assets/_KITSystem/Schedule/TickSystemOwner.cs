@@ -9,7 +9,7 @@ namespace _KITSystem.Schedule
     {
         [SerializeField] private bool useUnscaledTime = false;
         [SerializeField] private int targetFPS = 30;
-        [SerializeField, Range(1, 30)] protected float loop = 1;
+        [SerializeField, Range(1, 5)] protected float loop = 1;
         [SerializeField, Range(1, 10)] private int maxTicksPerFrame = 5;
         [SerializeReference] public List<ITickable> tickables = new List<ITickable>();
 

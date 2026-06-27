@@ -52,6 +52,8 @@ namespace _Game.GamePlay.Model
 
             OnMonsterEnable?.Invoke(this);
             
+            gameObject.SetActive(true);
+            
             isInitialized = true;
         }
         
@@ -79,6 +81,8 @@ namespace _Game.GamePlay.Model
             OnMonsterDisable?.Invoke(this);
             
             isInitialized = false;
+            
+            gameObject.SetActive(false);
             
             Pool.Destroy(gameObject);
         }

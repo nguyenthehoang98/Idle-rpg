@@ -62,7 +62,7 @@ namespace _Game.GamePlay.Manager
 
             btnPushEquipment.onClick.AddListener(() => { equipmentQueue.Decrease(); });
             
-            uiTickable.AddTick(energy);
+            //uiTickable.AddTick(energy);
         }
 
         private async void Start()
@@ -175,7 +175,7 @@ namespace _Game.GamePlay.Manager
         private void QueueFull()
         {
             float d = 0;
-            float speed = owner.Loop;
+            float speed = 1;//owner.Loop;
             for (int i = 0; i < Const.MAX_WEAPON_SLOT; i++)
             {
                 int index = i;

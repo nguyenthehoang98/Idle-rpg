@@ -21,6 +21,8 @@ namespace _Game.GamePlay.View
             return Task.CompletedTask;
         }
 
+        private void Update() => Tick(Time.deltaTime);
+
         public void Tick(float deltaTime)
         {
             elapsedTime += deltaTime;
