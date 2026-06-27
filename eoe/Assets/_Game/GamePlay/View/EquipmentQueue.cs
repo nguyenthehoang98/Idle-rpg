@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using _Game.Configs;
 using _Game.GamePlay.Utils;
@@ -8,6 +9,7 @@ using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace _Game.GamePlay.View
 {
@@ -95,7 +97,7 @@ namespace _Game.GamePlay.View
         }
 
         public List<int> GetAllEquipment() => list;
-        
+
         public void Clear()
         {
             Array.Clear(array, 0, array.Length);

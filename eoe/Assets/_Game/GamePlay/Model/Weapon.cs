@@ -21,8 +21,6 @@ namespace _Game.GamePlay.Model
 
         [Header("Outline")]
         [SerializeField] private SpriteRenderer spOutline;
-        [SerializeField] private Color color2 = new Color(1, 1, 0, 1);
-        [SerializeField] private Color color3 = new Color(1, 0, 1, 1);
         [SerializeField] private float outlineColorDuration = 0.2f;
         [Header("Element")]
         [SerializeField] private Transform muzzle;
@@ -61,6 +59,7 @@ namespace _Game.GamePlay.Model
         public float DeltaTime { get; set; } = 0.034f; // = delta / timescale
         public int WeaponLevel
         {
+            get => level;
             set
             {
                 bool shouldUpdateOutlineColor = level != value;
@@ -177,12 +176,12 @@ namespace _Game.GamePlay.Model
             if (level == 2)
             {
                 current.Increase(powerX2);
-                color = color2;
+                color = Const.WEAPON_OUTLINE_X2;
             }
             else if (level == 3)
             {
                 current.Increase(powerX3);
-                color = color3;
+                color = Const.WEAPON_OUTLINE_X3;
             }
 
             if (updateOutline)

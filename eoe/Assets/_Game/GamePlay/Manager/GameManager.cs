@@ -205,6 +205,11 @@ namespace _Game.GamePlay.Manager
                 {
                     weaponContainer[pair.Key].WeaponLevel = pair.Value;
                 }
+
+                foreach (var pair in weaponContainer)
+                {
+                    equipmentActivation.SetBackgroundColor(list, pair.Key, pair.Value.WeaponLevel);
+                }
                 
                 equipmentQueue.Clear();
             });
