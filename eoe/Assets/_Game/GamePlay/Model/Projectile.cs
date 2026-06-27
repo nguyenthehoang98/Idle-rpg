@@ -16,11 +16,6 @@ namespace _Game.GamePlay.Model
         private bool isRunning = false;
         private bool shouldDestroy = false;
 
-        private void OnEnable()
-        {
-            if (trailRenderer != null) trailRenderer.emitting = true;
-        }
-
         public void Initialize()
         {
             elapsedTime = 0;
@@ -28,6 +23,12 @@ namespace _Game.GamePlay.Model
             
             shouldDestroy = false;
             isRunning = true;
+            
+            if (trailRenderer != null)
+            {
+                trailRenderer.emitting = true;
+                trailRenderer.enabled = true;
+            }
         }
 
         public void SetPosition(Vector3 position, float dt)
@@ -68,6 +69,7 @@ namespace _Game.GamePlay.Model
 
             if (trailRenderer != null)
             {
+                trailRenderer.emitting = false;
                 trailRenderer.enabled = false;
                 
                 trailRenderer.Clear();

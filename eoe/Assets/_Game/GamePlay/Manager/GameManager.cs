@@ -22,6 +22,7 @@ namespace _Game.GamePlay.Manager
         [SerializeField] private UpgradeCardUIPicker cardUIPicker;
         [SerializeField] private Energy energy;
         [SerializeField] private EquipmentQueue equipmentQueue;
+        [SerializeField] private EquipmentActivation equipmentActivation;
         
         [SerializeField] private int[] equipments = new int[4];
         [SerializeField] private Transform[] slots = new Transform[4];
@@ -55,6 +56,7 @@ namespace _Game.GamePlay.Manager
 
             cardUIPicker.OnPickCard += PickCard;
             energy.OnFill += FillEnergy;
+            equipmentQueue.OnQueueFull += QueueFull;
 
             btnPushEquipment.onClick.AddListener(() => { equipmentQueue.Decrease(); });
         }
@@ -91,10 +93,7 @@ namespace _Game.GamePlay.Manager
             owner.IsPaused = false;
             owner.Loop = 1;
 
-            foreach (var pair in weaponContainer)
-            {
-                pair.Value.WeaponLevel = 2;
-            }
+            QueueFull();
             
             energy.enabled = true;
             
@@ -112,6 +111,7 @@ namespace _Game.GamePlay.Manager
             
             cardUIPicker.OnPickCard -= PickCard;
             energy.OnFill -= FillEnergy;
+            equipmentQueue.OnQueueFull -= QueueFull;
         }
 
         private async UniTask Equip(int weaponId)
@@ -167,6 +167,32 @@ namespace _Game.GamePlay.Manager
         }
         
         // callback
+
+        private void QueueFull()
+        {
+            float d = 0;
+            for (int i = 0; i < Const.MAX_WEAPON_SLOT; i++)
+            {
+                int index = i;
+                float f1 = 0.1f * i;
+                float f2 = 0.1f + 0.1f * i;
+                float f3 = 0.5f + 0.1f * i;
+                this.WaitInvoke(f1, () => { equipmentActivation.ReleaseAnimation(index); });
+                this.WaitInvoke(f2, () => { equipmentQueue.PushAnimation(index); });
+                this.WaitInvoke(f3, () =>
+                {
+                    if (equipmentQueue.TryGetWeaponData(index, out WeaponData weaponData))
+                        equipmentActivation.SetWeapon(index, weaponData);
+                    equipmentActivation.IdleAnimation(index);
+                });
+                d = Mathf.Max(d, f1, f2, f3);
+            }
+
+            this.WaitInvoke(d, () =>
+            {
+                this.WaitNextFrame(equipmentQueue.Clear);
+            });
+        }
 
         private void FillEnergy() => equipmentQueue.Increase();
         

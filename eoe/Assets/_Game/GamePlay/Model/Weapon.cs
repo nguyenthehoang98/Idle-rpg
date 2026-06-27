@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using _Game.Configs;
 using _Game.GamePlay.Data;
+using _Game.GamePlay.Entity;
 using _Game.GamePlay.Manager;
 using _Game.GamePlay.Utils;
+using _KITSystem.Entity;
 using _KITSystem.Resource;
 using _KITSystem.SkillSystem.Core;
 using Cysharp.Threading.Tasks;
@@ -21,9 +23,10 @@ namespace _Game.GamePlay.Model
         [SerializeField] private Transform rotatePivot;
         [SerializeField] private AnimationCurve rotationCurve;
         [SerializeField] private float rotationDuration;
-
+        
         private HashSet<string> names = new HashSet<string>();
 
+        private int entityTarget;
         private SkillData skillData;
         private WeaponUpgradeData current;
         private WeaponUpgradeData levelUp;
@@ -137,7 +140,7 @@ namespace _Game.GamePlay.Model
                 KillInstantBelowHealthPercent = current.killInstantBelowHealthPercent,
             };
             
-            SkillManager.CastSkill(skillData, runtimeData, muzzlePosition, destinationPosition);
+            SkillManager.CastSkill(skillData, runtimeData, muzzlePosition, destinationPosition, entityTarget);
         }
 
         public void EndAnimation()
@@ -180,6 +183,12 @@ namespace _Game.GamePlay.Model
                 float sqrRadius = radius * radius;
                 query.FindTarget(type, center, position, radius, (entity, float2) =>
                 {
+                    HealthData healthData = ComponentManager<HealthData>.Get(entity);
+                    if (healthData.FutureHealth <= 0)
+                    {
+                        return false;
+                    }
+                    
                     float d = math.lengthsq(float2);
                     return d <= sqrRadius;
                 }, out QueryResult result);
@@ -201,6 +210,8 @@ namespace _Game.GamePlay.Model
                 float gizmosDeltaTime = cooldown / TimeScale;
 #endif
 
+                entityTarget = entity;
+                
                 if (entity == -1)
                 {
 #if UNITY_EDITOR

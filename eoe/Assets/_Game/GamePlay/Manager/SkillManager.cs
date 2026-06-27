@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using _Game.Configs;
+using _Game.Entry;
 using _Game.GamePlay.Data;
 using _Game.GamePlay.Entity;
 using _Game.GamePlay.Model;
@@ -12,7 +13,9 @@ using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Core;
 using _KITSystem.SkillSystem.Imp;
+using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 
 namespace _Game.GamePlay.Manager
@@ -25,6 +28,7 @@ namespace _Game.GamePlay.Manager
         public event Action<PostDamageParams> OnPostDamage;
         public event Action<PostEarnExpParams> OnPostEarnExp;
 
+        private Dictionary<int, Coroutine> coroutinesResetFutureHealth = new Dictionary<int, Coroutine>();
         private IQuery query;
         private HashSet<string> names;
 
@@ -51,13 +55,15 @@ namespace _Game.GamePlay.Manager
             instance = null;
         }
 
-        public static void CastSkill(SkillData skillData, SkillRuntimeData runtimeData, Vector3 position, Vector3 destination)
+        public static void CastSkill(SkillData skillData, SkillRuntimeData runtimeData, Vector3 position, Vector3 destination, int entityTarget)
         {
             if (instance == null)
             {
                 Debug.LogError("Instance SkillManager is null");
                 return;
             }
+
+            instance.SyncFutureDamage(runtimeData, entityTarget);
             
             Vector3 direction = (destination - position).normalized;
             
@@ -104,6 +110,34 @@ namespace _Game.GamePlay.Manager
             }
                 
             if(!extra) instance.CastSkill_Private(skillData, runtimeData, position, destination, 1);
+        }
+
+        private void SyncFutureDamage(SkillRuntimeData runtimeData, int entityTarget)
+        {
+            if (!EntityManager.IsEntityAlive(entityTarget)) return;
+            
+            runtimeData.CritChance = 0; // Lấy dmg gốc là được
+            
+            int damage = Mathf.CeilToInt(Formula.CalculateFinalDamage(runtimeData, out bool critical));
+
+            ref HealthData healthData = ref ComponentManager<HealthData>.Get(entityTarget);
+
+            healthData.FutureHealth -= damage;
+
+            MonoBehaviour pool = Pool.Instance;
+            
+            if (coroutinesResetFutureHealth.TryGetValue(entityTarget, out var coroutine))
+            {
+                pool.StopCoroutine(coroutine);
+            }
+
+            coroutinesResetFutureHealth[entityTarget] = pool.WaitInvoke(1, () =>
+            {
+                if (!EntityManager.IsEntityAlive(entityTarget)) return;
+                
+                ref HealthData healthData = ref ComponentManager<HealthData>.Get(entityTarget);
+                healthData.FutureHealth = healthData.CurrentHealth;
+            });
         }
         
         private async void CastSkill_Private(SkillData skillData, SkillRuntimeData runtimeData,
