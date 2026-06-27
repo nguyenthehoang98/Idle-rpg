@@ -18,7 +18,6 @@ namespace _Game.GamePlay.Manager
     [RequireComponent(typeof(TickSystemOwner))]
     public sealed class GameManager : MonoBehaviour
     {
-        [SerializeField] private Button btnPushEquipment;
         [SerializeField] private UpgradeCardUIPicker cardUIPicker;
         [SerializeField] private Energy energy;
         [SerializeField] private EquipmentQueue equipmentQueue;
@@ -59,10 +58,6 @@ namespace _Game.GamePlay.Manager
             cardUIPicker.OnPickCard += PickCard;
             energy.OnFill += FillEnergy;
             equipmentQueue.OnQueueFull += QueueFull;
-
-            btnPushEquipment.onClick.AddListener(() => { equipmentQueue.Decrease(); });
-            
-            //uiTickable.AddTick(energy);
         }
 
         private async void Start()

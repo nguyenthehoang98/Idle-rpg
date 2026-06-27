@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: f1d335e6e2f7e0242a9bd238414a5d68
+guid: 8a84a3e1df42c654289be3ca584109f5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5329537587623874400
-    second: Gemini_Generated_Image_42nldj42nldj42nl_0
+      213: 2456396607979140560
+    second: button.hammer_0
+  - first:
+      213: 2600928716685730475
+    second: button.hammer_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +49,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -96,27 +99,62 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Gemini_Generated_Image_42nldj42nldj42nl_0
+      name: button.hammer_0
       rect:
         serializedVersion: 2
-        x: 19
-        y: 13
-        width: 249
-        height: 250
+        x: 0
+        y: 0
+        width: 168
+        height: 168
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0a036981dcda906b0800000000000000
-      internalID: -5329537587623874400
+      spriteID: 0d5321e43bfd61220800000000000000
+      internalID: 2456396607979140560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button.hammer_1
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 0
+        width: 168
+        height: 168
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba26a2433ea581420800000000000000
+      internalID: 2600928716685730475
       vertices: []
       indices: 
       edges: []
@@ -125,7 +163,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 8f151646eba449e48a95c1293a6631d1
     internalID: 0
     vertices: []
     indices: 
@@ -133,9 +171,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":2.0,"y":1.0},"gridSpriteSize":{"x":168.0,"y":168.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Gemini_Generated_Image_42nldj42nldj42nl_0: -5329537587623874400
+      button.hammer_0: 2456396607979140560
+      button.hammer_1: 2600928716685730475
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

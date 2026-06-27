@@ -3,40 +3,32 @@ using System.Collections.Generic;
 using _Game.Configs;
 using _Game.GamePlay.Utils;
 using _KITSystem.Resource;
+using _KITSystem.Schedule;
 using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
 using Unity.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace _Game.GamePlay.View
 {
     public class EquipmentQueue : MonoBehaviour
     {
-        private static readonly int SlotPush = Animator.StringToHash("slot_push");
-
         [SerializeField] private float slotPushDuration = 0.5f;
-        [SerializeField] private Animator[] animators = new Animator[4];
-        [SerializeField] private Image[] imgEquipments;
+        [SerializeField] private UIAnimation smokeAnimation;
+        [SerializeField] private EquipmentSlot[] slots;
 
         public event Action OnQueueFull;
+        public event Action OnFill;
 
-        private List<int> list; //key
-        private int[] array; // 
-        private Dictionary<int, WeaponData> container;
-        private List<int> equipments;
+        private List<int> list = new List<int>(); //key
+        private int[] array = new int[4]; // 
+        private Dictionary<int, WeaponData> container = new Dictionary<int, WeaponData>();
+        private List<int> equipments = new List<int>();
 
         public async UniTask Init(WeaponConfig config, int[] allEquipments)
         {
-            list = new List<int>();
-            equipments = new List<int>();
-            container = new Dictionary<int, WeaponData>();
-
-            foreach (var img in imgEquipments)
-            {
-                img.enabled = false;
-            }
-
+            foreach (var sl in slots) sl.ResetIcon();
+            
             foreach (var weaponId in allEquipments)
             {
                 if (config.TryGetWeaponData(weaponId, out var data))
@@ -77,8 +69,13 @@ namespace _Game.GamePlay.View
             int item = equipments[idx];
             
             list.Add(item);
+
+            smokeAnimation.transform.position = slots[list.Count - 1].Position;
+            smokeAnimation.Play();
           
             RefreshUI();
+            
+            OnFill?.Invoke();
 
             if (list.Count >= Const.MAX_WEAPON_SLOT)
             {
@@ -88,11 +85,14 @@ namespace _Game.GamePlay.View
 
         public void PushAnimation(int idx, float speed)
         {
-            Animator anim = animators[idx];
-            anim.Play(SlotPush);
-            anim.speed = speed;
-
-            this.WaitInvoke(slotPushDuration / speed, () => { imgEquipments[idx].enabled = false; });
+            EquipmentSlot slot = slots[idx];
+            slot.Speed = speed;
+            slot.PlayPush();
+            
+            this.WaitInvoke(slotPushDuration / speed, () =>
+            {
+                slot.ResetIcon();
+            });
         }
 
         public List<int> GetAllEquipment() => list;
@@ -128,13 +128,14 @@ namespace _Game.GamePlay.View
             for (int i = 0; i < list.Count; i++)
             {
                 TryGetWeaponData(i, out WeaponData weaponData);
-                Sprite icon = await AssetBundleManager.GetAssetCached<Sprite>(weaponData.iconName);
-                imgEquipments[i].sprite = icon;
+                slots[i].SetIcon(await AssetBundleManager.GetAssetCached<Sprite>(weaponData.iconName));
             }
             
             for (int i = 0; i < Const.MAX_WEAPON_SLOT; i++)
             {
-                imgEquipments[i].enabled = i < list.Count;
+                if (i < list.Count) continue;
+
+                slots[i].ResetIcon();
             }
         }
     }

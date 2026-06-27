@@ -11,3 +11,5 @@ eoe/.utmp
 eoe/eoe_BurstDebugInformation_DoNotShip
 *.apk
 eoe/Assets/Ref
+eoe/Assets/_BattleSource/Ref
+eoe/Assets/_BattleSource/Ref.meta
