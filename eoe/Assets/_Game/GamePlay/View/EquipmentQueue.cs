@@ -20,10 +20,11 @@ namespace _Game.GamePlay.View
         public event Action OnQueueFull;
         public event Action OnFill;
 
-        private List<int> list = new List<int>(); //key
-        private int[] array = new int[4]; // 
+        private readonly List<int> list = new List<int>(); // dánh sách equipment đang cơh̀
+        private int[] array = new int[4]; // lưu trữ stack
+        private readonly List<int> temp = new List<int>(); // use 1 frame
         private Dictionary<int, WeaponData> container = new Dictionary<int, WeaponData>();
-        private List<int> equipments = new List<int>();
+        private readonly List<int> equipments = new List<int>(); // dánh sah eqm mặc dịnh
 
         public async UniTask Init(WeaponConfig config, int[] allEquipments)
         {
@@ -53,16 +54,13 @@ namespace _Game.GamePlay.View
 
         public void Increase()
         {
-            NativeList<int> temp = new NativeList<int>(array.Length, Allocator.Temp);
-            
+            temp.Clear();
             for (int i = 0; i < array.Length; i++)
             {
                 if (array[i] < 3) temp.Add(i);
             }
             
-            int idx = RandomUtils.Range(0, temp.Length);
-
-            temp.Dispose();
+            int idx = RandomUtils.Range(0, temp.Count);
 
             array[idx]++;
             
@@ -71,6 +69,7 @@ namespace _Game.GamePlay.View
             list.Add(item);
 
             smokeAnimation.transform.position = slots[list.Count - 1].Position;
+            
             smokeAnimation.Play();
           
             RefreshUI();
@@ -108,6 +107,9 @@ namespace _Game.GamePlay.View
             float d = 0.35f;
             if (list.Count > 0)
             {
+                int item = list[0];
+                int idx = equipments.IndexOf(item);
+                array[idx]--;
                 list.RemoveAt(0);
                 this.WaitInvoke(duration, () => { slots[0].SetDissolve(0.25f); });
             }
