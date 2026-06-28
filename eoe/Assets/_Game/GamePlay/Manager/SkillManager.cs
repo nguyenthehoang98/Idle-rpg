@@ -8,14 +8,11 @@ using _Game.GamePlay.Entity;
 using _Game.GamePlay.Model;
 using _Game.GamePlay.Utils;
 using _KITSystem.Entity;
-using _KITSystem.Grid;
 using _KITSystem.Resource;
 using _KITSystem.Schedule;
 using _KITSystem.SkillSystem.Core;
 using _KITSystem.SkillSystem.Imp;
 using _KITSystem.Utils;
-using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using UnityEngine;
 
 namespace _Game.GamePlay.Manager
