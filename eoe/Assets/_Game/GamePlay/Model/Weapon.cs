@@ -33,13 +33,14 @@ namespace _Game.GamePlay.Model
         private HashSet<string> names = new HashSet<string>();
 
         private int entityTarget;
-        private int currentLevelUpgradeData;
+        private int currentGroupUpgradeData;
+        private int currentLevelUpgradeData = 1;
         private SkillData skillData;
         private WeaponUpgradeData current;
         private WeaponUpgradeData levelUp;
         private WeaponUpgradeData powerX2;
         private WeaponUpgradeData powerX3;
-        private List<WeaponUpgradeData> upgradesData;
+        private Dictionary<int, List<WeaponUpgradeData>> upgradesData;
 
         private IQuery query;
         private Coroutine coroutineUpdateColor;
@@ -92,13 +93,13 @@ namespace _Game.GamePlay.Model
             names = null;
         }
 
-        public async UniTask Initialize(WeaponData weaponData, List<WeaponUpgradeData> upgradesData,
+        public async UniTask Initialize(WeaponData weaponData, Dictionary<int, List<WeaponUpgradeData>> dict,
             WeaponUpgradeData upgradeDataX2, WeaponUpgradeData upgradeDataX3, 
             float faceFlip)
         {
             powerX2 = upgradeDataX2;
             powerX3 = upgradeDataX3;
-            this.upgradesData = upgradesData;
+            upgradesData = dict;
 
             attack = weaponData.attack;
             critChance = weaponData.critChance;
@@ -151,6 +152,7 @@ namespace _Game.GamePlay.Model
         public void IncreaseUpgradeData(WeaponUpgradeData upgradeData)
         {
             currentLevelUpgradeData++;
+            currentGroupUpgradeData = upgradeData.group;
             
             levelUp.Increase(upgradeData);
             
@@ -189,15 +191,36 @@ namespace _Game.GamePlay.Model
             isAttacking = false;
         }
 
-        public bool TryGetUpgradeLevelData(out WeaponUpgradeData data)
+        public bool TryGetUpgradeLevelData(out List<WeaponUpgradeData> list)
         {
-            if (currentLevelUpgradeData < upgradesData.Count)
+            if (upgradesData.TryGetValue(currentLevelUpgradeData, out List<WeaponUpgradeData> temp))
             {
-                data = upgradesData[currentLevelUpgradeData];
-                return true;
+                if (temp.Count == 1)
+                {
+                    list = temp;
+                    return true;
+                }
+                else
+                {
+                    bool found = false;
+                    list = new List<WeaponUpgradeData>();
+                    foreach (var item in temp)
+                    {
+                        if (item.group == currentGroupUpgradeData)
+                        {
+                            list.Add(item);
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found) list = temp;
+
+                    return true;
+                }
             }
 
-            data = default;
+            list = new List<WeaponUpgradeData>();
             return false;
         }
 

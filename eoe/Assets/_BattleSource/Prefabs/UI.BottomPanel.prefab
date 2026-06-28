@@ -555,7 +555,7 @@ GameObject:
   - component: {fileID: 8638496294078803346}
   - component: {fileID: 649311985383495547}
   m_Layer: 5
-  m_Name: BottomPanel
+  m_Name: UI.BottomPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

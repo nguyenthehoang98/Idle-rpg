@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6314042747971306159}
   - component: {fileID: 932330563802625033}
   m_Layer: 5
-  m_Name: UpgradeCardUIPicker
+  m_Name: UI.UpgradeCardUIPicker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -29,7 +29,7 @@ namespace _Game.Configs
             cachedUpgrade = new Dictionary<int, WeaponUpgradeData>();
             foreach (var data in upgrades)
             {
-                int key = HashCode.Combine(data.id, data.level, data.type);
+                int key = HashCode.Combine(data.id, data.level, data.group, data.type);
                 cachedUpgrade.Add(key, data);
             }
         }
@@ -79,21 +79,27 @@ namespace _Game.Configs
 
         public bool TryGetUpgradePowerWeapon(int weaponId, UpgradeType type, out WeaponUpgradeData data)
         {
-            int key = HashCode.Combine(weaponId, 0, type);
+            int key = HashCode.Combine(weaponId, 0, 0, type);
             return cachedUpgrade.TryGetValue(key, out data);
         }
 
-        public List<WeaponUpgradeData> GetUpgradesLevelWeapon(int weaponId)
+        public Dictionary<int, List<WeaponUpgradeData>> GetUpgradesLevelWeapon(int weaponId)
         {
-            List<WeaponUpgradeData> list = new List<WeaponUpgradeData>();
-            for (int i = 0; i < 15; i++)
+            Dictionary<int, List<WeaponUpgradeData>> dict = new Dictionary<int, List<WeaponUpgradeData>>();
+            for (int lv = 1; lv <= 10; lv++)
             {
-                int key = HashCode.Combine(weaponId, i, UpgradeType.LevelUp);
-                if (cachedUpgrade.TryGetValue(key, out var data))
-                    list.Add(data);
+                for (int gr = 0; gr <= 2; gr++)
+                {
+                    int key = HashCode.Combine(weaponId, lv, gr, UpgradeType.LevelUp);
+                    if (cachedUpgrade.TryGetValue(key, out var data))
+                    {
+                        if (dict.TryGetValue(lv, out var list)) list.Add(data);
+                        else dict.Add(lv, new List<WeaponUpgradeData> { data });
+                    }
+                }
             }
 
-            return list;
+            return dict;
         }
     }
     
@@ -120,6 +126,7 @@ namespace _Game.Configs
     public struct WeaponUpgradeData
     {
         public int id;
+        public int group;
         public int level;
         public UpgradeType type;
         public float attackSpeed;

@@ -1,5 +1,6 @@
 using System;
 using _Game.Configs;
+using _Game.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,7 +27,8 @@ namespace _Game.GamePlay.View
         public void Init(WeaponUpgradeData upgradeData)
         {
             this.upgradeData = upgradeData;
-            txt.text = JsonUtility.ToJson(upgradeData);
+            txt.text = $"Weapon {upgradeData.id}\n" +
+                       LocalizeManager.GetUpgradeWeaponLocalize(upgradeData);
         }
     }
 }

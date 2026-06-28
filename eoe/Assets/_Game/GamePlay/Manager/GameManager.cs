@@ -128,7 +128,7 @@ namespace _Game.GamePlay.Manager
                 if (!weaponConfig.TryGetUpgradePowerWeapon(weaponId, UpgradeType.PowerX3, out var dataX3))
                     Debug.LogError($"Not found upgrade weapon x3 with '{weaponId}'");
 
-                List<WeaponUpgradeData> list = weaponConfig.GetUpgradesLevelWeapon(weaponId);
+                Dictionary<int, List<WeaponUpgradeData>> dict = weaponConfig.GetUpgradesLevelWeapon(weaponId);
 
                 GameObject go = await AssetBundleManager.GetAsset<GameObject>(weaponData.prefabName);
                 go = Object.Instantiate(go, slots[currentWeaponSlot]);
@@ -141,7 +141,7 @@ namespace _Game.GamePlay.Manager
                 Weapon weapon = go.GetComponent<Weapon>();
                 if(weapon == null) Debug.LogError($"Gameobject '{go}' not attach Weapon component");
                 
-                await weapon.Initialize(weaponData, list, dataX2, dataX3, flip);
+                await weapon.Initialize(weaponData, dict, dataX2, dataX3, flip);
 
                 weaponContainer[weaponId] = weapon;
             }
@@ -269,26 +269,26 @@ namespace _Game.GamePlay.Manager
                 player.CurrentLevel += 1;
                 player.CurrentExp -= data.exp;
 
-                List<WeaponUpgradeData> list = new List<WeaponUpgradeData>();
+                List<WeaponUpgradeData> temp = new List<WeaponUpgradeData>();
                 foreach (var pair in weaponContainer)
                 {
-                    if (pair.Value.TryGetUpgradeLevelData(out WeaponUpgradeData upgradeData)) list.Add(upgradeData);
+                    if (pair.Value.TryGetUpgradeLevelData(out var list)) temp.AddRange(list);
                 }
-
-                List<WeaponUpgradeData> temp = new List<WeaponUpgradeData>();
-                if (list.Count < 3)
+                
+                List<WeaponUpgradeData> collects = new List<WeaponUpgradeData>();
+                if (temp.Count < 3)
                 {
-                    int count = list.Count;
-                    temp.AddRange(list);
-                    for (int i = count; i <= 3; i++) temp.Add(list[i % count]);
+                    int count = temp.Count;
+                    collects.AddRange(temp);
+                    for (int i = count; i <= 3; i++) collects.Add(temp[i % count]);
                 }
                 else
                 {
-                    CollectionUtils.Shuffle(ref list);
-                    for (int i = 0; i < 3; i++) temp.Add(list[i]);
+                    CollectionUtils.Shuffle(ref temp);
+                    for (int i = 0; i < 3; i++) collects.Add(temp[i]);
                 }
 
-                cardUIPicker.Show(temp);
+                cardUIPicker.Show(collects);
                 bottomPanel.Hide();
                 owner.IsPaused = true;
             }
