@@ -1,3 +1,4 @@
+using System;
 using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -292,7 +293,25 @@ namespace LitMotion.Animation.Editor
             }
             else
             {
-                view.Text = property.FindPropertyRelative("displayName").stringValue;
+                string settingPrex = "";
+
+                try
+                {
+                    SerializedProperty settingProperty = property.FindPropertyRelative("settings");
+                    if(settingProperty != null)
+                    {
+                        float duration = settingProperty.FindPropertyRelative("duration").floatValue;
+                        settingPrex = $" ({duration}s)";
+                        float delay = settingProperty.FindPropertyRelative("delay").floatValue;
+                        settingPrex += $" ({delay}s)";
+                    }
+                }
+                catch (Exception e)
+                {
+                    settingPrex = "";
+                }
+                
+                view.Text = property.FindPropertyRelative("displayName").stringValue + settingPrex;
 
                 var targetProperty = property.FindPropertyRelative("target");
                 if (targetProperty != null)

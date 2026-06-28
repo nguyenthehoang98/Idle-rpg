@@ -10,14 +10,15 @@ using _KITSystem.Schedule;
 using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
+using UnityEngine.Events;
 
 namespace _Game.GamePlay.Manager
 {
     [RequireComponent(typeof(TickSystemOwner))]
     public sealed class GameManager : MonoBehaviour
     {
+        [SerializeField] private UnityEvent OnShowUIPicker;
+        [SerializeField] private UnityEvent OnHideUIPicker;
         [SerializeField] private UpgradeCardUIPicker cardUIPicker;
         [SerializeField] private Energy energy;
         [SerializeField] private EquipmentQueue equipmentQueue;
@@ -29,7 +30,6 @@ namespace _Game.GamePlay.Manager
         private Dictionary<int, Weapon> weaponContainer = new Dictionary<int, Weapon>();
         private Dictionary<int, int> damageMemory = new Dictionary<int, int>();
         private TickSystemOwner owner;
-        private UITickable uiTickable;
         private SpawnManager spawnManager;
         private SkillManager skillManager;
         private WeaponConfig weaponConfig;
@@ -46,7 +46,6 @@ namespace _Game.GamePlay.Manager
             owner = GetComponent<TickSystemOwner>();
             owner.TryGetTickable(out skillManager);
             owner.TryGetTickable(out spawnManager);
-            owner.TryGetTickable(out uiTickable);
             
             owner.OnChangeScaleTime += OnChangeScaleTime;
             skillManager.OnPostDamage += PostDamage;
@@ -231,6 +230,8 @@ namespace _Game.GamePlay.Manager
             if (weaponContainer.TryGetValue(@params.id, out Weapon weapon))
             {
                 weapon.IncreaseUpgradeData(@params);
+                
+                OnHideUIPicker?.Invoke();
             }
         }
 
@@ -259,6 +260,7 @@ namespace _Game.GamePlay.Manager
                 player.CurrentExp -= data.exp;
                 
                 cardUIPicker.Show();
+                OnShowUIPicker?.Invoke();
             }
         }
 

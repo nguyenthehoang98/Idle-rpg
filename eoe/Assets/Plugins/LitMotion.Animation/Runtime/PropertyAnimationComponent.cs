@@ -66,6 +66,15 @@ namespace LitMotion.Animation
         }
     }
 
+    public abstract class BooleanPropertyAnimationComponent<TObject> : PropertyAnimationComponent<TObject, bool, NoOptions,
+        BooleanMotionAdapter> where TObject : UnityEngine.Object
+    {
+        protected override bool GetRelativeValue(in bool startValue, in bool relativeValue)
+        {
+            return relativeValue;
+        }
+    }
+
     public abstract class DoublePropertyAnimationComponent<TObject> : PropertyAnimationComponent<TObject, double, NoOptions, DoubleMotionAdapter>
         where TObject : UnityEngine.Object
     {

@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 1044321970874481220}
   - component: {fileID: 2169100009811582856}
   - component: {fileID: 1186359209710181114}
-  - component: {fileID: 2998204777570625592}
   - component: {fileID: 896879978359316200}
+  - component: {fileID: 6174012678705568397}
   m_Layer: 5
   m_Name: base.button
   m_TagString: Untagged
@@ -67,7 +67,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e65e2c6acdaabd14b8459a2ced2ba8de, type: 3}
+  m_Sprite: {fileID: 2600928716685730475, guid: 8a84a3e1df42c654289be3ca584109f5, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -77,45 +77,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2998204777570625592
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8843277435717151334}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c19d82987c234880a5ee9cd71b1b645f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.View.UIButton
-  scale: {x: 1.25, y: 1.25, z: 1.25}
-  duration: 0.15
-  curve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  enableSound: 0
 --- !u!114 &896879978359316200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,4 +120,85 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1186359209710181114}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6174012678705568397}
+        m_TargetAssemblyTypeName: LitMotion.Animation.LitMotionAnimation, LitMotion.Animation
+        m_MethodName: Restart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &6174012678705568397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8843277435717151334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cc6819e64e4c44beb63ea2ef45e1a6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LitMotion.Animation::LitMotion.Animation.LitMotionAnimation
+  autoPlayMode: 1
+  animationMode: 1
+  components:
+  - rid: 607417039756722421
+  playOnAwake: 1
+  version: 1
+  references:
+    version: 2
+    RefIds:
+    - rid: 607417039756722421
+      type: {class: TransformScalePunchAnimation, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
+      data:
+        displayName: Scale (Punch)
+        enabled: 1
+        target: {fileID: 1044321970874481220}
+        settings:
+          startValue: {x: 1, y: 1, z: 1}
+          endValue: {x: 1, y: 1, z: 1}
+          duration: 0.2
+          options:
+            Frequency: 2
+            DampingRatio: 50
+          ease: 31
+          customEaseCurve:
+            serializedVersion: 2
+            m_Curve:
+            - serializedVersion: 3
+              time: 0
+              value: 0
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            - serializedVersion: 3
+              time: 1
+              value: 1
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+          delay: 0
+          delayType: 0
+          loops: 1
+          loopType: 1
+          cancelOnError: 0
+          skipValuesDuringDelay: 0
+          immediateBind: 0
+          schedulerType: 0
+          additionalSettings: 1
+        relative: 0

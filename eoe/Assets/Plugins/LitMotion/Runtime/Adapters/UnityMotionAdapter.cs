@@ -1,3 +1,4 @@
+using System;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
@@ -13,6 +14,16 @@ using LitMotion.Adapters;
 
 namespace LitMotion.Adapters
 {
+    public readonly struct BooleanMotionAdapter : IMotionAdapter<Boolean, NoOptions>
+    {
+        public bool Evaluate(ref bool startValue, ref bool endValue, ref NoOptions options, in MotionEvaluationContext context)
+        {
+            if (context.Progress < 1)
+                return startValue;
+            return endValue;
+        }
+    }
+    
     public readonly struct Vector2MotionAdapter : IMotionAdapter<Vector2, NoOptions>
     {
         public Vector2 Evaluate(ref Vector2 startValue, ref Vector2 endValue, ref NoOptions options, in MotionEvaluationContext context)

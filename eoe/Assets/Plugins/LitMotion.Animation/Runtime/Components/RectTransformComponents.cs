@@ -17,3 +17,11 @@ public sealed class RectTransformPivotAnimation : Vector2PropertyAnimationCompon
     protected override Vector2 GetValue(RectTransform target) => target.pivot;
     protected override void SetValue(RectTransform target, in Vector2 value) => target.pivot = value;
 }
+
+[Serializable]
+[LitMotionAnimationComponentMenu("UI/Rect Transform/Anchored Position")]
+public sealed class RectTransformAnchoredPositionAnimation : Vector2PropertyAnimationComponent<RectTransform>
+{
+    protected override Vector2 GetValue(RectTransform target) => target.anchoredPosition;
+    protected override void SetValue(RectTransform target, in Vector2 value) => target.anchoredPosition = value;
+}

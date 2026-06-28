@@ -61,6 +61,15 @@ namespace LitMotion.Animation.Components
     }
 
     [Serializable]
+    [LitMotionAnimationComponentMenu("UI/Image/Enable")]
+    public sealed class ImageEnableAnimation : BooleanPropertyAnimationComponent<Image>
+    {
+        protected override bool GetValue(Image target) => target.enabled;
+
+        protected override void SetValue(Image target, in bool value) => target.enabled = value;
+    }
+
+    [Serializable]
     [LitMotionAnimationComponentMenu("UI/Image/Fill Amount")]
     public sealed class ImageFillAmountAnimation : FloatPropertyAnimationComponent<Image>
     {

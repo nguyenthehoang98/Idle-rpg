@@ -10,7 +10,10 @@ namespace _Game.GamePlay.View
 
         public void Show()
         {
-            
+        }
+
+        public void Close()
+        {
         }
     }
 }

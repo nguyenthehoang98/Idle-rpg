@@ -1,4 +1,3 @@
-using _KITSystem.Schedule;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +8,7 @@ namespace _Game.GamePlay.View
         [SerializeField] private Sprite spHammerActive;
         [SerializeField] private Sprite spHammerInactive;
         [SerializeField] private UIAnimation hammerAnimation;
-        [SerializeField] private UIButton btnHammer;
+        [SerializeField] private Button btnHammer;
         [SerializeField] private EquipmentQueue equipmentQueue;
 
         private void Awake()
@@ -17,32 +16,30 @@ namespace _Game.GamePlay.View
             equipmentQueue.OnFill += Fill;
             equipmentQueue.OnQueueFull += QueueFull;
             hammerAnimation.OnCompleted += HammerComplete;
-            btnHammer.OnClicked += ClickHammer;
+            btnHammer.onClick.AddListener(ClickHammer); 
         }
 
-        private void Start()
-        {
-            btnHammer.IsBlockInput = true;
-            SetHammerInactive();
-        }
+        private void Start() => DefaultButton();
 
         private void OnDestroy()
         {
             equipmentQueue.OnFill -= Fill;
             equipmentQueue.OnQueueFull -= QueueFull;
             hammerAnimation.OnCompleted -= HammerComplete;
-            btnHammer.OnClicked -= ClickHammer;
+            btnHammer.onClick.RemoveListener(ClickHammer);
         }
 
-        private void QueueFull()
+        private void QueueFull() => DefaultButton();
+
+        private void DefaultButton()
         {
-            btnHammer.IsBlockInput = true;
+            btnHammer.interactable = false;
             SetHammerInactive();
         }
 
         private void ClickHammer()
         {
-            btnHammer.IsBlockInput = true;
+            btnHammer.interactable = false;
             float f = hammerAnimation.Play();
             equipmentQueue.Decrease(f);
             RefreshUI();
@@ -50,21 +47,21 @@ namespace _Game.GamePlay.View
 
         private void HammerComplete()
         {
-            btnHammer.IsBlockInput = equipmentQueue.GetAllEquipment().Count == 0;
+            btnHammer.interactable = equipmentQueue.GetAllEquipment().Count != 0;
             RefreshUI();
         }
 
         private void Fill()
         {
-            if (!btnHammer.IsPressing && btnHammer.IsBlockInput) btnHammer.IsBlockInput = false;
+            if (!btnHammer.interactable) btnHammer.interactable = true;
             RefreshUI();
         }
 
         private void RefreshUI()
         {
-            bool f1 = btnHammer.IsBlockInput;
+            bool f1 = btnHammer.interactable;
             bool f2 = equipmentQueue.GetAllEquipment().Count > 0;
-            if (!f1 && f2)
+            if (f1 && f2)
             {
                 SetHammerActive();
             }
