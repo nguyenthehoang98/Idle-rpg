@@ -16,6 +16,7 @@ namespace _Game.GamePlay.Model
 {
     public class Weapon : MonoBehaviour
     {
+        private static readonly int IdleAnimator = Animator.StringToHash("Idle");
         private static readonly int AttackAnimator = Animator.StringToHash("Attack");
         private static readonly int OutlineColor = Shader.PropertyToID("_OutlineColor");
 
@@ -32,14 +33,17 @@ namespace _Game.GamePlay.Model
         private HashSet<string> names = new HashSet<string>();
 
         private int entityTarget;
+        private int currentLevelUpgradeData;
         private SkillData skillData;
         private WeaponUpgradeData current;
         private WeaponUpgradeData levelUp;
         private WeaponUpgradeData powerX2;
         private WeaponUpgradeData powerX3;
+        private List<WeaponUpgradeData> upgradesData;
 
         private IQuery query;
-        private Coroutine coroutine;
+        private Coroutine coroutineUpdateColor;
+        private Coroutine coroutineAutoAttack;
         private MaterialPropertyBlock propertyBlock;
         private AudioClip attackAudioClip;
         private float attackVolume;
@@ -55,6 +59,7 @@ namespace _Game.GamePlay.Model
         private bool isAttacking;
         private bool isActivated;
 
+        private bool isPaused;
         public float TimeScale { get; set; } = 1f;
         public float DeltaTime { get; set; } = 0.034f; // = delta / timescale
         public int WeaponLevel
@@ -87,10 +92,13 @@ namespace _Game.GamePlay.Model
             names = null;
         }
 
-        public async UniTask Initialize(WeaponData weaponData, WeaponUpgradeData upgradeDataX2, WeaponUpgradeData upgradeDataX3, float faceFlip)
+        public async UniTask Initialize(WeaponData weaponData, List<WeaponUpgradeData> upgradesData,
+            WeaponUpgradeData upgradeDataX2, WeaponUpgradeData upgradeDataX3, 
+            float faceFlip)
         {
             powerX2 = upgradeDataX2;
             powerX3 = upgradeDataX3;
+            this.upgradesData = upgradesData;
 
             attack = weaponData.attack;
             critChance = weaponData.critChance;
@@ -124,13 +132,26 @@ namespace _Game.GamePlay.Model
                 attackAudioClip = await AssetBundleManager.GetAssetCached<AudioClip>(weaponData.attackAudioClip);
             }
 
-            StartCoroutine(AutoAttack());
-            
+            coroutineAutoAttack = StartCoroutine(AutoAttack());
             RefreshUpgradeData(true);
+        }
+
+        public void SetPause(bool pause)
+        {
+            this.isPaused = pause;
+            if (pause)
+            {
+                isAttacking = false;
+                animator.Play(IdleAnimator, 0, 0);
+                StopCoroutine(coroutineAutoAttack);
+            }
+            else coroutineAutoAttack = StartCoroutine(AutoAttack());
         }
 
         public void IncreaseUpgradeData(WeaponUpgradeData upgradeData)
         {
+            currentLevelUpgradeData++;
+            
             levelUp.Increase(upgradeData);
             
             RefreshUpgradeData(false);
@@ -168,6 +189,18 @@ namespace _Game.GamePlay.Model
             isAttacking = false;
         }
 
+        public bool TryGetUpgradeLevelData(out WeaponUpgradeData data)
+        {
+            if (currentLevelUpgradeData < upgradesData.Count)
+            {
+                data = upgradesData[currentLevelUpgradeData];
+                return true;
+            }
+
+            data = default;
+            return false;
+        }
+
         private void RefreshUpgradeData(bool updateOutline)
         {
             current = levelUp;
@@ -186,8 +219,8 @@ namespace _Game.GamePlay.Model
 
             if (updateOutline)
             {
-                if (coroutine != null) StopCoroutine(coroutine);
-                coroutine = StartCoroutine(ChangeColor(color));
+                if (coroutineUpdateColor != null) StopCoroutine(coroutineUpdateColor);
+                coroutineUpdateColor = StartCoroutine(ChangeColor(color));
             }
         }
 
@@ -214,7 +247,7 @@ namespace _Game.GamePlay.Model
 
         private IEnumerator AutoAttack()
         {
-            while (true)
+            while (!isPaused)
             {
                 float cooldown = attackCooldown * (1 - current.cooldownReduce);
 

@@ -13,12 +13,23 @@ namespace _KITSystem.Schedule
         [SerializeField, Range(1, 10)] private int maxTicksPerFrame = 5;
         [SerializeReference] public List<ITickable> tickables = new List<ITickable>();
 
+        private bool isPaused = true;
         private float accumulator;
         private int tickableCount;
 
         public event Action<float> OnChangeScaleTime;
+        public event Action<bool> OnChangePause;
 
-        public bool IsPaused { private get; set; } = true;
+        public bool IsPaused
+        {
+            private get => isPaused;
+            set
+            {
+                isPaused = value;
+                OnChangePause?.Invoke(isPaused);
+            }
+        }
+
         public float TickInterval { get; private set; }
         public float Time {get; private set;}
 

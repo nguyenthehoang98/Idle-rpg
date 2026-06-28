@@ -243,17 +243,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 876742483}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &309162297 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6082345267835176423, guid: 972344802c905a247b362e370067ba05, type: 3}
-  m_PrefabInstance: {fileID: 8357001130564312416}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cc6819e64e4c44beb63ea2ef45e1a6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: LitMotion.Animation::LitMotion.Animation.LitMotionAnimation
 --- !u!1 &310851829
 GameObject:
   m_ObjectHideFlags: 0
@@ -812,17 +801,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0957ebeac6454233a801cc798f22cd53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.View.EquipmentActivation
---- !u!114 &1582630228 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4841304916388294862, guid: 972344802c905a247b362e370067ba05, type: 3}
-  m_PrefabInstance: {fileID: 8357001130564312416}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cc6819e64e4c44beb63ea2ef45e1a6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: LitMotion.Animation::LitMotion.Animation.LitMotionAnimation
 --- !u!1 &1696421122
 GameObject:
   m_ObjectHideFlags: 0
@@ -902,60 +880,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dbafcedd9ae4a07b69bc87d6d05b8ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.Manager.GameManager
-  OnShowUIPicker:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1582630228}
-        m_TargetAssemblyTypeName: LitMotion.Animation.LitMotionAnimation, LitMotion.Animation
-        m_MethodName: Restart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 4475309639526082815}
-        m_TargetAssemblyTypeName: LitMotion.Animation.LitMotionAnimation, LitMotion.Animation
-        m_MethodName: Restart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnHideUIPicker:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 309162297}
-        m_TargetAssemblyTypeName: LitMotion.Animation.LitMotionAnimation, LitMotion.Animation
-        m_MethodName: Restart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 4475309639526082814}
-        m_TargetAssemblyTypeName: LitMotion.Animation.LitMotionAnimation, LitMotion.Animation
-        m_MethodName: Restart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  bottomPanel: {fileID: 8357001130564312417}
   cardUIPicker: {fileID: 1931167400}
   energy: {fileID: 1074248198}
   equipmentQueue: {fileID: 983035829}
@@ -1339,28 +1264,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65bfa4849999a1549931fae99d48bbd3, type: 3}
---- !u!114 &4475309639526082814 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2954548686934059531, guid: 65bfa4849999a1549931fae99d48bbd3, type: 3}
-  m_PrefabInstance: {fileID: 4475309639526082813}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cc6819e64e4c44beb63ea2ef45e1a6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: LitMotion.Animation::LitMotion.Animation.LitMotionAnimation
---- !u!114 &4475309639526082815 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4578096822302793378, guid: 65bfa4849999a1549931fae99d48bbd3, type: 3}
-  m_PrefabInstance: {fileID: 4475309639526082813}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cc6819e64e4c44beb63ea2ef45e1a6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: LitMotion.Animation::LitMotion.Animation.LitMotionAnimation
 --- !u!1001 &8357001130564312416
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1458,6 +1361,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 972344802c905a247b362e370067ba05, type: 3}
+--- !u!114 &8357001130564312417 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 649311985383495547, guid: 972344802c905a247b362e370067ba05, type: 3}
+  m_PrefabInstance: {fileID: 8357001130564312416}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6cdc5a65471492789823cbc1e48fa19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.View.BottomPanel
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

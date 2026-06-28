@@ -1,3 +1,4 @@
+using LitMotion.Animation;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,6 +6,8 @@ namespace _Game.GamePlay.View
 {
     public class BottomPanel : MonoBehaviour
     {
+        [SerializeField] private LitMotionAnimation openAnimation;
+        [SerializeField] private LitMotionAnimation closeAnimation;
         [SerializeField] private Sprite spHammerActive;
         [SerializeField] private Sprite spHammerInactive;
         [SerializeField] private UIAnimation hammerAnimation;
@@ -73,5 +76,16 @@ namespace _Game.GamePlay.View
 
         private void SetHammerActive() => btnHammer.GetComponent<Image>().sprite = spHammerActive;
         private void SetHammerInactive() => btnHammer.GetComponent<Image>().sprite = spHammerInactive;
+
+        public void Show()
+        {
+            closeAnimation.Stop();
+            openAnimation.Play();
+        }
+        public void Hide()
+        {
+            openAnimation.Stop();
+            closeAnimation.Play();
+        }
     }
 }

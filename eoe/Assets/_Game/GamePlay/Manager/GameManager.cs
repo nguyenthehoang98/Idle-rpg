@@ -10,15 +10,13 @@ using _KITSystem.Schedule;
 using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace _Game.GamePlay.Manager
 {
     [RequireComponent(typeof(TickSystemOwner))]
     public sealed class GameManager : MonoBehaviour
     {
-        [SerializeField] private UnityEvent OnShowUIPicker;
-        [SerializeField] private UnityEvent OnHideUIPicker;
+        [SerializeField] private BottomPanel bottomPanel;
         [SerializeField] private UpgradeCardUIPicker cardUIPicker;
         [SerializeField] private Energy energy;
         [SerializeField] private EquipmentQueue equipmentQueue;
@@ -46,8 +44,9 @@ namespace _Game.GamePlay.Manager
             owner = GetComponent<TickSystemOwner>();
             owner.TryGetTickable(out skillManager);
             owner.TryGetTickable(out spawnManager);
-            
-            owner.OnChangeScaleTime += OnChangeScaleTime;
+
+            owner.OnChangePause += ChangePause; 
+            owner.OnChangeScaleTime += ChangeScaleTime;
             skillManager.OnPostDamage += PostDamage;
             skillManager.OnPostEarnExp += EarnExp;
             
@@ -100,7 +99,8 @@ namespace _Game.GamePlay.Manager
 
         private void OnDestroy()
         {
-            owner.OnChangeScaleTime -= OnChangeScaleTime;
+            owner.OnChangePause -= ChangePause;
+            owner.OnChangeScaleTime -= ChangeScaleTime;
             skillManager.OnPostDamage -= PostDamage;
             skillManager.OnPostEarnExp -= EarnExp;
             
@@ -122,11 +122,13 @@ namespace _Game.GamePlay.Manager
             
             if (!string.IsNullOrEmpty(weaponData.prefabName))
             {
-                if (!weaponConfig.TryGetUpgradeWeapon(weaponId, 0, UpgradeType.PowerX2, out var list1))
+                if (!weaponConfig.TryGetUpgradePowerWeapon(weaponId, UpgradeType.PowerX2, out var dataX2))
                     Debug.LogError($"Not found upgrade weapon x2 with '{weaponId}'");
 
-                if (!weaponConfig.TryGetUpgradeWeapon(weaponId, 0, UpgradeType.PowerX3, out var list2))
+                if (!weaponConfig.TryGetUpgradePowerWeapon(weaponId, UpgradeType.PowerX3, out var dataX3))
                     Debug.LogError($"Not found upgrade weapon x3 with '{weaponId}'");
+
+                List<WeaponUpgradeData> list = weaponConfig.GetUpgradesLevelWeapon(weaponId);
 
                 GameObject go = await AssetBundleManager.GetAsset<GameObject>(weaponData.prefabName);
                 go = Object.Instantiate(go, slots[currentWeaponSlot]);
@@ -139,9 +141,7 @@ namespace _Game.GamePlay.Manager
                 Weapon weapon = go.GetComponent<Weapon>();
                 if(weapon == null) Debug.LogError($"Gameobject '{go}' not attach Weapon component");
                 
-                WeaponUpgradeData upgradeDataX2 = list1[0];
-                WeaponUpgradeData upgradeDataX3 = list2[0];
-                await weapon.Initialize(weaponData, upgradeDataX2, upgradeDataX3, flip);
+                await weapon.Initialize(weaponData, list, dataX2, dataX3, flip);
 
                 weaponContainer[weaponId] = weapon;
             }
@@ -216,7 +216,16 @@ namespace _Game.GamePlay.Manager
 
         private void FillEnergy() => equipmentQueue.Increase();
         
-        private void OnChangeScaleTime(float deltaTime)
+        private void ChangePause(bool paused)
+        {
+            foreach (var pair in weaponContainer)
+            {
+                pair.Value.SetPause(paused);
+            }
+            energy.SetPause(paused);
+        }
+        
+        private void ChangeScaleTime(float deltaTime)
         {
             foreach (var pair in weaponContainer)
             {
@@ -230,8 +239,9 @@ namespace _Game.GamePlay.Manager
             if (weaponContainer.TryGetValue(@params.id, out Weapon weapon))
             {
                 weapon.IncreaseUpgradeData(@params);
-                
-                OnHideUIPicker?.Invoke();
+                cardUIPicker.Hide();
+                bottomPanel.Show();
+                owner.IsPaused = false;
             }
         }
 
@@ -258,9 +268,29 @@ namespace _Game.GamePlay.Manager
             {
                 player.CurrentLevel += 1;
                 player.CurrentExp -= data.exp;
-                
-                cardUIPicker.Show();
-                OnShowUIPicker?.Invoke();
+
+                List<WeaponUpgradeData> list = new List<WeaponUpgradeData>();
+                foreach (var pair in weaponContainer)
+                {
+                    if (pair.Value.TryGetUpgradeLevelData(out WeaponUpgradeData upgradeData)) list.Add(upgradeData);
+                }
+
+                List<WeaponUpgradeData> temp = new List<WeaponUpgradeData>();
+                if (list.Count < 3)
+                {
+                    int count = list.Count;
+                    temp.AddRange(list);
+                    for (int i = count; i <= 3; i++) temp.Add(list[i % count]);
+                }
+                else
+                {
+                    CollectionUtils.Shuffle(ref list);
+                    for (int i = 0; i < 3; i++) temp.Add(list[i]);
+                }
+
+                cardUIPicker.Show(temp);
+                bottomPanel.Hide();
+                owner.IsPaused = true;
             }
         }
 

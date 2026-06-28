@@ -148,34 +148,6 @@ namespace _Game.Configs
         }
 
         [Test]
-        public void OnMappingValue_BuildsUpgradeCache()
-        {
-            var config = new WeaponConfig();
-            var upgrades = new List<WeaponUpgradeData>
-            {
-                new WeaponUpgradeData { id = 1, level = 1, type = UpgradeType.LevelUp, damagePercent = 10 },
-                new WeaponUpgradeData { id = 1, level = 2, type = UpgradeType.LevelUp, damagePercent = 20 },
-            };
-            ConfigTestHelper.SetField(config, "upgrades", upgrades);
-            config.OnMappingValue();
-
-            Assert.IsTrue(config.TryGetUpgradeWeapon(1, 1, UpgradeType.LevelUp, out var list1));
-            Assert.AreEqual(1, list1.Count);
-            Assert.AreEqual(10f, list1[0].damagePercent);
-
-            Assert.IsTrue(config.TryGetUpgradeWeapon(1, 2, UpgradeType.LevelUp, out var list2));
-            Assert.AreEqual(20f, list2[0].damagePercent);
-        }
-
-        [Test]
-        public void TryGetUpgradeWeapon_MissingKey_ReturnsFalse()
-        {
-            var config = new WeaponConfig();
-            config.OnMappingValue();
-            Assert.IsFalse(config.TryGetUpgradeWeapon(99, 1, UpgradeType.LevelUp, out _));
-        }
-
-        [Test]
         public void TryGetWeaponData_MissingId_ReturnsFalse()
         {
             var config = new WeaponConfig();

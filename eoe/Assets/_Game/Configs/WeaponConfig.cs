@@ -15,7 +15,7 @@ namespace _Game.Configs
         [SerializeField] private List<WeaponUpgradeData> upgrades = new List<WeaponUpgradeData>();
 
         private Dictionary<int, WeaponData> cachedWeapon;
-        private Dictionary<int, List<WeaponUpgradeData>> cachedUpgrade;
+        private Dictionary<int, WeaponUpgradeData> cachedUpgrade;
         
         public void OnMappingValue()
         {
@@ -26,15 +26,11 @@ namespace _Game.Configs
                 if (!cachedWeapon.TryAdd(data.id, data)) Debug.LogError($"Duplicate weapon '{data.id}'");
             }
 
-            cachedUpgrade = new Dictionary<int, List<WeaponUpgradeData>>();
+            cachedUpgrade = new Dictionary<int, WeaponUpgradeData>();
             foreach (var data in upgrades)
             {
                 int key = HashCode.Combine(data.id, data.level, data.type);
-                if (cachedUpgrade.TryGetValue(key, out var list))
-                {
-                    list.Add(data);
-                }
-                else cachedUpgrade.Add(key, new List<WeaponUpgradeData> { data });
+                cachedUpgrade.Add(key, data);
             }
         }
 
@@ -81,16 +77,23 @@ namespace _Game.Configs
             return cachedWeapon.TryGetValue(weaponId, out weaponData);
         }
 
-        public bool TryGetUpgradeWeapon(int weaponId, int level, UpgradeType type, out List<WeaponUpgradeData> list)
+        public bool TryGetUpgradePowerWeapon(int weaponId, UpgradeType type, out WeaponUpgradeData data)
         {
-            int key = HashCode.Combine(weaponId, level, type);
+            int key = HashCode.Combine(weaponId, 0, type);
+            return cachedUpgrade.TryGetValue(key, out data);
+        }
 
-            if (cachedUpgrade.TryGetValue(key, out list))
+        public List<WeaponUpgradeData> GetUpgradesLevelWeapon(int weaponId)
+        {
+            List<WeaponUpgradeData> list = new List<WeaponUpgradeData>();
+            for (int i = 0; i < 15; i++)
             {
-                return list.Count > 0;
+                int key = HashCode.Combine(weaponId, i, UpgradeType.LevelUp);
+                if (cachedUpgrade.TryGetValue(key, out var data))
+                    list.Add(data);
             }
 
-            return false;
+            return list;
         }
     }
     
