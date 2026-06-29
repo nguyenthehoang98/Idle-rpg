@@ -57,6 +57,7 @@ namespace _Game.Configs
                             exp = data.expScale * b.exp,
                             attack = data.attackScale * b.attack,
                             health = data.healthScale * b.health,
+                            deathVfx = b.deathVfx
                         });
                         found = true;
                         break;
@@ -89,6 +90,7 @@ namespace _Game.Configs
         public float stopDistance;
         public string deathAudioClip;
         public float deathVolume;
+        public string deathVfx;
         public float attack;
         public float health;
         public float exp;
@@ -104,6 +106,7 @@ namespace _Game.Configs
         public float radius;
         public string deathAudioClip;
         public float deathVolume;
+        public string deathVfx;
     }
     
     [Serializable] struct MonsterScaleData

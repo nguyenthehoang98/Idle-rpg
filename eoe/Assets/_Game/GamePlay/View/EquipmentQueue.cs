@@ -1,22 +1,18 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using _Game.Configs;
 using _Game.GamePlay.Utils;
 using _KITSystem.Resource;
-using _KITSystem.Schedule;
 using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
-using Unity.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace _Game.GamePlay.View
 {
     public class EquipmentQueue : MonoBehaviour
     {
         [SerializeField] private float slotPushDuration = 0.5f;
-        [SerializeField] private UIAnimation smokeAnimation;
+        [SerializeField] private ImageAnimation smokeAnimation;
         [SerializeField] private EquipmentSlot[] slots;
 
         public event Action OnQueueFull;

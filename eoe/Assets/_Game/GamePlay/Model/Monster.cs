@@ -17,6 +17,7 @@ namespace _Game.GamePlay.Model
         public static event Action<Monster> OnMonsterEnable;
         public static event Action<Monster> OnMonsterDisable;
 
+        private GameObject vfxPrefab;
         private AudioClip deathAudioClip;
         private float deathVolume;
         
@@ -42,6 +43,11 @@ namespace _Game.GamePlay.Model
             if (deathAudioClip == null)
             {
                 deathAudioClip = await AssetBundleManager.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
+            }
+
+            if (vfxPrefab == null)
+            {
+                vfxPrefab = await AssetBundleManager.GetAssetCached<GameObject>(monsterData.deathVfx);
             }
             
             deathVolume = monsterData.deathVolume;
@@ -77,6 +83,11 @@ namespace _Game.GamePlay.Model
             if (!isInitialized) return;
             
             SoundManager.Instance.PlayOneShot(deathAudioClip, deathVolume);
+
+            if (vfxPrefab != null)
+            {
+                Pool.Instantiate(vfxPrefab, transform.position, Quaternion.identity);
+            }
             
             OnMonsterDisable?.Invoke(this);
             

@@ -1,12 +1,11 @@
 using System;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace _Game.GamePlay.View
 {
-    public class UIAnimation : MonoBehaviour
+    public abstract class BaseAnimation<T> : MonoBehaviour
     {
-        [SerializeField] private Image image;
+        [SerializeField] protected T reference;
         [SerializeField] private Sprite[] sprites;
         [SerializeField] private bool loop;
         [SerializeField] private int frameRate = 24;
@@ -18,12 +17,10 @@ namespace _Game.GamePlay.View
         private float frameRateDeltaTime;
         private int currentFrame;
 
-        public bool IsPlaying => isPlaying;
-
         private void Awake()
         {
             frameRateDeltaTime = 1f / frameRate;
-            image.enabled = false;
+            Enable = false;
             isPlaying = false;
         }
 
@@ -32,7 +29,7 @@ namespace _Game.GamePlay.View
             isPlaying = true;
             currentFrame = 0;
             elapsedTime = 0f;
-            image.enabled = true;
+            Enable = true;
             SetFrame(currentFrame);
             return 0.25f;
         }
@@ -40,8 +37,7 @@ namespace _Game.GamePlay.View
         public void Stop()
         {
             isPlaying = false;
-            image.enabled = false;
-         
+            Enable = false;
             OnCompleted?.Invoke();
         }
 
@@ -79,7 +75,11 @@ namespace _Game.GamePlay.View
         private void SetFrame(int frame)
         {
             Sprite sprite = sprites[frame];
-            image.sprite = sprite;
+            OnUpdateFrame(sprite);
         }
+        
+        protected abstract void OnUpdateFrame(Sprite sprite);
+        
+        protected abstract bool Enable { set; }
     }
 }

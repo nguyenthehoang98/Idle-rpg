@@ -88,7 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dda70baa987496f813e63a87bdfada4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: KITSystem.Schedule::_KITSystem.Schedule.UIAnimation
-  image: {fileID: 6596035570656385545}
+  reference: {fileID: 6596035570656385545}
   sprites:
   - {fileID: 3195314740341109055, guid: 5b65a4b6a17c02846accb84af008b222, type: 3}
   - {fileID: -3823285434388661776, guid: 5b65a4b6a17c02846accb84af008b222, type: 3}

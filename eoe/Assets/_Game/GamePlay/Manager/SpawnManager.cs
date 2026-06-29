@@ -64,6 +64,14 @@ namespace _Game.GamePlay.Manager
                         continue;
                     }
 
+                    // CACHE VFX
+                    go = await AssetBundleManager.GetAssetCached<GameObject>(monsterData.deathVfx);
+                    
+                    if (names.Add(monsterData.prefabName))
+                    {
+                        Pool.RegisterPool(go, true);
+                    }
+
                     go = await AssetBundleManager.GetAssetCached<GameObject>(monsterData.prefabName);
 
                     cachedMonster.TryAdd(monsterId, go);

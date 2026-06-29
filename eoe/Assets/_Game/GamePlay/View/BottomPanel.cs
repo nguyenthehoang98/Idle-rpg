@@ -10,7 +10,7 @@ namespace _Game.GamePlay.View
         [SerializeField] private LitMotionAnimation closeAnimation;
         [SerializeField] private Sprite spHammerActive;
         [SerializeField] private Sprite spHammerInactive;
-        [SerializeField] private UIAnimation hammerAnimation;
+        [SerializeField] private ImageAnimation hammerAnimation;
         [SerializeField] private Button btnHammer;
         [SerializeField] private EquipmentQueue equipmentQueue;
 
