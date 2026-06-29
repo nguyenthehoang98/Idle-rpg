@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9137458123750331909}
   - component: {fileID: 4597191701707181589}
   - component: {fileID: 6974235257950605670}
-  - component: {fileID: 7800324188874494817}
+  - component: {fileID: 6045341589512146165}
   m_Layer: 0
   m_Name: fx.death
   m_TagString: Untagged
@@ -59,7 +59,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
+  m_DrawMode: 1
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
@@ -104,6 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab652e4c850d49d49d0220100f792723, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.View.SpriteRendererAnimation
+  playOnEnable: 1
   reference: {fileID: 4597191701707181589}
   sprites:
   - {fileID: 1259765240, guid: 84d566c9e5be1ec4493cec888893dab4, type: 3}
@@ -112,7 +113,22 @@ MonoBehaviour:
   - {fileID: 1923961698, guid: 84d566c9e5be1ec4493cec888893dab4, type: 3}
   loop: 0
   frameRate: 16
---- !u!114 &7800324188874494817
+  OnEventCompleted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6045341589512146165}
+        m_TargetAssemblyTypeName: _Game.GamePlay.Model.EventDestroyObject, Assembly-CSharp
+        m_MethodName: Destroy
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &6045341589512146165
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,7 +137,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 3520684215985857136}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87c75c8af4414bda8fa336fe4b425260, type: 3}
+  m_Script: {fileID: 11500000, guid: 86bdee9c35aa4d229e698da30204e35c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.View.AutoDestroyGameObject
-  lifeTime: 1
+  m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.Model.EventDestroyObject

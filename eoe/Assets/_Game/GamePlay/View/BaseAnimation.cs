@@ -1,15 +1,18 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace _Game.GamePlay.View
 {
     public abstract class BaseAnimation<T> : MonoBehaviour
     {
+        [SerializeField] private bool playOnEnable;
         [SerializeField] protected T reference;
         [SerializeField] private Sprite[] sprites;
         [SerializeField] private bool loop;
         [SerializeField] private int frameRate = 24;
         
+        public UnityEvent OnEventCompleted;
         public event Action OnCompleted;
 
         private bool isPlaying;
@@ -22,6 +25,11 @@ namespace _Game.GamePlay.View
             frameRateDeltaTime = 1f / frameRate;
             Enable = false;
             isPlaying = false;
+        }
+
+        private void OnEnable()
+        {
+            if (playOnEnable) Play();
         }
 
         public float Play()
@@ -39,6 +47,7 @@ namespace _Game.GamePlay.View
             isPlaying = false;
             Enable = false;
             OnCompleted?.Invoke();
+            OnEventCompleted?.Invoke();
         }
 
         private void Update()

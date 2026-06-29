@@ -213,11 +213,15 @@ namespace _Game.GamePlay.Manager
             );
             action.OnComplete += () =>
             {
-                if(action.Reason == ActionCompleteReason.Interrupt)
+                Action callback = () =>
                 {
-                    Pool.Instantiate(impact, true).transform.position = projectile.TargetPosition;
-                }
-                projectile.Destroy();
+                    if (action.Reason == ActionCompleteReason.Interrupt)
+                    {
+                        Pool.Instantiate(impact, true).transform.position = projectile.TargetPosition;
+                    }
+                };
+
+                projectile.Destroy(callback);
             };
 
             RequestAddAction(1, action);

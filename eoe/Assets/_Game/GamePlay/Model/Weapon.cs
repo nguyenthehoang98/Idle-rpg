@@ -48,7 +48,6 @@ namespace _Game.GamePlay.Model
 
         private IQuery query;
         private Coroutine coroutineUpdateColor;
-        private Coroutine coroutineAutoAttack;
         private MaterialPropertyBlock propertyBlock;
         private AudioClip attackAudioClip;
         private float attackVolume;
@@ -64,6 +63,7 @@ namespace _Game.GamePlay.Model
         private bool isAttacking;
         private bool isActivated;
 
+        private float savedAnimatorSpeed;
         private bool isPaused;
         public float TimeScale { get; set; } = 1f;
         public float DeltaTime { get; set; } = 0.034f; // = delta / timescale
@@ -140,20 +140,23 @@ namespace _Game.GamePlay.Model
                 attackAudioClip = await AssetBundleManager.GetAssetCached<AudioClip>(weaponData.attackAudioClip);
             }
 
-            coroutineAutoAttack = StartCoroutine(AutoAttack());
+            StartCoroutine(AutoAttack());
             RefreshUpgradeData(true);
         }
 
         public void SetPause(bool pause)
         {
-            this.isPaused = pause;
+            isPaused = pause;
             if (pause)
             {
                 isAttacking = false;
-                animator.Play(IdleAnimator, 0, 0);
-                StopCoroutine(coroutineAutoAttack);
+                savedAnimatorSpeed = animator.speed;
+                animator.speed = 0;
             }
-            else coroutineAutoAttack = StartCoroutine(AutoAttack());
+            else
+            {
+                animator.speed = savedAnimatorSpeed;
+            }
         }
 
         public void IncreaseUpgradeData(WeaponUpgradeData upgradeData)
@@ -348,8 +351,14 @@ namespace _Game.GamePlay.Model
 
         private IEnumerator AutoAttack()
         {
-            while (!isPaused)
+            while (true)
             {
+                if (isPaused)
+                {
+                    yield return null; 
+                    continue;
+                }
+                
                 float cooldown = attackCooldown * (1 - current.cooldownReduce);
 
                 yield return new WaitForSeconds(cooldown / TimeScale);

@@ -67,7 +67,7 @@ namespace _Game.GamePlay.Manager
                     // CACHE VFX
                     go = await AssetBundleManager.GetAssetCached<GameObject>(monsterData.deathVfx);
                     
-                    if (names.Add(monsterData.prefabName))
+                    if (names.Add(monsterData.deathVfx))
                     {
                         Pool.RegisterPool(go, true);
                     }
@@ -166,7 +166,7 @@ namespace _Game.GamePlay.Manager
             }
         }
 
-        private async void Spawn(SpawnData data)
+        private void Spawn(SpawnData data)
         {
             int portalIndex = data.portals[0];
             

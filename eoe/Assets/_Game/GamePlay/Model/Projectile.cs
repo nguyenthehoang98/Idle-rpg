@@ -10,7 +10,8 @@ namespace _Game.GamePlay.Model
         public Vector3 PreviousPosition { get; private set; }
 
         [SerializeField] private TrailRenderer trailRenderer;
-        
+
+        private Action onDestroyCallback;
         private float elapsedTime;
         private float deltaTime;
         private bool isRunning = false;
@@ -40,7 +41,7 @@ namespace _Game.GamePlay.Model
             
             Vector3 direction = position - PreviousPosition;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            transform.rotation =  Quaternion.Euler(0, 0, angle + 90f);
+            transform.rotation = Quaternion.Euler(0, 0, angle + 90f);
         }
 
         private void FixedUpdate()
@@ -55,15 +56,23 @@ namespace _Game.GamePlay.Model
 
             if (t >= 1.0f && shouldDestroy)
             {
+                if (onDestroyCallback != null)
+                {
+                    onDestroyCallback.Invoke();
+                    onDestroyCallback = null;
+                }
+                
                 Pool.Destroy(gameObject);
                 
                 isRunning = false;
             }
         }
 
-        public void Destroy()
+        public void Destroy(Action callback)
         {
             if (shouldDestroy) return;
+
+            onDestroyCallback = callback;
             
             shouldDestroy = true;
 
