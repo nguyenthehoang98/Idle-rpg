@@ -83,6 +83,7 @@ namespace _KITSystem.Resource
         private GameObject OnCreate()
         {
             GameObject go = Object.Instantiate(instance);
+            go.gameObject.SetActive(false);
             go.name = instance.name;
 #if UNITY_EDITOR
             allObjects.Add(go);
