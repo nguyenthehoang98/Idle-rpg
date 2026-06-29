@@ -65,6 +65,8 @@ namespace _Game.GamePlay.Manager
             playerConfig = ConfigManager.Get<PlayerConfig>();
             weaponConfig = ConfigManager.Get<WeaponConfig>();
             player = new PlayerRuntimeData();
+            
+            spawnManager.SetLevel(1);
 
             // load 
             await RegisterPool<GameObject>(Path.TEXT_DAMAGE_NORMAL);
@@ -73,9 +75,7 @@ namespace _Game.GamePlay.Manager
             await RegisterPool<AudioClip>(Path.SFX_LEVEL_UP);
             await RegisterPool<AudioClip>(Path.SFX_ENERGY);
             await RegisterPool<AudioClip>(Path.SFX_ENERGY_FULL);
-            await RegisterPool<AudioClip>(Path.SFX_POP);
-            
-            spawnManager.SetLevel(1);
+            await RegisterPool<AudioClip>(Path.SFX_HAMMER);
 
             await BuildHero(10);
 
@@ -86,10 +86,8 @@ namespace _Game.GamePlay.Manager
                 await Equip(equipments[i]);
             }
 
-            await equipmentQueue.Init(weaponConfig, equipments);
+            equipmentQueue.Init(weaponConfig, equipments);
 
-            await UniTask.WaitForSeconds(1);
-            
             owner.IsPaused = false;
             owner.Loop = 1;
             
@@ -125,39 +123,37 @@ namespace _Game.GamePlay.Manager
                 Debug.LogWarning($"Not found weapon with id '{weaponId}'");
                 return;
             }
+
+            await RegisterPool<Sprite>(weaponData.iconName);
             
-            if (!string.IsNullOrEmpty(weaponData.prefabName))
+            GameObject go = await AssetBundleManager.GetAsset<GameObject>(weaponData.prefabName);
+            go = Object.Instantiate(go, slots[currentWeaponSlot]);
+            go.transform.localPosition = Vector3.zero;
+
+            assetPath.Add(weaponData.prefabName);
+            
+            if (!weaponConfig.TryGetUpgradePowerWeapon(weaponId, UpgradeType.PowerX2, out var dataX2))
+                Debug.LogError($"Not found upgrade weapon x2 with '{weaponId}'");
+
+            if (!weaponConfig.TryGetUpgradePowerWeapon(weaponId, UpgradeType.PowerX3, out var dataX3))
+                Debug.LogError($"Not found upgrade weapon x3 with '{weaponId}'");
+            
+            Dictionary<int, List<WeaponUpgradeData>> dict = weaponConfig.GetUpgradesLevelWeapon(weaponId);
+            foreach (var pair in dict)
             {
-                if (!weaponConfig.TryGetUpgradePowerWeapon(weaponId, UpgradeType.PowerX2, out var dataX2))
-                    Debug.LogError($"Not found upgrade weapon x2 with '{weaponId}'");
-
-                if (!weaponConfig.TryGetUpgradePowerWeapon(weaponId, UpgradeType.PowerX3, out var dataX3))
-                    Debug.LogError($"Not found upgrade weapon x3 with '{weaponId}'");
-
-                Dictionary<int, List<WeaponUpgradeData>> dict = weaponConfig.GetUpgradesLevelWeapon(weaponId);
-
-                foreach (var pair in dict)
-                {
-                    foreach (var upgradeData in pair.Value) 
-                        await AssetBundleManager.GetAssetCached<Sprite>(upgradeData.iconName);
-                }
-
-                GameObject go = await AssetBundleManager.GetAsset<GameObject>(weaponData.prefabName);
-                go = Object.Instantiate(go, slots[currentWeaponSlot]);
-                go.transform.localPosition = Vector3.zero;
-
-                float flip = currentWeaponSlot % 2 == 0 ? 1 : -1;
-                
-                currentWeaponSlot++;
-
-                Weapon weapon = go.GetComponent<Weapon>();
-                if(weapon == null) Debug.LogError($"Gameobject '{go}' not attach Weapon component");
-                
-                await weapon.Initialize(weaponData, dict, dataX2, dataX3, flip);
-
-                weaponContainer[weaponId] = weapon;
+                foreach (var upgradeData in pair.Value) await RegisterPool<Sprite>(upgradeData.iconName);
             }
-            else Debug.LogError($"Not found weapon_prefab '{weaponData.prefabName}'");
+            
+            float flip = currentWeaponSlot % 2 == 0 ? 1 : -1;
+            
+            currentWeaponSlot++;
+
+            Weapon weapon = go.GetComponent<Weapon>();
+            if(weapon == null) Debug.LogError($"Gameobject '{go}' not attach Weapon component");
+                
+            await weapon.Initialize(weaponData, dict, dataX2, dataX3, flip);
+
+            weaponContainer[weaponId] = weapon;
         }
 
         private async UniTask BuildHero(int heroId)

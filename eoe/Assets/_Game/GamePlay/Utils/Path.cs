@@ -9,6 +9,6 @@ namespace _Game.GamePlay.Utils
         public const string SFX_POWER_SELECT = "power_select.ogg";
         public const string SFX_ENERGY = "energy.ogg";
         public const string SFX_ENERGY_FULL = "entergy_full.ogg";
-        public const string SFX_POP = "pop.ogg";
+        public const string SFX_HAMMER = "hammer.ogg";
     }
 }

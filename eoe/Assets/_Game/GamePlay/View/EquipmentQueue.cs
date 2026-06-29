@@ -24,7 +24,7 @@ namespace _Game.GamePlay.View
         private Dictionary<int, WeaponData> container = new Dictionary<int, WeaponData>();
         private readonly List<int> equipments = new List<int>(); // dánh sah eqm mặc dịnh
 
-        public async UniTask Init(WeaponConfig config, int[] allEquipments)
+        public void Init(WeaponConfig config, int[] allEquipments)
         {
             foreach (var sl in slots) sl.ResetIcon();
             
@@ -32,12 +32,15 @@ namespace _Game.GamePlay.View
             {
                 if (config.TryGetWeaponData(weaponId, out var data))
                 {
-                    await AssetBundleManager.GetAssetCached<Sprite>(data.iconName);
-
                     container.Add(weaponId, data);
                     equipments.Add(weaponId);
                 }
+                else Debug.LogError($"Not found equipment '{weaponId}'");
             }
+
+#if UNITY_EDITOR
+            Debug.Log($"[EquipmentQueue] Init all'{allEquipments.Length}', equipment'{equipments.Count}'");
+#endif
             
             array = new int[equipments.Count];
 

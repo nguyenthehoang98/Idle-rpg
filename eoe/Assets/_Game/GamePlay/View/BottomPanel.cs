@@ -44,16 +44,13 @@ namespace _Game.GamePlay.View
             SetHammerInactive();
         }
 
-        private void ClickHammer()
+        private async void ClickHammer()
         {
             btnHammer.interactable = false;
             float f = hammerAnimation.Play();
             equipmentQueue.Decrease(f);
             RefreshUI();
-            this.WaitInvoke(f, async () =>
-            {
-                SoundManager.Instance.PlayOneShot(await AssetBundleManager.GetAssetCached<AudioClip>(Path.SFX_POP));
-            });
+            SoundManager.Instance.PlayOneShot(await AssetBundleManager.GetAssetCached<AudioClip>(Path.SFX_HAMMER));
         }
 
         private void HammerComplete()

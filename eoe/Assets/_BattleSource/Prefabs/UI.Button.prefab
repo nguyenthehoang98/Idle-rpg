@@ -227,4 +227,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c6d38484be74da48dfbfa7c3353bbe7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.Model.EventSfx
-  sfx: {fileID: 8300000, guid: 5e10432c346e8e74f92736df0e2271e1, type: 3}
+  sfx: {fileID: 8300000, guid: 6583ae85fba72a04197882734ad263bc, type: 3}

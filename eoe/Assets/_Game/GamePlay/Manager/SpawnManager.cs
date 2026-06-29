@@ -38,7 +38,8 @@ namespace _Game.GamePlay.Manager
             
             LevelConfig levelConfig = ConfigManager.Get<LevelConfig>();
             
-            levelConfig.TryGetLevelData(level, out levelData);
+            bool found = levelConfig.TryGetLevelData(level, out levelData);
+            if (!found) Debug.LogError($"Level {level} not found");
         }
 
         public async Task Initialize()
