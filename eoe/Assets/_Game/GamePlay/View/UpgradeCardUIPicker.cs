@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _Game.Configs;
+using Cysharp.Threading.Tasks;
 using LitMotion.Animation;
 using UnityEngine;
 
@@ -25,11 +26,11 @@ namespace _Game.GamePlay.View
             }
         }
 
-        public void Show(List<WeaponUpgradeData> list)
+        public async UniTask Show(List<CardItemData> list)
         {
             for (int i = 0; i < cardItems.Length; i++)
             {
-                cardItems[i].Init(list[i]);
+                await cardItems[i].Init(list[i]);
             }
             
             openAnimation.Play();

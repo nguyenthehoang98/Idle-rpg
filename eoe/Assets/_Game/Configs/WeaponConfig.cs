@@ -128,6 +128,7 @@ namespace _Game.Configs
         public int id;
         public int group;
         public int level;
+        public string iconName;
         public UpgradeType type;
         public float attackSpeed;
         public float projectileSize;
@@ -144,6 +145,11 @@ namespace _Game.Configs
         public int bounceCount;
         public float bounceDamagePercent;
         public float killInstantBelowHealthPercent;
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(id, level, group);
+        }
 
         public void Increase(WeaponUpgradeData data)
         {

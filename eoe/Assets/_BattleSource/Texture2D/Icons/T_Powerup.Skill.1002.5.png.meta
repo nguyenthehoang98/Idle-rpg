@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f449c9a1bd563684eb531ad72e8c4c12
+guid: ab8711b48e4d75147a20c016c30904f6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1811625211291234299
-    second: T_PowerupTreeArrows_0
+      213: -849346380084905308
+    second: T_Powerup.Skill.1002.5_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -113,87 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: T_PowerupTreeArrows_0
+      name: T_Powerup.Skill.1002.5_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 0
-        width: 16
-        height: 14
+        x: 8
+        y: 4
+        width: 17
+        height: 23
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline:
-      - - {x: 3, y: -5}
-        - {x: 3, y: -2}
-        - {x: 1, y: 1}
-        - {x: 8, y: 1}
-        - {x: 8, y: 8}
-        - {x: -3, y: 8}
-        - {x: -8, y: 5}
-        - {x: -8, y: -8}
-        - {x: 0, y: -8}
-      physicsShape: []
-      tessellationDetail: 0.725
-      bones: []
-      spriteID: 50018def770dbd6e0800000000000000
-      internalID: -1811625211291234299
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: T_PowerupTreeArrows_1
-      rect:
-        serializedVersion: 2
-        x: 18
-        y: 0
-        width: 16
-        height: 14
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline:
-      - - {x: 8, y: -7}
-        - {x: 8, y: 2}
-        - {x: 2, y: 5}
-        - {x: -3, y: 0}
-        - {x: -3, y: 6}
-        - {x: -5, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: -5}
-        - {x: -6, y: -7}
-        - {x: -2, y: -8}
-        - {x: 7, y: -8}
-      physicsShape: []
-      tessellationDetail: 0.725
-      bones: []
-      spriteID: 3c7a8745d1e89914091a35a5f7a00f06
-      internalID: 1713556037
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: T_PowerupTreeArrows_2
-      rect:
-        serializedVersion: 2
-        x: 35
-        y: 3
-        width: 12
-        height: 9
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 4ea8431b2f90b8f468096048f85ba0b0
-      internalID: -1155853070
+      spriteID: 4aa76c3a7f38634f0800000000000000
+      internalID: -849346380084905308
       vertices: []
       indices: 
       edges: []
@@ -202,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: bac090ea5b173dc4fbad230f91e11ed5
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -210,13 +146,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries:
-      - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":2.0,"y":1.0},"gridSpriteSize":{"x":16.0,"y":16.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+      entries: []
     nameFileIdTable:
-      T_PowerupTreeArrows_0: -1811625211291234299
-      T_PowerupTreeArrows_1: 1713556037
-      T_PowerupTreeArrows_2: -1155853070
+      T_Powerup.Skill.1002.5_0: -849346380084905308
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

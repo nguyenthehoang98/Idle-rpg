@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using _Game.Configs;
 
@@ -41,6 +42,15 @@ namespace _Game.Utils
             if (data.bounceDamagePercent > 0) sb.AppendLine(string.Format(BOUNCE_DAMAGE_PERCENT_UPGRADE, data.bounceDamagePercent * 100));
             if (data.killInstantBelowHealthPercent > 0) sb.AppendLine(string.Format(KILL_INSTANT_BELOW_HEALTH_UPGRADE, data.killInstantBelowHealthPercent * 100));
             return sb;
+        }
+
+        public static string GetPowerLevel(int currentGroup)
+        {
+            if (currentGroup == 1) return "(I)";
+            if (currentGroup == 2) return "(II)";
+            if (currentGroup == 3) return "(III)";
+            if (currentGroup == 4) return "(IV)";
+            return String.Empty;
         }
     }
 }

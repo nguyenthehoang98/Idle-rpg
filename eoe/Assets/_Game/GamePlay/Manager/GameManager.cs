@@ -130,6 +130,12 @@ namespace _Game.GamePlay.Manager
 
                 Dictionary<int, List<WeaponUpgradeData>> dict = weaponConfig.GetUpgradesLevelWeapon(weaponId);
 
+                foreach (var pair in dict)
+                {
+                    foreach (var upgradeData in pair.Value) 
+                        await AssetBundleManager.GetAssetCached<Sprite>(upgradeData.iconName);
+                }
+
                 GameObject go = await AssetBundleManager.GetAsset<GameObject>(weaponData.prefabName);
                 go = Object.Instantiate(go, slots[currentWeaponSlot]);
                 go.transform.localPosition = Vector3.zero;
@@ -269,29 +275,36 @@ namespace _Game.GamePlay.Manager
                 player.CurrentLevel += 1;
                 player.CurrentExp -= data.exp;
 
-                List<WeaponUpgradeData> temp = new List<WeaponUpgradeData>();
-                foreach (var pair in weaponContainer)
-                {
-                    if (pair.Value.TryGetUpgradeLevelData(out var list)) temp.AddRange(list);
-                }
+                PickCardItemData();
                 
-                List<WeaponUpgradeData> collects = new List<WeaponUpgradeData>();
-                if (temp.Count < 3)
-                {
-                    int count = temp.Count;
-                    collects.AddRange(temp);
-                    for (int i = count; i <= 3; i++) collects.Add(temp[i % count]);
-                }
-                else
-                {
-                    CollectionUtils.Shuffle(ref temp);
-                    for (int i = 0; i < 3; i++) collects.Add(temp[i]);
-                }
-
-                cardUIPicker.Show(collects);
-                bottomPanel.Hide();
                 owner.IsPaused = true;
             }
+        }
+
+        private async void PickCardItemData()
+        {
+            List<CardItemData> temp = new List<CardItemData>();
+            foreach (var pair in weaponContainer)
+            {
+                temp.AddRange(pair.Value.GetUpgradeDataAvailable());
+            }
+                
+            List<CardItemData> collects = new List<CardItemData>();
+            if (temp.Count < 3)
+            {
+                int count = temp.Count;
+                collects.AddRange(temp);
+                for (int i = count; i <= 3; i++) collects.Add(temp[i % count]);
+            }
+            else
+            {
+                CollectionUtils.Shuffle(ref temp);
+                for (int i = 0; i < 3; i++) collects.Add(temp[i]);
+            }
+
+            await cardUIPicker.Show(collects);
+                
+            bottomPanel.Hide();
         }
 
         private void PostDamage(PostDamageParams @params)

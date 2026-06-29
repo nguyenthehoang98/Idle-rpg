@@ -34,8 +34,6 @@ namespace _Game.Entry
             
             await ConfigManager.Load(new string[] { "MonsterConfig", "LevelConfig", "WeaponConfig", "PlayerConfig" });
 
-            ColorSetting.Load();
-
             ChangeSceneAsync("GameplayScene");
             
             isLoadingScene = true;

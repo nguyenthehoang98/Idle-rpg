@@ -51,27 +51,6 @@ namespace _Game.Configs
         }
         
         [Test]
-        public void OnMapValue_BuildsCache()
-        {
-            var setting = ScriptableObject.CreateInstance<ColorSetting>();
-            var datas = new[]
-            {
-                new ColorData { id = 1, activeColor = Color.red, inactiveColor = Color.gray },
-                new ColorData { id = 2, activeColor = Color.blue, inactiveColor = Color.white },
-            };
-            ConfigTestHelper.SetField(setting, "datas", datas);
-
-            var mapField = setting.GetType().GetMethod("OnMapValue",
-                BindingFlags.Instance | BindingFlags.NonPublic);
-            mapField.Invoke(setting, null);
-
-            Assert.IsTrue(setting.TryGetColor(1, out var c1));
-            Assert.AreEqual(Color.red, c1.activeColor);
-            Assert.IsTrue(setting.TryGetColor(2, out var c2));
-            Assert.AreEqual(Color.blue, c2.activeColor);
-        }
-        
-        [Test]
         public void OnMappingValue_BuildsLevelCache()
         {
             var config = new LevelConfig();

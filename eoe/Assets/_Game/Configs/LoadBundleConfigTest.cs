@@ -36,16 +36,6 @@ namespace _Game.Configs
             yield return LoadBundle<PlayerConfig>();
         }
 
-        [Test]
-        public void LoadAddressable_ColorSetting()
-        {
-            ColorSetting setting = Resources.Load<ColorSetting>("ColorSetting");
-
-            Assert.NotNull(setting);
-
-            Resources.UnloadAsset(setting);
-        }
-
         private IEnumerator LoadBundle<T>(Action<T> callback = null) where T : IGameConfig
         {
             string name = typeof(T).Name;

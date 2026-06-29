@@ -25,13 +25,33 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 16060bc016f979d45892b8b8dfae864a
+    m_Address: T_Powerup.Skill.1002.3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 21e656f72c926ee45bc6df67ca059bbe
     m_Address: BrainMonster-9.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2915d59e1c9ef6447b8b27b0defe1c7b
+    m_Address: T_Powerup.Skill.1002.2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2bacccd9ef9a3284495cb63d35d408c7
+    m_Address: T_Powerup.Skill.1002.1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2dd9e666ffaca10439384efd3e21d290
     m_Address: shotgun_green.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 348f3f75697aebe4c8b8108c2e1f3262
+    m_Address: T_Powerup.Skill.1001.4
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -50,6 +70,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4b00cb7a40147f34f8c41c24b19f96d7
+    m_Address: T_Powerup.Skill.1001.5
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 503d1299770633e47a201fc377a8a970
     m_Address: BrainMonster-10.png
     m_ReadOnly: 0
@@ -57,6 +82,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 504f78bf0d5db45429c8c08409dcb9d5
     m_Address: BrainMonster-3.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 567ac04a2fbf48f4cb76b90f8ad60558
+    m_Address: T_Powerup.Skill.1001.6
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -75,13 +105,38 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 70626c24713cba34e9cb4230fbfd2270
+    m_Address: T_Powerup.Skill.1002.4
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 73762136d49bf3541bfd3470211f6cf4
     m_Address: MonsterConfig
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7865e4f6b379479499429aa13c7ac812
+    m_Address: T_Powerup.Skill.1002.9
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 828387ba02e13fa4da54517e5bfe4659
+    m_Address: T_Powerup.Skill.1001.7
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 82cf2971d0233bc408a01a169398e8d5
+    m_Address: T_Powerup.Skill.1001.2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 86b64b43844b7f14e9e458c1177e89c8
     m_Address: BrainMonster-6.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8bf8702efce94324483f60536c56ebcd
+    m_Address: T_Powerup.Skill.1001.9
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -95,6 +150,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9b4dccefa4453f04e89cbbc56fb02dce
+    m_Address: T_Powerup.Skill.1002.7
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9f0e94d71243e974685f5bcea515820b
     m_Address: shotgun_green.weapon
     m_ReadOnly: 0
@@ -102,6 +162,16 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a03f9cc7a4b8e1541938e12b1245283c
     m_Address: TextDamageNormal
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aae5f0eb474b679429faa2c2f01b4320
+    m_Address: T_Powerup.Skill.1001.10
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ab8711b48e4d75147a20c016c30904f6
+    m_Address: T_Powerup.Skill.1002.5
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -130,6 +200,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c72859f779940e44ea76cde5e52c29f8
+    m_Address: T_Powerup.Skill.1002.10
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c891f9ddf66145b47a575fa28a8ec208
     m_Address: BrainMonster-1.png
     m_ReadOnly: 0
@@ -137,6 +212,21 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: da47545e2a842514ba076f556fbe83ba
     m_Address: LevelConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: daaf644f5837cd841b39d8bab8b778ee
+    m_Address: T_Powerup.Skill.1001.1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dcd2119041cb5b84c8eb690c9ce25857
+    m_Address: T_Powerup.Skill.1001.3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e2610a4b8e71c7e449756965d4f888ed
+    m_Address: T_Powerup.Skill.1002.8
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -162,6 +252,16 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f1f8e97a3411c6d4cb992f88d760301c
     m_Address: SkillConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f3ce7b747fcf1234fb48e0fcf154b1c2
+    m_Address: T_Powerup.Skill.1002.6
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f970645e1dd1d714089b9ce7b7c8f8d8
+    m_Address: T_Powerup.Skill.1001.8
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

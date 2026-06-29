@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using _Game.Configs;
@@ -5,6 +6,7 @@ using _Game.GamePlay.Data;
 using _Game.GamePlay.Entity;
 using _Game.GamePlay.Manager;
 using _Game.GamePlay.Utils;
+using _Game.GamePlay.View;
 using _KITSystem.Entity;
 using _KITSystem.Resource;
 using _KITSystem.SkillSystem.Core;
@@ -33,13 +35,15 @@ namespace _Game.GamePlay.Model
         private HashSet<string> names = new HashSet<string>();
 
         private int entityTarget;
-        private int currentGroupUpgradeData;
-        private int currentLevelUpgradeData = 1;
+        private int currentGroup; // {0:1-2-3-4} {1:4-5-6-7} {2:7-8-9-10}
+        private int[] currentLevel = new int[2]; // line 0 & line 1. tương ứng với idx của group
         private SkillData skillData;
         private WeaponUpgradeData current;
         private WeaponUpgradeData levelUp;
         private WeaponUpgradeData powerX2;
         private WeaponUpgradeData powerX3;
+        private WeaponUpgradeData[] groups;
+        private bool[] isUpgraded;
         private Dictionary<int, List<WeaponUpgradeData>> upgradesData;
 
         private IQuery query;
@@ -109,6 +113,9 @@ namespace _Game.GamePlay.Model
             attackSpeed = weaponData.attackSpeed;
             attackVolume = weaponData.attackVolume;
             query = new EntityQuery();
+            currentLevel = new int[2] { 1, 1 };
+
+            UpdateUpgradeDataGroup();
             
             GameObject go = null;
             
@@ -151,11 +158,29 @@ namespace _Game.GamePlay.Model
 
         public void IncreaseUpgradeData(WeaponUpgradeData upgradeData)
         {
-            currentLevelUpgradeData++;
-            currentGroupUpgradeData = upgradeData.group;
+            int lv = upgradeData.level;
+
+            if (lv == 1 || lv == 4 || lv == 7 || lv == 10)
+            {
+                for (int i = 0; i < currentLevel.Length; i++)
+                    currentLevel[i] = lv + 1;
+            }
+            else
+            {
+                int gr = upgradeData.group;
+                currentLevel[gr - 1] = lv + 1;
+            }
+            
+            if (lv == 4 || lv == 7 || lv == 10)
+            {
+                currentGroup++;
+                UpdateUpgradeDataGroup();
+            }
+
+            int idx = Array.IndexOf(groups, upgradeData);
+            isUpgraded[idx] = true;
             
             levelUp.Increase(upgradeData);
-            
             RefreshUpgradeData(false);
         }
         
@@ -191,37 +216,90 @@ namespace _Game.GamePlay.Model
             isAttacking = false;
         }
 
-        public bool TryGetUpgradeLevelData(out List<WeaponUpgradeData> list)
+        private void UpdateUpgradeDataGroup()
         {
-            if (upgradesData.TryGetValue(currentLevelUpgradeData, out List<WeaponUpgradeData> temp))
+            int[] idx = new int[4];
+            if (currentGroup == 0) idx = new int[4] { 1, 2, 3, 4 };
+            else if (currentGroup == 1) idx = new int[4] { 4, 5, 6, 7 };
+            else if (currentGroup == 2) idx = new int[4] { 7, 8, 9, 10 };
+            else
             {
-                if (temp.Count == 1)
-                {
-                    list = temp;
-                    return true;
-                }
-                else
-                {
-                    bool found = false;
-                    list = new List<WeaponUpgradeData>();
-                    foreach (var item in temp)
-                    {
-                        if (item.group == currentGroupUpgradeData)
-                        {
-                            list.Add(item);
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (!found) list = temp;
-
-                    return true;
-                }
+                isUpgraded = new bool[0];
+                groups = new WeaponUpgradeData[0];
+                return;
             }
 
-            list = new List<WeaponUpgradeData>();
-            return false;
+            isUpgraded = new bool[6];
+            groups = new WeaponUpgradeData[6];
+            groups[0] = upgradesData[idx[0]][0];
+            groups[1] = upgradesData[idx[1]][0];
+            groups[2] = upgradesData[idx[1]][1];
+            groups[3] = upgradesData[idx[2]][0];
+            groups[4] = upgradesData[idx[2]][1];
+            groups[5] = upgradesData[idx[3]][0];
+        }
+
+        public List<CardItemData> GetUpgradeDataAvailable()
+        {
+            List<CardItemData> list = new List<CardItemData>();
+            if (groups.Length == 0) return list;
+            
+            List<WeaponUpgradeData> listUpgradeData;
+            if (currentLevel[0] == currentLevel[1])
+            {
+                int idx = currentLevel[0];
+                if (upgradesData.TryGetValue(idx, out listUpgradeData))
+                {
+                    for (int i = 0; i < listUpgradeData.Count; i++)
+                    {
+                        list.Add(new CardItemData
+                        {
+                            Satellites = groups,
+                            Current = listUpgradeData[i],
+                            IsUpgraded = isUpgraded,
+                            currentGroup = currentGroup
+                        });
+                    }
+                }
+            }
+            else
+            {
+                if (upgradesData.TryGetValue(currentLevel[0], out listUpgradeData))
+                {
+                    list.Add(new CardItemData
+                    {
+                        Satellites = groups,
+                        Current = listUpgradeData[0],
+                        IsUpgraded = isUpgraded,
+                        currentGroup = currentGroup
+                    });
+                }
+                if (upgradesData.TryGetValue(currentLevel[1], out listUpgradeData))
+                {
+                    if (listUpgradeData.Count > 1)
+                    {
+                        list.Add(new CardItemData
+                        {
+                            Satellites = groups,
+                            Current = listUpgradeData[1],
+                            IsUpgraded = isUpgraded,
+                            currentGroup = currentGroup
+                        });
+                    }
+                    else
+                    {
+                        list.Add(new CardItemData
+                        {
+                            Satellites = groups,
+                            Current = listUpgradeData[0],
+                            IsUpgraded = isUpgraded,
+                            currentGroup = currentGroup
+                        });
+                    }
+                }
+            }
+            
+            return list;
         }
 
         private void RefreshUpgradeData(bool updateOutline)
