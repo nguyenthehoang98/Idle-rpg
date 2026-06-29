@@ -240,13 +240,15 @@ namespace _Game.GamePlay.Manager
             }
         }
 
-        private void PickCard(WeaponUpgradeData @params)
+        private async void PickCard(WeaponUpgradeData @params)
         {
             if (weaponContainer.TryGetValue(@params.id, out Weapon weapon))
             {
                 weapon.IncreaseUpgradeData(@params);
                 cardUIPicker.Hide();
                 bottomPanel.Show();
+
+                await UniTask.WaitForSeconds(0.2f);
                 owner.IsPaused = false;
             }
         }

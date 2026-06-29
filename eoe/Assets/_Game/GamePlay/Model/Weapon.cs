@@ -48,6 +48,7 @@ namespace _Game.GamePlay.Model
 
         private IQuery query;
         private Coroutine coroutineUpdateColor;
+        private Coroutine coroutineAutoAttack;
         private MaterialPropertyBlock propertyBlock;
         private AudioClip attackAudioClip;
         private float attackVolume;
@@ -63,7 +64,6 @@ namespace _Game.GamePlay.Model
         private bool isAttacking;
         private bool isActivated;
 
-        private float savedAnimatorSpeed;
         private bool isPaused;
         public float TimeScale { get; set; } = 1f;
         public float DeltaTime { get; set; } = 0.034f; // = delta / timescale
@@ -140,7 +140,7 @@ namespace _Game.GamePlay.Model
                 attackAudioClip = await AssetBundleManager.GetAssetCached<AudioClip>(weaponData.attackAudioClip);
             }
 
-            StartCoroutine(AutoAttack());
+            coroutineAutoAttack = StartCoroutine(AutoAttack());
             RefreshUpgradeData(true);
         }
 
@@ -149,13 +149,12 @@ namespace _Game.GamePlay.Model
             isPaused = pause;
             if (pause)
             {
+                StopCoroutine(coroutineAutoAttack);
                 isAttacking = false;
-                savedAnimatorSpeed = animator.speed;
-                animator.speed = 0;
             }
             else
             {
-                animator.speed = savedAnimatorSpeed;
+                coroutineAutoAttack = StartCoroutine(AutoAttack());
             }
         }
 
@@ -190,7 +189,7 @@ namespace _Game.GamePlay.Model
         public void ExecuteAnimation()
         {
             if (!isActivated || !isAttacking) return;
-
+         
             SoundManager.Instance.PlayOneShot(attackAudioClip, attackVolume);
 
             Vector3 muzzlePosition = MuzzlePosition();
@@ -351,14 +350,8 @@ namespace _Game.GamePlay.Model
 
         private IEnumerator AutoAttack()
         {
-            while (true)
+            while (!isPaused)
             {
-                if (isPaused)
-                {
-                    yield return null; 
-                    continue;
-                }
-                
                 float cooldown = attackCooldown * (1 - current.cooldownReduce);
 
                 yield return new WaitForSeconds(cooldown / TimeScale);
@@ -449,8 +442,9 @@ namespace _Game.GamePlay.Model
                     yield return new WaitForSeconds(DeltaTime);
                 }
 
-                if (!isActivated) yield break;
-
+                if (!isActivated || isPaused) 
+                    continue;
+                
                 OnAttack();
 
                 rotatePivot.eulerAngles = new Vector3(0, 0, angleTo);
