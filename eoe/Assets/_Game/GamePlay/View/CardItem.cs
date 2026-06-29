@@ -9,7 +9,8 @@ namespace _Game.GamePlay.View
 {
     public class CardItem : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI txt;
+        [SerializeField] private TextMeshProUGUI txtName;
+        [SerializeField] private TextMeshProUGUI txtDesc;
         [SerializeField] private Button button;
 
         public event Action<WeaponUpgradeData> OnSelected; 
@@ -27,8 +28,8 @@ namespace _Game.GamePlay.View
         public void Init(WeaponUpgradeData upgradeData)
         {
             this.upgradeData = upgradeData;
-            txt.text = $"Weapon {upgradeData.id}\n" +
-                       LocalizeManager.GetUpgradeWeaponLocalize(upgradeData);
+            txtName.text = $"Weapon {upgradeData.id}";
+            txtDesc.text = LocalizeManager.GetUpgradeWeaponLocalize(upgradeData).ToString();
         }
     }
 }

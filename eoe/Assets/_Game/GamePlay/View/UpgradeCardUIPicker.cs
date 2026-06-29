@@ -32,13 +32,11 @@ namespace _Game.GamePlay.View
                 cardItems[i].Init(list[i]);
             }
             
-            closeAnimation.Stop();
             openAnimation.Play();
         }
 
         public void Hide()
         {
-            openAnimation.Stop();
             closeAnimation.Play();
         }
     }

@@ -79,7 +79,7 @@ namespace LitMotion.Animation
 
         public void Play()
         {
-            var isPlaying = false;
+            /*var isPlaying = false;
 
             foreach (var component in playingComponents.AsSpan())
             {
@@ -93,7 +93,7 @@ namespace LitMotion.Animation
                 }
             }
 
-            if (isPlaying) return;
+            if (isPlaying) return;*/
 
             playingComponents.Clear();
 
@@ -180,7 +180,10 @@ namespace LitMotion.Animation
                 foreach (var component in playingComponents.AsSpan())
                 {
                     var handle = component.TrackedHandle;
-                    if (handle.IsActive()) return true;
+                    if (handle.IsActive())
+                    {
+                        return true;
+                    }
                 }
 
                 return false;

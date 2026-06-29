@@ -79,12 +79,10 @@ namespace _Game.GamePlay.View
 
         public void Show()
         {
-            closeAnimation.Stop();
             openAnimation.Play();
         }
         public void Hide()
         {
-            openAnimation.Stop();
             closeAnimation.Play();
         }
     }
