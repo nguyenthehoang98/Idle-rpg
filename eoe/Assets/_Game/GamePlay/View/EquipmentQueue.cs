@@ -133,6 +133,7 @@ namespace _Game.GamePlay.View
             for (int i = 0; i < list.Count; i++)
             {
                 TryGetWeaponData(i, out WeaponData weaponData);
+                
                 slots[i].SetIcon(await AssetBundleManager.GetAssetCached<Sprite>(weaponData.iconName));
             }
             

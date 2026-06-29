@@ -353,8 +353,8 @@ namespace _Game.GamePlay.Manager
         private async void SpawnTextDamage(int damage, bool critical, Vector3 position)
         {
             GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(critical
-                    ? Const.TEXT_DAMAGE_CRITICAL
-                    : Const.TEXT_DAMAGE_NORMAL);
+                    ? Path.TEXT_DAMAGE_CRITICAL
+                    : Path.TEXT_DAMAGE_NORMAL);
 
             TextDamage ins = Pool.Instantiate(go).GetComponent<TextDamage>();
             ins.transform.position = position;

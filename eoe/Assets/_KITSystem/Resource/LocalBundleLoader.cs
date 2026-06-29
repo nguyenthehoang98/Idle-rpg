@@ -35,7 +35,7 @@ namespace _KITSystem.Resource
                 Addressables.Release(entry.Handle);
 
 #if UNITY_EDITOR
-                Debug.Log($"[KitLoaded] Uncached asset: {assetName}");
+                Debug.Log($"[Loaded] Uncached asset: {assetName}");
 #endif
             }
         }
@@ -65,9 +65,9 @@ namespace _KITSystem.Resource
                 if (asset == null)
                 {
 #if UNITY_EDITOR
-                    Debug.LogError($"[KitLoaded] Asset at path '{assetName}' is null. \n\n{stackTrace}");
+                    Debug.LogError($"[Loaded] Asset at path '{assetName}' is null. \n\n{stackTrace}");
 #else
-                    Debug.LogError($"[KitLoaded] Asset at path '{assetName}' is null.");
+                    Debug.LogError($"[Loaded] Asset at path '{assetName}' is null.");
 #endif
 
                     return null;
@@ -81,7 +81,7 @@ namespace _KITSystem.Resource
                 {
                     Dictionary[assetName] = new CacheEntry(handle, asset);
 #if UNITY_EDITOR
-                    Debug.Log($"[KitLoaded] Cached asset: {assetName}, duration '{sw.ElapsedMilliseconds}'ms\n\n{stackTrace}");
+                    Debug.Log($"[Loaded] Cached asset: {assetName}, duration '{sw.ElapsedMilliseconds}'ms\n\n{stackTrace}");
 #endif
                 }
                 else
@@ -96,10 +96,10 @@ namespace _KITSystem.Resource
             {
 #if UNITY_EDITOR
                 sw.Stop();
-                Debug.LogError($"[KitLoaded] Failed to load asset '{typeof(T)}' at path '{assetName}'\n\n{stackTrace}");
+                Debug.LogError($"[Loaded] Failed to load asset '{typeof(T)}' at path '{assetName}'\n\n{stackTrace}");
                 Debug.LogError(e);
 #else
-                Debug.LogError($"[KitLoaded] Failed to load asset '{typeof(T)}' at path '{assetName}'");
+                Debug.LogError($"[Loaded] Failed to load asset '{typeof(T)}' at path '{assetName}'");
                 Debug.LogError(e);
 #endif
                 return null;

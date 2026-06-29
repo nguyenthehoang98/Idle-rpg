@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1186359209710181114}
   - component: {fileID: 896879978359316200}
   - component: {fileID: 6174012678705568397}
+  - component: {fileID: 3746134183584375135}
   m_Layer: 5
   m_Name: UI.Button
   m_TagString: Untagged
@@ -133,6 +134,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 3746134183584375135}
+        m_TargetAssemblyTypeName: _Game.GamePlay.Model.EventSfx, Assembly-CSharp
+        m_MethodName: Trigger
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &6174012678705568397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,3 +215,16 @@ MonoBehaviour:
           schedulerType: 0
           additionalSettings: 1
         relative: 0
+--- !u!114 &3746134183584375135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8843277435717151334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c6d38484be74da48dfbfa7c3353bbe7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.Model.EventSfx
+  sfx: {fileID: 8300000, guid: 5e10432c346e8e74f92736df0e2271e1, type: 3}

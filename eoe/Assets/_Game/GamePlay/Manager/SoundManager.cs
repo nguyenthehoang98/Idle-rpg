@@ -40,6 +40,10 @@ namespace _Game.GamePlay.Manager
                     return;
             }
 
+#if UNITY_EDITOR
+            Debug.Log($"[Sound] PlayOneShot {clip.name}");
+#endif
+            
             audioSource.PlayOneShot(clip, Mathf.Clamp01(volume));
 
             lastPlayTimes[clip] = Time.time;

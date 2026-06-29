@@ -5,7 +5,7 @@ namespace _Game.GamePlay.Model
 {
     public class EventDestroyObject : MonoBehaviour
     {
-        public void Destroy()
+        public void Trigger()
         {
             Pool.Destroy(gameObject);
         }

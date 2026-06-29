@@ -1,3 +1,7 @@
+using _Game.GamePlay.Manager;
+using _Game.GamePlay.Utils;
+using _KITSystem.Resource;
+using _KITSystem.Utils;
 using LitMotion.Animation;
 using UnityEngine;
 using UnityEngine.UI;
@@ -46,6 +50,10 @@ namespace _Game.GamePlay.View
             float f = hammerAnimation.Play();
             equipmentQueue.Decrease(f);
             RefreshUI();
+            this.WaitInvoke(f, async () =>
+            {
+                SoundManager.Instance.PlayOneShot(await AssetBundleManager.GetAssetCached<AudioClip>(Path.SFX_POP));
+            });
         }
 
         private void HammerComplete()

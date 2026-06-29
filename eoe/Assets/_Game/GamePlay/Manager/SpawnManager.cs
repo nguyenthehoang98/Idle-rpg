@@ -86,7 +86,7 @@ namespace _Game.GamePlay.Manager
                         await AssetBundleManager.GetAssetCached<Sprite>(monsterData.skin);
                     }
                     
-                    if (names.Add(monsterData.deathAudioClip))
+                    if (!string.IsNullOrEmpty(monsterData.deathAudioClip) && names.Add(monsterData.deathAudioClip))
                     {
                         await AssetBundleManager.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
                     }

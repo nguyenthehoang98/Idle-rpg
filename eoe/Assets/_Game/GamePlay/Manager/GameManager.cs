@@ -25,6 +25,7 @@ namespace _Game.GamePlay.Manager
         [SerializeField] private int[] equipments = new int[4];
         [SerializeField] private Transform[] slots = new Transform[4];
 
+        private HashSet<string> assetPath = new HashSet<string>();
         private Dictionary<int, Weapon> weaponContainer = new Dictionary<int, Weapon>();
         private Dictionary<int, int> damageMemory = new Dictionary<int, int>();
         private TickSystemOwner owner;
@@ -36,6 +37,7 @@ namespace _Game.GamePlay.Manager
 
         private int totalMonsterAlive;
         private int currentWeaponSlot;
+        private bool firstTimePlaySfxFullQueue = true;
 
         private void Awake()
         {
@@ -65,14 +67,13 @@ namespace _Game.GamePlay.Manager
             player = new PlayerRuntimeData();
 
             // load 
-            GameObject go = null;
-            go = await AssetBundleManager.GetAssetCached<GameObject>(Const.TEXT_DAMAGE_NORMAL);
-            Pool.RegisterPool(go, true);
-            Pool.Destroy(Pool.Instantiate(go));
-            
-            go = await AssetBundleManager.GetAssetCached<GameObject>(Const.TEXT_DAMAGE_CRITICAL);
-            Pool.RegisterPool(go, true);
-            Pool.Destroy(Pool.Instantiate(go));
+            await RegisterPool<GameObject>(Path.TEXT_DAMAGE_NORMAL);
+            await RegisterPool<GameObject>(Path.TEXT_DAMAGE_CRITICAL);
+            await RegisterPool<AudioClip>(Path.SFX_POWER_SELECT);
+            await RegisterPool<AudioClip>(Path.SFX_LEVEL_UP);
+            await RegisterPool<AudioClip>(Path.SFX_ENERGY);
+            await RegisterPool<AudioClip>(Path.SFX_ENERGY_FULL);
+            await RegisterPool<AudioClip>(Path.SFX_POP);
             
             spawnManager.SetLevel(1);
 
@@ -110,6 +111,11 @@ namespace _Game.GamePlay.Manager
             cardUIPicker.OnPickCard -= PickCard;
             energy.OnFill -= FillEnergy;
             equipmentQueue.OnQueueFull -= QueueFull;
+
+            foreach (var path in assetPath)
+            {
+                AssetBundleManager.UnCache(path);
+            }
         }
 
         private async UniTask Equip(int weaponId)
@@ -169,10 +175,22 @@ namespace _Game.GamePlay.Manager
                 }
             }
         }
+
+        private async UniTask RegisterPool<T>(string path) where T : Object
+        {
+            T asset = await AssetBundleManager.GetAssetCached<T>(path);
+            if (asset is GameObject go)
+            {
+                Pool.RegisterPool(go, true);
+                Pool.Destroy(Pool.Instantiate(go));
+            }
+
+            if (asset != null) assetPath.Add(path);
+        }
         
         // callback
 
-        private void QueueFull()
+        private async void QueueFull()
         {
             float d = 0;
             float speed = 1;//owner.Loop;
@@ -218,9 +236,21 @@ namespace _Game.GamePlay.Manager
                 
                 equipmentQueue.Clear();
             });
+
+            if (firstTimePlaySfxFullQueue)
+            {
+                firstTimePlaySfxFullQueue = false;
+                return;
+            }
+            SoundManager.Instance.PlayOneShot(await AssetBundleManager.GetAssetCached<AudioClip>(Path.SFX_ENERGY_FULL)); 
         }
 
-        private void FillEnergy() => equipmentQueue.Increase();
+        private async void FillEnergy()
+        {
+            SoundManager.Instance.PlayOneShot(await AssetBundleManager.GetAssetCached<AudioClip>(Path.SFX_ENERGY));
+            
+            equipmentQueue.Increase();
+        }
         
         private void ChangePause(bool paused)
         {
@@ -245,6 +275,10 @@ namespace _Game.GamePlay.Manager
             if (weaponContainer.TryGetValue(@params.id, out Weapon weapon))
             {
                 weapon.IncreaseUpgradeData(@params);
+                
+                SoundManager.Instance.PlayOneShot(await AssetBundleManager.GetAssetCached<AudioClip>(Path.SFX_POWER_SELECT));
+                await UniTask.WaitForSeconds(0.2f);
+                
                 cardUIPicker.Hide();
                 bottomPanel.Show();
 
@@ -268,7 +302,7 @@ namespace _Game.GamePlay.Manager
             totalMonsterAlive++;
         }
 
-        private void EarnExp(PostEarnExpParams @params)
+        private async void EarnExp(PostEarnExpParams @params)
         {
             player.CurrentExp += @params.Exp;
             
@@ -277,9 +311,15 @@ namespace _Game.GamePlay.Manager
                 player.CurrentLevel += 1;
                 player.CurrentExp -= data.exp;
 
-                PickCardItemData();
+                SoundManager.Instance.PlayOneShot(await AssetBundleManager.GetAssetCached<AudioClip>(Path.SFX_LEVEL_UP));          
+             
+                await UniTask.WaitForSeconds(0.25f);
                 
                 owner.IsPaused = true;
+              
+                await UniTask.WaitForSeconds(0.25f);
+                
+                PickCardItemData();
             }
         }
 

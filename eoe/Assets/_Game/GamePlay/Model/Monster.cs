@@ -40,7 +40,7 @@ namespace _Game.GamePlay.Model
         {
             await GetComponent<MonsterSkin>().UpdateSkin(monsterData.skin);
             
-            if (deathAudioClip == null)
+            if (deathAudioClip == null && !string.IsNullOrEmpty(monsterData.deathAudioClip))
             {
                 deathAudioClip = await AssetBundleManager.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
             }

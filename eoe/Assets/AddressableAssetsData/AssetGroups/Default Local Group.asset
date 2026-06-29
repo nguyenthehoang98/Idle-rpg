@@ -30,6 +30,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1bf29c8a77572a540a5b2c1f57dab99d
+    m_Address: entergy_full.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 21e656f72c926ee45bc6df67ca059bbe
     m_Address: BrainMonster-9.png
     m_ReadOnly: 0
@@ -61,7 +66,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 44baf661eeefa4349b427fb07ccc33f0
-    m_Address: ArrowFly.ogg
+    m_Address: arrow.ogg
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -135,6 +140,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87c471c71e0724c45bb083cdc3cf0439
+    m_Address: pop.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8bf8702efce94324483f60536c56ebcd
     m_Address: T_Powerup.Skill.1001.9
     m_ReadOnly: 0
@@ -162,6 +172,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a03f9cc7a4b8e1541938e12b1245283c
     m_Address: TextDamageNormal
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a36ee78671a6d1641873ecde0e088b65
+    m_Address: energy.ogg
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -250,6 +265,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ef1a412728c5a68478aef282561ec5dc
+    m_Address: level_up.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f0e8072150d245143aac9ac7c463891f
     m_Address: brain.monster
     m_ReadOnly: 0
@@ -267,6 +287,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f970645e1dd1d714089b9ce7b7c8f8d8
     m_Address: T_Powerup.Skill.1001.8
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fc43f714122eba84a846a67ff8769b58
+    m_Address: power_select.ogg
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
