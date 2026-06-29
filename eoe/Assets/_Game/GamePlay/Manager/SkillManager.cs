@@ -205,23 +205,24 @@ namespace _Game.GamePlay.Manager
             );
 
             if (lifetimeProjectile <= 0) lifetimeProjectile = skillData.lifeTime;
-            
+
+            Action onProjectileDestroyed = () => { };
             CastProjectileAction action = new CastProjectileAction(this, lifetimeProjectile, collider, trajectory,
-                (entity, pos) => OnDamageEntityFunction(skillData, runtimeData, entity, pos, scaleDamage),
+                (entity, pos, lastCollision) => OnDamageEntityFunction(skillData, runtimeData, entity, pos, scaleDamage,
+                    lastCollision, ref onProjectileDestroyed),
                 projectile, dtt, damageTicket.ticketInterval,
                 colliderData.limitNumberCollision, colliderData.resetCollisionInterval
             );
+            
             action.OnComplete += () =>
             {
-                Action callback = () =>
+                onProjectileDestroyed += () =>
                 {
                     if (action.Reason == ActionCompleteReason.Interrupt)
-                    {
                         Pool.Instantiate(impact, true).transform.position = projectile.TargetPosition;
-                    }
                 };
 
-                projectile.Destroy(callback);
+                projectile.Destroy(onProjectileDestroyed);
             };
 
             RequestAddAction(1, action);
@@ -232,7 +233,7 @@ namespace _Game.GamePlay.Manager
         }
 
         private bool OnDamageEntityFunction(SkillData skillData, SkillRuntimeData runtimeData, int entity,
-            Vector3 position, float scaleDamage)
+            Vector3 position, float scaleDamage, bool lastCollision, ref Action onProjectileDestroyed)
         {
             float radius = Mathf.Max(0, runtimeData.ExplosiveRadius);
 
@@ -260,7 +261,7 @@ namespace _Game.GamePlay.Manager
                         {
                             float dmg = (e == entity ? 1.0f : explosiveDamage) * scaleDamage;
                             
-                            return CalculatorDamage(skillData, runtimeData, entity, position, dmg);
+                            return CalculatorDamage(skillData, runtimeData, entity, position, dmg, lastCollision, ref onProjectileDestroyed);
                         }
                     }
                 }
@@ -279,14 +280,14 @@ namespace _Game.GamePlay.Manager
                     Color.yellow, 0.1f
                 );
 #endif
-                return CalculatorDamage(skillData, runtimeData, entity, position, scaleDamage);
+                return CalculatorDamage(skillData, runtimeData, entity, position, scaleDamage, lastCollision, ref onProjectileDestroyed);
             }
 
             return true;
         }
 
         private bool CalculatorDamage(SkillData skillData, SkillRuntimeData runtimeData, int entity, Vector3 position,
-            float scaleDamage)
+            float scaleDamage, bool lastCollision, ref Action onProjectileDestroyed)
         {
             if (!EntityManager.IsEntityAlive(entity)) return false;
 
@@ -319,7 +320,14 @@ namespace _Game.GamePlay.Manager
 
                 if (MonsterEntityManager.TryGetAgent(entity, out int agent))
                 {
-                    AgentManager.Destroy_Agent(agent);
+                    if (lastCollision)
+                    {
+                        AgentManager.Destroy_Agent(agent, ref onProjectileDestroyed);
+                    }
+                    else
+                    {
+                        AgentManager.Destroy_Agent(agent);                        
+                    }
                 }
             }
 

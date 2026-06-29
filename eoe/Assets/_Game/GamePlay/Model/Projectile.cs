@@ -60,6 +60,14 @@ namespace _Game.GamePlay.Model
                 {
                     onDestroyCallback.Invoke();
                     onDestroyCallback = null;
+
+                    if (trailRenderer != null)
+                    {
+                        trailRenderer.emitting = false;
+                        trailRenderer.enabled = false;
+                
+                        trailRenderer.Clear();
+                    }
                 }
                 
                 Pool.Destroy(gameObject);
@@ -75,14 +83,6 @@ namespace _Game.GamePlay.Model
             onDestroyCallback = callback;
             
             shouldDestroy = true;
-
-            if (trailRenderer != null)
-            {
-                trailRenderer.emitting = false;
-                trailRenderer.enabled = false;
-                
-                trailRenderer.Clear();
-            }
         }
     }
 }

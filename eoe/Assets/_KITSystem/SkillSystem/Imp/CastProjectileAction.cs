@@ -15,7 +15,7 @@ namespace _KITSystem.SkillSystem.Imp
         private readonly float damageTickerInterval;
         private readonly int limitNumberCollisions;
         private readonly float resetCollisionInterval;
-        private readonly Func<int, Vector2, bool> onDamageEntity;
+        private readonly Func<int, Vector2, bool, bool> onDamageEntity;
 
         public event Action OnComplete;
 
@@ -27,7 +27,7 @@ namespace _KITSystem.SkillSystem.Imp
         private float damageTickerElapsedTime;
 
         public CastProjectileAction(Spu spu, float lifeTime, BaseCollider collider, BaseTrajectory trajectory,
-            Func<int, Vector2, bool> onDamageEntity,
+            Func<int, Vector2, bool, bool> onDamageEntity,
             Projectile projectile, DamageTickerType damageTickerType, float damageTickerInterval,
             int limitNumberCollisions, float resetCollisionInterval) : base(spu, lifeTime)
         {
@@ -76,7 +76,7 @@ namespace _KITSystem.SkillSystem.Imp
                 {
                     if (damageTickerType == DamageTickerType.DamageOverTime && !this.collisions.Add(entity)) continue;
 
-                    if (!TryDamage(position, entity)) continue;
+                    if (!TryDamage(position, entity, totalCollisions + 1 == limitNumberCollisions)) continue;
 
                     totalCollisions++;
 
@@ -101,15 +101,15 @@ namespace _KITSystem.SkillSystem.Imp
             OnComplete = null;
         }
 
-        private bool TryDamage(Vector2 position, int entity)
+        private bool TryDamage(Vector2 position, int entity, bool lastCollision)
         {
             switch (damageTickerType)
             {
                 case DamageTickerType.Instant:
-                    return Damage(position, entity);
+                    return Damage(position, entity, lastCollision);
                 case DamageTickerType.DamageOverTime:
                     if (damageTickerElapsedTime < damageTickerInterval) return false;
-                    if (Damage(position, entity))
+                    if (Damage(position, entity, lastCollision))
                     {
                         damageTickerElapsedTime = 0;
                         return true;
@@ -122,9 +122,9 @@ namespace _KITSystem.SkillSystem.Imp
             }
         }
 
-        private bool Damage(Vector2 position, int entity)
+        private bool Damage(Vector2 position, int entity, bool lastCollision)
         {
-            return onDamageEntity(entity, position);
+            return onDamageEntity(entity, position, lastCollision);
         }
     }
 }

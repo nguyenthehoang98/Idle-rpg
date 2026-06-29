@@ -86,7 +86,7 @@ namespace _Game.GamePlay.Model
 
             if (vfxPrefab != null)
             {
-                //Pool.Instantiate(vfxPrefab, transform.position, Quaternion.identity);
+                Pool.Instantiate(vfxPrefab, transform.position, Quaternion.identity);
             }
             
             OnMonsterDisable?.Invoke(this);

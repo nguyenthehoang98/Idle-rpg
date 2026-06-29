@@ -132,6 +132,14 @@ namespace _Game.GamePlay.Manager
             }
         }
 
+        public static void Destroy_Agent(int agent, ref Action onDestroyMonsterCommand)
+        {
+#if !UNITY_EDITOR
+            if (instance == null) return;       
+#endif
+            instance.DestroyAgent_Private(agent, ref onDestroyMonsterCommand);
+        }
+
         public static void Destroy_Agent(int agent)
         {
 #if !UNITY_EDITOR
@@ -160,7 +168,18 @@ namespace _Game.GamePlay.Manager
         {
             if (container.Remove(agent, out Temp temp))
             {
-                temp.Monster.Destroy();
+                Monster m = temp.Monster;
+                m.Destroy();
+                remove.Enqueue(temp);
+            }
+        }
+
+        private void DestroyAgent_Private(int agent, ref Action onDestroyMonsterCommand)
+        {
+            if (container.Remove(agent, out Temp temp))
+            {
+                Monster m = temp.Monster;
+                onDestroyMonsterCommand += () => { m.Destroy(); };
                 
                 remove.Enqueue(temp);
             }

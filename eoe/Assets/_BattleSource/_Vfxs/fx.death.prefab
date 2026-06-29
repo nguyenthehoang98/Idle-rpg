@@ -112,7 +112,7 @@ MonoBehaviour:
   - {fileID: 526824568, guid: 84d566c9e5be1ec4493cec888893dab4, type: 3}
   - {fileID: 1923961698, guid: 84d566c9e5be1ec4493cec888893dab4, type: 3}
   loop: 0
-  frameRate: 16
+  frameRate: 8
   OnEventCompleted:
     m_PersistentCalls:
       m_Calls:
