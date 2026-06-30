@@ -939,8 +939,6 @@ MonoBehaviour:
           y: 0
         defaultAgentRadius: 0.5
         deltaIgnoreCheckNeighborDistance: 0.5
-        deltaStuckDistance: 0.5
-        stuckFrameCount: 20
         stopDistance: 1.6
     - rid: 607417000826765380
       type: {class: SkillManager, ns: _Game.GamePlay.Manager, asm: Assembly-CSharp}
@@ -1134,10 +1132,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -1356,10 +1354,6 @@ PrefabInstance:
     - target: {fileID: 2647833869170970314, guid: 972344802c905a247b362e370067ba05, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6082345267835176423, guid: 972344802c905a247b362e370067ba05, type: 3}
-      propertyPath: managedReferences[607417039756722435].settings.additionalSettings
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

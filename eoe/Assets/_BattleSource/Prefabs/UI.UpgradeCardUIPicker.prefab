@@ -146,6 +146,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cc6819e64e4c44beb63ea2ef45e1a6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LitMotion.Animation::LitMotion.Animation.LitMotionAnimation
+  isReverseWhenStop: 0
+  autoStopMode: 1
   autoPlayMode: 0
   animationMode: 0
   components:
@@ -303,7 +305,7 @@ MonoBehaviour:
         settings:
           startValue: 1
           endValue: 0
-          duration: 0.5
+          duration: 0.4
           ease: 0
           customEaseCurve:
             serializedVersion: 2
@@ -432,6 +434,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cc6819e64e4c44beb63ea2ef45e1a6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LitMotion.Animation::LitMotion.Animation.LitMotionAnimation
+  isReverseWhenStop: 0
+  autoStopMode: 1
   autoPlayMode: 0
   animationMode: 0
   components:

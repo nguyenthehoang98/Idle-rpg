@@ -18,11 +18,11 @@ namespace _Game.GamePlay.View
         public event Action OnQueueFull;
         public event Action OnFill;
 
-        private readonly List<int> list = new List<int>(); // dánh sách equipment đang cơh̀
+        private List<int> list = new List<int>(); // dánh sách equipment đang cơh̀
         private int[] array = new int[4]; // lưu trữ stack
-        private readonly List<int> temp = new List<int>(); // use 1 frame
+        private List<int> temp = new List<int>(); // use 1 frame
         private Dictionary<int, WeaponData> container = new Dictionary<int, WeaponData>();
-        private readonly List<int> equipments = new List<int>(); // dánh sah eqm mặc dịnh
+        private List<int> equipments = new List<int>(); // dánh sah eqm mặc dịnh
 
         public void Init(WeaponConfig config, int[] allEquipments)
         {
@@ -55,21 +55,34 @@ namespace _Game.GamePlay.View
 
         public void Increase()
         {
-            temp.Clear();
+            if (list.Count == Const.MAX_WEAPON_SLOT)
+            {
+                return;
+            }
+
+            temp = new List<int>(equipments);
+
             for (int i = 0; i < array.Length; i++)
             {
-                if (array[i] < 3) temp.Add(i);
+                if (array[i] >= 3) temp.RemoveAt(i);
             }
             
             int idx = RandomUtils.Range(0, temp.Count);
 
-            array[idx]++;
-            
-            int item = equipments[idx];
+            int item = temp[idx];
             
             list.Add(item);
 
-            smokeAnimation.transform.position = slots[list.Count - 1].Position;
+            array[idx]++;
+
+            if (slots.Length < list.Count)
+            {
+                Debug.LogError($"slots: {slots.Length}, list: {list.Count}");
+            }
+            
+            Vector3 pos = slots[list.Count - 1].Position;
+
+            smokeAnimation.transform.position = pos;
             
             smokeAnimation.Play();
           

@@ -80,12 +80,14 @@ namespace _Game.GamePlay.View
         }
 
         private void SetHammerActive() => btnHammer.GetComponent<Image>().sprite = spHammerActive;
+     
         private void SetHammerInactive() => btnHammer.GetComponent<Image>().sprite = spHammerInactive;
 
         public void Show()
         {
             openAnimation.Play();
         }
+      
         public void Hide()
         {
             closeAnimation.Play();

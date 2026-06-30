@@ -188,6 +188,8 @@ namespace _Game.GamePlay.Manager
 
         private async void QueueFull()
         {
+            energy.SetAnimating(true);
+            
             float d = 0;
             float speed = 1;//owner.Loop;
             for (int i = 0; i < Const.MAX_WEAPON_SLOT; i++)
@@ -231,6 +233,8 @@ namespace _Game.GamePlay.Manager
                 }
                 
                 equipmentQueue.Clear();
+                
+                energy.SetAnimating(false);
             });
 
             if (firstTimePlaySfxFullQueue)

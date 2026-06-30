@@ -12,23 +12,25 @@ namespace _Game.GamePlay.View
 
         private float elapsedTime = 0;
         private bool isPaused;
+        private bool isAnimating;
         
         public event Action OnFill;
 
         public Task Initialize()
         {
             imgProgress.fillAmount = 0;   
-          
             return Task.CompletedTask;
         }
         
-        public void SetPause(bool pause) => this.isPaused = pause;
+        public void SetAnimating(bool value) => this.isAnimating = value;
+        
+        public void SetPause(bool value) => this.isPaused = value;
 
         private void Update() => Tick(Time.deltaTime);
 
         public void Tick(float deltaTime)
         {
-            if (isPaused) return;
+            if (isPaused || isAnimating) return;
             
             elapsedTime += deltaTime;
             
