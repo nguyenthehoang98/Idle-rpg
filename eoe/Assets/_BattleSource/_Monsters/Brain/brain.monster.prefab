@@ -322,6 +322,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: LitMotion.Animation::LitMotion.Animation.LitMotionAnimation
   autoPlayMode: 0
   animationMode: 1
+  autoReverseWhenStop: 0
   components:
   - rid: 607417095885946943
   - rid: 607417095885946946
@@ -339,7 +340,7 @@ MonoBehaviour:
         settings:
           startValue: 0
           endValue: 1
-          duration: 0.2
+          duration: 0.15
           ease: 31
           customEaseCurve:
             serializedVersion: 2
@@ -385,7 +386,7 @@ MonoBehaviour:
         settings:
           startValue: 1
           endValue: 0
-          duration: 0.2
+          duration: 0.15
           ease: 31
           customEaseCurve:
             serializedVersion: 2
@@ -393,8 +394,8 @@ MonoBehaviour:
             - serializedVersion: 3
               time: 0
               value: 0
-              inSlope: 2
-              outSlope: 2
+              inSlope: 0
+              outSlope: 0
               tangentMode: 0
               weightedMode: 0
               inWeight: 0
@@ -402,8 +403,8 @@ MonoBehaviour:
             - serializedVersion: 3
               time: 1
               value: 1
-              inSlope: 0
-              outSlope: 0
+              inSlope: 2
+              outSlope: 2
               tangentMode: 0
               weightedMode: 0
               inWeight: 0

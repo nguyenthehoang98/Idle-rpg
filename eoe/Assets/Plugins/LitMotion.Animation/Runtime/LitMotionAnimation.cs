@@ -171,7 +171,7 @@ namespace LitMotion.Animation
 
             if (time >= duration)
             {
-                if (Application.isPlaying)
+                if (Application.isPlaying && isActiveAndEnabled)
                 {
                     StartCoroutine(AutoStop());
                 }

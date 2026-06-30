@@ -75,10 +75,7 @@ namespace _Game.GamePlay.Model
             elapsedTime = 0;
         }
 
-        public void BeHit()
-        {
-            OnBeHit?.Invoke();
-        }
+        public void BeHit() => OnBeHit?.Invoke();
 
         public void Destroy()
         {
