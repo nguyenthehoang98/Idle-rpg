@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4a3df5b39dbce9346a6d77dd73ac4543
+guid: deb49f7fb9de2794a99aed6a6d41a405
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Pixelify Sans
+  - Minecraft
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

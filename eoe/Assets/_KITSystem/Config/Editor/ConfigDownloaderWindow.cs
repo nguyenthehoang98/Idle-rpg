@@ -232,15 +232,14 @@ namespace _KITSystem.Config.Editor
                     var elementType = info.FieldType.GetGenericArguments()[0];
                  
                     var json = request.downloadHandler.text;
+                    
+                    Debug.Log(json);
 
                     foreach (JObject token in JArray.Parse(json))
                     {
                         var item = Activator.CreateInstance(elementType);
                         
-                        foreach (var field in elementType.GetFields(
-                                     BindingFlags.Instance |
-                                     BindingFlags.Public |
-                                     BindingFlags.NonPublic))
+                        foreach (var field in elementType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
                         {
                             if (field.GetCustomAttribute<JsonIgnoreAttribute>() != null) continue;
                             
@@ -250,7 +249,7 @@ namespace _KITSystem.Config.Editor
 
                             try
                             {
-                                object fieldValue = ConvertValue(value, field.FieldType);
+                                object fieldValue = ConvertValue(value, field.FieldType, field.Name);
 
                                 field.SetValue(item, fieldValue);
                             }
@@ -333,10 +332,7 @@ namespace _KITSystem.Config.Editor
 
             var type = obj.GetType();
 
-            foreach (var field in type.GetFields(
-                         BindingFlags.Instance |
-                         BindingFlags.Public |
-                         BindingFlags.NonPublic))
+            foreach (var field in type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
             {
                 if (field.GetCustomAttribute<JsonIgnoreAttribute>() != null)
                     continue;
@@ -354,7 +350,7 @@ namespace _KITSystem.Config.Editor
             return true;
         }
         
-        private static object ConvertValue(JToken token, Type targetType)
+        private static object ConvertValue(JToken token, Type targetType, string fieldName)
         {
             if (token == null || token.Type == JTokenType.Null)
             {
@@ -383,27 +379,19 @@ namespace _KITSystem.Config.Editor
             if (targetType == typeof(float))
             {
                 value = value.Replace(',', '.');
+                
+                float.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out float f);
 
-                return float.TryParse(
-                    value,
-                    NumberStyles.Any,
-                    CultureInfo.InvariantCulture,
-                    out float f)
-                    ? f
-                    : 0f;
+                return f;
             }
 
             if (targetType == typeof(double))
             {
                 value = value.Replace(',', '.');
                 
-                return double.TryParse(
-                    value,
-                    NumberStyles.Any,
-                    CultureInfo.InvariantCulture,
-                    out double d)
-                    ? d
-                    : 0d;
+                double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out double d);
+
+                return d;
             }
 
             if (targetType == typeof(bool))
@@ -444,9 +432,7 @@ namespace _KITSystem.Config.Editor
 
                 for (int i = 0; i < array.Count; i++)
                 {
-                    result.SetValue(
-                        Convert.ChangeType(array[i].ToString(), elementType),
-                        i);
+                    result.SetValue(Convert.ChangeType(array[i].ToString(), elementType), i);
                 }
 
                 return result;

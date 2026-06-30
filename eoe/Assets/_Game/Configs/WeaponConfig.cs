@@ -104,7 +104,7 @@ namespace _Game.Configs
     }
     
     [Serializable]
-    public struct WeaponData
+    public struct WeaponData : IEquatable<WeaponData>
     {
         public int id;
         public string prefabName;
@@ -120,10 +120,25 @@ namespace _Game.Configs
         public SkillData skillData;
         public string attackAudioClip;
         public float attackVolume;
+
+        public override int GetHashCode()
+        {
+            return 10000 + id;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is WeaponData other && Equals(other);
+        }
+
+        public bool Equals(WeaponData other)
+        {
+            return id == other.id;
+        }
     }
 
     [Serializable]
-    public struct WeaponUpgradeData
+    public struct WeaponUpgradeData : IEquatable<WeaponUpgradeData>
     {
         public int id;
         public int group;
@@ -135,7 +150,7 @@ namespace _Game.Configs
         public float damagePercent;
         public float cooldownReduce;
         public int parallelCount;
-        public int parallelDamagePercent;
+        public float parallelDamagePercent;
         public int spreadCount;
         public float spreadDamagePercent;
         public int piercingCount;
@@ -152,6 +167,16 @@ namespace _Game.Configs
             return HashCode.Combine(id, level, group);
         }
 
+        public bool Equals(WeaponUpgradeData other)
+        {
+            return id == other.id && group == other.group && level == other.level;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is WeaponUpgradeData other && Equals(other);
+        }
+
         public void Increase(WeaponUpgradeData data)
         {
             attackSpeed += data.attackSpeed;
@@ -161,6 +186,7 @@ namespace _Game.Configs
             bounceDamagePercent += data.bounceDamagePercent;
             killInstantBelowHealthPercent += data.killInstantBelowHealthPercent;
             projectileSize += data.projectileSize;
+            parallelDamagePercent += data.parallelDamagePercent;
             damagePercent += data.damagePercent;
             explosiveDamagePercent += data.explosiveDamagePercent;
             spreadDamagePercent += data.spreadDamagePercent;
@@ -177,6 +203,7 @@ namespace _Game.Configs
             critChance -= data.critChance;
             critDamage -= data.critDamage;
             bounceCount -= data.bounceCount;
+            parallelDamagePercent -= data.parallelDamagePercent;
             bounceDamagePercent -= data.bounceDamagePercent;
             killInstantBelowHealthPercent -= data.killInstantBelowHealthPercent;
             projectileSize -= data.projectileSize;

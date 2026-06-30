@@ -11,9 +11,12 @@ namespace _Game.GamePlay.Model
 
         [SerializeField] private TrailRenderer trailRenderer;
 
+        private Action onCollisionCallback;
         private Action onDestroyCallback;
         private float elapsedTime;
         private float deltaTime;
+        private float lastCollisionTime;
+        private bool isCollision = false;
         private bool isRunning = false;
         private bool shouldDestroy = false;
 
@@ -54,6 +57,15 @@ namespace _Game.GamePlay.Model
 
             transform.position = Vector3.Lerp(PreviousPosition, TargetPosition, t);
 
+            if (t >= 1.0f && isCollision)
+            {
+                onCollisionCallback?.Invoke();
+                
+                isCollision = false;
+                
+                Debug.Log($"delay: {Time.time - lastCollisionTime}");
+            }
+
             if (t >= 1.0f && shouldDestroy)
             {
                 if (onDestroyCallback != null)
@@ -74,6 +86,15 @@ namespace _Game.GamePlay.Model
                 
                 isRunning = false;
             }
+        }
+
+        public void Collision(Action callback)
+        {
+            isCollision = true;
+            
+            onCollisionCallback = callback;
+
+            lastCollisionTime = Time.time;
         }
 
         public void Destroy(Action callback)

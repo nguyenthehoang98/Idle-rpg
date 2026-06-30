@@ -73,8 +73,6 @@ namespace _Game.GamePlay.Manager
                 float scaleDamage = runtimeData.ParallelDamagePercent;
                 Vector3 perpendicular = new Vector3(-direction.y, direction.x, 0);
              
-                int mid = count / 2;
-                
                 for (int i = 0; i < count; i++)
                 {
                     float offset = (i - (count - 1) * 0.5f) * spacing;
@@ -82,7 +80,7 @@ namespace _Game.GamePlay.Manager
                     Vector3 offsetPos = position + perpendicular * offset;
                     Vector3 offsetDest = destination + perpendicular * offset;
 
-                    instance.CastSkill_Private(skillData, runtimeData, offsetPos, offsetDest, mid == i ? 1 : scaleDamage);
+                    instance.CastSkill_Private(skillData, runtimeData, offsetPos, offsetDest, scaleDamage);
                 }
                     
                 extra = true;
@@ -208,8 +206,9 @@ namespace _Game.GamePlay.Manager
 
             Action onProjectileDestroyed = () => { };
             CastProjectileAction action = new CastProjectileAction(this, lifetimeProjectile, collider, trajectory,
-                (entity, pos, lastCollision) => OnDamageEntityFunction(skillData, runtimeData, entity, pos, scaleDamage,
-                    lastCollision, ref onProjectileDestroyed),
+                (entity, pos, lastCollision) =>
+                    OnDamageEntityFunction(skillData, runtimeData, projectile, entity, pos, scaleDamage, lastCollision,
+                        ref onProjectileDestroyed),
                 projectile, dtt, damageTicket.ticketInterval,
                 colliderData.limitNumberCollision + runtimeData.PiercingCount, colliderData.resetCollisionInterval
             );
@@ -232,8 +231,8 @@ namespace _Game.GamePlay.Manager
             projectile.gameObject.SetActive(true);
         }
 
-        private bool OnDamageEntityFunction(SkillData skillData, SkillRuntimeData runtimeData, int entity,
-            Vector3 position, float scaleDamage, bool lastCollision, ref Action onProjectileDestroyed)
+        private bool OnDamageEntityFunction(SkillData skillData, SkillRuntimeData runtimeData, Projectile projectile,
+            int entity, Vector3 position, float scaleDamage, bool lastCollision, ref Action onProjectileDestroyed)
         {
             float radius = Mathf.Max(0, runtimeData.ExplosiveRadius);
 
@@ -260,8 +259,10 @@ namespace _Game.GamePlay.Manager
                         if (d < sqrRadius)
                         {
                             float dmg = (e == entity ? 1.0f : explosiveDamage) * scaleDamage;
-                            
-                            return CalculatorDamage(skillData, runtimeData, entity, position, dmg, lastCollision, ref onProjectileDestroyed);
+
+                            return CalculatorDamage(skillData, runtimeData, projectile,
+                                entity, position, dmg, lastCollision, ref onProjectileDestroyed
+                            );
                         }
                     }
                 }
@@ -280,13 +281,16 @@ namespace _Game.GamePlay.Manager
                     Color.yellow, 0.1f
                 );
 #endif
-                return CalculatorDamage(skillData, runtimeData, entity, position, scaleDamage, lastCollision, ref onProjectileDestroyed);
+                return CalculatorDamage(skillData, runtimeData, projectile, entity, position, scaleDamage,
+                    lastCollision, ref onProjectileDestroyed
+                );
             }
 
             return true;
         }
 
-        private bool CalculatorDamage(SkillData skillData, SkillRuntimeData runtimeData, int entity, Vector3 position,
+        private bool CalculatorDamage(SkillData skillData, SkillRuntimeData runtimeData, Projectile projectile, 
+            int entity, Vector3 position,
             float scaleDamage, bool lastCollision, ref Action onProjectileDestroyed)
         {
             if (!EntityManager.IsEntityAlive(entity)) return false;
@@ -298,14 +302,26 @@ namespace _Game.GamePlay.Manager
             int damage = Mathf.CeilToInt(Formula.CalculateFinalDamage(runtimeData, out bool critical) * scaleDamage);
             
             health.CurrentHealth -= damage;
+            
+            int currentHealth = health.CurrentHealth;
 
-            if (AgentManager.TryGet_Monster(entity, out Monster monster) && health.CurrentHealth > 0) monster.BeHit();
-
-            OnPostDamage?.Invoke(new PostDamageParams
+            Action onCollision = () =>
             {
-                Damage = damage,
-                Source = skillData
-            });
+                if (AgentManager.TryGet_Monster(entity, out Monster monster) && currentHealth > 0)
+                {
+                    monster.BeHit();
+                }
+
+                OnPostDamage?.Invoke(new PostDamageParams
+                {
+                    Damage = damage,
+                    Source = skillData
+                });
+                
+                SpawnTextDamage(damage, critical, position);
+            };
+            
+            projectile.Collision(onCollision);
 
             float killInstantBelow = runtimeData.KillInstantBelowHealthPercent;
             float healthPercent = health.CurrentHealth / (float)health.MaxHealth;
@@ -334,8 +350,6 @@ namespace _Game.GamePlay.Manager
                 }
             }
 
-            SpawnTextDamage(damage, critical, position);
-
             return true;
         }
 
@@ -360,7 +374,8 @@ namespace _Game.GamePlay.Manager
                     : Path.TEXT_DAMAGE_NORMAL);
 
             TextDamage ins = Pool.Instantiate(go).GetComponent<TextDamage>();
-            ins.transform.position = position;
+            float offsetX = RandomUtils.Range(-0.3f, 0.3f);
+            ins.transform.position = position + new Vector3(offsetX, 0, 0);
 
             ins.Execute(damage);
         }

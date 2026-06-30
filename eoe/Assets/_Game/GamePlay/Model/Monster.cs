@@ -27,7 +27,6 @@ namespace _Game.GamePlay.Model
         private Vector3 previousPosition;
         private float elapsedTime;
         private float deltaTime;
-        private bool isBeingAttacked;
         private bool isInitialized;
 
         private void FixedUpdate()
@@ -39,13 +38,6 @@ namespace _Game.GamePlay.Model
             float t = Mathf.Clamp01(elapsedTime / deltaTime);
 
             transform.position = Vector3.Lerp(previousPosition, targetPosition, t);
-
-            if (isBeingAttacked && t >= 1)
-            {
-                OnBeHit?.Invoke();
-                
-                isBeingAttacked = false;
-            }
         }
 
         public async void Initialize(MonsterData monsterData)
@@ -87,7 +79,7 @@ namespace _Game.GamePlay.Model
             elapsedTime = 0;
         }
 
-        public void BeHit() => isBeingAttacked = true;
+        public void BeHit() => OnBeHit?.Invoke();
 
         public void Destroy()
         {
