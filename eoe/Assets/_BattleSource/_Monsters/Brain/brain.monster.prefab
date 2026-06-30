@@ -320,9 +320,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cc6819e64e4c44beb63ea2ef45e1a6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LitMotion.Animation::LitMotion.Animation.LitMotionAnimation
+  isReverseWhenStop: 1
+  autoStopMode: 1
   autoPlayMode: 0
   animationMode: 1
-  autoReverseWhenStop: 0
   components:
   - rid: 607417095885946943
   - rid: 607417095885946946

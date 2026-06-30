@@ -16,12 +16,20 @@ namespace LitMotion.Animation
             OnEnable
         }
 
+        enum AutoStopMode
+        {
+            None,
+            OnDisable,
+        }
+
         enum AnimationMode
         {
             Parallel,
             Sequential
         }
 
+        [SerializeField] private bool isReverseWhenStop = false;
+        [SerializeField] AutoStopMode autoStopMode = AutoStopMode.OnDisable;
         [SerializeField] AutoPlayMode autoPlayMode = AutoPlayMode.OnStart;
         [SerializeField] AnimationMode animationMode;
 
@@ -41,7 +49,7 @@ namespace LitMotion.Animation
             if (autoPlayMode == AutoPlayMode.OnEnable)
                 Play();
         }
-
+        
         void Start()
         {
             if (autoPlayMode == AutoPlayMode.OnStart)
@@ -173,23 +181,9 @@ namespace LitMotion.Animation
             {
                 if (Application.isPlaying && isActiveAndEnabled)
                 {
-                    StartCoroutine(AutoStop());
-                }
-                else
-                {
                     Stop();
                 }
             }
-        }
-
-        IEnumerator AutoStop()
-        {
-            for (int i = 0; i < 2; i++)
-            {
-                yield return null;
-            }
-
-            Stop();
         }
 
         public void Stop()
@@ -200,14 +194,14 @@ namespace LitMotion.Animation
             {
                 var handle = component.TrackedHandle;
                 handle.TryCancel();
-                //if (!Application.isPlaying) component.OnStop();
+                if(isReverseWhenStop) component.OnStop();
                 component.TrackedHandle = handle;
             }
 
             playingComponents.Clear();
             queue.Clear();
         }
-
+        
         public void Restart()
         {
             Stop();
@@ -248,13 +242,8 @@ namespace LitMotion.Animation
 
         void OnDisable()
         {
-            if (autoPlayMode == AutoPlayMode.OnEnable)
+            if (autoStopMode == AutoStopMode.OnDisable)
                 Stop();
-        }
-
-        void OnDestroy()
-        {
-            Stop();
         }
 
         void ISerializationCallbackReceiver.OnBeforeSerialize() { }

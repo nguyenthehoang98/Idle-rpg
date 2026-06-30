@@ -904,7 +904,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: KITSystem.Schedule::_KITSystem.Schedule.TickSystemOwner
   useUnscaledTime: 0
-  targetFPS: 30
+  targetFPS: 20
   loop: 1
   maxTicksPerFrame: 5
   tickables:
@@ -938,7 +938,7 @@ MonoBehaviour:
           x: 0
           y: 0
         defaultAgentRadius: 0.5
-        deltaIgnoreCheckNeighborDistance: 0.2
+        deltaIgnoreCheckNeighborDistance: 0.9
         deltaStuckDistance: 0.2
         stopDistance: 1.6
     - rid: 607417000826765380
