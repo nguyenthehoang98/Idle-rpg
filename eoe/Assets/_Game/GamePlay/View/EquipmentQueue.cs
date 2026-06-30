@@ -74,11 +74,6 @@ namespace _Game.GamePlay.View
             list.Add(item);
 
             array[idx]++;
-
-            if (slots.Length < list.Count)
-            {
-                Debug.LogError($"slots: {slots.Length}, list: {list.Count}");
-            }
             
             Vector3 pos = slots[list.Count - 1].Position;
 

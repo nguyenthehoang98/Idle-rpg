@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.Manager.EnergyManager
   imgProgress: {fileID: 5120030498174985021}
-  duration: 0.5
+  duration: 2
 --- !u!1 &9125583931897760885
 GameObject:
   m_ObjectHideFlags: 0

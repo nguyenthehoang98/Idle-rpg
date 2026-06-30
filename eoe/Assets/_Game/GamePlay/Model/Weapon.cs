@@ -200,6 +200,7 @@ namespace _Game.GamePlay.Model
                 CritChance = current.critChance + critChance,
                 CritDamage = current.critDamage + critDamage,
                 ParallelCount = current.parallelCount,
+                ParallelDamagePercent = current.parallelDamagePercent,
                 SpreadCount = current.spreadCount,
                 SpreadDamagePercent = current.spreadDamagePercent,
                 PiercingCount = current.piercingCount,

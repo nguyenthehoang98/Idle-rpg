@@ -211,7 +211,7 @@ namespace _Game.GamePlay.Manager
                 (entity, pos, lastCollision) => OnDamageEntityFunction(skillData, runtimeData, entity, pos, scaleDamage,
                     lastCollision, ref onProjectileDestroyed),
                 projectile, dtt, damageTicket.ticketInterval,
-                colliderData.limitNumberCollision, colliderData.resetCollisionInterval
+                colliderData.limitNumberCollision + runtimeData.PiercingCount, colliderData.resetCollisionInterval
             );
             
             action.OnComplete += () =>

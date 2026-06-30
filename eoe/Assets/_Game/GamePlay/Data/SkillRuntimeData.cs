@@ -12,8 +12,8 @@ namespace _Game.GamePlay.Data
         public int PiercingCount;
         public float ExplosiveRadius;
         public float ExplosiveDamagePercent;
-        public int BounceCount;
-        public float BounceDamagePercent;
+        public int BounceCount; // chưa có logic
+        public float BounceDamagePercent; // chưa có logic
         public float KillInstantBelowHealthPercent;
     }
 }

@@ -135,6 +135,7 @@ namespace _Game.Configs
         public float damagePercent;
         public float cooldownReduce;
         public int parallelCount;
+        public int parallelDamagePercent;
         public int spreadCount;
         public float spreadDamagePercent;
         public int piercingCount;
