@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using LitMotion.Collections;
 using UnityEngine;
@@ -59,7 +60,11 @@ namespace LitMotion.Animation
                     if (isActive)
                     {
                         handle.Preserve();
-                        MotionManager.GetManagedDataRef(handle, false).OnCompleteAction += MoveNextMotion;
+                        MotionManager.GetManagedDataRef(handle, false).OnCompleteAction += () =>
+                        {
+                            MoveNextMotion();
+                            CheckStop();
+                        };
                     }
 
                     queuedComponent.TrackedHandle = handle;
@@ -79,7 +84,7 @@ namespace LitMotion.Animation
 
         public void Play()
         {
-            /*var isPlaying = false;
+            var isPlaying = false;
 
             foreach (var component in playingComponents.AsSpan())
             {
@@ -93,7 +98,7 @@ namespace LitMotion.Animation
                 }
             }
 
-            if (isPlaying) return;*/
+            if (isPlaying) return;
 
             playingComponents.Clear();
 
@@ -124,6 +129,8 @@ namespace LitMotion.Animation
                             {
                                 handle.Preserve();
                             }
+                            
+                            MotionManager.GetManagedDataRef(handle, false).OnCompleteAction += CheckStop;
 
                             playingComponents.Add(component);
                         }
@@ -149,6 +156,42 @@ namespace LitMotion.Animation
             }
         }
 
+        private void CheckStop()
+        {
+            double time = 0;
+            double duration = 0;
+            foreach (var comp in playingComponents.AsSpan())
+            {
+                time = Math.Max(time, comp.TrackedHandle.Time);
+                if (animationMode == AnimationMode.Sequential)
+                    duration += comp.TrackedHandle.TotalDuration;
+                else
+                    duration = Math.Max(duration, comp.TrackedHandle.TotalDuration);
+            }
+
+            if (time >= duration)
+            {
+                if (Application.isPlaying)
+                {
+                    StartCoroutine(AutoStop());
+                }
+                else
+                {
+                    Stop();
+                }
+            }
+        }
+
+        IEnumerator AutoStop()
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                yield return null;
+            }
+
+            Stop();
+        }
+
         public void Stop()
         {
             var span = playingComponents.AsSpan();
@@ -157,7 +200,7 @@ namespace LitMotion.Animation
             {
                 var handle = component.TrackedHandle;
                 handle.TryCancel();
-                component.OnStop();
+                //if (!Application.isPlaying) component.OnStop();
                 component.TrackedHandle = handle;
             }
 
@@ -180,10 +223,7 @@ namespace LitMotion.Animation
                 foreach (var component in playingComponents.AsSpan())
                 {
                     var handle = component.TrackedHandle;
-                    if (handle.IsActive())
-                    {
-                        return true;
-                    }
+                    if (handle.IsActive()) return true;
                 }
 
                 return false;

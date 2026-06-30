@@ -10,7 +10,7 @@ namespace LitMotion.Animation.Components
     [LitMotionAnimationComponentMenu("Rendering/Material/Property (Float)")]
     public sealed class MaterialFloatAnimation : FloatPropertyAnimationComponent<Material>
     {
-        [SerializeField] string propertyName = "";
+        [SerializeField] private string propertyName = "";
 
         protected override float GetValue(Material target)
         {
@@ -86,6 +86,29 @@ namespace LitMotion.Animation.Components
         protected override void SetValue(SpriteRenderer target, in Color value)
         {
             target.color = value;
+        }
+    }
+
+    [Serializable]
+    [LitMotionAnimationComponentMenu("Rendering/Sprite Renderer/Material Float Property")]
+    public sealed class SpriteRendererMaterialAnimation : FloatPropertyAnimationComponent<SpriteRenderer>
+    {
+        [SerializeField] private string propertyName = "";
+        
+        private MaterialPropertyBlock propertyBlock;
+
+        protected override float GetValue(SpriteRenderer target)
+        {
+            propertyBlock = new MaterialPropertyBlock();
+            target.GetPropertyBlock(propertyBlock);
+            float f = propertyBlock.GetFloat(propertyName);
+            return f;
+        }
+
+        protected override void SetValue(SpriteRenderer target, in float value)
+        {
+            propertyBlock.SetFloat(propertyName, value);
+            target.SetPropertyBlock(propertyBlock);
         }
     }
 

@@ -18,6 +18,8 @@ namespace LitMotion.Animation
                 : type.Name;
 #endif
         }
+        
+        public event Action OnComplete;
 
         [SerializeField] string displayName;
         [SerializeField] bool enabled = true;

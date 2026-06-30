@@ -83,9 +83,11 @@ Material:
     - _DstBlendAlpha: 0
     - _EnableExternalAlpha: 0
     - _GlossinessSource: 0
+    - _Glow: 1
     - _MinBrightness: 0.2
     - _QueueOffset: 0
     - _ReceiveShadows: 1
+    - _Saturate: 0
     - _Shininess: 0
     - _Smoothness: 0.5
     - _SmoothnessSource: 0

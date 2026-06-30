@@ -1,10 +1,9 @@
 using System;
-using System.Collections.Generic;
 using _Game.Configs;
 using _Game.GamePlay.Manager;
 using _KITSystem.Resource;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace _Game.GamePlay.Model
 {
@@ -13,6 +12,8 @@ namespace _Game.GamePlay.Model
     public class Monster : MonoBehaviour
     {
         [SerializeField] private Transform scaleTransform;
+        [SerializeField] private UnityEvent OnBeHit;
+        [SerializeField] private UnityEvent OnDeath;
         
         public static event Action<Monster> OnMonsterEnable;
         public static event Action<Monster> OnMonsterDisable;
@@ -26,7 +27,7 @@ namespace _Game.GamePlay.Model
         private float elapsedTime;
         private float deltaTime;
         private bool isInitialized;
-        
+
         private void FixedUpdate()
         {
             if (!isInitialized) return;
@@ -76,6 +77,7 @@ namespace _Game.GamePlay.Model
 
         public void BeHit()
         {
+            OnBeHit?.Invoke();
         }
 
         public void Destroy()
@@ -92,6 +94,8 @@ namespace _Game.GamePlay.Model
             OnMonsterDisable?.Invoke(this);
             
             isInitialized = false;
+            
+            OnDeath?.Invoke();
             
             gameObject.SetActive(false);
             

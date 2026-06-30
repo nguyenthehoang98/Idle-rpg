@@ -6,6 +6,7 @@ Shader "Game/Sprite-Lit-Brightness"
         _MaskTex("Mask", 2D) = "white" {}
         _NormalMap("Normal Map", 2D) = "bump" {}
 		_MinBrightness("Min Brightness", Range(0,1)) = 0.2
+		_Saturate("Saturate", Range(0,1)) = 0
         [MaterialToggle] _ZWrite("ZWrite", Float) = 0
 
         // Legacy properties. They're here so that materials using this shader can gracefully fallback to the legacy sprite shader.
@@ -81,6 +82,7 @@ Shader "Game/Sprite-Lit-Brightness"
             CBUFFER_START(UnityPerMaterial)
                 half4 _Color;
 				float _MinBrightness;
+				float _Saturate;
             CBUFFER_END
 
             #if USE_SHAPE_LIGHT_TYPE_0
@@ -141,7 +143,8 @@ Shader "Game/Sprite-Lit-Brightness"
 
 				half4 color = CombinedShapeLightShared(surfaceData, inputData);
 				float3 minColor = surfaceData.albedo * _MinBrightness;
-				color.rgb = max(color.rgb, minColor);
+				float3 originalColor = max(color.rgb, minColor);
+                color.rgb = lerp(originalColor, 1.0, _Saturate);
 				return color;
             }
             ENDHLSL
