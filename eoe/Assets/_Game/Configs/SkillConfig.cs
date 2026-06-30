@@ -12,11 +12,6 @@ namespace _Game.Configs
     public class SkillConfig : IGameConfig
     {
         [SerializeField] private List<SkillData> skills = new List<SkillData>();
-        [JsonProperty] private List<ColliderData> colliders = new List<ColliderData>();
-        [JsonProperty] private List<TrajectoryData> trajectories = new List<TrajectoryData>();
-        [JsonProperty] private List<FindTargetData> findTargets = new List<FindTargetData>();
-        [JsonProperty] private List<DamageTickerData> damageTickers = new List<DamageTickerData>();
-        [JsonProperty] private List<ExtraData> extras = new List<ExtraData>();
 
         private Dictionary<int, SkillData> cached;
         
@@ -32,83 +27,6 @@ namespace _Game.Configs
 
         public void OnPostImported()
         {
-            for (int i = 0; i < skills.Count; i++)
-            {
-                SkillData skill = skills[i];
-
-                bool found = false;
-                foreach (var c in colliders)
-                {
-                    if (skill.colliderId == c.id)
-                    {
-                        skill.collider = c;
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found)
-                    Debug.LogError($"Not found skill at '{skill.skillId}', collider id '{skill.colliderId}'");
-
-                found = false;
-                foreach (var t in trajectories)
-                {
-                    if (skill.trajectoryId == t.id)
-                    {
-                        skill.trajectory = t;
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found)
-                    Debug.LogError($"Not found skill at '{skill.skillId}', trajectory id '{skill.trajectoryId}'");
-                
-                found = false;
-                foreach (var f in findTargets)
-                {
-                    if (skill.findTargetId == f.id)
-                    {
-                        skill.findTarget = f;
-                        found = true;
-                        break;
-                    }
-                }
-                
-                if (!found)
-                    Debug.LogError($"Not found skill at '{skill.skillId}', findTarget id '{skill.findTargetId}'");
-                
-                found = false;
-                foreach (var d in damageTickers)
-                {
-                    if (skill.damageTickerId == d.id)
-                    {
-                        skill.damageTicker = d;
-                        found = true;
-                        break;
-                    }
-                }
-                
-                if (!found)
-                    Debug.LogError($"Not found skill at '{skill.skillId}', damageTicker id '{skill.damageTickerId}'");
-                
-                found = false;
-                foreach (var e in extras)
-                {
-                    if (skill.extraId == e.id)
-                    {
-                        skill.extra = e;
-                        found = true;
-                        break;
-                    }
-                }
-                
-                if (!found)
-                    Debug.LogError($"Not found skill at '{skill.skillId}', extra id '{skill.extraId}'");
-                
-
-                skills[i] = skill;
-            }
         }
 
         public void OnValidateLinkConfig()
@@ -130,63 +48,11 @@ namespace _Game.Configs
         public string prefabName; // Đọc từ weapon. monster
         public string impactName; // Đọc từ weapon. monster
         
-        [JsonProperty, NonSerialized] public string findTargetId;
-        [JsonProperty, NonSerialized] public string trajectoryId;
-        [JsonProperty, NonSerialized] public string colliderId;
-        [JsonProperty, NonSerialized] public string damageTickerId;
-        [JsonProperty, NonSerialized] public string extraId;
-
-        public FindTargetData findTarget;
-        public TrajectoryData trajectory;
-        public ColliderData collider;
-        public DamageTickerData damageTicker;
+        public DamageTickerType tickerType;
+        public float ticketInterval;
         
-        // runtime
-        public ExtraData extra;
-    }
-
-    [Serializable]
-    public struct ExtraData
-    {
-        [JsonProperty, NonSerialized] public string id;
-        
-        public float spreadAngleStep;
-        public float parallelDistanceStep;
-        public string explosivePrefabName;
-    }
-
-    [Serializable]
-    public struct ColliderData
-    {
-        [JsonProperty, NonSerialized] public string id;
-
-        public float timerTrigger;
-        public float duration;
-        public int limitNumberCollision;
-        public float resetCollisionInterval;
-        public ColliderType type;
-        public float radius;
-        public Vector2 relativePosition;
-    }
-
-    [Serializable]
-    public struct TrajectoryData
-    {
-        [JsonProperty, NonSerialized] public string id;
-        
-        public TrajectoryType type;
-        public float bulletInitSpeed;
-        public float bulletAcceleration;
-    }
-
-    [Serializable]
-    public struct FindTargetData
-    {
-        [JsonProperty, NonSerialized] public string id;
-        
-        public FilterType type;
-        public float radius;
-
+        public FilterType filterType;
+        public float filterRadius;
         public enum FilterType
         {
             None = 0,
@@ -199,15 +65,21 @@ namespace _Game.Configs
             DefLowest,
             DefHighest
         }
-    }
-
-    [Serializable]
-    public struct DamageTickerData
-    {
-        [NonSerialized] public string id;
         
-        public DamageTickerType type;
-        public float ticketInterval;
+        public ColliderType collShapeType;
+        public float collTimerTrigger;
+        public float collCircleRadius;
+        public float collDuration;
+        public float collResetCollision;
+        public int collLimitCollision;
+        
+        public TrajectoryType trajectoryType;
+        public float bulletInitSpeed;
+        public float bulletAcceleration;
+        
+        public float spreadAngleStep;
+        public float parallelDistanceStep;
+        public string explosivePrefabName;
     }
     
     public enum DamageTickerType

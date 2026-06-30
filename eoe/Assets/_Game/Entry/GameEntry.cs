@@ -1,6 +1,3 @@
-using _Game.Configs;
-using _Game.GamePlay.Manager;
-using _Game.GamePlay.Utils;
 using _KITSystem.Config;
 using _KITSystem.Resource;
 using _KITSystem.Utils;
@@ -32,11 +29,11 @@ namespace _Game.Entry
         {
             AssetBundleManager.SetLocationBundle(true);
             
-            await ConfigManager.Load(new string[] { "MonsterConfig", "LevelConfig", "WeaponConfig", "PlayerConfig" });
-
             ChangeSceneAsync("GameplayScene");
             
             isLoadingScene = true;
+            
+            await ConfigManager.Load(new string[] { "MonsterConfig", "LevelConfig", "WeaponConfig", "PlayerConfig" });
         }
 
         private void Update()

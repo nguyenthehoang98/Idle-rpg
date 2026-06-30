@@ -366,14 +366,14 @@ namespace _Game.GamePlay.Model
                 }
 
                 FindTargetType type = FindTargetType.Filter;
-                if (skillData.findTarget.type == FindTargetData.FilterType.Farthest)
+                if (skillData.filterType == SkillData.FilterType.Farthest)
                     type = FindTargetType.Farthest;
-                else if (skillData.findTarget.type == FindTargetData.FilterType.Nearest)
+                else if (skillData.filterType == SkillData.FilterType.Nearest)
                     type = FindTargetType.Nearest;
 
                 Vector3 position = MuzzlePosition();
                 Vector3 center = Vector3.zero;
-                float radius = skillData.findTarget.radius;
+                float radius = skillData.filterRadius;
                 float sqrRadius = radius * radius;
                 query.FindTarget(type, center, position, radius, (entity, float2) =>
                 {

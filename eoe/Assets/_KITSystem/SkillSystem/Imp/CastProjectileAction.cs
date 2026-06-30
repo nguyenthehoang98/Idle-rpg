@@ -79,7 +79,7 @@ namespace _KITSystem.SkillSystem.Imp
                     if (!TryDamage(position, entity, totalCollisions + 1 == limitNumberCollisions)) continue;
 
                     totalCollisions++;
-
+                    
                     if (totalCollisions == limitNumberCollisions)
                     {
                         Interrupt();
