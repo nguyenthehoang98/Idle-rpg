@@ -150,6 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a0dfb388fc490abe5977cb3b7c142e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game._GamePlay2.MonsterSortingLayer
+  rendererTransform: {fileID: 4651176741943372476}
   renderers:
   - {fileID: 5667090380951180666}
   - {fileID: 6686843005404104435}
@@ -166,6 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game._GamePlay2.Monster
   scaleTransform: {fileID: 6619085215776799793}
+  rendererTransform: {fileID: 4651176741943372476}
   OnBeHit:
     m_PersistentCalls:
       m_Calls:

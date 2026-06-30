@@ -12,6 +12,7 @@ namespace _Game.GamePlay.Model
     public class Monster : MonoBehaviour
     {
         [SerializeField] private Transform scaleTransform;
+        [SerializeField] private Transform rendererTransform;
         [SerializeField] private UnityEvent OnBeHit;
         [SerializeField] private UnityEvent OnDeath;
         
@@ -55,7 +56,8 @@ namespace _Game.GamePlay.Model
 
             int x = transform.position.x < 0 ? 1 : -1;
 
-            scaleTransform.localScale = monsterData.scale * new Vector3(x, 1, 1);
+            scaleTransform.localScale = monsterData.scale * Vector3.one;
+            rendererTransform.localScale = new Vector3(x, 1, 1);
 
             OnMonsterEnable?.Invoke(this);
             

@@ -18,15 +18,17 @@ namespace _KITSystem.Grid
         [SerializeField] private float defaultAgentRadius = 0.5f;
         [SerializeField, Range(0.1f, 0.9f), Tooltip("Hệ số bỏ qua việc kiểm tra khoảng cách")]
         private float deltaIgnoreCheckNeighborDistance = 0.2f;
-        [SerializeField, Range(0.1f, 1.0f), Tooltip("Khoảng cách bắt đầu kiểm soát việc tắc nghẽn di chuyển")]
+        /*[SerializeField, Range(0.1f, 1.0f), Tooltip("Khoảng cách bắt đầu kiểm soát việc tắc nghẽn di chuyển")]
         private float deltaStuckDistance = 0.2f;
+        [SerializeField, Range(1, 20), Tooltip("Số frame được tính là stop")]
+        private int stuckFrameCount;*/
 
         private Dictionary<int, AgentData> containers = new Dictionary<int, AgentData>();        
         private List<int> agents = new List<int>();
         private Simulator simulator;
         private IGrid grid;
         private float ignoreCheckNeighborDistanceSq;
-        private float deltaDistanceStuckSq;
+        //private float deltaDistanceStuckSq;
         
         public virtual void Tick(float deltaTime)
         {
@@ -101,7 +103,7 @@ namespace _KITSystem.Grid
             simulator.SetAgentDefaults(5f, 10, 10f, 10f, defaultAgentRadius, 1f, float2.zero);
             float a = 2 * (1 + deltaIgnoreCheckNeighborDistance) * defaultAgentRadius;
             ignoreCheckNeighborDistanceSq = a * a;
-            deltaDistanceStuckSq = deltaStuckDistance * deltaStuckDistance;
+            //deltaDistanceStuckSq = deltaStuckDistance * deltaStuckDistance;
         }
 
         private void ReachedGoal()
@@ -155,7 +157,7 @@ namespace _KITSystem.Grid
                     frontBlockedCount++;
                 }
 
-                float movedDistanceSq = math.distancesq(position, previous);
+                /*float movedDistanceSq = math.distancesq(position, previous);
                 bool stuck = movedDistanceSq < deltaDistanceStuckSq;
                 bool crowdedFront = frontBlockedCount >= 2;
                 if (crowdedFront && stuck)
@@ -167,7 +169,7 @@ namespace _KITSystem.Grid
                     temp.stuckFrames = 0;
                 }
 
-                /*if (temp.stuckFrames >= 10)
+                if (temp.stuckFrames >= stuckFrameCount)
                 {
                     temp.isStopped = true;
                     StopAgent(agent);
@@ -251,6 +253,5 @@ namespace _KITSystem.Grid
         public float stopDistanceSq;
 
         public bool isStopped;
-        public int stuckFrames;
     }
 }

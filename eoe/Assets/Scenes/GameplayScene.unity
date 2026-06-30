@@ -938,8 +938,9 @@ MonoBehaviour:
           x: 0
           y: 0
         defaultAgentRadius: 0.5
-        deltaIgnoreCheckNeighborDistance: 0.9
-        deltaStuckDistance: 0.2
+        deltaIgnoreCheckNeighborDistance: 0.5
+        deltaStuckDistance: 0.5
+        stuckFrameCount: 20
         stopDistance: 1.6
     - rid: 607417000826765380
       type: {class: SkillManager, ns: _Game.GamePlay.Manager, asm: Assembly-CSharp}
