@@ -291,9 +291,12 @@ namespace _Game.GamePlay.Manager
         {
             if (!EntityManager.IsEntityAlive(entity)) return false;
 
-            int damage = Mathf.CeilToInt(Formula.CalculateFinalDamage(runtimeData, out bool critical) * scaleDamage);
-
             ref HealthData health = ref ComponentManager<HealthData>.Get(entity);
+            
+            if(health.CurrentHealth <= 0) return false;
+            
+            int damage = Mathf.CeilToInt(Formula.CalculateFinalDamage(runtimeData, out bool critical) * scaleDamage);
+            
             health.CurrentHealth -= damage;
 
             if (AgentManager.TryGet_Monster(entity, out Monster monster) && health.CurrentHealth > 0) monster.BeHit();
