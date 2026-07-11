@@ -2,6 +2,9 @@ using System;
 using _Game.Configs;
 using _Game.GamePlay.Manager;
 using _KITSystem.Resource;
+using _KITSystem.Utils;
+using LitMotion;
+using LitMotion.Extensions;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -58,14 +61,20 @@ namespace _Game.GamePlay.Model
 
             int x = transform.position.x < 0 ? 1 : -1;
 
-            scaleTransform.localScale = monsterData.scale * Vector3.one;
+            scaleTransform.localScale = Vector3.zero;
             rendererTransform.localScale = new Vector3(x, 1, 1);
+
+            Vector3 scale = monsterData.scale * Vector3.one;
 
             OnMonsterEnable?.Invoke(this);
             
             gameObject.SetActive(true);
+
+            float duration = 0.15f;
             
-            isInitialized = true;
+            LMotion.Create(Vector3.zero, scale, duration)
+                .BindToLocalScale(scaleTransform);
+            this.WaitInvoke(duration, () => { isInitialized = true; });
         }
         
         public void SetPosition(Vector3 position, float dt)
