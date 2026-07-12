@@ -10,12 +10,11 @@ using UnityEngine.Events;
 
 namespace _Game.GamePlay.Model
 {
-    [RequireComponent(typeof(MonsterSkin))]
     [RequireComponent(typeof(MonsterSortingLayer))]
     public class Monster : MonoBehaviour
     {
         [SerializeField] private Transform scaleTransform;
-        [SerializeField] private Transform rendererTransform;
+        [SerializeField] private Transform flipTransform;
         [SerializeField] private UnityEvent OnBeHit;
         [SerializeField] private UnityEvent OnDeath;
         
@@ -32,6 +31,16 @@ namespace _Game.GamePlay.Model
         private float deltaTime;
         private bool isInitialized;
 
+        private void OnDrawGizmos()
+        {
+#if UNITY_EDITOR
+            if (Application.isPlaying) 
+                return;
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, 0.1f);
+#endif
+        }
+
         private void FixedUpdate()
         {
             if (!isInitialized) return;
@@ -45,8 +54,6 @@ namespace _Game.GamePlay.Model
 
         public async void Initialize(MonsterData monsterData)
         {
-            await GetComponent<MonsterSkin>().UpdateSkin(monsterData.skin);
-            
             if (deathAudioClip == null && !string.IsNullOrEmpty(monsterData.deathAudioClip))
             {
                 deathAudioClip = await AssetBundleManager.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
@@ -62,7 +69,7 @@ namespace _Game.GamePlay.Model
             int x = transform.position.x < 0 ? 1 : -1;
 
             scaleTransform.localScale = Vector3.zero;
-            rendererTransform.localScale = new Vector3(x, 1, 1);
+            flipTransform.localScale = new Vector3(x, 1, 1);
 
             Vector3 scale = monsterData.scale * Vector3.one;
 
