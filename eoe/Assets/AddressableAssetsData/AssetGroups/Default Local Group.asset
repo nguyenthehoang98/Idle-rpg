@@ -50,6 +50,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2a08992f67d80714784d77c50b25709c
+    m_Address: Fork.Equipment
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2bacccd9ef9a3284495cb63d35d408c7
     m_Address: T_Powerup.Skill.1002.1
     m_ReadOnly: 0
