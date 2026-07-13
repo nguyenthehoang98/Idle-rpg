@@ -76,6 +76,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   rotationDuration: 0.25
+  effectImpactPrefab: {fileID: 6631459377956474121, guid: e366fca57029858448e565ea7b90d880, type: 3}
 --- !u!95 &417439057925282555
 Animator:
   serializedVersion: 7

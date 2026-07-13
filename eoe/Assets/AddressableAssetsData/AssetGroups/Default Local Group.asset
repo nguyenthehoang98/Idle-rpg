@@ -55,11 +55,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2dd9e666ffaca10439384efd3e21d290
-    m_Address: shotgun_green.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 348f3f75697aebe4c8b8108c2e1f3262
     m_Address: T_Powerup.Skill.1001.4
     m_ReadOnly: 0
@@ -72,11 +67,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 44baf661eeefa4349b427fb07ccc33f0
     m_Address: arrow.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 470e0b356c719924fa6f45e004bcbf33
-    m_Address: shotgun_orange.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -102,11 +92,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5d6ddb7f70cb4de4fb354a518020c358
     m_Address: PlayerConfig
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6442c5363eaa242479f6f899628133b1
-    m_Address: shotgun_orange.weapon
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -175,11 +160,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9f0e94d71243e974685f5bcea515820b
-    m_Address: shotgun_green.weapon
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a03f9cc7a4b8e1541938e12b1245283c
     m_Address: TextDamageNormal
     m_ReadOnly: 0
@@ -197,6 +177,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ab8711b48e4d75147a20c016c30904f6
     m_Address: T_Powerup.Skill.1002.5
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: abdf9fc8142c9234eb8b7584ec2331a8
+    m_Address: Squeeze Bottle.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -257,11 +242,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e2610a4b8e71c7e449756965d4f888ed
     m_Address: T_Powerup.Skill.1002.8
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e366fca57029858448e565ea7b90d880
-    m_Address: default.impact
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

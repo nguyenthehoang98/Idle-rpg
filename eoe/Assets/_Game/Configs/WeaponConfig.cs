@@ -52,7 +52,6 @@ namespace _Game.Configs
                 {
                     weaponData.skillData = skillData;
                     weaponData.skillData.prefabName = weaponData.projectileName;
-                    weaponData.skillData.impactName = weaponData.impactName;
                 }
                 else Debug.LogError($"Not found skill '{weaponData.skillId}' at weapon '{weaponData.id}'");
                 weapons[i] = weaponData;

@@ -175,13 +175,6 @@ namespace _Game.GamePlay.Manager
             }
 
             GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(skillData.prefabName);
-            if (names.Add(skillData.prefabName))
-                Pool.RegisterPool(go, true);
-            
-            GameObject impact = await AssetBundleManager.GetAssetCached<GameObject>(skillData.impactName);
-            if (names.Add(skillData.impactName))
-                Pool.RegisterPool(impact, true);
-
             go = Pool.Instantiate(go, false);
             go.transform.position = position;
 
@@ -222,7 +215,7 @@ namespace _Game.GamePlay.Manager
                 onProjectileDestroyed += () =>
                 {
                     if (action.Reason == ActionCompleteReason.Interrupt)
-                        Pool.Instantiate(impact, true).transform.position = projectile.TargetPosition;
+                        Pool.Instantiate(runtimeData.ImpactEffectPrefab, true).transform.position = projectile.TargetPosition;
                 };
 
                 projectile.Destroy(onProjectileDestroyed);

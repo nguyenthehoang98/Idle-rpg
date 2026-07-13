@@ -46,7 +46,6 @@ namespace _Game.Configs
         public int skillId;
         public float lifeTime;
         public string prefabName; // Đọc từ weapon. monster
-        public string impactName; // Đọc từ weapon. monster
         
         public DamageTickerType tickerType;
         public float ticketInterval;

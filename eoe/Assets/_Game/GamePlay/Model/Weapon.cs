@@ -18,7 +18,6 @@ namespace _Game.GamePlay.Model
 {
     public class Weapon : MonoBehaviour
     {
-        private static readonly int IdleAnimator = Animator.StringToHash("Idle");
         private static readonly int AttackAnimator = Animator.StringToHash("Attack");
         private static readonly int OutlineColor = Shader.PropertyToID("_OutlineColor");
 
@@ -31,8 +30,11 @@ namespace _Game.GamePlay.Model
         [SerializeField] private Transform rotatePivot;
         [SerializeField] private AnimationCurve rotationCurve;
         [SerializeField] private float rotationDuration;
+        [Header("Prefabs")] 
+        [SerializeField] private GameObject effectImpactPrefab;
         
         private HashSet<string> names = new HashSet<string>();
+        private bool isEffectImpactLoaded;
 
         private int entityTarget;
         private int currentGroup; // {0:1-2-3-4} {1:4-5-6-7} {2:7-8-9-10}
@@ -128,11 +130,11 @@ namespace _Game.GamePlay.Model
                 Pool.Destroy(Pool.Instantiate(go));
             }
 
-            if (names.Add(skillData.impactName))
+            if (!isEffectImpactLoaded)
             {
-                go = await AssetBundleManager.GetAssetCached<GameObject>(skillData.impactName);
-                Pool.RegisterPool(go, true);
+                Pool.RegisterPool(effectImpactPrefab, true);
                 Pool.Destroy(Pool.Instantiate(go));
+                isEffectImpactLoaded = true;
             }
 
             if (names.Add(weaponData.attackAudioClip))
@@ -209,15 +211,13 @@ namespace _Game.GamePlay.Model
                 BounceCount = current.bounceCount,
                 BounceDamagePercent = current.bounceDamagePercent,
                 KillInstantBelowHealthPercent = current.killInstantBelowHealthPercent,
+                ImpactEffectPrefab = effectImpactPrefab,
             };
             
             SkillManager.CastSkill(skillData, runtimeData, muzzlePosition, destinationPosition, entityTarget);
         }
 
-        public void EndAnimation()
-        {
-            isAttacking = false;
-        }
+        public void EndAnimation() => isAttacking = false;
 
         private void UpdateUpgradeDataGroup()
         {
