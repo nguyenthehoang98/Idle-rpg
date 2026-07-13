@@ -212,11 +212,11 @@ namespace _Game.GamePlay.Manager
             
             action.OnComplete += () =>
             {
-                onProjectileDestroyed += () =>
+                /*onProjectileDestroyed += () =>
                 {
                     if (action.Reason == ActionCompleteReason.Interrupt)
                         Pool.Instantiate(runtimeData.ImpactEffectPrefab, true).transform.position = projectile.TargetPosition;
-                };
+                };*/
 
                 projectile.Destroy(onProjectileDestroyed);
             };

@@ -1,8 +1,6 @@
-using UnityEngine;
-
 namespace _Game.GamePlay.Data
 {
-    public class SkillRuntimeData
+    public struct SkillRuntimeData
     {
         public float Attack;
         public float CritChance;
@@ -17,6 +15,5 @@ namespace _Game.GamePlay.Data
         public int BounceCount; // chưa có logic
         public float BounceDamagePercent; // chưa có logic
         public float KillInstantBelowHealthPercent;
-        public GameObject ImpactEffectPrefab;
     }
 }
