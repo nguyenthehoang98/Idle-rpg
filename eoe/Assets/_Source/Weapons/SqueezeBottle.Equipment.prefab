@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 954820505271275567}
   - component: {fileID: 417439057925282555}
   m_Layer: 0
-  m_Name: shotgun_green.weapon
+  m_Name: SqueezeBottle.Equipment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

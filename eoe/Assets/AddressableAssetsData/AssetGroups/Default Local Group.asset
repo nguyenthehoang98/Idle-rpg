@@ -130,6 +130,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 80ab78efd07a83e41a287e5eed364747
+    m_Address: SqueezeBottle.Projectile
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 828387ba02e13fa4da54517e5bfe4659
     m_Address: T_Powerup.Skill.1001.7
     m_ReadOnly: 0
@@ -147,6 +152,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8bf8702efce94324483f60536c56ebcd
     m_Address: T_Powerup.Skill.1001.9
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8d088fce81fddef4c85eebe6714237c4
+    m_Address: SqueezeBottle.Equipment
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

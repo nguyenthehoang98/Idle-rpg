@@ -145,19 +145,6 @@ namespace _Game.GamePlay.Manager
         private async void CastSkill_Private(SkillData skillData, SkillRuntimeData runtimeData,
             Vector3 position, Vector3 destination, float scaleDamage)
         {
-            BaseCollider collider = null;
-            switch (skillData.collShapeType)
-            {
-                case ColliderType.Circle:
-                    collider = new CircleCollider(
-                        query, Vector2.zero, skillData.collTimerTrigger, skillData.collDuration, skillData.collCircleRadius
-                    );
-                    break;
-                default:
-                    Debug.LogError($"Collider Type not supported {skillData.collShapeType}");
-                    break;
-            }
-
             BaseTrajectory trajectory = null;
             float lifetimeProjectile = 0;
             float distanceDelta = Vector3.Distance(position, Vector3.zero);
@@ -200,6 +187,19 @@ namespace _Game.GamePlay.Manager
 
             Projectile projectile = go.GetComponent<Projectile>();
             if (projectile == null) Debug.LogError($"Projectile Component is null at '{go.name}'");
+            
+            BaseCollider collider = null;
+            switch (projectile.ShapeType)
+            {
+                case ColliderType.Circle:
+                    collider = new CircleCollider(
+                        query, Vector2.zero, skillData.collTimerTrigger, skillData.collDuration, projectile.CircleRadius
+                    );
+                    break;
+                default:
+                    Debug.LogError($"Collider Type not supported {projectile.ShapeType}");
+                    break;
+            }
 
             DamageTickerType tickerType = skillData.tickerType;
             _KITSystem.SkillSystem.Core.DamageTickerType dtt = Enum.Parse<_KITSystem.SkillSystem.Core.DamageTickerType>(

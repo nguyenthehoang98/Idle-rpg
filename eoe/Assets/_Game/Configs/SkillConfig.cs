@@ -66,9 +66,7 @@ namespace _Game.Configs
             DefHighest
         }
         
-        public ColliderType collShapeType;
         public float collTimerTrigger;
-        public float collCircleRadius;
         public float collDuration;
         public float collResetCollision;
         public int collLimitCollision;
