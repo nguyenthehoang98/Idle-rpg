@@ -125,6 +125,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 745d75c2da58f1042826ee98d9ae0e8a
+    m_Address: staff.1.lv1.weapon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7865e4f6b379479499429aa13c7ac812
     m_Address: T_Powerup.Skill.1002.9
     m_ReadOnly: 0
@@ -245,6 +250,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: debe5a9d6c4e6a9428c98411a7a3f3a5
+    m_Address: staff.2.lv1.weapon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e2610a4b8e71c7e449756965d4f888ed
     m_Address: T_Powerup.Skill.1002.8
     m_ReadOnly: 0
@@ -282,6 +292,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f3ce7b747fcf1234fb48e0fcf154b1c2
     m_Address: T_Powerup.Skill.1002.6
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f8e4adc6ad9153a46bdbbede003cbdcb
+    m_Address: 1001.monster
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

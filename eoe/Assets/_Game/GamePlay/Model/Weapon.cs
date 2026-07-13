@@ -18,19 +18,16 @@ namespace _Game.GamePlay.Model
 {
     public class Weapon : MonoBehaviour
     {
-        private static readonly int IdleAnimator = Animator.StringToHash("Idle");
         private static readonly int AttackAnimator = Animator.StringToHash("Attack");
         private static readonly int OutlineColor = Shader.PropertyToID("_OutlineColor");
 
-        [Header("Outline")]
-        [SerializeField] private SpriteRenderer spOutline;
-        [SerializeField] private float outlineColorDuration = 0.2f;
-        [Header("Element")]
+        [SerializeField] private SpriteRenderer model;
         [SerializeField] private Transform muzzle;
         [SerializeField] private Animator animator;
         [SerializeField] private Transform rotatePivot;
         [SerializeField] private AnimationCurve rotationCurve;
         [SerializeField] private float rotationDuration;
+        [SerializeField] private float outlineColorDuration = 0.2f;
         
         private HashSet<string> names = new HashSet<string>();
 
@@ -324,6 +321,7 @@ namespace _Game.GamePlay.Model
             if (updateOutline)
             {
                 if (coroutineUpdateColor != null) StopCoroutine(coroutineUpdateColor);
+                
                 coroutineUpdateColor = StartCoroutine(ChangeColor(color));
             }
         }
@@ -332,7 +330,7 @@ namespace _Game.GamePlay.Model
         {
             float elapsedTime = 0f;
 
-            spOutline.GetPropertyBlock(propertyBlock);
+            model.GetPropertyBlock(propertyBlock);
             Color color = propertyBlock.GetColor(OutlineColor);
             
             while (elapsedTime < outlineColorDuration)
@@ -343,7 +341,7 @@ namespace _Game.GamePlay.Model
 
                 propertyBlock.SetColor(OutlineColor, Color.Lerp(color, targetColor, t));
 
-                spOutline.SetPropertyBlock(propertyBlock);
+                model.SetPropertyBlock(propertyBlock);
                 
                 yield return new WaitForSeconds(DeltaTime);
             }
