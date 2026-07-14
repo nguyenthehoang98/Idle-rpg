@@ -10,20 +10,16 @@ namespace _KITSystem.SkillSystem.Imp
         private readonly float initialSpeed;
         private readonly float initialDuration;
         private readonly float delayDuration;
-        private readonly float returnSpeed;
         private readonly float returnDuration;
 
-        private bool isInitialized;
-        private bool isWaitingPhase;
-        private bool isReturningPhase;
-
+        private Phase phase = Phase.Init;
         private Vector2 deltaPosition;
+        private Vector2 savedDeltaPosition;
         private float elapsedTime;
 
         public BoomerangTrajectory(AnimationCurve initialCurve, AnimationCurve returnCurve,
             float initialSpeed, float initialDuration,
-            float delayDuration,
-            float returnSpeed, float returnDuration,
+            float delayDuration, float returnDuration,
             Vector2 start, Vector2 goal) : base(start, goal)
         {
             this.initialCurve = initialCurve;
@@ -32,50 +28,58 @@ namespace _KITSystem.SkillSystem.Imp
             this.initialSpeed = initialSpeed;
             this.initialDuration = initialDuration;
             this.returnDuration = returnDuration;
-            this.returnSpeed = returnSpeed;
-            this.isInitialized = true;
         }
 
         protected override Vector2 OnEvaluatePosition(float deltaTime)
         {
             elapsedTime += deltaTime;
-
-            if (isReturningPhase)
+            float p, f, s;
+            switch (phase)
             {
-                float p = elapsedTime / returnDuration;
-                float f = returnCurve.Evaluate(p);
-                float s = f * returnSpeed * deltaTime;
-                deltaPosition -= s * Direction;
-               
-                if (p >= 1)
-                {
-                    isReturningPhase = false;
-                }
-            }
-            else if (isWaitingPhase)
-            {
-                if (elapsedTime >= delayDuration)
-                {
-                    elapsedTime = 0;
-                    isWaitingPhase = false;
-                    isReturningPhase = true;
-                }
-            }
-            else if (isInitialized)
-            {
-                float p = Mathf.Clamp01(elapsedTime / initialDuration);
-                float f = initialCurve.Evaluate(p);
-                float s = f * initialSpeed * deltaTime;
-                deltaPosition += s * Direction;
+                case Phase.Init:
+                    p = Mathf.Clamp01(elapsedTime / initialDuration);
+                    f = initialCurve.Evaluate(p);
+                    s = f * initialSpeed * deltaTime;
+                    deltaPosition += s * Direction;
               
-                if (p >= 1)
-                {
-                    isInitialized = false;
-                    isWaitingPhase = true;
-                }
+                    if (p >= 1)
+                    {
+                        if (delayDuration > 0) phase = Phase.Wait;
+                        else phase = Phase.Return;
+                        elapsedTime = 0;
+                        savedDeltaPosition = deltaPosition;
+                        Debug.LogError("init " + deltaPosition + ", " + initialSpeed);
+                    }
+                    break;
+                case Phase.Wait:
+                    if (elapsedTime >= delayDuration)
+                    {
+                        phase = Phase.Return;
+                        elapsedTime = 0;
+                    }
+                    break;
+                case Phase.Return:
+                    p = elapsedTime / returnDuration;
+                    f = returnCurve.Evaluate(p);
+                    deltaPosition = Vector2.Lerp(savedDeltaPosition, Vector2.zero, f);
+               
+                    if (p >= 1)
+                    {
+                        elapsedTime = 0;
+                        phase = Phase.Complete;
+                        Debug.LogError("end " + deltaPosition);
+                    }
+                    break;
+                case Phase.Complete:
+                    break;
             }
 
             return deltaPosition + Start;
+        }
+
+        enum Phase
+        {
+            Init, Wait, Return, Complete
         }
     }
 }

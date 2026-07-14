@@ -885,7 +885,7 @@ MonoBehaviour:
   energy: {fileID: 1074248198}
   equipmentQueue: {fileID: 983035829}
   equipmentActivation: {fileID: 1374644340}
-  equipments: e9030000000000000000000000000000
+  equipments: ea030000000000000000000000000000
   slots:
   - {fileID: 1143688530}
   - {fileID: 1219510552}
@@ -1015,9 +1015,6 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    boomerangReturnDurationPercent: 0
-    boomerangInitDurationPercent: 0
-    boomerangWaitingDurationPercent: 0
   rotatePivot: {fileID: 0}
   rotationCurve:
     serializedVersion: 2

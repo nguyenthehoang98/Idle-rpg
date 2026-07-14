@@ -59,6 +59,14 @@ namespace _Game.GamePlay.Manager
                 return;
             }
 
+            // ~todo: force cast skill if weapon can fly
+            if (runtimeData.IsFlyWeapon)
+            {
+                instance.CastSkill_Private(skillData, runtimeData, position, destination, 1);
+                
+                return;
+            }
+
             instance.PredictedTargetDamage(runtimeData, entityTarget);
             
             Vector3 direction = (destination - position).normalized;
@@ -118,6 +126,7 @@ namespace _Game.GamePlay.Manager
             float lifeTime = 0;
        
             BaseTrajectory trajectory = GetTrajectory(runtimeData.Trajectory, skillData, position, destination, ref lifeTime);
+            Debug.Log("cast projectile: " + trajectory.GetHashCode());
             if (trajectory == null)
             {
 #if UNITY_EDITOR
@@ -420,8 +429,7 @@ namespace _Game.GamePlay.Manager
                     return new BoomerangTrajectory(trajectoryData.boomerangInitCurve,
                         trajectoryData.boomerangReturnCurve,
                         skillData.boomerangInitSpeed, skillData.boomerangInitDuration,
-                        skillData.boomerangWaitingDuration,
-                        skillData.boomerangReturnSpeed, skillData.boomerangReturnDuration,
+                        skillData.boomerangWaitingDuration, skillData.boomerangReturnDuration,
                         position, destination);
                 default:
                     Debug.LogError("Unknown Trajectory type " + trajectoryData.type);
