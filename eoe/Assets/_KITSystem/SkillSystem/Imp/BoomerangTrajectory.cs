@@ -48,7 +48,6 @@ namespace _KITSystem.SkillSystem.Imp
                         else phase = Phase.Return;
                         elapsedTime = 0;
                         savedDeltaPosition = deltaPosition;
-                        Debug.LogError("init " + deltaPosition + ", " + initialSpeed);
                     }
                     break;
                 case Phase.Wait:
@@ -67,7 +66,6 @@ namespace _KITSystem.SkillSystem.Imp
                     {
                         elapsedTime = 0;
                         phase = Phase.Complete;
-                        Debug.LogError("end " + deltaPosition);
                     }
                     break;
                 case Phase.Complete:

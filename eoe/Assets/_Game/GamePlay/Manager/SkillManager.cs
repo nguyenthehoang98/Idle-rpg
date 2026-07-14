@@ -126,7 +126,6 @@ namespace _Game.GamePlay.Manager
             float lifeTime = 0;
        
             BaseTrajectory trajectory = GetTrajectory(runtimeData.Trajectory, skillData, position, destination, ref lifeTime);
-            Debug.Log("cast projectile: " + trajectory.GetHashCode());
             if (trajectory == null)
             {
 #if UNITY_EDITOR
@@ -204,7 +203,9 @@ namespace _Game.GamePlay.Manager
             
             castProjectileAction.OnComplete += () =>
             {
-                projectile.Destroy(onProjectileDestroyed);
+                if (isFlyWeapon) runtimeData.FlyWeapon.OnStopAttack();
+
+                projectile.Destroy(onProjectileDestroyed);         
             };
             
             RequestAddAction(1, castProjectileAction);

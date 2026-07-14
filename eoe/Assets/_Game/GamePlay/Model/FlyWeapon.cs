@@ -18,8 +18,13 @@ namespace _Game.GamePlay.Model
             animator.enabled = false;
             
             ExecuteAttack();
+        }
+
+        public override void OnStopAttack()
+        {
+            base.OnStopAttack();
             
-            Debug.LogError("@execute attack");
+            animator.enabled = true;
         }
     }
 }

@@ -296,7 +296,7 @@ namespace _Game.GamePlay.Model
             SkillManager.CastSkill(SkillData, runtimeData, muzzlePosition, destinationPosition, entity);
         }
 
-        protected virtual void OnStopAttack()
+        public virtual void OnStopAttack()
         {
             IsAttacking = false;
         }
