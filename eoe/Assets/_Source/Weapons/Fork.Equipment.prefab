@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8792860407553118502}
-  - component: {fileID: 954820505271275567}
   - component: {fileID: 417439057925282555}
+  - component: {fileID: 1263631346473971960}
   m_Layer: 0
   m_Name: Fork.Equipment
   m_TagString: Untagged
@@ -34,48 +34,6 @@ Transform:
   - {fileID: 154186919891485008}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &954820505271275567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 597346039149855723}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 908ee781e0a58ae42b2d53367951931e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::_Game._GamePlay.Weapon
-  spOutline: {fileID: 6899095874571813914}
-  outlineColorDuration: 0.2
-  muzzle: {fileID: 0}
-  animator: {fileID: 417439057925282555}
-  rotatePivot: {fileID: 154186919891485008}
-  rotationCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  rotationDuration: 0.25
 --- !u!95 &417439057925282555
 Animator:
   serializedVersion: 7
@@ -98,6 +56,53 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1263631346473971960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 597346039149855723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 323f0f68c6614897bf802376601d5abe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.Model.RangedWeapon
+  renderer: {fileID: 0}
+  adjustOutlineColorDuration: 0.2
+  trajectory:
+    type: 0
+    projectileCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    boomerangInitCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    boomerangReturnCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    boomerangReturnDurationPercent: 0
+    boomerangInitDurationPercent: 0
+    boomerangWaitingDurationPercent: 0
+  rotatePivot: {fileID: 0}
+  rotationCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  rotationDuration: 0
+  muzzle: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!1 &3657667344081574233
 GameObject:
   m_ObjectHideFlags: 0

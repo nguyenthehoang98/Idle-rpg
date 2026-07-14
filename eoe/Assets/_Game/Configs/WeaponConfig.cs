@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using _KITSystem.Config;
 using UnityEngine;
+using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -63,9 +64,7 @@ namespace _Game.Configs
                     Debug.LogError($"Prefab name is empty at weapon '{weaponData.id}'");
                 if(string.IsNullOrEmpty(weaponData.projectileName))
                     Debug.LogError($"Projectile name is empty at weapon '{weaponData.id}'");
-                if(string.IsNullOrEmpty(weaponData.impactName))
-                    Debug.LogError($"Impact name is empty at weapon '{weaponData.id}'");
-                if(string.IsNullOrEmpty(weaponData.attackAudioClip))
+                if(string.IsNullOrEmpty(weaponData.audioClip))
                     Debug.LogError($"Attack audio is empty at weapon '{weaponData.id}'");
             }
 #endif
@@ -101,24 +100,39 @@ namespace _Game.Configs
             return dict;
         }
     }
-    
+
     [Serializable]
     public struct WeaponData : IEquatable<WeaponData>
     {
         public int id;
+        public int skillId;
         public string prefabName;
         public string projectileName;
-        public string impactName;
         public string iconName;
-        public int skillId;
+
+        /*
+         * @ Stat
+         */
         public float cooldown;
         public float attackSpeed;
         public int attack;
         public float critChance;
         public float critDamage;
+
+        /// <summary>
+        /// Runtime data
+        /// </summary>
         public SkillData skillData;
-        public string attackAudioClip;
-        public float attackVolume;
+
+        /// <summary>
+        /// Attack audio clip
+        /// </summary>
+        public string audioClip;
+
+        /// <summary>
+        /// Attack volume
+        /// </summary>
+        public float volume;
 
         public override int GetHashCode()
         {

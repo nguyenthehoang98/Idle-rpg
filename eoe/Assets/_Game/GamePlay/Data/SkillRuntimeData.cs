@@ -1,3 +1,5 @@
+using _KITSystem.SkillSystem.Imp;
+
 namespace _Game.GamePlay.Data
 {
     public struct SkillRuntimeData
@@ -15,5 +17,6 @@ namespace _Game.GamePlay.Data
         public int BounceCount; // chưa có logic
         public float BounceDamagePercent; // chưa có logic
         public float KillInstantBelowHealthPercent;
+        public TrajectoryData Trajectory;
     }
 }

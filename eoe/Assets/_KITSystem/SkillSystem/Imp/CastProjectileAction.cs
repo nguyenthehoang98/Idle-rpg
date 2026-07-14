@@ -11,8 +11,7 @@ namespace _KITSystem.SkillSystem.Imp
     {
         private readonly BaseCollider collider;
         private readonly BaseTrajectory trajectory;
-        private readonly DamageTickerType damageTickerType;
-        private readonly float damageTickerInterval;
+        private readonly float damageInterval;
         private readonly int limitNumberCollisions;
         private readonly float resetCollisionInterval;
         private readonly Func<int, Vector2, bool, bool> onDamageEntity;
@@ -28,17 +27,16 @@ namespace _KITSystem.SkillSystem.Imp
 
         public CastProjectileAction(Spu spu, float lifeTime, BaseCollider collider, BaseTrajectory trajectory,
             Func<int, Vector2, bool, bool> onDamageEntity,
-            Projectile projectile, DamageTickerType damageTickerType, float damageTickerInterval,
+            Projectile projectile, float damageInterval,
             int limitNumberCollisions, float resetCollisionInterval) : base(spu, lifeTime)
         {
             this.onDamageEntity = onDamageEntity;
             this.collider = collider;
             this.trajectory = trajectory;
             this.projectile = projectile;
-            this.damageTickerType = damageTickerType;
             this.limitNumberCollisions = limitNumberCollisions;
             this.resetCollisionInterval = resetCollisionInterval > 0 ? resetCollisionInterval : float.MaxValue;
-            this.damageTickerInterval = damageTickerInterval;
+            this.damageInterval = damageInterval;
             this.collisions = new HashSet<int>();
             this.collisionResetElapsedTime = this.damageTickerElapsedTime = 0;
             this.totalCollisions = 0;
@@ -74,7 +72,8 @@ namespace _KITSystem.SkillSystem.Imp
             {
                 foreach (var entity in results)
                 {
-                    if (damageTickerType == DamageTickerType.DamageOverTime && !this.collisions.Add(entity)) continue;
+                    bool dmgOverTime = damageInterval > 0;
+                    if (dmgOverTime && !this.collisions.Add(entity)) continue;
 
                     if (!TryDamage(position, entity, totalCollisions + 1 == limitNumberCollisions)) continue;
 
@@ -103,22 +102,22 @@ namespace _KITSystem.SkillSystem.Imp
 
         private bool TryDamage(Vector2 position, int entity, bool lastCollision)
         {
-            switch (damageTickerType)
-            {
-                case DamageTickerType.Instant:
-                    return Damage(position, entity, lastCollision);
-                case DamageTickerType.DamageOverTime:
-                    if (damageTickerElapsedTime < damageTickerInterval) return false;
-                    if (Damage(position, entity, lastCollision))
-                    {
-                        damageTickerElapsedTime = 0;
-                        return true;
-                    }
+            bool dmgOverTime = damageInterval > 0;
 
-                    return false;
-                default:
-                    Debug.LogError($"TryDamage: '{damageTickerType}' not defined ");
-                    return false;
+            if (dmgOverTime)
+            {
+                if (damageTickerElapsedTime < damageInterval) return false;
+                if (Damage(position, entity, lastCollision))
+                {
+                    damageTickerElapsedTime = 0;
+                    return true;
+                }
+
+                return false;
+            }
+            else
+            {
+                return Damage(position, entity, lastCollision);
             }
         }
 

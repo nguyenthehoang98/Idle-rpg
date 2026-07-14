@@ -4,8 +4,7 @@ using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Imp
 {
-    public class 
-        CircleCollider : BaseCollider
+    public class CircleCollider : BaseCollider
     {
         private Vector2 size;
         private float radius;

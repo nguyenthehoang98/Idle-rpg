@@ -1,6 +1,7 @@
 using System;
 using _Game.Configs;
 using _KITSystem.Resource;
+using _KITSystem.SkillSystem.Imp;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -14,11 +15,9 @@ namespace _Game.GamePlay.Model
         public Vector3 PreviousPosition { get; private set; }
 
         [SerializeField] private TrailRenderer trailRenderer;
-        [SerializeField] private ColliderType collShapeType;
-        [SerializeField] private float collCircleRadius;
+        [SerializeField] private ColliderData colliderData;
 
-        public ColliderType ShapeType => collShapeType;
-        public float CircleRadius => collCircleRadius;
+        public ColliderData ColliderData => colliderData;
 
         private Action onDestroyCallback;
         private float elapsedTime;
@@ -29,10 +28,10 @@ namespace _Game.GamePlay.Model
         private void OnDrawGizmos()
         {
 #if UNITY_EDITOR
-            switch (collShapeType)
+            switch (colliderData.type)
             {
                 case ColliderType.Circle:
-                    Handles.DrawWireDisc(transform.position, Vector3.forward, collCircleRadius);
+                    Handles.DrawWireDisc(transform.position, Vector3.forward, colliderData.circleRadius);
                     break;
                 default: 
                     Debug.LogError("Error in DrawGizmosSelected");

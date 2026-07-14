@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using _Game.Configs;
-using _Game.Entry;
 using _Game.GamePlay.Data;
 using _Game.GamePlay.Entity;
 using _Game.GamePlay.Model;
@@ -14,7 +13,6 @@ using _KITSystem.SkillSystem.Core;
 using _KITSystem.SkillSystem.Imp;
 using _KITSystem.Utils;
 using UnityEngine;
-using DamageTickerType = _Game.Configs.DamageTickerType;
 
 namespace _Game.GamePlay.Manager
 {
@@ -145,86 +143,67 @@ namespace _Game.GamePlay.Manager
         private async void CastSkill_Private(SkillData skillData, SkillRuntimeData runtimeData,
             Vector3 position, Vector3 destination, float scaleDamage)
         {
-            BaseTrajectory trajectory = null;
-            float lifetimeProjectile = 0;
-            float distanceDelta = Vector3.Distance(position, Vector3.zero);
-            
-            switch (skillData.trajectoryType)
+            float lifeTime = skillData.lifeTime;
+       
+            BaseTrajectory trajectory = GetTrajectory(runtimeData.Trajectory, skillData, position, destination, ref lifeTime);
+            if (trajectory == null)
             {
-                case TrajectoryType.Bullet:
-                    // s=0.5at2 + vt
-                    float s = skillData.filterRadius - distanceDelta;
-                    float v = skillData.bulletInitSpeed;
-                    float a = skillData.bulletAcceleration;
-
-                    if (a > 0)
-                    {
-                        float dt = v * v + 2f * a * s;
-                        if (dt >= 0) lifetimeProjectile = (-v + Mathf.Sqrt(dt)) / a;
-                    }
-                    else
-                    {
-                        lifetimeProjectile = s / v;
-                    }
-                    
-                    trajectory = new BulletTrajectory(v, a, position, destination);
-                    break;
-                default:
-                    Debug.LogError($"Trajectory Type not supported {skillData.trajectoryType}");
-                    break;
+#if UNITY_EDITOR
+                Debug.LogError("Stop cast skill because Trajectory is null, skillId " + skillData.skillId);
+#endif
+                return;
+            }
+            
+            if (lifeTime <= 0) lifeTime = skillData.lifeTime;
+            
+            GameObject prefab = await AssetBundleManager.GetAssetCached<GameObject>(skillData.prefabName);
+            if (prefab == null)
+            {
+#if UNITY_EDITOR
+                Debug.LogError("Stop cast skill because prefab is null, skillId " + skillData.skillId);
+#endif
+                return;
+            }
+            
+            Projectile projectile = prefab.GetComponent<Projectile>();
+            if (projectile == null)
+            {
+#if UNITY_EDITOR
+                Debug.LogError("Stop cast skill because Projectile Component is null, prefab " + prefab.name);
+#endif
+                return;
             }
 
-            GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(skillData.prefabName);
-            go = Pool.Instantiate(go, false);
+            BaseCollider collider = GetCollider(projectile.ColliderData, skillData);
+            if (collider == null)
+            {
+#if UNITY_EDITOR
+                Debug.LogError("Stop cast skill because Collider is null, skillId " + skillData.skillId);
+#endif
+                return;
+            }
+
+            GameObject go = Pool.Instantiate(prefab, false);
             go.transform.position = position;
 
-            Projectile projectile = go.GetComponent<Projectile>();
-            if (projectile == null) Debug.LogError($"Projectile Component is null at '{go.name}'");
-            
-            BaseCollider collider = null;
-            switch (projectile.ShapeType)
-            {
-                case ColliderType.Circle:
-                    collider = new CircleCollider(
-                        query, Vector2.zero, skillData.collTimerTrigger, skillData.collDuration, projectile.CircleRadius
-                    );
-                    break;
-                default:
-                    Debug.LogError($"Collider Type not supported {projectile.ShapeType}");
-                    break;
-            }
-
-            DamageTickerType tickerType = skillData.tickerType;
-            _KITSystem.SkillSystem.Core.DamageTickerType dtt = Enum.Parse<_KITSystem.SkillSystem.Core.DamageTickerType>(
-                tickerType.ToString()
-            );
-
-            if (lifetimeProjectile <= 0) lifetimeProjectile = skillData.lifeTime;
-            
             Action onProjectileDestroyed = () => { };
-            CastProjectileAction action = new CastProjectileAction(this, lifetimeProjectile, collider, trajectory,
+            CastProjectileAction castProjectileAction = new CastProjectileAction(this, lifeTime, collider, trajectory,
                 (entity, pos, lastCollision) =>
                     OnDamageEntityFunction(skillData, runtimeData, entity, pos, scaleDamage, lastCollision,
                         ref onProjectileDestroyed),
-                projectile, dtt, skillData.ticketInterval,
+                projectile, skillData.damageInterval,
                 skillData.collLimitCollision + runtimeData.PiercingCount, skillData.collResetCollision
             );
             
-            action.OnComplete += () =>
+            castProjectileAction.OnComplete += () =>
             {
-                /*onProjectileDestroyed += () =>
-                {
-                    if (action.Reason == ActionCompleteReason.Interrupt)
-                        Pool.Instantiate(runtimeData.ImpactEffectPrefab, true).transform.position = projectile.TargetPosition;
-                };*/
-
                 projectile.Destroy(onProjectileDestroyed);
             };
-
-            RequestAddAction(1, action);
+            
+            RequestAddAction(1, castProjectileAction);
 
             projectile.Initialize();
-            
+
             projectile.gameObject.SetActive(true);
         }
 
@@ -345,6 +324,9 @@ namespace _Game.GamePlay.Manager
             return true;
         }
 
+        /*
+         * @Spawn objects
+         */
         private async void SpawnExplosiveAura(string prefabName, float radius, Vector3 position)
         {
             if (string.IsNullOrEmpty(prefabName)) return;
@@ -370,6 +352,48 @@ namespace _Game.GamePlay.Manager
             ins.transform.position = position + new Vector3(offsetX, 0, 0);
 
             ins.Execute(damage);
+        }
+
+        /*
+         * @Build element
+         */
+        
+        private BaseCollider GetCollider(ColliderData colliderData, SkillData skillData)
+        {
+            switch (colliderData.type)
+            {
+                case ColliderType.Circle:
+                    return new CircleCollider(query, Vector2.zero,
+                        skillData.collTimerTrigger, skillData.collDuration, colliderData.circleRadius
+                    );
+                default:
+                    Debug.LogError("Unknown Collider type " + colliderData.type);
+                    return null;
+            }
+        }
+        
+        private BaseTrajectory GetTrajectory(TrajectoryData trajectoryData, SkillData skillData, Vector3 position, Vector3 destination, ref float duration)
+        {
+            float d = Vector3.Distance(position, Vector3.zero);
+            switch (trajectoryData.type)
+            {
+                case TrajectoryType.Projectile:
+                    duration = (skillData.findRadius - d) / skillData.projectileSpeed;
+                    return new ProjectileTrajectory(trajectoryData.projectileCurve, skillData.projectileSpeed,
+                        duration, position, destination
+                    );
+                case TrajectoryType.Boomerang:
+                    Debug.Log("tính lại duration ở đây để giới hạn trong vòng tròn");
+                    return new BoomerangTrajectory(trajectoryData.boomerangInitCurve,
+                        trajectoryData.boomerangReturnCurve,
+                        skillData.boomerangInitSpeed, trajectoryData.boomerangInitDurationPercent * duration,
+                        trajectoryData.boomerangWaitingDurationPercent * duration,
+                        skillData.boomerangReturnSpeed, trajectoryData.boomerangReturnDurationPercent * duration,
+                        position, destination);
+                default:
+                    Debug.LogError("Unknown Trajectory type " + trajectoryData.type);
+                    return null;
+            }
         }
     }
 

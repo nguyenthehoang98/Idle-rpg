@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using _KITSystem.Config;
-using Newtonsoft.Json;
+using _KITSystem.SkillSystem.Core;
+using _KITSystem.SkillSystem.Imp;
 using UnityEngine;
 
 namespace _Game.Configs
@@ -14,14 +15,15 @@ namespace _Game.Configs
         [SerializeField] private List<SkillData> skills = new List<SkillData>();
 
         private Dictionary<int, SkillData> cached;
-        
+
         public void OnMappingValue()
         {
             cached = new Dictionary<int, SkillData>();
 
-            foreach (var skillData in skills)
+            foreach (SkillData skillData in skills)
             {
-                if (!cached.TryAdd(skillData.skillId, skillData)) Debug.LogError($"Duplicate skill '{skillData.skillId}'");
+                if (!cached.TryAdd(skillData.skillId, skillData))
+                    Debug.LogError($"Duplicate skill '{skillData.skillId}'");
             }
         }
 
@@ -37,60 +39,52 @@ namespace _Game.Configs
         {
             return cached.TryGetValue(skillId, out skill);
         }
-    }    
+    }
 #endif
-    
+
     [Serializable]
     public struct SkillData
     {
+        /*
+         * @Default stat
+         */
         public int skillId;
-        public float lifeTime;
         public string prefabName; // Đọc từ weapon. monster
-        
-        public DamageTickerType tickerType;
-        public float ticketInterval;
-        
-        public FilterType filterType;
-        public float filterRadius;
-        public enum FilterType
-        {
-            None = 0,
-            Nearest,
-            Farthest,
-            HpLowest,
-            HpHighest,
-            AtkLowest,
-            AtkHighest,
-            DefLowest,
-            DefHighest
-        }
-        
+        public float lifeTime;
+        public float size;
+
+        /*
+         * @Damage ticet
+         */
+        public float damageInterval;
+
+        /*
+         * @Query entity
+         */
+        public FindTargetType findTarget;
+        public float findRadius;
+
+        /*
+         * @Trajectory
+         */
+        public TrajectoryType trajectory;
+        public float projectileSpeed;
+        public float boomerangInitSpeed;
+        public float boomerangReturnSpeed;
+
+        /*
+         * @Collider
+         */
         public float collTimerTrigger;
         public float collDuration;
         public float collResetCollision;
         public int collLimitCollision;
-        
-        public TrajectoryType trajectoryType;
-        public float bulletInitSpeed;
-        public float bulletAcceleration;
-        
+
+        /*
+         * @Extra/bonus
+         */
         public float spreadAngleStep;
         public float parallelDistanceStep;
         public string explosivePrefabName;
-    }
-    
-    public enum DamageTickerType
-    {
-        Instant, DamageOverTime
-    }
-
-    public enum TrajectoryType
-    {
-        Bullet = 1,
-    }
-
-    public enum ColliderType
-    {
-        Circle
     }
 }

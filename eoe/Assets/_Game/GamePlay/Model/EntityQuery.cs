@@ -64,7 +64,7 @@ namespace _Game.GamePlay.Model
 
                         result.Secondary = new QueryEntityData(entity, data.position);
                         break;
-                    case FindTargetType.Filter:
+                    default: Debug.LogError("Unknown entity type " + type);
                         break;
                 }
             }
