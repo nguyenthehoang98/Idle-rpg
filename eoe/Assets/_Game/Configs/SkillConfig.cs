@@ -50,7 +50,6 @@ namespace _Game.Configs
          */
         public int skillId;
         public string prefabName; // Đọc từ weapon. monster
-        public float lifeTime;
         public float size;
 
         /*
@@ -71,7 +70,9 @@ namespace _Game.Configs
         public float projectileSpeed;
         public float boomerangInitSpeed;
         public float boomerangReturnSpeed;
-
+        public float boomerangInitDuration;
+        public float boomerangReturnDuration;
+        public float boomerangWaitingDuration;
         /*
          * @Collider
          */

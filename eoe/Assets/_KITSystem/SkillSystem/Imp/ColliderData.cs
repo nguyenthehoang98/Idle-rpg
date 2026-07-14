@@ -11,6 +11,7 @@ namespace _KITSystem.SkillSystem.Imp
     {
         public ColliderType type;
         public float circleRadius;
+        public Vector2 relativePosition;
     }
 
 #if UNITY_EDITOR
@@ -26,6 +27,7 @@ namespace _KITSystem.SkillSystem.Imp
 
             var type = property.FindPropertyRelative(nameof(ColliderData.type));
             var circleRadius = property.FindPropertyRelative(nameof(ColliderData.circleRadius));
+            var relativePosition = property.FindPropertyRelative(nameof(ColliderData.relativePosition));
 
             GUI.Box(position, GUIContent.none);
 
@@ -36,6 +38,10 @@ namespace _KITSystem.SkillSystem.Imp
                 EditorGUIUtility.singleLineHeight);
 
             EditorGUI.PropertyField(rect, type);
+
+            rect.y += EditorGUIUtility.singleLineHeight + Space;
+
+            EditorGUI.PropertyField(rect, relativePosition);
 
             rect.y += EditorGUIUtility.singleLineHeight + Space;
 
@@ -53,6 +59,7 @@ namespace _KITSystem.SkillSystem.Imp
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             float h = Padding * 2;
+            h += EditorGUIUtility.singleLineHeight + Space;
             h += EditorGUIUtility.singleLineHeight + Space;
 
             var type = (ColliderType)property.FindPropertyRelative(nameof(ColliderData.type)).intValue;

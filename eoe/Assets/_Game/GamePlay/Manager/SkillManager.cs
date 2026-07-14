@@ -59,7 +59,7 @@ namespace _Game.GamePlay.Manager
                 return;
             }
 
-            instance.SyncFutureDamage(runtimeData, entityTarget);
+            instance.PredictedTargetDamage(runtimeData, entityTarget);
             
             Vector3 direction = (destination - position).normalized;
             
@@ -111,39 +111,11 @@ namespace _Game.GamePlay.Manager
                 
             if(!extra) instance.CastSkill_Private(skillData, runtimeData, position, destination, 1);
         }
-
-        private void SyncFutureDamage(SkillRuntimeData runtimeData, int entityTarget)
-        {
-            if (!EntityManager.IsEntityAlive(entityTarget)) return;
-            
-            runtimeData.CritChance = 0; // Lấy dmg gốc là được
-            
-            int damage = Mathf.CeilToInt(Formula.CalculateFinalDamage(runtimeData, out bool critical));
-
-            ref HealthData healthData = ref ComponentManager<HealthData>.Get(entityTarget);
-
-            healthData.FutureHealth -= damage;
-
-            MonoBehaviour pool = Pool.Instance;
-            
-            if (coroutinesResetFutureHealth.TryGetValue(entityTarget, out var coroutine))
-            {
-                pool.StopCoroutine(coroutine);
-            }
-
-            coroutinesResetFutureHealth[entityTarget] = pool.WaitInvoke(1, () =>
-            {
-                if (!EntityManager.IsEntityAlive(entityTarget)) return;
-                
-                ref HealthData healthData = ref ComponentManager<HealthData>.Get(entityTarget);
-                healthData.FutureHealth = healthData.CurrentHealth;
-            });
-        }
         
         private async void CastSkill_Private(SkillData skillData, SkillRuntimeData runtimeData,
             Vector3 position, Vector3 destination, float scaleDamage)
         {
-            float lifeTime = skillData.lifeTime;
+            float lifeTime = 0;
        
             BaseTrajectory trajectory = GetTrajectory(runtimeData.Trajectory, skillData, position, destination, ref lifeTime);
             if (trajectory == null)
@@ -154,39 +126,64 @@ namespace _Game.GamePlay.Manager
                 return;
             }
             
-            if (lifeTime <= 0) lifeTime = skillData.lifeTime;
+            Projectile projectile = null;
+            BaseCollider collider = null;
             
-            GameObject prefab = await AssetBundleManager.GetAssetCached<GameObject>(skillData.prefabName);
-            if (prefab == null)
+            bool isFlyWeapon = runtimeData.IsFlyWeapon;
+            if (isFlyWeapon)
             {
+                projectile = runtimeData.FlyWeapon.GetComponent<Projectile>();
+                if (projectile == null)
+                {
 #if UNITY_EDITOR
-                Debug.LogError("Stop cast skill because prefab is null, skillId " + skillData.skillId);
+                    Debug.LogError("Stop cast skill because Projectile Component is null, prefab " + runtimeData.FlyWeapon.name);
 #endif
-                return;
+                    return;
+                }
+                
+                collider = GetCollider(projectile.ColliderData, skillData);
+                if (collider == null)
+                {
+#if UNITY_EDITOR
+                    Debug.LogError("Stop cast skill because Collider is null, skillId " + skillData.skillId);
+#endif
+                    return;
+                }
+            }
+            else
+            {
+                GameObject prefab = await AssetBundleManager.GetAssetCached<GameObject>(skillData.prefabName);
+                if (prefab == null)
+                {
+#if UNITY_EDITOR
+                    Debug.LogError("Stop cast skill because prefab is null, skillId " + skillData.skillId);
+#endif
+                    return;
+                }
+                
+                // ~ get component in prefab
+                projectile = prefab.GetComponent<Projectile>();
+                if (projectile == null)
+                {
+#if UNITY_EDITOR
+                    Debug.LogError("Stop cast skill because Projectile Component is null, prefab " + prefab.name);
+#endif
+                    return;
+                }
+                
+                collider = GetCollider(projectile.ColliderData, skillData);
+                if (collider == null)
+                {
+#if UNITY_EDITOR
+                    Debug.LogError("Stop cast skill because Collider is null, skillId " + skillData.skillId);
+#endif
+                    return;
+                }
+             
+                GameObject go = Pool.Instantiate(prefab, position, false);
+                projectile = go.GetComponent<Projectile>();
             }
             
-            Projectile projectile = prefab.GetComponent<Projectile>();
-            if (projectile == null)
-            {
-#if UNITY_EDITOR
-                Debug.LogError("Stop cast skill because Projectile Component is null, prefab " + prefab.name);
-#endif
-                return;
-            }
-
-            BaseCollider collider = GetCollider(projectile.ColliderData, skillData);
-            if (collider == null)
-            {
-#if UNITY_EDITOR
-                Debug.LogError("Stop cast skill because Collider is null, skillId " + skillData.skillId);
-#endif
-                return;
-            }
-
-            GameObject go = Pool.Instantiate(prefab, false);
-            go.transform.position = position;
-            projectile = go.GetComponent<Projectile>();
-
             Action onProjectileDestroyed = () => { };
             CastProjectileAction castProjectileAction = new CastProjectileAction(this, lifeTime, collider, trajectory,
                 (entity, pos, lastCollision) =>
@@ -205,9 +202,43 @@ namespace _Game.GamePlay.Manager
 
             projectile.Initialize();
 
-            projectile.gameObject.SetActive(true);
+            if(!isFlyWeapon) projectile.gameObject.SetActive(true);
         }
+        
+        /*
+         * @Damage & Hp calculate
+         */
+        /// <summary>
+        /// Phương thức này mục đích là gán HP entity đang bị ngắm & tính hp ngay khi bắn để tránh các vũ khí đều tranh vào 1 entity
+        /// </summary>
+        private void PredictedTargetDamage(SkillRuntimeData runtimeData, int entityTarget)
+        {
+            if (!EntityManager.IsEntityAlive(entityTarget)) return;
+            
+            runtimeData.CritChance = 0; // Lấy dmg gốc là được
+            
+            int damage = Mathf.CeilToInt(Formula.CalculateFinalDamage(runtimeData, out bool critical));
 
+            ref HealthData healthData = ref ComponentManager<HealthData>.Get(entityTarget);
+
+            healthData.PredictedHealth -= damage;
+
+            MonoBehaviour pool = Pool.Instance;
+            
+            if (coroutinesResetFutureHealth.TryGetValue(entityTarget, out var coroutine))
+            {
+                pool.StopCoroutine(coroutine);
+            }
+
+            coroutinesResetFutureHealth[entityTarget] = pool.WaitInvoke(1, () =>
+            {
+                if (!EntityManager.IsEntityAlive(entityTarget)) return;
+                
+                ref HealthData healthData = ref ComponentManager<HealthData>.Get(entityTarget);
+                healthData.PredictedHealth = healthData.CurrentHealth;
+            });
+        }
+        
         private bool OnDamageEntityFunction(SkillData skillData, SkillRuntimeData runtimeData,
             int entity, Vector3 position, float scaleDamage, bool lastCollision, ref Action onProjectileDestroyed)
         {
@@ -364,7 +395,7 @@ namespace _Game.GamePlay.Manager
             switch (colliderData.type)
             {
                 case ColliderType.Circle:
-                    return new CircleCollider(query, Vector2.zero,
+                    return new CircleCollider(query, colliderData.relativePosition,
                         skillData.collTimerTrigger, skillData.collDuration, colliderData.circleRadius
                     );
                 default:
@@ -376,7 +407,7 @@ namespace _Game.GamePlay.Manager
         private BaseTrajectory GetTrajectory(TrajectoryData trajectoryData, SkillData skillData, Vector3 position, Vector3 destination, ref float duration)
         {
             float d = Vector3.Distance(position, Vector3.zero);
-            switch (trajectoryData.type)
+            switch (skillData.trajectory)
             {
                 case TrajectoryType.Projectile:
                     duration = (skillData.findRadius - d) / skillData.projectileSpeed;
@@ -384,12 +415,13 @@ namespace _Game.GamePlay.Manager
                         duration, position, destination
                     );
                 case TrajectoryType.Boomerang:
-                    Debug.Log("tính lại duration ở đây để giới hạn trong vòng tròn");
+                    duration = skillData.boomerangInitDuration + skillData.boomerangWaitingDuration +
+                               skillData.boomerangReturnDuration;
                     return new BoomerangTrajectory(trajectoryData.boomerangInitCurve,
                         trajectoryData.boomerangReturnCurve,
-                        skillData.boomerangInitSpeed, trajectoryData.boomerangInitDurationPercent * duration,
-                        trajectoryData.boomerangWaitingDurationPercent * duration,
-                        skillData.boomerangReturnSpeed, trajectoryData.boomerangReturnDurationPercent * duration,
+                        skillData.boomerangInitSpeed, skillData.boomerangInitDuration,
+                        skillData.boomerangWaitingDuration,
+                        skillData.boomerangReturnSpeed, skillData.boomerangReturnDuration,
                         position, destination);
                 default:
                     Debug.LogError("Unknown Trajectory type " + trajectoryData.type);

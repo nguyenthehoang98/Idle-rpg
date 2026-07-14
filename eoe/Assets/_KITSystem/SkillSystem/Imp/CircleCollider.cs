@@ -24,7 +24,7 @@ namespace _KITSystem.SkillSystem.Imp
         {
 #if UNITY_EDITOR
             int segments = 12;
-            Vector3 center = position;
+            Vector3 center = GetPosition(position);
             Vector3 prev = center + Vector3.right * radius;
             for (int i = 1; i <= segments; i++)
             {

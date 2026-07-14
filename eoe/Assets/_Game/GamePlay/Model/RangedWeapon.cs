@@ -1,11 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using _Game.Configs;
-using _Game.GamePlay.Data;
-using _Game.GamePlay.Manager;
-using _KITSystem.Resource;
-using _KITSystem.SkillSystem.Imp;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace _Game.GamePlay.Model
@@ -14,105 +6,19 @@ namespace _Game.GamePlay.Model
     {
         private static readonly int AttackAnimator = Animator.StringToHash("Attack");
         
-        [SerializeField] private Transform muzzle;
         [SerializeField] private Animator animator;
-
-        private Coroutine autoAttackCoroutine;
-        private AudioClip audioClip;
-        private bool isCachedPrefab;
-        private bool isCachedAudioClip;
-
-        private bool isAttacking;
-        private int entity;
-        private Vector3 destination;
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-
-            string prefabName = SkillData.prefabName;
-            if (!string.IsNullOrEmpty(prefabName)) AssetBundleManager.UnCache(prefabName);
-
-            string audioPath = WeaponData.audioClip;
-            if (!string.IsNullOrEmpty(audioPath)) AssetBundleManager.UnCache(audioPath);
-        }
-
-        public override async UniTask Initialize(WeaponData weaponData, Dictionary<int, List<WeaponUpgradeData>> dict, WeaponUpgradeData upgradeDataX2,
-            WeaponUpgradeData upgradeDataX3, float faceFlip)
-        {
-            if (!isCachedPrefab)
-            {
-                string prefabName = weaponData.skillData.prefabName;
-                GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(prefabName);
-                Pool.RegisterPool(go, true);
-                Pool.Destroy(Pool.Instantiate(go));
-                isCachedPrefab = true;
-            }
-
-            if (!isCachedAudioClip)
-            {
-                audioClip = await AssetBundleManager.GetAssetCached<AudioClip>(weaponData.audioClip);
-                isCachedAudioClip = true;
-            }
-            
-            await base.Initialize(weaponData, dict, upgradeDataX2, upgradeDataX3, faceFlip);
-            
-            autoAttackCoroutine = StartCoroutine(AutoAttackIE());
-        }
-
-        private IEnumerator AutoAttackIE()
-        {
-            while (!IsPaused)
-            {
-                float cooldown = WeaponData.cooldown * (1 - CurrentUpgradeData.cooldownReduce);
-
-                yield return new WaitForSeconds(cooldown / TimeScale);
-
-                if (isAttacking || !IsActivated) continue;
-
-                Vector3 position = GetMuzzlePosition();
-
-                bool found = FindTarget(SkillData.findTarget, position, out entity, out destination);
-
-                if (!found) continue;
-
-                yield return RotateIE(position, destination);
-
-                if (!IsActivated || IsPaused) continue;
-
-                OnAttack();
-
-                animator.Play(AttackAnimator, 0, 0);
-
-                animator.speed = TimeScale * (WeaponData.attackSpeed + CurrentUpgradeData.attackSpeed);
-                
-                isAttacking = true;
-            }
-        }
         
         /*
          * @Abstract
          */
 
-        protected virtual void OnAttack()
+        protected override void OnPlayAttack()
         {
-        }
-        
-        protected virtual Vector3 GetMuzzlePosition() => muzzle.position;
+            base.OnPlayAttack();
+            
+            animator.Play(AttackAnimator, 0, 0);
 
-        protected virtual Vector3 GetDestination(Vector3 @from, Vector3 @to) => @to;
-
-        protected override void OnPause()
-        {
-            base.OnPause();
-            StopCoroutine(autoAttackCoroutine);
-            isAttacking = false;
-        }
-
-        protected override void OnResume()
-        {
-            base.OnResume();
-            autoAttackCoroutine = StartCoroutine(AutoAttackIE());
+            animator.speed = TimeScale * (WeaponData.attackSpeed + CurrentUpgradeData.attackSpeed);
         }
         
         /*
@@ -121,35 +27,13 @@ namespace _Game.GamePlay.Model
 
         public void ExecuteAnimation()
         {
-            if (!IsActivated || !isAttacking) return;
-            
-            SoundManager.Instance.PlayOneShot(audioClip, WeaponData.volume);
-            
-            Vector3 muzzlePosition = GetMuzzlePosition();
-           
-            Vector3 destinationPosition = GetDestination(muzzlePosition, destination);
-           
-            SkillRuntimeData runtimeData = new SkillRuntimeData
-            {
-                Attack = (1 + CurrentUpgradeData.damagePercent) * WeaponData.attack,
-                CritChance = CurrentUpgradeData.critChance + WeaponData.critChance,
-                CritDamage = CurrentUpgradeData.critDamage + WeaponData.critDamage,
-                ParallelCount = CurrentUpgradeData.parallelCount,
-                ParallelDamagePercent = CurrentUpgradeData.parallelDamagePercent,
-                SpreadCount = CurrentUpgradeData.spreadCount,
-                SpreadDamagePercent = CurrentUpgradeData.spreadDamagePercent,
-                PiercingCount = CurrentUpgradeData.piercingCount,
-                ExplosiveRadius = CurrentUpgradeData.explosiveRadius,
-                ExplosiveDamagePercent = CurrentUpgradeData.explosiveDamagePercent,
-                BounceCount = CurrentUpgradeData.bounceCount,
-                BounceDamagePercent = CurrentUpgradeData.bounceDamagePercent,
-                KillInstantBelowHealthPercent = CurrentUpgradeData.killInstantBelowHealthPercent,
-                Trajectory = trajectory,
-            };
-            
-            SkillManager.CastSkill(SkillData, runtimeData, muzzlePosition, destinationPosition, entity);
+            if (!IsActivated || !IsAttacking) return;
+
+            ExecuteAttack();
         }
 
-        private void EndAnimation() => isAttacking = false;
+        private void EndAnimation() => OnStopAttack();
+
+        protected override bool IsFlyWeapon => false;
     }
 }

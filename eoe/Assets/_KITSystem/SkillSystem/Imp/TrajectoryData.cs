@@ -13,9 +13,6 @@ namespace _KITSystem.SkillSystem.Imp
         public AnimationCurve projectileCurve;
         public AnimationCurve boomerangInitCurve;
         public AnimationCurve boomerangReturnCurve;
-        public float boomerangReturnDurationPercent;
-        public float boomerangInitDurationPercent;
-        public float boomerangWaitingDurationPercent;
     }
 
     public enum TrajectoryType
@@ -42,13 +39,7 @@ namespace _KITSystem.SkillSystem.Imp
 
             var boomerangInitCurve = property.FindPropertyRelative(nameof(TrajectoryData.boomerangInitCurve));
             var boomerangReturnCurve = property.FindPropertyRelative(nameof(TrajectoryData.boomerangReturnCurve));
-            var boomerangReturnDurationPercent =
-                property.FindPropertyRelative(nameof(TrajectoryData.boomerangReturnDurationPercent));
-            var boomerangInitDurationPercent =
-                property.FindPropertyRelative(nameof(TrajectoryData.boomerangInitDurationPercent));
-            var boomerangWaitingDurationPercent =
-                property.FindPropertyRelative(nameof(TrajectoryData.boomerangWaitingDurationPercent));
-
+            
             GUI.Box(position, GUIContent.none);
 
             Rect rect = new Rect(
@@ -72,9 +63,6 @@ namespace _KITSystem.SkillSystem.Imp
                 case TrajectoryType.Boomerang:
                     Draw(ref rect, boomerangInitCurve);
                     Draw(ref rect, boomerangReturnCurve);
-                    Draw(ref rect, boomerangInitDurationPercent);
-                    Draw(ref rect, boomerangWaitingDurationPercent);
-                    Draw(ref rect, boomerangReturnDurationPercent);
                     break;
             }
 
@@ -110,14 +98,6 @@ namespace _KITSystem.SkillSystem.Imp
                     h += EditorGUI.GetPropertyHeight(
                         property.FindPropertyRelative(nameof(TrajectoryData.boomerangReturnCurve)), true);
 
-                    h += EditorGUI.GetPropertyHeight(
-                        property.FindPropertyRelative(nameof(TrajectoryData.boomerangInitDurationPercent)), true);
-
-                    h += EditorGUI.GetPropertyHeight(
-                        property.FindPropertyRelative(nameof(TrajectoryData.boomerangWaitingDurationPercent)), true);
-
-                    h += EditorGUI.GetPropertyHeight(
-                        property.FindPropertyRelative(nameof(TrajectoryData.boomerangReturnDurationPercent)), true);
                     break;
             }
 

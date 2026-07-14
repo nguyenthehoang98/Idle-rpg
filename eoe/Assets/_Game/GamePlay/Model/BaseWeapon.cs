@@ -2,10 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using _Game.Configs;
+using _Game.GamePlay.Data;
 using _Game.GamePlay.Entity;
+using _Game.GamePlay.Manager;
 using _Game.GamePlay.Utils;
 using _Game.GamePlay.View;
 using _KITSystem.Entity;
+using _KITSystem.Resource;
 using _KITSystem.SkillSystem.Core;
 using _KITSystem.SkillSystem.Imp;
 using Cysharp.Threading.Tasks;
@@ -23,7 +26,8 @@ namespace _Game.GamePlay.Model
         [SerializeField] protected TrajectoryData trajectory;
         [SerializeField] private Transform rotatePivot;
         [SerializeField] private AnimationCurve rotationCurve;
-        [SerializeField] private float rotationDuration;
+        [SerializeField] private float rotationDuration = 0.15f;
+        [SerializeField] private Transform muzzle;
 
         private WeaponUpgradeData current;
         private WeaponUpgradeData levelUp;
@@ -38,6 +42,13 @@ namespace _Game.GamePlay.Model
         private IQuery query;
         private Coroutine adjustOutlineColorCoroutine;
         private MaterialPropertyBlock propertyBlock;
+        
+        private AudioClip audioClip;
+        private bool isCachedAudioClip;
+        
+        private Coroutine autoAttackCoroutine;
+        private Vector3 destination;
+        private int entity;
 
         private int currentGroup; // {0:1-2-3-4} {1:4-5-6-7} {2:7-8-9-10}
         private int level;
@@ -49,6 +60,7 @@ namespace _Game.GamePlay.Model
         protected float TimeScale { get; private set; } = 1f;
         protected bool IsPaused { get; private set; }
         protected bool IsActivated { get; private set; }
+        protected bool IsAttacking { get; private set; }
 
         public int Level
         {
@@ -62,7 +74,7 @@ namespace _Game.GamePlay.Model
             }
         }
 
-        public virtual UniTask Initialize(WeaponData weaponData, Dictionary<int, List<WeaponUpgradeData>> dict,
+        public virtual async UniTask Initialize(WeaponData weaponData, Dictionary<int, List<WeaponUpgradeData>> dict,
             WeaponUpgradeData upgradeDataX2, WeaponUpgradeData upgradeDataX3,
             float faceFlip)
         {
@@ -78,8 +90,14 @@ namespace _Game.GamePlay.Model
 
             UpdateGroupData();
             UpgradeData(true);
-
-            return UniTask.CompletedTask;
+            
+            if (!isCachedAudioClip)
+            {
+                audioClip = await AssetBundleManager.GetAssetCached<AudioClip>(weaponData.audioClip);
+                isCachedAudioClip = true;
+            }
+            
+            autoAttackCoroutine = StartCoroutine(AutoAttackIE());
         }
 
         protected virtual void Awake()
@@ -89,6 +107,8 @@ namespace _Game.GamePlay.Model
 
         protected virtual void OnDestroy()
         {
+            string audioPath = WeaponData.audioClip;
+            if (!string.IsNullOrEmpty(audioPath)) AssetBundleManager.UnCache(audioPath);
         }
 
         public List<CardItemData> GetUpgradeDataAvailable()
@@ -205,15 +225,96 @@ namespace _Game.GamePlay.Model
 
         protected virtual void OnPause()
         {
+            IsAttacking = false;
+            
+            StopCoroutine(autoAttackCoroutine);
         }
 
         protected virtual void OnResume()
         {
+            autoAttackCoroutine = StartCoroutine(AutoAttackIE());
         }
 
-        protected IEnumerator RotateIE(Vector3 position, Vector3 destination)
+        protected virtual IEnumerator AutoAttackIE()
         {
-            Vector3 direction = destination - position;
+            while (!IsPaused)
+            {
+                float cooldown = WeaponData.cooldown * (1 - CurrentUpgradeData.cooldownReduce);
+
+                yield return new WaitForSeconds(cooldown / TimeScale);
+
+                if (IsAttacking || !IsActivated) continue;
+
+                Vector3 position = GetMuzzlePosition();
+
+                bool found = FindTarget(SkillData.findTarget, position);
+
+                if (!found) continue;
+
+                yield return RotateIE(position, destination);
+
+                if (!IsActivated || IsPaused) continue;
+
+                OnPlayAttack();
+                
+                IsAttacking = true;
+            }
+        }
+
+        protected virtual void OnPlayAttack()
+        {
+        }
+
+        protected virtual void ExecuteAttack()
+        {
+            PlayAudioAttackOneShot();
+            
+            Vector3 muzzlePosition = GetMuzzlePosition();
+           
+            Vector3 destinationPosition = GetDestination(muzzlePosition, destination);
+
+            SkillRuntimeData runtimeData = new SkillRuntimeData
+            {
+                Attack = (1 + CurrentUpgradeData.damagePercent) * WeaponData.attack,
+                CritChance = CurrentUpgradeData.critChance + WeaponData.critChance,
+                CritDamage = CurrentUpgradeData.critDamage + WeaponData.critDamage,
+                ParallelCount = CurrentUpgradeData.parallelCount,
+                ParallelDamagePercent = CurrentUpgradeData.parallelDamagePercent,
+                SpreadCount = CurrentUpgradeData.spreadCount,
+                SpreadDamagePercent = CurrentUpgradeData.spreadDamagePercent,
+                PiercingCount = CurrentUpgradeData.piercingCount,
+                ExplosiveRadius = CurrentUpgradeData.explosiveRadius,
+                ExplosiveDamagePercent = CurrentUpgradeData.explosiveDamagePercent,
+                BounceCount = CurrentUpgradeData.bounceCount,
+                BounceDamagePercent = CurrentUpgradeData.bounceDamagePercent,
+                KillInstantBelowHealthPercent = CurrentUpgradeData.killInstantBelowHealthPercent,
+                Trajectory = trajectory,
+                IsFlyWeapon = IsFlyWeapon,
+                FlyWeapon = IsFlyWeapon ? this : null,
+            };
+            
+            SkillManager.CastSkill(SkillData, runtimeData, muzzlePosition, destinationPosition, entity);
+        }
+
+        protected virtual void OnStopAttack()
+        {
+            IsAttacking = false;
+        }
+        
+        protected abstract bool IsFlyWeapon { get; }
+        
+        protected virtual Vector3 GetMuzzlePosition() => muzzle.position;
+
+        protected virtual Vector3 GetDestination(Vector3 @from, Vector3 @to) => @to;
+
+        protected virtual void PlayAudioAttackOneShot()
+        {
+            SoundManager.Instance.PlayOneShot(audioClip, WeaponData.volume);
+        }
+
+        protected IEnumerator RotateIE(Vector3 position, Vector3 target)
+        {
+            Vector3 direction = target - position;
 
             float angleFrom = rotatePivot.eulerAngles.z;
             float angleTo = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
@@ -236,16 +337,16 @@ namespace _Game.GamePlay.Model
             rotatePivot.localScale = new Vector3(1, Mathf.Abs(angleTo) <= 90 ? 1 : -1f, 1);
         }
 
-        protected bool FindTarget(FindTargetType type, Vector3 position, out int entity, out Vector3 destination)
+        protected bool FindTarget(FindTargetType type, Vector3 position)
         {
             Vector3 center = Vector3.zero;
             float radius = SkillData.findRadius;
             float sqrRadius = radius * radius;
 
-            query.FindTarget(type, center, position, radius, (entity, float2) =>
+            query.FindTarget(type, center, position, radius, (e, float2) =>
             {
-                HealthData healthData = ComponentManager<HealthData>.Get(entity);
-                if (healthData.FutureHealth <= 0)
+                HealthData healthData = ComponentManager<HealthData>.Get(e);
+                if (healthData.PredictedHealth <= 0)
                 {
                     return false;
                 }

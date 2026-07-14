@@ -1,5 +1,4 @@
 using System;
-using _Game.Configs;
 using _KITSystem.Resource;
 using _KITSystem.SkillSystem.Imp;
 using UnityEngine;
@@ -14,6 +13,7 @@ namespace _Game.GamePlay.Model
         public Vector3 TargetPosition { get; private set; }
         public Vector3 PreviousPosition { get; private set; }
 
+        [SerializeField] private bool enableDestroy = true;
         [SerializeField] private TrailRenderer trailRenderer;
         [SerializeField] private ColliderData colliderData;
 
@@ -28,10 +28,12 @@ namespace _Game.GamePlay.Model
         private void OnDrawGizmos()
         {
 #if UNITY_EDITOR
+            Vector2 position = transform.position;
+            Vector2 center = position + colliderData.relativePosition;
             switch (colliderData.type)
             {
                 case ColliderType.Circle:
-                    Handles.DrawWireDisc(transform.position, Vector3.forward, colliderData.circleRadius);
+                    Handles.DrawWireDisc(center, Vector3.forward, colliderData.circleRadius);
                     break;
                 default: 
                     Debug.LogError("Error in DrawGizmosSelected");
@@ -93,7 +95,7 @@ namespace _Game.GamePlay.Model
                     }
                 }
                 
-                Pool.Destroy(gameObject);
+                if(enableDestroy) Pool.Destroy(gameObject);
                 
                 isRunning = false;
             }

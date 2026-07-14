@@ -4,11 +4,11 @@ namespace _Game.GamePlay.Entity
     {
         public int MaxHealth;
         public int CurrentHealth;
-        public int FutureHealth;
+        public int PredictedHealth;
 
         public HealthData(int maxHealth)
         {
-            CurrentHealth = FutureHealth = MaxHealth = maxHealth;
+            CurrentHealth = PredictedHealth = MaxHealth = maxHealth;
         }
     }
 }

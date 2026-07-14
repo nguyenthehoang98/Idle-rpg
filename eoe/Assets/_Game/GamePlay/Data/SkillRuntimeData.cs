@@ -1,3 +1,4 @@
+using _Game.GamePlay.Model;
 using _KITSystem.SkillSystem.Imp;
 
 namespace _Game.GamePlay.Data
@@ -18,5 +19,7 @@ namespace _Game.GamePlay.Data
         public float BounceDamagePercent; // chưa có logic
         public float KillInstantBelowHealthPercent;
         public TrajectoryData Trajectory;
+        public bool IsFlyWeapon;
+        public BaseWeapon FlyWeapon;
     }
 }
