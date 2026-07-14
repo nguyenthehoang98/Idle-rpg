@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using _Game.Configs;
+using _Game.GamePlay.Data;
 using _Game.GamePlay.Manager;
 using _KITSystem.Resource;
+using _KITSystem.SkillSystem.Imp;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -21,13 +23,18 @@ namespace _Game.GamePlay.Model
         private bool isCachedAudioClip;
 
         private bool isAttacking;
-        
+        private int entity;
+        private Vector3 destination;
+
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            
+
             string prefabName = SkillData.prefabName;
-            AssetBundleManager.UnCache(prefabName);
+            if (!string.IsNullOrEmpty(prefabName)) AssetBundleManager.UnCache(prefabName);
+
+            string audioPath = WeaponData.audioClip;
+            if (!string.IsNullOrEmpty(audioPath)) AssetBundleManager.UnCache(audioPath);
         }
 
         public override async UniTask Initialize(WeaponData weaponData, Dictionary<int, List<WeaponUpgradeData>> dict, WeaponUpgradeData upgradeDataX2,
@@ -63,9 +70,7 @@ namespace _Game.GamePlay.Model
 
                 if (isAttacking || !IsActivated) continue;
 
-                int entity;
                 Vector3 position = GetMuzzlePosition();
-                Vector3 destination;
 
                 bool found = FindTarget(SkillData.findTarget, position, out entity, out destination);
 
@@ -119,6 +124,30 @@ namespace _Game.GamePlay.Model
             if (!IsActivated || !isAttacking) return;
             
             SoundManager.Instance.PlayOneShot(audioClip, WeaponData.volume);
+            
+            Vector3 muzzlePosition = GetMuzzlePosition();
+           
+            Vector3 destinationPosition = GetDestination(muzzlePosition, destination);
+           
+            SkillRuntimeData runtimeData = new SkillRuntimeData
+            {
+                Attack = (1 + CurrentUpgradeData.damagePercent) * WeaponData.attack,
+                CritChance = CurrentUpgradeData.critChance + WeaponData.critChance,
+                CritDamage = CurrentUpgradeData.critDamage + WeaponData.critDamage,
+                ParallelCount = CurrentUpgradeData.parallelCount,
+                ParallelDamagePercent = CurrentUpgradeData.parallelDamagePercent,
+                SpreadCount = CurrentUpgradeData.spreadCount,
+                SpreadDamagePercent = CurrentUpgradeData.spreadDamagePercent,
+                PiercingCount = CurrentUpgradeData.piercingCount,
+                ExplosiveRadius = CurrentUpgradeData.explosiveRadius,
+                ExplosiveDamagePercent = CurrentUpgradeData.explosiveDamagePercent,
+                BounceCount = CurrentUpgradeData.bounceCount,
+                BounceDamagePercent = CurrentUpgradeData.bounceDamagePercent,
+                KillInstantBelowHealthPercent = CurrentUpgradeData.killInstantBelowHealthPercent,
+                Trajectory = trajectory,
+            };
+            
+            SkillManager.CastSkill(SkillData, runtimeData, muzzlePosition, destinationPosition, entity);
         }
 
         private void EndAnimation() => isAttacking = false;

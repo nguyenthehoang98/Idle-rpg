@@ -28,7 +28,7 @@ namespace _KITSystem.SkillSystem.Imp
                 elapsedTime += deltaTime;
                 float p = Mathf.Clamp01(elapsedTime / duration);
                 float f = curve.Evaluate(p);
-                deltaPosition = f * Direction * deltaTime * speed;
+                deltaPosition += f * Direction * deltaTime * speed;
                 if (p >= 1f) isCompleted = true;
             }
 

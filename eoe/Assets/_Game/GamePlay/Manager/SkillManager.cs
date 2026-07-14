@@ -185,6 +185,7 @@ namespace _Game.GamePlay.Manager
 
             GameObject go = Pool.Instantiate(prefab, false);
             go.transform.position = position;
+            projectile = go.GetComponent<Projectile>();
 
             Action onProjectileDestroyed = () => { };
             CastProjectileAction castProjectileAction = new CastProjectileAction(this, lifeTime, collider, trajectory,

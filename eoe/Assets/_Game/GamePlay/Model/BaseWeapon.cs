@@ -20,7 +20,7 @@ namespace _Game.GamePlay.Model
 
         [SerializeField] private new SpriteRenderer renderer;
         [SerializeField] private float adjustOutlineColorDuration = 0.2f;
-        [SerializeField] private TrajectoryData trajectory;
+        [SerializeField] protected TrajectoryData trajectory;
         [SerializeField] private Transform rotatePivot;
         [SerializeField] private AnimationCurve rotationCurve;
         [SerializeField] private float rotationDuration;
