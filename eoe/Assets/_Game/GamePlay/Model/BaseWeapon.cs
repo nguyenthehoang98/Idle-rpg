@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
 using _Game.Configs;
 using _Game.GamePlay.Data;
 using _Game.GamePlay.Entity;
@@ -14,6 +16,7 @@ using _KITSystem.SkillSystem.Imp;
 using Cysharp.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace _Game.GamePlay.Model
 {
@@ -108,6 +111,7 @@ namespace _Game.GamePlay.Model
         protected virtual void OnDestroy()
         {
             string audioPath = WeaponData.audioClip;
+            
             if (!string.IsNullOrEmpty(audioPath)) AssetBundleManager.UnCache(audioPath);
         }
 
@@ -251,21 +255,21 @@ namespace _Game.GamePlay.Model
                 Vector3 position = GetMuzzlePosition();
 
                 bool found = FindTarget(SkillData.findTarget, position);
-
+                
                 if (!found)
                 {
                     //Debug.LogError("stop attack (2)");
                     continue;
                 }
-
+                
                 yield return RotateIE(position, destination);
-
+                
                 if (IsPaused || !IsActivated)
                 {
                     //Debug.LogError("stop attack (3)");
                     continue;
                 }
-
+                
                 OnPlayAttack();
                 
                 IsAttacking = true;
@@ -312,7 +316,9 @@ namespace _Game.GamePlay.Model
         public virtual void OnStopAttack()
         {
             IsAttacking = false;
+            
             StopCoroutine(attackCoroutine);
+            
             attackCoroutine = StartCoroutine(AutoAttackIE());
         }
         
@@ -327,7 +333,7 @@ namespace _Game.GamePlay.Model
             SoundManager.Instance.PlayOneShot(audioClip, WeaponData.volume);
         }
 
-        protected IEnumerator RotateIE(Vector3 position, Vector3 target)
+        private IEnumerator RotateIE(Vector3 position, Vector3 target)
         {
             Vector3 direction = target - position;
 
@@ -337,18 +343,22 @@ namespace _Game.GamePlay.Model
             float dynamicDuration = Mathf.Lerp(0f, rotationDuration, angleDelta / 180f);
 
             float elapsedTime = 0;
+            
             while (elapsedTime <= dynamicDuration)
             {
                 elapsedTime += DeltaTime;
+                
                 float t = Mathf.Clamp01(elapsedTime / dynamicDuration);
+                
                 float s = rotationCurve.Evaluate(t);
+                
                 float a = Mathf.LerpAngle(angleFrom, angleTo, s);
+                
                 rotatePivot.eulerAngles = new Vector3(0, 0, a);
 
                 yield return new WaitForSeconds(DeltaTime);
             }
 
-            rotatePivot.eulerAngles = new Vector3(0, 0, angleTo);
             rotatePivot.localScale = new Vector3(1, Mathf.Abs(angleTo) <= 90 ? 1 : -1f, 1);
         }
 

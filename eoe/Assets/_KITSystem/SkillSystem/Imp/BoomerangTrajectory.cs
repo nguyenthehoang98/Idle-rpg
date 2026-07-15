@@ -15,7 +15,7 @@ namespace _KITSystem.SkillSystem.Imp
 
         public event Action<Phase> OnChangePhase;
 
-        private Phase phase = Phase.Outbound;
+        private Phase phase = Phase.Undefined;
         private Vector2 deltaPosition;
         private Vector2 savedDeltaPosition;
         private float elapsedTime;
@@ -35,6 +35,12 @@ namespace _KITSystem.SkillSystem.Imp
 
         protected override Vector2 OnEvaluatePosition(float deltaTime)
         {
+            if (phase == Phase.Undefined)
+            {
+                phase = Phase.Outbound;
+                OnChangePhase?.Invoke(phase);
+            }
+            
             elapsedTime += deltaTime;
             float p, f, s;
             switch (phase)
@@ -83,7 +89,7 @@ namespace _KITSystem.SkillSystem.Imp
 
         public enum Phase
         {
-            Outbound, Hang, Return, Complete
+           Undefined, Outbound, Hang, Return, Complete
         }
     }
 }
