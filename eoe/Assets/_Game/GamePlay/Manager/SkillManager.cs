@@ -214,9 +214,26 @@ namespace _Game.GamePlay.Manager
             {
                 if (trajectory is BoomerangTrajectory boomerangTrajectory)
                 {
+                    FlyWeapon flyWeapon = runtimeData.FlyWeapon as FlyWeapon;
+                    
                     boomerangTrajectory.OnChangePhase += phase =>
                     {
-                        if (phase == BoomerangTrajectory.Phase.Return) projectile.DisableTrail();
+                        switch (phase)
+                        {
+                            case BoomerangTrajectory.Phase.Outbound:
+                                flyWeapon.OutboundFly();
+                                break;
+                            case BoomerangTrajectory.Phase.Hang:
+                                flyWeapon.HangFly();
+                                break;
+                            case BoomerangTrajectory.Phase.Return:
+                                flyWeapon.ReturnFly();
+                                projectile.DisableTrail();
+                                break;
+                            case BoomerangTrajectory.Phase.Complete:
+                                flyWeapon.CompleteFly();
+                                break;
+                        }
                     };
                 }
             }
@@ -390,8 +407,6 @@ namespace _Game.GamePlay.Manager
 
             GameObject o = Pool.Instantiate(go);
             o.transform.position = position;
-
-            //o.GetComponent<Aura>().Scale(radius);
         }
 
         private async void SpawnTextDamage(int damage, bool critical, Vector3 position)
@@ -410,7 +425,6 @@ namespace _Game.GamePlay.Manager
         /*
          * @Build element
          */
-        
         private BaseCollider GetCollider(ColliderData colliderData, SkillData skillData)
         {
             switch (colliderData.type)
@@ -436,12 +450,12 @@ namespace _Game.GamePlay.Manager
                         duration, position, destination
                     );
                 case TrajectoryType.Boomerang:
-                    duration = skillData.boomerangInitDuration + skillData.boomerangWaitingDuration +
+                    duration = skillData.boomerangOutboundDuration + skillData.boomerangHangDuration +
                                skillData.boomerangReturnDuration;
                     return new BoomerangTrajectory(trajectoryData.boomerangInitCurve,
                         trajectoryData.boomerangReturnCurve,
-                        skillData.boomerangInitSpeed, skillData.boomerangInitDuration,
-                        skillData.boomerangWaitingDuration, skillData.boomerangReturnDuration,
+                        skillData.boomerangOutboundSpeed, skillData.boomerangOutboundDuration,
+                        skillData.boomerangHangDuration, skillData.boomerangReturnDuration,
                         position, destination);
                 default:
                     Debug.LogError("Unknown Trajectory type " + trajectoryData.type);

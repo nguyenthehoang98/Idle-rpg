@@ -15,7 +15,7 @@ namespace _Game.Configs
         private Dictionary<int, PlayerExpData> cachedExp;
         private Dictionary<int, HeroData> cachedHero;
         private Dictionary<int, WingData> cachedWing;
-        
+
         public void OnMappingValue()
         {
             cachedExp = new Dictionary<int, PlayerExpData>();
@@ -23,13 +23,13 @@ namespace _Game.Configs
             {
                 cachedExp.Add(pair.level, pair);
             }
-            
+
             cachedHero = new Dictionary<int, HeroData>();
             foreach (var hero in heros)
             {
                 cachedHero.Add(hero.id, hero);
             }
-            
+
             cachedWing = new Dictionary<int, WingData>();
             foreach (var wing in wings)
             {
@@ -78,22 +78,68 @@ namespace _Game.Configs
     [Serializable]
     public struct HeroData
     {
-        public int id;
-        public string prefabName;
-        public int wingId;
+        [SerializeField] private int i;
+
+        public int id
+        {
+            get => i;
+            set => i = value;
+        }
+
+        [SerializeField] private string pn;
+
+        public string prefabName
+        {
+            get => pn;
+            set => pn = value;
+        }
+
+        [SerializeField] private int wi;
+
+        public int wingId
+        {
+            get => wi;
+            set => wi = value;
+        }
     }
 
     [Serializable]
     public struct WingData
     {
-        public int id;
-        public string wingName;
+        [SerializeField] private int i;
+
+        public int id
+        {
+            get => i;
+            set => i = value;
+        }
+
+        [SerializeField] private string wn;
+
+        public string wingName
+        {
+            get => wn;
+            set => wn = value;
+        }
     }
 
     [Serializable]
     public struct PlayerExpData
     {
-        public int level;
-        public int exp;
+        [SerializeField] private int l;
+
+        public int level
+        {
+            get => l;
+            set => l = value;
+        }
+
+        [SerializeField] private int e;
+
+        public int exp
+        {
+            get => e;
+            set => e = value;
+        }
     }
 }

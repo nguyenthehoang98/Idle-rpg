@@ -13,8 +13,6 @@ namespace _Game.GamePlay.Model
         {
             base.OnPlayAttack();
             
-            if (!IsActivated || !IsAttacking) return;
-            
             animator.enabled = false;
             
             ExecuteAttack();
@@ -26,5 +24,10 @@ namespace _Game.GamePlay.Model
             
             animator.enabled = true;
         }
+
+        public void OutboundFly() { }
+        public void HangFly() { }
+        public void ReturnFly() { }
+        public void CompleteFly() { }
     }
 }

@@ -24,7 +24,7 @@ namespace _Game.GamePlay.Model
         [SerializeField] private new SpriteRenderer renderer;
         [SerializeField] private float adjustOutlineColorDuration = 0.2f;
         [SerializeField] protected TrajectoryData trajectory;
-        [SerializeField] private Transform rotatePivot;
+        [SerializeField] protected Transform rotatePivot;
         [SerializeField] private AnimationCurve rotationCurve;
         [SerializeField] private float rotationDuration = 0.15f;
         [SerializeField] private Transform muzzle;
@@ -46,7 +46,7 @@ namespace _Game.GamePlay.Model
         private AudioClip audioClip;
         private bool isCachedAudioClip;
         
-        private Coroutine autoAttackCoroutine;
+        private Coroutine attackCoroutine;
         private Vector3 destination;
         private int entity;
 
@@ -97,7 +97,7 @@ namespace _Game.GamePlay.Model
                 isCachedAudioClip = true;
             }
             
-            autoAttackCoroutine = StartCoroutine(AutoAttackIE());
+            attackCoroutine = StartCoroutine(AutoAttackIE());
         }
 
         protected virtual void Awake()
@@ -226,39 +226,51 @@ namespace _Game.GamePlay.Model
         protected virtual void OnPause()
         {
             IsAttacking = false;
-            
-            StopCoroutine(autoAttackCoroutine);
+            StopCoroutine(attackCoroutine);
         }
 
         protected virtual void OnResume()
         {
-            autoAttackCoroutine = StartCoroutine(AutoAttackIE());
+            attackCoroutine = StartCoroutine(AutoAttackIE());
         }
 
         protected virtual IEnumerator AutoAttackIE()
         {
-            Debug.Log("phần này sư lại khi component thì mới tính cooldown thì sẽ chính xác");
-            while (!IsPaused)
+            while (!IsAttacking)
             {
                 float cooldown = WeaponData.cooldown * (1 - CurrentUpgradeData.cooldownReduce);
 
                 yield return new WaitForSeconds(cooldown / TimeScale);
 
-                if (IsAttacking || !IsActivated) continue;
-
+                if (IsPaused || !IsActivated)
+                {
+                    //Debug.LogError("stop attack (1)");
+                    continue;
+                }
+                
                 Vector3 position = GetMuzzlePosition();
 
                 bool found = FindTarget(SkillData.findTarget, position);
 
-                if (!found) continue;
+                if (!found)
+                {
+                    //Debug.LogError("stop attack (2)");
+                    continue;
+                }
 
                 yield return RotateIE(position, destination);
 
-                if (!IsActivated || IsPaused) continue;
+                if (IsPaused || !IsActivated)
+                {
+                    //Debug.LogError("stop attack (3)");
+                    continue;
+                }
 
                 OnPlayAttack();
                 
                 IsAttacking = true;
+                
+                yield break;
             }
         }
 
@@ -300,6 +312,8 @@ namespace _Game.GamePlay.Model
         public virtual void OnStopAttack()
         {
             IsAttacking = false;
+            StopCoroutine(attackCoroutine);
+            attackCoroutine = StartCoroutine(AutoAttackIE());
         }
         
         protected abstract bool IsFlyWeapon { get; }

@@ -16,10 +16,7 @@ namespace _Game.Configs
             this.id = id;
         }
 
-        public int Id
-        {
-            get { return id; }
-        }
+        public int Id => id;
 
         public float Evaluate(float x)
         {

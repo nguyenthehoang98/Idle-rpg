@@ -239,7 +239,7 @@ namespace _KITSystem.Config.Editor
                     {
                         var item = Activator.CreateInstance(elementType);
                         
-                        foreach (var field in elementType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+                        foreach (var field in elementType.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
                         {
                             if (field.GetCustomAttribute<JsonIgnoreAttribute>() != null) continue;
                             
@@ -249,8 +249,8 @@ namespace _KITSystem.Config.Editor
 
                             try
                             {
-                                object fieldValue = ConvertValue(value, field.FieldType, field.Name);
-
+                                object fieldValue = ConvertValue(value, field.PropertyType, field.Name);
+                                
                                 field.SetValue(item, fieldValue);
                             }
                             catch (Exception e)

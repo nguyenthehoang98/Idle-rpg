@@ -6,8 +6,8 @@ namespace _KITSystem.SkillSystem.Imp
 {
     public class CircleCollider : BaseCollider
     {
-        private Vector2 size;
-        private float radius;
+        private readonly Vector2 size;
+        private readonly float radius;
         
         public CircleCollider(IQuery query, Vector2 relativePosition, float timerTrigger, float duration, float radius) : base(query, relativePosition, timerTrigger, duration)
         {
@@ -15,16 +15,16 @@ namespace _KITSystem.SkillSystem.Imp
             this.size = new Vector2(radius / 2f, radius / 2f);
         }
 
-        protected override List<int> OnCollision(Vector2 position)
+        protected override List<int> OnCollision(Vector2 prevPosition, Vector2 currentPosition)
         {
-            return Query.GetAllEntities(GetPosition(position), size, FilterEntity);
+            return Query.GetAllEntities(GetPosition(prevPosition, currentPosition), size, FilterEntity);
         }
         
-        public override void Gizmos(Vector3 position, Color color, float deltaTime)
+        protected override void OnGizmos(Vector2 prevPosition, Vector3 currentPosition, Color color, float deltaTime)
         {
 #if UNITY_EDITOR
             int segments = 12;
-            Vector3 center = GetPosition(position);
+            Vector3 center = GetPosition(prevPosition, currentPosition);
             Vector3 prev = center + Vector3.right * radius;
             for (int i = 1; i <= segments; i++)
             {

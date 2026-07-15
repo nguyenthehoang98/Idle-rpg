@@ -10,9 +10,6 @@ namespace _Game.GamePlay.Model
 {
     public class Projectile : MonoBehaviour
     {
-        public Vector3 TargetPosition { get; private set; }
-        public Vector3 PreviousPosition { get; private set; }
-
         [SerializeField] private bool enableDestroy = true;
         [SerializeField] private Transform rotatePivot;
         [SerializeField] private TrailRenderer trailRenderer;
@@ -21,6 +18,9 @@ namespace _Game.GamePlay.Model
         public ColliderData ColliderData => colliderData;
 
         private Action onDestroyCallback;
+        
+        private Vector3 targetPosition;
+        private Vector3 previousPosition;
         private float elapsedTime;
         private float deltaTime;
         private bool isRunning = false;
@@ -29,6 +29,8 @@ namespace _Game.GamePlay.Model
         private void OnDrawGizmos()
         {
 #if UNITY_EDITOR
+            if (Application.isPlaying) return;
+            
             Vector2 position = transform.position;
             Vector2 center = position + colliderData.relativePosition;
             switch (colliderData.type)
@@ -46,7 +48,7 @@ namespace _Game.GamePlay.Model
         public void Initialize()
         {
             elapsedTime = 0;
-            TargetPosition = PreviousPosition = transform.position;
+            targetPosition = previousPosition = transform.position;
             
             shouldDestroy = false;
             isRunning = true;
@@ -56,14 +58,14 @@ namespace _Game.GamePlay.Model
 
         public void SetPosition(Vector3 position, float dt)
         {
-            this.PreviousPosition = transform.position;
-            this.TargetPosition = position;
+            this.previousPosition = transform.position;
+            this.targetPosition = position;
             this.deltaTime = dt;
             this.elapsedTime = 0;
             
-            Vector3 direction = position - PreviousPosition;
+            Vector3 direction = position - previousPosition;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            rotatePivot.localRotation = Quaternion.Euler(0, 0, angle + 90f);
+            rotatePivot.localRotation = Quaternion.Euler(0, 0, angle);
         }
 
         private void FixedUpdate()
@@ -74,7 +76,7 @@ namespace _Game.GamePlay.Model
 
             float t = Mathf.Clamp01(elapsedTime / deltaTime);
 
-            transform.position = Vector3.Lerp(PreviousPosition, TargetPosition, t);
+            transform.position = Vector3.Lerp(previousPosition, targetPosition, t);
 
             if (t >= 1.0f && shouldDestroy)
             {

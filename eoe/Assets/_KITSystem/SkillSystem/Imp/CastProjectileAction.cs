@@ -19,10 +19,11 @@ namespace _KITSystem.SkillSystem.Imp
         public event Action OnComplete;
 
         private Projectile projectile;
-        private HashSet<int> collisions;
+        private readonly HashSet<int> collisions = new HashSet<int>();
+
+        private Vector2 previousPosition;
         private int totalCollisions;
         private float collisionResetElapsedTime;
-
         private float damageTickerElapsedTime;
 
         public CastProjectileAction(Spu spu, float lifeTime, BaseCollider collider, BaseTrajectory trajectory,
@@ -37,45 +38,48 @@ namespace _KITSystem.SkillSystem.Imp
             this.limitNumberCollisions = limitNumberCollisions;
             this.resetCollisionInterval = resetCollisionInterval > 0 ? resetCollisionInterval : float.MaxValue;
             this.damageInterval = damageInterval;
-            this.collisions = new HashSet<int>();
             this.collisionResetElapsedTime = this.damageTickerElapsedTime = 0;
             this.totalCollisions = 0;
         }
 
         protected override void OnUpdate(float deltaTime)
         {
-            this.collisionResetElapsedTime += deltaTime;
+            collisionResetElapsedTime += deltaTime;
 
-            if (this.collisionResetElapsedTime >= this.resetCollisionInterval && this.collisions.Count > 0)
+            if (collisionResetElapsedTime >= resetCollisionInterval && collisions.Count > 0)
             {
-                this.collisions.Clear();
-                this.collisionResetElapsedTime = 0;
+                collisions.Clear();
+                collisionResetElapsedTime = 0;
             }
 
             damageTickerElapsedTime += deltaTime;
 
-            Vector2 position = this.trajectory.EvaluatePosition(deltaTime);
+            Vector2 currentPosition = trajectory.EvaluatePosition(deltaTime);
             
-            projectile.SetPosition(position, deltaTime);
+            projectile.SetPosition(currentPosition, deltaTime);
 
             collider.Tick(deltaTime);
 
-            List<int> results = collider.Collision(position);
+            List<int> results = collider.Collision(previousPosition, currentPosition);
 
             bool hit = results != null && results.Count > 0;
 
 #if UNITY_EDITOR
-            collider.Gizmos(position, hit ? Color.red : Color.green, deltaTime);
+            Color color = hit ? Color.red : Color.green;
+            Debug.DrawLine(previousPosition, currentPosition, color, deltaTime);
+            collider.Gizmos(previousPosition, currentPosition, color, deltaTime);
 #endif
+
+            previousPosition = currentPosition;
             
             if (hit)
             {
                 foreach (var entity in results)
                 {
                     bool dmgOverTime = damageInterval > 0;
-                    if (dmgOverTime && !this.collisions.Add(entity)) continue;
+                    if (dmgOverTime && !collisions.Add(entity)) continue;
 
-                    if (!TryDamage(position, entity, totalCollisions + 1 == limitNumberCollisions)) continue;
+                    if (!TryDamage(currentPosition, entity, totalCollisions + 1 == limitNumberCollisions)) continue;
 
                     totalCollisions++;
                     

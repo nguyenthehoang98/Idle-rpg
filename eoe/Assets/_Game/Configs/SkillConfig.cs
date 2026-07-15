@@ -4,6 +4,7 @@ using _KITSystem.Config;
 using _KITSystem.SkillSystem.Core;
 using _KITSystem.SkillSystem.Imp;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Game.Configs
 {
@@ -22,8 +23,9 @@ namespace _Game.Configs
 
             foreach (SkillData skillData in skills)
             {
-                if (!cached.TryAdd(skillData.skillId, skillData))
-                    Debug.LogError($"Duplicate skill '{skillData.skillId}'");
+                if (cached.TryAdd(skillData.skillId, skillData)) continue;
+
+                Debug.LogError($"Duplicate skill '{skillData.skillId}'");
             }
         }
 
@@ -48,43 +50,171 @@ namespace _Game.Configs
         /*
          * @Default stat
          */
-        public int skillId;
-        public string prefabName; // Đọc từ weapon. monster
-        public float size;
+        [SerializeField] private int si;
+
+        public int skillId
+        {
+            get => si;
+            set => si = value;
+        }
+
+        [SerializeField] private string pn;
+
+        public string prefabName // Đọc từ weapon. monster
+        {
+            get => pn;
+            set => pn = value;
+        }
+
+        [SerializeField] private float s;
+
+        public float size
+        {
+            get => s;
+            set => s = value;
+        }
 
         /*
          * @Damage ticet
          */
-        public float damageInterval;
+        [SerializeField] private float di;
+
+        public float damageInterval
+        {
+            get => di;
+            set => di = value;
+        }
 
         /*
          * @Query entity
          */
-        public FindTargetType findTarget;
-        public float findRadius;
+        [SerializeField] private FindTargetType ft;
+
+        public FindTargetType findTarget
+        {
+            get => ft;
+            set => ft = value;
+        }
+
+        [SerializeField] private float fr;
+
+        public float findRadius
+        {
+            get => fr;
+            set => fr = value;
+        }
 
         /*
          * @Trajectory
          */
-        public TrajectoryType trajectory;
-        public float projectileSpeed;
-        public float boomerangInitSpeed;
-        public float boomerangInitDuration;
-        public float boomerangReturnDuration;
-        public float boomerangWaitingDuration;
+        [SerializeField] private TrajectoryType t;
+
+        public TrajectoryType trajectory
+        {
+            get => t;
+            set => t = value;
+        }
+
+        [SerializeField] private float ps;
+
+        public float projectileSpeed
+        {
+            get => ps;
+            set => ps = value;
+        }
+
+        [SerializeField] private float bos;
+
+        public float boomerangOutboundSpeed
+        {
+            get => bos;
+            set => bos = value;
+        }
+
+        [SerializeField] private float bod;
+
+        public float boomerangOutboundDuration
+        {
+            get => bod;
+            set => bod = value;
+        }
+
+        [SerializeField] private float brd;
+
+        public float boomerangReturnDuration
+        {
+            get => brd;
+            set => brd = value;
+        }
+
+        [SerializeField] private float bhd;
+
+        public float boomerangHangDuration
+        {
+            get => bhd;
+            set => bhd = value;
+        }
+
         /*
          * @Collider
          */
-        public float collTimerTrigger;
-        public float collDuration;
-        public float collResetCollision;
-        public int collLimitCollision;
+        [SerializeField] private float ctt;
+
+        public float collTimerTrigger
+        {
+            get => ctt;
+            set => ctt = value;
+        }
+
+        [SerializeField] private float cd;
+
+        public float collDuration
+        {
+            get => cd;
+            set => cd = value;
+        }
+
+        [SerializeField] private float crc;
+
+        public float collResetCollision
+        {
+            get => crc;
+            set => crc = value;
+        }
+
+        [SerializeField] private int clc;
+
+        public int collLimitCollision
+        {
+            get => clc;
+            set => clc = value;
+        }
 
         /*
          * @Extra/bonus
          */
-        public float spreadAngleStep;
-        public float parallelDistanceStep;
-        public string explosivePrefabName;
+        [SerializeField] private float sas;
+
+        public float spreadAngleStep
+        {
+            get => sas;
+            set => sas = value;
+        }
+
+        [SerializeField] private float pds;
+
+        public float parallelDistanceStep
+        {
+            get => pds;
+            set => pds = value;
+        }
+
+        [SerializeField] private string epn;
+
+        public string explosivePrefabName
+        {
+            get => epn;
+            set => epn = value;
+        }
     }
 }

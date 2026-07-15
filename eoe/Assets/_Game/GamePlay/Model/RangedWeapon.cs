@@ -11,7 +11,6 @@ namespace _Game.GamePlay.Model
         /*
          * @Abstract
          */
-
         protected override void OnPlayAttack()
         {
             base.OnPlayAttack();
@@ -24,7 +23,6 @@ namespace _Game.GamePlay.Model
         /*
          * @private. callback animation
          */
-
         public void ExecuteAnimation()
         {
             if (!IsActivated || !IsAttacking) return;

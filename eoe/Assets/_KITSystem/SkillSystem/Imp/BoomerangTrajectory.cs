@@ -15,7 +15,7 @@ namespace _KITSystem.SkillSystem.Imp
 
         public event Action<Phase> OnChangePhase;
 
-        private Phase phase = Phase.Init;
+        private Phase phase = Phase.Outbound;
         private Vector2 deltaPosition;
         private Vector2 savedDeltaPosition;
         private float elapsedTime;
@@ -39,7 +39,7 @@ namespace _KITSystem.SkillSystem.Imp
             float p, f, s;
             switch (phase)
             {
-                case Phase.Init:
+                case Phase.Outbound:
                     p = Mathf.Clamp01(elapsedTime / initialDuration);
                     f = initialCurve.Evaluate(p);
                     s = f * initialSpeed * deltaTime;
@@ -47,14 +47,14 @@ namespace _KITSystem.SkillSystem.Imp
               
                     if (p >= 1)
                     {
-                        if (delayDuration > 0) phase = Phase.Wait;
+                        if (delayDuration > 0) phase = Phase.Hang;
                         else phase = Phase.Return;
                         elapsedTime = 0;
                         savedDeltaPosition = deltaPosition;
                         OnChangePhase?.Invoke(phase);
                     }
                     break;
-                case Phase.Wait:
+                case Phase.Hang:
                     if (elapsedTime >= delayDuration)
                     {
                         phase = Phase.Return;
@@ -83,7 +83,7 @@ namespace _KITSystem.SkillSystem.Imp
 
         public enum Phase
         {
-            Init, Wait, Return, Complete
+            Outbound, Hang, Return, Complete
         }
     }
 }
