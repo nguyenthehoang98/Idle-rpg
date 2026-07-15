@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using _KITSystem.Config;
+using K4os.Compression.LZ4;
 using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
@@ -85,10 +87,13 @@ namespace _Game.Configs
         public void OnValidateLinkConfig()
         {
 #if UNITY_EDITOR
-            TextAsset asset =
-                AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/_BattleSource/Configs/MonsterConfig.json");
+            TextAsset asset = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/_BattleSource/Configs/MonsterConfig.json");
 
-            MonsterConfig monsterConfig = JsonUtility.FromJson<MonsterConfig>(asset.text);
+            byte[] unpick = LZ4Pickler.Unpickle(asset.bytes); 
+
+            string text = Encoding.UTF8.GetString(unpick);
+            
+            MonsterConfig monsterConfig = JsonUtility.FromJson<MonsterConfig>(text);
 
             monsterConfig.OnMappingValue();
 

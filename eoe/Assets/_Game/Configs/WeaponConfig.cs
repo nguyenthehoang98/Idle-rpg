@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using _KITSystem.Config;
+using K4os.Compression.LZ4;
 using UnityEngine;
 using UnityEngine.Serialization;
 #if UNITY_EDITOR
@@ -43,7 +45,13 @@ namespace _Game.Configs
         {
 #if UNITY_EDITOR
             TextAsset asset = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/_BattleSource/Configs/SkillConfig.json");
-            SkillConfig skillConfig = JsonUtility.FromJson<SkillConfig>(asset.text);
+            
+            byte[] unpick = LZ4Pickler.Unpickle(asset.bytes); 
+
+            string text = Encoding.UTF8.GetString(unpick);
+            
+            SkillConfig skillConfig = JsonUtility.FromJson<SkillConfig>(text);
+            
             skillConfig.OnMappingValue();
 
             for (int i = 0; i < weapons.Count; i++)

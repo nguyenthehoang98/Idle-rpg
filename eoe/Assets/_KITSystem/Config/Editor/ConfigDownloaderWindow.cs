@@ -5,8 +5,10 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using K4os.Compression.LZ4;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEditor;
@@ -297,8 +299,12 @@ namespace _KITSystem.Config.Editor
 
                         return m.Value;
                     });
+                
+                byte[] bytes = Encoding.UTF8.GetBytes(contents);
 
-                await File.WriteAllTextAsync(savePath, contents);
+                byte[] pack = LZ4Pickler.Pickle(bytes);
+
+                await File.WriteAllBytesAsync(savePath, pack);
 
                 var relativePath = savePath.Replace(projectPath, "").TrimStart(Path.DirectorySeparatorChar)
                     .Replace("\\", "/");
@@ -448,19 +454,29 @@ namespace _KITSystem.Config.Editor
             foreach (var type in configTypes)
             {
                 string fullName = type.FullName;
+                
                 statusMap[fullName] = $"Pending: Validate to {type.Name}.json";
                 
                 string filePath = Path.Combine(folder, type.Name + ".json");
+                
                 TextAsset asset = AssetDatabase.LoadAssetAtPath<TextAsset>(filePath);
+                
                 if (asset != null)
                 {
-                    object target = JsonUtility.FromJson(asset.text, type);
+                    byte[] unpick = LZ4Pickler.Unpickle(asset.bytes); 
+
+                    string text = Encoding.UTF8.GetString(unpick);
+                    
+                    object target = JsonUtility.FromJson(text, type);
+                    
                     if (target != null)
                     {
                         type.GetMethod("OnValidateLinkConfig",
                                 BindingFlags.Instance | BindingFlags.Public)
                             ?.Invoke(target, null);
+                        
                         string contents = JsonUtility.ToJson(target, false);
+                        
                         contents = Regex.Replace(
                             contents,
                             @"-?\d+\.\d+",
@@ -479,8 +495,15 @@ namespace _KITSystem.Config.Editor
                             });
 
                         string savePath = Path.Combine(projectPath, filePath);
-                        await File.WriteAllTextAsync(savePath, contents);
+                        
+                        byte[] bytes = Encoding.UTF8.GetBytes(contents);
+
+                        byte[] pack = LZ4Pickler.Pickle(bytes);
+                        
+                        await File.WriteAllBytesAsync(savePath, pack);
+                        
                         AssetDatabase.ImportAsset(filePath);
+                        
                         if (asset != null)
                         {
                             EditorGUIUtility.PingObject(asset);

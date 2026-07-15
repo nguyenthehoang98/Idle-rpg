@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using _KITSystem.Resource;
 using Cysharp.Threading.Tasks;
+using K4os.Compression.LZ4;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace _KITSystem.Config
 {
@@ -18,6 +22,7 @@ namespace _KITSystem.Config
                 return;
             }
 
+            Stopwatch sw = Stopwatch.StartNew();
             Type[] allType = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(x => x.GetTypes()).Where(x =>
                 {
@@ -34,18 +39,24 @@ namespace _KITSystem.Config
 
                 if (type == null) continue;
 
-                string text = (await AssetBundleManager.GetAsset<TextAsset>(scriptObjectsPath[i])).text;
+                byte[] bytes = (await AssetBundleManager.GetAsset<TextAsset>(scriptObjectsPath[i])).bytes;
+
+                byte[] unpick = LZ4Pickler.Unpickle(bytes); 
+
+                string text = Encoding.UTF8.GetString(unpick);
 
                 object asset = JsonUtility.FromJson(text, type);
-                
+
                 IGameConfig config = asset as IGameConfig;
-                
+
                 config.OnMappingValue();
 
                 cache[type] = config;
             }
 
-            Debug.Log($"Load success '{scriptObjectsPath.Length}' config files.");
+            sw.Stop();
+
+            Debug.Log($"Load success '{scriptObjectsPath.Length}' config files, in {sw.ElapsedMilliseconds} ms");
         }
 
         private static Type FindType(string typeName, Type[] sources)
