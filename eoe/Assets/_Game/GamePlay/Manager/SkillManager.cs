@@ -67,24 +67,30 @@ namespace _Game.GamePlay.Manager
                 return;
             }
 
+            float size = skillData.size;
+
             instance.PredictedTargetDamage(runtimeData, entityTarget);
             
             Vector3 direction = (destination - position).normalized;
             
             bool extra = false;
+            
             Vector3 perpendicular = new Vector3(-direction.y, direction.x, 0);
+            
             float parallelSpacing = skillData.parallelDistanceStep;
 
             if (runtimeData.ParallelCount > 0)
             {
                 int count = runtimeData.ParallelCount + 1;
+                
                 float scaleDamage = runtimeData.ParallelDamagePercent;
              
                 for (int i = 0; i < count; i++)
                 {
-                    float offset = (i - (count - 1) * 0.5f) * parallelSpacing;
+                    float offset = (i - (count - 1) * 0.5f) * parallelSpacing * size;
 
                     Vector3 offsetPos = position + perpendicular * offset;
+                    
                     Vector3 offsetDest = destination + perpendicular * offset;
 
                     instance.CastSkill_Private(skillData, runtimeData, offsetPos, offsetDest, scaleDamage);
@@ -96,21 +102,31 @@ namespace _Game.GamePlay.Manager
             if (runtimeData.SpreadCount > 0)
             {
                 int count = runtimeData.SpreadCount + 1;
+                
                 float angleStep = skillData.spreadAngleStep;
+                
                 float scaleDamage = runtimeData.SpreadDamagePercent;
 
-                float d = (Mathf.CeilToInt(runtimeData.ParallelCount / 2f) * parallelSpacing);
+                float d = Mathf.CeilToInt(runtimeData.ParallelCount / 2f) * parallelSpacing;
+                
                 Vector3 left = position - d * perpendicular;
+                
                 int mid = count / 2;
+                
                 Vector3 right = position + d * perpendicular;
                 
                 for (int i = 0; i < count; i++)
                 {
                     float angle = (i - (count - 1) * 0.5f) * angleStep / Mathf.Max(1, count - 1);
+                    
                     Vector3 dir = Quaternion.Euler(0, 0, angle) * direction;
+                    
                     Vector3 final;
+                    
                     if (i >= count / 2) final = right;
+                    
                     else final = left;
+                    
                     instance.CastSkill_Private(skillData, runtimeData, final, final + dir * 100f,  mid == i ? 1 : scaleDamage);
                 }
                     
@@ -138,6 +154,7 @@ namespace _Game.GamePlay.Manager
             BaseCollider collider = null;
             
             bool isFlyWeapon = runtimeData.IsFlyWeapon;
+          
             if (isFlyWeapon)
             {
                 projectile = runtimeData.FlyWeapon.GetComponent<Projectile>();
@@ -148,7 +165,8 @@ namespace _Game.GamePlay.Manager
 #endif
                     return;
                 }
-                
+               
+                projectile.SetSizeScale(skillData.size);
                 collider = GetCollider(projectile.ColliderData, skillData);
                 if (collider == null)
                 {
@@ -179,6 +197,7 @@ namespace _Game.GamePlay.Manager
                     return;
                 }
                 
+                projectile.SetSizeScale(skillData.size);
                 collider = GetCollider(projectile.ColliderData, skillData);
                 if (collider == null)
                 {
@@ -210,6 +229,7 @@ namespace _Game.GamePlay.Manager
             
             RequestAddAction(1, castProjectileAction);
 
+            //~ custom
             if (isFlyWeapon)
             {
                 if (trajectory is BoomerangTrajectory boomerangTrajectory)

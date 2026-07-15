@@ -10,20 +10,27 @@ namespace _Game.GamePlay.Model
 {
     public class Projectile : MonoBehaviour
     {
-        [SerializeField] private bool enableDestroy = true;
+        [SerializeField] private bool canDestroy = true;
+        [SerializeField] private bool dependencyRelativePosition = true;
+        [SerializeField] private Transform scalePivot;
         [SerializeField] private Transform rotatePivot;
         [SerializeField] private TrailRenderer trailRenderer;
         [SerializeField] private ColliderData colliderData;
 
-        public ColliderData ColliderData => colliderData;
+        public ColliderData ColliderData { get; private set; }
 
         private Action onDestroyCallback;
         
         private Vector3 targetPosition;
+        
         private Vector3 previousPosition;
+        
         private float elapsedTime;
+        
         private float deltaTime;
+        
         private bool isRunning = false;
+        
         private bool shouldDestroy = false;
 
         private void OnDrawGizmos()
@@ -87,8 +94,8 @@ namespace _Game.GamePlay.Model
 
                     DisableTrail();
                 }
-                
-                if(enableDestroy) Pool.Destroy(gameObject);
+
+                if (canDestroy) Pool.Destroy(gameObject);
                 
                 isRunning = false;
             }
@@ -101,6 +108,25 @@ namespace _Game.GamePlay.Model
             onDestroyCallback = callback;
             
             shouldDestroy = true;
+        }
+
+        public void SetSizeScale(float scale)
+        {
+            ColliderData = new ColliderData
+            {
+                type = colliderData.type,
+                
+                circleRadius = colliderData.circleRadius * scale,
+                
+                relativePosition =dependencyRelativePosition ? colliderData.relativePosition * scale : colliderData.relativePosition,
+            };
+            
+            scalePivot.transform.localScale = Vector3.one * scale;
+
+            if (trailRenderer != null)
+            {
+                trailRenderer.widthMultiplier = scale;
+            }
         }
 
         public void EnableTrail()

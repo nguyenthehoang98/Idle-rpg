@@ -66,7 +66,7 @@ namespace _KITSystem.SkillSystem.Imp
 
 #if UNITY_EDITOR
             Color color = hit ? Color.red : Color.green;
-            Debug.DrawLine(previousPosition, currentPosition, color, deltaTime);
+            
             collider.Gizmos(previousPosition, currentPosition, color, deltaTime);
 #endif
 

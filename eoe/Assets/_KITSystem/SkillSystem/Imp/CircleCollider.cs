@@ -12,7 +12,10 @@ namespace _KITSystem.SkillSystem.Imp
         public CircleCollider(IQuery query, Vector2 relativePosition, float timerTrigger, float duration, float radius) : base(query, relativePosition, timerTrigger, duration)
         {
             this.radius = radius;
+            
             this.size = new Vector2(radius / 2f, radius / 2f);
+            
+            Debug.Log("radius: " + radius);
         }
 
         protected override List<int> OnCollision(Vector2 prevPosition, Vector2 currentPosition)
@@ -24,16 +27,25 @@ namespace _KITSystem.SkillSystem.Imp
         {
 #if UNITY_EDITOR
             int segments = 12;
+            
             Vector3 center = GetPosition(prevPosition, currentPosition);
+            
             Vector3 prev = center + Vector3.right * radius;
+            
             for (int i = 1; i <= segments; i++)
             {
                 float t = i / (float)segments;
+                
                 float angle = t * Mathf.PI * 2f;
+                
                 Vector3 next = center + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+                
                 Debug.DrawLine(prev, next, color, deltaTime);
+                
                 prev = next;
             }
+            
+            Debug.DrawLine(prevPosition, currentPosition, color, deltaTime);
 #endif
         }
     }

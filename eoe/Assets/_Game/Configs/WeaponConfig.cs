@@ -71,8 +71,6 @@ namespace _Game.Configs
             {
                 if (string.IsNullOrEmpty(weaponData.prefabName))
                     Debug.LogError($"Prefab name is empty at weapon '{weaponData.id}'");
-                if (string.IsNullOrEmpty(weaponData.projectileName))
-                    Debug.LogError($"Projectile name is empty at weapon '{weaponData.id}'");
                 if (string.IsNullOrEmpty(weaponData.audioClip))
                     Debug.LogError($"Attack audio is empty at weapon '{weaponData.id}'");
             }

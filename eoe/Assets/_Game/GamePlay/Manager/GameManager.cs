@@ -134,6 +134,17 @@ namespace _Game.GamePlay.Manager
                 return;
             }
 
+            string projectileName = weaponData.skillData.prefabName;
+
+            if (!string.IsNullOrEmpty(projectileName))
+            {
+                GameObject projectile = await AssetBundleManager.GetAssetCached<GameObject>(projectileName);                
+            
+                Pool.RegisterPool(projectile, true);
+                
+                assetPath.Add(projectileName);
+            }
+
             GameObject go = await AssetBundleManager.GetAsset<GameObject>(weaponData.prefabName);
             
             go = Object.Instantiate(go, slots[currentWeaponSlot]);
