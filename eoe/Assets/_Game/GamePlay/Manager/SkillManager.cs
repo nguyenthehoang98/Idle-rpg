@@ -210,6 +210,17 @@ namespace _Game.GamePlay.Manager
             
             RequestAddAction(1, castProjectileAction);
 
+            if (isFlyWeapon)
+            {
+                if (trajectory is BoomerangTrajectory boomerangTrajectory)
+                {
+                    boomerangTrajectory.OnChangePhase += phase =>
+                    {
+                        if (phase == BoomerangTrajectory.Phase.Return) projectile.DisableTrail();
+                    };
+                }
+            }
+
             projectile.Initialize();
 
             if(!isFlyWeapon) projectile.gameObject.SetActive(true);

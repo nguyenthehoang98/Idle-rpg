@@ -14,6 +14,7 @@ namespace _Game.GamePlay.Model
         public Vector3 PreviousPosition { get; private set; }
 
         [SerializeField] private bool enableDestroy = true;
+        [SerializeField] private Transform rotatePivot;
         [SerializeField] private TrailRenderer trailRenderer;
         [SerializeField] private ColliderData colliderData;
 
@@ -49,12 +50,8 @@ namespace _Game.GamePlay.Model
             
             shouldDestroy = false;
             isRunning = true;
-            
-            if (trailRenderer != null)
-            {
-                trailRenderer.emitting = true;
-                trailRenderer.enabled = true;
-            }
+
+            EnableTrail();
         }
 
         public void SetPosition(Vector3 position, float dt)
@@ -66,7 +63,7 @@ namespace _Game.GamePlay.Model
             
             Vector3 direction = position - PreviousPosition;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0, 0, angle + 90f);
+            rotatePivot.localRotation = Quaternion.Euler(0, 0, angle + 90f);
         }
 
         private void FixedUpdate()
@@ -86,13 +83,7 @@ namespace _Game.GamePlay.Model
                     onDestroyCallback.Invoke();
                     onDestroyCallback = null;
 
-                    if (trailRenderer != null)
-                    {
-                        trailRenderer.emitting = false;
-                        trailRenderer.enabled = false;
-                
-                        trailRenderer.Clear();
-                    }
+                    DisableTrail();
                 }
                 
                 if(enableDestroy) Pool.Destroy(gameObject);
@@ -108,6 +99,26 @@ namespace _Game.GamePlay.Model
             onDestroyCallback = callback;
             
             shouldDestroy = true;
+        }
+
+        public void EnableTrail()
+        {
+            if (trailRenderer != null)
+            {
+                trailRenderer.emitting = true;
+                trailRenderer.enabled = true;
+            }
+        }
+
+        public void DisableTrail()
+        {
+            if (trailRenderer != null)
+            {
+                trailRenderer.emitting = false;
+                trailRenderer.enabled = false;
+                
+                trailRenderer.Clear();
+            }
         }
     }
 }

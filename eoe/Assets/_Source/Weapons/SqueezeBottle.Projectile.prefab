@@ -165,10 +165,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d310ff3e519bd0e4a8f724ec24dc56d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.Model.Projectile
+  enableDestroy: 1
+  rotatePivot: {fileID: 4724804207875695}
   trailRenderer: {fileID: 96061268324235159}
   colliderData:
     type: 0
     circleRadius: 0.125
+    relativePosition: {x: 0, y: 0}
 --- !u!1 &1730242686860875
 GameObject:
   m_ObjectHideFlags: 0

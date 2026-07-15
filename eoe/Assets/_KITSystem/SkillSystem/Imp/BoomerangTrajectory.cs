@@ -1,3 +1,4 @@
+using System;
 using _KITSystem.SkillSystem.Core;
 using UnityEngine;
 
@@ -11,6 +12,8 @@ namespace _KITSystem.SkillSystem.Imp
         private readonly float initialDuration;
         private readonly float delayDuration;
         private readonly float returnDuration;
+
+        public event Action<Phase> OnChangePhase;
 
         private Phase phase = Phase.Init;
         private Vector2 deltaPosition;
@@ -48,6 +51,7 @@ namespace _KITSystem.SkillSystem.Imp
                         else phase = Phase.Return;
                         elapsedTime = 0;
                         savedDeltaPosition = deltaPosition;
+                        OnChangePhase?.Invoke(phase);
                     }
                     break;
                 case Phase.Wait:
@@ -55,6 +59,7 @@ namespace _KITSystem.SkillSystem.Imp
                     {
                         phase = Phase.Return;
                         elapsedTime = 0;
+                        OnChangePhase?.Invoke(phase);
                     }
                     break;
                 case Phase.Return:
@@ -66,6 +71,7 @@ namespace _KITSystem.SkillSystem.Imp
                     {
                         elapsedTime = 0;
                         phase = Phase.Complete;
+                        OnChangePhase?.Invoke(phase);
                     }
                     break;
                 case Phase.Complete:
@@ -75,7 +81,7 @@ namespace _KITSystem.SkillSystem.Imp
             return deltaPosition + Start;
         }
 
-        enum Phase
+        public enum Phase
         {
             Init, Wait, Return, Complete
         }

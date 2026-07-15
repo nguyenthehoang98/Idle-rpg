@@ -237,6 +237,7 @@ namespace _Game.GamePlay.Model
 
         protected virtual IEnumerator AutoAttackIE()
         {
+            Debug.Log("phần này sư lại khi component thì mới tính cooldown thì sẽ chính xác");
             while (!IsPaused)
             {
                 float cooldown = WeaponData.cooldown * (1 - CurrentUpgradeData.cooldownReduce);
