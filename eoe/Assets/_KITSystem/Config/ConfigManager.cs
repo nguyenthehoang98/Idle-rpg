@@ -23,6 +23,7 @@ namespace _KITSystem.Config
             }
 
             Stopwatch sw = Stopwatch.StartNew();
+            
             Type[] allType = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(x => x.GetTypes()).Where(x =>
                 {
@@ -32,16 +33,29 @@ namespace _KITSystem.Config
                 }).Select(x => x).ToArray();
 
             cache = new Dictionary<Type, IGameConfig>();
+            
+            UniTask<TextAsset>[] loadTasks = new UniTask<TextAsset>[scriptObjectsPath.Length];
+            
+            Type[] types = new Type[scriptObjectsPath.Length];
 
             for (int i = 0; i < scriptObjectsPath.Length; i++)
             {
                 Type type = FindType(scriptObjectsPath[i], allType);
 
                 if (type == null) continue;
+                
+                types[i] = type;
+                
+                loadTasks[i] = AssetBundleManager.GetAsset<TextAsset>(scriptObjectsPath[i]);
+            }
+            
+            TextAsset[] assets = await UniTask.WhenAll(loadTasks);
 
-                byte[] bytes = (await AssetBundleManager.GetAsset<TextAsset>(scriptObjectsPath[i])).bytes;
-
-                byte[] unpick = LZ4Pickler.Unpickle(bytes); 
+            for (int i = 0; i < scriptObjectsPath.Length; i++)
+            {
+                Type type = types[i];
+                
+                byte[] unpick = LZ4Pickler.Unpickle(assets[i].bytes);
 
                 string text = Encoding.UTF8.GetString(unpick);
 
