@@ -123,145 +123,33 @@ namespace _Game.Configs
     [Serializable]
     public struct LevelData
     {
-        [SerializeField] private int li;
-
-        public int levelId
-        {
-            get => li;
-            set => li = value;
-        }
-
-        [SerializeField] private string ln;
-
-        public string levelName
-        {
-            get => ln;
-            set => ln = value;
-        }
-
-        [SerializeField] private string bn;
-
-        public string backgroundName
-        {
-            get => bn;
-            set => bn = value;
-        }
-
-        [SerializeField] private WaveData[] ws;
-
-        public WaveData[] waves
-        {
-            get => ws;
-            set => ws = value;
-        }
-
-        [JsonProperty] public string[] wavesId { get; set; }
+        public int levelId;
+        public string levelName;
+        public string backgroundName;
+        public WaveData[] waves;
+        [JsonProperty, HideInInspector] public string[] wavesId;
     }
 
     [Serializable]
     public struct WaveData
     {
-        [SerializeField] private string wi;
-
-        public string waveId
-        {
-            get => wi;
-            set => wi = value;
-        }
-
-        [SerializeField] private SpawnData[] ss;
-
-        public SpawnData[] spawns
-        {
-            get => ss;
-            set => ss = value;
-        }
-
-        [JsonProperty] public string[] groupsId { get; set; }
-        
+        public string waveId;
+        [JsonProperty, HideInInspector] public string[] groupsId;
+        public SpawnData[] spawns;
     }
 
     [Serializable]
     public struct SpawnData
     {
-        [SerializeField] private string gi;
-
-        public string groupId
-        {
-            get => gi;
-            set => gi = value;
-        }
-
-        [SerializeField] private int mi;
-
-        public int monsterId
-        {
-            get => mi;
-            set => mi = value;
-        }
-
-        [SerializeField] private int tt;
-
-        public int total
-        {
-            get => tt;
-            set => tt = value;
-        }
-
-        [SerializeField] private float as2;
-
-        public float attackScale
-        {
-            get => as2;
-            set => as2 = value;
-        }
-
-        [SerializeField] private float hs2;
-
-        public float healthScale
-        {
-            get => hs2;
-            set => hs2 = value;
-        }
-
-        [SerializeField] private float es2;
-
-        public float expScale
-        {
-            get => es2;
-            set => es2 = value;
-        }
-
-        [SerializeField] private float r;
-
-        public float radius
-        {
-            get => r;
-            set => r = value;
-        }
-
-        [SerializeField] private float st2;
-
-        public float startTime
-        {
-            get => st2;
-            set => st2 = value;
-        }
-
-        [SerializeField] private float et2;
-
-        public float endTime
-        {
-            get => et2;
-            set => et2 = value;
-        }
-
-        [SerializeField] private int[] ps;
-
-        public int[] portals
-        {
-            get => ps;
-            set => ps = value;
-        }
+        public string groupId;
+        public int monsterId;
+        public int total;
+        public float attackScale;
+        public float healthScale;
+        public float expScale;
+        public float radius;
+        public float startTime;
+        public float endTime;
+        public int[] portals;
     }
 }

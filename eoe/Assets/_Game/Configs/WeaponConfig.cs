@@ -113,122 +113,35 @@ namespace _Game.Configs
     [Serializable]
     public struct WeaponData : IEquatable<WeaponData>
     {
-        [SerializeField] private int i;
-
-        public int id
-        {
-            get => i;
-            set => i = value;
-        }
-
-        [SerializeField] private int si;
-
-        public int skillId
-        {
-            get => si;
-            set => si = value;
-        }
-
-        [SerializeField] private string pn;
-
-        public string prefabName
-        {
-            get => pn;
-            set => pn = value;
-        }
-
-        [SerializeField] private string pn2;
-
-        public string projectileName
-        {
-            get => pn2;
-            set => pn2 = value;
-        }
-
-        [SerializeField] private string in2;
-
-        public string iconName
-        {
-            get => in2;
-            set => in2 = value;
-        }
+        public int id;
+        public int skillId;
+        public string prefabName;
+        public string projectileName;
+        public string iconName;
 
         /*
          * @ Stat
          */
-        [SerializeField] private float cd;
-
-        public float cooldown
-        {
-            get => cd;
-            set => cd = value;
-        }
-
-        [SerializeField] private float as2;
-
-        public float attackSpeed
-        {
-            get => as2;
-            set => as2 = value;
-        }
-
-        [SerializeField] private int a2;
-
-        public int attack
-        {
-            get => a2;
-            set => a2 = value;
-        }
-
-        [SerializeField] private float cc2;
-
-        public float critChance
-        {
-            get => cc2;
-            set => cc2 = value;
-        }
-
-        [SerializeField] private float cd2;
-
-        public float critDamage
-        {
-            get => cd2;
-            set => cd2 = value;
-        }
+        public float cooldown;
+        public float attackSpeed;
+        public int attack;
+        public float critChance;
+        public float critDamage;
 
         /// <summary>
         /// Runtime data
         /// </summary>
-
-        [SerializeField] private SkillData ssr;
-
-        public SkillData skillData
-        {
-            get => ssr;
-            set => ssr = value;
-        }
+        public SkillData skillData;
 
         /// <summary>
         /// Attack audio clip
         /// </summary>
-        [SerializeField] private string mp3;
-
-        public string audioClip
-        {
-            get => mp3;
-            set => mp3 = value;
-        }
+        public string audioClip;
 
         /// <summary>
         /// Attack volume
         /// </summary>
-        [SerializeField] private float v;
-
-        public float volume
-        {
-            get => v;
-            set => v = value;
-        }
+        public float volume;
 
         public override int GetHashCode()
         {
@@ -249,173 +162,27 @@ namespace _Game.Configs
     [Serializable]
     public struct WeaponUpgradeData : IEquatable<WeaponUpgradeData>
     {
-        [SerializeField] private int i;
-
-        public int id
-        {
-            get => i;
-            set => i = value;
-        }
-
-        [SerializeField] private int g;
-
-        public int group
-        {
-            get => g;
-            set => g = value;
-        }
-
-        [SerializeField] private int l;
-
-        public int level
-        {
-            get => l;
-            set => l = value;
-        }
-
-        [SerializeField] string in2;
-
-        public string iconName
-        {
-            get => in2;
-            set => in2 = value;
-        }
-
-        [SerializeField] private UpgradeType t;
-
-        public UpgradeType type
-        {
-            get => t;
-            set => t = value;
-        }
-
-        [SerializeField] private float as2;
-
-        public float attackSpeed
-        {
-            get => as2;
-            set => as2 = value;
-        }
-
-        [SerializeField] private float ps2;
-
-        public float projectileSize
-        {
-            get => ps2;
-            set => ps2 = value;
-        }
-
-        [SerializeField] private float dp;
-
-        public float damagePercent
-        {
-            get => dp;
-            set => dp = value;
-        }
-
-        [SerializeField] private float cdr;
-
-        public float cooldownReduce
-        {
-            get => cdr;
-            set => cdr = value;
-        }
-
-        [SerializeField] private int pc;
-
-        public int parallelCount
-        {
-            get => pc;
-            set => pc = value;
-        }
-
-        [SerializeField] private float pdp;
-
-        public float parallelDamagePercent
-        {
-            get => pdp;
-            set => pdp = value;
-        }
-
-        [SerializeField] private int sc;
-
-        public int spreadCount
-        {
-            get => sc;
-            set => sc = value;
-        }
-
-        [SerializeField] private float sdp;
-
-        public float spreadDamagePercent
-        {
-            get => sdp;
-            set => sdp = value;
-        }
-
-        [SerializeField] private int pc2;
-
-        public int piercingCount
-        {
-            get => pc2;
-            set => pc2 = value;
-        }
-
-        [SerializeField] private float er;
-
-        public float explosiveRadius
-        {
-            get => er;
-            set => er = value;
-        }
-
-        [SerializeField] private float edp;
-
-        public float explosiveDamagePercent
-        {
-            get => edp;
-            set => edp = value;
-        }
-
-        [SerializeField] private float cc;
-
-        public float critChance
-        {
-            get => cc;
-            set => cc = value;
-        }
-
-        [SerializeField] private float cd;
-
-        public float critDamage
-        {
-            get => cd;
-            set => cd = value;
-        }
-
-        [SerializeField] private int bc;
-
-        public int bounceCount
-        {
-            get => bc;
-            set => bc = value;
-        }
-
-        [SerializeField] private float bdp;
-
-        public float bounceDamagePercent
-        {
-            get => bdp;
-            set => bdp = value;
-        }
-
-        [SerializeField] private float kibhp;
-
-        public float killInstantBelowHealthPercent
-        {
-            get => kibhp;
-            set => kibhp = value;
-        }
+        public int id;
+        public int group;
+        public int level;
+        public string iconName;
+        public UpgradeType type;
+        public float attackSpeed;
+        public float projectileSize;
+        public float damagePercent;
+        public float cooldownReduce;
+        public int parallelCount;
+        public float parallelDamagePercent;
+        public int spreadCount;
+        public float spreadDamagePercent;
+        public int piercingCount;
+        public float explosiveRadius;
+        public float explosiveDamagePercent;
+        public float critChance;
+        public float critDamage;
+        public int bounceCount;
+        public float bounceDamagePercent;
+        public float killInstantBelowHealthPercent;
 
         public override int GetHashCode()
         {

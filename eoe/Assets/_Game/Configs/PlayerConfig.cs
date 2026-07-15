@@ -78,68 +78,22 @@ namespace _Game.Configs
     [Serializable]
     public struct HeroData
     {
-        [SerializeField] private int i;
-
-        public int id
-        {
-            get => i;
-            set => i = value;
-        }
-
-        [SerializeField] private string pn;
-
-        public string prefabName
-        {
-            get => pn;
-            set => pn = value;
-        }
-
-        [SerializeField] private int wi;
-
-        public int wingId
-        {
-            get => wi;
-            set => wi = value;
-        }
+        public int id;
+        public string prefabName;
+        public int wingId;
     }
 
     [Serializable]
     public struct WingData
     {
-        [SerializeField] private int i;
-
-        public int id
-        {
-            get => i;
-            set => i = value;
-        }
-
-        [SerializeField] private string wn;
-
-        public string wingName
-        {
-            get => wn;
-            set => wn = value;
-        }
+        public int id;
+        public string wingName;
     }
 
     [Serializable]
     public struct PlayerExpData
     {
-        [SerializeField] private int l;
-
-        public int level
-        {
-            get => l;
-            set => l = value;
-        }
-
-        [SerializeField] private int e;
-
-        public int exp
-        {
-            get => e;
-            set => e = value;
-        }
+        public int level;
+        public int exp;
     }
 }

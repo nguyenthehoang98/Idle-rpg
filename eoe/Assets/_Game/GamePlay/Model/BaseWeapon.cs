@@ -71,8 +71,11 @@ namespace _Game.GamePlay.Model
             set
             {
                 bool shouldUpdateOutlineColor = level != value;
+                
                 level = value;
+                
                 IsActivated = value > 0;
+                
                 UpgradeData(shouldUpdateOutlineColor);
             }
         }

@@ -1,6 +1,4 @@
-using System.Diagnostics;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace _Game.GamePlay.Model
 {

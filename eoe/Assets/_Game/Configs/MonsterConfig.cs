@@ -82,136 +82,44 @@ namespace _Game.Configs
     [Serializable]
     public struct MonsterData
     {
-        [SerializeField] private int i;
-
-        public int id
-        {
-            get => i;
-            set => i = value;
-        }
-
-        [SerializeField] private string pn;
-
-        public string prefabName
-        {
-            get => pn;
-            set => pn = value;
-        }
-
-        [SerializeField] private string s;
-
-        public string skin
-        {
-            get => s;
-            set => s = value;
-        }
-
-        [SerializeField] private float s2;
-
-        public float speed
-        {
-            get => s2;
-            set => s2 = value;
-        }
-
-        [SerializeField] private float s3;
-
-        public float scale
-        {
-            get => s3;
-            set => s3 = value;
-        }
-
-        [SerializeField] private float r;
-
-        public float radius
-        {
-            get => r;
-            set => r = value;
-        }
-
-        [SerializeField] private float sd;
-
-        public float stopDistance
-        {
-            get => sd;
-            set => sd = value;
-        }
-
-        [SerializeField] private string mp3;
-
-        public string deathAudioClip
-        {
-            get => mp3;
-            set => mp3 = value;
-        }
-
-        [SerializeField] private float dv;
-
-        public float deathVolume
-        {
-            get => dv;
-            set => dv = value;
-        }
-
-        [SerializeField] private string dvfx;
-
-        public string deathVfx
-        {
-            get => dvfx;
-            set => dvfx = value;
-        }
-
-        [SerializeField] private float a;
-
-        public float attack
-        {
-            get => a;
-            set => a = value;
-        }
-
-        [SerializeField] private float h2;
-
-        public float health
-        {
-            get => h2;
-            set => h2 = value;
-        }
-
-        [SerializeField] private float e2;
-
-        public float exp
-        {
-            get => e2;
-            set => e2 = value;
-        }
+        public int id;
+        public string prefabName;
+        public string skin;
+        public float speed;
+        public float scale;
+        public float radius;
+        public float stopDistance;
+        public string deathAudioClip;
+        public float deathVolume;
+        public string deathVfx;
+        public float attack;
+        public float health;
+        public float exp;
     }
 
-    [Serializable]
-    struct BaseMonsterData
+    [Serializable] struct BaseMonsterData
     {
-        public int health { get; set; }
-        public int attack { get; set; }
-        public int exp { get; set; }
-        public string prefabName { get; set; }
-        public float speed { get; set; }
-        public float radius { get; set; }
-        public string deathAudioClip { get; set; }
-        public float deathVolume { get; set; }
-        public string deathVfx { get; set; }
+        public int health;
+        public int attack;
+        public int exp;
+        public string prefabName;
+        public float speed;
+        public float radius;
+        public string deathAudioClip;
+        public float deathVolume;
+        public string deathVfx;
     }
-
-    [Serializable]
-    struct MonsterScaleData
+    
+    [Serializable] struct MonsterScaleData
     {
-        public int id { get; set; }
-        public string baseId { get; set; }
-        public string skin { get; set; }
-        public float scaleRadius { get; set; }
-        public float scaleSpeed { get; set; }
-        public float stopDistance { get; set; }
-        public float healthScale { get; set; }
-        public float attackScale { get; set; }
-        public float expScale { get; set; }
+        public int id;
+        public string baseId;
+        public string skin;
+        public float scaleRadius;
+        public float scaleSpeed;
+        public float stopDistance;
+        public float healthScale;
+        public float attackScale;
+        public float expScale;
     }
 }
