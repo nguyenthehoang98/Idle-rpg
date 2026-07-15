@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using _Game.Configs;
 using _Game.GamePlay.Data;
 using _Game.GamePlay.Model;
@@ -10,6 +11,7 @@ using _KITSystem.Schedule;
 using _KITSystem.Utils;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace _Game.GamePlay.Manager
 {
@@ -69,13 +71,16 @@ namespace _Game.GamePlay.Manager
             spawnManager.SetLevel(1);
 
             // load 
-            await RegisterPool<GameObject>(Path.TEXT_DAMAGE_NORMAL);
-            await RegisterPool<GameObject>(Path.TEXT_DAMAGE_CRITICAL);
-            await RegisterPool<AudioClip>(Path.SFX_POWER_SELECT);
-            await RegisterPool<AudioClip>(Path.SFX_LEVEL_UP);
-            await RegisterPool<AudioClip>(Path.SFX_ENERGY);
-            await RegisterPool<AudioClip>(Path.SFX_ENERGY_FULL);
-            await RegisterPool<AudioClip>(Path.SFX_HAMMER);
+            Stopwatch sw = Stopwatch.StartNew();
+            await RegisterPools<GameObject>(new string[]
+            {
+                Path.TEXT_DAMAGE_NORMAL, Path.TEXT_DAMAGE_CRITICAL
+            });
+            await RegisterPools<AudioClip>(new string[]
+            {
+                Path.SFX_POWER_SELECT, Path.SFX_LEVEL_UP, Path.SFX_ENERGY,
+                Path.SFX_ENERGY_FULL, Path.SFX_HAMMER
+            });
 
             await BuildHero(10);
 
@@ -88,7 +93,12 @@ namespace _Game.GamePlay.Manager
 
             equipmentQueue.Init(weaponConfig, equipments);
 
+            sw.Stop();
+            
+            Debug.Log($"GameManager init in {sw.ElapsedMilliseconds}ms");
+            
             owner.IsPaused = false;
+            
             owner.Loop = 1;
 
             energy.enabled = true;
@@ -124,10 +134,10 @@ namespace _Game.GamePlay.Manager
                 return;
             }
 
-            await RegisterPool<Sprite>(weaponData.iconName);
-
             GameObject go = await AssetBundleManager.GetAsset<GameObject>(weaponData.prefabName);
+            
             go = Object.Instantiate(go, slots[currentWeaponSlot]);
+           
             go.transform.localPosition = Vector3.zero;
 
             assetPath.Add(weaponData.prefabName);
@@ -139,16 +149,24 @@ namespace _Game.GamePlay.Manager
                 Debug.LogError($"Not found upgrade weapon x3 with '{weaponId}'");
 
             Dictionary<int, List<WeaponUpgradeData>> dict = weaponConfig.GetUpgradesLevelWeapon(weaponId);
+
+            List<string> iconPaths = new List<string>();
+            
             foreach (var pair in dict)
             {
-                foreach (var upgradeData in pair.Value) await RegisterPool<Sprite>(upgradeData.iconName);
+                foreach (var upgradeData in pair.Value) iconPaths.Add(upgradeData.iconName);
             }
+            
+            iconPaths.Add(weaponData.iconName);
 
+            await RegisterPools<Sprite>(iconPaths.ToArray());
+            
             float flip = currentWeaponSlot % 2 == 0 ? 1 : -1;
 
             currentWeaponSlot++;
 
             BaseWeapon weapon = go.GetComponent<BaseWeapon>();
+            
             if (weapon == null) Debug.LogError($"Gameobject '{go}' not attach Weapon component");
 
             await weapon.Initialize(weaponData, dict, dataX2, dataX3, flip);
@@ -161,11 +179,12 @@ namespace _Game.GamePlay.Manager
             if (playerConfig.TryGetHero(heroId, out HeroData heroData))
             {
                 GameObject go = null;
+              
                 go = await AssetBundleManager.GetAsset<GameObject>(heroData.prefabName);
+               
                 Object.Instantiate(go, Vector3.zero, Quaternion.identity);
 
-                if (playerConfig.TryGetWing(heroData.wingId, out WingData wingData) &&
-                    !string.IsNullOrEmpty(wingData.wingName))
+                if (playerConfig.TryGetWing(heroData.wingId, out WingData wingData) && !string.IsNullOrEmpty(wingData.wingName))
                 {
                     go = await AssetBundleManager.GetAsset<GameObject>(wingData.wingName);
                     Object.Instantiate(go, Vector3.zero, Quaternion.identity);
@@ -173,16 +192,34 @@ namespace _Game.GamePlay.Manager
             }
         }
 
-        private async UniTask RegisterPool<T>(string path) where T : Object
+        private async UniTask RegisterPools<T>(string[] paths) where T : Object
         {
-            T asset = await AssetBundleManager.GetAssetCached<T>(path);
-            if (asset is GameObject go)
+            UniTask<T>[] tasks = new UniTask<T>[paths.Length];
+
+            // Load song song
+            for (int i = 0; i < paths.Length; i++)
             {
-                Pool.RegisterPool(go, true);
-                Pool.Destroy(Pool.Instantiate(go));
+                tasks[i] = AssetBundleManager.GetAssetCached<T>(paths[i]);
             }
 
-            if (asset != null) assetPath.Add(path);
+            T[] assets = await UniTask.WhenAll(tasks);
+
+            // Đăng ký pool
+            for (int i = 0; i < assets.Length; i++)
+            {
+                T asset = assets[i];
+
+                if (asset is GameObject go)
+                {
+                    Pool.RegisterPool(go, true);
+                    Pool.Destroy(Pool.Instantiate(go));
+                }
+
+                if (asset != null)
+                {
+                    assetPath.Add(paths[i]);
+                }
+            }
         }
 
         /*

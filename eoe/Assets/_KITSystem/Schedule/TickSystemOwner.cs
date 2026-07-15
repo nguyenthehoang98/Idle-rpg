@@ -52,12 +52,13 @@ namespace _KITSystem.Schedule
 
         public async Task Initialize()
         {
+            Task[] tasks = new Task[tickables.Count];
             for (int i = 0; i < tickables.Count; i++)
             {
-                await tickables[i].Initialize();
+                tasks[i] = tickables[i].Initialize();
             }
 
-            await Task.CompletedTask;
+            await Task.WhenAll(tasks);
         }
 
         private void Awake()
