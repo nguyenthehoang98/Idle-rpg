@@ -31,11 +31,7 @@ namespace _KITSystem.SkillSystem.Imp
 
             GUI.Box(position, GUIContent.none);
 
-            Rect rect = new Rect(
-                position.x + Padding,
-                position.y + Padding,
-                position.width - Padding * 2,
-                EditorGUIUtility.singleLineHeight);
+            Rect rect = new Rect(position.x + Padding, position.y + Padding, position.width - Padding * 2, EditorGUIUtility.singleLineHeight);
 
             EditorGUI.PropertyField(rect, type);
 
@@ -43,6 +39,7 @@ namespace _KITSystem.SkillSystem.Imp
 
             EditorGUI.PropertyField(rect, relativePosition);
 
+            rect.y += EditorGUIUtility.singleLineHeight + Space;
             rect.y += EditorGUIUtility.singleLineHeight + Space;
 
             switch ((ColliderType)type.intValue)
@@ -59,6 +56,7 @@ namespace _KITSystem.SkillSystem.Imp
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             float h = Padding * 2;
+            h += EditorGUIUtility.singleLineHeight + Space;
             h += EditorGUIUtility.singleLineHeight + Space;
             h += EditorGUIUtility.singleLineHeight + Space;
 

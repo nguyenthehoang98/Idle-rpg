@@ -4,7 +4,6 @@ using _Game.Configs;
 using _Game.GamePlay.Utils;
 using _KITSystem.Resource;
 using _KITSystem.Utils;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace _Game.GamePlay.View
@@ -49,8 +48,6 @@ namespace _Game.GamePlay.View
                 int idx = i % equipments.Count;
                 list.Add(equipments[idx]);
             }
-            
-            OnQueueFull?.Invoke();
         }
 
         public void Increase()
@@ -145,7 +142,10 @@ namespace _Game.GamePlay.View
             {
                 TryGetWeaponData(i, out WeaponData weaponData);
                 
-                slots[i].SetIcon(await AssetBundleManager.GetAssetCached<Sprite>(weaponData.iconName));
+                if (!string.IsNullOrEmpty(weaponData.iconName))
+                {
+                    slots[i].SetIcon(await AssetBundleManager.GetAssetCached<Sprite>(weaponData.iconName));                
+                }
             }
             
             for (int i = 0; i < Const.MAX_WEAPON_SLOT; i++)

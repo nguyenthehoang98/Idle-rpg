@@ -340,12 +340,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 323f0f68c6614897bf802376601d5abe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.Model.RangedWeapon
-  rotatePivot: {fileID: 0}
   renderer: {fileID: 0}
+  adjustOutlineColorDuration: 0.2
   trajectory:
     type: 0
-    projectileSpeed: 0
-  adjustOutlineColorDuration: 0.2
+    projectileCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    boomerangInitCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    boomerangReturnCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  rotatePivot: {fileID: 0}
+  rotationCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  rotationDuration: 0.15
+  muzzle: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!1 &1402580554
 GameObject:
   m_ObjectHideFlags: 0

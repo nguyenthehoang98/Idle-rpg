@@ -14,7 +14,6 @@ namespace LitMotion.Animation
     {
         [SerializeField] TObject target;
         [SerializeField] SerializableMotionSettings<TValue, TOptions> settings;
-        [SerializeField] bool relative;
 
         TValue startValue;
 
@@ -30,7 +29,7 @@ namespace LitMotion.Animation
 
             MotionHandle handle;
 
-            if (relative)
+            if (settings.Relative)
             {
                 handle = LMotion.Create<TValue, TOptions, TAdapter>(settings)
                     .Bind(this, (x, state) =>

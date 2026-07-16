@@ -885,7 +885,7 @@ MonoBehaviour:
   energy: {fileID: 1074248198}
   equipmentQueue: {fileID: 983035829}
   equipmentActivation: {fileID: 1374644340}
-  equipments: e9030000000000000000000000000000
+  equipments: ea030000000000000000000000000000
   slots:
   - {fileID: 1143688530}
   - {fileID: 1219510552}
@@ -1081,7 +1081,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2081720019
 RectTransform:
   m_ObjectHideFlags: 0

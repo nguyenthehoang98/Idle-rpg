@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: caddd4eeaae6bd640bd158e3033cce9c
+guid: 6ce59553cd0fb5745bb249de9b626483
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7241275139643303700
-    second: Fork_0
+      213: 4119801618915546468
+    second: Icon28_24_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 50
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Fork_0
+      name: Icon28_24_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 9
-        height: 44
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ce891bc50a2d18b90800000000000000
-      internalID: -7241275139643303700
+      spriteID: 4655a88aeb97c2930800000000000000
+      internalID: 4119801618915546468
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Fork_0: -7241275139643303700
+      Icon28_24_0: 4119801618915546468
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

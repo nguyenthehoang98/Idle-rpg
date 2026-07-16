@@ -261,6 +261,9 @@ namespace _KITSystem.SkillSystem.Core
     
     public partial class Spu
     {
+#if UNITY_EDITOR
+        [Serializable]
+#endif
         struct ActionRuntime
         {
             public int SkillInstanceId;

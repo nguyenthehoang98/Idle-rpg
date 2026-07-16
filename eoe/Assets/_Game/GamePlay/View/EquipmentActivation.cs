@@ -45,7 +45,11 @@ namespace _Game.GamePlay.View
         public async void SetWeapon(int idx, WeaponData data)
         {
             EquipmentSlot sl = slots[idx];
-            sl.SetIcon(await AssetBundleManager.GetAssetCached<Sprite>(data.iconName));
+           
+            if (!string.IsNullOrEmpty(data.iconName))
+            {
+                sl.SetIcon(await AssetBundleManager.GetAssetCached<Sprite>(data.iconName));                
+            }
         }
 
         private IEnumerator ChangeBackgroundColor(Image img, Color color, float duration)

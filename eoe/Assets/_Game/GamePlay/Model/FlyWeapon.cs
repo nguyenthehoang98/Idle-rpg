@@ -1,3 +1,5 @@
+using _KITSystem.Utils;
+using LitMotion.Animation;
 using UnityEngine;
 
 namespace _Game.GamePlay.Model
@@ -5,8 +7,14 @@ namespace _Game.GamePlay.Model
     [RequireComponent(typeof(Projectile))]
     public class FlyWeapon : BaseWeapon
     {
+        [Header("Animation")]
         [SerializeField] private Animator animator;
-
+        [SerializeField] private LitMotionAnimation outboundAnimation;
+        [SerializeField] private LitMotionAnimation hangAnimation;
+        [SerializeField] private LitMotionAnimation returnAnimation;
+        [SerializeField] private LitMotionAnimation completeAnimation;
+        [SerializeField] private float revertRotateDuration = 0.15f;
+        
         protected override bool IsFlyWeapon => true;
 
         protected override void OnPlayAttack()
@@ -25,22 +33,24 @@ namespace _Game.GamePlay.Model
             animator.enabled = true;
         }
 
-        public void OutboundFly()
-        {
-            rotatePivot.localRotation = Quaternion.Euler(0, 0, 0);
-        }
+        public void OutboundFly() => outboundAnimation?.Play();
 
-        public void HangFly()
-        {
-        }
+        public void HangFly() => hangAnimation?.Play();
 
-        public void ReturnFly()
-        {
-            rotatePivot.localRotation = Quaternion.Euler(0, 0, 180);
-        }
+        public void ReturnFly() => returnAnimation?.Play();
 
         public void CompleteFly()
         {
+            if (completeAnimation != null)
+            {
+                float duration = completeAnimation.Play();
+
+                this.WaitInvoke(duration, OnStopAttack);
+            }
+            else
+            {
+                OnStopAttack();
+            }
         }
     }
 }

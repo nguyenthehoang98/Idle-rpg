@@ -1,7 +1,6 @@
 using _Game.GamePlay.Manager;
 using _Game.GamePlay.Utils;
 using _KITSystem.Resource;
-using _KITSystem.Utils;
 using LitMotion.Animation;
 using UnityEngine;
 using UnityEngine.UI;

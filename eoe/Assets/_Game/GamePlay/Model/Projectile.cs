@@ -20,7 +20,7 @@ namespace _Game.GamePlay.Model
         public ColliderData ColliderData { get; private set; }
 
         private Action onDestroyCallback;
-        
+
         private Vector3 targetPosition;
         
         private Vector3 previousPosition;
@@ -28,10 +28,14 @@ namespace _Game.GamePlay.Model
         private float elapsedTime;
         
         private float deltaTime;
+
+        private float angle;
         
         private bool isRunning = false;
         
         private bool shouldDestroy = false;
+
+        private bool stopped = false;
 
         private void OnDrawGizmos()
         {
@@ -65,14 +69,27 @@ namespace _Game.GamePlay.Model
 
         public void SetPosition(Vector3 position, float dt)
         {
+            if (stopped)
+            {
+                stopped = false;
+                return;
+            }
+            
             this.previousPosition = transform.position;
             this.targetPosition = position;
             this.deltaTime = dt;
             this.elapsedTime = 0;
             
             Vector3 direction = position - previousPosition;
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            rotatePivot.localRotation = Quaternion.Euler(0, 0, angle);
+            angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            rotatePivot.localEulerAngles = new Vector3(0, 0, angle);
+        }
+
+        public void StopLerpMotion()
+        {
+            stopped = true;
+            previousPosition = transform.position;
+            targetPosition = transform.position;
         }
 
         private void FixedUpdate()
@@ -118,7 +135,7 @@ namespace _Game.GamePlay.Model
                 
                 circleRadius = colliderData.circleRadius * scale,
                 
-                relativePosition =dependencyRelativePosition ? colliderData.relativePosition * scale : colliderData.relativePosition,
+                relativePosition = dependencyRelativePosition ? colliderData.relativePosition * scale : colliderData.relativePosition,
             };
             
             scalePivot.transform.localScale = Vector3.one * scale;

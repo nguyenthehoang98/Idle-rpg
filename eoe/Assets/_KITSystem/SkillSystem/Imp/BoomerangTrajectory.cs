@@ -17,7 +17,7 @@ namespace _KITSystem.SkillSystem.Imp
 
         private Phase phase = Phase.Undefined;
         private Vector2 deltaPosition;
-        private Vector2 savedDeltaPosition;
+        private Vector2 outboundEndPosition;
         private float elapsedTime;
 
         public BoomerangTrajectory(AnimationCurve initialCurve, AnimationCurve returnCurve,
@@ -38,27 +38,39 @@ namespace _KITSystem.SkillSystem.Imp
             if (phase == Phase.Undefined)
             {
                 phase = Phase.Outbound;
+                elapsedTime = 0f;
                 OnChangePhase?.Invoke(phase);
             }
-            
+
             elapsedTime += deltaTime;
-            float p, f, s;
+            
+            float p = 0, f = 0, s = 0;
+
             switch (phase)
             {
                 case Phase.Outbound:
-                    p = Mathf.Clamp01(elapsedTime / initialDuration);
-                    f = initialCurve.Evaluate(p);
-                    s = f * initialSpeed * deltaTime;
-                    deltaPosition += s * Direction;
-              
-                    if (p >= 1)
+                    
+                    p = initialDuration <= 0f ? 1f : Mathf.Clamp01(elapsedTime / initialDuration);
+                 
+                    if (elapsedTime > initialDuration)
                     {
                         if (delayDuration > 0) phase = Phase.Hang;
                         else phase = Phase.Return;
+                        
                         elapsedTime = 0;
-                        savedDeltaPosition = deltaPosition;
+                        outboundEndPosition = deltaPosition;
+                        
                         OnChangePhase?.Invoke(phase);
                     }
+                    else
+                    {
+                        f = initialCurve.Evaluate(p);
+                        
+                        s = f * initialSpeed * deltaTime;
+                        
+                        deltaPosition += s * Direction;;
+                    }
+
                     break;
                 case Phase.Hang:
                     if (elapsedTime >= delayDuration)
@@ -69,14 +81,20 @@ namespace _KITSystem.SkillSystem.Imp
                     }
                     break;
                 case Phase.Return:
-                    p = elapsedTime / returnDuration;
+                    p = returnDuration <= 0f ? 1f : Mathf.Clamp01(elapsedTime / returnDuration);
+                   
                     f = returnCurve.Evaluate(p);
-                    deltaPosition = Vector2.Lerp(savedDeltaPosition, Vector2.zero, f);
-               
-                    if (p >= 1)
+
+                    deltaPosition = Vector2.Lerp(outboundEndPosition, Vector2.zero, f);
+
+                    if (elapsedTime >= returnDuration)
                     {
+                        deltaPosition = Vector2.zero;
+                        
                         elapsedTime = 0;
+                        
                         phase = Phase.Complete;
+                        
                         OnChangePhase?.Invoke(phase);
                     }
                     break;

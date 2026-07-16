@@ -222,8 +222,6 @@ namespace _Game.GamePlay.Manager
             
             castProjectileAction.OnComplete += () =>
             {
-                if (isFlyWeapon) runtimeData.FlyWeapon.OnStopAttack();
-
                 projectile.Destroy(onProjectileDestroyed);         
             };
             
@@ -244,11 +242,12 @@ namespace _Game.GamePlay.Manager
                                 flyWeapon.OutboundFly();
                                 break;
                             case BoomerangTrajectory.Phase.Hang:
+                                projectile.StopLerpMotion();
                                 flyWeapon.HangFly();
                                 break;
                             case BoomerangTrajectory.Phase.Return:
+                                projectile.StopLerpMotion();
                                 flyWeapon.ReturnFly();
-                                projectile.DisableTrail();
                                 break;
                             case BoomerangTrajectory.Phase.Complete:
                                 flyWeapon.CompleteFly();
@@ -465,8 +464,9 @@ namespace _Game.GamePlay.Manager
             switch (skillData.trajectory)
             {
                 case TrajectoryType.Projectile:
-                    duration = (skillData.findRadius - d) / skillData.projectileSpeed;
-                    return new ProjectileTrajectory(trajectoryData.projectileCurve, skillData.projectileSpeed,
+                    duration = skillData.projectileDuration;
+                    float speed = (skillData.findRadius - d) / duration;
+                    return new ProjectileTrajectory(trajectoryData.projectileCurve, speed,
                         duration, position, destination
                     );
                 case TrajectoryType.Boomerang:

@@ -23,6 +23,12 @@ namespace LitMotion
             init => endValue = value;
         }
 
+        public bool Relative
+        {
+            get => relative;
+            init => relative = value;
+        }
+
         public float Duration
         {
             get => duration;
@@ -97,6 +103,7 @@ namespace LitMotion
 
         [SerializeField] TValue startValue;
         [SerializeField] TValue endValue;
+        [SerializeField] bool relative;
         [SerializeField] float duration;
         [SerializeField] TOptions options;
         [SerializeField] Ease ease;

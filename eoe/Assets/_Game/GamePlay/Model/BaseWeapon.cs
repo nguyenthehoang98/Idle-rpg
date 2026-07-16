@@ -94,6 +94,8 @@ namespace _Game.GamePlay.Model
 
             rotatePivot.localScale = new Vector3(faceFlip, 1, 1);
 
+            Level = 1;
+            
             UpdateGroupData();
             UpgradeData(true);
             
@@ -249,7 +251,7 @@ namespace _Game.GamePlay.Model
 
                 yield return new WaitForSeconds(cooldown / TimeScale);
 
-                if (IsPaused || !IsActivated)
+                if (IsPaused || !IsActivated || IsAttacking)
                 {
                     //Debug.LogError("stop attack (1)");
                     continue;
@@ -267,7 +269,7 @@ namespace _Game.GamePlay.Model
                 
                 yield return RotateIE(position, destination);
                 
-                if (IsPaused || !IsActivated)
+                if (IsPaused || !IsActivated || IsAttacking)
                 {
                     //Debug.LogError("stop attack (3)");
                     continue;
@@ -359,7 +361,7 @@ namespace _Game.GamePlay.Model
                 
                 rotatePivot.eulerAngles = new Vector3(0, 0, a);
 
-                yield return new WaitForSeconds(DeltaTime);
+                yield return null;
             }
 
             rotatePivot.localScale = new Vector3(1, Mathf.Abs(angleTo) <= 90 ? 1 : -1f, 1);
@@ -418,7 +420,7 @@ namespace _Game.GamePlay.Model
 
                 renderer.SetPropertyBlock(propertyBlock);
 
-                yield return new WaitForSeconds(DeltaTime);
+                yield return null;
             }
         }
 

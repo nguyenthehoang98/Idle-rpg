@@ -165,10 +165,15 @@ namespace _Game.GamePlay.Manager
             
             foreach (var pair in dict)
             {
-                foreach (var upgradeData in pair.Value) iconPaths.Add(upgradeData.iconName);
+                foreach (var upgradeData in pair.Value)
+                {
+                    if(!string.IsNullOrEmpty(upgradeData.iconName))
+                        iconPaths.Add(upgradeData.iconName);
+                }
             }
             
-            iconPaths.Add(weaponData.iconName);
+            if(!string.IsNullOrEmpty(weaponData.iconName))
+                iconPaths.Add(weaponData.iconName);
 
             await RegisterPools<Sprite>(iconPaths.ToArray());
             

@@ -69,7 +69,7 @@ namespace _Game.Configs
          * @Trajectory
          */
         public TrajectoryType trajectory;
-        public float projectileSpeed;
+        public float projectileDuration;
         public float boomerangOutboundSpeed;
         public float boomerangOutboundDuration;
         public float boomerangReturnDuration;

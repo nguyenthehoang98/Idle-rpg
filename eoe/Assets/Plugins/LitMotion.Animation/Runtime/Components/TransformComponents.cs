@@ -64,7 +64,7 @@ namespace LitMotion.Animation.Components
             return startValue + relativeValue;
         }
     }
-
+    
     [Serializable]
     [LitMotionAnimationComponentMenu("Transform/Rotation")]
     public sealed class TransformRotationAnimation : TransformRotationAnimationBase<NoOptions, Vector3MotionAdapter> { }

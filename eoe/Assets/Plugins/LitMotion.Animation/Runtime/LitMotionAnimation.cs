@@ -58,12 +58,12 @@ namespace LitMotion.Animation
 
         void MoveNextMotion()
         {
-            if (queue.TryDequeue(out var queuedComponent))
+            if (queue.TryDequeue(out LitMotionAnimationComponent queuedComponent))
             {
                 try
                 {
-                    var handle = queuedComponent.Play();
-                    var isActive = handle.IsActive();
+                    MotionHandle handle = queuedComponent.Play();
+                    bool isActive = handle.IsActive();
 
                     if (isActive)
                     {
@@ -90,30 +90,42 @@ namespace LitMotion.Animation
             }
         }
 
-        public void Play()
+        public float Play()
         {
-            var isPlaying = false;
+            float duration = 0f;
 
-            foreach (var component in playingComponents.AsSpan())
+            bool isPlaying = false;
+
+            foreach (LitMotionAnimationComponent component in playingComponents.AsSpan())
             {
-                var handle = component.TrackedHandle;
+                MotionHandle handle = component.TrackedHandle;
                 if (handle.IsActive())
                 {
                     handle.PlaybackSpeed = 1f;
                     isPlaying = true;
 
+                    switch (animationMode)
+                    {
+                        case AnimationMode.Parallel:
+                            duration = Mathf.Max(duration, (float)handle.TotalDuration);
+                            break;
+                        case AnimationMode.Sequential:
+                            duration += (float)handle.TotalDuration;
+                            break;
+                    }
+
                     component.OnResume();
                 }
             }
 
-            if (isPlaying) return;
+            if (isPlaying) return duration;
 
             playingComponents.Clear();
 
             switch (animationMode)
             {
                 case AnimationMode.Sequential:
-                    foreach (var component in components)
+                    foreach (LitMotionAnimationComponent component in components)
                     {
                         if (component == null) continue;
                         if (!component.Enabled) continue;
@@ -123,21 +135,21 @@ namespace LitMotion.Animation
                     MoveNextMotion();
                     break;
                 case AnimationMode.Parallel:
-                    foreach (var component in components)
+                    foreach (LitMotionAnimationComponent component in components)
                     {
                         if (component == null) continue;
                         if (!component.Enabled) continue;
 
                         try
                         {
-                            var handle = component.Play();
+                            MotionHandle handle = component.Play();
                             component.TrackedHandle = handle;
 
                             if (handle.IsActive())
                             {
                                 handle.Preserve();
                             }
-                            
+
                             MotionManager.GetManagedDataRef(handle, false).OnCompleteAction += CheckStop;
 
                             playingComponents.Add(component);
@@ -147,15 +159,18 @@ namespace LitMotion.Animation
                             Debug.LogException(ex);
                         }
                     }
+
                     break;
             }
+
+            return duration;
         }
 
         public void Pause()
         {
-            foreach (var component in playingComponents.AsSpan())
+            foreach (LitMotionAnimationComponent component in playingComponents.AsSpan())
             {
-                var handle = component.TrackedHandle;
+                MotionHandle handle = component.TrackedHandle;
                 if (handle.IsActive())
                 {
                     handle.PlaybackSpeed = 0f;
@@ -168,7 +183,7 @@ namespace LitMotion.Animation
         {
             double time = 0;
             double duration = 0;
-            foreach (var comp in playingComponents.AsSpan())
+            foreach (LitMotionAnimationComponent comp in playingComponents.AsSpan())
             {
                 time = Math.Max(time, comp.TrackedHandle.Time);
                 if (animationMode == AnimationMode.Sequential)
@@ -188,11 +203,11 @@ namespace LitMotion.Animation
 
         public void Stop()
         {
-            var span = playingComponents.AsSpan();
+            Span<LitMotionAnimationComponent> span = playingComponents.AsSpan();
             span.Reverse();
-            foreach (var component in span)
+            foreach (LitMotionAnimationComponent component in span)
             {
-                var handle = component.TrackedHandle;
+                MotionHandle handle = component.TrackedHandle;
                 handle.TryCancel();
                 if(isReverseWhenStop) component.OnStop();
                 component.TrackedHandle = handle;
@@ -214,9 +229,9 @@ namespace LitMotion.Animation
             {
                 if (queue.Count > 0) return true;
 
-                foreach (var component in playingComponents.AsSpan())
+                foreach (LitMotionAnimationComponent component in playingComponents.AsSpan())
                 {
-                    var handle = component.TrackedHandle;
+                    MotionHandle handle = component.TrackedHandle;
                     if (handle.IsActive()) return true;
                 }
 
@@ -230,9 +245,9 @@ namespace LitMotion.Animation
             {
                 if (queue.Count > 0) return true;
 
-                foreach (var component in playingComponents.AsSpan())
+                foreach (LitMotionAnimationComponent component in playingComponents.AsSpan())
                 {
-                    var handle = component.TrackedHandle;
+                    MotionHandle handle = component.TrackedHandle;
                     if (handle.IsPlaying()) return true;
                 }
 

@@ -1,6 +1,8 @@
 using System;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Events;
+using Debug = UnityEngine.Debug;
 
 namespace LitMotion.Animation.Components
 {
@@ -36,6 +38,77 @@ namespace LitMotion.Animation.Components
         public override void OnStop()
         {
             onStop.Invoke();
+        }
+    }
+
+    [Serializable]
+    [LitMotionAnimationComponentMenu("Control/Debug")]
+    public sealed class DebugComponent : LitMotionAnimationComponent
+    {
+        [Space(5f)]
+        [SerializeField] string messageOnPlay;
+        [SerializeField] LogType logTypeOnPlay = LogType.Log;
+        [SerializeField] bool breakOnPlay = false;
+        [SerializeField] string messageOnStop;
+        [SerializeField] LogType logTypeOnStop = LogType.Log;
+        [SerializeField] bool breakOnStop = false;
+
+        private Stopwatch sw;
+
+        public override MotionHandle Play()
+        {
+            sw = Stopwatch.StartNew();
+
+            if (!string.IsNullOrEmpty(messageOnPlay))
+            {
+                switch (logTypeOnPlay)
+                {
+                    case LogType.Log:
+                    case LogType.Assert:
+                        Debug.Log($"[{Math.Round(Time.time, 2)}] {messageOnPlay}");
+                        break;
+                    case LogType.Warning:
+                        Debug.LogWarning($"[{Math.Round(Time.time, 2)}] {messageOnPlay}");
+                        break;
+                    case LogType.Error:
+                    case LogType.Exception:
+                        Debug.LogError($"[{Math.Round(Time.time, 2)}] {messageOnPlay}");
+                        break;
+                }
+            }
+
+#if UNITY_EDITOR
+            if (breakOnPlay) Debug.Break();
+#endif
+
+            return LMotion.Create(0f, 1f, 0f).RunWithoutBinding();
+        }
+
+        public override void OnStop()
+        {
+            sw.Stop();
+
+            if (!string.IsNullOrEmpty(messageOnStop))
+            {
+                switch (logTypeOnStop)
+                {
+                    case LogType.Log:
+                    case LogType.Assert:
+                        Debug.Log($"[{Math.Round(Time.time, 2)}] {messageOnStop} {sw.ElapsedMilliseconds}ms");
+                        break;
+                    case LogType.Warning:
+                        Debug.LogWarning($"[{Math.Round(Time.time, 2)}] {messageOnStop} {sw.ElapsedMilliseconds}ms");
+                        break;
+                    case LogType.Error:
+                    case LogType.Exception:
+                        Debug.LogError($"[{Math.Round(Time.time, 2)}] {messageOnStop} {sw.ElapsedMilliseconds}ms");
+                        break;
+                }
+            }
+
+#if UNITY_EDITOR
+            if (breakOnStop) Debug.Break();
+#endif
         }
     }
 
