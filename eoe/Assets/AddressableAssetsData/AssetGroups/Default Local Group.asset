@@ -106,7 +106,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 80ab78efd07a83e41a287e5eed364747
-    m_Address: SqueezeBottle.Projectile
+    m_Address: Famas.Projectile
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -126,7 +126,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8d088fce81fddef4c85eebe6714237c4
-    m_Address: SqueezeBottle.Equipment
+    m_Address: Famas.Equipment
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -152,11 +152,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ab8711b48e4d75147a20c016c30904f6
     m_Address: T_Powerup.Skill.1002.5
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: abdf9fc8142c9234eb8b7584ec2331a8
-    m_Address: Squeeze Bottle.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

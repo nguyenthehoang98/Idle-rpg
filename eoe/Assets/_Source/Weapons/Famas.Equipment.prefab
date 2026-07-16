@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 417439057925282555}
   - component: {fileID: 8497355627314679160}
   m_Layer: 0
-  m_Name: SqueezeBottle.Equipment
+  m_Name: Famas.Equipment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -108,9 +108,6 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    boomerangReturnDurationPercent: 0
-    boomerangInitDurationPercent: 0
-    boomerangWaitingDurationPercent: 0
   rotatePivot: {fileID: 154186919891485008}
   rotationCurve:
     serializedVersion: 2
@@ -164,13 +161,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2053234682472671296}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.3, y: 0.05, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalRotation: {x: 0, y: 0, z: -0.38268343, w: 0.92387956}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 154186919891485008}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -45}
 --- !u!212 &4674244790521166124
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -218,12 +215,12 @@ SpriteRenderer:
   m_SortingLayerID: 2095058935
   m_SortingLayer: 2
   m_SortingOrder: -1
-  m_Sprite: {fileID: 21300000, guid: abdf9fc8142c9234eb8b7584ec2331a8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4d49ac3d2f0f1994ebd590f7a6c4a893, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.875, y: 0.875}
+  m_Size: {x: 0.32, y: 0.32}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -287,7 +284,7 @@ Transform:
   m_GameObject: {fileID: 7784871466846726522}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.6, y: 0.05, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
