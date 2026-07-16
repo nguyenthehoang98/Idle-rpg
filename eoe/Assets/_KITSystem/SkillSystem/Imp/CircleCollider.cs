@@ -14,8 +14,6 @@ namespace _KITSystem.SkillSystem.Imp
             this.radius = radius;
             
             this.size = new Vector2(radius / 2f, radius / 2f);
-            
-            Debug.Log("radius: " + radius);
         }
 
         protected override List<int> OnCollision(Vector2 prevPosition, Vector2 currentPosition)

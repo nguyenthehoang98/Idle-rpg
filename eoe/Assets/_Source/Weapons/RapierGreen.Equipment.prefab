@@ -50,6 +50,7 @@ MonoBehaviour:
   animationMode: 0
   components:
   - rid: 8843438356789461059
+  - rid: 8843438356789461064
   playOnAwake: 1
   version: 1
   references:
@@ -101,6 +102,17 @@ MonoBehaviour:
           schedulerType: 0
           additionalSettings: 0
         useWorldSpace: 0
+    - rid: 8843438356789461064
+      type: {class: DebugComponent, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
+      data:
+        displayName: Debug
+        enabled: 0
+        messageOnPlay: complete
+        logTypeOnPlay: 0
+        breakOnPlay: 0
+        messageOnStop: 
+        logTypeOnStop: 3
+        breakOnStop: 0
 --- !u!1 &597346039149855723
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,18 +200,18 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 34
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
         weightedMode: 0
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 34
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
         weightedMode: 0
         inWeight: 0
         outWeight: 0
@@ -677,6 +689,7 @@ MonoBehaviour:
   components:
   - rid: 8843438356789461056
   - rid: 8843438356789461060
+  - rid: 8843438356789461065
   playOnAwake: 1
   version: 1
   references:
@@ -751,6 +764,17 @@ MonoBehaviour:
         onStop:
           m_PersistentCalls:
             m_Calls: []
+    - rid: 8843438356789461065
+      type: {class: DebugComponent, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
+      data:
+        displayName: Debug
+        enabled: 0
+        messageOnPlay: return
+        logTypeOnPlay: 0
+        breakOnPlay: 1
+        messageOnStop: 
+        logTypeOnStop: 3
+        breakOnStop: 0
 --- !u!1 &6639616093947491535
 GameObject:
   m_ObjectHideFlags: 0

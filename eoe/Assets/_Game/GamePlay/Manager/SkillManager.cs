@@ -460,12 +460,13 @@ namespace _Game.GamePlay.Manager
         
         private BaseTrajectory GetTrajectory(TrajectoryData trajectoryData, SkillData skillData, Vector3 position, Vector3 destination, ref float duration)
         {
-            float d = Vector3.Distance(position, Vector3.zero);
+            float distance = DistanceToCircleEdge(position, destination, skillData.findRadius);
+            
             switch (skillData.trajectory)
             {
                 case TrajectoryType.Projectile:
                     duration = skillData.projectileDuration;
-                    float speed = (skillData.findRadius - d) / duration;
+                    float speed = distance / duration;
                     return new ProjectileTrajectory(trajectoryData.projectileCurve, speed,
                         duration, position, destination
                     );
@@ -474,13 +475,32 @@ namespace _Game.GamePlay.Manager
                                skillData.boomerangReturnDuration;
                     return new BoomerangTrajectory(trajectoryData.boomerangInitCurve,
                         trajectoryData.boomerangReturnCurve,
-                        skillData.boomerangOutboundSpeed, skillData.boomerangOutboundDuration,
+                        distance, skillData.boomerangOutboundDuration,
                         skillData.boomerangHangDuration, skillData.boomerangReturnDuration,
                         position, destination);
                 default:
                     Debug.LogError("Unknown Trajectory type " + trajectoryData.type);
                     return null;
             }
+        }
+        
+        private static float DistanceToCircleEdge(
+            Vector3 position,
+            Vector3 destination,
+            float radius)
+        {
+            Vector3 dir = (destination - position).normalized;
+
+            // position - center, center = Vector3.zero
+            float b = Vector3.Dot(position, dir);
+            float c = Vector3.Dot(position, position) - radius * radius;
+
+            float delta = b * b - c;
+
+            if (delta < 0f)
+                return -1f; // Không giao (không nên xảy ra nếu position ở trong)
+
+            return -b + Mathf.Sqrt(delta);
         }
     }
 

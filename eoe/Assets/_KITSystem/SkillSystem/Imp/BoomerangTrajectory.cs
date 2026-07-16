@@ -8,10 +8,10 @@ namespace _KITSystem.SkillSystem.Imp
     {
         private readonly AnimationCurve initialCurve;
         private readonly AnimationCurve returnCurve;
-        private readonly float initialSpeed;
         private readonly float initialDuration;
         private readonly float delayDuration;
         private readonly float returnDuration;
+        private readonly float initialSpeed;
 
         public event Action<Phase> OnChangePhase;
 
@@ -19,18 +19,19 @@ namespace _KITSystem.SkillSystem.Imp
         private Vector2 deltaPosition;
         private Vector2 outboundEndPosition;
         private float elapsedTime;
-
+        private bool isCompleted;
+        
         public BoomerangTrajectory(AnimationCurve initialCurve, AnimationCurve returnCurve,
-            float initialSpeed, float initialDuration,
+            float distance, float initialDuration,
             float delayDuration, float returnDuration,
             Vector2 start, Vector2 goal) : base(start, goal)
         {
             this.initialCurve = initialCurve;
             this.returnCurve = returnCurve;
             this.delayDuration = delayDuration;
-            this.initialSpeed = initialSpeed;
             this.initialDuration = initialDuration;
             this.returnDuration = returnDuration;
+            this.initialSpeed = distance / initialDuration;
         }
 
         protected override Vector2 OnEvaluatePosition(float deltaTime)
@@ -44,65 +45,86 @@ namespace _KITSystem.SkillSystem.Imp
 
             elapsedTime += deltaTime;
             
-            float p = 0, f = 0, s = 0;
+            float p = 0, f = 0, s = 0, d = 0;
 
             switch (phase)
             {
                 case Phase.Outbound:
-                    
-                    p = initialDuration <= 0f ? 1f : Mathf.Clamp01(elapsedTime / initialDuration);
-                 
-                    if (elapsedTime > initialDuration)
+                    d = initialDuration - deltaTime;
+                    p = initialDuration <= 0f ? 1f : Mathf.Clamp01(elapsedTime / d);
+
+                    if (elapsedTime >= d)
                     {
                         if (delayDuration > 0) phase = Phase.Hang;
                         else phase = Phase.Return;
-                        
+
                         elapsedTime = 0;
                         outboundEndPosition = deltaPosition;
-                        
+
                         OnChangePhase?.Invoke(phase);
                     }
                     else
                     {
                         f = initialCurve.Evaluate(p);
-                        
+
                         s = f * initialSpeed * deltaTime;
-                        
-                        deltaPosition += s * Direction;;
+
+                        deltaPosition += s * Direction;
                     }
 
                     break;
                 case Phase.Hang:
-                    if (elapsedTime >= delayDuration)
+                    d = delayDuration - deltaTime;
+                    if (elapsedTime >= d)
                     {
                         phase = Phase.Return;
                         elapsedTime = 0;
                         OnChangePhase?.Invoke(phase);
                     }
+
                     break;
                 case Phase.Return:
-                    p = returnDuration <= 0f ? 1f : Mathf.Clamp01(elapsedTime / returnDuration);
-                   
-                    f = returnCurve.Evaluate(p);
+                    d = returnDuration - deltaTime;
+                    p = returnDuration <= 0f ? 1f : Mathf.Clamp01(elapsedTime / d);
 
-                    deltaPosition = Vector2.Lerp(outboundEndPosition, Vector2.zero, f);
-
-                    if (elapsedTime >= returnDuration)
+                    if (elapsedTime >= d)
                     {
                         deltaPosition = Vector2.zero;
-                        
+
                         elapsedTime = 0;
-                        
+
                         phase = Phase.Complete;
-                        
-                        OnChangePhase?.Invoke(phase);
                     }
+                    else
+                    {
+                        f = returnCurve.Evaluate(p);
+
+                        deltaPosition = Vector2.Lerp(outboundEndPosition, Vector2.zero, f);
+                    }
+
                     break;
                 case Phase.Complete:
+                    if (!isCompleted)
+                    {
+                        isCompleted = true;
+                        OnChangePhase?.Invoke(phase);
+                    }
+
                     break;
             }
 
             return deltaPosition + Start;
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            
+            if (!isCompleted)
+            {
+                isCompleted = true;
+                OnChangePhase?.Invoke(phase);
+            }
         }
 
         public enum Phase

@@ -1,9 +1,10 @@
+using System;
 using _KITSystem.Utils;
 using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Core
 {
-    public abstract class BaseTrajectory
+    public abstract class BaseTrajectory : IDisposable
     {
         protected Vector2 Goal;
         protected Vector2 Start;
@@ -22,5 +23,10 @@ namespace _KITSystem.SkillSystem.Core
         }
         
         protected abstract Vector2 OnEvaluatePosition(float deltaTime);
+
+        public virtual void Dispose()
+        {
+            // TODO release managed resources here
+        }
     }
 }

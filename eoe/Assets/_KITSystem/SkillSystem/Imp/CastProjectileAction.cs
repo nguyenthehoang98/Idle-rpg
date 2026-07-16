@@ -96,6 +96,8 @@ namespace _KITSystem.SkillSystem.Imp
         protected override void OnStop()
         {
             base.OnStop();
+            
+            trajectory.Dispose();
 
             projectile = null;
             

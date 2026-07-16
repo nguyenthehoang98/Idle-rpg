@@ -11,6 +11,7 @@ namespace _Game.Entry
     public class GameEntry : KitEntryScene
     {
         private float elapsed = 1;
+        
         private bool isLoadingScene = false;
         
         [SerializeField] private GameObject loadingScene;
