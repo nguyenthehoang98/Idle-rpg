@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using LitMotion.Collections;
 using UnityEngine;
@@ -90,10 +89,14 @@ namespace LitMotion.Animation
             }
         }
 
-        public float Play()
+        public void Play()
         {
-            float duration = 0f;
+            float duration = 0;
+            Play(ref duration);
+        }
 
+        public void Play(ref float duration)
+        {
             bool isPlaying = false;
 
             foreach (LitMotionAnimationComponent component in playingComponents.AsSpan())
@@ -102,24 +105,15 @@ namespace LitMotion.Animation
                 if (handle.IsActive())
                 {
                     handle.PlaybackSpeed = 1f;
-                    isPlaying = true;
 
-                    switch (animationMode)
-                    {
-                        case AnimationMode.Parallel:
-                            duration = Mathf.Max(duration, (float)handle.TotalDuration);
-                            break;
-                        case AnimationMode.Sequential:
-                            duration += (float)handle.TotalDuration;
-                            break;
-                    }
+                    isPlaying = true;
 
                     component.OnResume();
                 }
             }
 
-            if (isPlaying) return duration;
-
+            if (isPlaying) return;
+            
             playingComponents.Clear();
 
             switch (animationMode)
@@ -128,8 +122,12 @@ namespace LitMotion.Animation
                     foreach (LitMotionAnimationComponent component in components)
                     {
                         if (component == null) continue;
+                        
                         if (!component.Enabled) continue;
+
                         queue.Enqueue(component);
+                        
+                        duration += component.TrackedHandle.Duration;
                     }
 
                     MoveNextMotion();
@@ -149,6 +147,8 @@ namespace LitMotion.Animation
                             {
                                 handle.Preserve();
                             }
+                            
+                            duration = Mathf.Max(duration, (float)handle.TotalDuration);
 
                             MotionManager.GetManagedDataRef(handle, false).OnCompleteAction += CheckStop;
 
@@ -162,8 +162,6 @@ namespace LitMotion.Animation
 
                     break;
             }
-
-            return duration;
         }
 
         public void Pause()

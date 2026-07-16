@@ -13,7 +13,7 @@ namespace LitMotion.Animation
         where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
     {
         [SerializeField] TObject target;
-        [SerializeField] SerializableMotionSettings<TValue, TOptions> settings;
+        [SerializeField] protected SerializableMotionSettings<TValue, TOptions> settings;
 
         TValue startValue;
 
@@ -26,12 +26,12 @@ namespace LitMotion.Animation
         public override MotionHandle Play()
         {
             startValue = GetValue(target);
-
+            
             MotionHandle handle;
 
             if (settings.Relative)
             {
-                handle = LMotion.Create<TValue, TOptions, TAdapter>(settings)
+                handle = LMotion.Create<TValue, TOptions, TAdapter>(settings, startValue)
                     .Bind(this, (x, state) =>
                     {
                         state.SetValue(target, state.GetRelativeValue(state.startValue, x));
@@ -133,6 +133,7 @@ namespace LitMotion.Animation
     {
         protected sealed override Color GetRelativeValue(in Color startValue, in Color relativeValue)
         {
+            if (settings.Relative) return relativeValue;
             return startValue + relativeValue;
         }
     }

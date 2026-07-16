@@ -105,5 +105,35 @@ namespace LitMotion
             buffer.Scheduler = settings.Scheduler;
             return new MotionBuilder<TValue, TOptions, TAdapter>(buffer);
         }
+        /// <summary>
+        /// Create a builder for building motion.
+        /// </summary>
+        /// <typeparam name="TValue">The type of value to animate</typeparam>
+        /// <typeparam name="TOptions">The type of special parameters given to the motion entity</typeparam>
+        /// <typeparam name="TAdapter">The type of adapter that support value animation</typeparam>
+        /// <param name="settings">Motion settings</param>
+        /// <returns>Created motion builder</returns>
+        public static MotionBuilder<TValue, TOptions, TAdapter> Create<TValue, TOptions, TAdapter>(MotionSettings<TValue, TOptions> settings, TValue startValue)
+            where TValue : unmanaged
+            where TOptions : unmanaged, IMotionOptions
+            where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
+        {
+            var buffer = MotionBuilderBuffer<TValue, TOptions>.Rent();
+            buffer.StartValue = startValue;
+            buffer.EndValue = settings.EndValue;
+            buffer.Duration = settings.Duration;
+            buffer.Options = settings.Options;
+            buffer.Ease = settings.Ease;
+            buffer.AnimationCurve = settings.CustomEaseCurve;
+            buffer.Delay = settings.Delay;
+            buffer.DelayType = settings.DelayType;
+            buffer.Loops = settings.Loops;
+            buffer.LoopType = settings.LoopType;
+            buffer.CancelOnError = settings.CancelOnError;
+            buffer.SkipValuesDuringDelay = settings.SkipValuesDuringDelay;
+            buffer.ImmediateBind = settings.ImmediateBind;
+            buffer.Scheduler = settings.Scheduler;
+            return new MotionBuilder<TValue, TOptions, TAdapter>(buffer);
+        }
     }
 }
