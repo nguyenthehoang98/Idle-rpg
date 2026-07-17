@@ -12,6 +12,11 @@ namespace LitMotion.Animation.Components
     {
         [SerializeField] float delay;
 
+        public override float Duration()
+        {
+            return delay;
+        }
+
         public override MotionHandle Play()
         {
             return LMotion.Create(0f, 1f, delay)
@@ -28,6 +33,11 @@ namespace LitMotion.Animation.Components
         [Space(5f)]
         [SerializeField] UnityEvent onPlay;
         [SerializeField] UnityEvent onStop;
+
+        public override float Duration()
+        {
+            return 0;
+        }
 
         public override MotionHandle Play()
         {
@@ -54,6 +64,11 @@ namespace LitMotion.Animation.Components
         [SerializeField] bool breakOnStop = false;
 
         private Stopwatch sw;
+
+        public override float Duration()
+        {
+            return 0;
+        }
 
         public override MotionHandle Play()
         {
@@ -117,6 +132,11 @@ namespace LitMotion.Animation.Components
     public sealed class PlayLitMotionAnimationComponent : LitMotionAnimationComponent
     {
         [SerializeField] LitMotionAnimation target;
+
+        public override float Duration()
+        {
+            return target != null ? target.Duration() : 0;
+        }
 
         public override MotionHandle Play()
         {

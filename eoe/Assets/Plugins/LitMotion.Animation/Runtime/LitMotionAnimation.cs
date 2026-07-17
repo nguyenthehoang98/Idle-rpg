@@ -32,8 +32,7 @@ namespace LitMotion.Animation
         [SerializeField] AutoPlayMode autoPlayMode = AutoPlayMode.OnStart;
         [SerializeField] AnimationMode animationMode;
 
-        [SerializeReference]
-        LitMotionAnimationComponent[] components;
+        [SerializeReference] LitMotionAnimationComponent[] components;
 
         readonly Queue<LitMotionAnimationComponent> queue = new();
         FastListCore<LitMotionAnimationComponent> playingComponents;
@@ -48,7 +47,7 @@ namespace LitMotion.Animation
             if (autoPlayMode == AutoPlayMode.OnEnable)
                 Play();
         }
-        
+
         void Start()
         {
             if (autoPlayMode == AutoPlayMode.OnStart)
@@ -89,13 +88,38 @@ namespace LitMotion.Animation
             }
         }
 
-        public void Play()
+        public float Duration()
         {
             float duration = 0;
-            Play(ref duration);
+            switch (animationMode)
+            {
+                case AnimationMode.Sequential:
+                    foreach (LitMotionAnimationComponent component in components)
+                    {
+                        if (component == null) continue;
+                        if (!component.Enabled) continue;
+
+                        duration += component.Duration();
+                    }
+
+                    MoveNextMotion();
+                    break;
+                case AnimationMode.Parallel:
+                    foreach (LitMotionAnimationComponent component in components)
+                    {
+                        if (component == null) continue;
+                        if (!component.Enabled) continue;
+
+                        duration = Mathf.Max(duration, component.Duration());
+                    }
+
+                    break;
+            }
+
+            return duration;
         }
 
-        public void Play(ref float duration)
+        public void Play()
         {
             bool isPlaying = false;
 
@@ -113,7 +137,7 @@ namespace LitMotion.Animation
             }
 
             if (isPlaying) return;
-            
+
             playingComponents.Clear();
 
             switch (animationMode)
@@ -122,12 +146,10 @@ namespace LitMotion.Animation
                     foreach (LitMotionAnimationComponent component in components)
                     {
                         if (component == null) continue;
-                        
+
                         if (!component.Enabled) continue;
 
                         queue.Enqueue(component);
-                        
-                        duration += component.TrackedHandle.Duration;
                     }
 
                     MoveNextMotion();
@@ -147,8 +169,6 @@ namespace LitMotion.Animation
                             {
                                 handle.Preserve();
                             }
-                            
-                            duration = Mathf.Max(duration, (float)handle.TotalDuration);
 
                             MotionManager.GetManagedDataRef(handle, false).OnCompleteAction += CheckStop;
 
@@ -207,14 +227,14 @@ namespace LitMotion.Animation
             {
                 MotionHandle handle = component.TrackedHandle;
                 handle.TryCancel();
-                if(isReverseWhenStop) component.OnStop();
+                if (isReverseWhenStop) component.OnStop();
                 component.TrackedHandle = handle;
             }
 
             playingComponents.Clear();
             queue.Clear();
         }
-        
+
         public void Restart()
         {
             Stop();
@@ -259,7 +279,9 @@ namespace LitMotion.Animation
                 Stop();
         }
 
-        void ISerializationCallbackReceiver.OnBeforeSerialize() { }
+        void ISerializationCallbackReceiver.OnBeforeSerialize()
+        {
+        }
 
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {

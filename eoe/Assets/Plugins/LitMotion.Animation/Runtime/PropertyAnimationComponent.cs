@@ -49,6 +49,11 @@ namespace LitMotion.Animation
             return handle;
         }
 
+        public override float Duration()
+        {
+            return settings.Duration + settings.Delay;
+        }
+
         protected abstract TValue GetValue(TObject target);
         protected abstract void SetValue(TObject target, in TValue value);
         protected abstract TValue GetRelativeValue(in TValue startValue, in TValue relativeValue);

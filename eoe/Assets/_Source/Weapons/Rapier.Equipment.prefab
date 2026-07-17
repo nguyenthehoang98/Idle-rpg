@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 9085867229827258356}
   - component: {fileID: 4427382285310395892}
   m_Layer: 0
-  m_Name: RapierGreen.Equipment
+  m_Name: Rapier.Equipment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

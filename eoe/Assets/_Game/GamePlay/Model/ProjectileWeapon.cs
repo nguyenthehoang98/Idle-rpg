@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _Game.GamePlay.Model
 {
-    public class RangedWeapon : BaseWeapon
+    public class ProjectileWeapon : BaseWeapon
     {
         private static readonly int AttackAnimator = Animator.StringToHash("Attack");
         

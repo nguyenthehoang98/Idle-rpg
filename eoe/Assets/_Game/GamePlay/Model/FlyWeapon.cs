@@ -43,7 +43,9 @@ namespace _Game.GamePlay.Model
         {
             if (completeAnimation != null)
             {
-                float duration = completeAnimation.Play();
+                float duration = completeAnimation.Duration();
+
+                completeAnimation.Play();
 
                 this.WaitInvoke(duration, OnStopAttack);
             }
