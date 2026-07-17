@@ -45,6 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d310ff3e519bd0e4a8f724ec24dc56d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.Model.Projectile
+  onInitialize:
+    m_PersistentCalls:
+      m_Calls: []
   canDestroy: 1
   dependencyRelativePosition: 1
   scalePivot: {fileID: 2499445789741908526}
@@ -52,8 +55,10 @@ MonoBehaviour:
   trailRenderer: {fileID: 4797572086999235470}
   colliderData:
     type: 0
-    circleRadius: 0.125
+    circleRadius: 0.075
+    rectangleSize: {x: 0.5, y: 0.5}
     relativePosition: {x: 0, y: 0}
+    dependencyRelativeRotation: 1
 --- !u!1 &1730242686860875
 GameObject:
   m_ObjectHideFlags: 0
@@ -131,7 +136,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1228164997
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 4479c32f60ac8c342b8701428cbb350d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -255,7 +260,7 @@ TrailRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1228164997
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Time: 0.1
   m_PreviewTimeScale: 1

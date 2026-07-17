@@ -9,9 +9,14 @@ namespace _KITSystem.SkillSystem.Imp
         {
         }
 
-        protected override Vector2 OnEvaluatePosition(float deltaTime)
+        public override Vector2 EvaluatePosition(float deltaTime)
         {
             return Start;
+        }
+
+        public override Vector2 EvaluateDirection(float deltaTime)
+        {
+            return Direction;
         }
     }
 }

@@ -21,18 +21,27 @@ namespace _KITSystem.SkillSystem.Imp
             this.duration = duration;
         }
 
-        protected override Vector2 OnEvaluatePosition(float deltaTime)
+        public override Vector2 EvaluatePosition(float deltaTime)
         {
             if (!isCompleted)
             {
                 elapsedTime += deltaTime;
+                
                 float p = Mathf.Clamp01(elapsedTime / duration);
+                
                 float f = curve.Evaluate(p);
+                
                 deltaPosition += f * Direction * deltaTime * speed;
+                
                 if (p >= 1f) isCompleted = true;
             }
 
             return deltaPosition + Start;
+        }
+
+        public override Vector2 EvaluateDirection(float deltaTime)
+        {
+            return Direction;
         }
     }
 }

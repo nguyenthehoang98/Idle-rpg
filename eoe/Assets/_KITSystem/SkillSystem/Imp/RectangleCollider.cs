@@ -6,37 +6,54 @@ namespace _KITSystem.SkillSystem.Imp
 {
     public class RectangleCollider : BaseCollider
     {
-        private readonly Vector2 size;
+        private readonly Vector2 rectangleSize;
+        private readonly bool dependencyRelativeRotation;
         
-        public RectangleCollider(IQuery query, Vector2 relativePosition, float timerTrigger, float duration, Vector2 size) : base(query, relativePosition, timerTrigger, duration)
+        public RectangleCollider(IQuery query, Vector2 relativePosition, float timerTrigger, float duration, Vector2 rectangleSize, bool dependencyRelativeRotation) : base(query, relativePosition, timerTrigger, duration)
         {
-            this.size = size;
+            this.rectangleSize = rectangleSize;
+            this.dependencyRelativeRotation = dependencyRelativeRotation;
         }
 
-        protected override List<int> OnCollision(Vector2 prevPosition, Vector2 currentPosition)
+        protected override List<int> OnCollision(Vector2 position, Vector2 direction)
         {
-            return Query.GetAllEntities(GetPosition(prevPosition, currentPosition), (currentPosition - prevPosition).normalized, size, FilterEntity);
+            return Query.GetAllEntities(GetPosition(position, direction), rectangleSize, FilterEntity);
         }
 
-        protected override void OnGizmos(Vector2 prevPosition, Vector2 currentPosition, Color color, float deltaTime)
+        protected override void OnGizmos(Vector2 position, Vector2 direction, Color color, float deltaTime)
         {
 #if UNITY_EDITOR
-            Debug.Log($"OnGizmos: {prevPosition} -> {currentPosition}");
-            Vector2 direction = (currentPosition - prevPosition).normalized;
-            Vector2 position = currentPosition;
+            Vector2 center = GetPosition(position, direction);
+            
+            Vector2 bl, br, tr, tl;
+            
+            if (dependencyRelativeRotation)
+            {
+                Vector2 right = new Vector2(-direction.y, direction.x);
+                Vector2 halfForward = direction * (rectangleSize.y * 0.5f);
+                Vector2 halfRight   = right * (rectangleSize.x * 0.5f);
 
-            Vector2 right = direction * (size.x * 0.5f);
-            Vector2 up = new Vector2(-direction.y, direction.x) * (size.y * 0.5f);
+                bl = center - halfForward - halfRight;
+                br = center - halfForward + halfRight;
+                tr = center + halfForward + halfRight;
+                tl = center + halfForward - halfRight;
+            }
+            else
+            {
+                Vector2 half = rectangleSize * 0.5f;
+            
+                bl = center + new Vector2(-half.x, -half.y); // Bottom Left
+                br = center + new Vector2( half.x, -half.y); // Bottom Right
+                tr = center + new Vector2( half.x,  half.y); // Top Right
+                tl = center + new Vector2(-half.x,  half.y); // Top Left
+            }
 
-            Vector2 bl = position - right - up;
-            Vector2 tl = position - right + up;
-            Vector2 tr = position + right + up;
-            Vector2 br = position + right - up;
+            Debug.DrawLine(bl, br, color, deltaTime);
+            Debug.DrawLine(br, tr, color, deltaTime);
+            Debug.DrawLine(tr, tl, color, deltaTime);
+            Debug.DrawLine(tl, bl, color, deltaTime);
 
-            Debug.DrawLine(bl, tl, color, deltaTime);
-            Debug.DrawLine(tl, tr, color, deltaTime);
-            Debug.DrawLine(tr, br, color, deltaTime);
-            Debug.DrawLine(br, bl, color, deltaTime);
+            Debug.DrawRay(position, direction * rectangleSize.magnitude, color, deltaTime);
 #endif
         }
     }

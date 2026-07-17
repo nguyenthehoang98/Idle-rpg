@@ -2,6 +2,7 @@ using System;
 using _Game.Configs;
 using _Game.GamePlay.Manager;
 using _KITSystem.Resource;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -81,7 +82,7 @@ namespace _Game.GamePlay.Model
 
         public void BeHit() => OnBeHit?.Invoke();
 
-        public void Destroy()
+        public async void Destroy()
         {
             if (!isInitialized) return;
             
@@ -99,6 +100,8 @@ namespace _Game.GamePlay.Model
             OnDeath?.Invoke();
             
             gameObject.SetActive(false);
+
+            await UniTask.NextFrame(PlayerLoopTiming.Update);
             
             Pool.Destroy(gameObject);
         }

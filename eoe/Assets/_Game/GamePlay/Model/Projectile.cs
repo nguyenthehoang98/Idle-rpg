@@ -174,7 +174,11 @@ namespace _Game.GamePlay.Model
                 
                 circleRadius = colliderData.circleRadius * scale,
                 
+                rectangleSize = colliderData.rectangleSize,
+                
                 relativePosition = dependencyRelativePosition ? colliderData.relativePosition * scale : colliderData.relativePosition,
+                
+                dependencyRelativeRotation = colliderData.dependencyRelativeRotation
             };
             
             scalePivot.transform.localScale = Vector3.one * scale;

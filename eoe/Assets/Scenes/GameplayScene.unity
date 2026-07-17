@@ -885,7 +885,7 @@ MonoBehaviour:
   energy: {fileID: 1074248198}
   equipmentQueue: {fileID: 983035829}
   equipmentActivation: {fileID: 1374644340}
-  equipments: e903000000000000ea03000000000000
+  equipments: ea030000000000000000000000000000
   slots:
   - {fileID: 1143688530}
   - {fileID: 1219510552}
@@ -904,7 +904,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: KITSystem.Schedule::_KITSystem.Schedule.TickSystemOwner
   useUnscaledTime: 0
-  targetFPS: 20
+  targetFPS: 30
   loop: 1
   maxTicksPerFrame: 5
   tickables:

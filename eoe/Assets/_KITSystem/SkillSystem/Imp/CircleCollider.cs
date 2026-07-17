@@ -16,17 +16,17 @@ namespace _KITSystem.SkillSystem.Imp
             this.size = new Vector2(radius / 2f, radius / 2f);
         }
 
-        protected override List<int> OnCollision(Vector2 prevPosition, Vector2 currentPosition)
+        protected override List<int> OnCollision(Vector2 position, Vector2 direction)
         {
-            return Query.GetAllEntities(GetPosition(prevPosition, currentPosition), size, FilterEntity);
+            return Query.GetAllEntities(GetPosition(position, direction), size, FilterEntity);
         }
         
-        protected override void OnGizmos(Vector2 prevPosition, Vector2 currentPosition, Color color, float deltaTime)
+        protected override void OnGizmos(Vector2 position, Vector2 direction, Color color, float deltaTime)
         {
 #if UNITY_EDITOR
             int segments = 12;
             
-            Vector3 center = GetPosition(prevPosition, currentPosition);
+            Vector3 center = GetPosition(position, direction);
             
             Vector3 prev = center + Vector3.right * radius;
             
@@ -42,8 +42,8 @@ namespace _KITSystem.SkillSystem.Imp
                 
                 prev = next;
             }
-            
-            Debug.DrawLine(prevPosition, currentPosition, color, deltaTime);
+
+            Debug.DrawRay(position, direction * radius, color, deltaTime);
 #endif
         }
     }

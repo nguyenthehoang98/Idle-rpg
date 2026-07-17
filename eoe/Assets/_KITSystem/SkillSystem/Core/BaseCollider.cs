@@ -22,15 +22,12 @@ namespace _KITSystem.SkillSystem.Core
             this.relativePosition = relativePosition;
         }
 
-        protected Vector2 GetPosition(Vector2 prevPosition, Vector2 currentPosition)
+        protected Vector2 GetPosition(Vector2 position, Vector2 direction)
         {
-            Vector2 direction = (currentPosition - prevPosition).normalized;
-
             if (direction.sqrMagnitude < Mathf.Epsilon)
-                return currentPosition + relativePosition;
+                return position + relativePosition;
 
             float angle = Mathf.Atan2(direction.y, direction.x);
-
             float cos = Mathf.Cos(angle);
             float sin = Mathf.Sin(angle);
 
@@ -39,7 +36,7 @@ namespace _KITSystem.SkillSystem.Core
                 relativePosition.x * sin + relativePosition.y * cos
             );
 
-            return currentPosition + rotatedOffset;
+            return position + rotatedOffset;
         }
 
         protected bool FilterEntity(int entity) => true;
@@ -50,24 +47,24 @@ namespace _KITSystem.SkillSystem.Core
             canTrigger = timerTrigger <= elapsedTime && elapsedTime <= duration + timerTrigger;
         }
 
-        public List<int> Collision(Vector2 prevPosition, Vector2 currentPosition)
+        public List<int> Collision(Vector2 position, Vector2 direction)
         {
             if (canTrigger)
             {
-                return OnCollision(prevPosition, currentPosition);
+                return OnCollision(position, direction);
             }
 
             return null;
         }
 
-        protected abstract List<int> OnCollision(Vector2 prevPosition, Vector2 currentPosition);
+        protected abstract List<int> OnCollision(Vector2 position, Vector2 direction);
 
-        public void Gizmos(Vector2 prevPosition, Vector2 currentPosition, Color color, float deltaTime)
+        public void Gizmos(Vector2 position, Vector2 direction, Color color, float deltaTime)
         {
-            if(canTrigger) OnGizmos(prevPosition, currentPosition, color, deltaTime);
+            if(canTrigger) OnGizmos(position, direction, color, deltaTime);
         }
 
-        protected virtual void OnGizmos(Vector2 prevPosition, Vector2 currentPosition, Color color, float deltaTime)
+        protected virtual void OnGizmos(Vector2 position, Vector2 direction, Color color, float deltaTime)
         {
         }
     }

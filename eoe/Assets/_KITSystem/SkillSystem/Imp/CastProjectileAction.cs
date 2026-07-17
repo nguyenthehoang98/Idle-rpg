@@ -21,7 +21,6 @@ namespace _KITSystem.SkillSystem.Imp
         private Projectile projectile;
         private readonly HashSet<int> collisions = new HashSet<int>();
 
-        private Vector2 previousPosition;
         private int totalCollisions;
         private float collisionResetElapsedTime;
         private float damageTickerElapsedTime;
@@ -49,45 +48,53 @@ namespace _KITSystem.SkillSystem.Imp
             if (collisionResetElapsedTime >= resetCollisionInterval && collisions.Count > 0)
             {
                 collisions.Clear();
+                
                 collisionResetElapsedTime = 0;
             }
 
             damageTickerElapsedTime += deltaTime;
 
-            Vector2 currentPosition = trajectory.EvaluatePosition(deltaTime);
+            Vector2 position = trajectory.EvaluatePosition(deltaTime);
+
+            Vector2 direction = trajectory.EvaluateDirection(deltaTime);
             
-            projectile.SetPosition(currentPosition, deltaTime);
+            projectile.SetPosition(position, deltaTime);
 
             collider.Tick(deltaTime);
 
-            List<int> results = collider.Collision(previousPosition, currentPosition);
+            List<int> results = collider.Collision(position, direction);
 
             bool hit = results != null && results.Count > 0;
 
 #if UNITY_EDITOR
             Color color = hit ? Color.red : Color.green;
             
-            collider.Gizmos(previousPosition, currentPosition, color, deltaTime);
+            collider.Gizmos(position, direction, color, deltaTime);
 #endif
-
-            previousPosition = currentPosition;
-            
             if (hit)
             {
                 foreach (var entity in results)
                 {
                     bool dmgOverTime = damageInterval > 0;
-                    if (dmgOverTime && !collisions.Add(entity)) continue;
 
-                    if (!TryDamage(currentPosition, entity, totalCollisions + 1 == limitNumberCollisions)) continue;
-
-                    totalCollisions++;
-                    
-                    if (totalCollisions == limitNumberCollisions)
+                    if (dmgOverTime)
                     {
-                        Interrupt();
+                        Debug.LogError("Chưa xử lý");
+                    }
+                    else
+                    {
+                        if (!collisions.Add(entity)) continue;
+
+                        if (!TryDamage(position, entity, totalCollisions + 1 == limitNumberCollisions)) continue;
                         
-                        return;
+                        totalCollisions++;
+                    
+                        if (totalCollisions == limitNumberCollisions)
+                        {
+                            Interrupt();
+                        
+                            return;
+                        }
                     }
                 }
             }

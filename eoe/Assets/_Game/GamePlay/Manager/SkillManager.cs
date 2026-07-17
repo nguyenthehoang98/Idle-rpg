@@ -316,6 +316,7 @@ namespace _Game.GamePlay.Manager
                 float explosiveDamage = runtimeData.ExplosiveDamagePercent;
 
                 List<int> entities = query.GetAllEntities(position, size, EntityManager.IsEntityAlive);
+                
                 for (int i = entities.Count - 1; i >= 0; i--)
                 {
                     int e = entities[i];
@@ -459,7 +460,8 @@ namespace _Game.GamePlay.Manager
                     );
                 case ColliderType.Rectangle:
                     return new RectangleCollider(query, colliderData.relativePosition,
-                        skillData.collTimerTrigger, skillData.collDuration, colliderData.rectangleSize
+                        skillData.collTimerTrigger, skillData.collDuration, colliderData.rectangleSize,
+                        colliderData.dependencyRelativeRotation
                     );
                 default:
                     Debug.LogError("Unknown Collider type " + colliderData.type);

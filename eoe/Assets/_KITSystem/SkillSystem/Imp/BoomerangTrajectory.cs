@@ -34,7 +34,7 @@ namespace _KITSystem.SkillSystem.Imp
             this.initialSpeed = distance / initialDuration;
         }
 
-        protected override Vector2 OnEvaluatePosition(float deltaTime)
+        public override Vector2 EvaluatePosition(float deltaTime)
         {
             if (phase == Phase.Undefined)
             {
@@ -114,6 +114,15 @@ namespace _KITSystem.SkillSystem.Imp
             }
 
             return deltaPosition + Start;
+        }
+
+        public override Vector2 EvaluateDirection(float deltaTime)
+        {
+            if (phase == Phase.Outbound) return Direction;
+         
+            if (phase == Phase.Return) return -Direction;
+            
+            return Vector2.zero;
         }
 
         public override void Dispose()
