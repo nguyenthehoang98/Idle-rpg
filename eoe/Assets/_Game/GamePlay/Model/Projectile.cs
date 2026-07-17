@@ -93,7 +93,7 @@ namespace _Game.GamePlay.Model
             onInitialize?.Invoke();
         }
 
-        public void SetPosition(Vector3 position, float dt)
+        public void SetPosition(Vector3 position, Vector3 direction, float dt)
         {
             if (stopped)
             {
@@ -106,15 +106,13 @@ namespace _Game.GamePlay.Model
             this.deltaTime = dt;
             this.elapsedTime = 0;
             
-            Vector3 direction = position - previousPosition;
-            
             Rotate(direction);
         }
         
         public void BlockRotation() => blockRotation = true;
 
         public void Rotate(Vector3 direction)
-        {
+        {   
             if (blockRotation) return;
 
             angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;

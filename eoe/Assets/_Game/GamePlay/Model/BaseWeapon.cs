@@ -310,13 +310,16 @@ namespace _Game.GamePlay.Model
                 BounceCount = CurrentUpgradeData.bounceCount,
                 BounceDamagePercent = CurrentUpgradeData.bounceDamagePercent,
                 KillInstantBelowHealthPercent = CurrentUpgradeData.killInstantBelowHealthPercent,
-                WeaponDirection = GetWeaponDirection(),
+                Pivot = GetPivotPosition(),
+                Destination = destination,
+                Muzzle = muzzlePosition,
+                Entity = entity,
                 Trajectory = trajectory,
                 IsFlyWeapon = IsFlyWeapon,
                 FlyWeapon = IsFlyWeapon ? this : null,
             };
             
-            SkillManager.CastSkill(SkillData, runtimeData, muzzlePosition, destinationPosition, entity);
+            SkillManager.CastSkill(SkillData, runtimeData);
         }
 
         public virtual void OnStopAttack()
@@ -332,12 +335,9 @@ namespace _Game.GamePlay.Model
         
         protected virtual Vector3 GetMuzzlePosition() => muzzle.position;
 
-        protected virtual Vector3 GetDestination(Vector3 @from, Vector3 @to) => @to;
+        protected virtual Vector3 GetPivotPosition() => transform.position;
 
-        public Vector3 GetWeaponDirection()
-        {
-            return (GetMuzzlePosition() - transform.position).normalized;
-        }
+        protected virtual Vector3 GetDestination(Vector3 @from, Vector3 @to) => @to;
 
         protected virtual void PlayAudioAttackOneShot()
         {

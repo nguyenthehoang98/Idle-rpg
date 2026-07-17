@@ -52,8 +52,12 @@ namespace _Game.GamePlay.Manager
             instance = null;
         }
 
-        public static void CastSkill(SkillData skillData, SkillRuntimeData runtimeData, Vector3 position, Vector3 destination, int entityTarget)
+        public static void CastSkill(SkillData skillData, SkillRuntimeData runtimeData)
         {
+            Vector3 position = runtimeData.Muzzle;
+            Vector3 destination = runtimeData.Destination;
+            int entityTarget = runtimeData.Entity;
+            
             if (instance == null)
             {
                 Debug.LogError("Instance SkillManager is null");
@@ -137,12 +141,11 @@ namespace _Game.GamePlay.Manager
             if(!extra) instance.CastSkill_Private(skillData, runtimeData, position, destination, 1);
         }
         
-        private async void CastSkill_Private(SkillData skillData, SkillRuntimeData runtimeData,
-            Vector3 position, Vector3 destination, float scaleDamage)
+        private async void CastSkill_Private(SkillData skillData, SkillRuntimeData runtimeData, Vector3 position, Vector3 destination, float scaleDamage)
         {
             float lifeTime = 0;
-       
-            BaseTrajectory trajectory = GetTrajectory(runtimeData.Trajectory, skillData, ref position, ref destination, ref lifeTime);
+            
+            BaseTrajectory trajectory = GetTrajectory(runtimeData, skillData, ref position, ref destination, ref lifeTime);
             if (trajectory == null)
             {
 #if UNITY_EDITOR
@@ -469,9 +472,11 @@ namespace _Game.GamePlay.Manager
             }
         }
         
-        private BaseTrajectory GetTrajectory(TrajectoryData trajectoryData, SkillData skillData, ref Vector3 position, ref Vector3 destination, ref float duration)
+        private BaseTrajectory GetTrajectory(SkillRuntimeData runtimeData, SkillData skillData, ref Vector3 position, ref Vector3 destination, ref float duration)
         {
             float distance = DistanceToCircleEdge(position, destination, skillData.findRadius);
+
+            TrajectoryData trajectoryData = runtimeData.Trajectory;
             
             switch (skillData.trajectory)
             {
@@ -491,8 +496,25 @@ namespace _Game.GamePlay.Manager
                         position, destination);
                 case TrajectoryType.Stationary:
                     duration = skillData.stationaryDuration;
-                    if (skillData.stationaryRandomPosition)
-                        position = RandomPositionInRadius(position, skillData.stationaryRandomRadius);
+                    switch (skillData.stationaryPivot)
+                    {
+                        case TrajectoryStationaryPivot.Enemy:
+                            position = runtimeData.Muzzle;
+                            destination = runtimeData.Destination;
+                            break;
+                        case TrajectoryStationaryPivot.Random:
+                            position = runtimeData.Muzzle;
+                            destination = RandomPositionInRadius(position, skillData.stationaryRandomRadius);
+                            break;
+                        case TrajectoryStationaryPivot.Weapon:
+                            position = runtimeData.Pivot;
+                            destination = runtimeData.Muzzle;
+                            break;
+                        default:
+                            Debug.LogError("Undefined Trajectory Stationary Pivot");
+                            break;
+                    }
+
                     return new StationaryTrajectory(position, destination);
                 default:
                     Debug.LogError("Unknown Trajectory type " + trajectoryData.type);

@@ -58,7 +58,7 @@ namespace _KITSystem.SkillSystem.Imp
 
             Vector2 direction = trajectory.EvaluateDirection(deltaTime);
             
-            projectile.SetPosition(position, deltaTime);
+            projectile.SetPosition(position, direction, deltaTime);
 
             collider.Tick(deltaTime);
 

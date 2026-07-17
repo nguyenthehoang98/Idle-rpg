@@ -6,12 +6,14 @@ namespace _KITSystem.SkillSystem.Core
 {
     public abstract class BaseTrajectory : IDisposable
     {
+        protected Vector2 Goal;
         protected Vector2 Start;
         protected Vector2 Direction;
         
         protected BaseTrajectory(Vector2 start, Vector2 goal)
         {
             Start = start;
+            Goal = goal;
             Direction = MathUtils.NormalizeSafe(goal - start);
         }
 

@@ -212,7 +212,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 12e72ef0329e6594582c38420aaf1fb2, type: 3}
   - {fileID: 21300000, guid: c8124f13de746684288f4fc0a1a83441, type: 3}
   - {fileID: 21300000, guid: ef8f849b9cee1a949b60059d35479a7b, type: 3}
-  loop: 0
+  loop: 1
   frameRate: 30
   OnEventCompleted:
     m_PersistentCalls:

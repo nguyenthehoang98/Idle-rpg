@@ -11,7 +11,7 @@ namespace _KITSystem.SkillSystem.Imp
 
         public override Vector2 EvaluatePosition(float deltaTime)
         {
-            return Start;
+            return Goal;
         }
 
         public override Vector2 EvaluateDirection(float deltaTime)

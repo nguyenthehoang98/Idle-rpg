@@ -44,6 +44,7 @@ namespace _KITSystem.SkillSystem.Core
         public void Tick(float deltaTime)
         {
             elapsedTime += deltaTime;
+            
             canTrigger = timerTrigger <= elapsedTime && elapsedTime <= duration + timerTrigger;
         }
 

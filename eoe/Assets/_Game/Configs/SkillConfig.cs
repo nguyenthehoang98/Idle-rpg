@@ -73,7 +73,7 @@ namespace _Game.Configs
         public float boomerangOutboundDuration;
         public float boomerangReturnDuration;
         public float boomerangHangDuration;
-        public bool stationaryRandomPosition;
+        public TrajectoryStationaryPivot stationaryPivot;
         public float stationaryRandomRadius;
         public float stationaryDuration;
         /*
@@ -90,5 +90,10 @@ namespace _Game.Configs
         public float spreadAngleStep;
         public float parallelDistanceStep;
         public string explosivePrefabName;
+    }
+
+    public enum TrajectoryStationaryPivot
+    {
+        Weapon, Enemy, Random
     }
 }

@@ -6,6 +6,7 @@ namespace _Game.GamePlay.Data
 {
     public struct SkillRuntimeData
     {
+        public int Entity;
         public float Attack;
         public float CritChance;
         public float CritDamage;
@@ -20,7 +21,9 @@ namespace _Game.GamePlay.Data
         public float BounceDamagePercent; // chưa có logic
         public float KillInstantBelowHealthPercent;
         public TrajectoryData Trajectory;
-        public Vector2 WeaponDirection;
+        public Vector2 Pivot;
+        public Vector2 Muzzle;
+        public Vector2 Destination;
         public bool IsFlyWeapon;
         public BaseWeapon FlyWeapon;
     }
