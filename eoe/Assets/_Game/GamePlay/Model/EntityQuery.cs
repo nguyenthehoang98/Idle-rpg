@@ -111,5 +111,52 @@ namespace _Game.GamePlay.Model
             
             return results;
         }
+
+        public List<int> GetAllEntities(Vector2 center, Vector2 size, Vector2 direction, Func<int, bool> funcFilterEntity)
+        {
+            int count = AgentManager.Query_Agent(center, size, out AgentData[] agents);
+
+            direction.Normalize();
+
+            Vector2 right = direction;
+            Vector2 up = new Vector2(-direction.y, direction.x);
+
+            Vector2 half = size * 0.5f;
+
+            List<int> results = new List<int>(count);
+
+            for (int i = 0; i < count; i++)
+            {
+                AgentData data = agents[i];
+
+                if (!MonsterEntityManager.TryGetEntity(data.agent, out int entity))
+                    continue;
+
+                if (!EntityManager.IsEntityAlive(entity))
+                    continue;
+
+                if (!funcFilterEntity(entity))
+                    continue;
+
+                Vector2 delta = (Vector2)data.position - center;
+
+                // World -> Local rectangle
+                float localX = Vector2.Dot(delta, right);
+                float localY = Vector2.Dot(delta, up);
+
+                float closestX = math.clamp(localX, -half.x, half.x);
+                float closestY = math.clamp(localY, -half.y, half.y);
+
+                float dx = localX - closestX;
+                float dy = localY - closestY;
+
+                if (dx * dx + dy * dy <= data.radius * data.radius)
+                {
+                    results.Add(entity);
+                }
+            }
+
+            return results;
+        }
     }
 }

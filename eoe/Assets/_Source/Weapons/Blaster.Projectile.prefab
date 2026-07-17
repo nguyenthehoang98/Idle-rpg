@@ -77,15 +77,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d310ff3e519bd0e4a8f724ec24dc56d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.Model.Projectile
+  onInitialize:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4331552628611919551}
+        m_TargetAssemblyTypeName: _Game.GamePlay.View.SpriteRendererAnimation, Assembly-CSharp
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   canDestroy: 1
   dependencyRelativePosition: 1
   scalePivot: {fileID: 7067284531707531920}
   rotatePivot: {fileID: 5878097163562352361}
   trailRenderer: {fileID: 0}
   colliderData:
-    type: 0
+    type: 1
     circleRadius: 0.125
-    relativePosition: {x: 0, y: 0}
+    rectangleSize: {x: 7.5, y: 0.5}
+    relativePosition: {x: 3.75, y: 0}
+    dependencyRelativeRotation: 1
 --- !u!1 &9046264094979996413
 GameObject:
   m_ObjectHideFlags: 0
@@ -114,7 +131,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7067284531707531920}
@@ -164,7 +181,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1228164997
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 12e72ef0329e6594582c38420aaf1fb2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -189,7 +206,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab652e4c850d49d49d0220100f792723, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.View.SpriteRendererAnimation
-  playOnEnable: 1
+  playOnEnable: 0
   reference: {fileID: 4143204196659968835}
   sprites:
   - {fileID: 21300000, guid: 12e72ef0329e6594582c38420aaf1fb2, type: 3}

@@ -46,8 +46,8 @@ namespace _Game.GamePlay.View
         private async void ClickHammer()
         {
             btnHammer.interactable = false;
-            float f = hammerAnimation.Play();
-            equipmentQueue.Decrease(f);
+            hammerAnimation.Play();
+            equipmentQueue.Decrease(0.25f);
             RefreshUI();
             SoundManager.Instance.PlayOneShot(await AssetBundleManager.GetAssetCached<AudioClip>(Path.SFX_HAMMER));
         }

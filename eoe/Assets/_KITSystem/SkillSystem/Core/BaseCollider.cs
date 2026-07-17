@@ -62,12 +62,12 @@ namespace _KITSystem.SkillSystem.Core
 
         protected abstract List<int> OnCollision(Vector2 prevPosition, Vector2 currentPosition);
 
-        public void Gizmos(Vector2 prevPosition, Vector3 currentPosition, Color color, float deltaTime)
+        public void Gizmos(Vector2 prevPosition, Vector2 currentPosition, Color color, float deltaTime)
         {
             if(canTrigger) OnGizmos(prevPosition, currentPosition, color, deltaTime);
         }
 
-        protected virtual void OnGizmos(Vector2 prevPosition, Vector3 currentPosition, Color color, float deltaTime)
+        protected virtual void OnGizmos(Vector2 prevPosition, Vector2 currentPosition, Color color, float deltaTime)
         {
         }
     }

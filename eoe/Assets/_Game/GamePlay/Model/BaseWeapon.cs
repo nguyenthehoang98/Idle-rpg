@@ -310,6 +310,7 @@ namespace _Game.GamePlay.Model
                 BounceCount = CurrentUpgradeData.bounceCount,
                 BounceDamagePercent = CurrentUpgradeData.bounceDamagePercent,
                 KillInstantBelowHealthPercent = CurrentUpgradeData.killInstantBelowHealthPercent,
+                WeaponDirection = GetWeaponDirection(),
                 Trajectory = trajectory,
                 IsFlyWeapon = IsFlyWeapon,
                 FlyWeapon = IsFlyWeapon ? this : null,
@@ -332,6 +333,11 @@ namespace _Game.GamePlay.Model
         protected virtual Vector3 GetMuzzlePosition() => muzzle.position;
 
         protected virtual Vector3 GetDestination(Vector3 @from, Vector3 @to) => @to;
+
+        public Vector3 GetWeaponDirection()
+        {
+            return (GetMuzzlePosition() - transform.position).normalized;
+        }
 
         protected virtual void PlayAudioAttackOneShot()
         {

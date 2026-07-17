@@ -1,5 +1,6 @@
 using _Game.GamePlay.Model;
 using _KITSystem.SkillSystem.Imp;
+using UnityEngine;
 
 namespace _Game.GamePlay.Data
 {
@@ -19,6 +20,7 @@ namespace _Game.GamePlay.Data
         public float BounceDamagePercent; // chưa có logic
         public float KillInstantBelowHealthPercent;
         public TrajectoryData Trajectory;
+        public Vector2 WeaponDirection;
         public bool IsFlyWeapon;
         public BaseWeapon FlyWeapon;
     }

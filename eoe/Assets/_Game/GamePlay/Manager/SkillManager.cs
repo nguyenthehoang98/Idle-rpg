@@ -216,6 +216,7 @@ namespace _Game.GamePlay.Manager
             }
             
             Action onProjectileDestroyed = () => { };
+            
             CastProjectileAction castProjectileAction = new CastProjectileAction(this, lifeTime, collider, trajectory,
                 (entity, pos, lastCollision) =>
                     OnDamageEntityFunction(skillData, runtimeData, entity, pos, scaleDamage, lastCollision,
@@ -455,6 +456,10 @@ namespace _Game.GamePlay.Manager
                 case ColliderType.Circle:
                     return new CircleCollider(query, colliderData.relativePosition,
                         skillData.collTimerTrigger, skillData.collDuration, colliderData.circleRadius
+                    );
+                case ColliderType.Rectangle:
+                    return new RectangleCollider(query, colliderData.relativePosition,
+                        skillData.collTimerTrigger, skillData.collDuration, colliderData.rectangleSize
                     );
                 default:
                     Debug.LogError("Unknown Collider type " + colliderData.type);

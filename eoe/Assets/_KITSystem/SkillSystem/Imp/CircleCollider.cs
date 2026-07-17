@@ -21,7 +21,7 @@ namespace _KITSystem.SkillSystem.Imp
             return Query.GetAllEntities(GetPosition(prevPosition, currentPosition), size, FilterEntity);
         }
         
-        protected override void OnGizmos(Vector2 prevPosition, Vector3 currentPosition, Color color, float deltaTime)
+        protected override void OnGizmos(Vector2 prevPosition, Vector2 currentPosition, Color color, float deltaTime)
         {
 #if UNITY_EDITOR
             int segments = 12;

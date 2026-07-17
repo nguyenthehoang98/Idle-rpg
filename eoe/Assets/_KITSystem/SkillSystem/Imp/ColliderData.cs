@@ -11,7 +11,9 @@ namespace _KITSystem.SkillSystem.Imp
     {
         public ColliderType type;
         public float circleRadius;
+        public Vector2 rectangleSize;
         public Vector2 relativePosition;
+        public bool dependencyRelativeRotation;
     }
 
 #if UNITY_EDITOR
@@ -26,8 +28,8 @@ namespace _KITSystem.SkillSystem.Imp
             EditorGUI.BeginProperty(position, label, property);
 
             var type = property.FindPropertyRelative(nameof(ColliderData.type));
-            var circleRadius = property.FindPropertyRelative(nameof(ColliderData.circleRadius));
             var relativePosition = property.FindPropertyRelative(nameof(ColliderData.relativePosition));
+            var dependencyRelativeRotation = property.FindPropertyRelative(nameof(ColliderData.dependencyRelativeRotation));
 
             GUI.Box(position, GUIContent.none);
 
@@ -40,16 +42,25 @@ namespace _KITSystem.SkillSystem.Imp
             EditorGUI.PropertyField(rect, relativePosition);
 
             rect.y += EditorGUIUtility.singleLineHeight + Space;
+
+            EditorGUI.PropertyField(rect, dependencyRelativeRotation);
+
             rect.y += EditorGUIUtility.singleLineHeight + Space;
 
             switch ((ColliderType)type.intValue)
             {
                 case ColliderType.Circle:
+                    var circleRadius = property.FindPropertyRelative(nameof(ColliderData.circleRadius));
                     rect.height = EditorGUI.GetPropertyHeight(circleRadius, true);
                     EditorGUI.PropertyField(rect, circleRadius, true);
                     break;
+                case ColliderType.Rectangle:
+                    var rectangleSize = property.FindPropertyRelative(nameof(ColliderData.rectangleSize));
+                    rect.height = EditorGUI.GetPropertyHeight(rectangleSize, true);
+                    EditorGUI.PropertyField(rect, rectangleSize, true);
+                    break;
             }
-
+            
             EditorGUI.EndProperty();
         }
 
@@ -67,6 +78,10 @@ namespace _KITSystem.SkillSystem.Imp
                 case ColliderType.Circle:
                     h += EditorGUI.GetPropertyHeight(
                         property.FindPropertyRelative(nameof(ColliderData.circleRadius)), true);
+                    break;
+                case ColliderType.Rectangle:
+                    h += EditorGUI.GetPropertyHeight(
+                        property.FindPropertyRelative(nameof(ColliderData.rectangleSize)), true);
                     break;
             }
 

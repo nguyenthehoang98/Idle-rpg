@@ -45,11 +45,11 @@ TagManager:
   - name: Monster
     uniqueID: 3571737467
     locked: 0
-  - name: Weapon
-    uniqueID: 2095058935
-    locked: 0
   - name: Projectile
     uniqueID: 1228164997
+    locked: 0
+  - name: Weapon
+    uniqueID: 2095058935
     locked: 0
   - name: UIText
     uniqueID: 2654165327

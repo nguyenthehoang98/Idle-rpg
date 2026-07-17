@@ -2,6 +2,7 @@ using System;
 using _KITSystem.Resource;
 using _KITSystem.SkillSystem.Imp;
 using UnityEngine;
+using UnityEngine.Events;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -10,6 +11,7 @@ namespace _Game.GamePlay.Model
 {
     public class Projectile : MonoBehaviour
     {
+        [SerializeField] private UnityEvent onInitialize;
         [SerializeField] private bool canDestroy = true;
         [SerializeField] private bool dependencyRelativePosition = true;
         [SerializeField] private Transform scalePivot;
@@ -42,14 +44,33 @@ namespace _Game.GamePlay.Model
 #if UNITY_EDITOR
             if (Application.isPlaying) return;
             
-            Vector2 position = transform.position;
-            Vector2 center = position + colliderData.relativePosition;
+            Vector2 center = (Vector2)transform.position + colliderData.relativePosition;
+            
+            Color color = Color.green;
+            
+            Handles.color = color;
+
             switch (colliderData.type)
             {
                 case ColliderType.Circle:
                     Handles.DrawWireDisc(center, Vector3.forward, colliderData.circleRadius);
                     break;
-                default: 
+                case ColliderType.Rectangle:
+                    Matrix4x4 oldMatrix = Handles.matrix;
+                    Handles.matrix = Matrix4x4.TRS(center, transform.rotation, Vector3.one);
+                    Vector2 size = colliderData.rectangleSize;
+                    Vector3[] verts =
+                    {
+                        new(-size.x * 0.5f, -size.y * 0.5f, 0),
+                        new(-size.x * 0.5f, size.y * 0.5f, 0),
+                        new(size.x * 0.5f, size.y * 0.5f, 0),
+                        new(size.x * 0.5f, -size.y * 0.5f, 0),
+                    };
+
+                    Handles.DrawSolidRectangleWithOutline(verts, new Color(color.r, color.g, color.b, 0.1f), color);
+                    Handles.matrix = oldMatrix;
+                    break;
+                default:
                     Debug.LogError("Error in DrawGizmosSelected");
                     break;
             }
@@ -65,6 +86,8 @@ namespace _Game.GamePlay.Model
             isRunning = true;
 
             EnableTrail();
+            
+            onInitialize?.Invoke();
         }
 
         public void SetPosition(Vector3 position, float dt)
@@ -81,6 +104,7 @@ namespace _Game.GamePlay.Model
             this.elapsedTime = 0;
             
             Vector3 direction = position - previousPosition;
+            
             Rotate(direction);
         }
 

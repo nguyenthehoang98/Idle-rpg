@@ -32,14 +32,13 @@ namespace _Game.GamePlay.View
             if (playOnEnable) Play();
         }
 
-        public float Play()
+        public void Play()
         {
             isPlaying = true;
             currentFrame = 0;
             elapsedTime = 0f;
             Enable = true;
             SetFrame(currentFrame);
-            return 0.25f;
         }
 
         public void Stop()
