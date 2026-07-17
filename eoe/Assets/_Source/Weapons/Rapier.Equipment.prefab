@@ -102,6 +102,7 @@ MonoBehaviour:
           schedulerType: 0
           additionalSettings: 0
         useWorldSpace: 0
+        useDeltaAngle: 0
     - rid: 8843438356789461064
       type: {class: DebugComponent, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
       data:
@@ -268,7 +269,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   rotationDuration: 0.15
-  muzzle: {fileID: 7520070235302929977}
+  muzzle: {fileID: 8792860407553118502}
   animator: {fileID: 417439057925282555}
   outboundAnimation: {fileID: 2765871460923298154}
   hangAnimation: {fileID: 0}
@@ -287,6 +288,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d310ff3e519bd0e4a8f724ec24dc56d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.Model.Projectile
+  onInitialize:
+    m_PersistentCalls:
+      m_Calls: []
   canDestroy: 0
   dependencyRelativePosition: 0
   scalePivot: {fileID: 1543081629790892130}
@@ -295,7 +299,9 @@ MonoBehaviour:
   colliderData:
     type: 0
     circleRadius: 0.2
+    rectangleSize: {x: 0, y: 0}
     relativePosition: {x: 0.2, y: 0}
+    dependencyRelativeRotation: 0
 --- !u!1 &3657667344081574233
 GameObject:
   m_ObjectHideFlags: 0
@@ -373,7 +379,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2095058935
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 6ce59553cd0fb5745bb249de9b626483, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -464,7 +470,7 @@ TrailRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2095058935
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: -2
   m_Time: 0.1
   m_PreviewTimeScale: 1
@@ -638,6 +644,7 @@ MonoBehaviour:
           schedulerType: 0
           additionalSettings: 1
         useWorldSpace: 0
+        useDeltaAngle: 0
 --- !u!1 &6139367762931335681
 GameObject:
   m_ObjectHideFlags: 0
@@ -699,7 +706,7 @@ MonoBehaviour:
       type: {class: TransformRotationAnimation, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
       data:
         displayName: Rotation
-        enabled: 1
+        enabled: 0
         target: {fileID: 154186919891485008}
         settings:
           startValue: {x: 0, y: 0, z: 0}
@@ -741,6 +748,7 @@ MonoBehaviour:
           schedulerType: 0
           additionalSettings: 0
         useWorldSpace: 0
+        useDeltaAngle: 0
     - rid: 8843438356789461060
       type: {class: EventComponent, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
       data:
@@ -752,6 +760,18 @@ MonoBehaviour:
             - m_Target: {fileID: 4427382285310395892}
               m_TargetAssemblyTypeName: _Game.GamePlay.Model.Projectile, Assembly-CSharp
               m_MethodName: DisableTrail
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+            - m_Target: {fileID: 4427382285310395892}
+              m_TargetAssemblyTypeName: _Game.GamePlay.Model.Projectile, Assembly-CSharp
+              m_MethodName: BlockRotation
               m_Mode: 1
               m_Arguments:
                 m_ObjectArgument: {fileID: 0}
@@ -775,37 +795,6 @@ MonoBehaviour:
         messageOnStop: 
         logTypeOnStop: 3
         breakOnStop: 0
---- !u!1 &6639616093947491535
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7520070235302929977}
-  m_Layer: 0
-  m_Name: muzzle
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7520070235302929977
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6639616093947491535}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0.05, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 154186919891485008}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6700339827179454540
 GameObject:
   m_ObjectHideFlags: 0
@@ -900,7 +889,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7631743472788265751}
-  - {fileID: 7520070235302929977}
   m_Father: {fileID: 5400583493042846177}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8283264560483155214

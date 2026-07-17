@@ -39,6 +39,8 @@ namespace _Game.GamePlay.Model
 
         private bool stopped = false;
 
+        private bool blockRotation = false;
+
         private void OnDrawGizmos()
         {
 #if UNITY_EDITOR
@@ -79,6 +81,7 @@ namespace _Game.GamePlay.Model
 
         public void Initialize()
         {
+            blockRotation = false;
             elapsedTime = 0;
             targetPosition = previousPosition = transform.position;
             
@@ -107,17 +110,24 @@ namespace _Game.GamePlay.Model
             
             Rotate(direction);
         }
+        
+        public void BlockRotation() => blockRotation = true;
 
         public void Rotate(Vector3 direction)
         {
+            if (blockRotation) return;
+
             angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            
             rotatePivot.localEulerAngles = new Vector3(0, 0, angle);
         }
 
         public void StopLerpMotion()
         {
             stopped = true;
+            
             previousPosition = transform.position;
+            
             targetPosition = transform.position;
         }
 
@@ -130,7 +140,7 @@ namespace _Game.GamePlay.Model
             float t = Mathf.Clamp01(elapsedTime / deltaTime);
 
             transform.position = Vector3.Lerp(previousPosition, targetPosition, t);
-
+            
             if (t >= 1.0f && shouldDestroy)
             {
                 if (onDestroyCallback != null)

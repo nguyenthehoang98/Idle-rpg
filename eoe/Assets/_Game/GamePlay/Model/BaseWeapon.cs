@@ -349,8 +349,11 @@ namespace _Game.GamePlay.Model
             Vector3 direction = target - position;
 
             float angleFrom = rotatePivot.eulerAngles.z;
+            
             float angleTo = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            
             float angleDelta = Mathf.Abs(Mathf.DeltaAngle(angleFrom, angleTo));
+            
             float dynamicDuration = Mathf.Lerp(0f, rotationDuration, angleDelta / 180f);
 
             float elapsedTime = 0;
