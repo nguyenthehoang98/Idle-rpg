@@ -13,6 +13,7 @@ using _KITSystem.SkillSystem.Core;
 using _KITSystem.SkillSystem.Imp;
 using _KITSystem.Utils;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace _Game.GamePlay.Manager
 {
@@ -141,7 +142,7 @@ namespace _Game.GamePlay.Manager
         {
             float lifeTime = 0;
        
-            BaseTrajectory trajectory = GetTrajectory(runtimeData.Trajectory, skillData, position, destination, ref lifeTime);
+            BaseTrajectory trajectory = GetTrajectory(runtimeData.Trajectory, skillData, ref position, ref destination, ref lifeTime);
             if (trajectory == null)
             {
 #if UNITY_EDITOR
@@ -198,7 +199,9 @@ namespace _Game.GamePlay.Manager
                 }
                 
                 projectile.SetSizeScale(skillData.size);
+                
                 collider = GetCollider(projectile.ColliderData, skillData);
+
                 if (collider == null)
                 {
 #if UNITY_EDITOR
@@ -209,6 +212,7 @@ namespace _Game.GamePlay.Manager
              
                 GameObject go = Pool.Instantiate(prefab, position, false);
                 projectile = go.GetComponent<Projectile>();
+                projectile.Rotate(destination - position);
             }
             
             Action onProjectileDestroyed = () => { };
@@ -458,7 +462,7 @@ namespace _Game.GamePlay.Manager
             }
         }
         
-        private BaseTrajectory GetTrajectory(TrajectoryData trajectoryData, SkillData skillData, Vector3 position, Vector3 destination, ref float duration)
+        private BaseTrajectory GetTrajectory(TrajectoryData trajectoryData, SkillData skillData, ref Vector3 position, ref Vector3 destination, ref float duration)
         {
             float distance = DistanceToCircleEdge(position, destination, skillData.findRadius);
             
@@ -478,16 +482,23 @@ namespace _Game.GamePlay.Manager
                         distance, skillData.boomerangOutboundDuration,
                         skillData.boomerangHangDuration, skillData.boomerangReturnDuration,
                         position, destination);
+                case TrajectoryType.Stationary:
+                    duration = skillData.stationaryDuration;
+                    if (skillData.stationaryRandomPosition)
+                        position = RandomPositionInRadius(position, skillData.stationaryRandomRadius);
+                    return new StationaryTrajectory(position, destination);
                 default:
                     Debug.LogError("Unknown Trajectory type " + trajectoryData.type);
                     return null;
             }
         }
         
-        private static float DistanceToCircleEdge(
-            Vector3 position,
-            Vector3 destination,
-            float radius)
+        private static Vector2 RandomPositionInRadius(Vector2 position, float radius)
+        {
+            return position + Random.insideUnitCircle * radius;
+        }
+        
+        private static float DistanceToCircleEdge(Vector3 position, Vector3 destination, float radius)
         {
             Vector3 dir = (destination - position).normalized;
 

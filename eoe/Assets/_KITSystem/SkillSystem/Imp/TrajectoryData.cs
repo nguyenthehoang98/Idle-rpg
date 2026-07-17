@@ -19,6 +19,7 @@ namespace _KITSystem.SkillSystem.Imp
     {
         Projectile = 1,
         Boomerang = 2,
+        Stationary = 3,
     }
 
 #if UNITY_EDITOR

@@ -81,6 +81,11 @@ namespace _Game.GamePlay.Model
             this.elapsedTime = 0;
             
             Vector3 direction = position - previousPosition;
+            Rotate(direction);
+        }
+
+        public void Rotate(Vector3 direction)
+        {
             angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             rotatePivot.localEulerAngles = new Vector3(0, 0, angle);
         }

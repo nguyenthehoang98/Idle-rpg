@@ -73,6 +73,9 @@ namespace _Game.Configs
         public float boomerangOutboundDuration;
         public float boomerangReturnDuration;
         public float boomerangHangDuration;
+        public bool stationaryRandomPosition;
+        public float stationaryRandomRadius;
+        public float stationaryDuration;
         /*
          * @Collider
          */
