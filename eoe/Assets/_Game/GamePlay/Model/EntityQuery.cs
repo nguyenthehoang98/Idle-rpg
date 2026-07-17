@@ -114,14 +114,16 @@ namespace _Game.GamePlay.Model
 
         public List<int> GetAllEntities(Vector2 center, Vector2 size, Vector2 direction, Func<int, bool> funcFilterEntity)
         {
-            int count = AgentManager.Query_Agent(center, size, out AgentData[] agents);
+            Vector2 right = new Vector2(direction.y, -direction.x);
 
-            direction.Normalize();
-
-            Vector2 right = direction;
-            Vector2 up = new Vector2(-direction.y, direction.x);
-
-            Vector2 half = size * 0.5f;
+            float halfForward = size.x * 0.5f;
+            float halfRight = size.y * 0.5f;
+            Vector2 queryHalf = new Vector2(
+                Mathf.Abs(direction.x) * halfForward + Mathf.Abs(right.x) * halfRight,
+                Mathf.Abs(direction.y) * halfForward + Mathf.Abs(right.y) * halfRight
+            );
+          
+            int count = AgentManager.Query_Agent(center, queryHalf * 2f, out AgentData[] agents);
 
             List<int> results = new List<int>(count);
 
@@ -140,17 +142,18 @@ namespace _Game.GamePlay.Model
 
                 Vector2 delta = (Vector2)data.position - center;
 
-                // World -> Local rectangle
-                float localX = Vector2.Dot(delta, right);
-                float localY = Vector2.Dot(delta, up);
+                float localForward = Vector2.Dot(delta, direction);
+                float localRight = Vector2.Dot(delta, right);
 
-                float closestX = math.clamp(localX, -half.x, half.x);
-                float closestY = math.clamp(localY, -half.y, half.y);
+                float closestForward = Mathf.Clamp(localForward, -halfForward, halfForward);
+                float closestRight = Mathf.Clamp(localRight, -halfRight, halfRight);
 
-                float dx = localX - closestX;
-                float dy = localY - closestY;
+                float dx = localForward - closestForward;
+                float dy = localRight - closestRight;
 
-                if (dx * dx + dy * dy <= data.radius * data.radius)
+                bool hit = dx * dx + dy * dy <= data.radius * data.radius;
+
+                if (hit)
                 {
                     results.Add(entity);
                 }

@@ -17,7 +17,7 @@ namespace _KITSystem.SkillSystem.Imp
 
         protected override List<int> OnCollision(Vector2 position, Vector2 direction)
         {
-            return Query.GetAllEntities(GetPosition(position, direction), rectangleSize, FilterEntity);
+            return Query.GetAllEntities(GetPosition(position, direction), rectangleSize, direction, FilterEntity);
         }
 
         protected override void OnGizmos(Vector2 position, Vector2 direction, Color color, float deltaTime)
@@ -29,14 +29,16 @@ namespace _KITSystem.SkillSystem.Imp
             
             if (dependencyRelativeRotation)
             {
-                Vector2 right = new Vector2(-direction.y, direction.x);
-                Vector2 halfForward = direction * (rectangleSize.y * 0.5f);
-                Vector2 halfRight   = right * (rectangleSize.x * 0.5f);
+                Vector2 right = new Vector2(direction.y, -direction.x);
+                float halfForward = rectangleSize.x * 0.5f;
+                float halfRight = rectangleSize.y * 0.5f;
+                Vector2 hf = direction * halfForward;
+                Vector2 hr = right * halfRight;
 
-                bl = center - halfForward - halfRight;
-                br = center - halfForward + halfRight;
-                tr = center + halfForward + halfRight;
-                tl = center + halfForward - halfRight;
+                bl = center - hf - hr;
+                br = center - hf + hr;
+                tr = center + hf + hr;
+                tl = center + hf - hr;
             }
             else
             {
