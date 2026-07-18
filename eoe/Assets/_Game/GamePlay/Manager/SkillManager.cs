@@ -336,7 +336,7 @@ namespace _Game.GamePlay.Manager
             if (radius > 0)
             {
                 
-                SpawnExplosiveAura(skillData.explosivePrefabName, position);
+                SpawnExplosiveAura(runtimeData.ExplosivePrefabName, position);
                 
 #if UNITY_EDITOR
                 GizmosLine.Circle(position, radius, Color.yellow, 0.1f);

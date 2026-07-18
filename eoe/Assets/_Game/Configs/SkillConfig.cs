@@ -89,7 +89,6 @@ namespace _Game.Configs
          */
         public float spreadAngleStep;
         public float parallelDistanceStep;
-        public string explosivePrefabName;
     }
 
     public enum TrajectoryStationaryPivot

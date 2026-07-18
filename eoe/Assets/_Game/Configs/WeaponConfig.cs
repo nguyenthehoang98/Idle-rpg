@@ -116,6 +116,7 @@ namespace _Game.Configs
         public string prefabName;
         public string projectileName;
         public string iconName;
+        public string explosivePrefabName;
 
         /*
          * @ Stat

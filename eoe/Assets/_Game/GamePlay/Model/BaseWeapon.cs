@@ -307,6 +307,7 @@ namespace _Game.GamePlay.Model
                 PiercingCount = CurrentUpgradeData.piercingCount,
                 ExplosiveRadius = CurrentUpgradeData.explosiveRadius,
                 ExplosiveDamagePercent = CurrentUpgradeData.explosiveDamagePercent,
+                ExplosivePrefabName = WeaponData.explosivePrefabName,
                 BounceCount = CurrentUpgradeData.bounceCount,
                 BounceDamagePercent = CurrentUpgradeData.bounceDamagePercent,
                 KillInstantBelowHealthPercent = CurrentUpgradeData.killInstantBelowHealthPercent,
