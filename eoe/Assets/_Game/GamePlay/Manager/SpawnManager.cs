@@ -100,7 +100,7 @@ namespace _Game.GamePlay.Manager
 
         private bool LoadWave(int wave)
         {
-            if (wave >= 0 && wave < maxWave)
+            if (wave >= 0 && wave <= maxWave)
             {
                 waveIndex = wave;
 
