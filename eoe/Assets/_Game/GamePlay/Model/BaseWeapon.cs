@@ -395,7 +395,7 @@ namespace _Game.GamePlay.Model
                 float d = math.lengthsq(float2);
                 return d <= sqrRadius;
             }, out QueryResult result);
-
+            
             entity = -1;
             destination = Vector3.zero;
 

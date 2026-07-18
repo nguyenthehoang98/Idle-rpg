@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _Game.GamePlay.Manager;
+using _Game.GamePlay.Utils;
 using _KITSystem.Entity;
 using _KITSystem.Grid;
 using _KITSystem.SkillSystem.Core;
@@ -15,14 +16,13 @@ namespace _Game.GamePlay.Model
         public void FindTarget(FindTargetType type, Vector2 center, Vector2 pivot, float radius, Func<int, float2, bool> funcFilterEntity,
             out QueryResult result)
         {
-            float sqrRadius = radius * radius;
-
             int count = AgentManager.Query_Agent(center, new float2(radius, radius), out AgentData[] agents);
-
-            float maxDistance = float.MinValue;
-            float minDistance = float.MaxValue;
-
+            
             result = new QueryResult();
+            
+            float sqr = radius * radius;
+            
+            float minDistance = float.MaxValue;
 
             for (int i = 0; i < count; i++)
             {
@@ -34,35 +34,25 @@ namespace _Game.GamePlay.Model
 
                 switch (type)
                 {
-                    case FindTargetType.Farthest:
                     case FindTargetType.Nearest:
-
-                        if (math.distancesq(center, data.position) >= sqrRadius) continue;
+                        
+                        if (math.distancesq(center, data.position) >= sqr) continue;
                         
                         float dsq = math.distancesq(pivot, data.position);
 
-                        if (dsq > sqrRadius) continue;
-
-                        if (type == FindTargetType.Farthest)
+                        if (dsq < minDistance)
                         {
-                            if (dsq < maxDistance) continue;
-
-                            maxDistance = dsq;
-                        }
-                        else
-                        {
-                            if (dsq > minDistance) continue;
-
                             minDistance = dsq;
-                        }
 
-                        if (funcFilterEntity(entity, data.position))
-                        {
-                            result.Primary = new QueryEntityData(entity, data.position);
-                            continue;
-                        }
+                            if (funcFilterEntity(entity, data.position))
+                            {
+                                result.Primary = new QueryEntityData(entity, data.position);
+                                continue;
+                            }
 
-                        result.Secondary = new QueryEntityData(entity, data.position);
+                            result.Secondary = new QueryEntityData(entity, data.position);
+                        }
+                        
                         break;
                     default: Debug.LogError("Unknown entity type " + type);
                         break;

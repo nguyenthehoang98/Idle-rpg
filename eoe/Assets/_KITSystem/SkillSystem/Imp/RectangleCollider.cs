@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using _Game.GamePlay.Utils;
 using _KITSystem.SkillSystem.Core;
 using UnityEngine;
 
@@ -25,35 +26,14 @@ namespace _KITSystem.SkillSystem.Imp
 #if UNITY_EDITOR
             Vector2 center = GetPosition(position, direction);
             
-            Vector2 bl, br, tr, tl;
-            
             if (dependencyRelativeRotation)
             {
-                Vector2 right = new Vector2(direction.y, -direction.x);
-                float halfForward = rectangleSize.x * 0.5f;
-                float halfRight = rectangleSize.y * 0.5f;
-                Vector2 hf = direction * halfForward;
-                Vector2 hr = right * halfRight;
-
-                bl = center - hf - hr;
-                br = center - hf + hr;
-                tr = center + hf + hr;
-                tl = center + hf - hr;
+                GizmosLine.Rectangle(center, direction, rectangleSize, color, deltaTime);
             }
             else
             {
-                Vector2 half = rectangleSize * 0.5f;
-            
-                bl = center + new Vector2(-half.x, -half.y); // Bottom Left
-                br = center + new Vector2( half.x, -half.y); // Bottom Right
-                tr = center + new Vector2( half.x,  half.y); // Top Right
-                tl = center + new Vector2(-half.x,  half.y); // Top Left
+                GizmosLine.Rectangle(center, rectangleSize, color, deltaTime);
             }
-
-            Debug.DrawLine(bl, br, color, deltaTime);
-            Debug.DrawLine(br, tr, color, deltaTime);
-            Debug.DrawLine(tr, tl, color, deltaTime);
-            Debug.DrawLine(tl, bl, color, deltaTime);
 
             Debug.DrawRay(position, direction * rectangleSize.magnitude, color, deltaTime);
 #endif

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using _Game.GamePlay.Utils;
 using _KITSystem.SkillSystem.Core;
 using UnityEngine;
 
@@ -24,24 +25,9 @@ namespace _KITSystem.SkillSystem.Imp
         protected override void OnGizmos(Vector2 position, Vector2 direction, Color color, float deltaTime)
         {
 #if UNITY_EDITOR
-            int segments = 12;
-            
             Vector3 center = GetPosition(position, direction);
             
-            Vector3 prev = center + Vector3.right * radius;
-            
-            for (int i = 1; i <= segments; i++)
-            {
-                float t = i / (float)segments;
-                
-                float angle = t * Mathf.PI * 2f;
-                
-                Vector3 next = center + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
-                
-                Debug.DrawLine(prev, next, color, deltaTime);
-                
-                prev = next;
-            }
+            GizmosLine.Circle(center, radius, color, deltaTime);
 
             Debug.DrawRay(position, direction * radius, color, deltaTime);
 #endif
