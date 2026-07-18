@@ -23,9 +23,10 @@ namespace _Game.Configs
 
             foreach (SkillData skillData in skills)
             {
-                if (cached.TryAdd(skillData.skillId, skillData)) continue;
-
-                Debug.LogError($"Duplicate skill '{skillData.skillId}'");
+                if (!cached.TryAdd(skillData.skillId, skillData))
+                {
+                    Debug.LogError($"Duplicate skill '{skillData.skillId}'");
+                }
             }
         }
 
@@ -76,6 +77,9 @@ namespace _Game.Configs
         public TrajectoryStationaryPivot stationaryPivot;
         public float stationaryRandomRadius;
         public float stationaryDuration;
+        public float splineWindupDuration;
+        public float splineExecuteDuration;
+        public float splineRecoveryDuration;
         /*
          * @Collider
          */

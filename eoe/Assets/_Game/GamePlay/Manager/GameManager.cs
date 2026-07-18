@@ -161,22 +161,22 @@ namespace _Game.GamePlay.Manager
 
             Dictionary<int, List<WeaponUpgradeData>> dict = weaponConfig.GetUpgradesLevelWeapon(weaponId);
 
-            List<string> iconPaths = new List<string>();
+            List<string> spritesPath = new List<string>();
             
             foreach (var pair in dict)
             {
                 foreach (var upgradeData in pair.Value)
                 {
                     if(!string.IsNullOrEmpty(upgradeData.iconName))
-                        iconPaths.Add(upgradeData.iconName);
+                        spritesPath.Add(upgradeData.iconName);
                 }
             }
             
             if(!string.IsNullOrEmpty(weaponData.iconName))
-                iconPaths.Add(weaponData.iconName);
+                spritesPath.Add(weaponData.iconName);
 
-            await RegisterPools<Sprite>(iconPaths.ToArray());
-            
+            await RegisterPools<Sprite>(spritesPath.ToArray());
+
             float flip = currentWeaponSlot % 2 == 0 ? 1 : -1;
 
             currentWeaponSlot++;

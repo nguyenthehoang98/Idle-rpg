@@ -16,7 +16,6 @@ using _KITSystem.SkillSystem.Imp;
 using Cysharp.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace _Game.GamePlay.Model
 {
@@ -312,7 +311,7 @@ namespace _Game.GamePlay.Model
                 BounceDamagePercent = CurrentUpgradeData.bounceDamagePercent,
                 KillInstantBelowHealthPercent = CurrentUpgradeData.killInstantBelowHealthPercent,
                 Pivot = GetPivotPosition(),
-                Destination = destination,
+                Destination = destinationPosition,
                 Muzzle = muzzlePosition,
                 Entity = entity,
                 Trajectory = trajectory,
@@ -320,7 +319,7 @@ namespace _Game.GamePlay.Model
                 FlyWeapon = IsFlyWeapon ? this : null,
             };
             
-            SkillManager.CastSkill(SkillData, runtimeData);
+            SkillManager.CastSkill(SkillData, GetSkillData(runtimeData));
         }
 
         public virtual void OnStopAttack()
@@ -339,6 +338,8 @@ namespace _Game.GamePlay.Model
         protected virtual Vector3 GetPivotPosition() => transform.position;
 
         protected virtual Vector3 GetDestination(Vector3 @from, Vector3 @to) => @to;
+        
+        protected virtual SkillRuntimeData GetSkillData(SkillRuntimeData original) => original;
 
         protected virtual void PlayAudioAttackOneShot()
         {

@@ -151,11 +151,11 @@ namespace _Game.GamePlay.Manager
         private void CreateAgent_Private(Monster monster, MonsterRuntimeData runtimeData, MonsterData monsterData)
         {
             int agent = CreateAgent(
-                monster.transform.position, monsterData.radius, monsterData.speed,
+                monster.transform.position, monster.Radius, monsterData.speed,
                 stopDistance + monsterData.stopDistance
             ).agent;
             
-            monster.Initialize(monsterData);
+            monster.Initialize(monsterData, runtimeData);
             
             Temp temp = new Temp(monster, agent);
             additional.Enqueue(temp);

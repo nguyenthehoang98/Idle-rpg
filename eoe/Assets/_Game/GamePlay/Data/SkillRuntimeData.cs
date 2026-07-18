@@ -1,6 +1,7 @@
 using _Game.GamePlay.Model;
 using _KITSystem.SkillSystem.Imp;
 using UnityEngine;
+using UnityEngine.Splines;
 
 namespace _Game.GamePlay.Data
 {

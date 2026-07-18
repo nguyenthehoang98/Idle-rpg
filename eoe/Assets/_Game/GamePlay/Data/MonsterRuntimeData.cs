@@ -5,5 +5,6 @@ namespace _Game.GamePlay.Data
         public float AttackScale;
         public float HealthScale;
         public float ExpScale;
+        public float Scale;
     }
 }

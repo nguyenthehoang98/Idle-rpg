@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Splines;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -7,11 +8,12 @@ using UnityEditor;
 namespace _KITSystem.SkillSystem.Imp
 {
     [Serializable]
-    public struct TrajectoryData
+    public class TrajectoryData
     {
         public AnimationCurve projectileCurve;
         public AnimationCurve boomerangInitCurve;
         public AnimationCurve boomerangReturnCurve;
+        public SplineContainer spline;
     }
 
     public enum TrajectoryType
@@ -19,5 +21,6 @@ namespace _KITSystem.SkillSystem.Imp
         Projectile = 1,
         Boomerang = 2,
         Stationary = 3,
+        Spline = 4,
     }
 }

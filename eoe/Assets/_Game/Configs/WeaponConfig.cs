@@ -6,6 +6,7 @@ using K4os.Compression.LZ4;
 using UnityEngine;
 using UnityEngine.Serialization;
 #if UNITY_EDITOR
+using System.IO;
 using UnityEditor;
 #endif
 
@@ -44,7 +45,9 @@ namespace _Game.Configs
         public void OnValidateLinkConfig()
         {
 #if UNITY_EDITOR
-            TextAsset asset = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/_BattleSource/Configs/SkillConfig.json");
+            string path = Path.Combine(ConfigPath.Folder, "SkillConfig.json");
+
+            TextAsset asset = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
             
             byte[] unpick = LZ4Pickler.Unpickle(asset.bytes); 
 

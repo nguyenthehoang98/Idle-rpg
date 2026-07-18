@@ -531,6 +531,14 @@ namespace _Game.GamePlay.Manager
                         distance, skillData.boomerangOutboundDuration,
                         skillData.boomerangHangDuration, skillData.boomerangReturnDuration,
                         position, destination);
+                case TrajectoryType.Spline:
+                    duration = skillData.splineWindupDuration + skillData.splineExecuteDuration +
+                               skillData.splineRecoveryDuration;
+                    return new SplineTrajectory(trajectoryData.spline.Spline,
+                        skillData.splineWindupDuration, skillData.splineExecuteDuration,
+                        skillData.splineRecoveryDuration,
+                        position, destination
+                    );
                 case TrajectoryType.Stationary:
                     duration = skillData.stationaryDuration;
                     switch (skillData.stationaryPivot)

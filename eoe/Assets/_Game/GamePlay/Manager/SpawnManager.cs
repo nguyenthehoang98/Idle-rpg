@@ -20,17 +20,21 @@ namespace _Game.GamePlay.Manager
         [SerializeField] private Transform[] portals;
 
         public event Action<int> OnWaveSpawnCompleted;
+      
+        private Dictionary<int, GameObject> cachedMonster = new Dictionary<int, GameObject>();
+        private HashSet<string> names = new HashSet<string>();
+        private SpawnTimer[] temps;
+       
+        private MonsterConfig monsterConfig;
+       
+        private SpawnData[] currentSpawnsData;
+        private LevelData levelData;
+
+        private int maxWave;
+        private int waveIndex;
 
         public bool IsPaused { get; set; }
         public bool IsCompleted { get; private set; }
-
-        private SpawnTimer[] temps;
-        private Dictionary<int, GameObject> cachedMonster = new Dictionary<int, GameObject>();
-        private HashSet<string> names = new HashSet<string>();
-        private MonsterConfig monsterConfig;
-        private WaveData currentWaveData;
-        private LevelData levelData;
-        private int waveIndex;
 
         public void SetLevel(int level)
         {
@@ -46,71 +50,70 @@ namespace _Game.GamePlay.Manager
         {
             GameObject go;
 
-            for (int wave = 0; wave < levelData.waves.Length; wave++)
+            for (int i = 0; i < levelData.spawns.Length; i++)
             {
-                WaveData waveData = levelData.waves[wave];
+                SpawnData spawnData = levelData.spawns[i];
 
-                for (int spawn = 0; spawn < waveData.spawns.Length; spawn++)
+                maxWave = Mathf.Max(maxWave, spawnData.wave);
+
+                int monsterId = spawnData.monster;
+
+                if (cachedMonster.ContainsKey(monsterId)) continue;
+
+                bool found = monsterConfig.TryGetMonsterData(monsterId, out var monsterData);
+                if (!found)
                 {
-                    SpawnData spawnData = waveData.spawns[spawn];
+                    Debug.LogError($"Not found monster data with id '{monsterId}'");
+                    continue;
+                }
 
-                    int monsterId = spawnData.monsterId;
-
-                    if (cachedMonster.ContainsKey(monsterId)) continue;
-
-                    bool found = monsterConfig.TryGetMonsterData(monsterId, out var monsterData);
-                    if (!found)
-                    {
-                        Debug.LogError($"Not found monster data with id '{monsterId}'");
-                        continue;
-                    }
-
-                    // CACHE VFX
-                    go = await AssetBundleManager.GetAssetCached<GameObject>(monsterData.deathVfx);
+                // CACHE VFX
+                go = await AssetBundleManager.GetAssetCached<GameObject>(monsterData.deathVfx);
                     
-                    if (names.Add(monsterData.deathVfx))
-                    {
-                        Pool.RegisterPool(go, true);
-                    }
+                if (names.Add(monsterData.deathVfx))
+                {
+                    Pool.RegisterPool(go, true);
+                }
 
-                    go = await AssetBundleManager.GetAssetCached<GameObject>(monsterData.prefabName);
+                go = await AssetBundleManager.GetAssetCached<GameObject>(monsterData.prefabName);
 
-                    cachedMonster.TryAdd(monsterId, go);
+                cachedMonster.TryAdd(monsterId, go);
                     
-                    if (names.Add(monsterData.prefabName))
-                    {
-                        Pool.RegisterPool(go, true);
-                    }
-
-                    if (names.Add(monsterData.skin))
-                    {
-                        await AssetBundleManager.GetAssetCached<Sprite>(monsterData.skin);
-                    }
+                if (names.Add(monsterData.prefabName))
+                {
+                    Pool.RegisterPool(go, true);
+                }
                     
-                    if (!string.IsNullOrEmpty(monsterData.deathAudioClip) && names.Add(monsterData.deathAudioClip))
-                    {
-                        await AssetBundleManager.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
-                    }
+                if (!string.IsNullOrEmpty(monsterData.deathAudioClip) && names.Add(monsterData.deathAudioClip))
+                {
+                    await AssetBundleManager.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
                 }
             }
 
-            go = await AssetBundleManager.GetAsset<GameObject>(levelData.backgroundName);
+            go = await AssetBundleManager.GetAsset<GameObject>(levelData.backgroundPrefabName);
             Object.Instantiate(go).transform.position = Vector3.zero;
 
-            LoadWave(0);
+            LoadWave(1);
 
             await Task.CompletedTask;
         }
 
         private bool LoadWave(int wave)
         {
-            if (wave >= 0 && wave < levelData.waves.Length)
+            if (wave >= 0 && wave < maxWave)
             {
                 waveIndex = wave;
 
-                currentWaveData = levelData.waves[waveIndex];
+                List<SpawnData> list = new List<SpawnData>();
 
-                SpawnData[] spawnsData = currentWaveData.spawns;
+                foreach (var spawnData in levelData.spawns)
+                {
+                    if(spawnData.wave == wave) list.Add(spawnData);
+                }
+
+                currentSpawnsData = list.ToArray();
+
+                SpawnData[] spawnsData = currentSpawnsData;
 
                 temps = new SpawnTimer[spawnsData.Length];
 
@@ -135,9 +138,9 @@ namespace _Game.GamePlay.Manager
 
             bool isWaveCompleted = true;
 
-            for (var i = 0; i < currentWaveData.spawns.Length; i++)
+            for (var i = 0; i < currentSpawnsData.Length; i++)
             {
-                SpawnData spawnData = currentWaveData.spawns[i];
+                SpawnData spawnData = currentSpawnsData[i];
 
                 SpawnTimer data = temps[i];
 
@@ -181,9 +184,9 @@ namespace _Game.GamePlay.Manager
                 RandomUtils.Range(-data.radius, data.radius)
             );
             
-            GameObject instance = Pool.Instantiate(cachedMonster[data.monsterId], position, false);
+            GameObject instance = Pool.Instantiate(cachedMonster[data.monster], position, false);
             
-            monsterConfig.TryGetMonsterData(data.monsterId, out MonsterData monsterData);
+            monsterConfig.TryGetMonsterData(data.monster, out MonsterData monsterData);
             
             Monster monster = instance.GetComponent<Monster>();
             
@@ -191,7 +194,8 @@ namespace _Game.GamePlay.Manager
             {
                 AttackScale = data.attackScale,
                 HealthScale = data.healthScale,
-                ExpScale = data.expScale
+                ExpScale = data.expScale,
+                Scale = data.scale,
             };
             
             AgentManager.Create_Agent(monster, runtimeData, monsterData);

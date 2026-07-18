@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,7 +8,14 @@ namespace _Game.GamePlay.Model
     {
         [SerializeField] private Transform rendererTransform;
         [SerializeField] private SpriteRenderer[] renderers;
-        
+
+        private Vector3 localScale;
+
+        private void Awake()
+        {
+            localScale = rendererTransform.localScale;
+        }
+
         private void OnEnable()
         {
             StartCoroutine(AutoSort());            
@@ -18,13 +26,15 @@ namespace _Game.GamePlay.Model
             while (true)
             {
                 int idy = Mathf.RoundToInt(-transform.position.y * 1000);
+                
                 for (int i = 0; i < renderers.Length; i++)
                 {
                     renderers[i].sortingOrder = idy + i;
                 }
 
-                int x = transform.position.x < 0 ? 1 : -1;
-                rendererTransform.localScale = new Vector3(x, 1, 1);
+                int flip = transform.position.x < 0 ? 1 : -1;
+                
+                rendererTransform.localScale = new Vector3(Mathf.Abs(localScale.x) * flip, localScale.y, localScale.z);
                 
                 yield return new WaitForSeconds(1f);
             }

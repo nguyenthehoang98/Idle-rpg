@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using _KITSystem.Config;
 using K4os.Compression.LZ4;
@@ -14,7 +15,7 @@ namespace _Game.Configs
     public class LevelConfig : IGameConfig
     {
         [SerializeField, JsonProperty] private List<LevelData> levels = new List<LevelData>();
-        [JsonProperty] private List<WaveData> waves = new List<WaveData>();
+       
         [JsonProperty] private List<SpawnData> spawns = new List<SpawnData>();
 
         private Dictionary<int, LevelData> cached;
@@ -25,69 +26,35 @@ namespace _Game.Configs
 
             foreach (var data in levels)
             {
-                if (!cached.TryAdd(data.levelId, data)) Debug.LogError($"Duplicate level '{data.levelId}'");
+                if (!cached.TryAdd(data.level, data)) Debug.LogError($"Duplicate level '{data.level}'");
             }
         }
 
         public void OnPostImported()
         {
-            for (int i = 0; i < waves.Count; i++)
-            {
-                WaveData data = waves[i];
-                data.spawns = new SpawnData[data.groupsId.Length];
-
-                for (var j = 0; j < data.groupsId.Length; j++)
-                {
-                    string spawnGroupId = data.groupsId[j];
-                    bool found = false;
-                    foreach (var spawnData in spawns)
-                    {
-                        if (string.Equals(spawnData.groupId, spawnGroupId))
-                        {
-                            found = true;
-                            data.spawns[j] = spawnData;
-                            break;
-                        }
-                    }
-
-                    if (!found)
-                        Debug.LogError($"Not found spawn group at wave '{data.waveId}', group id '{spawnGroupId}'");
-                }
-
-                waves[i] = data;
-            }
-
             for (int i = 0; i < levels.Count; i++)
             {
-                LevelData data = levels[i];
-                data.waves = new WaveData[data.wavesId.Length];
+                LevelData levelData = levels[i];
 
-                for (var j = 0; j < data.wavesId.Length; j++)
+                List<SpawnData> list = new List<SpawnData>();
+                
+                foreach (var spawnData in spawns)
                 {
-                    var waveId = data.wavesId[j];
-                    bool found = false;
-                    foreach (var waveData in waves)
-                    {
-                        if (string.Equals(waveData.waveId, waveId))
-                        {
-                            data.waves[j] = waveData;
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (!found)
-                        Debug.LogError($"Not found level '{data.levelId}', wave '{waveId}'");
+                    if (spawnData.level == levelData.level) list.Add(spawnData);
                 }
-
-                levels[i] = data;
+                
+                levelData.spawns = list.ToArray();
+                
+                levels[i] = levelData;
             }
         }
 
         public void OnValidateLinkConfig()
         {
 #if UNITY_EDITOR
-            TextAsset asset = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/_BattleSource/Configs/MonsterConfig.json");
+            string path = Path.Combine(ConfigPath.Folder, "MonsterConfig.json");
+            
+            TextAsset asset = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
 
             byte[] unpick = LZ4Pickler.Unpickle(asset.bytes); 
 
@@ -101,14 +68,13 @@ namespace _Game.Configs
             {
                 LevelData levelData = levels[i];
 
-                foreach (var waveData in levelData.waves)
+                foreach (var spawnData in levelData.spawns)
                 {
-                    foreach (var spawnData in waveData.spawns)
-                    {
-                        if (monsterConfig.TryGetMonsterData(spawnData.monsterId, out MonsterData monsterData)) continue;
+                    if (monsterConfig.TryGetMonsterData(spawnData.monster, out MonsterData data)) continue;
 
-                        Debug.LogError($"Not found monster id '{spawnData.monsterId}' at spawn group id '{waveData.groupsId}'");
-                    }
+                    Debug.LogError(
+                        $"Not found monster '{spawnData.monster}', wave {spawnData.wave}, level {levelData.level} "
+                    );
                 }
             }
 #endif
@@ -123,30 +89,22 @@ namespace _Game.Configs
     [Serializable]
     public struct LevelData
     {
-        public int levelId;
-        public string levelName;
-        public string backgroundName;
-        public WaveData[] waves;
-        [JsonProperty, HideInInspector] public string[] wavesId;
-    }
-
-    [Serializable]
-    public struct WaveData
-    {
-        public string waveId;
-        [JsonProperty, HideInInspector] public string[] groupsId;
+        public int level;
+        public string backgroundPrefabName;
         public SpawnData[] spawns;
     }
 
     [Serializable]
     public struct SpawnData
     {
-        public string groupId;
-        public int monsterId;
+        public int level;
+        public int wave;
+        public int monster;
         public int total;
         public float attackScale;
         public float healthScale;
         public float expScale;
+        public float scale;
         public float radius;
         public float startTime;
         public float endTime;

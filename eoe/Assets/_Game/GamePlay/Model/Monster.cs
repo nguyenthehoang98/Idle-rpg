@@ -1,22 +1,25 @@
 using System;
 using _Game.Configs;
+using _Game.GamePlay.Data;
 using _Game.GamePlay.Manager;
 using _KITSystem.Resource;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace _Game.GamePlay.Model
 {
-    [RequireComponent(typeof(MonsterSkin))]
     [RequireComponent(typeof(MonsterSortingLayer))]
     public class Monster : MonoBehaviour
     {
         [SerializeField] private Transform scaleTransform;
-        [SerializeField] private Transform rendererTransform;
         [SerializeField] private UnityEvent OnBeHit;
         [SerializeField] private UnityEvent OnDeath;
-        
+        [SerializeField] private float radius;
+         
         public static event Action<Monster> OnMonsterEnable;
         public static event Action<Monster> OnMonsterDisable;
 
@@ -29,6 +32,27 @@ namespace _Game.GamePlay.Model
         private float elapsedTime;
         private float deltaTime;
         private bool isInitialized;
+        
+        public float Radius => radius;
+
+        private void OnDrawGizmos()
+        {
+#if UNITY_EDITOR
+            if (Application.isPlaying) return;
+            
+            Vector3 center = transform.position;
+            
+            Color color = Color.green;
+            
+            Handles.color = color;
+            
+            Handles.DrawWireDisc(center, Vector3.forward, radius, 2f);
+            
+            Handles.color = new Color(color.r, color.g, color.b, 0.1f);
+            
+            Handles.DrawSolidDisc(center, Vector3.forward, radius);
+#endif
+        }
 
         private void FixedUpdate()
         {
@@ -41,10 +65,8 @@ namespace _Game.GamePlay.Model
             transform.position = Vector3.Lerp(previousPosition, targetPosition, t);
         }
 
-        public async void Initialize(MonsterData monsterData)
+        public async void Initialize(MonsterData monsterData, MonsterRuntimeData runtimeData)
         {
-            await GetComponent<MonsterSkin>().UpdateSkin(monsterData.skin);
-            
             if (deathAudioClip == null && !string.IsNullOrEmpty(monsterData.deathAudioClip))
             {
                 deathAudioClip = await AssetBundleManager.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
@@ -57,11 +79,8 @@ namespace _Game.GamePlay.Model
             
             deathVolume = monsterData.deathVolume;
 
-            int x = transform.position.x < 0 ? 1 : -1;
-
-            scaleTransform.localScale = monsterData.scale * Vector3.one;
-            rendererTransform.localScale = new Vector3(x, 1, 1);
-
+            scaleTransform.localScale = runtimeData.Scale * Vector3.one;
+            
             OnMonsterEnable?.Invoke(this);
             
             gameObject.SetActive(true);

@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Codice.Client.BaseCommands;
 using K4os.Compression.LZ4;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -27,7 +28,6 @@ namespace _KITSystem.Config.Editor
         private HashSet<string> downloading = new HashSet<string>();
 
         private const string EditorPrefsKeyPrefix = "ConfigDownloader_URL_";
-        private const string EditorPrefsKeyFolderPrefix = "ConfigDownloader_Folder";
         private const string PRE_PATH = "https://opensheet.elk.sh/";
         private static readonly string ROOT_FORMAT_PATH = "https://docs.google.com/spreadsheets/d/{0}/edit";
 
@@ -78,15 +78,14 @@ namespace _KITSystem.Config.Editor
                 {
                     ValidateAll();
                 }
-                
+
                 GUILayout.Space(10);
-                
-                var folder = EditorPrefs.GetString(EditorPrefsKeyFolderPrefix);
+
+                var folder = ConfigPath.Folder;
+
                 var newFolder = EditorGUILayout.TextField(folder);
-                if (newFolder != folder)
-                {
-                    EditorPrefs.SetString(EditorPrefsKeyFolderPrefix, newFolder);
-                }
+
+                if (newFolder != folder) ConfigPath.Folder = newFolder;
             }
 
             using (new GUILayout.HorizontalScope())
@@ -276,7 +275,7 @@ namespace _KITSystem.Config.Editor
                     ?.Invoke(target, null);
 
                 var projectPath = Path.GetDirectoryName(Application.dataPath);
-                var folder = EditorPrefs.GetString(EditorPrefsKeyFolderPrefix);
+                var folder = ConfigPath.Folder;
                 var fileName = type.Name + ".json";
                 var savePath = Path.Combine(projectPath, folder, fileName);
 
@@ -449,8 +448,10 @@ namespace _KITSystem.Config.Editor
 
         private async void ValidateAll()
         {
-            var folder = EditorPrefs.GetString(EditorPrefsKeyFolderPrefix);
+            var folder = ConfigPath.Folder;
+            
             var projectPath = Path.GetDirectoryName(Application.dataPath);
+
             foreach (var type in configTypes)
             {
                 string fullName = type.FullName;

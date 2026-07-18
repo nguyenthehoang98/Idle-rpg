@@ -40,6 +40,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2470093582212de4faaaae7812f327f4
+    m_Address: Katana.Equipment
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2915d59e1c9ef6447b8b27b0defe1c7b
     m_Address: T_Powerup.Skill.1002.2
     m_ReadOnly: 0
@@ -52,6 +57,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2bacccd9ef9a3284495cb63d35d408c7
     m_Address: T_Powerup.Skill.1002.1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2d095e496fb61304eb29c5d159d8bbaf
+    m_Address: Bee.Monster
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -190,11 +200,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c891f9ddf66145b47a575fa28a8ec208
-    m_Address: BrainMonster-1.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d4e05df0a033f2849a09f73d90249352
     m_Address: fx.death
     m_ReadOnly: 0
@@ -222,11 +227,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ef1a412728c5a68478aef282561ec5dc
     m_Address: level_up.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f0e8072150d245143aac9ac7c463891f
-    m_Address: brain.monster
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
