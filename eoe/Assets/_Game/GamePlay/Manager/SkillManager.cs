@@ -65,7 +65,7 @@ namespace _Game.GamePlay.Manager
             }
 
             // ~todo: force cast skill if weapon can fly
-            if (runtimeData.IsFlyWeapon)
+            if (runtimeData.UseWeapon)
             {
                 instance.CastSkill_Private(skillData, runtimeData, position, destination, 1);
                 
@@ -158,16 +158,16 @@ namespace _Game.GamePlay.Manager
            
             List<BaseCollider> colliders = new List<BaseCollider>();
             
-            bool isFlyWeapon = runtimeData.IsFlyWeapon;
+            bool isFlyWeapon = runtimeData.UseWeapon;
           
             if (isFlyWeapon)
             {
-                projectile = runtimeData.FlyWeapon.GetComponent<Projectile>();
+                projectile = runtimeData.Weapon.GetComponent<Projectile>();
           
                 if (projectile == null)
                 {
 #if UNITY_EDITOR
-                    Debug.LogError("Stop cast skill because Projectile Component is null, prefab " + runtimeData.FlyWeapon.name);
+                    Debug.LogError("Stop cast skill because Projectile Component is null, prefab " + runtimeData.Weapon.name);
 #endif
                     return;
                 }
@@ -256,25 +256,50 @@ namespace _Game.GamePlay.Manager
             {
                 if (trajectory is BoomerangTrajectory boomerangTrajectory)
                 {
-                    FlyWeapon flyWeapon = runtimeData.FlyWeapon as FlyWeapon;
+                    FlyWeapon flyWeapon = runtimeData.Weapon as FlyWeapon;
                     
                     boomerangTrajectory.OnChangePhase += phase =>
                     {
                         switch (phase)
                         {
                             case BoomerangTrajectory.Phase.Outbound:
-                                flyWeapon.OutboundFly();
+                                flyWeapon.Startup();
                                 break;
                             case BoomerangTrajectory.Phase.Hang:
                                 projectile.StopLerpMotion();
-                                flyWeapon.HangFly();
+                                flyWeapon.Phase01();
                                 break;
                             case BoomerangTrajectory.Phase.Return:
                                 projectile.StopLerpMotion();
-                                flyWeapon.ReturnFly();
+                                flyWeapon.Phase02();
                                 break;
                             case BoomerangTrajectory.Phase.Complete:
-                                flyWeapon.CompleteFly();
+                                flyWeapon.Complete();
+                                break;
+                        }
+                    };
+                }
+                else if (trajectory is SplineTrajectory splineTrajectory)
+                {
+                    FlyWeapon flyWeapon = runtimeData.Weapon as FlyWeapon;
+                    
+                    splineTrajectory.OnChangePhase += phase =>
+                    {
+                        switch (phase)
+                        {
+                            case SplineTrajectory.Phase.Windup:
+                                flyWeapon.Startup();
+                                break;
+                            case SplineTrajectory.Phase.Execute:
+                                projectile.StopLerpMotion();
+                                flyWeapon.Phase01();
+                                break;
+                            case SplineTrajectory.Phase.Recovery:
+                                projectile.StopLerpMotion();
+                                flyWeapon.Phase02();
+                                break;
+                            case SplineTrajectory.Phase.Complete:
+                                flyWeapon.Complete();
                                 break;
                         }
                     };

@@ -316,8 +316,8 @@ namespace _Game.GamePlay.Model
                 Muzzle = muzzlePosition,
                 Entity = entity,
                 Trajectory = trajectory,
-                IsFlyWeapon = IsFlyWeapon,
-                FlyWeapon = IsFlyWeapon ? this : null,
+                UseWeapon = IsFlyWeapon,
+                Weapon = IsFlyWeapon ? this : null,
             };
             
             SkillManager.CastSkill(SkillData, GetSkillData(runtimeData));

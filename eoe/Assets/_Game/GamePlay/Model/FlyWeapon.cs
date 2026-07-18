@@ -10,9 +10,9 @@ namespace _Game.GamePlay.Model
     {
         [Header("Animation")]
         [SerializeField] private Animator animator;
-        [SerializeField] private LitMotionAnimation outboundAnimation;
-        [SerializeField] private LitMotionAnimation hangAnimation;
-        [SerializeField] private LitMotionAnimation returnAnimation;
+        [SerializeField] private LitMotionAnimation startupAnimation;
+        [SerializeField] private LitMotionAnimation phase01Animation;
+        [SerializeField] private LitMotionAnimation phase02Animation;
         [SerializeField] private LitMotionAnimation completeAnimation;
         [SerializeField] private float revertRotateDuration = 0.15f;
         
@@ -34,13 +34,13 @@ namespace _Game.GamePlay.Model
             animator.enabled = true;
         }
 
-        public void OutboundFly() => outboundAnimation?.Play();
+        public void Startup() => startupAnimation?.Play();
 
-        public void HangFly() => hangAnimation?.Play();
+        public void Phase01() => phase01Animation?.Play();
 
-        public void ReturnFly() => returnAnimation?.Play();
+        public void Phase02() => phase02Animation?.Play();
 
-        public void CompleteFly()
+        public void Complete()
         {
             if (completeAnimation != null)
             {

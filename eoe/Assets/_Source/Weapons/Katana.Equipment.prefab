@@ -60,7 +60,7 @@ MonoBehaviour:
       type: {class: TransformRotationAnimation, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
       data:
         displayName: Rotation
-        enabled: 1
+        enabled: 0
         target: {fileID: 154186919891485008}
         settings:
           startValue: {x: 0, y: 0, z: 0}
@@ -148,7 +148,6 @@ Transform:
   - {fileID: 6937620022221262534}
   - {fileID: 5400583493042846177}
   - {fileID: 7110390180652751094}
-  - {fileID: 746563086158845614}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &417439057925282555
@@ -200,15 +199,6 @@ MonoBehaviour:
         weightedMode: 0
         inWeight: 0
         outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -220,15 +210,6 @@ MonoBehaviour:
         value: 0
         inSlope: 2
         outSlope: 2
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
@@ -248,19 +229,10 @@ MonoBehaviour:
         weightedMode: 0
         inWeight: 0
         outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    spline: {fileID: 6409529089224015946}
+    spline: {fileID: 7780506963776454933, guid: 67b4b286c8e6a4f45a43e58cf1ac61e2, type: 3}
   rotatePivot: {fileID: 154186919891485008}
   rotationCurve:
     serializedVersion: 2
@@ -289,9 +261,9 @@ MonoBehaviour:
   rotationDuration: 0.15
   muzzle: {fileID: 8792860407553118502}
   animator: {fileID: 417439057925282555}
-  outboundAnimation: {fileID: 2765871460923298154}
-  hangAnimation: {fileID: 0}
-  returnAnimation: {fileID: 2989926422287772793}
+  startupAnimation: {fileID: 2765871460923298154}
+  phase01Animation: {fileID: 2989926422287772793}
+  phase02Animation: {fileID: 7611104889850670216}
   completeAnimation: {fileID: 615097707071505995}
   revertRotateDuration: 0.1
 --- !u!114 &4427382285310395892
@@ -582,7 +554,7 @@ GameObject:
   - component: {fileID: 6942513229689788970}
   - component: {fileID: 2765871460923298154}
   m_Layer: 0
-  m_Name: outbound
+  m_Name: startup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -630,7 +602,7 @@ MonoBehaviour:
       type: {class: TransformRotationAnimation, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
       data:
         displayName: Rotation
-        enabled: 1
+        enabled: 0
         target: {fileID: 154186919891485008}
         settings:
           startValue: {x: 0, y: 0, z: 0}
@@ -672,138 +644,6 @@ MonoBehaviour:
           schedulerType: 0
           additionalSettings: 1
         useWorldSpace: 0
---- !u!1 &4719539171867545348
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 746563086158845614}
-  - component: {fileID: 6409529089224015946}
-  m_Layer: 0
-  m_Name: Spline
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &746563086158845614
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4719539171867545348}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 1, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8792860407553118502}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
---- !u!114 &6409529089224015946
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4719539171867545348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dab5c7d4c32e743048dfca98e2d5914f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Splines::UnityEngine.Splines.SplineContainer
-  m_Spline:
-    m_EditModeType: 1
-    m_Knots: []
-    m_MetaData: []
-    m_Closed: 0
-    m_IntData:
-      m_Data: []
-    m_FloatData:
-      m_Data: []
-    m_Float4Data:
-      m_Data: []
-    m_ObjectData:
-      m_Data: []
-  m_Splines:
-  - m_EditModeType: 1
-    m_Knots:
-    - Position:
-        x: -0.000000021855694
-        y: 0
-        z: 0
-      TangentIn:
-        x: 0
-        y: 0
-        z: -0.7120003
-      TangentOut:
-        x: 0
-        y: 0
-        z: 0.7120003
-      Rotation:
-        value:
-          x: -0.1261654
-          y: 0.69576025
-          z: 0.12616539
-          w: 0.69576025
-    - Position:
-        x: -0.000000021855694
-        y: 1
-        z: 0
-      TangentIn:
-        x: 0
-        y: 0
-        z: -0.7120003
-      TangentOut:
-        x: 0
-        y: 0
-        z: 0.7120003
-      Rotation:
-        value:
-          x: -0.1261654
-          y: -0.69576025
-          z: -0.12616539
-          w: 0.69576025
-    - Position:
-        x: -0.00000002185569
-        y: 2
-        z: 0
-      TangentIn:
-        x: 0
-        y: 0
-        z: -0.7120003
-      TangentOut:
-        x: 0
-        y: 0
-        z: 0.7120003
-      Rotation:
-        value:
-          x: -0.1261654
-          y: 0.69576025
-          z: 0.12616539
-          w: 0.69576025
-    m_MetaData:
-    - Mode: 4
-      Tension: 0.5
-    - Mode: 4
-      Tension: 0.5
-    - Mode: 4
-      Tension: 0.5
-    m_Closed: 0
-    m_IntData:
-      m_Data: []
-    m_FloatData:
-      m_Data: []
-    m_Float4Data:
-      m_Data: []
-    m_ObjectData:
-      m_Data: []
-  m_Knots:
-    m_KnotsLink: []
 --- !u!1 &6139367762931335681
 GameObject:
   m_ObjectHideFlags: 0
@@ -815,7 +655,7 @@ GameObject:
   - component: {fileID: 4089492157703157729}
   - component: {fileID: 2989926422287772793}
   m_Layer: 0
-  m_Name: return
+  m_Name: phase01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -911,7 +751,156 @@ MonoBehaviour:
       type: {class: EventComponent, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
       data:
         displayName: Event
-        enabled: 1
+        enabled: 0
+        onPlay:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 4427382285310395892}
+              m_TargetAssemblyTypeName: _Game.GamePlay.Model.Projectile, Assembly-CSharp
+              m_MethodName: DisableTrail
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+            - m_Target: {fileID: 4427382285310395892}
+              m_TargetAssemblyTypeName: _Game.GamePlay.Model.Projectile, Assembly-CSharp
+              m_MethodName: BlockRotation
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+        onStop:
+          m_PersistentCalls:
+            m_Calls: []
+    - rid: 8843438356789461065
+      type: {class: DebugComponent, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
+      data:
+        displayName: Debug
+        enabled: 0
+        messageOnPlay: return
+        logTypeOnPlay: 0
+        breakOnPlay: 1
+        messageOnStop: 
+        logTypeOnStop: 3
+        breakOnStop: 0
+--- !u!1 &6625312836499562999
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1000850691636589646}
+  - component: {fileID: 7611104889850670216}
+  m_Layer: 0
+  m_Name: phase02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1000850691636589646
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6625312836499562999}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7110390180652751094}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7611104889850670216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6625312836499562999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cc6819e64e4c44beb63ea2ef45e1a6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LitMotion.Animation::LitMotion.Animation.LitMotionAnimation
+  isReverseWhenStop: 0
+  autoStopMode: 0
+  autoPlayMode: 0
+  animationMode: 0
+  components:
+  - rid: 8843438356789461056
+  - rid: 8843438356789461060
+  - rid: 8843438356789461065
+  playOnAwake: 1
+  version: 1
+  references:
+    version: 2
+    RefIds:
+    - rid: 8843438356789461056
+      type: {class: TransformRotationAnimation, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
+      data:
+        displayName: Rotation
+        enabled: 0
+        target: {fileID: 154186919891485008}
+        settings:
+          startValue: {x: 0, y: 0, z: 0}
+          endValue: {x: 0, y: 0, z: 180}
+          relative: 0
+          duration: 0
+          ease: 0
+          customEaseCurve:
+            serializedVersion: 2
+            m_Curve:
+            - serializedVersion: 3
+              time: 0
+              value: 0
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            - serializedVersion: 3
+              time: 1
+              value: 1
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+          delay: 0
+          delayType: 0
+          loops: 1
+          loopType: 0
+          cancelOnError: 0
+          skipValuesDuringDelay: 0
+          immediateBind: 0
+          schedulerType: 0
+          additionalSettings: 0
+        useWorldSpace: 0
+    - rid: 8843438356789461060
+      type: {class: EventComponent, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
+      data:
+        displayName: Event
+        enabled: 0
         onPlay:
           m_PersistentCalls:
             m_Calls:
@@ -1080,6 +1069,7 @@ Transform:
   m_Children:
   - {fileID: 6942513229689788970}
   - {fileID: 4089492157703157729}
+  - {fileID: 1000850691636589646}
   - {fileID: 7705630132506762244}
   m_Father: {fileID: 8792860407553118502}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

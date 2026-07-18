@@ -26,7 +26,7 @@ namespace _Game.GamePlay.Data
         public Vector2 Pivot;
         public Vector2 Muzzle;
         public Vector2 Destination;
-        public bool IsFlyWeapon;
-        public BaseWeapon FlyWeapon;
+        public bool UseWeapon;
+        public BaseWeapon Weapon;
     }
 }

@@ -279,9 +279,9 @@ MonoBehaviour:
   rotationDuration: 0.15
   muzzle: {fileID: 8792860407553118502}
   animator: {fileID: 417439057925282555}
-  outboundAnimation: {fileID: 2765871460923298154}
-  hangAnimation: {fileID: 0}
-  returnAnimation: {fileID: 2989926422287772793}
+  startupAnimation: {fileID: 2765871460923298154}
+  phase01Animation: {fileID: 0}
+  phase02Animation: {fileID: 2989926422287772793}
   completeAnimation: {fileID: 615097707071505995}
   revertRotateDuration: 0.1
 --- !u!114 &4427382285310395892
@@ -562,7 +562,7 @@ GameObject:
   - component: {fileID: 6942513229689788970}
   - component: {fileID: 2765871460923298154}
   m_Layer: 0
-  m_Name: outbound
+  m_Name: startup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -663,7 +663,7 @@ GameObject:
   - component: {fileID: 4089492157703157729}
   - component: {fileID: 2989926422287772793}
   m_Layer: 0
-  m_Name: return
+  m_Name: phase02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
