@@ -55,7 +55,7 @@ MonoBehaviour:
   trailRenderer: {fileID: 4797572086999235470}
   colliders:
   - type: 0
-    circleRadius: 0.05
+    circleRadius: 0.08
     rectangleSize: {x: 0, y: 0}
     relativePosition: {x: 0, y: 0}
     dependencyRelativeRotation: 0

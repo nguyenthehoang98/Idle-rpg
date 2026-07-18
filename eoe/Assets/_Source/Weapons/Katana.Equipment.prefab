@@ -288,17 +288,12 @@ MonoBehaviour:
   trailRenderer: {fileID: 2925384481517476279}
   colliders:
   - type: 0
-    circleRadius: 0.07
+    circleRadius: 0.13
     rectangleSize: {x: 0.2, y: 0.1}
     relativePosition: {x: 0, y: -0.05}
     dependencyRelativeRotation: 0
   - type: 0
-    circleRadius: 0.07
-    rectangleSize: {x: 0.2, y: 0.1}
-    relativePosition: {x: 0.14, y: -0.05}
-    dependencyRelativeRotation: 0
-  - type: 0
-    circleRadius: 0.1
+    circleRadius: 0.13
     rectangleSize: {x: 0.2, y: 0.1}
     relativePosition: {x: 0.3, y: 0}
     dependencyRelativeRotation: 0

@@ -13,7 +13,7 @@ GameObject:
   m_Layer: 0
   m_Name: Katana.Spline
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -25,13 +25,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8247773978670042715}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 1, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7780506963776454933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,59 +61,59 @@ MonoBehaviour:
   - m_EditModeType: 1
     m_Knots:
     - Position:
-        x: 0
-        y: 0
-        z: 0
+        x: 0.1080558
+        y: -1.3410755
+        z: 0.00000094398746
       TangentIn:
         x: -0
         y: -0
-        z: -0.26925823
+        z: -0.4113359
       TangentOut:
         x: 0
         y: 0
-        z: 0.26925823
+        z: 0.4113359
       Rotation:
         value:
-          x: -0.3964244
-          y: 0.5855319
-          z: 0.3964244
-          w: 0.5855319
+          x: -0.57525665
+          y: 0.41119307
+          z: -0.41119274
+          w: 0.57525694
     - Position:
-        x: 1
-        y: 2.5
-        z: 0
+        x: 3.9999766
+        y: -0.0096571585
+        z: 0.000000972895
       TangentIn:
         x: -0
         y: -0
-        z: -0.8333334
+        z: -0.39857644
       TangentOut:
         x: 0
         y: 0
-        z: 0.8333334
+        z: 0.39597005
       Rotation:
         value:
-          x: -0.5
-          y: -0.5
-          z: -0.5
-          w: 0.5
+          x: 0.70700693
+          y: 0.011901912
+          z: -0.01190209
+          w: -0.70700634
     - Position:
-        x: 0
-        y: 5
-        z: 0
+        x: 0.07908332
+        y: 1.0429909
+        z: -0.0000009061714
       TangentIn:
         x: -0
         y: -0
-        z: -0.26925823
+        z: -0.4059738
       TangentOut:
         x: 0
         y: 0
-        z: 0.26925823
+        z: 0.4059738
       Rotation:
         value:
-          x: -0.5855319
-          y: 0.3964244
-          z: 0.5855319
-          w: 0.3964244
+          x: 0.56109035
+          y: 0.43032292
+          z: -0.43032238
+          w: -0.5610904
     m_MetaData:
     - Mode: 0
       Tension: 0.5

@@ -303,7 +303,7 @@ MonoBehaviour:
           immediateBind: 0
           schedulerType: 0
           additionalSettings: 1
-        propertyName: _Saturate
+        propertyName: _HitEffectBlend
     - rid: 607417095885946946
       type: {class: SpriteRendererMaterialAnimation, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
       data:
@@ -349,4 +349,4 @@ MonoBehaviour:
           immediateBind: 0
           schedulerType: 0
           additionalSettings: 0
-        propertyName: _Saturate
+        propertyName: _HitEffectBlend

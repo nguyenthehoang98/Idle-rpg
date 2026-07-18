@@ -1,4 +1,5 @@
 using System;
+using _Game.GamePlay.Utils;
 using _KITSystem.SkillSystem.Core;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -20,6 +21,7 @@ namespace _KITSystem.SkillSystem.Imp
         private Vector2 direction;
         private Vector2 deltaPosition;
         private float elapsedTime;
+        private float totalElapsedTime;
 
         public SplineTrajectory(Spline spline,
             float windupDuration, float executeDuration, float recoveryDuration,
@@ -32,7 +34,7 @@ namespace _KITSystem.SkillSystem.Imp
 
             Vector2 d = (goal - start).normalized;
             this.startSplinePosition = ValidatePosition(start, spline.EvaluatePosition(0), d);
-            this.startSplinePosition = ValidatePosition(start, spline.EvaluatePosition(1), d);
+            this.endSplinePosition = ValidatePosition(start, spline.EvaluatePosition(1), d);
         }
 
         public override Vector2 EvaluatePosition(float deltaTime)
@@ -47,6 +49,7 @@ namespace _KITSystem.SkillSystem.Imp
             }
 
             elapsedTime += deltaTime;
+            totalElapsedTime += deltaTime;
 
             Vector2 prevPosition = deltaPosition;
 
@@ -118,6 +121,12 @@ namespace _KITSystem.SkillSystem.Imp
 
             direction = (deltaPosition - prevPosition).normalized;
 
+#if UNITY_EDITOR
+            float t = windupDuration + executeDuration + recoveryDuration;
+            
+            GizmosLine.Line(prevPosition, deltaPosition, Color.yellow, t - totalElapsedTime);
+#endif
+
             return deltaPosition;
         }
 
@@ -137,11 +146,12 @@ namespace _KITSystem.SkillSystem.Imp
 
         private static Vector2 ValidatePosition(Vector3 center, Vector3 localPosition, Vector2 direction)
         {
-            Quaternion rot = Quaternion.FromToRotation(Vector3.right, direction.normalized);
+            Matrix4x4 matrix = Matrix4x4.TRS(
+                center,
+                Quaternion.Euler(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg),
+                Vector3.one);
 
-            Vector3 rotatedPos = center + rot * localPosition;
-
-            return rotatedPos;
+            return matrix.MultiplyPoint3x4(localPosition);
         }
     }
 }
