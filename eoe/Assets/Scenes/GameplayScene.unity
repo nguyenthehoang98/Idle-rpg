@@ -885,7 +885,7 @@ MonoBehaviour:
   energy: {fileID: 1074248198}
   equipmentQueue: {fileID: 983035829}
   equipmentActivation: {fileID: 1374644340}
-  equipments: e9030000ea0300000000000000000000
+  equipments: ea030000000000000000000000000000
   slots:
   - {fileID: 1143688530}
   - {fileID: 1219510552}

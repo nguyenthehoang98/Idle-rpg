@@ -11,7 +11,6 @@ namespace _KITSystem.SkillSystem.Imp
         private readonly float initialDuration;
         private readonly float delayDuration;
         private readonly float returnDuration;
-        private readonly float initialSpeed;
 
         public event Action<Phase> OnChangePhase;
 
@@ -21,17 +20,19 @@ namespace _KITSystem.SkillSystem.Imp
         private float elapsedTime;
         private bool isCompleted;
         
-        public BoomerangTrajectory(AnimationCurve initialCurve, AnimationCurve returnCurve,
-            float distance, float initialDuration,
+        public BoomerangTrajectory(AnimationCurve initialCurve, AnimationCurve returnCurve, float initialDuration,
             float delayDuration, float returnDuration,
             Vector2 start, Vector2 goal) : base(start, goal)
         {
             this.initialCurve = initialCurve;
+            
             this.returnCurve = returnCurve;
+            
             this.delayDuration = delayDuration;
+            
             this.initialDuration = initialDuration;
+            
             this.returnDuration = returnDuration;
-            this.initialSpeed = distance / initialDuration;
         }
 
         public override Vector2 EvaluatePosition(float deltaTime)
@@ -44,8 +45,9 @@ namespace _KITSystem.SkillSystem.Imp
             }
 
             elapsedTime += deltaTime;
-            
-            float p = 0, f = 0, s = 0, d = 0;
+
+            float p, f;
+            float d;
 
             switch (phase)
             {
@@ -59,17 +61,16 @@ namespace _KITSystem.SkillSystem.Imp
                         else phase = Phase.Return;
 
                         elapsedTime = 0;
+                        
                         outboundEndPosition = deltaPosition;
-
+                        
                         OnChangePhase?.Invoke(phase);
                     }
                     else
                     {
                         f = initialCurve.Evaluate(p);
 
-                        s = f * initialSpeed * deltaTime;
-
-                        deltaPosition += s * Direction;
+                        deltaPosition = Vector2.Lerp(Start, Goal, f);
                     }
 
                     break;
@@ -85,6 +86,7 @@ namespace _KITSystem.SkillSystem.Imp
                     break;
                 case Phase.Return:
                     d = returnDuration - deltaTime;
+                    
                     p = returnDuration <= 0f ? 1f : Mathf.Clamp01(elapsedTime / d);
 
                     if (elapsedTime >= d)
@@ -99,7 +101,7 @@ namespace _KITSystem.SkillSystem.Imp
                     {
                         f = returnCurve.Evaluate(p);
 
-                        deltaPosition = Vector2.Lerp(outboundEndPosition, Vector2.zero, f);
+                        deltaPosition = Vector2.Lerp(outboundEndPosition, Start, f);
                     }
 
                     break;
@@ -113,7 +115,7 @@ namespace _KITSystem.SkillSystem.Imp
                     break;
             }
 
-            return deltaPosition + Start;
+            return deltaPosition;
         }
 
         public override Vector2 EvaluateDirection(float deltaTime)

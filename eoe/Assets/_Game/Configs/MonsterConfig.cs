@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using _KITSystem.Config;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Game.Configs
 {
@@ -48,7 +49,7 @@ namespace _Game.Configs
         public float speed;
         public float stopDistance;
         public string deathAudioClip;
-        public float deathVolume;
+        public float volume;
         public string deathVfx;
     }
 }

@@ -143,6 +143,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    spline: {fileID: 0}
   rotatePivot: {fileID: 154186919891485008}
   rotationCurve:
     serializedVersion: 2
@@ -168,7 +169,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  rotationDuration: 0.15
+  rotationDuration: 0.05
   muzzle: {fileID: 6900292614292365982}
   animator: {fileID: 417439057925282555}
 --- !u!1 &2053234682472671296

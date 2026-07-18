@@ -199,15 +199,6 @@ MonoBehaviour:
         weightedMode: 0
         inWeight: 0
         outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -259,6 +250,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    spline: {fileID: 0}
   rotatePivot: {fileID: 154186919891485008}
   rotationCurve:
     serializedVersion: 2
@@ -805,7 +797,7 @@ MonoBehaviour:
         enabled: 0
         messageOnPlay: return
         logTypeOnPlay: 0
-        breakOnPlay: 1
+        breakOnPlay: 0
         messageOnStop: 
         logTypeOnStop: 3
         breakOnStop: 0

@@ -16,6 +16,7 @@ using _KITSystem.SkillSystem.Imp;
 using Cysharp.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace _Game.GamePlay.Model
 {

@@ -77,7 +77,7 @@ namespace _Game.GamePlay.Model
                 vfxPrefab = await AssetBundleManager.GetAssetCached<GameObject>(monsterData.deathVfx);
             }
             
-            deathVolume = monsterData.deathVolume;
+            deathVolume = monsterData.volume;
 
             scaleTransform.localScale = runtimeData.Scale * Vector3.one;
             

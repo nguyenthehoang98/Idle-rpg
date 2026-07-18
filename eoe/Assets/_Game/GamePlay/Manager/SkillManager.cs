@@ -511,36 +511,57 @@ namespace _Game.GamePlay.Manager
         private BaseTrajectory GetTrajectory(SkillRuntimeData runtimeData, SkillData skillData, ref Vector3 position, 
             ref Vector3 destination, ref float duration)
         {
-            float distance = DistanceToCircleEdge(position, destination, skillData.findRadius);
+            float distance = 0;
+            
+            bool found = DistanceToCircleEdge(position, destination, skillData.findRadius, out distance, out Vector3 hitPoint);
+
+            if (!found)
+            {
+                hitPoint = destination;
+                
+                distance = Vector3.Distance(position, destination);
+            }
 
             TrajectoryData trajectoryData = runtimeData.Trajectory;
             
             switch (skillData.trajectory)
             {
                 case TrajectoryType.Projectile:
+                    
                     duration = skillData.projectileDuration;
+                    
                     float speed = distance / duration;
+                    
                     return new ProjectileTrajectory(trajectoryData.projectileCurve, speed,
                         duration, position, destination
                     );
+                
                 case TrajectoryType.Boomerang:
+                    
                     duration = skillData.boomerangOutboundDuration + skillData.boomerangHangDuration +
                                skillData.boomerangReturnDuration;
+                    
                     return new BoomerangTrajectory(trajectoryData.boomerangInitCurve,
-                        trajectoryData.boomerangReturnCurve,
-                        distance, skillData.boomerangOutboundDuration,
+                        trajectoryData.boomerangReturnCurve, skillData.boomerangOutboundDuration,
                         skillData.boomerangHangDuration, skillData.boomerangReturnDuration,
-                        position, destination);
+                        position, hitPoint);
+                
                 case TrajectoryType.Spline:
-                    duration = skillData.splineWindupDuration + skillData.splineExecuteDuration +
-                               skillData.splineRecoveryDuration;
+
+                    duration = skillData.splineWindupDuration
+                               + skillData.splineExecuteDuration
+                               + skillData.splineRecoveryDuration;
+                    
                     return new SplineTrajectory(trajectoryData.spline.Spline,
                         skillData.splineWindupDuration, skillData.splineExecuteDuration,
                         skillData.splineRecoveryDuration,
                         position, destination
                     );
+                
                 case TrajectoryType.Stationary:
+                    
                     duration = skillData.stationaryDuration;
+                    
                     switch (skillData.stationaryPivot)
                     {
                         case TrajectoryStationaryPivot.Enemy:
@@ -561,6 +582,7 @@ namespace _Game.GamePlay.Manager
                     }
 
                     return new StationaryTrajectory(position, destination);
+                
                 default:
                     Debug.LogError("Unknown Trajectory type " + skillData.trajectory);
                     return null;
@@ -572,20 +594,28 @@ namespace _Game.GamePlay.Manager
             return position + Random.insideUnitCircle * radius;
         }
         
-        private static float DistanceToCircleEdge(Vector3 position, Vector3 destination, float radius)
+        private static bool DistanceToCircleEdge(Vector3 position, Vector3 destination, float radius,
+            out float distance, out Vector3 hitPoint)
         {
             Vector3 dir = (destination - position).normalized;
 
-            // position - center, center = Vector3.zero
+            // position = ray origin
+            // center = Vector3.zero
             float b = Vector3.Dot(position, dir);
             float c = Vector3.Dot(position, position) - radius * radius;
 
             float delta = b * b - c;
 
             if (delta < 0f)
-                return -1f; // Không giao (không nên xảy ra nếu position ở trong)
+            {
+                distance = -1f;
+                hitPoint = Vector3.zero;
+                return false;
+            }
 
-            return -b + Mathf.Sqrt(delta);
+            distance = -b + Mathf.Sqrt(delta);
+            hitPoint = position + dir * distance;
+            return true;
         }
     }
 

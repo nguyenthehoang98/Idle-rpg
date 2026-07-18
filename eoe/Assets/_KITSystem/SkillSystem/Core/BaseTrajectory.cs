@@ -14,7 +14,7 @@ namespace _KITSystem.SkillSystem.Core
         {
             Start = start;
             Goal = goal;
-            Direction = MathUtils.NormalizeSafe(goal - start);
+            Direction = (goal - start).normalized;
         }
 
         public abstract Vector2 EvaluatePosition(float deltaTime);
