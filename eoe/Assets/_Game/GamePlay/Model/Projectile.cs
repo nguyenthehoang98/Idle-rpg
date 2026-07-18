@@ -17,64 +17,68 @@ namespace _Game.GamePlay.Model
         [SerializeField] private Transform scalePivot;
         [SerializeField] private Transform rotatePivot;
         [SerializeField] private TrailRenderer trailRenderer;
-        [SerializeField] private ColliderData colliderData;
+        [SerializeField] private ColliderData[] colliders = new ColliderData[0];
 
-        public ColliderData ColliderData { get; private set; }
+        public ColliderData[] Colliders { get; private set; }
 
         private Action onDestroyCallback;
 
         private Vector3 targetPosition;
-        
+
         private Vector3 previousPosition;
-        
+
         private float elapsedTime;
-        
+
         private float deltaTime;
 
         private float angle;
-        
+
         private bool isRunning = false;
-        
+
         private bool shouldDestroy = false;
 
         private bool stopped = false;
 
         private bool blockRotation = false;
 
-        private void OnDrawGizmos()
+        private void OnDrawGizmosSelected()
         {
 #if UNITY_EDITOR
             if (Application.isPlaying) return;
-            
-            Vector2 center = (Vector2)transform.position + colliderData.relativePosition;
-            
-            Color color = Color.green;
-            
-            Handles.color = color;
 
-            switch (colliderData.type)
+            foreach (var colliderData in colliders)
             {
-                case ColliderType.Circle:
-                    Handles.DrawWireDisc(center, Vector3.forward, colliderData.circleRadius);
-                    break;
-                case ColliderType.Rectangle:
-                    Matrix4x4 oldMatrix = Handles.matrix;
-                    Handles.matrix = Matrix4x4.TRS(center, transform.rotation, Vector3.one);
-                    Vector2 size = colliderData.rectangleSize;
-                    Vector3[] verts =
-                    {
-                        new(-size.x * 0.5f, -size.y * 0.5f, 0),
-                        new(-size.x * 0.5f, size.y * 0.5f, 0),
-                        new(size.x * 0.5f, size.y * 0.5f, 0),
-                        new(size.x * 0.5f, -size.y * 0.5f, 0),
-                    };
+                Vector2 center = (Vector2)transform.position + colliderData.relativePosition;
 
-                    Handles.DrawSolidRectangleWithOutline(verts, new Color(color.r, color.g, color.b, 0.1f), color);
-                    Handles.matrix = oldMatrix;
-                    break;
-                default:
-                    Debug.LogError("Error in DrawGizmosSelected");
-                    break;
+                Color color = Color.green;
+
+                switch (colliderData.type)
+                {
+                    case ColliderType.Circle:
+                        Handles.color = color;
+                        Handles.DrawWireDisc(center, Vector3.forward, colliderData.circleRadius, 2f);
+                        Handles.color = new Color(color.r, color.g, color.b, 0.1f);
+                        Handles.DrawSolidDisc(center, Vector3.forward, colliderData.circleRadius);
+                        break;
+                    case ColliderType.Rectangle:
+                        Matrix4x4 oldMatrix = Handles.matrix;
+                        Handles.matrix = Matrix4x4.TRS(center, transform.rotation, Vector3.one);
+                        Vector2 size = colliderData.rectangleSize;
+                        Vector3[] verts =
+                        {
+                            new(-size.x * 0.5f, -size.y * 0.5f, 0),
+                            new(-size.x * 0.5f, size.y * 0.5f, 0),
+                            new(size.x * 0.5f, size.y * 0.5f, 0),
+                            new(size.x * 0.5f, -size.y * 0.5f, 0),
+                        };
+
+                        Handles.DrawSolidRectangleWithOutline(verts, new Color(color.r, color.g, color.b, 0.1f), color);
+                        Handles.matrix = oldMatrix;
+                        break;
+                    default:
+                        Debug.LogError("Error in DrawGizmosSelected");
+                        break;
+                }
             }
 #endif
         }
@@ -84,12 +88,12 @@ namespace _Game.GamePlay.Model
             blockRotation = false;
             elapsedTime = 0;
             targetPosition = previousPosition = transform.position;
-            
+
             shouldDestroy = false;
             isRunning = true;
 
             EnableTrail();
-            
+
             onInitialize?.Invoke();
         }
 
@@ -100,32 +104,32 @@ namespace _Game.GamePlay.Model
                 stopped = false;
                 return;
             }
-            
+
             this.previousPosition = transform.position;
             this.targetPosition = position;
             this.deltaTime = dt;
             this.elapsedTime = 0;
-            
+
             Rotate(direction);
         }
-        
+
         public void BlockRotation() => blockRotation = true;
 
         public void Rotate(Vector3 direction)
-        {   
+        {
             if (blockRotation) return;
 
             angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            
+
             rotatePivot.localEulerAngles = new Vector3(0, 0, angle);
         }
 
         public void StopLerpMotion()
         {
             stopped = true;
-            
+
             previousPosition = transform.position;
-            
+
             targetPosition = transform.position;
         }
 
@@ -138,7 +142,7 @@ namespace _Game.GamePlay.Model
             float t = Mathf.Clamp01(elapsedTime / deltaTime);
 
             transform.position = Vector3.Lerp(previousPosition, targetPosition, t);
-            
+
             if (t >= 1.0f && shouldDestroy)
             {
                 if (onDestroyCallback != null)
@@ -150,7 +154,7 @@ namespace _Game.GamePlay.Model
                 }
 
                 if (canDestroy) Pool.Destroy(gameObject);
-                
+
                 isRunning = false;
             }
         }
@@ -160,25 +164,24 @@ namespace _Game.GamePlay.Model
             if (shouldDestroy) return;
 
             onDestroyCallback = callback;
-            
+
             shouldDestroy = true;
         }
 
         public void SetSizeScale(float scale)
         {
-            ColliderData = new ColliderData
+            Colliders = new ColliderData[colliders.Length];
+
+            for (int i = 0; i < Colliders.Length; i++)
             {
-                type = colliderData.type,
-                
-                circleRadius = colliderData.circleRadius * scale,
-                
-                rectangleSize = colliderData.rectangleSize,
-                
-                relativePosition = dependencyRelativePosition ? colliderData.relativePosition * scale : colliderData.relativePosition,
-                
-                dependencyRelativeRotation = colliderData.dependencyRelativeRotation
-            };
-            
+                ColliderData colliderData = colliders[i];
+                colliderData.circleRadius *= scale;
+                colliderData.rectangleSize *= scale;
+                if (dependencyRelativePosition) colliderData.relativePosition *= scale;
+
+                Colliders[i] = colliderData;
+            }
+
             scalePivot.transform.localScale = Vector3.one * scale;
 
             if (trailRenderer != null)
@@ -202,7 +205,7 @@ namespace _Game.GamePlay.Model
             {
                 trailRenderer.emitting = false;
                 trailRenderer.enabled = false;
-                
+
                 trailRenderer.Clear();
             }
         }

@@ -7,31 +7,46 @@ using UnityEngine;
 
 namespace _KITSystem.SkillSystem.Imp
 {
+    public struct DamageEntityInfo
+    {
+        public int entity;
+        public bool isLastCollision;
+        public Vector3 projectilePosition;
+
+        public DamageEntityInfo(int entity, bool isLastCollision, Vector3 projectilePosition)
+        {
+            this.entity = entity;
+            this.isLastCollision = isLastCollision;
+            this.projectilePosition = projectilePosition;
+        }
+    }
+
     public class CastProjectileAction : BaseAction
     {
-        private readonly BaseCollider collider;
+        private readonly List<BaseCollider> colliders;
         private readonly BaseTrajectory trajectory;
         private readonly float damageInterval;
         private readonly int limitNumberCollisions;
         private readonly float resetCollisionInterval;
-        private readonly Func<int, Vector2, bool, bool> onDamageEntity;
+        private readonly Func<DamageEntityInfo, bool> onDamageEntity;
 
         public event Action OnComplete;
 
         private Projectile projectile;
         private readonly HashSet<int> collisions = new HashSet<int>();
+        private readonly List<int> results = new List<int>();
 
         private int totalCollisions;
         private float collisionResetElapsedTime;
         private float damageTickerElapsedTime;
 
-        public CastProjectileAction(Spu spu, float lifeTime, BaseCollider collider, BaseTrajectory trajectory,
-            Func<int, Vector2, bool, bool> onDamageEntity,
+        public CastProjectileAction(float lifeTime, List<BaseCollider> colliders, BaseTrajectory trajectory,
+            Func<DamageEntityInfo, bool> onDamageEntity,
             Projectile projectile, float damageInterval,
-            int limitNumberCollisions, float resetCollisionInterval) : base(spu, lifeTime)
+            int limitNumberCollisions, float resetCollisionInterval) : base(lifeTime)
         {
             this.onDamageEntity = onDamageEntity;
-            this.collider = collider;
+            this.colliders = colliders;
             this.trajectory = trajectory;
             this.projectile = projectile;
             this.limitNumberCollisions = limitNumberCollisions;
@@ -48,7 +63,7 @@ namespace _KITSystem.SkillSystem.Imp
             if (collisionResetElapsedTime >= resetCollisionInterval && collisions.Count > 0)
             {
                 collisions.Clear();
-                
+
                 collisionResetElapsedTime = 0;
             }
 
@@ -57,20 +72,28 @@ namespace _KITSystem.SkillSystem.Imp
             Vector2 position = trajectory.EvaluatePosition(deltaTime);
 
             Vector2 direction = trajectory.EvaluateDirection(deltaTime);
-            
+
             projectile.SetPosition(position, direction, deltaTime);
 
-            collider.Tick(deltaTime);
+            results.Clear();
 
-            List<int> results = collider.Collision(position, direction);
+            foreach (var collider in colliders)
+            {
+                collider.Tick(deltaTime);
 
-            bool hit = results != null && results.Count > 0;
+                List<int> hits = collider.Collision(position, direction);
 
 #if UNITY_EDITOR
-            Color color = hit ? Color.red : Color.green;
-            
-            collider.Gizmos(position, direction, color, deltaTime);
+                Color color = (hits != null && hits.Count > 0) ? Color.red : Color.green;
+
+                collider.Gizmos(position, direction, color, deltaTime);
 #endif
+
+                if (hits != null && hits.Count > 0) results.AddRange(hits);
+            }
+
+            bool hit = results.Count > 0;
+
             if (hit)
             {
                 foreach (var entity in results)
@@ -85,14 +108,18 @@ namespace _KITSystem.SkillSystem.Imp
                     {
                         if (!collisions.Add(entity)) continue;
 
-                        if (!TryDamage(position, entity, totalCollisions + 1 == limitNumberCollisions)) continue;
+                        DamageEntityInfo info = new DamageEntityInfo(
+                            entity, totalCollisions + 1 == limitNumberCollisions, position
+                        );
                         
+                        if (!TryDamage(info)) continue;
+
                         totalCollisions++;
-                    
+
                         if (totalCollisions == limitNumberCollisions)
                         {
                             Interrupt();
-                        
+
                             return;
                         }
                     }
@@ -103,24 +130,25 @@ namespace _KITSystem.SkillSystem.Imp
         protected override void OnStop()
         {
             base.OnStop();
-            
+
             trajectory.Dispose();
 
             projectile = null;
-            
+
             OnComplete?.Invoke();
-            
+
             OnComplete = null;
         }
 
-        private bool TryDamage(Vector2 position, int entity, bool lastCollision)
+        private bool TryDamage(DamageEntityInfo info)
         {
             bool dmgOverTime = damageInterval > 0;
 
             if (dmgOverTime)
             {
                 if (damageTickerElapsedTime < damageInterval) return false;
-                if (Damage(position, entity, lastCollision))
+
+                if (onDamageEntity.Invoke(info))
                 {
                     damageTickerElapsedTime = 0;
                     return true;
@@ -128,15 +156,8 @@ namespace _KITSystem.SkillSystem.Imp
 
                 return false;
             }
-            else
-            {
-                return Damage(position, entity, lastCollision);
-            }
-        }
 
-        private bool Damage(Vector2 position, int entity, bool lastCollision)
-        {
-            return onDamageEntity(entity, position, lastCollision);
+            return onDamageEntity.Invoke(info);
         }
     }
 }

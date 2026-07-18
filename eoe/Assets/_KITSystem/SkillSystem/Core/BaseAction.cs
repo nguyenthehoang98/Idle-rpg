@@ -1,17 +1,13 @@
-using UnityEngine;
-
 namespace _KITSystem.SkillSystem.Core
 {
     public abstract class BaseAction : IAction
     {
-        protected readonly Spu Spu;
         protected readonly float LifeTime;
 
         private float elapsedTime;
 
-        protected BaseAction(Spu spu, float lifeTime)
+        protected BaseAction(float lifeTime)
         {
-            Spu = spu;
             LifeTime = lifeTime;
             Reason = ActionCompleteReason.Undefined;
         }

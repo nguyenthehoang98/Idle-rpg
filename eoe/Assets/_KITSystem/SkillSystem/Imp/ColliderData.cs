@@ -46,9 +46,13 @@ namespace _KITSystem.SkillSystem.Imp
             switch ((ColliderType)type.intValue)
             {
                 case ColliderType.Circle:
+                    
                     var circleRadius = property.FindPropertyRelative(nameof(ColliderData.circleRadius));
+                    
                     rect.height = EditorGUI.GetPropertyHeight(circleRadius, true);
+                  
                     EditorGUI.PropertyField(rect, circleRadius, true);
+                  
                     break;
                 case ColliderType.Rectangle:
 
@@ -71,17 +75,17 @@ namespace _KITSystem.SkillSystem.Imp
         {
             float h = Padding * 2;
             h += EditorGUIUtility.singleLineHeight + Space;
-            h += EditorGUIUtility.singleLineHeight + Space;
-
-            var type = (ColliderType)property.FindPropertyRelative(nameof(ColliderData.type)).intValue;
+            ColliderType type = (ColliderType)property.FindPropertyRelative(nameof(ColliderData.type)).intValue;
 
             switch (type)
             {
                 case ColliderType.Circle:
+                    h += EditorGUIUtility.singleLineHeight + Space;
                     h += EditorGUI.GetPropertyHeight(
                         property.FindPropertyRelative(nameof(ColliderData.circleRadius)), true);
                     break;
                 case ColliderType.Rectangle:
+                    h += EditorGUIUtility.singleLineHeight + Space;
                     h += EditorGUIUtility.singleLineHeight + Space;
                     h += EditorGUI.GetPropertyHeight(
                         property.FindPropertyRelative(nameof(ColliderData.rectangleSize)), true);

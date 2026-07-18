@@ -155,13 +155,15 @@ namespace _Game.GamePlay.Manager
             }
             
             Projectile projectile = null;
-            BaseCollider collider = null;
+           
+            List<BaseCollider> colliders = new List<BaseCollider>();
             
             bool isFlyWeapon = runtimeData.IsFlyWeapon;
           
             if (isFlyWeapon)
             {
                 projectile = runtimeData.FlyWeapon.GetComponent<Projectile>();
+          
                 if (projectile == null)
                 {
 #if UNITY_EDITOR
@@ -171,18 +173,26 @@ namespace _Game.GamePlay.Manager
                 }
                
                 projectile.SetSizeScale(skillData.size);
-                collider = GetCollider(projectile.ColliderData, skillData);
-                if (collider == null)
+
+                for (int i = 0; i < projectile.Colliders.Length; i++)
                 {
+                    BaseCollider collider = GetCollider(projectile.Colliders[i], skillData);
+                    
+                    if (collider == null)
+                    {
 #if UNITY_EDITOR
-                    Debug.LogError("Stop cast skill because Collider is null, skillId " + skillData.skillId);
+                        Debug.LogError("Stop cast skill because Collider is null, skillId " + skillData.skillId);
 #endif
-                    return;
+                        continue;
+                    }
+                    
+                    colliders.Add(collider);
                 }
             }
             else
             {
                 GameObject prefab = await AssetBundleManager.GetAssetCached<GameObject>(skillData.prefabName);
+                
                 if (prefab == null)
                 {
 #if UNITY_EDITOR
@@ -193,6 +203,7 @@ namespace _Game.GamePlay.Manager
                 
                 // ~ get component in prefab
                 projectile = prefab.GetComponent<Projectile>();
+                
                 if (projectile == null)
                 {
 #if UNITY_EDITOR
@@ -202,30 +213,35 @@ namespace _Game.GamePlay.Manager
                 }
                 
                 projectile.SetSizeScale(skillData.size);
-                
-                collider = GetCollider(projectile.ColliderData, skillData);
 
-                if (collider == null)
+                for (int i = 0; i < projectile.Colliders.Length; i++)
                 {
+                    BaseCollider collider = GetCollider(projectile.Colliders[i], skillData);
+
+                    if (collider == null)
+                    {
 #if UNITY_EDITOR
-                    Debug.LogError("Stop cast skill because Collider is null, skillId " + skillData.skillId);
+                        Debug.LogError("Stop cast skill because Collider is null, skillId " + skillData.skillId);
 #endif
-                    return;
+                        continue;
+                    }
+                    
+                    colliders.Add(collider);
                 }
-             
+                
                 GameObject go = Pool.Instantiate(prefab, position, false);
+
                 projectile = go.GetComponent<Projectile>();
+                
                 projectile.Rotate(destination - position);
             }
             
             Action onProjectileDestroyed = () => { };
-            
-            CastProjectileAction castProjectileAction = new CastProjectileAction(this, lifeTime, collider, trajectory,
-                (entity, pos, lastCollision) =>
-                    OnDamageEntityFunction(skillData, runtimeData, entity, pos, scaleDamage, lastCollision,
-                        ref onProjectileDestroyed),
-                projectile, skillData.damageInterval,
-                skillData.collLimitCollision + runtimeData.PiercingCount, skillData.collResetCollision
+
+            CastProjectileAction castProjectileAction = new CastProjectileAction(lifeTime, colliders, trajectory,
+                info => OnDamageEntityFunction(skillData, runtimeData, info, scaleDamage, ref onProjectileDestroyed),
+                projectile, skillData.damageInterval, skillData.collLimitCollision + runtimeData.PiercingCount,
+                skillData.collResetCollision
             );
             
             castProjectileAction.OnComplete += () =>
@@ -305,70 +321,88 @@ namespace _Game.GamePlay.Manager
         }
         
         private bool OnDamageEntityFunction(SkillData skillData, SkillRuntimeData runtimeData,
-            int entity, Vector3 position, float scaleDamage, bool lastCollision, ref Action onProjectileDestroyed)
+            DamageEntityInfo info, float scaleDamage, ref Action onProjectileDestroyed)
         {
             float radius = Mathf.Max(0, runtimeData.ExplosiveRadius);
 
+            Vector3 position = Vector3.zero;
+            int agent;
+
+            bool valid = MonsterEntityManager.TryGetAgent(info.entity, out agent)
+                         && AgentManager.TryGet_AgentPosition(agent, out position);
+
+            if (!valid) return false;
+
             if (radius > 0)
             {
+                
+                SpawnExplosiveAura(skillData.explosivePrefabName, position);
+                
 #if UNITY_EDITOR
                 GizmosLine.Circle(position, radius, Color.yellow, 0.1f);
 #endif
-                Vector2 size = new Vector2(radius / 2f, radius / 2f);
-                float sqrRadius = radius * radius;
-                float explosiveDamage = runtimeData.ExplosiveDamagePercent;
-
-                List<int> entities = query.GetAllEntities(position, size, EntityManager.IsEntityAlive);
+                Vector2 size = Vector2.one * radius / 2f;
                 
-                for (int i = entities.Count - 1; i >= 0; i--)
+                float sqr = Mathf.Pow(radius, 2);
+
+                float explosiveDamagePercent = runtimeData.ExplosiveDamagePercent;
+                
+                List<int> entities = query.GetAllEntities(position, size, EntityManager.IsEntityAlive);
+
+                for (int i = 0; i < entities.Count; i++)
                 {
                     int e = entities[i];
 
-                    if (!MonsterEntityManager.TryGetAgent(e, out int agent)) continue;
-                    
-                    if (AgentManager.TryGet_AgentPosition(agent, out Vector3 entityPosition))
+                    if (!MonsterEntityManager.TryGetAgent(e, out int a)) continue;
+
+                    if (!AgentManager.TryGet_AgentPosition(a, out Vector3 p)) continue;
+
+                    float d = Vector3.SqrMagnitude(p - position);
+
+                    if (d < sqr)
                     {
-                        float d = Vector3.SqrMagnitude(entityPosition - position);
+                        float dmg = (e == info.entity ? 1 : explosiveDamagePercent) * scaleDamage;
 
-                        if (d < sqrRadius)
-                        {
-                            float dmg = (e == entity ? 1.0f : explosiveDamage) * scaleDamage;
-
-                            return CalculatorDamage(skillData, runtimeData,
-                                entity, position, dmg, lastCollision, ref onProjectileDestroyed
-                            );
-                        }
+                        Vector3 textDamagePosition = skillData.trajectory == TrajectoryType.Stationary
+                            ? position
+                            : info.projectilePosition;
+                        return CalculatorDamage(skillData, runtimeData,
+                            info.entity, textDamagePosition, dmg, info.isLastCollision, ref onProjectileDestroyed
+                        );
                     }
                 }
-
-                SpawnExplosiveAura(skillData.explosivePrefabName, radius, position);
             }
             else
             {
 #if UNITY_EDITOR
-                GizmosLine.Line(position - new Vector3(0.25f, 0.25f),
-                    position + new Vector3(0.25f, 0.25f),
+                Vector3 p = info.projectilePosition;
+                GizmosLine.Line(p - new Vector3(0.25f, 0.25f),
+                    p + new Vector3(0.25f, 0.25f),
                     Color.yellow, 0.1f
                 );
-                GizmosLine.Line(position + new Vector3(-0.25f, 0.25f),
-                    position + new Vector3(0.25f, -0.25f),
+                GizmosLine.Line(p + new Vector3(-0.25f, 0.25f),
+                    p + new Vector3(0.25f, -0.25f),
                     Color.yellow, 0.1f
                 );
 #endif
-                return CalculatorDamage(skillData, runtimeData, entity, position, scaleDamage,
-                    lastCollision, ref onProjectileDestroyed
+                Vector3 textDamagePosition = skillData.trajectory == TrajectoryType.Stationary
+                    ? position
+                    : info.projectilePosition;
+                
+                return CalculatorDamage(skillData, runtimeData,
+                    info.entity, textDamagePosition, scaleDamage, info.isLastCollision, ref onProjectileDestroyed
                 );
             }
 
-            return true;
+            return false;
         }
 
         private bool CalculatorDamage(SkillData skillData, SkillRuntimeData runtimeData, 
-            int entity, Vector3 position,
+            int entity, Vector3 textDamagePosition,
             float scaleDamage, bool lastCollision, ref Action onProjectileDestroyed)
         {
             if (!EntityManager.IsEntityAlive(entity)) return false;
-
+            
             ref HealthData health = ref ComponentManager<HealthData>.Get(entity);
             
             if(health.CurrentHealth <= 0) return false;
@@ -390,10 +424,12 @@ namespace _Game.GamePlay.Manager
                 Source = skillData
             });
                 
-            SpawnTextDamage(damage, critical, position);
+            SpawnTextDamage(damage, critical, textDamagePosition);
 
             float killInstantBelow = runtimeData.KillInstantBelowHealthPercent;
+            
             float healthPercent = health.CurrentHealth / (float)health.MaxHealth;
+            
             bool shouldKillInstantMonster = healthPercent <= killInstantBelow;
 
             if (healthPercent <= 0 || shouldKillInstantMonster)
@@ -425,7 +461,7 @@ namespace _Game.GamePlay.Manager
         /*
          * @Spawn objects
          */
-        private async void SpawnExplosiveAura(string prefabName, float radius, Vector3 position)
+        private async void SpawnExplosiveAura(string prefabName, Vector3 position)
         {
             if (string.IsNullOrEmpty(prefabName)) return;
 
@@ -472,7 +508,8 @@ namespace _Game.GamePlay.Manager
             }
         }
         
-        private BaseTrajectory GetTrajectory(SkillRuntimeData runtimeData, SkillData skillData, ref Vector3 position, ref Vector3 destination, ref float duration)
+        private BaseTrajectory GetTrajectory(SkillRuntimeData runtimeData, SkillData skillData, ref Vector3 position, 
+            ref Vector3 destination, ref float duration)
         {
             float distance = DistanceToCircleEdge(position, destination, skillData.findRadius);
 
@@ -517,7 +554,7 @@ namespace _Game.GamePlay.Manager
 
                     return new StationaryTrajectory(position, destination);
                 default:
-                    Debug.LogError("Unknown Trajectory type " + trajectoryData.type);
+                    Debug.LogError("Unknown Trajectory type " + skillData.trajectory);
                     return null;
             }
         }

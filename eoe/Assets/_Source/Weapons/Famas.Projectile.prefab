@@ -53,12 +53,12 @@ MonoBehaviour:
   scalePivot: {fileID: 2499445789741908526}
   rotatePivot: {fileID: 4724804207875695}
   trailRenderer: {fileID: 4797572086999235470}
-  colliderData:
-    type: 0
-    circleRadius: 0.075
-    rectangleSize: {x: 0.5, y: 0.5}
+  colliders:
+  - type: 0
+    circleRadius: 0.05
+    rectangleSize: {x: 0, y: 0}
     relativePosition: {x: 0, y: 0}
-    dependencyRelativeRotation: 1
+    dependencyRelativeRotation: 0
 --- !u!1 &1730242686860875
 GameObject:
   m_ObjectHideFlags: 0

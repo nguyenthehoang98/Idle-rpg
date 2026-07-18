@@ -102,7 +102,6 @@ MonoBehaviour:
           schedulerType: 0
           additionalSettings: 0
         useWorldSpace: 0
-        useDeltaAngle: 0
     - rid: 8843438356789461064
       type: {class: DebugComponent, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
       data:
@@ -188,10 +187,27 @@ MonoBehaviour:
   renderer: {fileID: 6899095874571813914}
   adjustOutlineColorDuration: 0.2
   trajectory:
-    type: 2
     projectileCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -296,11 +312,11 @@ MonoBehaviour:
   scalePivot: {fileID: 1543081629790892130}
   rotatePivot: {fileID: 5400583493042846177}
   trailRenderer: {fileID: 2925384481517476279}
-  colliderData:
-    type: 0
+  colliders:
+  - type: 0
     circleRadius: 0.2
     rectangleSize: {x: 0, y: 0}
-    relativePosition: {x: 0.2, y: 0}
+    relativePosition: {x: 0.05, y: 0}
     dependencyRelativeRotation: 0
 --- !u!1 &3657667344081574233
 GameObject:
@@ -644,7 +660,6 @@ MonoBehaviour:
           schedulerType: 0
           additionalSettings: 1
         useWorldSpace: 0
-        useDeltaAngle: 0
 --- !u!1 &6139367762931335681
 GameObject:
   m_ObjectHideFlags: 0
@@ -748,7 +763,6 @@ MonoBehaviour:
           schedulerType: 0
           additionalSettings: 0
         useWorldSpace: 0
-        useDeltaAngle: 0
     - rid: 8843438356789461060
       type: {class: EventComponent, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
       data:

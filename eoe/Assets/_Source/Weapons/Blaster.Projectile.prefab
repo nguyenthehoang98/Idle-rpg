@@ -97,9 +97,9 @@ MonoBehaviour:
   scalePivot: {fileID: 7067284531707531920}
   rotatePivot: {fileID: 5878097163562352361}
   trailRenderer: {fileID: 0}
-  colliderData:
-    type: 1
-    circleRadius: 0.125
+  colliders:
+  - type: 1
+    circleRadius: 0.67
     rectangleSize: {x: 7.5, y: 0.5}
     relativePosition: {x: 3.75, y: 0}
     dependencyRelativeRotation: 1
