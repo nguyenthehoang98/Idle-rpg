@@ -16,7 +16,7 @@ namespace _Game.GamePlay.Model
         [SerializeField] private LitMotionAnimation completeAnimation;
         [SerializeField] private float revertRotateDuration = 0.15f;
         
-        protected override bool IsFlyWeapon => true;
+        protected override bool UseWeapon => true;
 
         protected override void OnPlayAttack()
         {

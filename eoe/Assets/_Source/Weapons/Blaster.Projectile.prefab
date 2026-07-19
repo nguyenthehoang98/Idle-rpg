@@ -92,8 +92,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onDestroy:
+    m_PersistentCalls:
+      m_Calls: []
   canDestroy: 1
   dependencyRelativePosition: 1
+  shouldPushToWeapon: 0
+  positionPivot: {fileID: 5878097163562352361}
   scalePivot: {fileID: 7067284531707531920}
   rotatePivot: {fileID: 5878097163562352361}
   trailRenderer: {fileID: 0}

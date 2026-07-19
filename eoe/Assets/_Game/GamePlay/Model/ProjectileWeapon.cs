@@ -32,6 +32,6 @@ namespace _Game.GamePlay.Model
 
         private void EndAnimation() => OnStopAttack();
 
-        protected override bool IsFlyWeapon => false;
+        protected override bool UseWeapon => false;
     }
 }

@@ -299,8 +299,13 @@ MonoBehaviour:
   onInitialize:
     m_PersistentCalls:
       m_Calls: []
+  onDestroy:
+    m_PersistentCalls:
+      m_Calls: []
   canDestroy: 0
   dependencyRelativePosition: 0
+  shouldPushToWeapon: 0
+  positionPivot: {fileID: 8792860407553118502}
   scalePivot: {fileID: 1543081629790892130}
   rotatePivot: {fileID: 5400583493042846177}
   trailRenderer: {fileID: 2925384481517476279}

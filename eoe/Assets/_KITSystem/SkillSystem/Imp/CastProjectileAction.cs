@@ -56,6 +56,13 @@ namespace _KITSystem.SkillSystem.Imp
             this.totalCollisions = 0;
         }
 
+        protected override void OnStart()
+        {
+            base.OnStart();
+
+            projectile.ImmediatelySetPosition(trajectory.EvaluatePosition(0));
+        }
+
         protected override void OnUpdate(float deltaTime)
         {
             collisionResetElapsedTime += deltaTime;

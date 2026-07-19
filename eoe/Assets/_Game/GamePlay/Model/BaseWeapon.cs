@@ -316,8 +316,8 @@ namespace _Game.GamePlay.Model
                 Muzzle = muzzlePosition,
                 Entity = entity,
                 Trajectory = trajectory,
-                UseWeapon = IsFlyWeapon,
-                Weapon = IsFlyWeapon ? this : null,
+                UseWeapon = UseWeapon,
+                Weapon = this,
             };
             
             SkillManager.CastSkill(SkillData, GetSkillData(runtimeData));
@@ -332,7 +332,9 @@ namespace _Game.GamePlay.Model
             attackCoroutine = StartCoroutine(AutoAttackIE());
         }
         
-        protected abstract bool IsFlyWeapon { get; }
+        protected abstract bool UseWeapon { get; }
+
+        public virtual Transform GetMuzzleTransform() => muzzle;
         
         protected virtual Vector3 GetMuzzlePosition() => muzzle.position;
 

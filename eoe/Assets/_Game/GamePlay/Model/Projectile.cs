@@ -11,10 +11,14 @@ namespace _Game.GamePlay.Model
 {
     public class Projectile : MonoBehaviour
     {
+        [Header("Event & Parameters")]
         [SerializeField] private UnityEvent onInitialize;
         [SerializeField] private UnityEvent onDestroy;
         [SerializeField] private bool canDestroy = true;
         [SerializeField] private bool dependencyRelativePosition = true;
+        [SerializeField] private bool shouldPushToWeapon;
+        [Header("Components")]
+        [SerializeField] private Transform positionPivot;
         [SerializeField] private Transform scalePivot;
         [SerializeField] private Transform rotatePivot;
         [SerializeField] private TrailRenderer trailRenderer;
@@ -84,18 +88,30 @@ namespace _Game.GamePlay.Model
 #endif
         }
 
-        public void Initialize()
+        public void Initialize(BaseWeapon weapon)
         {
             blockRotation = false;
             elapsedTime = 0;
-            targetPosition = previousPosition = transform.position;
+            targetPosition = previousPosition = positionPivot.position;
 
             shouldDestroy = false;
             isRunning = true;
 
+            if (weapon != null && shouldPushToWeapon)
+            {
+                transform.SetParent(weapon.GetMuzzleTransform());
+                transform.localRotation = Quaternion.Euler(0,0,0);
+                transform.localPosition = Vector3.zero;
+            }
+
             EnableTrail();
 
             onInitialize?.Invoke();
+        }
+
+        public void ImmediatelySetPosition(Vector3 position)
+        {
+            positionPivot.position = position;
         }
 
         public void SetPosition(Vector3 position, Vector3 direction, float dt)
@@ -106,7 +122,7 @@ namespace _Game.GamePlay.Model
                 return;
             }
 
-            this.previousPosition = transform.position;
+            this.previousPosition = positionPivot.position;
             this.targetPosition = position;
             this.deltaTime = dt;
             this.elapsedTime = 0;
@@ -122,16 +138,16 @@ namespace _Game.GamePlay.Model
 
             angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-            rotatePivot.localEulerAngles = new Vector3(0, 0, angle);
+            //rotatePivot.localEulerAngles = new Vector3(0, 0, angle);
         }
 
         public void StopLerpMotion()
         {
             stopped = true;
 
-            previousPosition = transform.position;
+            previousPosition = positionPivot.position;
 
-            targetPosition = transform.position;
+            targetPosition = positionPivot.position;
         }
 
         private void FixedUpdate()
@@ -142,7 +158,7 @@ namespace _Game.GamePlay.Model
 
             float t = Mathf.Clamp01(elapsedTime / deltaTime);
 
-            transform.position = Vector3.Lerp(previousPosition, targetPosition, t);
+            positionPivot.position = Vector3.Lerp(previousPosition, targetPosition, t);
 
             if (t >= 1.0f && shouldDestroy)
             {
@@ -156,7 +172,12 @@ namespace _Game.GamePlay.Model
                     DisableTrail();
                 }
 
-                if (canDestroy) Pool.Destroy(gameObject);
+                if (canDestroy)
+                {
+                    if (shouldPushToWeapon) transform.SetParent(null);
+                    
+                    Pool.Destroy(gameObject);
+                }
 
                 isRunning = false;
             }
@@ -178,8 +199,11 @@ namespace _Game.GamePlay.Model
             for (int i = 0; i < Colliders.Length; i++)
             {
                 ColliderData colliderData = colliders[i];
+                
                 colliderData.circleRadius *= scale;
+                
                 colliderData.rectangleSize *= scale;
+                
                 if (dependencyRelativePosition) colliderData.relativePosition *= scale;
 
                 Colliders[i] = colliderData;
@@ -198,6 +222,7 @@ namespace _Game.GamePlay.Model
             if (trailRenderer != null)
             {
                 trailRenderer.emitting = true;
+                
                 trailRenderer.enabled = true;
             }
         }
@@ -207,10 +232,21 @@ namespace _Game.GamePlay.Model
             if (trailRenderer != null)
             {
                 trailRenderer.emitting = false;
+                
                 trailRenderer.enabled = false;
 
                 trailRenderer.Clear();
             }
+        }
+
+        public void Active()
+        {
+            gameObject.SetActive(true);
+        }
+
+        public void Inactive()
+        {
+            gameObject.SetActive(false);
         }
     }
 }

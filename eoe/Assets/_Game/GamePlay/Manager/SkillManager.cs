@@ -158,9 +158,9 @@ namespace _Game.GamePlay.Manager
            
             List<BaseCollider> colliders = new List<BaseCollider>();
             
-            bool isFlyWeapon = runtimeData.UseWeapon;
+            bool useWeapon = runtimeData.UseWeapon;
           
-            if (isFlyWeapon)
+            if (useWeapon)
             {
                 projectile = runtimeData.Weapon.GetComponent<Projectile>();
           
@@ -254,7 +254,7 @@ namespace _Game.GamePlay.Manager
             RequestAddAction(1, castProjectileAction);
 
             //~ custom
-            if (isFlyWeapon)
+            if (useWeapon)
             {
                 if (trajectory is BoomerangTrajectory boomerangTrajectory)
                 {
@@ -308,9 +308,9 @@ namespace _Game.GamePlay.Manager
                 }
             }
 
-            projectile.Initialize();
+            projectile.Initialize(runtimeData.Weapon);
 
-            if(!isFlyWeapon) projectile.gameObject.SetActive(true);
+            if(!useWeapon) projectile.Active();
         }
         
         /*
