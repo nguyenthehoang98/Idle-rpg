@@ -200,6 +200,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ca443e74b1d53c94090f02bc03354fa6
+    m_Address: Nunchaku.Equipment
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d4e05df0a033f2849a09f73d90249352
     m_Address: fx.death
     m_ReadOnly: 0

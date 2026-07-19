@@ -237,10 +237,12 @@ namespace _Game.GamePlay.Manager
             }
             
             Action onProjectileDestroyed = () => { };
+            
+            int collLimitCollision = skillData.collLimitCollision <= 0 ? int.MaxValue : skillData.collLimitCollision;
 
             CastProjectileAction castProjectileAction = new CastProjectileAction(lifeTime, colliders, trajectory,
                 info => OnDamageEntityFunction(skillData, runtimeData, info, scaleDamage, ref onProjectileDestroyed),
-                projectile, skillData.damageInterval, skillData.collLimitCollision + runtimeData.PiercingCount,
+                projectile, skillData.damageInterval, collLimitCollision + runtimeData.PiercingCount,
                 skillData.collResetCollision
             );
             

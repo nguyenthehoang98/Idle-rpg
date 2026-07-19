@@ -41,7 +41,7 @@ namespace _Game.GamePlay.Model
 
         private bool blockRotation = false;
 
-        private void OnDrawGizmosSelected()
+        private void OnDrawGizmos()
         {
 #if UNITY_EDITOR
             if (Application.isPlaying) return;

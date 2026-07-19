@@ -50,7 +50,7 @@ namespace _KITSystem.SkillSystem.Imp
             this.trajectory = trajectory;
             this.projectile = projectile;
             this.limitNumberCollisions = limitNumberCollisions;
-            this.resetCollisionInterval = resetCollisionInterval > 0 ? resetCollisionInterval : float.MaxValue;
+            this.resetCollisionInterval = resetCollisionInterval <= 0 ? float.MaxValue : resetCollisionInterval;
             this.damageInterval = damageInterval;
             this.collisionResetElapsedTime = this.damageTickerElapsedTime = 0;
             this.totalCollisions = 0;

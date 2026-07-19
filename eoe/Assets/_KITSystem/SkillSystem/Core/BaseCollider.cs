@@ -12,13 +12,14 @@ namespace _KITSystem.SkillSystem.Core
         private readonly Vector2 relativePosition;
         
         private float elapsedTime;
+        
         private bool canTrigger;
 
         protected BaseCollider(IQuery query, Vector2 relativePosition, float timerTrigger, float duration)
         {
             Query = query;
             this.timerTrigger = timerTrigger;
-            this.duration = duration;
+            this.duration = duration <= 0 ? float.MaxValue : duration;
             this.relativePosition = relativePosition;
         }
 
