@@ -45,6 +45,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 26b3759bdbb1e9640aae244fc0fa5cfe
+    m_Address: FlameThrower.Equipment
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2718e4b9e23de464fae92bc91e2c3232
+    m_Address: FlameThrower.Projectile
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2915d59e1c9ef6447b8b27b0defe1c7b
     m_Address: T_Powerup.Skill.1002.2
     m_ReadOnly: 0

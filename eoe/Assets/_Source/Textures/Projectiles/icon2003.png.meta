@@ -1,10 +1,22 @@
 fileFormatVersion: 2
-guid: 12e72ef0329e6594582c38420aaf1fb2
+guid: 9648e241af42f7644911de092be1794d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8770288673365900547
-    second: Explosion_1_1_0
+      213: 3865545760113045021
+    second: icon2003_0
+  - first:
+      213: 1461360495599021212
+    second: icon2003_1
+  - first:
+      213: 6769190713588739821
+    second: icon2003_2
+  - first:
+      213: -5156735756852936391
+    second: icon2003_3
+  - first:
+      213: -1826100675978326386
+    second: icon2003_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,12 +58,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 2
+  alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 75
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,23 +125,67 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Explosion_1_1_0
+      name: icon2003_0
       rect:
         serializedVersion: 2
-        x: 17
-        y: 40
-        width: 75
-        height: 620
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 0
+        width: 60
+        height: 372
+      alignment: 2
+      pivot: {x: 0.5, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 30d3b99d41356b970800000000000000
-      internalID: 8770288673365900547
+      spriteID: d1e2e86636d25a530800000000000000
+      internalID: 3865545760113045021
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon2003_1
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 0
+        width: 60
+        height: 372
+      alignment: 2
+      pivot: {x: 0.5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9ce7fcc0abc74410800000000000000
+      internalID: 1461360495599021212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon2003_2
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 0
+        width: 60
+        height: 372
+      alignment: 2
+      pivot: {x: 0.5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dee645cd61ff0fd50800000000000000
+      internalID: 6769190713588739821
       vertices: []
       indices: 
       edges: []
@@ -138,7 +194,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: dd6ea046bfc5c874184091ed893b3abb
     internalID: 0
     vertices: []
     indices: 
@@ -146,9 +202,13 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":3.0,"y":1.0},"gridSpriteSize":{"x":60.0,"y":372.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":1.0},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":2,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Explosion_1_1_0: 8770288673365900547
+      icon2003_0: 3865545760113045021
+      icon2003_1: 1461360495599021212
+      icon2003_2: 6769190713588739821
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

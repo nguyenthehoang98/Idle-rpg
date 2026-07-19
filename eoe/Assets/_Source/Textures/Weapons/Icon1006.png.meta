@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c8124f13de746684288f4fc0a1a83441
+guid: 5826500e3f0fb4e48ac5a20c00bfacc2
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 919487587162992248
-    second: Explosion_1_2_0
+      213: 7493304892077035853
+    second: Icon29_40_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -49,9 +49,9 @@ TextureImporter:
   spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 2
+  alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 50
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Explosion_1_2_0
+      name: Icon29_40_0
       rect:
         serializedVersion: 2
-        x: 6
-        y: 63
-        width: 86
-        height: 597
+        x: 1
+        y: 0
+        width: 30
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 87e2b30c61da2cc00800000000000000
-      internalID: 919487587162992248
+      spriteID: d41d2fd19119df760800000000000000
+      internalID: 7493304892077035853
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Explosion_1_2_0: 919487587162992248
+      Icon29_40_0: 7493304892077035853
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

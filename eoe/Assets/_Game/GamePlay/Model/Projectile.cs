@@ -12,6 +12,7 @@ namespace _Game.GamePlay.Model
     public class Projectile : MonoBehaviour
     {
         [SerializeField] private UnityEvent onInitialize;
+        [SerializeField] private UnityEvent onDestroy;
         [SerializeField] private bool canDestroy = true;
         [SerializeField] private bool dependencyRelativePosition = true;
         [SerializeField] private Transform scalePivot;
@@ -147,6 +148,8 @@ namespace _Game.GamePlay.Model
             {
                 if (onDestroyCallback != null)
                 {
+                    onDestroy?.Invoke();
+                    
                     onDestroyCallback.Invoke();
                     onDestroyCallback = null;
 

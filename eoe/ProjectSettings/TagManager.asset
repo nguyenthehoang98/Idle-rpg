@@ -51,6 +51,9 @@ TagManager:
   - name: Weapon
     uniqueID: 2095058935
     locked: 0
+  - name: Vfx
+    uniqueID: 739322861
+    locked: 0
   - name: UIText
     uniqueID: 2654165327
     locked: 0

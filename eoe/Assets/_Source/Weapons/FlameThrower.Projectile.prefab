@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 5878097163562352361}
   - component: {fileID: 7754458491669515336}
   m_Layer: 0
-  m_Name: Blaster.Projectile
+  m_Name: FlameThrower.Projectile
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -92,6 +92,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onDestroy:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4331552628611919551}
+        m_TargetAssemblyTypeName: _Game.GamePlay.View.SpriteRendererAnimation, Assembly-CSharp
+        m_MethodName: Stop
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   canDestroy: 1
   dependencyRelativePosition: 1
   scalePivot: {fileID: 7067284531707531920}
@@ -100,8 +115,8 @@ MonoBehaviour:
   colliders:
   - type: 1
     circleRadius: 0.67
-    rectangleSize: {x: 5, y: 0.5}
-    relativePosition: {x: 2.5, y: 0}
+    rectangleSize: {x: 1.6, y: 0.55}
+    relativePosition: {x: 0.8, y: 0.11}
     dependencyRelativeRotation: 1
 --- !u!1 &9046264094979996413
 GameObject:
@@ -129,13 +144,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9046264094979996413}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.135, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7067284531707531920}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4143204196659968835
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -180,10 +195,10 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 1228164997
-  m_SortingLayer: 2
+  m_SortingLayerID: 739322861
+  m_SortingLayer: 4
   m_SortingOrder: 1
-  m_Sprite: {fileID: 3865545760113045021, guid: 9648e241af42f7644911de092be1794d, type: 3}
+  m_Sprite: {fileID: -1298101607, guid: c5cb088fc6d1aa94e9d2bd9577f669e8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -209,9 +224,11 @@ MonoBehaviour:
   playOnEnable: 0
   reference: {fileID: 4143204196659968835}
   sprites:
-  - {fileID: 3865545760113045021, guid: 9648e241af42f7644911de092be1794d, type: 3}
-  - {fileID: 1461360495599021212, guid: 9648e241af42f7644911de092be1794d, type: 3}
-  - {fileID: 6769190713588739821, guid: 9648e241af42f7644911de092be1794d, type: 3}
+  - {fileID: -1298101607, guid: c5cb088fc6d1aa94e9d2bd9577f669e8, type: 3}
+  - {fileID: 794175461, guid: c5cb088fc6d1aa94e9d2bd9577f669e8, type: 3}
+  - {fileID: -856575970, guid: c5cb088fc6d1aa94e9d2bd9577f669e8, type: 3}
+  - {fileID: -608311936, guid: c5cb088fc6d1aa94e9d2bd9577f669e8, type: 3}
+  - {fileID: -1339571941, guid: c5cb088fc6d1aa94e9d2bd9577f669e8, type: 3}
   loop: 1
   frameRate: 30
   OnEventCompleted:
