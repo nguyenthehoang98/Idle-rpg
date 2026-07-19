@@ -30,7 +30,7 @@ namespace _Game.GamePlay.Model
             ExecuteAttack();
         }
 
-        private void EndAnimation() => OnStopAttack();
+        private void EndAnimation() => StopAttack();
 
         protected override bool UseWeapon => false;
     }

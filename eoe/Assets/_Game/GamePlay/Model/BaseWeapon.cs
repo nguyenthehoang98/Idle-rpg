@@ -16,6 +16,7 @@ using _KITSystem.SkillSystem.Imp;
 using Cysharp.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Events;
 using Debug = UnityEngine.Debug;
 
 namespace _Game.GamePlay.Model
@@ -24,6 +25,10 @@ namespace _Game.GamePlay.Model
     {
         private static readonly int OutlineColorProperty = Shader.PropertyToID("_OutlineColor");
 
+        [Header("Event & Parameters")]
+        [SerializeField] private UnityEvent onStartAttack;
+        [SerializeField] private UnityEvent onCompleteAttack;
+        [Header("Components")]
         [SerializeField] private new SpriteRenderer renderer;
         [SerializeField] private float adjustOutlineColorDuration = 0.2f;
         [SerializeField] protected TrajectoryData trajectory;
@@ -275,6 +280,8 @@ namespace _Game.GamePlay.Model
                     continue;
                 }
                 
+                onStartAttack?.Invoke();
+                
                 OnPlayAttack();
                 
                 IsAttacking = true;
@@ -322,14 +329,22 @@ namespace _Game.GamePlay.Model
             
             SkillManager.CastSkill(SkillData, GetSkillData(runtimeData));
         }
-
-        public virtual void OnStopAttack()
+        
+        public void StopAttack()
         {
             IsAttacking = false;
             
             StopCoroutine(attackCoroutine);
+
+            OnStopAttack();
+            
+            onCompleteAttack?.Invoke();
             
             attackCoroutine = StartCoroutine(AutoAttackIE());
+        }
+
+        protected virtual void OnStopAttack()
+        {
         }
         
         protected abstract bool UseWeapon { get; }

@@ -27,7 +27,7 @@ namespace _Game.GamePlay.Model
             ExecuteAttack();
         }
 
-        public override void OnStopAttack()
+        protected override void OnStopAttack()
         {
             base.OnStopAttack();
 
@@ -48,11 +48,11 @@ namespace _Game.GamePlay.Model
 
                 completeAnimation.Play();
 
-                this.WaitInvoke(duration, OnStopAttack);
+                this.WaitInvoke(duration, StopAttack);
             }
             else
             {
-                OnStopAttack();
+                StopAttack();
             }
         }
     }
