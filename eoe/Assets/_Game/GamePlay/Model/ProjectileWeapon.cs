@@ -17,7 +17,7 @@ namespace _Game.GamePlay.Model
             
             animator.Play(AttackAnimator, 0, 0);
 
-            animator.speed = TimeScale * (WeaponData.attackSpeed + CurrentUpgradeData.attackSpeed);
+            animator.speed = TimeScale * (WeaponData.attackSpeed + CurrentUpgradeData.attackRate);
         }
         
         /*

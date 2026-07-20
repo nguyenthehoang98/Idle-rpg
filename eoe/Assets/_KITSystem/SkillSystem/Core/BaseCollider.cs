@@ -7,7 +7,7 @@ namespace _KITSystem.SkillSystem.Core
     {
         protected readonly IQuery Query;
         
-        private readonly float timerTrigger;
+        private readonly float collisionStartDelay;
         private readonly float duration;
         private readonly Vector2 relativePosition;
         
@@ -15,10 +15,10 @@ namespace _KITSystem.SkillSystem.Core
         
         private bool canTrigger;
 
-        protected BaseCollider(IQuery query, Vector2 relativePosition, float timerTrigger, float duration)
+        protected BaseCollider(IQuery query, Vector2 relativePosition, float collisionStartDelay, float duration)
         {
             Query = query;
-            this.timerTrigger = timerTrigger;
+            this.collisionStartDelay = collisionStartDelay;
             this.duration = duration <= 0 ? float.MaxValue : duration;
             this.relativePosition = relativePosition;
         }
@@ -46,7 +46,7 @@ namespace _KITSystem.SkillSystem.Core
         {
             elapsedTime += deltaTime;
             
-            canTrigger = timerTrigger <= elapsedTime && elapsedTime <= duration + timerTrigger;
+            canTrigger = collisionStartDelay <= elapsedTime && elapsedTime <= duration + collisionStartDelay;
         }
 
         public List<int> Collision(Vector2 position, Vector2 direction)

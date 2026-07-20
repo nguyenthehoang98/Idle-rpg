@@ -36,8 +36,8 @@ namespace _KITSystem.SkillSystem.Imp
         private readonly List<BaseCollider> colliders;
         private readonly BaseTrajectory trajectory;
         private readonly float damageInterval;
-        private readonly int limitNumberCollisions;
-        private readonly float resetCollisionInterval;
+        private readonly int maxHitCount;
+        private readonly float targetHitCooldown;
         private readonly Func<DamageEntityInfo, bool> onDamageEntity;
 
         public event Action OnComplete;
@@ -53,14 +53,14 @@ namespace _KITSystem.SkillSystem.Imp
         public CastProjectileAction(float lifeTime, List<BaseCollider> colliders, BaseTrajectory trajectory,
             Func<DamageEntityInfo, bool> onDamageEntity,
             Projectile projectile, float damageInterval,
-            int limitNumberCollisions, float resetCollisionInterval) : base(lifeTime)
+            int maxHitCount, float targetHitCooldown) : base(lifeTime)
         {
             this.onDamageEntity = onDamageEntity;
             this.colliders = colliders;
             this.trajectory = trajectory;
             this.projectile = projectile;
-            this.limitNumberCollisions = limitNumberCollisions;
-            this.resetCollisionInterval = resetCollisionInterval <= 0 ? float.MaxValue : resetCollisionInterval;
+            this.maxHitCount = maxHitCount;
+            this.targetHitCooldown = targetHitCooldown <= 0 ? float.MaxValue : targetHitCooldown;
             this.damageInterval = damageInterval;
             this.collisionResetElapsedTime = this.damageTickerElapsedTime = 0;
             this.totalCollisions = 0;
@@ -77,7 +77,7 @@ namespace _KITSystem.SkillSystem.Imp
         {
             collisionResetElapsedTime += deltaTime;
 
-            if (collisionResetElapsedTime >= resetCollisionInterval && collisions.Count > 0)
+            if (collisionResetElapsedTime >= targetHitCooldown && collisions.Count > 0)
             {
                 collisions.Clear();
 
@@ -120,7 +120,7 @@ namespace _KITSystem.SkillSystem.Imp
 
                     if (dmgOverTime)
                     {
-                        if(totalCollisions < limitNumberCollisions)
+                        if(totalCollisions < maxHitCount)
                         {
                             if (collisions.Add(entity)) totalCollisions++;
                         }
@@ -130,14 +130,14 @@ namespace _KITSystem.SkillSystem.Imp
                         if (!collisions.Add(entity)) continue;
 
                         DamageEntityInfo info = new DamageEntityInfo(
-                            entity, totalCollisions + 1 == limitNumberCollisions, position
+                            entity, totalCollisions + 1 == maxHitCount, position
                         );
 
                         if (!onDamageEntity.Invoke(info)) continue;
 
                         totalCollisions++;
 
-                        if (totalCollisions == limitNumberCollisions)
+                        if (totalCollisions == maxHitCount)
                         {
                             Interrupt();
 

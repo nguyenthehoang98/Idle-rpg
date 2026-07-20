@@ -26,21 +26,21 @@ namespace _Game.Utils
         public static StringBuilder GetUpgradeWeaponLocalize(WeaponUpgradeData data)
         {
             StringBuilder sb = new StringBuilder();
-            if (data.attackSpeed > 0) sb.AppendLine(string.Format(ATTACK_SPEED_UPGRADE, data.attackSpeed * 100));
-            if (data.projectileSize > 0) sb.AppendLine(string.Format(PROJECTILE_SIZE_UPGRADE, data.projectileSize * 100));
-            if (data.damagePercent > 0) sb.AppendLine(string.Format(DAMAGE_PERCENTAGE_UPGRADE, data.damagePercent * 100));
-            if (data.cooldownReduce > 0) sb.AppendLine(string.Format(COOLDOWN_REDUCE_UPGRADE, data.cooldownReduce * 100));
-            if (data.parallelCount > 0) sb.AppendLine(string.Format(PARRALLEL_PROJECTILE_COUNT_UPGRADE, data.parallelCount));
-            if (data.spreadCount > 0) sb.AppendLine(string.Format(SPREAD_PROJECTILE_COUNT_UPGRADE, data.spreadCount));
-            if (data.spreadDamagePercent > 0) sb.AppendLine(string.Format(SPREAD_PROJECT_DAMAGE_PERCENTAGE_UPGRADE, data.spreadDamagePercent * 100));
+            if (data.attackRate > 0) sb.AppendLine(string.Format(ATTACK_SPEED_UPGRADE, data.attackRate * 100));
+            if (data.projectileScale > 0) sb.AppendLine(string.Format(PROJECTILE_SIZE_UPGRADE, data.projectileScale * 100));
+            if (data.damageMultiplier > 0) sb.AppendLine(string.Format(DAMAGE_PERCENTAGE_UPGRADE, data.damageMultiplier * 100));
+            if (data.cooldownReductionPercent > 0) sb.AppendLine(string.Format(COOLDOWN_REDUCE_UPGRADE, data.cooldownReductionPercent * 100));
+            if (data.extraProjectiles > 0) sb.AppendLine(string.Format(PARRALLEL_PROJECTILE_COUNT_UPGRADE, data.extraProjectiles));
+            if (data.spreadProjectileCount > 0) sb.AppendLine(string.Format(SPREAD_PROJECTILE_COUNT_UPGRADE, data.spreadProjectileCount));
+            if (data.spreadDamageMultiplier > 0) sb.AppendLine(string.Format(SPREAD_PROJECT_DAMAGE_PERCENTAGE_UPGRADE, data.spreadDamageMultiplier * 100));
             if (data.piercingCount > 0) sb.AppendLine(string.Format(PIERCING_COUNT_UPGRADE, data.piercingCount));
             if (data.explosiveRadius > 0) sb.AppendLine(string.Format(EXPLOSIVE_RADIUS_UPGRADE, data.explosiveRadius));
             if (data.explosiveDamagePercent > 0) sb.AppendLine(string.Format(EXPLOSIVE_DAMAGE_PERCENTAGE_UPGRADE, data.explosiveDamagePercent * 100));
             if (data.critChance > 0) sb.AppendLine(string.Format(CRIT_CHANCE_UPGRADE, data.critChance * 100));
             if (data.critDamage > 0) sb.AppendLine(string.Format(CRIT_DAMAGE_UPGRADE, data.critDamage * 100));
             if (data.bounceCount > 0) sb.AppendLine(string.Format(BOUNCE_COUNT_UPGRADE, data.bounceCount));
-            if (data.bounceDamagePercent > 0) sb.AppendLine(string.Format(BOUNCE_DAMAGE_PERCENT_UPGRADE, data.bounceDamagePercent * 100));
-            if (data.killInstantBelowHealthPercent > 0) sb.AppendLine(string.Format(KILL_INSTANT_BELOW_HEALTH_UPGRADE, data.killInstantBelowHealthPercent * 100));
+            if (data.bounceDamageMultiplier > 0) sb.AppendLine(string.Format(BOUNCE_DAMAGE_PERCENT_UPGRADE, data.bounceDamageMultiplier * 100));
+            if (data.executeHealthPercent > 0) sb.AppendLine(string.Format(KILL_INSTANT_BELOW_HEALTH_UPGRADE, data.executeHealthPercent * 100));
             return sb;
         }
 

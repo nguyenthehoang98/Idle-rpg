@@ -10,7 +10,7 @@ namespace _KITSystem.SkillSystem.Imp
         private readonly Vector2 rectangleSize;
         private readonly bool dependencyRelativeRotation;
         
-        public RectangleCollider(IQuery query, Vector2 relativePosition, float timerTrigger, float duration, Vector2 rectangleSize, bool dependencyRelativeRotation) : base(query, relativePosition, timerTrigger, duration)
+        public RectangleCollider(IQuery query, Vector2 relativePosition, float collisionStartDelay, float duration, Vector2 rectangleSize, bool dependencyRelativeRotation) : base(query, relativePosition, collisionStartDelay, duration)
         {
             this.rectangleSize = rectangleSize;
             this.dependencyRelativeRotation = dependencyRelativeRotation;

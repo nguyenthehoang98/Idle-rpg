@@ -10,7 +10,7 @@ namespace _KITSystem.SkillSystem.Imp
         private readonly Vector2 size;
         private readonly float radius;
         
-        public CircleCollider(IQuery query, Vector2 relativePosition, float timerTrigger, float duration, float radius) : base(query, relativePosition, timerTrigger, duration)
+        public CircleCollider(IQuery query, Vector2 relativePosition, float collisionStartDelay, float duration, float radius) : base(query, relativePosition, collisionStartDelay, duration)
         {
             this.radius = radius;
             

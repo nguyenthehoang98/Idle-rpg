@@ -72,7 +72,7 @@ namespace _Game.GamePlay.Manager
                 return;
             }
 
-            float size = skillData.size;
+            float projectileScale = runtimeData.ProjectileScale;
 
             instance.PredictedTargetDamage(runtimeData, entityTarget);
             
@@ -92,7 +92,7 @@ namespace _Game.GamePlay.Manager
              
                 for (int i = 0; i < count; i++)
                 {
-                    float offset = (i - (count - 1) * 0.5f) * parallelSpacing * size;
+                    float offset = (i - (count - 1) * 0.5f) * parallelSpacing * projectileScale;
 
                     Vector3 offsetPos = position + perpendicular * offset;
                     
@@ -159,6 +159,8 @@ namespace _Game.GamePlay.Manager
             List<BaseCollider> colliders = new List<BaseCollider>();
             
             bool useWeapon = runtimeData.UseWeapon;
+            
+            float projectileScale = runtimeData.ProjectileScale;
           
             if (useWeapon)
             {
@@ -171,8 +173,8 @@ namespace _Game.GamePlay.Manager
 #endif
                     return;
                 }
-               
-                projectile.SetSizeScale(skillData.size);
+                
+                projectile.SetSizeScale(projectileScale);
 
                 for (int i = 0; i < projectile.Colliders.Length; i++)
                 {
@@ -212,7 +214,7 @@ namespace _Game.GamePlay.Manager
                     return;
                 }
                 
-                projectile.SetSizeScale(skillData.size);
+                projectile.SetSizeScale(projectileScale);
 
                 for (int i = 0; i < projectile.Colliders.Length; i++)
                 {
@@ -238,12 +240,12 @@ namespace _Game.GamePlay.Manager
             
             Action onProjectileDestroyed = () => { };
             
-            int collLimitCollision = skillData.collLimitCollision <= 0 ? int.MaxValue : skillData.collLimitCollision;
+            int maxHitCount = skillData.maxHitCount <= 0 ? int.MaxValue : skillData.maxHitCount;
 
             CastProjectileAction castProjectileAction = new CastProjectileAction(lifeTime, colliders, trajectory,
                 info => OnDamageEntityFunction(skillData, runtimeData, info, scaleDamage, ref onProjectileDestroyed),
-                projectile, skillData.damageInterval, collLimitCollision + runtimeData.PiercingCount,
-                skillData.collResetCollision
+                projectile, skillData.damageTickInterval, maxHitCount + runtimeData.PiercingCount,
+                skillData.targetHitCooldown
             );
             
             castProjectileAction.OnComplete += () =>
@@ -517,11 +519,11 @@ namespace _Game.GamePlay.Manager
             {
                 case ColliderType.Circle:
                     return new CircleCollider(query, colliderData.relativePosition,
-                        skillData.collTimerTrigger, skillData.collDuration, colliderData.circleRadius
+                        skillData.collisionStartDelay, skillData.collisionDuration, colliderData.circleRadius
                     );
                 case ColliderType.Rectangle:
                     return new RectangleCollider(query, colliderData.relativePosition,
-                        skillData.collTimerTrigger, skillData.collDuration, colliderData.rectangleSize,
+                        skillData.collisionStartDelay, skillData.collisionDuration, colliderData.rectangleSize,
                         colliderData.dependencyRelativeRotation
                     );
                 default:
@@ -534,8 +536,10 @@ namespace _Game.GamePlay.Manager
             ref Vector3 destination, ref float duration)
         {
             float distance = 0;
-            
-            bool found = DistanceToCircleEdge(position, destination, skillData.findRadius, out distance, out Vector3 hitPoint);
+
+            bool found = DistanceToCircleEdge(position, destination, skillData.attackRange + runtimeData.AttackRange,
+                out distance, out Vector3 hitPoint
+            );
 
             if (!found)
             {

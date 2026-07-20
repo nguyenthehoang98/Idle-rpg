@@ -169,22 +169,23 @@ namespace _Game.Configs
         public int level;
         public string iconName;
         public UpgradeType type;
-        public float attackSpeed;
-        public float projectileSize;
-        public float damagePercent;
-        public float cooldownReduce;
-        public int parallelCount;
-        public float parallelDamagePercent;
-        public int spreadCount;
-        public float spreadDamagePercent;
+        public float attackRange;
+        public float attackRate;
+        public float projectileScale;
+        public float damageMultiplier;
+        public float cooldownReductionPercent;
+        public int extraProjectiles;
+        public float extraDamageMultiplier;
+        public int spreadProjectileCount;
+        public float spreadDamageMultiplier;
         public int piercingCount;
         public float explosiveRadius;
         public float explosiveDamagePercent;
         public float critChance;
         public float critDamage;
         public int bounceCount;
-        public float bounceDamagePercent;
-        public float killInstantBelowHealthPercent;
+        public float bounceDamageMultiplier;
+        public float executeHealthPercent;
 
         public override int GetHashCode()
         {
@@ -203,42 +204,44 @@ namespace _Game.Configs
 
         public void Increase(WeaponUpgradeData data)
         {
-            attackSpeed += data.attackSpeed;
+            attackRange += data.attackRange;
+            attackRate += data.attackRate;
             critChance += data.critChance;
             critDamage += data.critDamage;
             bounceCount += data.bounceCount;
-            bounceDamagePercent += data.bounceDamagePercent;
-            killInstantBelowHealthPercent += data.killInstantBelowHealthPercent;
-            projectileSize += data.projectileSize;
-            parallelDamagePercent += data.parallelDamagePercent;
-            damagePercent += data.damagePercent;
+            bounceDamageMultiplier += data.bounceDamageMultiplier;
+            executeHealthPercent += data.executeHealthPercent;
+            projectileScale += data.projectileScale;
+            extraDamageMultiplier += data.extraDamageMultiplier;
+            damageMultiplier += data.damageMultiplier;
             explosiveDamagePercent += data.explosiveDamagePercent;
-            spreadDamagePercent += data.spreadDamagePercent;
+            spreadDamageMultiplier += data.spreadDamageMultiplier;
             piercingCount += data.piercingCount;
             explosiveRadius += data.explosiveRadius;
-            spreadCount += data.spreadCount;
-            parallelCount += data.parallelCount;
-            cooldownReduce += data.cooldownReduce;
+            spreadProjectileCount += data.spreadProjectileCount;
+            extraProjectiles += data.extraProjectiles;
+            cooldownReductionPercent += data.cooldownReductionPercent;
         }
 
         public void Decrease(WeaponUpgradeData data)
         {
-            attackSpeed -= data.attackSpeed;
+            attackRange -= data.attackRange;
+            attackRate -= data.attackRate;
             critChance -= data.critChance;
             critDamage -= data.critDamage;
             bounceCount -= data.bounceCount;
-            parallelDamagePercent -= data.parallelDamagePercent;
-            bounceDamagePercent -= data.bounceDamagePercent;
-            killInstantBelowHealthPercent -= data.killInstantBelowHealthPercent;
-            projectileSize -= data.projectileSize;
-            damagePercent -= data.damagePercent;
+            extraDamageMultiplier -= data.extraDamageMultiplier;
+            bounceDamageMultiplier -= data.bounceDamageMultiplier;
+            executeHealthPercent -= data.executeHealthPercent;
+            projectileScale -= data.projectileScale;
+            damageMultiplier -= data.damageMultiplier;
             explosiveDamagePercent -= data.explosiveDamagePercent;
-            spreadDamagePercent -= data.spreadDamagePercent;
+            spreadDamageMultiplier -= data.spreadDamageMultiplier;
             piercingCount -= data.piercingCount;
             explosiveRadius -= data.explosiveRadius;
-            spreadCount -= data.spreadCount;
-            parallelCount -= data.parallelCount;
-            cooldownReduce -= data.cooldownReduce;
+            spreadProjectileCount -= data.spreadProjectileCount;
+            extraProjectiles -= data.extraProjectiles;
+            cooldownReductionPercent -= data.cooldownReductionPercent;
         }
     }
 

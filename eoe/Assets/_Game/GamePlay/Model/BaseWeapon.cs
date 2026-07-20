@@ -254,7 +254,7 @@ namespace _Game.GamePlay.Model
         {
             while (!IsAttacking)
             {
-                float cooldown = WeaponData.cooldown * (1 - CurrentUpgradeData.cooldownReduce);
+                float cooldown = WeaponData.cooldown * (1 - CurrentUpgradeData.cooldownReductionPercent);
 
                 yield return new WaitForSeconds(cooldown / TimeScale);
 
@@ -306,20 +306,22 @@ namespace _Game.GamePlay.Model
 
             SkillRuntimeData runtimeData = new SkillRuntimeData
             {
-                Attack = (1 + CurrentUpgradeData.damagePercent) * WeaponData.attack,
+                ProjectileScale = CurrentUpgradeData.projectileScale,
+                AttackRange = CurrentUpgradeData.attackRange,
+                Attack = (1 + CurrentUpgradeData.damageMultiplier) * WeaponData.attack,
                 CritChance = CurrentUpgradeData.critChance + WeaponData.critChance,
                 CritDamage = CurrentUpgradeData.critDamage + WeaponData.critDamage,
-                ParallelCount = CurrentUpgradeData.parallelCount,
-                ParallelDamagePercent = CurrentUpgradeData.parallelDamagePercent,
-                SpreadCount = CurrentUpgradeData.spreadCount,
-                SpreadDamagePercent = CurrentUpgradeData.spreadDamagePercent,
+                ParallelCount = CurrentUpgradeData.extraProjectiles,
+                ParallelDamagePercent = CurrentUpgradeData.extraDamageMultiplier,
+                SpreadCount = CurrentUpgradeData.spreadProjectileCount,
+                SpreadDamagePercent = CurrentUpgradeData.spreadDamageMultiplier,
                 PiercingCount = CurrentUpgradeData.piercingCount,
                 ExplosiveRadius = CurrentUpgradeData.explosiveRadius,
                 ExplosiveDamagePercent = CurrentUpgradeData.explosiveDamagePercent,
                 ExplosivePrefabName = WeaponData.explosivePrefabName,
                 BounceCount = CurrentUpgradeData.bounceCount,
-                BounceDamagePercent = CurrentUpgradeData.bounceDamagePercent,
-                KillInstantBelowHealthPercent = CurrentUpgradeData.killInstantBelowHealthPercent,
+                BounceDamagePercent = CurrentUpgradeData.bounceDamageMultiplier,
+                KillInstantBelowHealthPercent = CurrentUpgradeData.executeHealthPercent,
                 Pivot = GetPivotPosition(),
                 Destination = destinationPosition,
                 Muzzle = muzzlePosition,
@@ -401,7 +403,7 @@ namespace _Game.GamePlay.Model
         protected bool FindTarget(FindTargetType type, Vector3 position)
         {
             Vector3 center = Vector3.zero;
-            float radius = SkillData.findRadius;
+            float radius = SkillData.attackRange + CurrentUpgradeData.attackRange;
             float sqrRadius = radius * radius;
 
             query.FindTarget(type, center, position, radius, (e, float2) =>

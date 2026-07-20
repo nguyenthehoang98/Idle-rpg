@@ -8,6 +8,8 @@ namespace _Game.GamePlay.Data
     public struct SkillRuntimeData
     {
         public int Entity;
+        public float ProjectileScale;
+        public float AttackRange;
         public float Attack;
         public float CritChance;
         public float CritDamage;

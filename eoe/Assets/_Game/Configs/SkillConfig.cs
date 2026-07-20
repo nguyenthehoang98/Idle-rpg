@@ -53,18 +53,17 @@ namespace _Game.Configs
          */
         public int skillId;
         public string prefabName; // Đọc từ weapon. monster
-        public float size;
 
         /*
          * @Damage ticet
          */
-        public float damageInterval;
+        public float damageTickInterval;
 
         /*
          * @Query entity
          */
         public FindTargetType findTarget;
-        public float findRadius;
+        public float attackRange;
 
         /*
          * @Trajectory
@@ -83,10 +82,10 @@ namespace _Game.Configs
         /*
          * @Collider
          */
-        public float collTimerTrigger;
-        public float collDuration;
-        public float collResetCollision;
-        public int collLimitCollision;
+        public float collisionStartDelay;
+        public float collisionDuration;
+        public float targetHitCooldown;
+        public int maxHitCount;
 
         /*
          * @Extra/bonus
