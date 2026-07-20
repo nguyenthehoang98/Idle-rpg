@@ -395,9 +395,10 @@ namespace _Game.GamePlay.Manager
                     {
                         float dmg = (e == info.entity ? 1 : explosiveDamagePercent) * scaleDamage;
 
-                        Vector3 textDamagePosition = skillData.trajectory == TrajectoryType.Stationary
+                        Vector3 textDamagePosition = (skillData.trajectory == TrajectoryType.Stationary || !info.useProjectilePosition)
                             ? position
                             : info.projectilePosition;
+                        
                         return CalculatorDamage(skillData, runtimeData,
                             info.entity, textDamagePosition, dmg, info.isLastCollision, ref onProjectileDestroyed
                         );
@@ -406,18 +407,7 @@ namespace _Game.GamePlay.Manager
             }
             else
             {
-#if UNITY_EDITOR
-                Vector3 p = info.projectilePosition;
-                GizmosLine.Line(p - new Vector3(0.25f, 0.25f),
-                    p + new Vector3(0.25f, 0.25f),
-                    Color.yellow, 0.1f
-                );
-                GizmosLine.Line(p + new Vector3(-0.25f, 0.25f),
-                    p + new Vector3(0.25f, -0.25f),
-                    Color.yellow, 0.1f
-                );
-#endif
-                Vector3 textDamagePosition = skillData.trajectory == TrajectoryType.Stationary
+                Vector3 textDamagePosition = (skillData.trajectory == TrajectoryType.Stationary || !info.useProjectilePosition)
                     ? position
                     : info.projectilePosition;
                 

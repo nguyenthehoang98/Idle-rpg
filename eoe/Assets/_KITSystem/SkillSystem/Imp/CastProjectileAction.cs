@@ -12,12 +12,22 @@ namespace _KITSystem.SkillSystem.Imp
         public int entity;
         public bool isLastCollision;
         public Vector3 projectilePosition;
+        public bool useProjectilePosition;
 
         public DamageEntityInfo(int entity, bool isLastCollision, Vector3 projectilePosition)
         {
             this.entity = entity;
+            this.useProjectilePosition = true;
             this.isLastCollision = isLastCollision;
             this.projectilePosition = projectilePosition;
+        }
+
+        public DamageEntityInfo(int entity)
+        {
+            this.entity = entity;
+            this.useProjectilePosition = false;
+            this.isLastCollision = false;
+            this.projectilePosition = Vector3.zero;
         }
     }
 
@@ -100,16 +110,20 @@ namespace _KITSystem.SkillSystem.Imp
             }
 
             bool hit = results.Count > 0;
+            
+            bool dmgOverTime = damageInterval > 0;
 
             if (hit)
             {
                 foreach (var entity in results)
                 {
-                    bool dmgOverTime = damageInterval > 0;
 
                     if (dmgOverTime)
                     {
-                        Debug.LogError("Chưa xử lý");
+                        if(totalCollisions < limitNumberCollisions)
+                        {
+                            if (collisions.Add(entity)) totalCollisions++;
+                        }
                     }
                     else
                     {
@@ -118,8 +132,8 @@ namespace _KITSystem.SkillSystem.Imp
                         DamageEntityInfo info = new DamageEntityInfo(
                             entity, totalCollisions + 1 == limitNumberCollisions, position
                         );
-                        
-                        if (!TryDamage(info)) continue;
+
+                        if (!onDamageEntity.Invoke(info)) continue;
 
                         totalCollisions++;
 
@@ -129,6 +143,24 @@ namespace _KITSystem.SkillSystem.Imp
 
                             return;
                         }
+                    }
+                }
+            }
+            
+            // DOT
+            if (dmgOverTime)
+            {
+                damageTickerElapsedTime += deltaTime;
+
+                if (damageTickerElapsedTime >= damageInterval)
+                {
+                    damageTickerElapsedTime = 0;
+
+                    foreach (var entity in collisions)
+                    {
+                        DamageEntityInfo info = new DamageEntityInfo(entity);
+
+                        onDamageEntity.Invoke(info);
                     }
                 }
             }
@@ -145,26 +177,6 @@ namespace _KITSystem.SkillSystem.Imp
             OnComplete?.Invoke();
 
             OnComplete = null;
-        }
-
-        private bool TryDamage(DamageEntityInfo info)
-        {
-            bool dmgOverTime = damageInterval > 0;
-
-            if (dmgOverTime)
-            {
-                if (damageTickerElapsedTime < damageInterval) return false;
-
-                if (onDamageEntity.Invoke(info))
-                {
-                    damageTickerElapsedTime = 0;
-                    return true;
-                }
-
-                return false;
-            }
-
-            return onDamageEntity.Invoke(info);
         }
     }
 }

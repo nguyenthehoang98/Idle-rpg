@@ -118,8 +118,8 @@ MonoBehaviour:
   colliders:
   - type: 1
     circleRadius: 0.67
-    rectangleSize: {x: 1.6, y: 0.55}
-    relativePosition: {x: 0.8, y: 0.11}
+    rectangleSize: {x: 2.4, y: 0.8}
+    relativePosition: {x: 1.2, y: 0.11}
     dependencyRelativeRotation: 1
 --- !u!1 &9046264094979996413
 GameObject:
@@ -148,9 +148,9 @@ Transform:
   m_GameObject: {fileID: 9046264094979996413}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.135, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0.2, z: 0}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 7067284531707531920}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
