@@ -186,6 +186,9 @@ namespace _Game.GamePlay.Manager
             if (weapon == null) Debug.LogError($"Gameobject '{go}' not attach Weapon component");
 
             await weapon.Initialize(weaponData, dict, dataX2, dataX3, flip);
+            
+            // Mặc định sẽ có sẵn ở level 1
+            weapon.IncreaseUpgradeData(dict[1][0]);
 
             weaponContainer[weaponId] = weapon;
         }

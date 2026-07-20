@@ -40,7 +40,9 @@ namespace _Game.GamePlay.View
         public async UniTask Init(CardItemData itemData)
         {
             upgradeData = itemData.Current;
+           
             txtName.text = $"Weapon {upgradeData.id} " + LocalizeManager.GetPowerLevel(itemData.currentGroup + 1);
+            
             txtDesc.text = LocalizeManager.GetUpgradeWeaponLocalize(upgradeData).ToString();
             
             var satellites = itemData.Satellites;

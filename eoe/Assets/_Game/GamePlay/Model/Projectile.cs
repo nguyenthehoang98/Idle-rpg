@@ -14,6 +14,7 @@ namespace _Game.GamePlay.Model
         [Header("Event & Parameters")]
         [SerializeField] private UnityEvent onInitialize;
         [SerializeField] private UnityEvent onDestroy;
+        [SerializeField] private ScaleAxis scaleAxis = ScaleAxis.XY;
         [SerializeField] private bool canDestroy = true;
         [SerializeField] private bool dependencyRelativePosition = true;
         [SerializeField] private bool shouldPushToWeapon;
@@ -138,7 +139,7 @@ namespace _Game.GamePlay.Model
 
             angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-            //rotatePivot.localEulerAngles = new Vector3(0, 0, angle);
+            rotatePivot.localEulerAngles = new Vector3(0, 0, angle);
         }
 
         public void StopLerpMotion()
@@ -199,17 +200,48 @@ namespace _Game.GamePlay.Model
             for (int i = 0; i < Colliders.Length; i++)
             {
                 ColliderData colliderData = colliders[i];
-                
+
+                // Circle luôn scale đều
                 colliderData.circleRadius *= scale;
-                
-                colliderData.rectangleSize *= scale;
-                
-                if (dependencyRelativePosition) colliderData.relativePosition *= scale;
+
+                // Rectangle
+                Vector2 rectSize = colliderData.rectangleSize;
+
+                if (scaleAxis.HasFlag(ScaleAxis.X))
+                    rectSize.x *= scale;
+
+                if (scaleAxis.HasFlag(ScaleAxis.Y))
+                    rectSize.y *= scale;
+
+                colliderData.rectangleSize = rectSize;
+
+                // Relative Position
+                if (dependencyRelativePosition)
+                {
+                    Vector2 pos = colliderData.relativePosition;
+
+                    if (scaleAxis.HasFlag(ScaleAxis.X))
+                        pos.x *= scale;
+
+                    if (scaleAxis.HasFlag(ScaleAxis.Y))
+                        pos.y *= scale;
+
+                    colliderData.relativePosition = pos;
+                }
 
                 Colliders[i] = colliderData;
             }
 
-            scalePivot.transform.localScale = Vector3.one * scale;
+            // Visual
+            Vector3 visualScale = Vector3.one;
+
+            if (scaleAxis.HasFlag(ScaleAxis.X))
+                visualScale.x = scale;
+
+            if (scaleAxis.HasFlag(ScaleAxis.Y))
+                visualScale.y = scale;
+
+            scalePivot.transform.localScale = visualScale;
 
             if (trailRenderer != null)
             {
@@ -248,5 +280,13 @@ namespace _Game.GamePlay.Model
         {
             gameObject.SetActive(false);
         }
+    }
+
+    public enum ScaleAxis
+    {
+        None = 0,
+        X = 1 << 0,
+        Y = 1 << 1,
+        XY = X | Y
     }
 }
