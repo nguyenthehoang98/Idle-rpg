@@ -22,6 +22,7 @@ namespace _Game.GamePlay.Data
         public int BounceCount; // chưa có logic
         public float BounceDamagePercent; // chưa có logic
         public float KillInstantBelowHealthPercent;
+        public DependencyResetAttack DependencyReset; 
         public TrajectoryData Trajectory;
         public Vector2 Pivot;
         public Vector2 Muzzle;

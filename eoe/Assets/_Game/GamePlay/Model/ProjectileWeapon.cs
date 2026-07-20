@@ -30,7 +30,10 @@ namespace _Game.GamePlay.Model
             ExecuteAttack();
         }
 
-        private void EndAnimation() => StopAttack();
+        private void EndAnimation()
+        {
+            if(DependencyReset == DependencyResetAttack.Animation) StopAttack();
+        }
 
         protected override bool UseWeapon => false;
     }

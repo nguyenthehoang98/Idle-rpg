@@ -125,7 +125,7 @@ Animator:
   m_GameObject: {fileID: 597346039149855723}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 8f874be35c4900f41955754a94fa898a, type: 2}
+  m_Controller: {fileID: 22100000, guid: fb4267484049def48abc57bd288fbe3e, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -149,6 +149,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16810ec00ac448afa86bcda50dcdc39f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.Model.FlyWeapon
+  onStartAttack:
+    m_PersistentCalls:
+      m_Calls: []
+  onCompleteAttack:
+    m_PersistentCalls:
+      m_Calls: []
+  dependencyReset: 0
   renderer: {fileID: 6899095874571813914}
   adjustOutlineColorDuration: 0.2
   trajectory:

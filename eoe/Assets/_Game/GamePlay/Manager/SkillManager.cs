@@ -248,7 +248,12 @@ namespace _Game.GamePlay.Manager
             
             castProjectileAction.OnComplete += () =>
             {
-                projectile.Destroy(onProjectileDestroyed);         
+                projectile.Destroy(onProjectileDestroyed);
+
+                if (runtimeData.DependencyReset == DependencyResetAttack.Skill)
+                {
+                    runtimeData.Weapon.StopAttack();
+                }
             };
             
             RequestAddAction(1, castProjectileAction);

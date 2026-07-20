@@ -68,6 +68,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 323f0f68c6614897bf802376601d5abe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.Model.RangedWeapon
+  onStartAttack:
+    m_PersistentCalls:
+      m_Calls: []
+  onCompleteAttack:
+    m_PersistentCalls:
+      m_Calls: []
+  dependencyReset: 1
   renderer: {fileID: 4674244790521166124}
   adjustOutlineColorDuration: 0.2
   trajectory:
@@ -143,6 +150,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    spline: {fileID: 0}
   rotatePivot: {fileID: 154186919891485008}
   rotationCurve:
     serializedVersion: 2

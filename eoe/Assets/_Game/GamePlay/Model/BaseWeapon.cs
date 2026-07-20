@@ -28,6 +28,7 @@ namespace _Game.GamePlay.Model
         [Header("Event & Parameters")]
         [SerializeField] private UnityEvent onStartAttack;
         [SerializeField] private UnityEvent onCompleteAttack;
+        [SerializeField] private DependencyResetAttack dependencyReset;
         [Header("Components")]
         [SerializeField] private new SpriteRenderer renderer;
         [SerializeField] private float adjustOutlineColorDuration = 0.2f;
@@ -62,6 +63,7 @@ namespace _Game.GamePlay.Model
         private int level;
 
         protected WeaponUpgradeData CurrentUpgradeData => current;
+        protected DependencyResetAttack DependencyReset => dependencyReset;
         protected SkillData SkillData { get; private set; }
         protected WeaponData WeaponData { get; private set; }
         protected float DeltaTime { get; private set; } = 0.034f;
