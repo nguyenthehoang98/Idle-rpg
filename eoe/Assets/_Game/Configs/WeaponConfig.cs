@@ -171,20 +171,16 @@ namespace _Game.Configs
         public UpgradeType type;
         public float attackRange;
         public float attackRate;
-        public float projectileScale;
-        public float damageMultiplier;
+        public float projectileScaleBonus;
+        public float projectileDamageMultiplier;
         public float cooldownReductionPercent;
-        public int extraProjectiles;
-        public float extraDamageMultiplier;
+        public int projectilesPerShot;
         public int spreadProjectileCount;
-        public float spreadDamageMultiplier;
-        public int piercingCount;
+        public int bonusPierceCount;
         public float explosiveRadius;
         public float explosiveDamagePercent;
         public float critChance;
         public float critDamage;
-        public int bounceCount;
-        public float bounceDamageMultiplier;
         public float executeHealthPercent;
 
         public override int GetHashCode()
@@ -208,18 +204,14 @@ namespace _Game.Configs
             attackRate += data.attackRate;
             critChance += data.critChance;
             critDamage += data.critDamage;
-            bounceCount += data.bounceCount;
-            bounceDamageMultiplier += data.bounceDamageMultiplier;
             executeHealthPercent += data.executeHealthPercent;
-            projectileScale += data.projectileScale;
-            extraDamageMultiplier += data.extraDamageMultiplier;
-            damageMultiplier += data.damageMultiplier;
+            projectileScaleBonus += data.projectileScaleBonus;
+            projectileDamageMultiplier += data.projectileDamageMultiplier;
             explosiveDamagePercent += data.explosiveDamagePercent;
-            spreadDamageMultiplier += data.spreadDamageMultiplier;
-            piercingCount += data.piercingCount;
+            bonusPierceCount += data.bonusPierceCount;
             explosiveRadius += data.explosiveRadius;
             spreadProjectileCount += data.spreadProjectileCount;
-            extraProjectiles += data.extraProjectiles;
+            projectilesPerShot += data.projectilesPerShot;
             cooldownReductionPercent += data.cooldownReductionPercent;
         }
 
@@ -229,18 +221,14 @@ namespace _Game.Configs
             attackRate -= data.attackRate;
             critChance -= data.critChance;
             critDamage -= data.critDamage;
-            bounceCount -= data.bounceCount;
-            extraDamageMultiplier -= data.extraDamageMultiplier;
-            bounceDamageMultiplier -= data.bounceDamageMultiplier;
             executeHealthPercent -= data.executeHealthPercent;
-            projectileScale -= data.projectileScale;
-            damageMultiplier -= data.damageMultiplier;
+            projectileScaleBonus -= data.projectileScaleBonus;
+            projectileDamageMultiplier -= data.projectileDamageMultiplier;
             explosiveDamagePercent -= data.explosiveDamagePercent;
-            spreadDamageMultiplier -= data.spreadDamageMultiplier;
-            piercingCount -= data.piercingCount;
+            bonusPierceCount -= data.bonusPierceCount;
             explosiveRadius -= data.explosiveRadius;
             spreadProjectileCount -= data.spreadProjectileCount;
-            extraProjectiles -= data.extraProjectiles;
+            projectilesPerShot -= data.projectilesPerShot;
             cooldownReductionPercent -= data.cooldownReductionPercent;
         }
     }

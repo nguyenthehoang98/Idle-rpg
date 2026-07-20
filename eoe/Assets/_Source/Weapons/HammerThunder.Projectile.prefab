@@ -26,11 +26,43 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2828195858323115395}
+  - {fileID: 3763849957737444577}
   m_Father: {fileID: 5878097163562352361}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3306959910973055419
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3763849957737444577}
+  m_Layer: 0
+  m_Name: rotate
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3763849957737444577
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3306959910973055419}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7067284531707531920}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4403227050818172255
 GameObject:
@@ -43,7 +75,7 @@ GameObject:
   - component: {fileID: 5878097163562352361}
   - component: {fileID: 7754458491669515336}
   m_Layer: 0
-  m_Name: FlameThrower.Projectile
+  m_Name: HammerThunder.Projectile
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63,7 +95,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7067284531707531920}
-  - {fileID: 4805969521052779143}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7754458491669515336
@@ -95,72 +126,20 @@ MonoBehaviour:
         m_CallState: 2
   onDestroy:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4331552628611919551}
-        m_TargetAssemblyTypeName: _Game.GamePlay.View.SpriteRendererAnimation, Assembly-CSharp
-        m_MethodName: Stop
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  scaleAxis: 2
+      m_Calls: []
+  scaleAxis: 3
   canDestroy: 1
   dependencyRelativePosition: 1
-  shouldPushToWeapon: 1
-  positionPivot: {fileID: 4805969521052779143}
+  shouldPushToWeapon: 0
+  positionPivot: {fileID: 5878097163562352361}
   scalePivot: {fileID: 7067284531707531920}
-  rotatePivot: {fileID: 4805969521052779143}
+  rotatePivot: {fileID: 3763849957737444577}
   trailRenderer: {fileID: 0}
   colliders:
-  - type: 1
-    circleRadius: 0.67
-    rectangleSize: {x: 0.5, y: 0.3}
-    relativePosition: {x: 0.2, y: 0.035}
-    dependencyRelativeRotation: 1
-  - type: 1
-    circleRadius: 0.67
-    rectangleSize: {x: 0.5, y: 0.5}
-    relativePosition: {x: 0.7, y: 0.05}
-    dependencyRelativeRotation: 1
-  - type: 1
-    circleRadius: 0.67
-    rectangleSize: {x: 0.5, y: 0.5}
-    relativePosition: {x: 1.2, y: 0.1}
-    dependencyRelativeRotation: 1
-  - type: 1
-    circleRadius: 0.67
-    rectangleSize: {x: 0.25, y: 0.6}
-    relativePosition: {x: 1.575, y: 0.15}
-    dependencyRelativeRotation: 1
-  - type: 1
-    circleRadius: 0.67
-    rectangleSize: {x: 0.25, y: 0.8}
-    relativePosition: {x: 1.825, y: 0.15}
-    dependencyRelativeRotation: 1
-  - type: 1
-    circleRadius: 0.67
-    rectangleSize: {x: 0.25, y: 0.85}
-    relativePosition: {x: 2.075, y: 0.15}
-    dependencyRelativeRotation: 1
-  - type: 1
-    circleRadius: 0.67
-    rectangleSize: {x: 0.25, y: 0.7}
-    relativePosition: {x: 2.325, y: 0.2}
-    dependencyRelativeRotation: 1
-  - type: 1
-    circleRadius: 0.67
-    rectangleSize: {x: 0.25, y: 0.85}
-    relativePosition: {x: 2.575, y: 0.3}
-    dependencyRelativeRotation: 1
-  - type: 1
-    circleRadius: 0.67
-    rectangleSize: {x: 0.3, y: 0.7}
-    relativePosition: {x: 2.875, y: 0.3}
+  - type: 0
+    circleRadius: 0.8
+    rectangleSize: {x: 5, y: 0.5}
+    relativePosition: {x: 0, y: 0}
     dependencyRelativeRotation: 1
 --- !u!1 &9046264094979996413
 GameObject:
@@ -189,9 +168,9 @@ Transform:
   m_GameObject: {fileID: 9046264094979996413}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
-  m_ConstrainProportionsScale: 1
+  m_LocalPosition: {x: 0, y: 7.5, z: 0}
+  m_LocalScale: {x: 1, y: 2, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7067284531707531920}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -239,10 +218,10 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 739322861
-  m_SortingLayer: 4
+  m_SortingLayerID: 1228164997
+  m_SortingLayer: 2
   m_SortingOrder: 1
-  m_Sprite: {fileID: -1298101607, guid: c5cb088fc6d1aa94e9d2bd9577f669e8, type: 3}
+  m_Sprite: {fileID: -885315102613970553, guid: 4ed3e31e84eff434285684a23f5d72ec, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -268,44 +247,13 @@ MonoBehaviour:
   playOnEnable: 0
   reference: {fileID: 4143204196659968835}
   sprites:
-  - {fileID: -1298101607, guid: c5cb088fc6d1aa94e9d2bd9577f669e8, type: 3}
-  - {fileID: 794175461, guid: c5cb088fc6d1aa94e9d2bd9577f669e8, type: 3}
-  - {fileID: -856575970, guid: c5cb088fc6d1aa94e9d2bd9577f669e8, type: 3}
-  - {fileID: -608311936, guid: c5cb088fc6d1aa94e9d2bd9577f669e8, type: 3}
-  - {fileID: -1339571941, guid: c5cb088fc6d1aa94e9d2bd9577f669e8, type: 3}
-  loop: 1
-  frameRate: 30
+  - {fileID: 3117191011359597849, guid: 4ed3e31e84eff434285684a23f5d72ec, type: 3}
+  - {fileID: -6480367745318688126, guid: 4ed3e31e84eff434285684a23f5d72ec, type: 3}
+  - {fileID: 5824452323703539130, guid: 4ed3e31e84eff434285684a23f5d72ec, type: 3}
+  - {fileID: 3710927090534192032, guid: 4ed3e31e84eff434285684a23f5d72ec, type: 3}
+  - {fileID: -885315102613970553, guid: 4ed3e31e84eff434285684a23f5d72ec, type: 3}
+  loop: 0
+  frameRate: 25
   OnEventCompleted:
     m_PersistentCalls:
       m_Calls: []
---- !u!1 &9216253889047293989
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4805969521052779143}
-  m_Layer: 0
-  m_Name: rotate
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4805969521052779143
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9216253889047293989}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5878097163562352361}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

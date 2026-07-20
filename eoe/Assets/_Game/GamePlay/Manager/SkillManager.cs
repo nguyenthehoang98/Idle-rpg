@@ -72,7 +72,7 @@ namespace _Game.GamePlay.Manager
                 return;
             }
 
-            float projectileScale = runtimeData.ProjectileScale;
+            float projectileScale = runtimeData.ProjectileScaleBonus + 1;
 
             instance.PredictedTargetDamage(runtimeData, entityTarget);
             
@@ -84,11 +84,11 @@ namespace _Game.GamePlay.Manager
             
             float parallelSpacing = skillData.parallelDistanceStep;
 
-            if (runtimeData.ParallelCount > 0)
+            if (runtimeData.ProjectilesPerShot > 0)
             {
-                int count = runtimeData.ParallelCount + 1;
-                
-                float scaleDamage = runtimeData.ParallelDamagePercent;
+                int count = runtimeData.ProjectilesPerShot + 1;
+
+                float scaleDamage = 1f;//runtimeData.ParallelDamagePercent;
              
                 for (int i = 0; i < count; i++)
                 {
@@ -104,15 +104,15 @@ namespace _Game.GamePlay.Manager
                 extra = true;
             }
 
-            if (runtimeData.SpreadCount > 0)
+            if (runtimeData.SpreadProjectileCount > 0)
             {
-                int count = runtimeData.SpreadCount + 1;
+                int count = runtimeData.SpreadProjectileCount + 1;
                 
                 float angleStep = skillData.spreadAngleStep;
-                
-                float scaleDamage = runtimeData.SpreadDamagePercent;
 
-                float d = Mathf.CeilToInt(runtimeData.ParallelCount / 2f) * parallelSpacing;
+                float scaleDamage = 1f;//runtimeData.SpreadDamagePercent;
+
+                float d = Mathf.CeilToInt(runtimeData.ProjectilesPerShot / 2f) * parallelSpacing;
                 
                 Vector3 left = position - d * perpendicular;
                 
@@ -160,7 +160,7 @@ namespace _Game.GamePlay.Manager
             
             bool useWeapon = runtimeData.UseWeapon;
             
-            float projectileScale = runtimeData.ProjectileScale;
+            float projectileScale = runtimeData.ProjectileScaleBonus + 1;
           
             if (useWeapon)
             {
@@ -241,10 +241,11 @@ namespace _Game.GamePlay.Manager
             Action onProjectileDestroyed = () => { };
             
             int maxHitCount = skillData.maxHitCount <= 0 ? int.MaxValue : skillData.maxHitCount;
+            maxHitCount += runtimeData.BonusPierceCount;
 
             CastProjectileAction castProjectileAction = new CastProjectileAction(lifeTime, colliders, trajectory,
                 info => OnDamageEntityFunction(skillData, runtimeData, info, scaleDamage, ref onProjectileDestroyed),
-                projectile, skillData.damageTickInterval, maxHitCount + runtimeData.PiercingCount,
+                projectile, skillData.damageTickInterval, maxHitCount,
                 skillData.targetHitCooldown
             );
             
@@ -314,6 +315,8 @@ namespace _Game.GamePlay.Manager
                     };
                 }
             }
+            
+            projectile.ImmediatelySetPosition(trajectory.EvaluatePosition(0));
 
             projectile.Initialize(runtimeData.Weapon);
 
@@ -450,7 +453,7 @@ namespace _Game.GamePlay.Manager
                 
             SpawnTextDamage(damage, critical, textDamagePosition);
 
-            float killInstantBelow = runtimeData.KillInstantBelowHealthPercent;
+            float killInstantBelow = runtimeData.ExecuteHealthPercent;
             
             float healthPercent = health.CurrentHealth / (float)health.MaxHealth;
             
