@@ -1,17 +1,16 @@
 using System;
 using UnityEngine;
 using UnityEngine.Events;
-using EntityId = _GameToolkit.Entity.EntityId;
 
 namespace _GameToolkit.Collision
 {
-   public abstract class BaseCollision : MonoBehaviour
+   internal abstract class BaseCollision : MonoBehaviour, ICollision
    {
       [SerializeField] protected LayerMask layerMask;
 
-      [SerializeField] private UnityEvent<EntityId> OnEventOverlap;
+      [SerializeField] private UnityEvent<Shared.EntityId> OnEventOverlap;
 
-      public event Action<EntityId> OnOverlap;
+      public event Action<Shared.EntityId> OnOverlap;
 
       public void Startup()
       {
@@ -54,7 +53,7 @@ namespace _GameToolkit.Collision
          OnShutdown();
       }
 
-      protected void Overlap(EntityId entityId)
+      protected void Overlap(Shared.EntityId entityId)
       {
          OnEventOverlap?.Invoke(entityId);
          

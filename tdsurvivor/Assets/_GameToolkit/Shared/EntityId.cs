@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace _GameToolkit.Entity
+namespace _GameToolkit.Shared
 {
     public class EntityId : MonoBehaviour
     {

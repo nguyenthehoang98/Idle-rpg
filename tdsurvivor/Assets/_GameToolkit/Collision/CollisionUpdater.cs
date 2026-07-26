@@ -1,40 +1,19 @@
 ﻿using System.Collections.Generic;
 using _GameToolkit.Updater;
-using UnityEngine;
 
 namespace _GameToolkit.Collision
 {
     internal sealed class CollisionUpdater : BaseUpdatable
     {
-        static CollisionUpdater instance;
-
         private Queue<BaseCollision> additionQueue = new Queue<BaseCollision>();
         private Queue<BaseCollision> removeQueue = new Queue<BaseCollision>();
         private List<BaseCollision> onGoings = new List<BaseCollision>();
 
-        public static CollisionUpdater Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new GameObject("CollisionUpdater").AddComponent<CollisionUpdater>();
-                }
-
-                return instance;
-            }
-        }
+        public static CollisionUpdater Instance { get; private set; }
 
         private void Awake()
         {
-            if (instance != null && instance != this)
-            {
-                Destroy(gameObject);
-            }
-            else
-            {
-                instance = this;
-            }
+            Instance = this;
         }
 
         public override void Tick(float deltaTime)

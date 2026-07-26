@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
-using EntityId = _GameToolkit.Entity.EntityId;
+using EntityId = _GameToolkit.Shared.EntityId;
 
 namespace _GameToolkit.Collision
 {
     [RequireComponent(typeof(CircleCollider2D))]
-    public sealed class CircleCollision2D : BaseCollision
+    internal sealed class CircleCollision2D : BaseCollision
     {
         [SerializeField] private int maximumResult = 10;
      

@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
-using EntityId = _GameToolkit.Entity.EntityId;
 
 namespace _GameToolkit.Collision
 {
     [RequireComponent(typeof(CapsuleCollider2D))]
-    public sealed class CapsuleCollision2D : BaseCollision
+    internal sealed class CapsuleCollision2D : BaseCollision
     {
         [SerializeField] private int maximumResult = 10;
 
@@ -35,7 +34,7 @@ namespace _GameToolkit.Collision
 
             for (int i = 0; i < count; i++)
             {
-                EntityId entityId = results[i].GetComponent<EntityId>();
+                Shared.EntityId entityId = results[i].GetComponent<Shared.EntityId>();
 
                 if (entityId != null)
                 {
