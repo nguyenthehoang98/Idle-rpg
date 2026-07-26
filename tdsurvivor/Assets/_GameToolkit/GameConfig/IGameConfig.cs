@@ -3,7 +3,7 @@
     public interface IGameConfig
     {
         void OnMappingValue();
-        void OnPostImported();
-        void OnValidateLinkConfig();
+        void OnImported();
+        void OnCompleteImported();
     }
 }
