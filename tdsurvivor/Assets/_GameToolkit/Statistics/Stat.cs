@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Kryz.CharacterStats
+namespace _GameToolkit.Statistics
 {
 	[Serializable]
-	public class CharacterStat
+	public class Stat
 	{
 		public float BaseValue;
 
@@ -13,6 +13,7 @@ namespace Kryz.CharacterStats
 		protected float lastBaseValue;
 
 		protected float _value;
+
 		public virtual float Value
 		{
 			get
@@ -23,6 +24,7 @@ namespace Kryz.CharacterStats
 					_value = CalculateFinalValue();
 					isDirty = false;
 				}
+
 				return _value;
 			}
 		}
@@ -34,7 +36,7 @@ namespace Kryz.CharacterStats
 		private readonly Predicate<StatModifier> predicate;
 		private object sourceToRemove;
 
-		public CharacterStat()
+		public Stat()
 		{
 			statModifiers = new List<StatModifier>();
 			StatModifiers = statModifiers.AsReadOnly();
@@ -42,7 +44,7 @@ namespace Kryz.CharacterStats
 			predicate = modifier => modifier.Source == sourceToRemove;
 		}
 
-		public CharacterStat(float baseValue) : this()
+		public Stat(float baseValue) : this()
 		{
 			BaseValue = baseValue;
 		}
@@ -60,6 +62,7 @@ namespace Kryz.CharacterStats
 				isDirty = true;
 				return true;
 			}
+
 			return false;
 		}
 
@@ -74,6 +77,7 @@ namespace Kryz.CharacterStats
 				isDirty = true;
 				return true;
 			}
+
 			return false;
 		}
 

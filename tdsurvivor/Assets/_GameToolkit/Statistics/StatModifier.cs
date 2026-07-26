@@ -1,6 +1,6 @@
 using System;
 
-namespace Kryz.CharacterStats
+namespace _GameToolkit.Statistics
 {
 	public enum StatModType
 	{

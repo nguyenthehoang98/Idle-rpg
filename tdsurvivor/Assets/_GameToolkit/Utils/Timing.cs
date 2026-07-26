@@ -1,9 +1,11 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Profiling;
 
-// /////////////////////////////////////////////////////////////////////////////////////////
+namespace _GameToolkit.Utils
+{
+    // /////////////////////////////////////////////////////////////////////////////////////////
 //                              More Effective Coroutines
 //                                        v3.15.0
 // 
@@ -23,8 +25,6 @@ using UnityEngine.Profiling;
 // All rights preserved
 // /////////////////////////////////////////////////////////////////////////////////////////
 
-namespace MEC
-{
     public class Timing : MonoBehaviour
     {
         /// <summary>
@@ -261,7 +261,7 @@ namespace MEC
                             {
                                 Profiler.BeginSample(ProfilerDebugAmount == DebugInfoType.SeparateTags ? ("Processing Coroutine (Slow Update)" +
                                         (_processTags.ContainsKey(_indexToHandle[coindex]) ? ", tag " + _processTags[_indexToHandle[coindex]] : ", no tag"))
-                                        : "Processing Coroutine (Slow Update)");
+                                    : "Processing Coroutine (Slow Update)");
                             }
 
                             if (!SlowUpdateProcesses[coindex.i].MoveNext())
@@ -317,7 +317,7 @@ namespace MEC
 
                         if (ex is MissingReferenceException)
                             Debug.LogError("This exception can probably be fixed by adding \"CancelWith(gameObject)\" when you run the coroutine.\n"
-                                + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject), Segment.SlowUpdate);");
+                                           + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject), Segment.SlowUpdate);");
                     }
                 }
 
@@ -335,7 +335,7 @@ namespace MEC
                             {
                                 Profiler.BeginSample(ProfilerDebugAmount == DebugInfoType.SeparateTags ? ("Processing Coroutine (Slow Update)" +
                                         (_processTags.ContainsKey(_indexToHandle[coindex]) ? ", tag " + _processTags[_indexToHandle[coindex]] : ", no tag"))
-                                        : "Processing Coroutine (Slow Update)");
+                                    : "Processing Coroutine (Slow Update)");
                             }
 
                             if (!SlowUpdateProcesses[coindex.i].MoveNext())
@@ -391,7 +391,7 @@ namespace MEC
 
                         if (ex is MissingReferenceException)
                             Debug.LogError("This exception can probably be fixed by adding \"CancelWith(gameObject)\" when you run the coroutine.\n"
-                                + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject), Segment.SlowUpdate);");
+                                           + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject), Segment.SlowUpdate);");
                     }
                 }
             }
@@ -414,7 +414,7 @@ namespace MEC
                             {
                                 Profiler.BeginSample(ProfilerDebugAmount == DebugInfoType.SeparateTags ? ("Processing Coroutine" +
                                         (_processTags.ContainsKey(_indexToHandle[coindex]) ? ", tag " + _processTags[_indexToHandle[coindex]] : ", no tag"))
-                                        : "Processing Coroutine");
+                                    : "Processing Coroutine");
                             }
 
                             if (!UpdateProcesses[coindex.i].MoveNext())
@@ -470,7 +470,7 @@ namespace MEC
 
                         if (ex is MissingReferenceException)
                             Debug.LogError("This exception can probably be fixed by adding \"CancelWith(gameObject)\" when you run the coroutine.\n"
-                                + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject));");
+                                           + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject));");
                     }
                 }
 
@@ -488,7 +488,7 @@ namespace MEC
                             {
                                 Profiler.BeginSample(ProfilerDebugAmount == DebugInfoType.SeparateTags ? ("Processing Coroutine" +
                                         (_processTags.ContainsKey(_indexToHandle[coindex]) ? ", tag " + _processTags[_indexToHandle[coindex]] : ", no tag"))
-                                        : "Processing Coroutine");
+                                    : "Processing Coroutine");
                             }
 
                             if (!UpdateProcesses[coindex.i].MoveNext())
@@ -544,7 +544,7 @@ namespace MEC
 
                         if (ex is MissingReferenceException)
                             Debug.LogError("This exception can probably be fixed by adding \"CancelWith(gameObject)\" when you run the coroutine.\n"
-                                + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject));");
+                                           + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject));");
                     }
                 }
             }
@@ -588,7 +588,7 @@ namespace MEC
                             {
                                 Profiler.BeginSample(ProfilerDebugAmount == DebugInfoType.SeparateTags ? ("Processing Coroutine" +
                                         (_processTags.ContainsKey(_indexToHandle[coindex]) ? ", tag " + _processTags[_indexToHandle[coindex]] : ", no tag"))
-                                        : "Processing Coroutine");
+                                    : "Processing Coroutine");
                             }
 
                             if (!FixedUpdateProcesses[coindex.i].MoveNext())
@@ -644,7 +644,7 @@ namespace MEC
 
                         if (ex is MissingReferenceException)
                             Debug.LogError("This exception can probably be fixed by adding \"CancelWith(gameObject)\" when you run the coroutine.\n"
-                                + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject), Segment.FixedUpdate);");
+                                           + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject), Segment.FixedUpdate);");
                     }
                 }
 
@@ -662,7 +662,7 @@ namespace MEC
                             {
                                 Profiler.BeginSample(ProfilerDebugAmount == DebugInfoType.SeparateTags ? ("Processing Coroutine" +
                                         (_processTags.ContainsKey(_indexToHandle[coindex]) ? ", tag " + _processTags[_indexToHandle[coindex]] : ", no tag"))
-                                        : "Processing Coroutine");
+                                    : "Processing Coroutine");
                             }
 
                             if (!FixedUpdateProcesses[coindex.i].MoveNext())
@@ -718,7 +718,7 @@ namespace MEC
 
                         if (ex is MissingReferenceException)
                             Debug.LogError("This exception can probably be fixed by adding \"CancelWith(gameObject)\" when you run the coroutine.\n"
-                                + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject), Segment.FixedUpdate);");
+                                           + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject), Segment.FixedUpdate);");
                     }
                 }
 
@@ -749,7 +749,7 @@ namespace MEC
                             {
                                 Profiler.BeginSample(ProfilerDebugAmount == DebugInfoType.SeparateTags ? ("Processing Coroutine" +
                                         (_processTags.ContainsKey(_indexToHandle[coindex]) ? ", tag " + _processTags[_indexToHandle[coindex]] : ", no tag"))
-                                        : "Processing Coroutine");
+                                    : "Processing Coroutine");
                             }
 
                             if (!LateUpdateProcesses[coindex.i].MoveNext())
@@ -805,7 +805,7 @@ namespace MEC
 
                         if (ex is MissingReferenceException)
                             Debug.LogError("This exception can probably be fixed by adding \"CancelWith(gameObject)\" when you run the coroutine.\n"
-                                + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject), Segment.LateUpdate);");
+                                           + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject), Segment.LateUpdate);");
                     }
                 }
 
@@ -823,7 +823,7 @@ namespace MEC
                             {
                                 Profiler.BeginSample(ProfilerDebugAmount == DebugInfoType.SeparateTags ? ("Processing Coroutine" +
                                         (_processTags.ContainsKey(_indexToHandle[coindex]) ? ", tag " + _processTags[_indexToHandle[coindex]] : ", no tag"))
-                                        : "Processing Coroutine");
+                                    : "Processing Coroutine");
                             }
 
                             if (!LateUpdateProcesses[coindex.i].MoveNext())
@@ -879,7 +879,7 @@ namespace MEC
 
                         if (ex is MissingReferenceException)
                             Debug.LogError("This exception can probably be fixed by adding \"CancelWith(gameObject)\" when you run the coroutine.\n"
-                                + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject), Segment.LateUpdate);");
+                                           + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject), Segment.LateUpdate);");
                     }
                 }
                 currentCoroutine = default(CoroutineHandle);
@@ -1136,7 +1136,7 @@ namespace MEC
         public CoroutineHandle RunCoroutineOnInstance(IEnumerator<float> coroutine)
         {
             return coroutine == null ? new CoroutineHandle()
-                 : RunCoroutineInternal(coroutine, Segment.Update, null, new CoroutineHandle(_instanceID), true);
+                : RunCoroutineInternal(coroutine, Segment.Update, null, new CoroutineHandle(_instanceID), true);
         }
 
         /// <summary>
@@ -1148,7 +1148,7 @@ namespace MEC
         public CoroutineHandle RunCoroutineOnInstance(IEnumerator<float> coroutine, string tag)
         {
             return coroutine == null ? new CoroutineHandle()
-                 : RunCoroutineInternal(coroutine, Segment.Update, tag, new CoroutineHandle(_instanceID), true);
+                : RunCoroutineInternal(coroutine, Segment.Update, tag, new CoroutineHandle(_instanceID), true);
         }
 
         /// <summary>
@@ -1160,7 +1160,7 @@ namespace MEC
         public CoroutineHandle RunCoroutineOnInstance(IEnumerator<float> coroutine, Segment segment)
         {
             return coroutine == null ? new CoroutineHandle()
-                 : RunCoroutineInternal(coroutine, segment, null, new CoroutineHandle(_instanceID), true);
+                : RunCoroutineInternal(coroutine, segment, null, new CoroutineHandle(_instanceID), true);
         }
 
         /// <summary>
@@ -1173,7 +1173,7 @@ namespace MEC
         public CoroutineHandle RunCoroutineOnInstance(IEnumerator<float> coroutine, Segment segment, string tag)
         {
             return coroutine == null ? new CoroutineHandle()
-                 : RunCoroutineInternal(coroutine, segment, tag, new CoroutineHandle(_instanceID), true);
+                : RunCoroutineInternal(coroutine, segment, tag, new CoroutineHandle(_instanceID), true);
         }
 
 
@@ -1257,7 +1257,7 @@ namespace MEC
 
                             if (ex is MissingReferenceException)
                                 Debug.LogError("This exception can probably be fixed by adding \"CancelWith(gameObject)\" when you run the coroutine.\n"
-                                    + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject));");
+                                               + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject));");
 
                             prewarm = false;
                         }
@@ -1328,7 +1328,7 @@ namespace MEC
 
                             if (ex is MissingReferenceException)
                                 Debug.LogError("This exception can probably be fixed by adding \"CancelWith(gameObject)\" when you run the coroutine.\n"
-                                    + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject), Segment.FixedUpdate);");
+                                               + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject), Segment.FixedUpdate);");
 
                             prewarm = false;
                         }
@@ -1399,7 +1399,7 @@ namespace MEC
 
                             if (ex is MissingReferenceException)
                                 Debug.LogError("This exception can probably be fixed by adding \"CancelWith(gameObject)\" when you run the coroutine.\n"
-                                    + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject), Segment.LateUpdate);");
+                                               + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject), Segment.LateUpdate);");
 
                             prewarm = false;
                         }
@@ -1470,7 +1470,7 @@ namespace MEC
 
                             if (ex is MissingReferenceException)
                                 Debug.LogError("This exception can probably be fixed by adding \"CancelWith(gameObject)\" when you run the coroutine.\n"
-                                    + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject), Segment.SlowUpdate);");
+                                               + "Example: Timing.RunCoroutine(_foo().CancelWith(gameObject), Segment.SlowUpdate);");
 
                             prewarm = false;
                         }
@@ -1822,7 +1822,7 @@ namespace MEC
         public int ResumeCoroutinesOnInstance(CoroutineHandle handle)
         {
             return _handleToIndex.ContainsKey(handle) &&
-                !CoindexIsNull(_handleToIndex[handle]) && SetPause(_handleToIndex[handle], false) ? 1 : 0;
+                   !CoindexIsNull(_handleToIndex[handle]) && SetPause(_handleToIndex[handle], false) ? 1 : 0;
         }
 
         /// <summary>
@@ -3120,49 +3120,49 @@ namespace MEC
             return Timing.RunCoroutine(coroutine, segment, tag);
         }
     }
-}
 
-public static class MECExtensionMethods2
-{
-    /// <summary>
-    /// Cancels this coroutine when the supplied game object is destroyed or made inactive.
-    /// </summary>
-    /// <param name="coroutine">The coroutine handle to act upon.</param>
-    /// <param name="gameObject">The GameObject to test.</param>
-    /// <returns>The modified coroutine handle.</returns>
-    public static IEnumerator<float> CancelWith(this IEnumerator<float> coroutine, GameObject gameObject)
+    public static class MECExtensionMethods2
     {
-        while (MEC.Timing.MainThread != System.Threading.Thread.CurrentThread || (gameObject && gameObject.activeInHierarchy && coroutine.MoveNext()))
-            yield return coroutine.Current;
-    }
+        /// <summary>
+        /// Cancels this coroutine when the supplied game object is destroyed or made inactive.
+        /// </summary>
+        /// <param name="coroutine">The coroutine handle to act upon.</param>
+        /// <param name="gameObject">The GameObject to test.</param>
+        /// <returns>The modified coroutine handle.</returns>
+        public static IEnumerator<float> CancelWith(this IEnumerator<float> coroutine, GameObject gameObject)
+        {
+            while (Timing.MainThread != System.Threading.Thread.CurrentThread || (gameObject && gameObject.activeInHierarchy && coroutine.MoveNext()))
+                yield return coroutine.Current;
+        }
 
-    /// <summary>
-    /// Cancels this coroutine when the supplied game objects are destroyed or made inactive.
-    /// </summary>
-    /// <param name="coroutine">The coroutine handle to act upon.</param>
-    /// <param name="gameObject1">The first GameObject to test.</param>
-    /// <param name="gameObject2">The second GameObject to test</param>
-    /// <returns>The modified coroutine handle.</returns>
-    public static IEnumerator<float> CancelWith(this IEnumerator<float> coroutine, GameObject gameObject1, GameObject gameObject2)
-    {
-        while (MEC.Timing.MainThread != System.Threading.Thread.CurrentThread || (gameObject1 && gameObject1.activeInHierarchy &&
-                gameObject2 && gameObject2.activeInHierarchy && coroutine.MoveNext()))
-            yield return coroutine.Current;
-    }
+        /// <summary>
+        /// Cancels this coroutine when the supplied game objects are destroyed or made inactive.
+        /// </summary>
+        /// <param name="coroutine">The coroutine handle to act upon.</param>
+        /// <param name="gameObject1">The first GameObject to test.</param>
+        /// <param name="gameObject2">The second GameObject to test</param>
+        /// <returns>The modified coroutine handle.</returns>
+        public static IEnumerator<float> CancelWith(this IEnumerator<float> coroutine, GameObject gameObject1, GameObject gameObject2)
+        {
+            while (Timing.MainThread != System.Threading.Thread.CurrentThread || (gameObject1 && gameObject1.activeInHierarchy &&
+                       gameObject2 && gameObject2.activeInHierarchy && coroutine.MoveNext()))
+                yield return coroutine.Current;
+        }
 
-    /// <summary>
-    /// Cancels this coroutine when the supplied game objects are destroyed or made inactive.
-    /// </summary>
-    /// <param name="coroutine">The coroutine handle to act upon.</param>
-    /// <param name="gameObject1">The first GameObject to test.</param>
-    /// <param name="gameObject2">The second GameObject to test</param>
-    /// <param name="gameObject3">The third GameObject to test.</param>
-    /// <returns>The modified coroutine handle.</returns>
-    public static IEnumerator<float> CancelWith(this IEnumerator<float> coroutine,
-        GameObject gameObject1, GameObject gameObject2, GameObject gameObject3)
-    {
-        while (MEC.Timing.MainThread != System.Threading.Thread.CurrentThread || (gameObject1 && gameObject1.activeInHierarchy &&
-                gameObject2 && gameObject2.activeInHierarchy && gameObject3 && gameObject3.activeInHierarchy && coroutine.MoveNext()))
-            yield return coroutine.Current;
+        /// <summary>
+        /// Cancels this coroutine when the supplied game objects are destroyed or made inactive.
+        /// </summary>
+        /// <param name="coroutine">The coroutine handle to act upon.</param>
+        /// <param name="gameObject1">The first GameObject to test.</param>
+        /// <param name="gameObject2">The second GameObject to test</param>
+        /// <param name="gameObject3">The third GameObject to test.</param>
+        /// <returns>The modified coroutine handle.</returns>
+        public static IEnumerator<float> CancelWith(this IEnumerator<float> coroutine,
+            GameObject gameObject1, GameObject gameObject2, GameObject gameObject3)
+        {
+            while (Timing.MainThread != System.Threading.Thread.CurrentThread || (gameObject1 && gameObject1.activeInHierarchy &&
+                       gameObject2 && gameObject2.activeInHierarchy && gameObject3 && gameObject3.activeInHierarchy && coroutine.MoveNext()))
+                yield return coroutine.Current;
+        }
     }
 }
