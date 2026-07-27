@@ -24,6 +24,7 @@ public class ExcelImporter : AssetPostprocessor
 	static void OnPostprocessAllAssets (string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
 	{
 		bool imported = false;
+		
 		foreach(string path in importedAssets)
 		{
 			if(Path.GetExtension(path) == ".xls" || Path.GetExtension(path) == ".xlsx") 
@@ -87,20 +88,25 @@ public class ExcelImporter : AssetPostprocessor
 	static List<ExcelAssetInfo> FindExcelAssetInfos()
 	{
 		var list = new List<ExcelAssetInfo>();
+		
 		foreach(var assembly in AppDomain.CurrentDomain.GetAssemblies())
 		{
 			if (assembly.FullName.StartsWith("Google")) continue;
-			
-			foreach(var type in assembly.GetTypes())
+
+			foreach (var type in assembly.GetTypes())
 			{
-				var attributes = type.GetCustomAttributes(typeof(ExcelAssetAttribute), false);
-				if(attributes.Length == 0) continue;
-				var attribute = (ExcelAssetAttribute)attributes[0];
-				var info = new ExcelAssetInfo()
+				object[] attributes = type.GetCustomAttributes(typeof(ExcelAssetAttribute), false);
+
+				if (attributes.Length == 0) continue;
+
+				ExcelAssetAttribute attribute = (ExcelAssetAttribute)attributes[0];
+
+				ExcelAssetInfo info = new ExcelAssetInfo()
 				{
 					AssetType = type,
 					Attribute = attribute
 				};
+
 				list.Add(info);
 			}
 		}
@@ -158,19 +164,22 @@ public class ExcelImporter : AssetPostprocessor
 
 				if (fieldInfo.FieldType == typeof(int))
 				{
-					if (cell.CellType == CellType.Formula) return (int) cell.NumericCellValue;
+					if (cell.CellType == CellType.Formula) 
+						return (int) cell.NumericCellValue;
 					return int.Parse(cell.StringCellValue);
 				}
 
 				if (fieldInfo.FieldType == typeof(float))
 				{
-					if (cell.CellType == CellType.Formula) return (float) cell.NumericCellValue;
+					if (cell.CellType == CellType.Formula)
+						return (float) cell.NumericCellValue;
 					return float.Parse(cell.StringCellValue);
 				}
 
 				if (fieldInfo.FieldType == typeof(double))
 				{
-					if (cell.CellType == CellType.Formula) return (double) cell.NumericCellValue;
+					if (cell.CellType == CellType.Formula) 
+						return (double) cell.NumericCellValue;
 					return double.Parse(cell.StringCellValue);
 				}
 
@@ -201,13 +210,21 @@ public class ExcelImporter : AssetPostprocessor
 
 					if (elementType == typeof(int))
 					{
-						var values = elements.Select(int.Parse).ToArray();
+						int[] values = elements
+							.Select(s => int.TryParse(s, out var n) ? (int?)n : null)
+							.Where(n => n.HasValue)
+							.Select(n => n.Value)
+							.ToArray();
 						return CreateCollection(fieldInfo.FieldType, values);
 					}
 
 					if (elementType == typeof(float))
 					{
-						var values = elements.Select(float.Parse).ToArray();
+						float[] values = elements
+							.Select(s => float.TryParse(s, out var n) ? (float?)n : null)
+							.Where(n => n.HasValue)
+							.Select(n => n.Value)
+							.ToArray();
 						return CreateCollection(fieldInfo.FieldType, values);
 					}
 
