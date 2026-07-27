@@ -33,7 +33,6 @@ namespace _GameToolkit.Resource
                 Dictionary.Remove(assetName);
 
                 Addressables.Release(entry.Handle);
-
 #if UNITY_EDITOR
                 Debug.Log($"[Loaded] Uncached asset: {assetName}");
 #endif

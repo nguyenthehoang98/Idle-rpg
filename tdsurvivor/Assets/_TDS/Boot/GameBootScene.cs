@@ -9,14 +9,14 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 #endif
 
-namespace _TDS.Startup
+namespace _TDS.Boot
 {
     public sealed class GameBootScene : BootScene
     {
         [SerializeField] private GameObject loadingScreenMasking;
 
         private bool isLoadingScene = false;
-        private float elapsedTime = 1;
+        private float elapsedTime = 2;
         
         protected async override void OnStart()
         {
@@ -29,6 +29,7 @@ namespace _TDS.Startup
             await ConfigManager.Load(new string[]
             {
                 nameof(SpawnerConfig),
+                nameof(EnemyConfig),
             });
         }
 

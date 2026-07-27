@@ -4,12 +4,26 @@ using UnityEngine;
 
 namespace _GameToolkit.Resource
 {
-    public static class AssetManager
+    public sealed class AssetManager
     {
         private static IBundleLoader loader;
 
         private static bool isInitialized = false;
 
+        static AssetManager()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.playModeStateChanged += change =>
+            {
+                if (change == UnityEditor.PlayModeStateChange.ExitingPlayMode)
+                {
+                    isInitialized = false;
+                    loader = null;
+                }
+            };
+#endif
+        }
+        
         public static void SetAssetLocal()
         {
             if (!isInitialized)

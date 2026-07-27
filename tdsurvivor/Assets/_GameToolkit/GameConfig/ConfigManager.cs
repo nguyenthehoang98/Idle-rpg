@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using _GameToolkit.Resource;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
@@ -12,7 +13,7 @@ namespace _GameToolkit.GameConfig
     {
         private static Dictionary<Type, IGameConfig> cache;
 
-        public static async UniTask Load(string[] scriptObjectsPath, bool checkExist = true)
+        public static async UniTask Load(string[] assetsPath, bool checkExist = true)
         {
             if (cache != null && checkExist)
             {
@@ -31,26 +32,24 @@ namespace _GameToolkit.GameConfig
 
             cache = new Dictionary<Type, IGameConfig>();
             
-            UniTask<TextAsset>[] loadTasks = new UniTask<TextAsset>[scriptObjectsPath.Length];
+            UniTask<TextAsset>[] loadTasks = new UniTask<TextAsset>[assetsPath.Length];
             
-            Type[] types = new Type[scriptObjectsPath.Length];
+            Type[] types = new Type[assetsPath.Length];
 
-            for (int i = 0; i < scriptObjectsPath.Length; i++)
+            for (int i = 0; i < assetsPath.Length; i++)
             {
-                Type type = FindType(scriptObjectsPath[i], allType);
+                Type type = FindType(assetsPath[i], allType);
 
                 if (type == null) continue;
                 
                 types[i] = type;
-                
-                loadTasks[i] = Resources.LoadAsync<TextAsset>(scriptObjectsPath[i])
-                    .ToUniTask()
-                    .ContinueWith(x => x as TextAsset);
+
+                loadTasks[i] = AssetManager.GetAsset<TextAsset>(assetsPath[i]);
             }
             
             TextAsset[] assets = await UniTask.WhenAll(loadTasks);
 
-            for (int i = 0; i < scriptObjectsPath.Length; i++)
+            for (int i = 0; i < assetsPath.Length; i++)
             {
                 Type type = types[i];
                 
@@ -65,7 +64,7 @@ namespace _GameToolkit.GameConfig
 
             sw.Stop();
 
-            Debug.Log($"Load success '{scriptObjectsPath.Length}' config files, in {sw.ElapsedMilliseconds} ms");
+            Debug.Log($"Load success '{assetsPath.Length}' config files, in {sw.ElapsedMilliseconds} ms");
         }
 
         private static Type FindType(string typeName, Type[] sources)

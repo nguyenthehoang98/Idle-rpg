@@ -8,7 +8,7 @@ namespace _TDS.GameConfig
 {
     [Serializable, ExcelAsset(
          ExcelPath = "Assets/Excels/SpawnerConfig.xlsx",
-         ConfigPath = "Assets/_TDS assets/Resources/SpawnerConfig.json")]
+         ConfigPath = "Assets/_TDS assets/Config/SpawnerConfig.json")]
     public class SpawnerConfig : IGameConfig
     {
         [SerializeField] private List<SpawnerConfigData> spawners = new List<SpawnerConfigData>();

@@ -8,7 +8,7 @@ namespace _TDS.GameConfig
 {
     [Serializable, ExcelAsset(
          ExcelPath = "Assets/Excels/EnemyConfig.xlsx",
-         ConfigPath = "Assets/_TDS assets/Resources/EnemyConfig.json")]
+         ConfigPath = "Assets/_TDS assets/Config/EnemyConfig.json")]
     public class EnemyConfig : IGameConfig
     {
         [SerializeField] private List<EnemyConfigData> enemies = new List<EnemyConfigData>();
