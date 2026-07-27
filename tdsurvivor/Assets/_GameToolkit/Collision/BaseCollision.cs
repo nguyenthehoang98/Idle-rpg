@@ -8,9 +8,9 @@ namespace _GameToolkit.Collision
    {
       [SerializeField] protected LayerMask layerMask;
 
-      [SerializeField] private UnityEvent<Shared.EntityId> OnEventOverlap;
+      [SerializeField] private UnityEvent<EntityId> OnEventOverlap;
 
-      public event Action<Shared.EntityId> OnOverlap;
+      public event Action<EntityId> OnOverlap;
 
       public void Startup()
       {
@@ -53,11 +53,14 @@ namespace _GameToolkit.Collision
          OnShutdown();
       }
 
-      protected void Overlap(Shared.EntityId entityId)
+      protected void Overlap(EntityId entityId)
       {
-         OnEventOverlap?.Invoke(entityId);
-         
-         OnOverlap?.Invoke(entityId);
+         if(entityId != default)
+         {
+            OnEventOverlap?.Invoke(entityId);
+
+            OnOverlap?.Invoke(entityId);
+         }
       }
    }
 }

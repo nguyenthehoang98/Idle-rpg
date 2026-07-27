@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using EntityId = _GameToolkit.Shared.EntityId;
 
 namespace _GameToolkit.Collision
 {
@@ -29,12 +28,7 @@ namespace _GameToolkit.Collision
             int count = Physics2D.OverlapCircle(transform.position, circle.radius, filter, results);
             for (int i = 0; i < count; i++)
             {
-                EntityId entityId = results[i].GetComponent<EntityId>();
-
-                if (entityId != null)
-                {
-                    Overlap(entityId);
-                }
+                Overlap(results[i].GetEntityId());
             }
         }
     }

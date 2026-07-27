@@ -1,5 +1,5 @@
 using System;
-using _GameToolkit.Shared;
+using UnityEngine;
 
 namespace _GameToolkit.Collision
 {

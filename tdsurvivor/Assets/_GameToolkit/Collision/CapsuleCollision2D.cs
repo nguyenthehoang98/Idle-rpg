@@ -34,12 +34,7 @@ namespace _GameToolkit.Collision
 
             for (int i = 0; i < count; i++)
             {
-                Shared.EntityId entityId = results[i].GetComponent<Shared.EntityId>();
-
-                if (entityId != null)
-                {
-                    Overlap(entityId);
-                }
+                Overlap(results[i].GetEntityId());
             }
         }
     }
