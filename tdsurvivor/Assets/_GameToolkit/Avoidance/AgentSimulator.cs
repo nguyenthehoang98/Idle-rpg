@@ -15,15 +15,11 @@ namespace _GameToolkit.Avoidance
         [SerializeField] private bool enableGizmos;
 #endif
         [SerializeField] private float2 destination;
-        [SerializeField] private float defaultAgentRadius = 0.5f;
-        [SerializeField, Range(0.1f, 0.9f), Tooltip("Hệ số bỏ qua việc kiểm tra khoảng cách")]
-        private float deltaIgnoreCheckNeighborDistance = 0.2f;
 
         private Dictionary<int, AgentData> containers = new Dictionary<int, AgentData>();        
         private List<int> agents = new List<int>();
         private Simulator simulator;
         private IGrid grid;
-        private float ignoreCheckNeighborDistanceSq;
         
         public virtual void Tick(float deltaTime)
         {
@@ -95,10 +91,7 @@ namespace _GameToolkit.Avoidance
             grid = new FixedUniformGrid(1);
             simulator = new Simulator();
             simulator.SetTimeStep(0.25f);
-            simulator.SetAgentDefaults(5f, 10, 10f, 10f, defaultAgentRadius, 1f, float2.zero);
-            float a = 2 * (1 + deltaIgnoreCheckNeighborDistance) * defaultAgentRadius;
-            ignoreCheckNeighborDistanceSq = a * a;
-            //deltaDistanceStuckSq = deltaStuckDistance * deltaStuckDistance;
+            simulator.SetAgentDefaults(5f, 10, 10f, 10f, 1, 1f, float2.zero);
         }
 
         private void ReachedGoal()
@@ -121,35 +114,6 @@ namespace _GameToolkit.Avoidance
                     containers[agent] = temp;
                     StopAgent(agent);
                     continue;
-                }
-
-                int query = grid.Query(position, new float2(3, 3), out int[] results);
-                int frontBlockedCount = 0;
-
-                float2 dirToGoal = NormalizeSafe(-position);
-                for (int i1 = 0; i1 < query; i1++)
-                {
-                    int otherId = results[i1];
-                    if (otherId == agent)
-                        continue;
-
-                    // chỉ quan tâm frontier
-                    if (containers.TryGetValue(otherId, out AgentData other))
-                    {
-                        if (!other.isStopped) continue;
-                    }
-
-                    float2 otherPos = simulator.GetAgentPosition(otherId);
-                    float2 toOther = otherPos - position;
-                    float lengthsq = math.lengthsq(toOther);
-                    if (lengthsq > ignoreCheckNeighborDistanceSq)
-                        continue;
-
-                    float dot = math.dot(dirToGoal, NormalizeSafe(toOther));
-                    if (dot < 0.5f)
-                        continue;
-
-                    frontBlockedCount++;
                 }
 
                 containers[agent] = temp;

@@ -29,7 +29,7 @@ namespace _TDS.Boot
             await ConfigManager.Load(new string[]
             {
                 nameof(SpawnerConfig),
-                nameof(EnemyConfig),
+                nameof(MonsterConfig),
             });
         }
 

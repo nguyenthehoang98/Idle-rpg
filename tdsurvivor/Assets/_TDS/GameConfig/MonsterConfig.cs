@@ -7,21 +7,21 @@ using UnityEngine;
 namespace _TDS.GameConfig
 {
     [Serializable, ExcelAsset(
-         ExcelPath = "Assets/Excels/EnemyConfig.xlsx",
-         ConfigPath = "Assets/_TDS assets/Config/EnemyConfig.json")]
-    public class EnemyConfig : IGameConfig
+         ExcelPath = "Assets/Excels/MonsterConfig.xlsx",
+         ConfigPath = "Assets/_TDS assets/Config/MonsterConfig.json")]
+    public class MonsterConfig : IGameConfig
     {
-        [SerializeField] private List<EnemyConfigData> enemies = new List<EnemyConfigData>();
+        [SerializeField] private List<MonsterConfigData> monsters = new List<MonsterConfigData>();
         
-        Dictionary<int, EnemyConfigData> cachedEnemies;
+        Dictionary<int, MonsterConfigData> cachedMonsters;
         
         public void OnMappingValue()
         {
-            cachedEnemies = new Dictionary<int, EnemyConfigData>();
+            cachedMonsters = new Dictionary<int, MonsterConfigData>();
 
-            foreach (var enemy in enemies)
+            foreach (var m in monsters)
             {
-                cachedEnemies.Add(enemy.id, enemy);
+                cachedMonsters.Add(m.id, m);
             }
         }
 
@@ -33,14 +33,14 @@ namespace _TDS.GameConfig
         {
         }
 
-        public bool TryGetMonster(int id, out EnemyConfigData config)
+        public bool TryGetMonster(int id, out MonsterConfigData config)
         {
-            return cachedEnemies.TryGetValue(id, out config);
+            return cachedMonsters.TryGetValue(id, out config);
         }
     }
 
     [Serializable]
-    public struct EnemyConfigData
+    public struct MonsterConfigData
     {
         public int id;
         public string asset;

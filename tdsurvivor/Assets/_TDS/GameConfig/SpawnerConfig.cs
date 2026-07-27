@@ -39,7 +39,7 @@ namespace _TDS.GameConfig
 
         public void OnCompleteImported()
         {
-            Type type = typeof(EnemyConfig);
+            Type type = typeof(MonsterConfig);
 
             object[] attributes = type.GetCustomAttributes(typeof(ExcelAssetAttribute), false);
 
@@ -49,13 +49,13 @@ namespace _TDS.GameConfig
 
             TextAsset asset = AssetDatabase.LoadAssetAtPath<TextAsset>(attribute.ConfigPath);
 
-            EnemyConfig config = JsonUtility.FromJson<EnemyConfig>(asset.text);
+            MonsterConfig config = JsonUtility.FromJson<MonsterConfig>(asset.text);
             
             config.OnMappingValue();
 
             foreach (var spawner in spawners)
             {
-                if (config.TryGetMonster(spawner.monster, out EnemyConfigData monster))
+                if (config.TryGetMonster(spawner.monster, out MonsterConfigData monster))
                 {
                 }
                 else

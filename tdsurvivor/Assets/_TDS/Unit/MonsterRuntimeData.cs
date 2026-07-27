@@ -1,4 +1,4 @@
-﻿namespace _TDS.Enemy
+﻿namespace _TDS.Unit
 {
     public struct MonsterRuntimeData
     {

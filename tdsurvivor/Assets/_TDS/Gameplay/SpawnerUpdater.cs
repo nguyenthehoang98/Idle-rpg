@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using _GameToolkit.GameConfig;
 using _GameToolkit.Resource;
 using _GameToolkit.Updater;
-using _TDS.Enemy;
 using _TDS.GameConfig;
+using _TDS.Unit;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -17,7 +17,7 @@ namespace _TDS.Gameplay
 
         public event Action<int> OnWaveSpawned; 
 
-        private EnemyConfig enemyConfig;
+        private MonsterConfig _monsterConfig;
         private List<SpawnerConfigData> allSpawners;
 
         Dictionary<int, GameObject> enemyIdToGameObjects = new Dictionary<int, GameObject>();
@@ -43,7 +43,7 @@ namespace _TDS.Gameplay
                 return;
             }
 
-            enemyConfig = ConfigManager.Get<EnemyConfig>();
+            _monsterConfig = ConfigManager.Get<MonsterConfig>();
 
             for (int i = 0; i < allSpawners.Count; i++)
             {
@@ -55,7 +55,7 @@ namespace _TDS.Gameplay
 
                 if (enemyIdToGameObjects.ContainsKey(monster)) continue;
 
-                found = enemyConfig.TryGetMonster(monster, out EnemyConfigData monsterData);
+                found = _monsterConfig.TryGetMonster(monster, out MonsterConfigData monsterData);
 
                 if (!found)
                 {
@@ -167,7 +167,14 @@ namespace _TDS.Gameplay
             
             Monster monster = go.GetComponent<Monster>();
 
-            enemyConfig.TryGetMonster(configData.monster, out EnemyConfigData enemyConfigData);
+            if (monster == null)
+            {
+                Debug.LogError($"Not found Monster at Prefab '{go.name}'");
+                
+                return;
+            }
+
+            _monsterConfig.TryGetMonster(configData.monster, out MonsterConfigData enemyConfigData);
 
             MonsterRuntimeData runtimeData = new MonsterRuntimeData(
                 configData.healthScale, configData.attackScale,
