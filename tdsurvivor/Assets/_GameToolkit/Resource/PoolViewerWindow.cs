@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace _GameToolkit.Resource
 {
-    public class PoolViewerWindow : EditorWindow
+    class PoolViewerWindow : EditorWindow
     {
         private Vector2 scroll;
         private bool autoRefresh = true;
