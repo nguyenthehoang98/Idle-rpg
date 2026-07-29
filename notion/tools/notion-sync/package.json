@@ -1,0 +1,14 @@
+{
+  "name": "tdsurvivor-notion-sync",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "push": "node sync.js push",
+    "pull": "node sync.js pull",
+    "check": "node sync.js check"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

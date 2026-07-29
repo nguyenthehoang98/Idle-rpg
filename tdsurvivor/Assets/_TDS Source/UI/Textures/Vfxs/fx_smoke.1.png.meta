@@ -1,0 +1,418 @@
+fileFormatVersion: 2
+guid: fdb9348f69fa01f498d35d6beace1b42
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1450506189086882148
+    second: vfx_explose_1_0
+  - first:
+      213: -579002398169633520
+    second: vfx_explose_1_1
+  - first:
+      213: 5545826122300664125
+    second: vfx_explose_1_2
+  - first:
+      213: 7533463741466202542
+    second: vfx_explose_1_3
+  - first:
+      213: 3916197473818267798
+    second: vfx_explose_1_4
+  - first:
+      213: -1084265036955787891
+    second: vfx_explose_1_5
+  - first:
+      213: 220948748091465408
+    second: vfx_explose_1_6
+  - first:
+      213: -4681654871637403193
+    second: vfx_explose_1_7
+  - first:
+      213: -2655583996112498041
+    second: vfx_explose_1_8
+  - first:
+      213: -1574320596153765183
+    second: vfx_explose_1_9
+  - first:
+      213: -3010179594562743442
+    second: vfx_explose_1_10
+  - first:
+      213: -4487833497630680728
+    second: vfx_explose_1_11
+  - first:
+      213: -1227898306128704537
+    second: vfx_explose_1_12
+  - first:
+      213: 1461709475357411141
+    second: vfx_explose_1_13
+  - first:
+      213: -8114716652539830096
+    second: vfx_explose_1_14
+  - first:
+      213: -6674835115445895157
+    second: vfx_explose_1_15
+  - first:
+      213: 8515823759843954608
+    second: vfx_explose_1_16
+  - first:
+      213: 2815775999046741995
+    second: vfx_explose_1_17
+  - first:
+      213: 1663326347398148677
+    second: vfx_explose_1_18
+  - first:
+      213: 3607295227942913435
+    second: vfx_explose_1_19
+  - first:
+      213: 1467049700539610003
+    second: vfx_explose_1_20
+  - first:
+      213: 4806686510212755924
+    second: vfx_explose_1_21
+  - first:
+      213: -1168193650408390107
+    second: vfx_explose_1_22
+  - first:
+      213: 2168170348160315395
+    second: vfx_explose_1_23
+  - first:
+      213: -1762813227877057014
+    second: vfx_explose_1_24
+  - first:
+      213: 5921241674331033265
+    second: vfx_explose_1_25
+  - first:
+      213: -8140660299786104518
+    second: vfx_explose_1_26
+  - first:
+      213: 8913288350332236384
+    second: vfx_explose_1_27
+  - first:
+      213: -8666878204455436649
+    second: vfx_explose_1_28
+  - first:
+      213: 4868457676079481039
+    second: vfx_explose_1_29
+  - first:
+      213: -6008159298807126852
+    second: vfx_explose_1_30
+  - first:
+      213: 1836926406830617981
+    second: vfx_explose_1_31
+  - first:
+      213: 7073078476696942512
+    second: vfx_explose_1_32
+  - first:
+      213: 7788358568062614534
+    second: vfx_explose_1_33
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: fx_smoke.1_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4366c785418b7954284e12a79dcd0b7e
+      internalID: 342933011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fx_smoke.1_1
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70b429f5f2fe45840a4ae135a6462a88
+      internalID: -2089680994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fx_smoke.1_2
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8066db7982e2223429f3c6730779caba
+      internalID: -812045606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fx_smoke.1_3
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42440b5471edd6a458337ebb632587ea
+      internalID: 1583171660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fx_smoke.1_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dce2c7d21737bd44eb7807dce9b70083
+      internalID: 496967376
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fx_smoke.1_5
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 0
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2c1c0a80f5583c49910c854a46fbb06
+      internalID: -493386232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fx_smoke.1_6
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 23e1a342c0b849b42ab34e278c47a2bf
+      internalID: 1222608820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fx_smoke.1_7
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 0
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8bee0b2ffc4e73f419385bccdbeb2fa3
+      internalID: 1109147855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 418bafdc1494a714ab4527a728caf0f9
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":4.0,"y":2.0},"gridSpriteSize":{"x":100.0,"y":100.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      fx_smoke.1_0: 342933011
+      fx_smoke.1_1: -2089680994
+      fx_smoke.1_2: -812045606
+      fx_smoke.1_3: 1583171660
+      fx_smoke.1_4: 496967376
+      fx_smoke.1_5: -493386232
+      fx_smoke.1_6: 1222608820
+      fx_smoke.1_7: 1109147855
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

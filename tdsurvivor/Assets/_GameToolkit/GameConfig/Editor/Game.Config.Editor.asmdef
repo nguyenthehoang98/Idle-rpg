@@ -1,0 +1,19 @@
+{
+    "name": "Game.Config.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0239619e1e2025b4c8f2fecc8e33feb2",
+        "UniGzipCompressor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

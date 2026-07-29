@@ -4,3 +4,13 @@ tdsurvivor/Logs
 tdsurvivor/obj
 tdsurvivor/UserSettings
 *.csproj
+Recovery
+
+# Local secrets
+.env
+
+# Local secrets
+.env
+notion/tools/notion-sync/.env
+Recovery 2
+ai
