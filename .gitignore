@@ -1,0 +1,6 @@
+﻿tdsurvivor/.idea
+tdsurvivor/Library
+tdsurvivor/Logs
+tdsurvivor/obj
+tdsurvivor/UserSettings
+*.csproj
