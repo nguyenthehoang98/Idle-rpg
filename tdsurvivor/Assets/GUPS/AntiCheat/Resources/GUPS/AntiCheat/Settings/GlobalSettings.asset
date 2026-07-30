@@ -1,0 +1,162 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 320a4d71c64282e479383ac79e0e76f4, type: 3}
+  m_Name: GlobalSettings
+  m_EditorClassIdentifier: 
+  PlayerPreferences_Verify_Integrity: 1
+  PlayerPreferences_Hash_Key: 1
+  PlayerPreferences_Value_Encryption_Key: 
+  PlayerPreferences_Allow_Read_Any_Owner: 1
+  Android_Enable_Development: 0
+  Android_AllowAllAppStores: 0
+  Android_AllowedAppStores: 0206070a0d
+  Android_AllowedCustomAppStores: []
+  Android_VerifyAppHash: 0
+  Android_AppHashAlgorithm: 3
+  Android_AppHashEndpoint: https://your-server.com/hash?version={version}
+  Android_VerifyAppFingerprint: 0
+  Android_AppFingerprintAlgorithm: 3
+  Android_AppFingerprint: YO:UR:FI:NG:ER:PR:IN:T
+  Android_UseWhitelistingForLibraries: 1
+  Android_WhitelistedLibraries:
+  - libmain.so
+  - libmono-native.so
+  - libmonobdwgc-2.0.so
+  - libMonoPosixHelper.so
+  - libunity.so
+  Android_BlacklistedLibraries: []
+  Android_UseBlacklistingforApplication: 0
+  Android_BlacklistedApplications:
+  - com.cheating.app
+  - catch_.me_.if_.you_.can_
+  IOS_Enable_Development: 0
+  IOS_DetectUrlSchemes: 1
+  IOS_DetectSuspiciousPaths: 1
+  IOS_DetectSandboxViolation: 1
+  IOS_DetectFork: 0
+  IOS_DetectDyldInjection: 1
+  IOS_DetectSuspiciousDylibs: 1
+  IOS_SuspiciousUrlSchemes:
+  - cydia
+  - sileo
+  - zbra
+  - filza
+  - undecimus-sileo
+  - activator
+  IOS_SuspiciousPaths:
+  - /Applications/Cydia.app
+  - /Applications/Sileo.app
+  - /Applications/Zebra.app
+  - /Applications/FakeCarrier.app
+  - /Applications/Icy.app
+  - /Applications/IntelliScreen.app
+  - /Applications/MxTube.app
+  - /Applications/RockApp.app
+  - /Applications/SBSettings.app
+  - /Applications/WinterBoard.app
+  - /Applications/blackra1n.app
+  - /Library/MobileSubstrate/MobileSubstrate.dylib
+  - /Library/MobileSubstrate/DynamicLibraries
+  - /usr/sbin/sshd
+  - /usr/bin/sshd
+  - /etc/apt
+  - /private/var/lib/apt
+  - /private/var/lib/cydia
+  - /private/var/stash
+  - /private/var/mobile/Library/SBSettings/Themes
+  - /private/var/tmp/cydia.log
+  - /bin/bash
+  - /bin/sh
+  - /usr/libexec/ssh-keysign
+  - /usr/libexec/sftp-server
+  - /var/cache/apt
+  - /var/lib/apt
+  - /var/lib/cydia
+  - /var/log/syslog
+  - /var/mobile/Media/.tweaks
+  - /var/jb
+  - /var/jb/Applications/Cydia.app
+  - /var/jb/Applications/Sileo.app
+  - /var/jb/usr/lib/TweakInject
+  IOS_SuspiciousDylibs:
+  - MobileSubstrate
+  - SubstrateLoader.dylib
+  - CydiaSubstrate
+  - libsubstitute.dylib
+  - libsubstrate.dylib
+  - libhooker.dylib
+  - libellekit.dylib
+  - TweakInject
+  - TweakLoader
+  - RocketBootstrap
+  - frida
+  - FridaGadget
+  - cycript
+  - electra
+  IOS_DyldAllowedPrefixes:
+  - /usr/lib/
+  - /Developer/
+  Desktop_Enable_Development: 0
+  Desktop_DetectModLoader: 1
+  Desktop_ModLoader_AssemblyPrefixes:
+  - BepInEx
+  - MelonLoader
+  - HarmonyLib
+  - 0Harmony
+  - MonoMod
+  - UniverseLib
+  - UnityExplorer
+  - Doorstop
+  - Il2CppInterop
+  Desktop_ModLoader_FileNames:
+  - BepInEx/
+  - MelonLoader/
+  - Mods/
+  - doorstop_config.ini
+  - dobby.dll
+  - MelonLoader.dll
+  Desktop_ModLoader_HijackDlls:
+  - winhttp.dll
+  - version.dll
+  Desktop_DetectUserModeDebugger: 1
+  Desktop_DetectKernelModeDebugger: 1
+  Desktop_Debugger_ReportManagedOnly: 1
+  Desktop_DetectVirtualMachine: 1
+  Desktop_VirtualMachine_MacOuis:
+  - 080027
+  - 0A0027
+  - 525400
+  - 000569
+  - 000C29
+  - 001C14
+  - 005056
+  - 001C42
+  Desktop_VirtualMachine_BiosKeywords:
+  - VirtualBox
+  - VBox
+  - innotek
+  - VMware
+  - QEMU
+  - Xen
+  - Parallels
+  - Hyper-V
+  - KVM
+  - Bochs
+  Desktop_VirtualMachine_WindowsServiceKeys:
+  - SYSTEM\CurrentControlSet\Services\VBoxGuest
+  - SYSTEM\CurrentControlSet\Services\VBoxMouse
+  - SYSTEM\CurrentControlSet\Services\VBoxService
+  - SYSTEM\CurrentControlSet\Services\VBoxSF
+  - SYSTEM\CurrentControlSet\Services\vmtools
+  - SYSTEM\CurrentControlSet\Services\vmmemctl
+  - SYSTEM\CurrentControlSet\Services\vmhgfs
+  - SYSTEM\CurrentControlSet\Services\prl_tools
