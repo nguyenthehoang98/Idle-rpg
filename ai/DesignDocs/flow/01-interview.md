@@ -9,19 +9,17 @@ HYPOTHESIS:
 Bạn muốn làm game Unity 2D dạng Tower Defense / Survivor, trong đó một nhóm nhân vật ở giữa màn hình tự động bảo vệ căn cứ trước đàn quái spawn từ xung quanh.
 
 CONFIDENCE:
-~65%
+~95%
 
 Đã rõ:
-- Engine: Unity
-- Game: 2D
-- Core fantasy: nhóm nhân vật phòng thủ trung tâm
-- Enemy: đàn quái vật tấn công từ xung quanh
-
-Chưa rõ:
-- Người chơi điều khiển gì trực tiếp?
-- Game thiên về idle, survivor, hay tower defense chiến thuật?
-- MVP đầu tiên cần cảm giác chơi giống game nào?
-- Art style và platform mục tiêu?
+- Engine: Unity 6 URP 2D
+- Game: 2D Tower Defense / Survivor
+- Core fantasy: nhóm 5 hero ở trung tâm tự động bảo vệ căn cứ
+- Enemy: quái vật spawn từ SpawnerConfig, di chuyển theo RVO
+- Người chơi: không điều khiển trực tiếp, có thể force hướng tấn công
+- Platform: Mobile
+- Progression: Roll (miễn phí 1 item/refresh 1 lần) + Shop (dùng coin mua)
+- Recovery: ưu tiên Recovery, dùng AgentSimulator, IGrid, Config, Pool từ GameToolkit
 ```
 
 ## 2. Interview Rules
@@ -38,75 +36,104 @@ Chưa rõ:
 ### Q1 - Vai trò người chơi
 
 ```text
-Q: Trong trận, người chơi chủ yếu điều khiển gì?
+Q: Trong trận, người chủ yếu điều khiển gì?
 GUESS: Người chơi không điều khiển nhân vật di chuyển; nhân vật tự đánh, người chơi chủ yếu chọn nâng cấp/kỹ năng sau mỗi wave.
+
+ANSWER: Người chơi không điều khiển gì cả. Hero tự tấn công kẻ địch.
+Người chơi có thể force hướng hero tấn công.
 ```
 
-Status: `pending`
+Status: `answered ✅`
 
 ### Q2 - Cảm giác gameplay tham chiếu
 
 ```text
 Q: Bạn muốn game gần với kiểu nào hơn?
 GUESS: Gần Vampire Survivors/Survivor.io hơn Kingdom Rush, vì quái tới từ mọi hướng và nhân vật đứng trung tâm.
+
+ANSWER: Quái vật xuất hiện dựa theo các vị trí của SpawnerConfig.
 ```
 
-Status: `pending`
+Status: `answered ✅`
 
 ### Q3 - Căn cứ hay nhân vật là điều kiện thua?
 
 ```text
 Q: Người chơi thua khi căn cứ vỡ, hay khi toàn bộ nhân vật chết?
 GUESS: MVP nên thua khi Base/Core ở giữa hết máu để đơn giản.
+
+ANSWER: Hết máu -> Thua.
 ```
 
-Status: `pending`
+Status: `answered ✅`
 
 ### Q4 - Đội hình nhân vật
 
 ```text
 Q: Ban đầu có 1 nhân vật hay một nhóm nhiều nhân vật?
 GUESS: MVP bắt đầu với 1 Archer tự bắn, sau đó mở rộng thành đội hình 3-5 nhân vật.
+
+ANSWER: MVP phải có tối thiểu 5 hero. 1 gameplay đã dùng tới 4 hero rồi.
+Phân bố: 2 Archer, 2 Magic, 1 Buff/Control.
 ```
 
-Status: `pending`
+Status: `answered ✅`
 
 ### Q5 - Progression trong trận
 
 ```text
 Q: Nâng cấp diễn ra khi nào?
 GUESS: Sau mỗi wave hiện bảng chọn 1 trong 3 nâng cấp như tăng damage, attack speed, range.
+
+ANSWER: Mỗi khi hoàn thành 1 wave sẽ hiện ra Roll hoặc Shop:
+- **Roll**: chọn miễn phí 1 item, refresh 1 lần miễn phí/roll.
+- **Shop**: dùng coin để mua vật phẩm, có thể mua nhiều, refresh làm mới.
 ```
 
-Status: `pending`
+Status: `answered ✅`
 
 ### Q6 - Platform
 
 ```text
 Q: Game ưu tiên PC hay mobile?
 GUESS: Mobile/PC đều được, nhưng MVP làm PC trong Unity Editor trước, UI sau đó tối ưu mobile.
+
+ANSWER: Game cho Mobile.
 ```
 
-Status: `pending`
+Status: `answered ✅`
 
 ### Q7 - Recovery reference
 
 ```text
 Q: Bạn muốn dùng Recovery như mức nào?
 GUESS: Chỉ tham khảo kiến trúc spawn/config/pool, không copy file cho tới khi MVP thiết kế xong.
+
+ANSWER: Đánh giá module của Recovery và Recovery 2. Ưu tiên Recovery.
+Dùng AgentSimulator.cs (RVO), IGrid.cs (hit-detection logic),
+Config files (SpawnerConfig, MonsterConfig...), Pool từ GameToolkit.
 ```
 
-Status: `pending`
+Status: `answered ✅`
 
 ## 4. Decisions Confirmed
 
 ```text
-D01 - Unity 2D.
+D01 - Unity 6 URP 2D.
 D02 - Tower Defense / Survival Defense.
-D03 - Nhóm nhân vật ở trung tâm bảo vệ trước đàn quái.
+D03 - Nhóm 5 hero ở trung tâm bảo vệ Base.
 D04 - Phải thiết kế docs trước khi copy/code tiếp.
-D05 - Recovery dùng làm cấu trúc tham khảo.
+D05 - Recovery ưu tiên làm tham khảo chính.
 D06 - Áp dụng agent-skills cho design flow.
+D07 - Platform: Mobile.
+D08 - Người chơi không điều khiển trực tiếp, chỉ force hướng.
+D09 - Quái spawn theo SpawnerConfig.
+D10 - Thua khi Base hết máu.
+D11 - 5 hero: 2 Archer, 2 Magic, 1 Buff/Control.
+D12 - Progression: Roll (free 1 item + 1 refresh) + Shop (coin).
+D13 - Coin + Exp. Exp = level, Coin = mua đồ.
+D14 - Enemy: mob, elite, boss.
+D15 - Có cả Passive + Active skill.
 ```
 
 ## 5. Stop Condition

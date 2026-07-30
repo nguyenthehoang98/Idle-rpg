@@ -4,10 +4,13 @@ Status: `draft`
 
 ## 1. Architecture Goal
 
-Thiết kế Unity 2D đơn giản, dễ test, chưa phụ thuộc Recovery/plugin.
+Thiết kế Unity 6 URP 2D, kế thừa có chọn lọc từ Recovery.
 
 ```text
-Scene MonoBehaviours first -> verify gameplay -> then consider Pool/Config/Updater.
+Dùng AgentSimulator (RVO) cho di chuyển.
+Dùng IGrid cho hit-detection logic.
+Config từ Excel -> JSON (SpawnerConfig, MonsterConfig...).
+Pool từ GameToolkit.
 ```
 
 ## 2. Dependency Direction
@@ -28,7 +31,7 @@ GameToolkit phụ thuộc TDSurvivor
 Runtime code phụ thuộc Editor-only tools
 ```
 
-## 3. Runtime Components MVP 0.1
+## 3. Runtime Components
 
 ### GameManager
 
@@ -67,7 +70,7 @@ Used by:
 ```text
 - BaseCore
 - Monster
-- Later: Hero
+- Hero
 ```
 
 ### BaseCore
@@ -81,7 +84,7 @@ Responsibilities:
 
 ```text
 - Receive damage
-- Trigger GameOver when dead
+- Trigger GameOver when HP <= 0
 ```
 
 ### MonsterController
@@ -94,32 +97,34 @@ Assets/_TDSurvivor/Code/Units/Monsters/MonsterController.cs
 Responsibilities:
 
 ```text
+- 3 tiers: Mob, Elite, Boss
 - Initialize with Base target
-- Move toward Base
+- Move toward Base using RVO (AgentSimulator từ Recovery)
 - Damage Base on reach
 - Notify finished on death/reach
 ```
 
-### HeroAutoAttack
+### HeroController
 
 Path:
 ```text
-Assets/_TDSurvivor/Code/Units/Heroes/HeroAutoAttack.cs
+Assets/_TDSurvivor/Code/Units/Heroes/HeroController.cs
 ```
 
 Responsibilities:
 
 ```text
-- Find nearest Monster in range
+- 5 heroes: 2 Archer, 2 Magic, 1 Buff/Control
+- Find nearest Monster in range (can force attack direction)
 - Respect cooldown
 - Spawn Projectile
+- Support Passive + Active skills
 ```
 
-MVP limitation:
+Force target:
 
 ```text
-Uses FindObjectsOfType for simplicity.
-Optimization later: TargetRegistry or spatial query.
+Player tap/click enemy -> hero forces attack direction.
 ```
 
 ### Projectile
@@ -133,7 +138,7 @@ Responsibilities:
 
 ```text
 - Follow target
-- Deal damage once
+- Deal damage once (logic hit via IGrid từ Recovery)
 - Destroy on hit/timeout/missing target
 ```
 
@@ -147,9 +152,10 @@ Assets/_TDSurvivor/Code/Spawning/EnemySpawner.cs
 Responsibilities:
 
 ```text
-- Spawn monster prefab
-- Pick portal/random position
+- Read SpawnerConfig (Excel -> JSON)
+- Spawn monster prefab at configured positions
 - Initialize monster with Base target
+- Use Pool từ GameToolkit
 ```
 
 ### WaveManager
@@ -163,9 +169,26 @@ Responsibilities:
 
 ```text
 - Run wave coroutine
-- Spawn N monsters
+- Spawn monsters based on config
 - Track alive monsters
+- Trigger Roll/Shop UI after wave
 - Trigger Victory after all waves
+```
+
+### RollShopUI
+
+Path:
+```text
+Assets/_TDSurvivor/Code/UI/RollShopUI.cs
+```
+
+Responsibilities:
+
+```text
+- Show after each wave
+- Roll: free 1 item + 1 free refresh
+- Shop: buy items with coin, refresh available
+- Display item list
 ```
 
 ### GameplayUI
@@ -180,6 +203,8 @@ Responsibilities:
 ```text
 - Display Base HP
 - Display Wave
+- Display Coin
+- Display Level (Exp)
 - Display GameState
 ```
 
@@ -203,7 +228,7 @@ Gameplay.unity
     └── GameplayUI
 ```
 
-## 5. Prefab Design MVP 0.1
+## 5. Prefab Design
 
 ### BaseCore.prefab
 
@@ -218,23 +243,43 @@ Serialized defaults:
 - Health.maxHp = 100
 ```
 
-### Archer.prefab
+### Archer.prefab (x2)
 
 ```text
 Components:
 - Transform
 - SpriteRenderer
-- HeroAutoAttack
+- HeroController
 
-Serialized defaults:
-- attackRange = 5
-- attackCooldown = 1
-- damage = 10
-- projectileSpeed = 10
-- projectilePrefab = Arrow
+Config: HeroConfig (Excel -> JSON)
+- attackRange, attackCooldown, damage, projectileSpeed
 ```
 
-### Slime.prefab
+### Magic.prefab (x2)
+
+```text
+Components:
+- Transform
+- SpriteRenderer
+- HeroController
+
+Config: HeroConfig (Excel -> JSON)
+- AoE/burst params
+```
+
+### BuffControl.prefab (x1)
+
+```text
+Components:
+- Transform
+- SpriteRenderer
+- HeroController
+
+Config: HeroConfig (Excel -> JSON)
+- Buff/control params
+```
+
+### Mob.prefab (slime)
 
 ```text
 Components:
@@ -243,11 +288,34 @@ Components:
 - Health
 - MonsterController
 
-Serialized defaults:
-- Health.maxHp = 30
-- moveSpeed = 2
-- attackDamage = 5
-- reachDistance = 0.25
+Config: MonsterConfig (Excel -> JSON)
+- Tier: Mob
+```
+
+### Elite.prefab
+
+```text
+Components:
+- Transform
+- SpriteRenderer
+- Health
+- MonsterController
+
+Config: MonsterConfig (Excel -> JSON)
+- Tier: Elite
+```
+
+### Boss.prefab
+
+```text
+Components:
+- Transform
+- SpriteRenderer
+- Health
+- MonsterController
+
+Config: MonsterConfig (Excel -> JSON)
+- Tier: Boss
 ```
 
 ### Arrow.prefab
@@ -258,56 +326,57 @@ Components:
 - SpriteRenderer
 - Projectile
 
-Serialized defaults:
-- speed = 10
-- hitDistance = 0.15
-- lifeTime = 3
+Config: ProjectileConfig (Excel -> JSON)
 ```
 
 ## 6. Data Strategy
 
-MVP 0.1:
-
 ```text
-Use serialized fields in MonoBehaviour.
-```
-
-MVP 0.2:
-
-```text
-Introduce ScriptableObject configs:
-- HeroConfig
-- MonsterConfig
+All config from Excel -> JSON pipeline (Recovery style):
+- SpawnerConfig
+- MonsterConfig (Mob, Elite, Boss)
+- HeroConfig (Archer, Magic, Buff/Control)
 - WaveConfig
+- ProjectileConfig
+- ShopConfig (items, prices)
+- RollConfig (items, refresh rates)
 ```
 
-Later, if needed:
+Load via ConfigManager từ Recovery/GameToolkit.
+Pool từ GameToolkit.
 
-```text
-Excel/JSON pipeline inspired by Recovery.
-```
 
 ## 7. Recovery Reference Strategy
 
-Reference only:
+Ưu tiên Recovery, đánh giá thêm Recovery 2.
+
+Reference và dùng lại (đã có base):
 
 ```text
-- Spawner structure
-- Monster config fields
-- Pool idea
-- Updater idea
-- Folder separation
+- AgentSimulator.cs (RVO movement)
+- IGrid.cs (hit-detection logic)
+- SpawnerConfig, MonsterConfig (Excel -> JSON pipeline)
+- Pool (GameToolkit)
+- Updater (GameToolkit)
+- Folder separation pattern
 ```
 
-Do not copy yet:
+Không copy:
 
 ```text
 - Scene files
 - Prefabs
 - Plugins
 - Addressables
-- ExcelExtension
 - Meta files
+```
+
+Quy tắc:
+
+```text
+- Copy code module -> đổi namespace _TDS -> TDSurvivor
+- Không copy .meta, .unity, .prefab
+- Chỉ dùng sau khi design đã được duyệt
 ```
 
 ## 8. Risks
@@ -320,12 +389,12 @@ Do not copy yet:
 | Manual scene setup slow | Setup mistakes | Add Editor scene generator after spec approved |
 | Recovery dependency creep | Broken refs/packages | Use source-driven reference only |
 
-## 9. Technical Open Questions
+## 9. Technical Decisions (from Interview)
 
 ```text
-TOQ01 - Use Built-in 2D or URP 2D?
-TOQ02 - Need Rigidbody2D/Collider2D in MVP, or transform movement enough?
-TOQ03 - Should hit detection be target-follow or physics collision?
-TOQ04 - Should wave data be serialized on WaveManager or ScriptableObject immediately?
-TOQ05 - Need object pooling in MVP 0.1 or MVP 0.2?
+TD01 - Unity 6 URP 2D.
+TD02 - Movement using logic position + RVO (AgentSimulator).
+TD03 - Hit detection using logic (IGrid).
+TD04 - All config: Excel -> JSON (SpawnerConfig, MonsterConfig...).
+TD05 - Pool: từ GameToolkit (có base sẵn).
 ```

@@ -1,6 +1,6 @@
 # 02 - Game Spec Draft
 
-Status: `draft - waiting for interview answers`
+Status: `updated - interview answers applied, chờ duyệt`
 
 Dựa trên skill `spec-driven-development`.
 
@@ -116,26 +116,14 @@ Out of scope MVP 0.1:
 - Projectile is destroyed after hit, timeout, or target missing.
 ```
 
-## 7. Data Defaults MVP 0.1
+## 7. Data Strategy
 
 ```text
-Base:
-- maxHp: 100
-
-Archer:
-- damage: 10
-- attackRange: 5
-- attackCooldown: 1.0
-- projectileSpeed: 10
-
-Slime:
-- maxHp: 30
-- moveSpeed: 2
-- attackDamage: 5
-
-Wave 1:
-- totalMonster: 10
-- spawnInterval: 1.0
+- All config data from Excel -> JSON (SpawnerConfig, MonsterConfig, HeroConfig...)
+- Use Recovery's Excel pipeline as reference.
+- Pool từ GameToolkit.
+- Movement: RVO via AgentSimulator (Recovery).
+- Hit detection: logic check via IGrid (Recovery).
 ```
 
 ## 8. Project Structure
@@ -159,10 +147,13 @@ Manual verification for now:
 2. Open Gameplay scene.
 3. Check Console no red errors.
 4. Press Play.
-5. Confirm monsters spawn.
-6. Confirm hero attacks.
-7. Confirm monsters die or damage Base.
-8. Confirm GameOver/Victory appears.
+5. Confirm monsters spawn from SpawnerConfig positions.
+6. Confirm heroes auto-attack (2 Archer, 2 Magic, 1 Buff/Control).
+7. Confirm RVO movement (AgentSimulator) works.
+8. Confirm hit detection (IGrid) works.
+9. Confirm monsters die or damage Base.
+10. Confirm Roll/Shop appears after wave.
+11. Confirm GameOver when Base HP <= 0.
 ```
 
 ## 10. Boundaries
@@ -171,15 +162,16 @@ Always:
 
 ```text
 - Update spec before changing design.
-- Keep MVP small.
+- Keep MVP focused on 5 heroes + 3 monster types.
 - Use namespace TDSurvivor.
 - Keep code and content separated.
+- Config from Excel -> JSON pipeline.
 ```
 
 Ask first:
 
 ```text
-- Copy files from Recovery.
+- Copy files from Recovery/Recovery 2.
 - Add plugins/packages.
 - Introduce Addressables/UniTask/ExcelExtension.
 - Change Unity project settings.
@@ -193,28 +185,37 @@ Never:
 - Hide assumptions.
 ```
 
-## 11. Success Criteria MVP 0.1
+## 11. Success Criteria
 
 ```text
 SC01 - Gameplay scene runs without red Console errors.
-SC02 - Monster spawns from outside center area.
-SC03 - Monster moves toward Base.
-SC04 - Hero attacks Monster automatically.
-SC05 - Projectile damages Monster.
+SC02 - Monsters spawn from SpawnerConfig positions.
+SC03 - Monsters move toward Base using RVO (AgentSimulator).
+SC04 - Heroes auto-attack, can force attack direction.
+SC05 - Projectile damages Monster via IGrid logic.
 SC06 - Monster dies at 0 HP.
 SC07 - Monster damages Base if reaching Base.
 SC08 - Base HP UI updates.
 SC09 - GameOver when Base HP <= 0.
 SC10 - Victory when all configured waves complete.
+SC11 - Roll appears after wave: free 1 item + 1 refresh.
+SC12 - Shop appears: buy items with coin, refresh available.
+SC13 - Coin and Exp system works (Exp = level, Coin = mua đồ).
+SC14 - Passive + Active skills functional.
+SC15 - 3 monster tiers: Mob, Elite, Boss behave correctly.
 ```
 
-## 12. Open Questions
+## 12. Closed Questions (từ Interview)
 
 ```text
-OQ01 - Player controls movement, skills, upgrades, or placement?
-OQ02 - Is the game more idle, survivor, or tower-defense strategy?
-OQ03 - Target platform: PC, mobile, web?
-OQ04 - Should MVP include upgrade choice after wave?
-OQ05 - Should heroes stand fixed or arranged around Base?
-OQ06 - Is Base a building, crystal, portal, or group HP?
+CQ01 - Người chơi không điều khiển gì, có thể force hướng hero.
+CQ02 - Game cho Mobile.
+CQ03 - 5 Hero: 2 Archer, 2 Magic, 1 Buff/Control.
+CQ04 - Progression: Roll (free 1 + 1 refresh) + Shop (coin).
+CQ05 - Enemy: 3 loại Mob, Elite, Boss.
+CQ06 - Hệ thống: Coin + Exp, Passive + Active skill.
+CQ07 - Unity 6 URP 2D, Excel -> JSON config.
+CQ08 - Movement: RVO (AgentSimulator), Hit: logic (IGrid).
+CQ09 - Pool: từ GameToolkit.
+CQ10 - Tham khảo: ưu tiên Recovery.
 ```
