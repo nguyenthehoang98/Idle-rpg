@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using _GameToolkit.Avoidance;
 using _GameToolkit.Updater;
 using _TDS.GameConfig;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _TDS.Unit
@@ -66,7 +67,7 @@ namespace _TDS.Unit
             }
         }
 
-        public void CreateAgent(Monster monster, MonsterConfigData configData, MonsterRuntimeData runtimeData)
+        public int CreateAgent(Monster monster, MonsterConfigData configData, MonsterRuntimeData runtimeData)
         {
             int agent = agentSimulator.CreateAgent(
                 monster.transform.position, monster.Radius * runtimeData.SizeScale,
@@ -75,10 +76,12 @@ namespace _TDS.Unit
             ).agent;
 
             Data data = new Data(monster, agent);
-            
+
             additionQueue.Enqueue(data);
-            
+
             agentToData.Add(agent, data);
+
+            return agent;
         }
 
         public bool TryGetMonster(int agent, out Monster monster)
@@ -93,6 +96,12 @@ namespace _TDS.Unit
                 monster = null;
                 return false;
             }
+        }
+
+        /// <summary>Query agent positions qua spatial grid (dùng cho hit detection).</summary>
+        public int QueryAgent(Vector2 center, Vector2 size, out AgentData[] agentsData)
+        {
+            return agentSimulator.QueryAgent(new float2(center.x, center.y), new float2(size.x, size.y), out agentsData);
         }
 
         public void DestroyAgent(int agent)

@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RVO2", "RVO2.csproj", "{cc7a9447-f07d-1939-8ded-e92b61941f3e}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_GameToolkit.SkillSystem", "_GameToolkit.SkillSystem.csproj", "{10321457-3a38-94d9-e492-6e8908ed953a}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LitMotion.Animation.Editor", "LitMotion.Animation.Editor.csproj", "{142c2a74-593b-7ec6-1e11-97dba8433ad2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniTask.Addressables", "UniTask.Addressables.csproj", "{bf481c2f-d19e-8111-157d-edb1ec45d789}"
@@ -77,6 +79,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_GameToolkit.Updater", "_GameToolkit.Updater.csproj", "{81d1ce68-92cf-58f8-ba7c-e62616d535ef}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_GameToolkit.SkillSystem.Tests", "_GameToolkit.SkillSystem.Tests.csproj", "{f52745ff-c91c-a2d2-638a-45e412deffd7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -112,6 +116,8 @@ Global
 		{8a9e848b-4e61-e843-1835-ba909de6cbb6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{cc7a9447-f07d-1939-8ded-e92b61941f3e}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{cc7a9447-f07d-1939-8ded-e92b61941f3e}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10321457-3a38-94d9-e492-6e8908ed953a}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10321457-3a38-94d9-e492-6e8908ed953a}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{142c2a74-593b-7ec6-1e11-97dba8433ad2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{142c2a74-593b-7ec6-1e11-97dba8433ad2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{bf481c2f-d19e-8111-157d-edb1ec45d789}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -158,6 +164,8 @@ Global
 		{8a52a2df-d88c-86ef-c1a5-03cb2cf47475}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81d1ce68-92cf-58f8-ba7c-e62616d535ef}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{81d1ce68-92cf-58f8-ba7c-e62616d535ef}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{f52745ff-c91c-a2d2-638a-45e412deffd7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{f52745ff-c91c-a2d2-638a-45e412deffd7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

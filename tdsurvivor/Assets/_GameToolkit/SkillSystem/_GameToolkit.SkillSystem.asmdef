@@ -1,3 +1,6 @@
 {
-	"name": "_GameToolkit.SkillSystem"
+	"name": "_GameToolkit.SkillSystem",
+	"references": [
+		"Unity.Splines"
+	]
 }
