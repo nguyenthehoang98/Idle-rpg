@@ -114,7 +114,50 @@ Wave tiếp theo bắt đầu sau delay.
 Nếu hết wave thì Victory hoặc log Complete.
 ```
 
-## 5. Acceptance Criteria MVP 0.1
+## 5. Automated Tests (Edit Mode)
+
+Bổ sung từ 2026-07-31. Unity Test Framework (`com.unity.test-framework`) + NUnit.
+
+### Nguyên tắc
+
+```text
+- Test pure logic: Spu, BaseAction, Trajectory, SpawnTimer, Stat.
+- Không test MonoBehaviour/visual trong Edit Mode.
+- Test file đặt cạnh code: Assets/_GameToolkit/SkillSystem/Tests/.
+- Mỗi test assembly dùng asmdef riêng với defineConstraints UNITY_INCLUDE_TESTS.
+```
+
+### Hiện có
+
+| Test file | Nội dung | Trạng thái |
+|---|---|---|
+| `SkillSystem/Tests/BaseActionTests.cs` | Lifecycle: Start/Tick/Interrupt/Stop/IsFinished/Reason (22 cases) | Sẵn sàng |
+| `SkillSystem/Tests/SpuTests.cs` | Command queue, add/remove action, skill grouping, id reuse (9 cases) | Sẵn sàng |
+| `SkillSystem/Tests/TrajectoryTests.cs` | Projectile/Boomerang/Stationary vị trí theo thời gian (7 cases) | Sẵn sàng |
+| `SkillSystem/Tests/CastProjectileActionTests.cs` | maxHitCount, hit cooldown, DoT interval, OnComplete (7 cases) | Sẵn sàng |
+| `_TDS/Tests/SpawnTimerTests.cs` | Spawn count trong window, IsFinished (8 cases) | Sẵn sàng |
+| `_TDS/Tests/StatTests.cs` | Modifier stacking Flat/PercentAdd/PercentMult (11 cases) | Sẵn sàng |
+
+### Cần bổ sung (khi code ổn định)
+
+```text
+- HealthTests: TakeDamage/Heal/death edge cases.
+- EntityQueryTests: query circle/rect, filter, nearest (cần mock AgentSimulator).
+```
+
+### Cách chạy
+
+```text
+CLI (không cần mở Editor):
+Unity.exe -batchmode -nographics -runTests -projectPath "tdsurvivor" \
+  -testPlatform EditMode -testResults "<path>/test-results.xml"
+
+Unity Editor: Window > General > Test Runner > EditMode > Run All
+```
+
+Gate: không có test fail trước khi coi task xong.
+
+## 6. Acceptance Criteria MVP 0.1
 
 MVP 0.1 được xem là đạt khi:
 
@@ -123,17 +166,19 @@ MVP 0.1 được xem là đạt khi:
 - Không có lỗi đỏ trong Console.
 - Có ít nhất 1 hero, 1 monster, 1 base, 1 wave.
 - Quái spawn -> đi vào base -> bị hero bắn -> chết hoặc gây damage base.
-- Code nằm đúng namespace TDSurvivor.
+- Code nằm đúng namespace _GameToolkit.* / _TDS.*.
+- Edit Mode tests pass (SkillSystem + Spu + BaseAction).
 - Không phụ thuộc file copy trực tiếp từ Recovery.
 ```
 
-## 6. Rủi ro kỹ thuật
+## 7. Rủi ro kỹ thuật
 
 ```text
 - Copy file Unity có thể vỡ GUID/meta.
 - Addressables/ExcelExtension có thể thiếu package.
 - Recovery dùng UniTask/Pool/Updater; nếu port sớm sẽ tăng phụ thuộc.
 - Scene/prefab cũ có reference bị mất khi sang project mới.
+- SplineTrajectory phụ thuộc package com.unity.splines (đã thêm 2.9.0).
 ```
 
 Cách giảm rủi ro:
@@ -144,13 +189,13 @@ Cách giảm rủi ro:
 - Nếu cần tham khảo Recovery, chỉ đọc logic rồi viết lại namespace mới.
 ```
 
-## 7. Thứ tự triển khai đề xuất sau khi duyệt
+## 8. Thứ tự triển khai đề xuất sau khi duyệt
 
 ```text
-Step 1 - Tạo folder `_TDSurvivor` theo file 02.
+Step 1 - Giữ folder _GameToolkit/_TDS/_TDS assets theo file 02.
 Step 2 - Tạo script skeleton MVP 0.1.
 Step 3 - Tạo Gameplay scene thủ công hoặc bằng editor script.
 Step 4 - Tạo prefab placeholder bằng Sprite đơn giản.
-Step 5 - Test loop spawn/move/attack/damage.
-Step 6 - Sau khi ổn mới xem xét port Pool/Updater từ Recovery.
+Step 5 - Test loop spawn/move/attack/damage (manual T01-T08).
+Step 6 - Chạy Edit Mode automated tests (SkillSystem).
 ```

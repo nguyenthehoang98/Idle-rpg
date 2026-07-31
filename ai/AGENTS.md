@@ -35,10 +35,13 @@ source-driven-development       -> use Recovery only as reference source
 Always:
 - Write/update Markdown design docs before implementation.
 - Surface assumptions before deciding.
-- Keep Unity code under `Assets/_TDSurvivor/Code`.
-- Keep game content under `Assets/_TDSurvivor/Content`.
-- Use namespace `TDSurvivor.*`.
+- Keep reusable engine code under `Assets/_GameToolkit`.
+- Keep game-specific code under `Assets/_TDS`.
+- Keep game content under `Assets/_TDS assets`.
+- Use namespace `_GameToolkit.*` (reusable) and `_TDS.*` (game-specific).
 - Keep Recovery as reference, not direct source of truth.
+- Write automated tests for pure logic (SkillSystem, Spu, Stats, timers).
+- Run Edit Mode tests before considering a task complete.
 
 Ask first:
 - Copying code, prefab, scene, plugin, or `.meta` from Recovery.
@@ -63,6 +66,33 @@ Check Console has no red errors
 Enter Play Mode
 Run MVP gameplay test checklist
 ```
+
+### Automated Tests (Edit Mode)
+
+Unity Test Framework (com.unity.test-framework) + NUnit. Test files live next to code:
+
+```text
+Assets/_GameToolkit/SkillSystem/Tests/   <- SpuTests.cs, BaseActionTests.cs
+```
+
+Run from CLI (batch mode):
+
+```text
+# Edit Mode tests (nhanh, không cần graphics)
+"C:\Program Files\Unity\Hub\Editor\6000.5.5f1\Editor\Unity.exe" \
+  -batchmode -nographics -runTests -projectPath "tdsurvivor" \
+  -testPlatform EditMode \
+  -testResults "$COMMANDCODE_SCRATCHPAD\test-results.xml"
+
+# Hoặc trong Unity Editor: Window > General > Test Runner > EditMode > Run All
+```
+
+Rules:
+
+- Test code nằm trong asmdef riêng (`*.Tests.asmdef`) với `defineConstraints: UNITY_INCLUDE_TESTS`.
+- Không test MonoBehaviour/visual trực tiếp trong Edit Mode — chỉ test pure logic (Spu, BaseAction, timers, math).
+- Play Mode tests (scene, prefab) để sau, khi gameplay loop hoàn thiện.
+- Trước khi coi task xong: chạy Edit Mode tests, không được có test fail.
 
 ## Design Docs Location
 

@@ -2,7 +2,7 @@
 using _GameToolkit.SkillSystem.Core;
 using NUnit.Framework;
 
-namespace _GameToolkit.SkillSystem
+namespace _GameToolkit.SkillSystem.Tests
 {
     public class BaseActionTests
     {

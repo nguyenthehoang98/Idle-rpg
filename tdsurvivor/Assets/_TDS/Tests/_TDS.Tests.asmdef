@@ -1,9 +1,8 @@
 {
-	"name": "_GameToolkit.SkillSystem.Tests",
+	"name": "_TDS.Tests",
 	"rootNamespace": "",
 	"references": [
-		"_GameToolkit.SkillSystem",
-		"Unity.Mathematics",
+		"Assembly-CSharp",
 		"UnityEngine.TestRunner",
 		"UnityEditor.TestRunner"
 	],

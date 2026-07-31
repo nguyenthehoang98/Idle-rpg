@@ -1,6 +1,7 @@
 {
 	"name": "_GameToolkit.SkillSystem",
 	"references": [
-		"Unity.Splines"
+		"Unity.Splines",
+		"Unity.Mathematics"
 	]
 }

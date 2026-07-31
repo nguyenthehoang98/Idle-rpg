@@ -2,7 +2,7 @@
 
 namespace _TDS.Gameplay
 {
-    struct SpawnTimer
+    public struct SpawnTimer
     {
         private int total;
 

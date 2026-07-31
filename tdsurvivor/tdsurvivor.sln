@@ -75,11 +75,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor-firs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniTask.Editor", "UniTask.Editor.csproj", "{89c6cafe-d355-da53-337a-b3a3990e8d0a}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_GameToolkit.SkillSystem.Tests", "_GameToolkit.SkillSystem.Tests.csproj", "{f52745ff-c91c-a2d2-638a-45e412deffd7}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{8a52a2df-d88c-86ef-c1a5-03cb2cf47475}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_GameToolkit.Updater", "_GameToolkit.Updater.csproj", "{81d1ce68-92cf-58f8-ba7c-e62616d535ef}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_TDS.Tests", "_TDS.Tests.csproj", "{47970583-ebed-0e2c-39f9-bae485c5e1ba}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_GameToolkit.SkillSystem.Tests", "_GameToolkit.SkillSystem.Tests.csproj", "{f52745ff-c91c-a2d2-638a-45e412deffd7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_GameToolkit.Updater", "_GameToolkit.Updater.csproj", "{81d1ce68-92cf-58f8-ba7c-e62616d535ef}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -160,12 +162,14 @@ Global
 		{5ebc3a14-e3ce-0fd7-4ffb-dc521bf0f2d0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89c6cafe-d355-da53-337a-b3a3990e8d0a}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{89c6cafe-d355-da53-337a-b3a3990e8d0a}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8a52a2df-d88c-86ef-c1a5-03cb2cf47475}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8a52a2df-d88c-86ef-c1a5-03cb2cf47475}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{81d1ce68-92cf-58f8-ba7c-e62616d535ef}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{81d1ce68-92cf-58f8-ba7c-e62616d535ef}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{f52745ff-c91c-a2d2-638a-45e412deffd7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{f52745ff-c91c-a2d2-638a-45e412deffd7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8a52a2df-d88c-86ef-c1a5-03cb2cf47475}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8a52a2df-d88c-86ef-c1a5-03cb2cf47475}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47970583-ebed-0e2c-39f9-bae485c5e1ba}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47970583-ebed-0e2c-39f9-bae485c5e1ba}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81d1ce68-92cf-58f8-ba7c-e62616d535ef}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81d1ce68-92cf-58f8-ba7c-e62616d535ef}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
