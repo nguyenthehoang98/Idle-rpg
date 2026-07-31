@@ -27,12 +27,12 @@ Chỉ pass khi trả lời được:
 Checklist:
 
 ```text
-[ ] Player role rõ
-[ ] Core loop rõ
-[ ] MVP scope rõ
-[ ] Non-scope rõ
-[ ] Success criteria rõ
-[ ] Confidence >= 90%
+[x] Player role rõ
+[x] Core loop rõ
+[x] MVP scope rõ
+[x] Non-scope rõ
+[x] Success criteria rõ
+[x] Confidence >= 90%
 ```
 
 ## Gate 2 - Spec Gate
@@ -40,15 +40,15 @@ Checklist:
 Chỉ pass khi `02-spec.md` có:
 
 ```text
-[ ] Objective
-[ ] Target player
-[ ] Core loop
-[ ] MVP scope
-[ ] Non-scope
-[ ] Gameplay rules
-[ ] Default data
-[ ] Success criteria
-[ ] Open questions resolved or accepted
+[x] Objective
+[x] Target player
+[x] Core loop
+[x] MVP scope
+[x] Non-scope
+[x] Gameplay rules
+[x] Default data
+[x] Success criteria
+[x] Open questions resolved or accepted
 ```
 
 Red flags:
@@ -64,13 +64,13 @@ Red flags:
 Chỉ pass khi `03-technical-design.md` có:
 
 ```text
-[ ] Scene structure
-[ ] Prefab/component list
-[ ] Runtime component responsibilities
-[ ] Dependency direction
-[ ] Data strategy
-[ ] Recovery reference boundary
-[ ] Risks and mitigation
+[x] Scene structure
+[x] Prefab/component list
+[x] Runtime component responsibilities
+[x] Dependency direction
+[x] Data strategy
+[x] Recovery reference boundary
+[x] Risks and mitigation
 ```
 
 Red flags:
@@ -87,11 +87,11 @@ Red flags:
 Chỉ pass khi tasks:
 
 ```text
-[ ] Chia theo vertical slices
-[ ] Mỗi task có file output rõ
-[ ] Mỗi task có acceptance criteria
-[ ] Mỗi task có test manual hoặc automated
-[ ] Task không vượt quá phạm vi nhỏ
+[x] Chia theo vertical slices
+[x] Mỗi task có file output rõ
+[x] Mỗi task có acceptance criteria
+[x] Mỗi task có test manual hoặc automated
+[x] Task không vượt quá phạm vi nhỏ
 ```
 
 ## Gate 5 - Build Gate
@@ -99,17 +99,18 @@ Chỉ pass khi tasks:
 Trước khi code:
 
 ```text
-[ ] Task được user duyệt
-[ ] Biết file nào sẽ thay đổi
-[ ] Biết cách test
-[ ] Không đụng Recovery nếu chưa hỏi
+[x] Task được user duyệt
+[x] Biết file nào sẽ thay đổi
+[x] Biết cách test
+[x] Không đụng Recovery nếu chưa hỏi
 ```
 
-Sau khi code:
+Sau khi code (Slice 1 passé, Slice 2 in progress):
 
 ```text
-[ ] Unity compile không lỗi đỏ
-[ ] Play Mode test pass
+[x] Unity compile không lỗi đỏ
+[x] Play Mode test pass (Slice 1: Spawn + RVO)
+[ ] Slice 2: BaseCore + Health → GameOver
 [ ] Docs cập nhật nếu design đổi
 ```
 
@@ -130,12 +131,13 @@ Review theo 5 trục:
 Tạo ADR khi quyết định:
 
 ```text
-- Chọn kiến trúc folder
-- Chọn ScriptableObject vs JSON/Excel
-- Chọn object pool
-- Chọn Addressables
-- Chọn target platform
-- Chọn input/control model
+[x] ADR-0001: Kiến trúc folder (accepted 2026-07-31)
+[x] ADR-0002: Excel → JSON vs ScriptableObject (accepted 2026-07-31)
+[x] ADR-0003: Object pool strategy (accepted 2026-07-31)
+[x] ADR-0004: Addressables (accepted 2026-07-31)
+[x] ADR-0005: Target platform – Mobile (accepted 2026-07-31)
+[-] ADR-0006: Input/control model (deferred – hero + input chưa trong scope)
+[x] ADR-0007: Skill System architecture (accepted 2026-07-31)
 ```
 
 Template ở:

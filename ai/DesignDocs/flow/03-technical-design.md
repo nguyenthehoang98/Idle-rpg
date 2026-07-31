@@ -1,6 +1,8 @@
-# 03 - Technical Design Draft
+# 03 - Technical Design
 
-Status: `draft`
+Status: `approved`
+
+Date approved: 2026-07-31
 
 ## 1. Architecture Goal
 
@@ -27,7 +29,7 @@ Không để:
 
 ```text
 Core phụ thuộc UI
-GameToolkit phụ thuộc TDSurvivor
+GameToolkit phụ thuộc _TDS
 Runtime code phụ thuộc Editor-only tools
 ```
 
@@ -37,7 +39,7 @@ Runtime code phụ thuộc Editor-only tools
 
 Path:
 ```text
-Assets/_TDSurvivor/Code/Core/GameManager.cs
+Assets/_TDS/Core/GameManager.cs
 ```
 
 Responsibilities:
@@ -52,7 +54,7 @@ Responsibilities:
 
 Path:
 ```text
-Assets/_TDSurvivor/Code/Combat/Health.cs
+Assets/_TDS/Combat/Health.cs
 ```
 
 Responsibilities:
@@ -77,7 +79,7 @@ Used by:
 
 Path:
 ```text
-Assets/_TDSurvivor/Code/Units/Base/BaseCore.cs
+Assets/_TDS/Units/Base/BaseCore.cs
 ```
 
 Responsibilities:
@@ -91,7 +93,7 @@ Responsibilities:
 
 Path:
 ```text
-Assets/_TDSurvivor/Code/Units/Monsters/MonsterController.cs
+Assets/_TDS/Units/Monsters/MonsterController.cs
 ```
 
 Responsibilities:
@@ -108,7 +110,7 @@ Responsibilities:
 
 Path:
 ```text
-Assets/_TDSurvivor/Code/Units/Heroes/HeroController.cs
+Assets/_TDS/Units/Heroes/HeroController.cs
 ```
 
 Responsibilities:
@@ -131,7 +133,7 @@ Player tap/click enemy -> hero forces attack direction.
 
 Path:
 ```text
-Assets/_TDSurvivor/Code/Projectiles/Projectile.cs
+Assets/_TDS/Projectiles/Projectile.cs
 ```
 
 Responsibilities:
@@ -146,7 +148,7 @@ Responsibilities:
 
 Path:
 ```text
-Assets/_TDSurvivor/Code/Spawning/EnemySpawner.cs
+Assets/_TDS/Spawning/EnemySpawner.cs
 ```
 
 Responsibilities:
@@ -162,7 +164,7 @@ Responsibilities:
 
 Path:
 ```text
-Assets/_TDSurvivor/Code/Spawning/WaveManager.cs
+Assets/_TDS/Spawning/WaveManager.cs
 ```
 
 Responsibilities:
@@ -179,7 +181,7 @@ Responsibilities:
 
 Path:
 ```text
-Assets/_TDSurvivor/Code/UI/RollShopUI.cs
+Assets/_TDS/UI/RollShopUI.cs
 ```
 
 Responsibilities:
@@ -195,7 +197,7 @@ Responsibilities:
 
 Path:
 ```text
-Assets/_TDSurvivor/Code/UI/GameplayUI.cs
+Assets/_TDS/UI/GameplayUI.cs
 ```
 
 Responsibilities:
@@ -374,7 +376,7 @@ Không copy:
 Quy tắc:
 
 ```text
-- Copy code module -> đổi namespace _TDS -> TDSurvivor
+- Copy code module -> giữ namespace hiện tại (_TDS.*, _GameToolkit.*)
 - Không copy .meta, .unity, .prefab
 - Chỉ dùng sau khi design đã được duyệt
 ```

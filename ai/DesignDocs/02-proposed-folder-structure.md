@@ -2,6 +2,34 @@
 
 Đích: `C:\Users\Hoang PC\Documents\Idle-rpg\tdsurvivor\Assets`
 
+## 0. Module Boundary Rules
+
+### _GameToolkit/ — Shared Engine
+Chỉ chứa code **KHÔNG phụ thuộc** vào game cụ thể:
+- ✅ Hệ thống engine-level: Pool, Updater, Config loader, Asset manager, SkillSystem
+- ✅ Data structures thuần túy: Stat, StatModifier
+- ✅ Abstractions: ICollision, IGrid, IGameConfig, IBundleLoader, IQuery, IProjectileView
+- ❌ KHÔNG: class tham chiếu đến MonsterConfig, HeroConfig, scene name
+- ❌ KHÔNG: MonoBehaviour kế thừa game-specific behavior
+- ❌ KHÔNG: prefab path, asset key cụ thể của game
+
+### _TDS/ — Gameplay Logic
+Chứa code đặc thù cho TDSurvivor:
+- ✅ Concrete implementations: Monster, MonsterMoveUpdater, SpawnerUpdater, Projectile
+- ✅ Game-specific config data: MonsterConfig, SpawnerConfig, SkillConfig
+- ✅ Scene wiring: GameBootScene, GameplayStartup
+- ✅ Game-specific constants: StatId
+- ✅ Utility classes game-specific: SpawnTimer, Stats
+- ✅ Bridges: SkillManager (Spu→game), EntityQuery (IQuery→AgentSimulator)
+- ✅ Các system mới: GameManager, Health, BaseCore, HeroController, RollShopUI
+
+### Decision Flow
+Khi thêm code mới → tự hỏi: "Nếu làm game khác (không phải TD), code này có dùng được không?"
+- CÓ → `_GameToolkit/`
+- KHÔNG → `_TDS/`
+
+---
+
 ## 1. Cấu trúc Assets giai đoạn thiết kế
 
 ```text
@@ -68,20 +96,22 @@ Assets/
 │   ├── Statistics/
 │   │   ├── Stat.cs
 │   │   └── StatModifier.cs
-│   ├── SystemSkills/
+│   ├── SkillSystem/
 │   │   ├── BaseActionTests.cs
 │   │   ├── Core/
 │   │   │   ├── BaseAction.cs
 │   │   │   ├── BaseCollider.cs
 │   │   │   ├── BaseTrajectory.cs
+│   │   │   ├── CastProjectileAction.cs
 │   │   │   ├── FindTargetType.cs
+│   │   │   ├── HitInfo.cs
 │   │   │   ├── IAction.cs
+│   │   │   ├── IProjectileView.cs
 │   │   │   ├── IQuery.cs
 │   │   │   ├── QueryResult.cs
 │   │   │   └── Spu.cs
-│   │   └── Implement/
+│   │   └── Imp/
 │   │       ├── BoomerangTrajectory.cs
-│   │       ├── CastProjectileAction.cs
 │   │       ├── CircleCollider.cs
 │   │       ├── ColliderData.cs
 │   │       ├── ColliderType.cs
@@ -105,6 +135,7 @@ Assets/
 │   └── Utils/
 │       ├── CollectionUtils.cs
 │       ├── CoroutineUtils.cs
+│       ├── GizmosLine.cs
 │       ├── KitEntryScene.cs
 │       ├── MathUtils.cs
 │       ├── RandomUtils.cs

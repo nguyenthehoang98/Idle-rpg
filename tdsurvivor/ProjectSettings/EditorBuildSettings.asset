@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/_TDS assets/Scenes/BootScene.unity
+    guid: 6060778a72d9fff4b80a7fc301ee2015
+  - enabled: 1
+    path: Assets/_TDS assets/Scenes/GamePlayScene.unity
+    guid: 8d6685dc7c2b9e54d8a7ef246bc38c4d
   m_configObjects: {}

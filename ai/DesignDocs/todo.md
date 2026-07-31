@@ -38,7 +38,9 @@
 
 ## ⏳ CHỜ XỬ LÝ
 
-- [ ] Duyệt spec (`flow/02-spec.md`)
-- [ ] Duyệt technical design (`flow/03-technical-design.md`)
-- [ ] Cập nhật quality gates (`flow/05-quality-gates.md`)
-- [ ] Bắt đầu build Slice 1
+- [x] Duyệt spec (`flow/02-spec.md`) — approved 2026-07-31
+- [x] Duyệt technical design (`flow/03-technical-design.md`) — approved 2026-07-31
+- [x] Cập nhật quality gates (`flow/05-quality-gates.md`) — gates 1-4,7 checked 2026-07-31
+- [x] Tạo các ADR còn thiếu — ADR-0002→0005 + ADR-0007 created 2026-07-31
+- [x] Thiết kế SkillSystem module (portable GameToolkit + bridge _TDS) — xem ADR-0007
+- [ ] Bắt đầu build Slice 2: BaseCore + Health → GameOver

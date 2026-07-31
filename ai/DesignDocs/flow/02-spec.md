@@ -1,6 +1,8 @@
-# 02 - Game Spec Draft
+# 02 - Game Spec
 
-Status: `updated - interview answers applied, chờ duyệt`
+Status: `approved`
+
+Date approved: 2026-07-31
 
 Dựa trên skill `spec-driven-development`.
 
@@ -12,15 +14,9 @@ Người chơi bảo vệ điểm trung tâm bằng một hoặc nhiều nhân v
 
 ## 2. Target Player
 
-TBD sau interview.
+Casual mobile player, session 5-10 phút / 1 màn chơi.
 
-Gợi ý lựa chọn:
-
-```text
-A. Người chơi thích game idle nhẹ, nâng cấp là chính.
-B. Người chơi thích survivor action, nhịp nhanh, nhiều quái.
-C. Người chơi thích tower defense chiến thuật, build đội hình/tower.
-```
+Thể loại: Tower Defense / Survival Defense nhẹ, auto-attack, tập trung vào nâng cấp đội hình qua Roll/Shop.
 
 ## 3. Core Fantasy
 
@@ -129,8 +125,9 @@ Out of scope MVP 0.1:
 ## 8. Project Structure
 
 ```text
-Assets/_TDSurvivor/Code
-Assets/_TDSurvivor/Content
+Assets/_GameToolkit/
+Assets/_TDS/
+Assets/_TDS assets/
 ai/DesignDocs
 ```
 
@@ -138,23 +135,15 @@ Detailed structure: see `02-proposed-folder-structure.md`.
 
 ## 9. Commands / Verification
 
-TBD after Unity version/package setup confirmed.
+Bản hiện tại (Unity 6000.5.5f1, URP 2D):
 
-Manual verification for now:
-
-```text
-1. Open Unity project.
-2. Open Gameplay scene.
-3. Check Console no red errors.
-4. Press Play.
-5. Confirm monsters spawn from SpawnerConfig positions.
-6. Confirm heroes auto-attack (2 Archer, 2 Magic, 1 Buff/Control).
-7. Confirm RVO movement (AgentSimulator) works.
-8. Confirm hit detection (IGrid) works.
-9. Confirm monsters die or damage Base.
-10. Confirm Roll/Shop appears after wave.
-11. Confirm GameOver when Base HP <= 0.
-```
+1. Mở `tdsurvivor/` trong Unity Hub → chọn Unity 6000.5.5f1
+2. Menu: Tools/Scenes/Boot Scene → mở BootScene
+3. Kiểm tra Console không có lỗi đỏ
+4. Nhấn Play
+5. Xác nhận monster spawn từ SpawnerConfig (4 portal viền màn hình)
+6. Xác nhận monster di chuyển về phía trung tâm (RVO AgentSimulator)
+7. Tắt Play, kiểm tra Console không exception
 
 ## 10. Boundaries
 

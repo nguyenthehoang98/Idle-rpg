@@ -39,24 +39,24 @@ Slice 3: base mất máu/game over
 
 ### M0 - Design Foundation
 
-Status: `interview done, chờ duyệt spec + design`
+Status: `interview done, spec + design approved 2026-07-31`
 
 Output:
 
 ```text
 - Agent skill flow docs ✅
 - Interview questions ✅ (answered)
-- Spec draft ✅ (updated)
-- Technical design draft ✅ (updated)
-- Quality gates 📝
+- Spec draft ✅ (approved 2026-07-31)
+- Technical design draft ✅ (approved 2026-07-31)
+- Quality gates ✅ (checked 2026-07-31)
 ```
 
 Exit criteria:
 
 ```text
 - User answers core interview questions ✅
-- Spec MVP approved ⏳
-- Technical design approved ⏳
+- Spec MVP approved ✅ (2026-07-31)
+- Technical design approved ✅ (2026-07-31)
 ```
 
 ### M1 - Playable Prototype MVP
@@ -248,13 +248,14 @@ Rollback:
 
 ```text
 ✅ Interview - completed (flow/01-interview)
-🔄 Spec - updated, chờ duyệt (flow/02-spec)
-🔄 Technical design - updated, chờ duyệt (flow/03-technical-design)
-⏳ Quality gates - cần cập nhật sau spec duyệt
+✅ Spec - approved 2026-07-31 (flow/02-spec)
+✅ Technical design - approved 2026-07-31 (flow/03-technical-design)
+✅ Quality gates - checked 2026-07-31 (flow/05-quality-gates)
+✅ ADRs - 6/6 created (ADR-0001→0005, ADR-0007)
 🔄 Build - đang phát triển trên nhánh ai/tower-defense
 
 Next step:
-- Duyệt spec + technical design
+- Bắt đầu build Slice 2: BaseCore + Health → GameOver
 - Cập nhật quality gates
 - Hoàn thiện Slice 2: BaseCore + Health + monster damage Base -> GameOver
 - Bắt đầu Slice 3 (Heroes)

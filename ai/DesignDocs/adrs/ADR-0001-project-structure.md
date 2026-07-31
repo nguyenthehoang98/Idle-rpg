@@ -1,8 +1,9 @@
 # ADR-0001 - Project Structure
 
-Status: `proposed`
+Status: `accepted`
 
 Date: 2026-07-29
+Date accepted: 2026-07-31
 
 ## Context
 
@@ -23,44 +24,48 @@ Recovery có nhiều ý tưởng tốt: tách toolkit/gameplay/assets, config da
 
 ## Decision
 
-Dùng cấu trúc mới:
+Dùng cấu trúc đã có, giữ nguyên từ Recovery (đã được chọn lọc module):
 
 ```text
 Assets/
-├── _DesignDocs/
-└── _TDSurvivor/
-    ├── Code/
-    └── Content/
+├── _GameToolkit/       # Engine/framework dùng chung
+│   ├── Avoidance/      # RVO movement
+│   ├── Collision/      # Spatial collision detection
+│   ├── GameConfig/     # Config loader (Excel → JSON)
+│   ├── Resource/       # Pool + Asset loader
+│   ├── Startup/        # BootScene base class
+│   ├── Statistics/     # Stat + StatModifier system
+│   ├── Updater/        # Fixed-timestep game loop
+│   └── Utils/          # SafeArea, Timing, GizmosLine
+├── _TDS/               # Gameplay code (TDSurvivor specific)
+│   ├── Boot/           # GameBootScene
+│   ├── GameConfig/     # MonsterConfig, SpawnerConfig
+│   ├── Gameplay/       # GameplayStartup, SpawnerUpdater
+│   ├── Statistics/     # StatId, Stats
+│   └── Unit/           # Monster, MonsterMoveUpdater
+├── _TDS assets/        # Scenes, Prefabs, Config JSON, Textures
+├── Excels/             # Source config (xlsx)
+└── Plugins/            # Third-party libs
 ```
 
-Trong đó:
-
-```text
-Code/      -> C# scripts namespace TDSurvivor
-Content/   -> Scenes, Prefabs, Sprites, Config, Audio
-DesignDocs -> Specs, plans, ADRs, test checklists
-```
-
-Không copy trực tiếp từ Recovery trong giai đoạn thiết kế/MVP 0.1.
+Rationale: giữ nguyên cấu trúc hiện tại để tránh refactor không cần thiết trong MVP. Cấu trúc này đã được verify hoạt động với Boot → Config → Spawn → RVO pipeline.
 
 ## Consequences
 
 Pros:
 
 ```text
-- Sạch namespace
-- Ít dependency
-- Dễ hiểu MVP
-- Tránh lỗi missing refs từ Unity asset copy
-- Có docs dẫn đường cho AI và người dùng
+- Kiến trúc đã được verify (Boot → Config → Spawn → RVO pipeline hoạt động)
+- Tách biệt rõ GameToolkit (reusable) và _TDS (game-specific)
+- Không cần refactor namespace, tránh lỗi missing refs
+- Module boundary đã được xác định rõ (xem 02-proposed-folder-structure.md)
 ```
 
 Cons:
 
 ```text
-- Ban đầu chậm hơn copy
-- Phải viết lại một số logic đã có ở Recovery
-- Sau này cần port có chọn lọc Pool/Updater/Config nếu cần
+- Giữ lại namespace cũ (_TDS.* thay vì TDSurvivor.*)
+- Một số module trong GameToolkit còn coupling với Recovery patterns (cần refactor dần)
 ```
 
 ## Alternatives Considered
@@ -69,35 +74,25 @@ Cons:
 
 Rejected.
 
-Lý do:
+Lý do: rủi ro dependency/plugin, không rõ module nào cần thiết.
 
-```text
-- Rủi ro dependency/plugin
-- Không rõ module nào cần thiết
-- Có thể kéo theo kiến trúc quá lớn cho MVP
-```
+### B. Thiết kế mới với `_TDSurvivor/Code/` + `Content/`
 
-### B. Copy `_TDS` và đổi namespace
+Rejected (đã từng proposed trong v1 ADR).
 
-Rejected for now.
+Lý do: cấu trúc `_TDS/` + `_GameToolkit/` hiện tại đã hoạt động ổn, refactor sang cấu trúc mới không cần thiết cho MVP.
 
-Lý do:
-
-```text
-- Vẫn phụ thuộc `_GameToolkit`, UniTask, Pool, ConfigManager
-- MVP chưa cần complexity đó
-```
-
-### C. Thiết kế mới, tham khảo Recovery
+### C. Giữ nguyên cấu trúc hiện tại (_TDS/ + _GameToolkit/)
 
 Accepted.
 
 Lý do:
 
 ```text
-- Phù hợp spec-driven workflow
-- Dễ kiểm soát MVP
-- Sau này port từng module khi có acceptance rõ
+- Đã có code hoạt động (Boot, Config, Spawn, RVO)
+- Module boundary rõ ràng (GameToolkit = reusable, _TDS = game-specific)
+- Tránh refactor không cần thiết trong giai đoạn MVP
+- Tập trung effort vào việc bổ sung gameplay thay vì tổ chức lại folder
 ```
 
 ## Review Date
