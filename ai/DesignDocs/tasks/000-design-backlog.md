@@ -29,7 +29,7 @@ Output:
 
 ### D002 - Complete interview
 
-Status: `todo`
+Status: `done` (kết quả ngày 30/07/2025 -> todo.md)
 
 Acceptance:
 
@@ -76,7 +76,7 @@ Acceptance:
 
 ### D006 - Decide what to do with existing skeleton code
 
-Status: `todo`
+Status: `done` - chọn giữ và phát triển tiếp skeleton theo hướng dẫn source-driven (Recovery chỉ là tham chiếu)
 
 Context:
 

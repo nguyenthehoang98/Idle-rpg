@@ -8,9 +8,9 @@ Dựa trên skill `planning-and-task-breakdown`.
 ✅ Interview completed (flow/01-interview)
 🔄 Spec updated (flow/02-spec) - cần duyệt
 🔄 Technical design updated (flow/03-technical-design) - cần duyệt
-⏳ Plan - đang cập nhật
+✅ Plan - chốt vertical slices
 ❌ Quality gates - chờ spec duyệt
-❌ Build - chưa bắt đầu
+🔄 Build - đã có core systems trên nhánh ai/tower-defense (xem section 7)
 ```
 
 ## 1. Planning Principle
@@ -107,7 +107,9 @@ Output:
 
 ## 3. Vertical Slices (cập nhật)
 
-### Slice 1 - Core Systems
+> Trạng thái thực tế 31/07/2025 - chi tiết ở section 7.
+
+### Slice 1 - Core Systems 🟡 (dở - chưa có GameManager/Health/BaseCore)
 
 Tasks:
 
@@ -127,7 +129,7 @@ Acceptance:
 - Calling damage can trigger GameOver
 ```
 
-### Slice 2 - Spawn + Monster (3 tiers)
+### Slice 2 - Spawn + Monster (3 tiers) 🟡 (spawn + RVO xong, chưa damage Base)
 
 Tasks:
 
@@ -146,7 +148,7 @@ Acceptance:
 - Monsters damage Base on reach
 ```
 
-### Slice 3 - Heroes (5 types)
+### Slice 3 - Heroes (5 types) ❌
 
 Tasks:
 
@@ -167,7 +169,7 @@ Acceptance:
 - Skills work
 ```
 
-### Slice 4 - Waves + Roll/Shop
+### Slice 4 - Waves + Roll/Shop 🟡 (spawner wave xong, chưa Roll/Shop)
 
 Tasks:
 
@@ -190,7 +192,7 @@ Acceptance:
 - Exp increases level
 ```
 
-### Slice 5 - UI
+### Slice 5 - UI ❌
 
 Tasks:
 
@@ -208,7 +210,7 @@ Acceptance:
 - Victory after all waves
 ```
 
-## 4. Task Definition Template
+## 4. Task Definition Template (giữ nguyên)
 
 ```markdown
 ## Txxx - [Task name]
@@ -249,10 +251,61 @@ Rollback:
 🔄 Spec - updated, chờ duyệt (flow/02-spec)
 🔄 Technical design - updated, chờ duyệt (flow/03-technical-design)
 ⏳ Quality gates - cần cập nhật sau spec duyệt
-⏳ Build - chưa bắt đầu
+🔄 Build - đang phát triển trên nhánh ai/tower-defense
 
 Next step:
 - Duyệt spec + technical design
 - Cập nhật quality gates
-- Bắt đầu Slice 1
+- Hoàn thiện Slice 2: BaseCore + Health + monster damage Base -> GameOver
+- Bắt đầu Slice 3 (Heroes)
+```
+
+## 7. Build Progress (cập nhật 31/07/2025)
+
+Trạng thái thực tế code trên nhánh `ai/tower-defense` (đã chạy được flow: Boot -> Load config -> Spawn wave -> Monster RVO di chuyển).
+
+### Đã xây dựng
+
+```text
+T001 ✅ Unity 6 URP 2D project setup
+T002 ✅ Import core modules: AgentSimulator, IGrid, Pool, AssetManager (GameToolkit)
+T008 ✅ EnemySpawner từ SpawnerConfig (SpawnerUpdater + SpawnTimer, spawn theo wave)
+T009 ✅ RVO movement: AgentSimulator + MonsterMoveUpdater
+T010 🟡 Spawn + di chuyển tới Base - thiếu BaseCore nên monster chưa tấn công Base
+T016 🟡 WaveManager - SpawnerUpdater có wave loop + OnWaveSpawned event, chưa có victory/lose flow
+T017 ✅ Config loader Excel -> JSON (MonsterConfig, SpawnerConfig)
+T021 🟡 Stat framework (StatId, Stats, StatModifier) - chưa có Coin/Exp runtime
+```
+
+Code chính:
+
+```text
+tdsurvivor/Assets/_TDS/Boot/GameBootScene.cs
+     /_TDS/Gameplay/SpawnerUpdater.cs, SpawnTimer.cs, GameplayStartup.cs
+     /_TDS/Unit/Monster.cs, MonsterMoveUpdater.cs, MonsterRuntimeData.cs
+     /_TDS/GameConfig/MonsterConfig.cs, SpawnerConfig.cs
+     /_TDS/Statistics/StatGlobal.cs, Stats.cs
+```
+
+### Chưa làm
+
+```text
+T003 ❌ GameManager state machine
+T004 ❌ Health component
+T005 ❌ BaseCore
+T007 ❌ 3 monster tiers tách riêng (hiện dùng 1 Monster + scale trong SpawnerConfig)
+T011-T015 ❌ Heroes (5 types), Projectile + IGrid hit, force direction, skills
+T018 ❌ Track alive monsters
+T019-T020 ❌ Roll/Shop UI
+T022-T024 ❌ UI (Canvas, HP/Wave/Coin display, GameOver/Victory)
+```
+
+### Kiến trúc đang dùng
+
+```text
+- Config: Excel -> JSON -> ConfigManager (Addressables local)
+- Pool + Addressables: AssetManager, Pool
+- Updater: UpdaterOwner + BaseUpdatable (Tick loop)
+- Movement: AgentSimulator (RVO) - logic position, Monster visual lerp theo
+- Hit detection: IGrid + BaseCollision (chưa dùng trong combat)
 ```
