@@ -1,9 +1,9 @@
-﻿namespace _TDS.Statistics
+﻿namespace _TDS.GameplayScene.Statistics
 {
     /// <summary>
     /// Hàm này để sử dụng trong code, phải dối chiếu với file config xem đúng Id ko tránh sai sót 
     /// </summary>
-    public static class StatId
+    public static class StatsIdConstant
     {
         // Vital
         public const int HP = 1001;

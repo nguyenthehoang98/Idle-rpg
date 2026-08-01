@@ -4,7 +4,7 @@ using _Toolkit.Config;
 using ExcelExtension;
 using UnityEngine;
 
-namespace _TDS.GameConfig
+namespace _TDS.Config
 {
     [Serializable, ExcelAsset(
          ExcelPath = "Assets/Excels/MonsterConfig.xlsx",
@@ -37,18 +37,5 @@ namespace _TDS.GameConfig
         {
             return cachedMonsters.TryGetValue(id, out config);
         }
-    }
-
-    [Serializable]
-    public struct MonsterConfigData
-    {
-        public int id;
-        public string asset;
-        public string name;
-        public int health;
-        public int attack;
-        public int exp;
-        public float moveSpeed;
-        public float stopDistance;
     }
 }

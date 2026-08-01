@@ -1,4 +1,4 @@
-﻿namespace _TDS.Unit
+﻿namespace _TDS.GameplayScene.Unit
 {
     public struct MonsterRuntimeData
     {

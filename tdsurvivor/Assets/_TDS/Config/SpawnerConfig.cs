@@ -4,7 +4,8 @@ using _Toolkit.Config;
 using ExcelExtension;
 using UnityEditor;
 using UnityEngine;
-namespace _TDS.GameConfig
+
+namespace _TDS.Config
 {
     [Serializable, ExcelAsset(
          ExcelPath = "Assets/Excels/SpawnerConfig.xlsx",
@@ -69,22 +70,5 @@ namespace _TDS.GameConfig
         {
             return cachedSpawners.TryGetValue(level, out configs);
         }
-    }
-
-    [Serializable]
-    public struct SpawnerConfigData
-    {
-        public int level;
-        public int wave;
-        public int monster;
-        public int totalMonster;
-        public float healthScale;
-        public float attackScale;
-        public float expScale;
-        public float sizeScale;
-        public float spawnStartTime;
-        public float spawnEndTime;
-        public float spawnAreaRadius;
-        public int[] portals;
     }
 }

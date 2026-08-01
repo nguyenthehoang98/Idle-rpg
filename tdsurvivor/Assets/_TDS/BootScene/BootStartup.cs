@@ -1,7 +1,6 @@
-﻿using _TDS.GameConfig;
+﻿using _TDS.Config;
 using _Toolkit.Config;
 using _Toolkit.ResourceManagement;
-using _Toolkit.Shared;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -9,9 +8,9 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 #endif
 
-namespace _TDS.Boot
+namespace _TDS.BootScene
 {
-    public sealed class GameBootScene : BootScene
+    public sealed class BootStartup : _Toolkit.Shared.BootScene
     {
         [SerializeField] private GameObject loadingScreenMasking;
 

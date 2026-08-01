@@ -1,26 +1,25 @@
-/*
 using System;
 using System.Collections.Generic;
 using _Toolkit.Config;
 using ExcelExtension;
 using UnityEngine;
 
-namespace _TDS.Skill
+namespace _TDS.Config
 {
     [Serializable, ExcelAsset(
          ExcelPath = "Assets/Excels/SkillConfig.xlsx",
          ConfigPath = "Assets/_TDS assets/Config/SkillConfig.json")]
     public class SkillConfig : IConfig
     {
-        [SerializeField] private List<SkillData> skills = new List<SkillData>();
+        [SerializeField] private List<SkillConfigData> skills = new List<SkillConfigData>();
 
-        private Dictionary<int, SkillData> cached;
+        private Dictionary<int, SkillConfigData> cached;
 
         public void OnMappingValue()
         {
-            cached = new Dictionary<int, SkillData>();
+            cached = new Dictionary<int, SkillConfigData>();
 
-            foreach (SkillData skillData in skills)
+            foreach (SkillConfigData skillData in skills)
             {
                 if (!cached.TryAdd(skillData.skillId, skillData))
                 {
@@ -37,10 +36,9 @@ namespace _TDS.Skill
         {
         }
 
-        public bool TryGetSkill(int skillId, out SkillData skill)
+        public bool TryGetSkill(int skillId, out SkillConfigData skillConfig)
         {
-            return cached.TryGetValue(skillId, out skill);
+            return cached.TryGetValue(skillId, out skillConfig);
         }
     }
 }
-*/

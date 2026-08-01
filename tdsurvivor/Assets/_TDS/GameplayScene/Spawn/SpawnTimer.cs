@@ -1,8 +1,8 @@
-﻿/*using UnityEngine;
+﻿using UnityEngine;
 
-namespace _TDS.Gameplay
+namespace _TDS.GameplayScene.Spawn
 {
-    public struct SpawnTimer
+    struct SpawnTimer
     {
         private int total;
 
@@ -44,4 +44,4 @@ namespace _TDS.Gameplay
 
         public bool IsFinished => spawnedCount >= total;
     }
-}*/
+}

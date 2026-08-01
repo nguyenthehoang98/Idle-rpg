@@ -1,38 +1,19 @@
-/*
 using System;
-using _GameToolkit.SkillSystem.Core;
-using _GameToolkit.SkillSystem.Imp;
 using UnityEngine;
 
-namespace _TDS.Skill
+namespace _TDS.Config
 {
-    /// <summary>
-    /// Runtime data khi cast skill — nạp từ Hero stats + buff, truyền vào SkillManager.
-    /// </summary>
-    [Serializable]
-    public struct SkillRuntimeData
+    public enum TrajectoryType
     {
-        public int Entity;
-        public float ProjectileScaleBonus;
-        public float AttackRange;
-        public float Attack;
-        public float CritChance;
-        public float CritDamage;
-        public int ProjectilesPerShot;
-        public int SpreadProjectileCount;
-        public int BonusPierceCount;
-        public float ExplosiveRadius;
-        public float ExplosiveDamagePercent;
-        public string ExplosivePrefabName;
-        public float ExecuteHealthPercent;
-        public TrajectoryData Trajectory;
-        public Vector2 Pivot;
-        public Vector2 Muzzle;
-        public Vector2 Destination;
+        
     }
 
+    public enum FindTargetType
+    {
+    }
+    
     [Serializable]
-    public struct SkillData
+    public struct SkillConfigData
     {
         public int skillId;
         public string prefabName; // asset key của projectile prefab
@@ -44,7 +25,8 @@ namespace _TDS.Skill
         public FindTargetType findTarget;
         public float attackRange;
 
-        // Trajectory
+        siawr lai chio so phan nay
+        // Trajectory 
         public TrajectoryType trajectory;
         public float projectileDuration;
         public float boomerangOutboundDuration;
@@ -73,4 +55,3 @@ namespace _TDS.Skill
         Weapon, Enemy, Random
     }
 }
-*/

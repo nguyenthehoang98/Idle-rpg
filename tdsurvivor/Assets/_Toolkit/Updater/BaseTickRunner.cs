@@ -18,18 +18,37 @@ namespace _Toolkit.Updater
         {
             while (addition.Count > 0)
             {
-                list.Add(addition.Dequeue());
+                T item = addition.Dequeue();
+                OnAdd(item);
+                list.Add(item);
             }
 
-            foreach (var on in list)
+            for (var i = list.Count - 1; i >= 0; i--)
             {
-                on.Tick(deltaTime);
+                var item = list[i];
+                if (item == null)
+                {
+                    list.RemoveAt(i);
+                    continue;
+                }
+             
+                item.Tick(deltaTime);
             }
 
             while (remove.Count > 0)
             {
-                list.Remove(remove.Dequeue());
+                T item = remove.Dequeue();
+                OnRemove(item);
+                list.Remove(item);
             }
+        }
+
+        protected virtual void OnAdd(T item)
+        {
+        }
+
+        protected virtual void OnRemove(T item)
+        {
         }
 
         public void Add(T detector) => addition.Enqueue(detector);

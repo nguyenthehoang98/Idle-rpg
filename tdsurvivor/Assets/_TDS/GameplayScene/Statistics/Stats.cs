@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using _Toolkit.Statistics;
 
-namespace _TDS.Statistics
+namespace _TDS.GameplayScene.Statistics
 {
     public sealed class Stats
     {
-        private Dictionary<int, Stat> stats = new Dictionary<int, Stat>();
+        Dictionary<int, Stat> stats = new Dictionary<int, Stat>();
 
         public bool AddStat(int id, Stat stat)
         {

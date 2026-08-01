@@ -27,9 +27,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniTask.Linq", "UniTask.Lin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeanCommon", "LeanCommon.csproj", "{36ed5776-8ae8-2dea-8739-cd45ad8c3105}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RVO2", "RVO2.csproj", "{cc7a9447-f07d-1939-8ded-e92b61941f3e}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{8a9e848b-4e61-e843-1835-ba909de6cbb6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RVO2", "RVO2.csproj", "{cc7a9447-f07d-1939-8ded-e92b61941f3e}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.SkillSystem.Implement", "Toolkit.SkillSystem.Implement.csproj", "{d53b32f4-5c56-1ad2-6dff-84af742fce1e}"
 EndProject
@@ -112,10 +112,10 @@ Global
 		{cbfb0d1e-7ed3-3e5e-6707-774b7dcb24b9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36ed5776-8ae8-2dea-8739-cd45ad8c3105}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{36ed5776-8ae8-2dea-8739-cd45ad8c3105}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{cc7a9447-f07d-1939-8ded-e92b61941f3e}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{cc7a9447-f07d-1939-8ded-e92b61941f3e}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8a9e848b-4e61-e843-1835-ba909de6cbb6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8a9e848b-4e61-e843-1835-ba909de6cbb6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{cc7a9447-f07d-1939-8ded-e92b61941f3e}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{cc7a9447-f07d-1939-8ded-e92b61941f3e}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{d53b32f4-5c56-1ad2-6dff-84af742fce1e}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{d53b32f4-5c56-1ad2-6dff-84af742fce1e}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{142c2a74-593b-7ec6-1e11-97dba8433ad2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
