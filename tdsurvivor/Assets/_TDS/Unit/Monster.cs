@@ -1,7 +1,8 @@
-﻿using System;
-using _GameToolkit.Resource;
+﻿/*
+using System;
 using _TDS.Combat;
 using _TDS.GameConfig;
+using _Toolkit.ResourceManagement;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -99,3 +100,4 @@ namespace _TDS.Unit
         }
     }
 }
+*/

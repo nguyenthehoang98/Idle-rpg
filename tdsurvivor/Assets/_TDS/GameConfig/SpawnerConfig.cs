@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using _GameToolkit.GameConfig;
+using _Toolkit.Config;
 using ExcelExtension;
 using UnityEditor;
 using UnityEngine;
@@ -9,7 +9,7 @@ namespace _TDS.GameConfig
     [Serializable, ExcelAsset(
          ExcelPath = "Assets/Excels/SpawnerConfig.xlsx",
          ConfigPath = "Assets/_TDS assets/Config/SpawnerConfig.json")]
-    public class SpawnerConfig : IGameConfig
+    public class SpawnerConfig : IConfig
     {
         [SerializeField] private List<SpawnerConfigData> spawners = new List<SpawnerConfigData>();
 

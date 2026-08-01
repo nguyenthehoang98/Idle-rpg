@@ -1,10 +1,11 @@
+/*
 using System;
 using System.Collections.Generic;
-using _GameToolkit.Resource;
 using _GameToolkit.SkillSystem.Core;
 using _GameToolkit.SkillSystem.Imp;
 using _GameToolkit.Updater;
 using _TDS.Unit;
+using _Toolkit.ResourceManagement;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -58,7 +59,7 @@ namespace _TDS.Skill
             List<BaseCollider> colliders = new List<BaseCollider>();
 
             // Load projectile prefab
-            GameObject prefab = await AssetManager.GetAssetCached<GameObject>(skillData.prefabName);
+            GameObject prefab = await AssetLoader.GetAssetCached<GameObject>(skillData.prefabName);
 
             if (prefab == null)
             {
@@ -242,3 +243,4 @@ namespace _TDS.Skill
         }
     }
 }
+*/

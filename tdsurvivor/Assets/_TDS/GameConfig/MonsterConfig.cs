@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using _GameToolkit.GameConfig;
+using _Toolkit.Config;
 using ExcelExtension;
 using UnityEngine;
 
@@ -9,7 +9,7 @@ namespace _TDS.GameConfig
     [Serializable, ExcelAsset(
          ExcelPath = "Assets/Excels/MonsterConfig.xlsx",
          ConfigPath = "Assets/_TDS assets/Config/MonsterConfig.json")]
-    public class MonsterConfig : IGameConfig
+    public class MonsterConfig : IConfig
     {
         [SerializeField] private List<MonsterConfigData> monsters = new List<MonsterConfigData>();
         

@@ -1,3 +1,4 @@
+/*
 using System;
 using _GameToolkit.SkillSystem.Core;
 using _GameToolkit.SkillSystem.Imp;
@@ -72,3 +73,4 @@ namespace _TDS.Skill
         Weapon, Enemy, Random
     }
 }
+*/

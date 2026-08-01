@@ -1,0 +1,21 @@
+{
+    "name": "Toolkit.SkillSystem.Implement",
+    "rootNamespace": "",
+    "references": [
+        "GUID:21d1eb854b91ade49bc69a263d12bee2",
+        "GUID:d8b63aba1907145bea998dd612889d6b",
+        "GUID:2ee9b47bbb4f43941804ac2f413005d1",
+        "GUID:696de5a7bc71ef54690d1e556f46e33b",
+        "GUID:97f2d94aaa49852498ad7bfe3b4039e4",
+        "GUID:8667c64dc35038a42bf818b383694f38"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

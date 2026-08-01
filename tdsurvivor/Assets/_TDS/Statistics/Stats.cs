@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using _GameToolkit.Statistics;
+using _Toolkit.Statistics;
 
 namespace _TDS.Statistics
 {

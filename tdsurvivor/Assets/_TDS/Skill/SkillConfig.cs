@@ -1,6 +1,7 @@
+/*
 using System;
 using System.Collections.Generic;
-using _GameToolkit.GameConfig;
+using _Toolkit.Config;
 using ExcelExtension;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ namespace _TDS.Skill
     [Serializable, ExcelAsset(
          ExcelPath = "Assets/Excels/SkillConfig.xlsx",
          ConfigPath = "Assets/_TDS assets/Config/SkillConfig.json")]
-    public class SkillConfig : IGameConfig
+    public class SkillConfig : IConfig
     {
         [SerializeField] private List<SkillData> skills = new List<SkillData>();
 
@@ -42,3 +43,4 @@ namespace _TDS.Skill
         }
     }
 }
+*/

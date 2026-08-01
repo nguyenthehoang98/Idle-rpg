@@ -1,10 +1,10 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
-using _GameToolkit.GameConfig;
-using _GameToolkit.Resource;
 using _GameToolkit.Updater;
 using _TDS.GameConfig;
 using _TDS.Unit;
+using _Toolkit.Config;
+using _Toolkit.ResourceManagement;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -64,7 +64,7 @@ namespace _TDS.Gameplay
                     continue;
                 }
 
-                GameObject go = await AssetManager.GetAssetCached<GameObject>(monsterData.asset);
+                GameObject go = await AssetLoader.GetAssetCached<GameObject>(monsterData.asset);
                 
                 enemyIdToGameObjects.TryAdd(monster, go);
 
@@ -193,8 +193,8 @@ namespace _TDS.Gameplay
 
             foreach (var assetPath in assetsPath)
             {
-                AssetManager.UnCache(assetPath);
+                AssetLoader.UnCache(assetPath);
             }
         }
     }
-}
+}*/

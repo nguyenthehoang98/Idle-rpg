@@ -1,0 +1,17 @@
+{
+    "name": "Toolkit.Collider",
+    "rootNamespace": "",
+    "references": [
+        "GUID:8667c64dc35038a42bf818b383694f38",
+        "GUID:696de5a7bc71ef54690d1e556f46e33b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
