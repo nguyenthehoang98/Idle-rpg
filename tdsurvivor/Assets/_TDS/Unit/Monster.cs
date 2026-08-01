@@ -28,6 +28,7 @@ namespace _TDS.Unit
         private void Awake()
         {
             circle = GetComponent<CircleCollider2D>();
+            
             if (health == null) health = GetComponentInChildren<Health>();
         }
 

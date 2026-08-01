@@ -234,7 +234,7 @@ GameObject:
   - component: {fileID: 563374987}
   - component: {fileID: 563374986}
   m_Layer: 0
-  m_Name: EventSystem
+  m_Name: Event System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -301,7 +301,7 @@ GameObject:
   - component: {fileID: 1439038987}
   - component: {fileID: 1439038986}
   m_Layer: 0
-  m_Name: GameBootScene
+  m_Name: Boot Scene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

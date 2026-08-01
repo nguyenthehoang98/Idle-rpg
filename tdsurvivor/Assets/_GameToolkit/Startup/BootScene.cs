@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 namespace _GameToolkit.Startup
 {
@@ -7,16 +8,17 @@ namespace _GameToolkit.Startup
     {
         public static BootScene Instance { get; private set; }
 
-        [SerializeField] private bool debugEnabled = false;
-        
+        [SerializeField] private bool logEnabled;
+        [SerializeField] private bool gizmosEnabled;
+
         protected bool IsLoadingScene { get; private set; }
 
-        private AsyncOperation asyncOperation;
-
-        protected AsyncOperation AsyncOperation
+        public bool GizmosEnabled
         {
-            get => asyncOperation;
+            get { return gizmosEnabled; }
         }
+
+        protected AsyncOperation AsyncOperation { get; private set; }
 
         private void Awake()
         {
@@ -25,9 +27,9 @@ namespace _GameToolkit.Startup
             Application.targetFrameRate = 60;
             Application.runInBackground = true;
             QualitySettings.vSyncCount = 0;
-            Debug.unityLogger.logEnabled = debugEnabled;
+            Debug.unityLogger.logEnabled = logEnabled;
             DontDestroyOnLoad(gameObject);
-            
+
             OnAwake();
         }
 
@@ -39,7 +41,7 @@ namespace _GameToolkit.Startup
                 PlayerPrefs.SetInt(key, 1);
                 NewGame();
             }
-            
+
             InitializeServices();
             OnStart();
         }
@@ -69,30 +71,30 @@ namespace _GameToolkit.Startup
         {
             if (IsLoadingScene) return;
 
-            asyncOperation = SceneManager.LoadSceneAsync(sceneName);
+            AsyncOperation = SceneManager.LoadSceneAsync(sceneName);
 
-            if(asyncOperation != null)
+            if (AsyncOperation != null)
             {
                 IsLoadingScene = true;
-                
-                asyncOperation.allowSceneActivation = false;
-                
+
+                AsyncOperation.allowSceneActivation = false;
+
                 OnStartLoadingScene();
             }
         }
 
         public void CloseLoadingScene()
         {
-            if (IsLoadingScene && asyncOperation != null)
+            if (IsLoadingScene && AsyncOperation != null)
             {
-                asyncOperation.allowSceneActivation = true;
+                AsyncOperation.allowSceneActivation = true;
 
-                asyncOperation.completed += operation =>
+                AsyncOperation.completed += operation =>
                 {
                     IsLoadingScene = false;
-                    
-                    asyncOperation = null;
-                    
+
+                    AsyncOperation = null;
+
                     OnCloseLoadingScene();
                 };
             }

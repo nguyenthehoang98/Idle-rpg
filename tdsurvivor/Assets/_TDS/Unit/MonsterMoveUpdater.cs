@@ -11,7 +11,7 @@ namespace _TDS.Unit
     public class MonsterMoveUpdater : BaseUpdatable
     {
         [SerializeField] private float stopDistanceDefault;
-        [SerializeField] private AgentSimulator agentSimulator;
+        public AgentSimulator agentSimulator;
         
         public static MonsterMoveUpdater Instance { get; private set; }
         
@@ -23,7 +23,6 @@ namespace _TDS.Unit
         private void Awake()
         {
             Instance = this;
-            
             agentSimulator.Initialize();
         }
 

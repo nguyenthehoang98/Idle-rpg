@@ -1,4 +1,6 @@
+using _GameToolkit.Startup;
 using _GameToolkit.Updater;
+using _TDS.Unit;
 using UnityEngine;
 
 namespace _TDS.Gameplay
@@ -20,6 +22,10 @@ namespace _TDS.Gameplay
             await spawnerUpdater.Initialize(1);
 
             updaterOwner.IsPaused = false;
+            
+#if UNITY_EDITOR
+            MonsterMoveUpdater.Instance.agentSimulator.enableGizmos = BootScene.Instance.GizmosEnabled;
+#endif
         }
 
         private void OnDestroy()
