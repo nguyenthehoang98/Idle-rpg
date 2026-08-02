@@ -8,10 +8,10 @@ namespace _Toolkit.SkillSystem.Implement
 {
     public class ProjectileSkillAction : BaseSkillAction
     {
-        private readonly List<ICollisionDetector> detectors;
-        private readonly float hitResetColliderInterval;
+        private readonly ICollisionDetector[] detectors;
+        private readonly float hitInterval;
         private readonly float damageInterval;
-        private readonly int maximumHit;
+        private readonly int hitCount;
 
         public event Func<HitInfo, bool> OnDamaged;
 
@@ -20,21 +20,21 @@ namespace _Toolkit.SkillSystem.Implement
         private float damageTickerElapsedTime;
         private int totalHit;
 
-        public ProjectileSkillAction(float lifeTime, List<ICollisionDetector> detectors,
-            float damageInterval, float hitResetColliderInterval, int maximumHit)
+        public ProjectileSkillAction(float lifeTime, ICollisionDetector[] detectors,
+            float damageInterval, float hitInterval, int hitCount)
             : base(lifeTime)
         {
             this.detectors = detectors;
             this.damageInterval = damageInterval;
-            this.hitResetColliderInterval = hitResetColliderInterval;
-            this.maximumHit = maximumHit;
+            this.hitInterval = hitInterval;
+            this.hitCount = hitCount;
         }
 
         public override void Startup()
         {
             base.Startup();
 
-            for (int i = 0; i < detectors.Count; i++)
+            for (int i = 0; i < detectors.Length; i++)
             {
                 detectors[i].Startup();
                 detectors[i].OnOverlapped += Overlapped;
@@ -43,7 +43,7 @@ namespace _Toolkit.SkillSystem.Implement
 
         private void Overlapped(Unique unique)
         {
-            if (totalHit >= maximumHit)
+            if (totalHit >= hitCount)
             {
                 Shutdown();
                 return;
@@ -51,13 +51,13 @@ namespace _Toolkit.SkillSystem.Implement
 
             if (currentColliders.Add(unique))
             {
-                HitInfo info = new HitInfo(unique, totalHit + 1 == maximumHit);
+                HitInfo info = new HitInfo(unique, totalHit + 1 == hitCount);
 
                 if (OnDamaged != null && OnDamaged.Invoke(info))
                 {
                     totalHit++;
 
-                    if (totalHit == maximumHit)
+                    if (totalHit == hitCount)
                     {
                         Interrupt();
                     }
@@ -69,7 +69,7 @@ namespace _Toolkit.SkillSystem.Implement
         {
             base.Shutdown();
 
-            for (int i = 0; i < detectors.Count; i++)
+            for (int i = 0; i < detectors.Length; i++)
             {
                 detectors[i].OnOverlapped -= Overlapped;
                 detectors[i].Shutdown();
@@ -82,7 +82,7 @@ namespace _Toolkit.SkillSystem.Implement
 
             colliderElapsedTime += deltaTime;
 
-            if (colliderElapsedTime >= hitResetColliderInterval && currentColliders.Count > 0)
+            if (colliderElapsedTime >= hitInterval && currentColliders.Count > 0)
             {
                 currentColliders.Clear();
 

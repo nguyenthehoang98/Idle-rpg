@@ -1,134 +1,98 @@
-﻿using _TDS.Config;
+﻿using System;
+using _TDS.Config;
+using _Toolkit.Entities;
+using _Toolkit.ResourceManagement;
+using _Toolkit.Shared;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace _TDS.GameplayScene.Unit
 {
     [RequireComponent(typeof(CircleCollider2D))]
-    public class Monster : MonoBehaviour
+    public class Monster : Unique
     {
-        private CircleCollider2D circle;
-
+        public event Action<float> OnTakeDamage;
+        public event Action OnDeath;
+        
+        // [Required]
         public float Radius { get { return circle.radius; } }
+
+#if UNITY_EDITOR
+        //[ProgressBar("Health", 300, EColor.Red)]
+        //public int health = 250;
+        // health-data debug gui
+#endif
+
+        CircleCollider2D circle;
+        Vector3 targetPosition;
+        Vector3 previousPosition;
+        float deltaTime;
+        float elapsedTime;
+        bool isInitialized;
+        int agent;
         
         private void Awake()
         {
             circle = GetComponent<CircleCollider2D>();
         }
 
-        public void Initialize(Vector3 position, MonsterConfigData configData, MonsterRuntimeData runtimeData)
-        {
-        }
-
-        public void SetPosition(Vector3 position, float deltaTime)
-        {
-        }
-
-        public async void Destroy()
-        {
-        }
-    }
-}
-
-/*
-using System;
-using _TDS.Combat;
-using _TDS.GameConfig;
-using _Toolkit.ResourceManagement;
-using Cysharp.Threading.Tasks;
-using UnityEngine;
-
-namespace _TDS.Unit
-{
-    [RequireComponent(typeof(CircleCollider2D))]
-    public class Monster : MonoBehaviour, IDamageable
-    {
-        [SerializeField] private Health health;
-
-        private CircleCollider2D circle;
-
-        private Vector3 targetPosition;
-        private Vector3 previousPosition;
-        float deltaTime;
-        float elapsedTime;
-        bool isInitialized;
-
-        public float Radius => circle.radius;
-
-        public int EntityId { get; private set; }
-        public bool IsAlive => isInitialized && (health == null || health.IsAlive);
-
-        private void Awake()
-        {
-            circle = GetComponent<CircleCollider2D>();
-            
-            if (health == null) health = GetComponentInChildren<Health>();
-        }
-
-        public void Initialize(Vector3 position, MonsterConfigData configData, MonsterRuntimeData runtimeData)
+        public void Initialize(Vector3 position, MonsterConfigData configData, MonsterContext context)
         {
             transform.position = position;
+            transform.localScale = context.SizeScale * Vector3.one;
 
-            transform.localScale = Vector3.one * runtimeData.SizeScale;
+            agent = MonsterTickRunner.Instance.Create(
+                this, configData, context
+            );
 
-            if (health != null)
-            {
-                health.Initialize(Mathf.Max(1, Mathf.RoundToInt(configData.health * runtimeData.HealthScale)));
-            }
-
-            int agent = MonsterMoveUpdater.Instance.CreateAgent(this, configData, runtimeData);
-            EntityId = agent;
-
+            ComponentManager<HealthComponent>.Add(agent, new HealthComponent(100));
+            
             gameObject.SetActive(true);
-
+            
             isInitialized = true;
-        }
-
-        public void TakeDamage(int damage)
-        {
-            if (!isInitialized) return;
-
-            health?.TakeDamage(damage);
-
-            if (health != null && !health.IsAlive)
-            {
-                Destroy();
-            }
-        }
-
-        private void FixedUpdate()
-        {
-            if (!isInitialized) return;
-
-            elapsedTime += Time.fixedDeltaTime;
-
-            float t = Mathf.Clamp01(elapsedTime / deltaTime);
-
-            transform.position = Vector3.Lerp(previousPosition, targetPosition, t);
         }
 
         public void SetPosition(Vector3 position, float dt)
         {
             previousPosition = transform.position;
-
             targetPosition = position;
-
-            deltaTime = dt;
-
+            deltaTime = dt; 
             elapsedTime = 0;
+        }
+
+        public void TakeDamagePost(float damage)
+        {
+            OnTakeDamage?.Invoke(damage);
+        }
+        
+        private void FixedUpdate()
+        {
+            if (isInitialized)
+            {
+                elapsedTime += Time.fixedDeltaTime;
+                float f = Mathf.Clamp01(elapsedTime / deltaTime);
+                transform.position = Vector3.Lerp(previousPosition, targetPosition, f);
+            }
         }
 
         public async void Destroy()
         {
-            if (!isInitialized) return;
+            if (isInitialized)
+            {
+                OnDeath?.Invoke();
+                
+                ComponentManager<HealthComponent>.Remove(agent);
+                
+                isInitialized = false;
+                
+                gameObject.SetActive(false);
 
-            isInitialized = false;
-
-            gameObject.SetActive(false);
-
-            await UniTask.NextFrame(PlayerLoopTiming.Update);
-
-            Pool.Destroy(gameObject);
+                await UniTask.NextFrame(PlayerLoopTiming.Update);
+                
+                Pool.Destroy(gameObject);
+            }
         }
+
+        public override int Id() => agent;
     }
 }
-*/

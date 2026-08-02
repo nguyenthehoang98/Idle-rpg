@@ -14,8 +14,8 @@ namespace _Toolkit.SkillSystem.Implement
         protected override void OnStartup()
         {
             base.OnStartup();
-            speed = RuntimeData.Speed;
-            duration = RuntimeData.Duration;
+            speed = Context.Speed;
+            duration = Context.Duration;
             elapsedTime = 0;
         }
 

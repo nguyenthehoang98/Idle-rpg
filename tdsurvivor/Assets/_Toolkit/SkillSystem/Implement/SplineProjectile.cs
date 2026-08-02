@@ -29,9 +29,9 @@ namespace _Toolkit.SkillSystem.Implement
         {
             base.OnStartup();
 
-            startDuration = RuntimeData.StartDuration;
-            duration = RuntimeData.Duration;
-            endDuration = RuntimeData.EndDuration;
+            startDuration = Context.StartDuration;
+            duration = Context.Duration;
+            endDuration = Context.EndDuration;
 
             phase = ProjectilePhase.Undefined;
             elapsedTime = 0;

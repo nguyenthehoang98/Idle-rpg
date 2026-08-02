@@ -9,7 +9,7 @@ namespace _Toolkit.SkillSystem.Implement
         {
             base.OnStartup();
 
-            transform.position = Goal;
+            transform.position = Destination;
         }
 
         protected override void OnTick(float deltaTime)

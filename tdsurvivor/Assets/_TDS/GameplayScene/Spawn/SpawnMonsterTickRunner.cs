@@ -176,12 +176,12 @@ namespace _TDS.GameplayScene.Spawn
 
             monsterConfig.TryGetMonster(configData.monster, out MonsterConfigData enemyConfigData);
 
-            MonsterRuntimeData runtimeData = new MonsterRuntimeData(
+            MonsterContext context = new MonsterContext(
                 configData.healthScale, configData.attackScale,
                 configData.expScale, configData.sizeScale
             );
 
-            monster.Initialize(spawnPosition, enemyConfigData, runtimeData);
+            monster.Initialize(spawnPosition, enemyConfigData, context);
         }
 
         private void OnDestroy()

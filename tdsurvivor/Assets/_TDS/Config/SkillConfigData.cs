@@ -87,11 +87,16 @@ namespace _TDS.Config
          * Thời gian check va chạm trên cùng 1 kẻ địch. kích hoạt 
          */
         public float hitInterval;
+        
+        /*
+         * đây là khoảng cách giữa mỗi viên đạn
+         */
+        public float projectileDistanceStep;
 
         /*
-         * Nếu đạn bắn hình quạt, đây là số góc của mỗi viên đạn
+         * đây là số góc của mỗi viên đạn
          */
-        public float spreadAngleStep;
+        public float projectileAngleStep;
         
         /*
          * Số lượng đạn hình quạt 
@@ -102,11 +107,6 @@ namespace _TDS.Config
          * Hệ số sát thương gây ra bởi mỗi viên đạn hình quạt
          */
         public float spreadDamageScale;
-        
-        /*
-         * Nếu nó bắn đạn song song, đây là khoảng cách giữa mỗi viên đạn
-         */
-        public float parallelDistanceStep;
         
         /*
          * Số lượng đạn bắn song song (đạn phụ)

@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Profiling;
+using Object = UnityEngine.Object;
 
 namespace _Toolkit.Shared
 {
@@ -1175,8 +1177,7 @@ namespace _Toolkit.Shared
             return coroutine == null ? new CoroutineHandle()
                 : RunCoroutineInternal(coroutine, segment, tag, new CoroutineHandle(_instanceID), true);
         }
-
-
+        
         private CoroutineHandle RunCoroutineInternal(IEnumerator<float> coroutine, Segment segment, string tag, CoroutineHandle handle, bool prewarm)
         {
             ProcessIndex slot = new ProcessIndex { seg = segment };
@@ -2870,7 +2871,7 @@ namespace _Toolkit.Shared
             if (onDone != null)
                 onDone(reference);
         }
-
+        
         private struct ProcessIndex : System.IEquatable<ProcessIndex>
         {
             public Segment seg;

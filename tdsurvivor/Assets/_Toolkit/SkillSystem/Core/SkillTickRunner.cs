@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace _Toolkit.SkillSystem.Core
 {
-    public sealed class SkillTickRunner : BaseTickRunner
+    public class SkillTickRunner : BaseTickRunner
     {
         private int version;
         private int nextSkillInstanceId = 1;

@@ -2,7 +2,8 @@
 
 namespace _Toolkit.Shared
 {
-    public sealed class Unique : MonoBehaviour
+    public abstract class Unique : MonoBehaviour
     {
+        public abstract int Id();
     }
 }
