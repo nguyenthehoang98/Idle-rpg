@@ -5,10 +5,14 @@ namespace _Toolkit.SkillSystem.Implement
 {
     public class StationaryProjectile : Projectile
     {
+        public override void EnsureValid(out float lifetime)
+        {
+            lifetime = Context.Duration;
+        }
+
         protected override void OnStartup()
         {
             base.OnStartup();
-
             transform.position = Destination;
         }
 

@@ -11,6 +11,11 @@ namespace _Toolkit.SkillSystem.Implement
         float duration;
         float elapsedTime;
 
+        public override void EnsureValid(out float lifetime)
+        {
+            lifetime = Context.Duration;
+        }
+
         protected override void OnStartup()
         {
             base.OnStartup();

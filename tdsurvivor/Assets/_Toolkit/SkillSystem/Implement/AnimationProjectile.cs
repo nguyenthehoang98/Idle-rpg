@@ -7,6 +7,11 @@ namespace _Toolkit.SkillSystem.Implement
     {
         [SerializeField] private Animator animator;
         [SerializeField] private string animationClipName;
+        
+        public override void EnsureValid(out float lifetime)
+        {
+            lifetime = Context.Duration;
+        }
 
         protected override void OnStartup()
         {

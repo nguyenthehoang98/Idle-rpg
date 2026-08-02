@@ -1,5 +1,4 @@
 using _TDS.GameplayScene.Spawn;
-using _TDS.GameplayScene.Unit;
 using _Toolkit.Updater;
 using UnityEngine;
 
@@ -20,7 +19,6 @@ namespace _TDS.GameplayScene
         private async void Start()
         {
             await tickRunner.Initialize(1);
-
             runner.IsPaused = false;
         }
 

@@ -94,7 +94,6 @@ namespace _Toolkit.Updater
                 if (tickExecuted >= maxTicksPerFrame * loop)
                 {
                     accumulator = 0f;
-
                     break;
                 }
             }

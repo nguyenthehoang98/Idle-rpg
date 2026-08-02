@@ -24,6 +24,11 @@ namespace _Toolkit.SkillSystem.Implement
 
         float currentAngle;
         float newAngle;
+        
+        public override void EnsureValid(out float lifetime)
+        {
+            lifetime = Context.StartDuration + Context.Duration + Context.EndDuration;
+        }
 
         protected override void OnStartup()
         {
