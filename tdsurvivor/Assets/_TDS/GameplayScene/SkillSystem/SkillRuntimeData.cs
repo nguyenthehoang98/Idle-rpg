@@ -1,30 +1,37 @@
-﻿using System;
+﻿using _Toolkit.SkillSystem.Core;
 using UnityEngine;
 
-namespace _TDS.Skill
+namespace _TDS.GameplayScene.SkillSystem
 {
     /// <summary>
     /// Runtime data khi cast skill — nạp từ Hero stats + buff, truyền vào SkillManager.
     /// </summary>
-    [Serializable]
     public struct SkillRuntimeData
     {
-        public int Entity;
-        public float ProjectileScaleBonus;
+        public int TargetEntity;
+        public int SkillId;
+        public string AssetName;
+        public ProjectileRuntimeData Projectile;
         public float AttackRange;
-        public float Attack;
-        public float CritChance;
+        public int Attack;
+        public float CritRate;
         public float CritDamage;
-        public int ProjectilesPerShot;
+        public float CollisionDelayInit;
+        public float CollisionDuration;
+        public int HitCount;
+        public float HitInterval;
         public int SpreadProjectileCount;
-        public int BonusPierceCount;
+        public float SpreadAngleStep;
+        public float SpreadDamageScale;
+        public int ParallelProjectileCount;
+        public float ParallelDistanceStep;
+        public float ParallelDamageScale;
+        public string ExplosiveAssetName;
         public float ExplosiveRadius;
-        public float ExplosiveDamagePercent;
-        public string ExplosivePrefabName;
-        public float ExecuteHealthPercent;
-        public TrajectoryData Trajectory;
-        public Vector2 Pivot;
-        public Vector2 Muzzle;
-        public Vector2 Destination;
+        public float ExplosiveDamageScale;
+        public float InstantKillTargetBelowHealthPercent;
+        public Vector3 CastPivot;
+        public Vector3 CastMuzzle;
+        public Vector3 CastDestination;
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace _Toolkit.SkillSystem.Implement
 {
-    public class AnimationCurveProjectile : Projectile
+    public class LineProjectile : Projectile
     {
         [SerializeField] AnimationCurve animationCurve;
 
