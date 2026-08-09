@@ -1095,7 +1095,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdaa6db8aaeb4599ae46129fbea999f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_TDS.GameplayScene.SkillSystem.Weapon
-  projectile: {fileID: 0}
+  projectile: {fileID: 3115970097683544099, guid: 82aba66d7e210c14c8093aaf15689757, type: 3}
 --- !u!1 &1853237100
 GameObject:
   m_ObjectHideFlags: 0
