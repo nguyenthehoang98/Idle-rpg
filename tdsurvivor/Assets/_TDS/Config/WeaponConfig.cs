@@ -67,6 +67,10 @@ namespace _TDS.Config
         public void OnCompleteImported()
         {
 #if UNITY_EDITOR
+            // Importer chỉ gọi OnCompleteImported, không gọi OnMappingValue -> cachedWeapons null.
+            // Build cache trước để ValidateUpgradeKey so sánh đúng weaponId.
+            OnMappingValue();
+
             SkillConfig skillConfig = LoadSkillConfig();
 
             if (skillConfig != null)
@@ -325,7 +329,7 @@ namespace _TDS.Config
 
         private void ValidateUpgradeKey(WeaponUpgradeData data)
         {
-            if (!cachedWeapons.ContainsKey(data.weaponId))
+            if (cachedWeapons == null || !cachedWeapons.ContainsKey(data.weaponId))
             {
                 Debug.LogError($"[WeaponConfig] Upgrade weaponId '{data.weaponId}' không tồn tại trong WeaponConfig.");
             }
