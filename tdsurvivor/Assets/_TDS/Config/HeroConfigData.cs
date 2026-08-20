@@ -1,4 +1,5 @@
 using System;
+using _TDS.GameplayScene.Unit;
 
 namespace _TDS.Config
 {
@@ -7,7 +8,7 @@ namespace _TDS.Config
     {
         public int id;
         public string name;
-        public int heroType;
+        public HeroType heroType;
         public float attackRange;
         public float attackCooldown;
         public int damage;

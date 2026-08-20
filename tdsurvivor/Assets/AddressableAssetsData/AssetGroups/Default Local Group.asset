@@ -35,6 +35,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9427aeafc5145df4b8c12768e0dd75fb
+    m_Address: SkillConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b5a30f79494f22f408961ada5e1814cc
     m_Address: WeaponConfig
     m_ReadOnly: 0

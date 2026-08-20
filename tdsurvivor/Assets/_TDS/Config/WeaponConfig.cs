@@ -271,7 +271,11 @@ namespace _TDS.Config
 
             ExcelAssetAttribute attr = (ExcelAssetAttribute)attrs[0];
             TextAsset asset = AssetDatabase.LoadAssetAtPath<TextAsset>(attr.ConfigPath);
-            if (asset == null) return null;
+            if (asset == null)
+            {
+                Debug.LogError($"Not found SkillConfig at '{attr.ConfigPath}'");
+                return null;
+            }
 
             SkillConfig config = JsonUtility.FromJson<SkillConfig>(asset.text);
             config.OnMappingValue();
