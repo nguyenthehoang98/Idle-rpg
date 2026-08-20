@@ -29,6 +29,7 @@ namespace _TDS.BootScene
             {
                 nameof(SpawnerConfig),
                 nameof(MonsterConfig),
+                nameof(HeroConfig),
             });
         }
 

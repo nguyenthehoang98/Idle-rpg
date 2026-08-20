@@ -17,6 +17,8 @@ namespace _TDS.GameplayScene.Unit
         
         Dictionary<int, Data> agentToData = new Dictionary<int, Data>();
 
+        public event Action OnMonsterRemoved;
+
         private void Awake()
         {
             Instance = this;
@@ -51,7 +53,7 @@ namespace _TDS.GameplayScene.Unit
                 stopDistance + configData.stopDistance
             ).agent;
 
-            Data data = new Data(monster, agent, this);
+            Data data = new Data(monster, agent, context.Attack, this);
             Add(data);
             agentToData.Add(agent, data);
            
@@ -98,6 +100,7 @@ namespace _TDS.GameplayScene.Unit
             if (agentToData.Remove(agent, out var data))
             {
                 data.monster.Destroy();
+                OnMonsterRemoved?.Invoke();
             }
 
             simulator.DestroyAgent(agent);
@@ -107,13 +110,15 @@ namespace _TDS.GameplayScene.Unit
         {
             public Monster monster;
             public int agent;
+            public int attack;
 
             MonsterTickRunner runner;
 
-            public Data(Monster monster, int agent, MonsterTickRunner runner)
+            public Data(Monster monster, int agent, int attack, MonsterTickRunner runner)
             {
                 this.monster = monster;
                 this.agent = agent;
+                this.attack = attack;
                 this.runner = runner;
             }
 
@@ -121,6 +126,16 @@ namespace _TDS.GameplayScene.Unit
             {
                 if (runner.simulator.TryGetAgent(agent, out AgentData agentData))
                 {
+                    if (agentData.isStopped)
+                    {
+                        if (BaseCore.Instance != null && BaseCore.Instance.IsAlive)
+                        {
+                            BaseCore.Instance.TakeDamage(attack);
+                        }
+                        runner.Remove(this);
+                        return;
+                    }
+
                     Vector3 position = new Vector3(agentData.position.x, agentData.position.y);
                     monster.SetPosition(position, deltaTime);
                 }

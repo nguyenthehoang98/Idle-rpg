@@ -41,11 +41,13 @@ namespace _TDS.GameplayScene.Unit
             transform.position = position;
             transform.localScale = context.SizeScale * Vector3.one;
 
+            int health = Mathf.RoundToInt(configData.health * context.HealthScale);
+
             agent = MonsterTickRunner.Instance.Create(
                 this, configData, context
             );
 
-            ComponentManager<HealthComponent>.Add(agent, new HealthComponent(100));
+            ComponentManager<HealthComponent>.Add(agent, new HealthComponent(health));
             
             gameObject.SetActive(true);
             

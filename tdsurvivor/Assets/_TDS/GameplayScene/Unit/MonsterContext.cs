@@ -1,4 +1,6 @@
-﻿namespace _TDS.GameplayScene.Unit
+﻿using UnityEngine;
+
+namespace _TDS.GameplayScene.Unit
 {
     public struct MonsterContext
     {
@@ -6,9 +8,11 @@
         public readonly float AttackScale;
         public readonly float ExpScale;
         public readonly float SizeScale;
+        public readonly int Attack;
 
-        public MonsterContext(float healthScale, float attackScale, float expScale, float sizeScale)
+        public MonsterContext(int baseAttack, float healthScale, float attackScale, float expScale, float sizeScale)
         {
+            Attack = Mathf.RoundToInt(baseAttack * attackScale);
             HealthScale = healthScale;
             AttackScale = attackScale;
             ExpScale = expScale;

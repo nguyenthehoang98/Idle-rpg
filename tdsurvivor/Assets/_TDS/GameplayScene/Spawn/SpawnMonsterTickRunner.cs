@@ -16,6 +16,7 @@ namespace _TDS.GameplayScene.Spawn
         [SerializeField] private Transform[] portals;
 
         public event Action<int> OnWaveSpawned;
+        public event Action OnMonsterSpawned;
 
         private MonsterConfig monsterConfig;
         private List<SpawnerConfigData> allSpawners;
@@ -177,11 +178,13 @@ namespace _TDS.GameplayScene.Spawn
             monsterConfig.TryGetMonster(configData.monster, out MonsterConfigData enemyConfigData);
 
             MonsterContext context = new MonsterContext(
-                configData.healthScale, configData.attackScale,
+                enemyConfigData.attack, configData.healthScale, configData.attackScale,
                 configData.expScale, configData.sizeScale
             );
 
             monster.Initialize(spawnPosition, enemyConfigData, context);
+
+            OnMonsterSpawned?.Invoke();
         }
 
         private void OnDestroy()
