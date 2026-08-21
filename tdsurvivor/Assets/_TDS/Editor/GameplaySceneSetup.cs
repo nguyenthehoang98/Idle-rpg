@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using _TDS.Config;
 using _TDS.Core;
+using _TDS.GameplayScene;
 using _TDS.GameplayScene.SkillSystem;
 using _TDS.GameplayScene.UI;
 using _TDS.GameplayScene.Unit;
@@ -8,6 +10,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Object = UnityEngine.Object;
 
 namespace _TDS.Editor
 {

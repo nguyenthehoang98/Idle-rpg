@@ -158,6 +158,9 @@ namespace _TDS.GameplayScene.SkillSystem
             isAttacking = false;
             cooldownTimer = 0f;
 
+            // ponytail: struct serialize trên scene cũ có thể mang Duration = 0 -> đạn tắt ngay frame đầu
+            if (projectileContext.Duration <= 0f) projectileContext.Duration = 2f;
+
             CacheAudio();
             UpdateGroupData();
         }

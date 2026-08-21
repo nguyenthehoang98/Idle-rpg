@@ -72,7 +72,10 @@ namespace _Toolkit.SkillSystem.Core
         public void Startup()
         {
             transform.position = Start;
-            
+
+            // Pool.Instantiate(..., false) tạo object ở trạng thái inactive -> phải tự bật
+            gameObject.SetActive(true);
+
             OnStartup();
             
             ProjectileTickRunner.Instance.Add(this);
