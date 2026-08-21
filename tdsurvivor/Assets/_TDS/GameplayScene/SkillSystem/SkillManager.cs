@@ -31,6 +31,10 @@ namespace _TDS.GameplayScene.SkillSystem
         {
             if (context.Fire.UseEquipment)
             {
+                // Duration tính từ quãng đường / tốc độ (config chỉ set Speed)
+                float distance = Vector3.Distance(context.Fire.EquipmentMuzzle, context.Fire.ProjectileDestination);
+                context.Projectile.Duration = distance / Mathf.Max(0.01f, context.Projectile.Speed);
+
                 BuildSkill_Private(
                     context, context.Fire.EquipmentMuzzle, context.Fire.ProjectileDestination, 1
                 );
@@ -115,7 +119,12 @@ namespace _TDS.GameplayScene.SkillSystem
             
             if (context.Fire.UseEquipment)
             {
-                projectile = context.Fire.Equipment.projectile;
+                // Equipment.projectile là reference tới prefab asset -> phải instantiate, không dùng trực tiếp
+                GameObject equipmentPrefab = context.Fire.Equipment.projectile.gameObject;
+
+                Pool.RegisterPool(equipmentPrefab, true); // idempotent
+
+                projectile = Pool.Instantiate(equipmentPrefab, from, false).GetComponent<Projectile>();
             }
             else
             {
@@ -133,7 +142,7 @@ namespace _TDS.GameplayScene.SkillSystem
                 context.Damage.DamageInterval, context.Damage.HitInterval, context.Damage.HitCount
             );
 
-            skillAction.OnDamaged += info => { return false;};
+            skillAction.OnDamaged += info => OnDamagedFunc(context, info, projectile, damageScale);
             skillAction.OnComplete += () =>
             {
                 if (context.ResetTiming == AttackResetTiming.OnSkillFinished)

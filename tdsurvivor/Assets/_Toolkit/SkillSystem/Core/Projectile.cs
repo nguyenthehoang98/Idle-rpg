@@ -66,6 +66,7 @@ namespace _Toolkit.SkillSystem.Core
             TransitionPreviousPosition = Vector3.zero;
             
             OnDestroy = null;
+            OnPhaseChanged = null; // tránh cộng dồn handler khi pool tái sử dụng
         }
 
         public void Startup()
