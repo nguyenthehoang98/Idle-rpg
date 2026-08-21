@@ -2,6 +2,9 @@ using _TDS.Core;
 using _TDS.GameplayScene.Unit;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace _TDS.GameplayScene.UI
 {
@@ -24,6 +27,12 @@ namespace _TDS.GameplayScene.UI
         {
             if (panelGameOver != null) panelGameOver.SetActive(false);
             if (panelVictory != null) panelVictory.SetActive(false);
+
+            // Click UI cần EventSystem - tự tạo nếu scene chưa có
+            if (FindObjectOfType<EventSystem>() == null)
+            {
+                new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
+            }
         }
 
         public void Initialize(WaveManager waveManager)
@@ -91,6 +100,7 @@ namespace _TDS.GameplayScene.UI
             if (panelGameOver != null)
             {
                 panelGameOver.SetActive(true);
+                EnsureReplayButton(panelGameOver.transform);
             }
             if (txtGameOverMessage != null)
             {
@@ -103,11 +113,52 @@ namespace _TDS.GameplayScene.UI
             if (panelVictory != null)
             {
                 panelVictory.SetActive(true);
+                EnsureReplayButton(panelVictory.transform);
             }
             if (txtVictoryMessage != null)
             {
                 txtVictoryMessage.text = "VICTORY!";
             }
+        }
+
+        /// <summary>Tự tạo nút chơi lại nếu panel chưa có - không phụ thuộc setup scene.</summary>
+        private void EnsureReplayButton(Transform panel)
+        {
+            if (panel.Find("BtnReplay") != null) return;
+
+            GameObject go = new GameObject("BtnReplay");
+            go.transform.SetParent(panel, false);
+
+            RectTransform rt = go.AddComponent<RectTransform>();
+            rt.anchorMin = rt.anchorMax = rt.pivot = Vector2.one * 0.5f;
+            rt.anchoredPosition = new Vector2(0, -50);
+            rt.sizeDelta = new Vector2(160, 45);
+
+            go.AddComponent<CanvasRenderer>();
+            go.AddComponent<Image>().color = new Color(0.25f, 0.55f, 1f);
+
+            Button button = go.AddComponent<Button>();
+            button.onClick.AddListener(Restart);
+
+            GameObject label = new GameObject("Text");
+            label.transform.SetParent(go.transform, false);
+            RectTransform lrt = label.AddComponent<RectTransform>();
+            lrt.anchorMin = Vector2.zero;
+            lrt.anchorMax = Vector2.one;
+            lrt.sizeDelta = Vector2.zero;
+            label.AddComponent<CanvasRenderer>();
+            TextMeshProUGUI tmp = label.AddComponent<TextMeshProUGUI>();
+            tmp.text = "CHƠI LẠI";
+            tmp.fontSize = 20;
+            tmp.color = Color.white;
+            tmp.alignment = TextAlignmentOptions.Center;
+        }
+
+        /// <summary>Gọi từ nút Replay trên GameOver/Victory panel.</summary>
+        public void Restart()
+        {
+            Time.timeScale = 1f; // GameManager đã set 0 khi thua/thắng
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
         private void OnDestroy()

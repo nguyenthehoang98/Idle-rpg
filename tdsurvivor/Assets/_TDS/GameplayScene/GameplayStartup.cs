@@ -12,7 +12,6 @@ namespace _TDS.GameplayScene
     {
         [SerializeField] private UpdateRunner runner;
         [SerializeField] private WaveManager waveManager;
-        [SerializeField] private int totalWaves = 10;
 
         SpawnMonsterTickRunner spawnerTickRunner;
         MonsterTickRunner monsterTickRunner;
@@ -51,11 +50,6 @@ namespace _TDS.GameplayScene
             {
                 waveManager = FindObjectOfType<WaveManager>();
             }
-
-            if (waveManager != null)
-            {
-                waveManager.Initialize(totalWaves);
-            }
         }
 
         private async void Start()
@@ -65,6 +59,12 @@ namespace _TDS.GameplayScene
             if (spawnerTickRunner != null)
             {
                 await spawnerTickRunner.Initialize(1);
+
+                // Tổng số wave lấy từ SpawnerConfig, không hardcode
+                if (waveManager != null)
+                {
+                    waveManager.Initialize(spawnerTickRunner.MaxWave);
+                }
             }
 
             runner.IsPaused = false;

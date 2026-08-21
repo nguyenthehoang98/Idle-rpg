@@ -46,5 +46,8 @@
 - [x] Build Slice 2: BaseCore + Health → GameOver (xong 2026-08-21: GameManager, BaseCore, WaveManager victory, GameplayUI)
 - [x] SC04 Force attack direction (ForceTargetInput + Weapon forced target + scene setup menu)
 - [x] Fix đạn không bắn ra: đăng ký Triangle vào Addressables + pool đúng cách (GetAssetCached + RegisterPool)
+- [x] Fix đạn inactive + Duration=0; tăng attackRange trong HeroConfig.xlsx/json
+- [x] Win/Lose hoàn chỉnh: totalWaves lấy từ SpawnerConfig.MaxWave (trước đó hardcode 10 > 3 wave
+     trong config nên không bao giờ Victory); nút CHƠI LẠI tự tạo trên panel GameOver/Victory
 - [ ] Slice 3 còn lại: Projectile IGrid hit (SC05), Passive/Active skills hoàn chỉnh (SC14)
 - [ ] Slice 4: Coin/Exp runtime + Roll/Shop UI (SC11-SC13) — cần thêm ItemConfig/RollConfig excel

@@ -18,6 +18,8 @@ namespace _TDS.GameplayScene.Spawn
         public event Action<int> OnWaveSpawned;
         public event Action OnMonsterSpawned;
 
+        public int MaxWave => maxWave;
+
         private MonsterConfig monsterConfig;
         private List<SpawnerConfigData> allSpawners;
 
