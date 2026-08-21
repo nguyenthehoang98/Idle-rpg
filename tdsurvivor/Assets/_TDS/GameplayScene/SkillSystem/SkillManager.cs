@@ -128,9 +128,20 @@ namespace _TDS.GameplayScene.SkillSystem
             }
             else
             {
-                GameObject go = await AssetLoader.GetAsset<GameObject>(context.AssetName);
-                go = Pool.Instantiate(go, from, false);
-                projectile = go.GetComponent<Projectile>();
+                // GetAssetCached + RegisterPool: GetAsset thường sẽ release handle ngay sau load,
+                // prefab sống trong pool nhưng asset đã bị release -> hỏng khi build.
+                GameObject go = await AssetLoader.GetAssetCached<GameObject>(context.AssetName);
+
+                if (go == null)
+                {
+                    Debug.LogError($"[SkillManager] Projectile prefab '{context.AssetName}' not found (check Addressables)");
+                    context.Fire.Equipment.StopAttack();
+                    return;
+                }
+
+                if (assetPaths.Add(context.AssetName)) Pool.RegisterPool(go, true);
+
+                projectile = Pool.Instantiate(go, from, false).GetComponent<Projectile>();
             }
             
             projectile.Initialize(from, to, context.Projectile);

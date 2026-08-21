@@ -36,6 +36,7 @@ namespace _TDS.Editor
             SetupForceTargetInput();
             SetupGameplayUI();
             SetupHeroes();
+            RegisterProjectilePrefabs.Register();
 
             Debug.Log("[Setup] Gameplay scene setup done");
         }

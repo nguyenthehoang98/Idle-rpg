@@ -45,5 +45,6 @@
 - [x] Thiết kế SkillSystem module (portable GameToolkit + bridge _TDS) — xem ADR-0007
 - [x] Build Slice 2: BaseCore + Health → GameOver (xong 2026-08-21: GameManager, BaseCore, WaveManager victory, GameplayUI)
 - [x] SC04 Force attack direction (ForceTargetInput + Weapon forced target + scene setup menu)
+- [x] Fix đạn không bắn ra: đăng ký Triangle vào Addressables + pool đúng cách (GetAssetCached + RegisterPool)
 - [ ] Slice 3 còn lại: Projectile IGrid hit (SC05), Passive/Active skills hoàn chỉnh (SC14)
 - [ ] Slice 4: Coin/Exp runtime + Roll/Shop UI (SC11-SC13) — cần thêm ItemConfig/RollConfig excel
