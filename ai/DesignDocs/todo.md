@@ -43,4 +43,7 @@
 - [x] Cập nhật quality gates (`flow/05-quality-gates.md`) — gates 1-4,7 checked 2026-07-31
 - [x] Tạo các ADR còn thiếu — ADR-0002→0005 + ADR-0007 created 2026-07-31
 - [x] Thiết kế SkillSystem module (portable GameToolkit + bridge _TDS) — xem ADR-0007
-- [ ] Bắt đầu build Slice 2: BaseCore + Health → GameOver
+- [x] Build Slice 2: BaseCore + Health → GameOver (xong 2026-08-21: GameManager, BaseCore, WaveManager victory, GameplayUI)
+- [x] SC04 Force attack direction (ForceTargetInput + Weapon forced target + scene setup menu)
+- [ ] Slice 3 còn lại: Projectile IGrid hit (SC05), Passive/Active skills hoàn chỉnh (SC14)
+- [ ] Slice 4: Coin/Exp runtime + Roll/Shop UI (SC11-SC13) — cần thêm ItemConfig/RollConfig excel

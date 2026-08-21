@@ -291,15 +291,25 @@ tdsurvivor/Assets/_TDS/Boot/GameBootScene.cs
 ### Chưa làm
 
 ```text
-T003 ❌ GameManager state machine
-T004 ❌ Health component
-T005 ❌ BaseCore
-T007 ❌ 3 monster tiers tách riêng (hiện dùng 1 Monster + scale trong SpawnerConfig)
-T011-T015 ❌ Heroes (5 types), Projectile + IGrid hit, force direction, skills
-T018 ❌ Track alive monsters
+T003 ✅ GameManager state machine (đã có: Assets/_TDS/Core/GameManager.cs)
+T004 ✅ Health component (HealthComponent struct + BaseCore)
+T005 ✅ BaseCore + monster damage Base -> GameOver
+T007 🟡 3 monster tiers tách riêng (hiện dùng 1 Monster + scale trong SpawnerConfig)
+T011 ✅ HeroController (+ Weapon auto-attack đã wire damage)
+T012 🟡 5 heroes: đã đủ dữ liệu HeroConfig.xlsx/json; scene setup menu clone đủ 5 hero từ hero mẫu
+T013 ❌ Projectile + IGrid hit (đang dùng SkillSystem projectile riêng)
+T014 ✅ Force attack direction (SC04): ForceTargetInput tap/click chọn quái gần nhất,
+     Weapon ưu tiên forced target; setup qua menu Tools > Setup > Setup Gameplay Scene
+T015 ❌ Passive + Active skills hoàn chỉnh
+T018 ✅ Track alive monsters (WaveManager.AliveMonsters)
 T019-T020 ❌ Roll/Shop UI
-T022-T024 ❌ UI (Canvas, HP/Wave/Coin display, GameOver/Victory)
+T021 ❌ Coin/Exp runtime
+T022-T024 ✅ UI cơ bản (GameplayUI: Base HP/Wave/Alive + GameOver/Victory)
 ```
+
+Scene setup: menu **Tools > Setup > Setup Gameplay Scene** (`Assets/_TDS/Editor/GameplaySceneSetup.cs`)
+- Idempotent: thêm GameManager/BaseCore/WaveManager/GameplayUI/ForceTargetInput nếu thiếu.
+- Đọc `HeroConfig.json`, clone hero mẫu dưới container `Heros` đủ 5 hero, gán stats (range/cooldown/damage/crit/spread/parallel/explosive) + xếp vòng quanh Base.
 
 ### Kiến trúc đang dùng
 

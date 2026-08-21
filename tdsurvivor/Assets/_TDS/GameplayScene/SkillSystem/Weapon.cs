@@ -28,6 +28,9 @@ namespace _TDS.GameplayScene.SkillSystem
         /* =====================================================================================
          * 0. Config base
          * ===================================================================================== */
+        [Header("Owner")]
+        [SerializeField] protected HeroController owner; // SC04 - force attack direction
+
         [Header("Find Target")]
         [SerializeField] protected FindTargetType findTargetType = FindTargetType.Nearest;
         [SerializeField] protected float attackRange = 3f;
@@ -135,6 +138,7 @@ namespace _TDS.GameplayScene.SkillSystem
          * ===================================================================================== */
         protected virtual void Awake()
         {
+            if (owner == null) owner = GetComponentInParent<HeroController>();
             if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
             outlineRenderer = spriteRenderer;
             if (animator == null) animator = GetComponent<Animator>();
@@ -344,6 +348,20 @@ namespace _TDS.GameplayScene.SkillSystem
             Vector3 bestSecondaryPos = Vector3.zero;
             float range = EffectiveAttackRange();
             float rangeSqr = range * range;
+
+            // SC04: mục tiêu bị ép (force target) được ưu tiên trục tiếp nếu còn sống và trong tàm
+            if (owner != null && owner.HasForcedTarget && runner.IsAlive(owner.ForcedTargetEntity)
+                && runner.TryGetAgent(owner.ForcedTargetEntity, out AgentData forcedData))
+            {
+                Vector2 forcedPos = new Vector2(forcedData.position.x, forcedData.position.y);
+                if ((forcedPos - (Vector2)center).sqrMagnitude <= rangeSqr)
+                {
+                    primaryTargetEntity = owner.ForcedTargetEntity;
+                    primaryDestination = forcedPos;
+                    hasTarget = true;
+                    return true;
+                }
+            }
 
             for (int i = 0; i < count; i++)
             {
