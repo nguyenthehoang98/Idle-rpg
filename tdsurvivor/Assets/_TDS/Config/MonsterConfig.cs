@@ -12,8 +12,8 @@ namespace _TDS.Config
     public class MonsterConfig : IConfig
     {
         [SerializeField] private List<MonsterConfigData> monsters = new List<MonsterConfigData>();
-        
-        Dictionary<int, MonsterConfigData> cachedMonsters;
+
+        private Dictionary<int, MonsterConfigData> cachedMonsters;
         
         public void OnMappingValue()
         {

@@ -26,7 +26,8 @@ namespace _TDS.Config
             cachedWeapons = new Dictionary<int, WeaponData>();
             foreach (var w in weapons)
             {
-                if (!cachedWeapons.TryAdd(w.weaponId, w)) Debug.LogError($"WeaponConfig couldn't be added to weapon '{w.weaponId}'");
+                if (!cachedWeapons.TryAdd(w.weaponId, w))
+                    Debug.LogError($"WeaponConfig couldn't be added to weapon '{w.weaponId}'");
             }
 
             cachedUpgrades = new Dictionary<int, Dictionary<int, List<WeaponUpgradeData>>>();
@@ -63,26 +64,26 @@ namespace _TDS.Config
 
             if (skillConfig != null)
             {
-                OnValidateLinkConfig(skillConfig);
+                foreach (WeaponUpgradeData data in upgrades)
+                {
+                    if (cachedWeapons == null || !cachedWeapons.ContainsKey(data.weaponId))
+                    {
+                        Debug.LogError(
+                            $"[WeaponConfig] Upgrade weaponId '{data.weaponId}' không tồn tại trong WeaponConfig.");
+                    }
+
+                    if (data.level <= 0)
+                    {
+                        Debug.LogWarning(
+                            $"[WeaponConfig] Upgrade weapon '{data.weaponId}' có level '{data.level}' không hợp lệ (bắt đầu từ 1).");
+                    }
+                }
             }
             else
             {
                 Debug.LogError("[WeaponConfig] Không load được SkillConfig. Skip link Weapon ↔ Skill.");
             }
 #endif
-        }
-
-        public bool TryGetWeaponData(int weaponId, out WeaponData data)
-        {
-            if (cachedWeapons != null) return cachedWeapons.TryGetValue(weaponId, out data);
-            data = default;
-            return false;
-        }
-
-        public bool TryGetUpgradesAtLevel(int weaponId, int level, out List<WeaponUpgradeData> list)
-        {
-            list = null;
-            return cachedUpgrades.TryGetValue(weaponId, out var dict) && dict.TryGetValue(level, out list);
         }
 
 #if UNITY_EDITOR
@@ -105,26 +106,17 @@ namespace _TDS.Config
         }
 #endif
 
-        /// <summary>
-        /// Liên kết Weapon ↔ Skill: resolve skillId → SkillData, copy projectile nếu WeaponData thiếu,
-        /// rồi validate lần lượt từng phần (tách thành hàm nhỏ cho rõ ràng).
-        /// </summary>
-        public void OnValidateLinkConfig(SkillConfig skillConfig)
+        public bool TryGetWeaponData(int weaponId, out WeaponData data)
         {
-            if (skillConfig == null) return;
+            if (cachedWeapons != null) return cachedWeapons.TryGetValue(weaponId, out data);
+            data = default;
+            return false;
+        }
 
-            foreach (WeaponUpgradeData data in upgrades)
-            {
-                if (cachedWeapons == null || !cachedWeapons.ContainsKey(data.weaponId))
-                {
-                    Debug.LogError($"[WeaponConfig] Upgrade weaponId '{data.weaponId}' không tồn tại trong WeaponConfig.");
-                }
-
-                if (data.level <= 0)
-                {
-                    Debug.LogWarning($"[WeaponConfig] Upgrade weapon '{data.weaponId}' có level '{data.level}' không hợp lệ (bắt đầu từ 1).");
-                }
-            }
+        public bool TryGetUpgradesAtLevel(int weaponId, int level, out List<WeaponUpgradeData> list)
+        {
+            list = null;
+            return cachedUpgrades.TryGetValue(weaponId, out var dict) && dict.TryGetValue(level, out list);
         }
     }
 }

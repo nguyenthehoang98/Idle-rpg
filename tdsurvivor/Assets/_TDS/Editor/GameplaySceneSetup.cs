@@ -27,7 +27,7 @@ namespace _TDS.Editor
         [Serializable]
         private class HeroConfigJsonWrapper
         {
-            public List<HeroConfigData> heroes;
+            public List<WeaponUpgradeData> heroes;
         }
 
         [MenuItem("Tools/Setup/Setup Gameplay Scene")]
@@ -209,7 +209,7 @@ namespace _TDS.Editor
 
             for (int i = 0; i < config.heroes.Count; i++)
             {
-                HeroConfigData data = config.heroes[i];
+                WeaponUpgradeData data = config.heroes[i];
 
                 HeroController hero;
                 if (i < existing.Count)
@@ -228,7 +228,7 @@ namespace _TDS.Editor
             }
         }
 
-        private static void ApplyHeroConfig(HeroController hero, HeroConfigData data, int index, int total)
+        private static void ApplyHeroConfig(HeroController hero, WeaponUpgradeData data, int index, int total)
         {
             Undo.RecordObject(hero, "Setup Heroes");
             hero.name = data.name;
@@ -251,7 +251,7 @@ namespace _TDS.Editor
             // Stat của Weapon giờ nạp từ WeaponConfig/SkillConfig theo weaponId lúc runtime,
             // editor chỉ cần gán đúng id (dùng hero id làm weaponId – chỉnh nếu mapping khác).
             SerializedObject wso = new SerializedObject(weapon);
-            SetValue(wso, "weaponId", data.id);
+            SetValue(wso, "weaponId", data.weaponId);
             wso.ApplyModifiedPropertiesWithoutUndo();
 
             EditorUtility.SetDirty(hero.gameObject);

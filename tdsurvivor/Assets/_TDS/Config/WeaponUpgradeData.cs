@@ -6,11 +6,44 @@ namespace _TDS.Config
     [Serializable]
     public struct WeaponUpgradeData
     {
+        /* ============================== ĐAỊNH DANH ============================== */
+
+        /// <summary>ID weapon / hero (hero dùng id làm weaponId).</summary>
         public int weaponId;
+
+        /// <summary>Tên hiển thị (dùng cho row base của hero).</summary>
+        public string name;
+
+        /// <summary>Loại hero (chỉ dùng cho row base – level 0).</summary>
+        public int heroType;
+
         public int level;
 
         /// <summary>Nhóm (group) – nhiều upgrade cùng group là các lựa chọn loại trừ nhau trong card.</summary>
         public int group;
+
+        /* ============================== BASE STAT (row level 0) ============================== */
+
+        /// <summary>Cooldown attack gốc (giây) – chỉ có ý nghĩa ở row base.</summary>
+        public float attackCooldown;
+
+        /// <summary>Sát thương gốc – chỉ có ý nghĩa ở row base.</summary>
+        public int damage;
+
+        /// <summary>Asset đạn (row base).</summary>
+        public string projectileAsset;
+
+        public int trajectoryType;
+
+        public int hitCount;
+
+        public float hitInterval;
+
+        public float projectileSpeed;
+
+        public float projectileSize;
+
+        public float spreadAngleStep;
 
         /* ============================== MODIFIER ============================== */
 
@@ -55,13 +88,5 @@ namespace _TDS.Config
 
         /// <summary>% máu mục tiêu mà weapon có thể Execute (tiêu diệt tức thì).</summary>
         public float executeHealthPercent;
-
-        /* ============================== POWER (X2 / X3) ============================== */
-
-        /// <summary>
-        /// Nếu &gt; 0 thì đây là upgrade cấp sức mạnh: 2 = Power X2, 3 = Power X3.
-        /// Dùng bởi <see cref="WeaponConfig.GetPowerLevel"/> khi weapon đạt level tương ứng.
-        /// </summary>
-        public int powerLevel;
     }
 }
