@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using _TDS.Config;
 using _TDS.GameplayScene.Unit;
 using _Toolkit.Avoidance;
+using _Toolkit.Config;
+using _Toolkit.ResourceManagement;
 using _Toolkit.SkillSystem.Core;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace _TDS.GameplayScene.SkillSystem
@@ -26,39 +29,20 @@ namespace _TDS.GameplayScene.SkillSystem
         public Projectile projectile;
 
         /* =====================================================================================
-         * 0. Config base
+         * 0. Data – weapon KHÔNG giữ stat trên inspector nữa.
+         *    Toàn bộ stat được build từ:
+         *      - WeaponData + WeaponUpgradeData (lấy qua weaponId từ WeaponConfig)
+         *      - SkillConfigData (lấy qua WeaponData.skillId từ SkillConfig)
+         *      - Projectile: load prefab theo WeaponData.projectileName
          * ===================================================================================== */
+        [Header("Config")]
+        [SerializeField] protected int weaponId;
+
         [Header("Owner")]
         [SerializeField] protected HeroController owner; // SC04 - force attack direction
 
         [Header("Find Target")]
-        [SerializeField] protected FindTargetType findTargetType = FindTargetType.Nearest;
-        [SerializeField] protected float attackRange = 3f;
-        [SerializeField] protected float attackCooldown = 1f;
         [SerializeField] protected float retryFindTargetDelay = 0.2f;
-
-        [Header("Damage / Crit")]
-        [SerializeField] protected int attack = 10;
-        [SerializeField] protected float critRate = 0f;
-        [SerializeField] protected float critDamage = 1.5f;
-
-        [Header("Projectile (khi projectile == null sẽ load theo asset name)")]
-        [SerializeField] protected string projectileAssetName;
-        [SerializeField] protected ProjectileContext projectileContext = new ProjectileContext { SizeScale = 1f, Speed = 5f };
-
-        [Header("Skill Runtime")]
-        [SerializeField] protected DamageContext damageContext = new DamageContext(1, 0.1f, 0f);
-        [SerializeField] protected AttackResetTiming resetTiming = AttackResetTiming.OnSkillFinished;
-        [SerializeField] protected float projectileDistanceStep;
-        [SerializeField] protected float projectileAngleStep;
-        [SerializeField] protected int spreadProjectileCount;
-        [SerializeField] protected float spreadDamageScale = 1f;
-        [SerializeField] protected int parallelProjectileCount;
-        [SerializeField] protected float parallelDamageScale;
-        [SerializeField] protected string explosiveAssetName;
-        [SerializeField] protected float explosiveRadius;
-        [SerializeField] protected float explosiveDamageScale;
-        [SerializeField] protected float instantKillTargetBelowHealthPercent;
 
         [Header("Animation & Attack Timing")]
         [SerializeField] protected Animator animator;
@@ -66,7 +50,30 @@ namespace _TDS.GameplayScene.SkillSystem
         [SerializeField] protected float attackWindupDelay = 0.12f;
         [SerializeField] protected float attackDuration = 0.35f;
 
-        [Header("Rotate")]
+        // ---- Runtime stats (được nạp từ config trong Initialize, không serialize) ----
+        protected FindTargetType findTargetType = FindTargetType.Nearest;
+        protected float attackRange = 3f;
+        protected float attackCooldown = 1f;
+        protected int attack = 10;
+        protected float critRate;
+        protected float critDamage = 1.5f;
+        protected string projectileAssetName;
+        protected ProjectileContext projectileContext = new ProjectileContext { SizeScale = 1f, Speed = 5f };
+        protected DamageContext damageContext = new DamageContext(1, 0.1f, 0f);
+        protected AttackResetTiming resetTiming = AttackResetTiming.OnSkillFinished;
+        protected float projectileDistanceStep;
+        protected float projectileAngleStep;
+        protected int spreadProjectileCount;
+        protected float spreadDamageScale = 1f;
+        protected int parallelProjectileCount;
+        protected float parallelDamageScale;
+        protected string explosiveAssetName;
+        protected float explosiveRadius;
+        protected float explosiveDamageScale;
+        protected float instantKillTargetBelowHealthPercent;
+        protected AudioClip[] attackAudioClips;
+
+        [Header("Rotate (visual – thuộc prefab)")]
         [SerializeField] protected Transform muzzle; // nguồn bắn đạn (null → transform.position)
         [SerializeField] protected Transform pivot;  // tâm xoay (null → transform.position)
         [SerializeField] protected AnimationCurve rotateCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
@@ -74,19 +81,13 @@ namespace _TDS.GameplayScene.SkillSystem
         [SerializeField] protected bool flipSprite = true;
         [SerializeField] protected SpriteRenderer spriteRenderer;
 
-        [Header("Audio")]
-        [SerializeField] protected AudioClip[] attackAudioClips;
-
-        [Header("Outline theo Level")]
+        [Header("Outline theo Level (visual – thuộc prefab)")]
         [SerializeField] protected Color outlineColorDefault = Color.white;
         [SerializeField] protected Color outlineColorX2 = new Color(1f, 0.85f, 0f, 1f);
         [SerializeField] protected Color outlineColorX3 = new Color(1f, 0.2f, 0.1f, 1f);
         [SerializeField] protected string outlineColorProperty = "_Color";
         [SerializeField] protected Material outlineX2Material;
         [SerializeField] protected Material outlineX3Material;
-
-        [Header("Upgrade")]
-        [SerializeField] protected int startLevel = 1;
 
         /* =====================================================================================
          * Runtime state
@@ -116,6 +117,10 @@ namespace _TDS.GameplayScene.SkillSystem
         protected MaterialPropertyBlock outlineBlock;
         protected Renderer outlineRenderer;
         protected AudioSource cachedAudioSource;
+
+        // Asset name/volume từ WeaponData (dùng bởi LoadAssetsAsync)
+        private string audioClipName;
+        private float audioVolume = 1f;
 
         public bool IsInitialized => isInitialized;
         public bool IsAttacking => isAttacking;
@@ -152,17 +157,103 @@ namespace _TDS.GameplayScene.SkillSystem
 
         public virtual void Initialize()
         {
-            level = Mathf.Max(1, startLevel);
+            level = 1;
             powerLevel = 1;
-            isInitialized = true;
             isAttacking = false;
             cooldownTimer = 0f;
 
-            // ponytail: struct serialize trên scene cũ có thể mang Duration = 0 -> đạn tắt ngay frame đầu
-            if (projectileContext.Duration <= 0f) projectileContext.Duration = 2f;
+            if (!LoadConfigData()) return;
 
             CacheAudio();
             UpdateGroupData();
+            LoadAssetsAsync().Forget();
+            isInitialized = true;
+        }
+
+        /// <summary>
+        /// Nạp toàn bộ stat từ config: WeaponData (theo weaponId) → base combat,
+        /// SkillConfigData (theo WeaponData.skillId) → hành vi đạn/skill.
+        /// </summary>
+        private bool LoadConfigData()
+        {
+            WeaponData data;
+            SkillConfigData skill = default;
+            try
+            {
+                WeaponConfig weaponConfig = ConfigManager.Get<WeaponConfig>();
+                if (!weaponConfig.TryGetWeaponData(weaponId, out data))
+                {
+                    Debug.LogError($"[Weapon] '{name}': không có WeaponData cho weaponId '{weaponId}'.");
+                    return false;
+                }
+
+                ConfigManager.Get<SkillConfig>().TryGetSkill(data.skillId, out skill);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[Weapon] '{name}': {e.Message}");
+                return false;
+            }
+
+            // Base combat ← WeaponData
+            attack = data.attack;
+            attackCooldown = Mathf.Max(0.05f, data.cooldown);
+            critRate = data.criticalChance;
+            if (data.criticalDamage > 0f) critDamage = data.criticalDamage;
+            projectileAssetName = data.projectileName;
+            audioVolume = data.attackVolume > 0f ? data.attackVolume : 1f;
+            audioClipName = data.attackAudioName;
+
+            // Hành vi đạn / skill ← SkillConfigData
+            if (skill.skillId != 0)
+            {
+                findTargetType = skill.findTarget;
+                attackRange = Mathf.Max(0.1f, skill.attackRange);
+                projectileContext = new ProjectileContext
+                {
+                    Speed = skill.projectileSpeed,
+                    StartDuration = skill.projectileStartDuration,
+                    Duration = skill.projectileDuration,
+                    EndDuration = skill.projectileEndDuration,
+                    SizeScale = skill.projectileSize,
+                    CollisionDelayInit = skill.collisionDelayInit,
+                    CollisionDuration = skill.collisionDuration,
+                };
+                // ponytail: excel cũ có thể mang Duration = 0 -> đạn tắt ngay frame đầu
+                if (projectileContext.Duration <= 0f) projectileContext.Duration = 2f;
+
+                damageContext = new DamageContext(skill.hitCount, skill.hitInterval, skill.damageTickInterval);
+                projectileDistanceStep = skill.projectileDistanceStep;
+                projectileAngleStep = skill.projectileAngleStep;
+                spreadProjectileCount = skill.spreadBonusProjectileCount;
+                spreadDamageScale = skill.spreadDamageScale;
+                parallelProjectileCount = skill.parallelBonusProjectileCount;
+                parallelDamageScale = skill.parallelDamageScale;
+                explosiveAssetName = skill.explosiveAssetName;
+                explosiveRadius = skill.explosiveRadius;
+                explosiveDamageScale = skill.explosiveDamageScale;
+                instantKillTargetBelowHealthPercent = skill.instantKillTargetBelowHealthPercent;
+            }
+
+            return true;
+        }
+
+        /// <summary>Load asset bất đồng bộ: projectile prefab + audio clip.</summary>
+        private async UniTaskVoid LoadAssetsAsync()
+        {
+            if (!string.IsNullOrEmpty(projectileAssetName))
+            {
+                GameObject prefab = await AssetLoader.GetAsset<GameObject>(projectileAssetName);
+                Projectile loaded = prefab != null ? prefab.GetComponent<Projectile>() : null;
+                if (loaded == null) Debug.LogError($"[Weapon] '{name}': không tìm thấy projectile prefab '{projectileAssetName}'.");
+                else projectile = loaded;
+            }
+
+            if (!string.IsNullOrEmpty(audioClipName))
+            {
+                AudioClip clip = await AssetLoader.GetAsset<AudioClip>(audioClipName);
+                attackAudioClips = clip != null ? new[] { clip } : Array.Empty<AudioClip>();
+            }
         }
 
         /// <summary>Cache âm thanh ngay khi khởi tạo để PlayOneShot không bị giật (hit IO).</summary>
@@ -173,21 +264,30 @@ namespace _TDS.GameplayScene.SkillSystem
                 cachedAudioSource = gameObject.AddComponent<AudioSource>();
                 cachedAudioSource.playOnAwake = false;
                 cachedAudioSource.spatialBlend = 0f;
-                cachedAudioSource.volume = 1f;
+                cachedAudioSource.volume = audioVolume;
             }
         }
 
         /* =====================================================================================
          * 2. QUẢN LÝ NÂNG CẤP / LEVEL
          * ===================================================================================== */
-        /// <summary>Danh sách upgrade khả dụng ở level hiện tại. Subclass override để lấy từ nguồn dữ liệu thật.</summary>
+        /// <summary>Danh sách upgrade khả dụng ở level hiện tại – lấy từ WeaponConfig theo weaponId.</summary>
         public virtual List<WeaponUpgradeData> GetUpgradeDataAvailable()
         {
-            return new List<WeaponUpgradeData>
+            List<WeaponUpgradeData> list;
+            try
             {
-                new WeaponUpgradeData { projectileDamage = 0.1f, attackRange = 0.25f, cooldownReduction = 0.05f },
-                new WeaponUpgradeData { spreadProjectile = 1 },
-            };
+                list = ConfigManager.Get<WeaponConfig>().TryGetUpgradesAtLevel(weaponId, level, out var result)
+                    ? result
+                    : new List<WeaponUpgradeData>();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[Weapon] '{name}': {e.Message}");
+                list = new List<WeaponUpgradeData>();
+            }
+
+            return list;
         }
 
         /// <summary>Áp dụng một upgrade cụ thể, tăng level, cập nhật group/power/outline.</summary>

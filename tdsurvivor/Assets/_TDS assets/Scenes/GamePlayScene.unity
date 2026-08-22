@@ -224,6 +224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_TDS.GameplayScene.SkillSystem.Weapon
   projectile: {fileID: 0}
+  owner: {fileID: 0}
   findTargetType: 1
   attackRange: 3
   attackCooldown: 1
@@ -232,6 +233,14 @@ MonoBehaviour:
   critRate: 0
   critDamage: 1.5
   projectileAssetName: 
+  projectileContext:
+    Speed: 5
+    StartDuration: 0
+    Duration: 0
+    EndDuration: 0
+    SizeScale: 1
+    CollisionDelayInit: 0
+    CollisionDuration: 0
   resetTiming: 0
   projectileDistanceStep: 0
   projectileAngleStep: 0
@@ -511,7 +520,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Gameplay
   runner: {fileID: 5550868312384340924}
   waveManager: {fileID: 0}
-  totalWaves: 10
 --- !u!1 &339352894
 GameObject:
   m_ObjectHideFlags: 0
@@ -1116,7 +1124,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 10, y: -10}
+  m_AnchoredPosition: {x: 10, y: -80}
   m_SizeDelta: {x: 300, y: 80}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &863414317
@@ -1630,7 +1638,7 @@ Sprite:
         format: 0
         dimension: 0
       m_DataSize: 184
-      _typelessdata: 0000003f0000903e000000000000f83e0000a8be000000000000003f000080be000000000000c03e0000003f000000000000b83e000000bf00000000000090be000000bf000000000000d8be0000003f00000000000000bf0000c03e00000000000000bf0000c8be0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+      _typelessdata: 0000003f0000903e000000000000f83e0000a8be000000000000003f000080be000000000000c03e0000003f000000000000b83e000000bf00000000000090be000000bf000000000000d8be0000003f00000000000000bf0000c03e00000000000000bf0000c8be00000000000000000000803f0000483f00007c3f0000303e0000803f0000803e0000603f0000803f00005c3f000000000000603e000000000000a03d0000803f000000000000603f000000000000e03d
     m_Bindpose: []
     textureRect:
       serializedVersion: 2
@@ -2380,6 +2388,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_TDS.GameplayScene.SkillSystem.Weapon
   projectile: {fileID: 0}
+  owner: {fileID: 0}
   findTargetType: 1
   attackRange: 3
   attackCooldown: 1
@@ -2388,6 +2397,14 @@ MonoBehaviour:
   critRate: 0
   critDamage: 1.5
   projectileAssetName: 
+  projectileContext:
+    Speed: 5
+    StartDuration: 0
+    Duration: 0
+    EndDuration: 0
+    SizeScale: 1
+    CollisionDelayInit: 0
+    CollisionDuration: 0
   resetTiming: 0
   projectileDistanceStep: 0
   projectileAngleStep: 0
@@ -2682,6 +2699,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_TDS.GameplayScene.SkillSystem.Weapon
   projectile: {fileID: 3115970097683544099, guid: 82aba66d7e210c14c8093aaf15689757, type: 3}
+  owner: {fileID: 0}
   findTargetType: 1
   attackRange: 3
   attackCooldown: 1
@@ -2690,6 +2708,14 @@ MonoBehaviour:
   critRate: 0
   critDamage: 1.5
   projectileAssetName: 
+  projectileContext:
+    Speed: 5
+    StartDuration: 0
+    Duration: 0
+    EndDuration: 0
+    SizeScale: 1
+    CollisionDelayInit: 0
+    CollisionDuration: 0
   resetTiming: 0
   projectileDistanceStep: 0
   projectileAngleStep: 0
@@ -2847,6 +2873,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_TDS.GameplayScene.SkillSystem.Weapon
   projectile: {fileID: 0}
+  owner: {fileID: 0}
   findTargetType: 1
   attackRange: 3
   attackCooldown: 1
@@ -2855,6 +2882,14 @@ MonoBehaviour:
   critRate: 0
   critDamage: 1.5
   projectileAssetName: 
+  projectileContext:
+    Speed: 5
+    StartDuration: 0
+    Duration: 0
+    EndDuration: 0
+    SizeScale: 1
+    CollisionDelayInit: 0
+    CollisionDuration: 0
   resetTiming: 0
   projectileDistanceStep: 0
   projectileAngleStep: 0

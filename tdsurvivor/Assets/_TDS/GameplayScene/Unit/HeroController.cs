@@ -6,12 +6,10 @@ namespace _TDS.GameplayScene.Unit
     public class HeroController : MonoBehaviour
     {
         [SerializeField] private Weapon weapon;
-        [SerializeField] private HeroType heroType;
 
         private int forcedTargetEntity = -1;
         private bool isInitialized;
 
-        public HeroType HeroType => heroType;
         public Weapon Weapon => weapon;
         public bool IsInitialized => isInitialized;
 

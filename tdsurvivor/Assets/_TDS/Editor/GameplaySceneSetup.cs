@@ -248,17 +248,10 @@ namespace _TDS.Editor
                 return;
             }
 
+            // Stat của Weapon giờ nạp từ WeaponConfig/SkillConfig theo weaponId lúc runtime,
+            // editor chỉ cần gán đúng id (dùng hero id làm weaponId – chỉnh nếu mapping khác).
             SerializedObject wso = new SerializedObject(weapon);
-            SetValue(wso, "attackRange", data.attackRange);
-            SetValue(wso, "attackCooldown", data.attackCooldown);
-            SetValue(wso, "attack", data.damage);
-            SetValue(wso, "critRate", data.critRate);
-            SetValue(wso, "critDamage", data.critDamage);
-            SetValue(wso, "projectileAssetName", data.projectileAsset);
-            SetValue(wso, "spreadProjectileCount", data.spreadCount);
-            SetValue(wso, "parallelProjectileCount", data.parallelCount);
-            SetValue(wso, "explosiveRadius", data.explosiveRadius);
-            SetValue(wso, "explosiveDamageScale", data.explosiveDamageScale);
+            SetValue(wso, "weaponId", data.id);
             wso.ApplyModifiedPropertiesWithoutUndo();
 
             EditorUtility.SetDirty(hero.gameObject);
