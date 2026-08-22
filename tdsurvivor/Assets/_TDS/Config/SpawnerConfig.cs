@@ -20,9 +20,9 @@ namespace _TDS.Config
         {
             cachedSpawners = new Dictionary<int, List<SpawnerConfigData>>();
 
-            foreach (var spawner in spawners)
+            foreach (SpawnerConfigData spawner in spawners)
             {
-                if (cachedSpawners.TryGetValue(spawner.level, out var list))
+                if (cachedSpawners.TryGetValue(spawner.level, out List<SpawnerConfigData> list))
                 {
                     list.Add(spawner);
                 }
@@ -54,7 +54,7 @@ namespace _TDS.Config
             
             config.OnMappingValue();
 
-            foreach (var spawner in spawners)
+            foreach (SpawnerConfigData spawner in spawners)
             {
                 if (config.TryGetMonster(spawner.monster, out MonsterConfigData monster))
                 {

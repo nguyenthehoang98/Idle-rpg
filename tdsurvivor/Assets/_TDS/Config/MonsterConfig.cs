@@ -19,9 +19,9 @@ namespace _TDS.Config
         {
             cachedMonsters = new Dictionary<int, MonsterConfigData>();
 
-            foreach (var m in monsters)
+            foreach (MonsterConfigData m in monsters)
             {
-                cachedMonsters.Add(m.id, m);
+                if(!cachedMonsters.TryAdd(m.id, m)) Debug.LogError($"MonsterConfig couldn't be added to heroes '{m.id}'");
             }
         }
 

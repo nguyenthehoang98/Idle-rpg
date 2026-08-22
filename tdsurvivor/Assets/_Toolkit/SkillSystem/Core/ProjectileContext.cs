@@ -1,5 +1,6 @@
 ﻿namespace _Toolkit.SkillSystem.Core
 {
+    [System.Serializable]
     public struct ProjectileContext
     {
         public float Speed;

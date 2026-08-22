@@ -19,12 +19,9 @@ namespace _TDS.Config
         {
             cached = new Dictionary<int, SkillConfigData>();
 
-            foreach (SkillConfigData skillData in skills)
+            foreach (SkillConfigData s in skills)
             {
-                if (!cached.TryAdd(skillData.skillId, skillData))
-                {
-                    Debug.LogError($"Duplicate skill '{skillData.skillId}'");
-                }
+                if (!cached.TryAdd(s.skillId, s)) Debug.LogError($"SkillConfig couldn't be added to skill '{s.skillId}'");
             }
         }
 

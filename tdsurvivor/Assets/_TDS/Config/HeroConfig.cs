@@ -19,9 +19,9 @@ namespace _TDS.Config
         {
             cachedHeroes = new Dictionary<int, HeroConfigData>();
 
-            foreach (var h in heroes)
+            foreach (HeroConfigData h in heroes)
             {
-                cachedHeroes[h.id] = h;
+                if (!cachedHeroes.TryAdd(h.id, h)) Debug.LogError($"Hero config couldn't be added to heroes '{h.id}'");
             }
         }
 

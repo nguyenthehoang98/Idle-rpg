@@ -193,9 +193,6 @@ namespace _TDS.GameplayScene.SkillSystem
         /// <summary>Áp dụng một upgrade cụ thể, tăng level, cập nhật group/power/outline.</summary>
         public virtual bool UpgradeData(WeaponUpgradeData data)
         {
-            if (data == null) return false;
-
-            data.Increase();
             appliedUpgrades.Add(data);
             level++;
             UpdateGroupData();
