@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using _TDS.Core;
+using _TDS.GameplayScene.SkillSystem;
 using _Toolkit.Avoidance;
 using UnityEngine;
 
@@ -7,14 +8,14 @@ namespace _TDS.GameplayScene.Unit
 {
     /// <summary>
     /// SC04 - click/tap để force hướng tấn công:
-    /// chọn quái gần điểm nhấp nhất cho tất cả hero.
-    /// Tap chỗ trống -> bỏ force, hero tự tìm mục tiêu như cũ.
+    /// chọn quái gần điểm nhấp nhất cho tất cả weapon.
+    /// Tap chỗ trống -> bỏ force, weapon tự tìm mục tiêu như cũ.
     /// </summary>
     public class ForceTargetInput : MonoBehaviour
     {
         [SerializeField] private float tapRadius = 1.5f;
 
-        private readonly List<HeroController> heroes = new List<HeroController>();
+        private readonly List<Weapon> heroes = new List<Weapon>();
         private Camera cam;
 
         private void Update()
@@ -40,12 +41,12 @@ namespace _TDS.GameplayScene.Unit
             if (runner == null) return;
 
             heroes.Clear();
-            heroes.AddRange(FindObjectsOfType<HeroController>());
+            heroes.AddRange(FindObjectsOfType<Weapon>());
             if (heroes.Count == 0) return;
 
             int forced = FindNearestMonster(runner, worldPos);
 
-            foreach (HeroController hero in heroes)
+            foreach (Weapon hero in heroes)
             {
                 if (forced > 0) hero.ForceTarget(forced);
                 else hero.ClearForceTarget();

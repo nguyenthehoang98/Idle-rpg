@@ -17,7 +17,8 @@ namespace _TDS.Editor
     /// <summary>
     /// Menu 1-click để scene GamePlay chạy được ngay:
     /// GameManager + BaseCore + WaveManager + GameplayUI + ForceTargetInput
-    /// + đủ 5 hero theo HeroConfig.json (clone từ hero mẫu có sẵn trong scene).
+    /// + đủ weapon theo HeroConfig.json (clone từ weapon mẫu có sẵn trong scene).
+    /// Weapon là thực thể tấn công (thay cho Hero) – tự find target + auto attack.
     /// Idempotent - cái nào đã có thì bỏ qua.
     /// </summary>
     public static class GameplaySceneSetup
@@ -190,20 +191,20 @@ namespace _TDS.Editor
             GameObject container = GameObject.Find("Heros");
             if (container == null) container = new GameObject("Heros");
 
-            // Hero mẫu: hero đã có HeroController + Weapon trong scene
-            HeroController template = null;
-            List<HeroController> existing = new List<HeroController>();
+            // Weapon mẫu: GO có component Weapon trong scene (weapon là thực thể tấn công, không còn Hero)
+            Weapon template = null;
+            List<Weapon> existing = new List<Weapon>();
             foreach (Transform child in container.transform)
             {
-                HeroController hero = child.GetComponent<HeroController>();
-                if (hero == null) continue;
-                existing.Add(hero);
-                if (template == null && hero.GetComponentInChildren<Weapon>() != null) template = hero;
+                Weapon w = child.GetComponentInChildren<Weapon>();
+                if (w == null) continue;
+                existing.Add(w);
+                if (template == null) template = w;
             }
 
             if (template == null)
             {
-                Debug.LogError("[Setup] Need at least 1 hero with HeroController + Weapon under 'Heros' as template");
+                Debug.LogError("[Setup] Need at least 1 GO with Weapon under 'Heros' as template");
                 return;
             }
 
@@ -211,51 +212,47 @@ namespace _TDS.Editor
             {
                 WeaponUpgradeData data = config.heroes[i];
 
-                HeroController hero;
+                Weapon weapon;
                 if (i < existing.Count)
                 {
-                    hero = existing[i];
+                    weapon = existing[i];
                 }
                 else
                 {
                     GameObject go = Object.Instantiate(template.gameObject, container.transform);
                     go.name = data.name;
-                    hero = go.GetComponent<HeroController>();
-                    existing.Add(hero);
+                    weapon = go.GetComponentInChildren<Weapon>();
+                    existing.Add(weapon);
                 }
 
-                ApplyHeroConfig(hero, data, i, config.heroes.Count);
+                ApplyWeaponConfig(weapon.gameObject, data, i, config.heroes.Count);
             }
         }
 
-        private static void ApplyHeroConfig(HeroController hero, WeaponUpgradeData data, int index, int total)
+        private static void ApplyWeaponConfig(GameObject go, WeaponUpgradeData data, int index, int total)
         {
-            Undo.RecordObject(hero, "Setup Heroes");
-            hero.name = data.name;
+            Undo.RecordObject(go.transform, "Setup Weapons");
+            go.name = data.name;
 
             // Đặt quanh base thành vòng tròn
             float angle = (360f * index / total) * Mathf.Deg2Rad;
-            hero.transform.position = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * 2.5f;
+            go.transform.position = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * 2.5f;
 
-            SerializedObject hso = new SerializedObject(hero);
-            hso.FindProperty("heroType").intValue = (int)data.heroType;
-            hso.ApplyModifiedPropertiesWithoutUndo();
-
-            Weapon weapon = hero.GetComponentInChildren<Weapon>();
+            Weapon weapon = go.GetComponentInChildren<Weapon>();
             if (weapon == null)
             {
-                Debug.LogWarning($"[Setup] Hero '{data.name}' has no Weapon, skip stats");
+                Debug.LogWarning($"[Setup] '{data.name}' has no Weapon, skip stats");
                 return;
             }
 
-            // Stat của Weapon giờ nạp từ WeaponConfig/SkillConfig theo weaponId lúc runtime,
-            // editor chỉ cần gán đúng id (dùng hero id làm weaponId – chỉnh nếu mapping khác).
+            // Stat của Weapon nạp từ WeaponConfig/SkillConfig theo weaponId lúc runtime,
+            // editor chỉ cần gán đúng id.
             SerializedObject wso = new SerializedObject(weapon);
             SetValue(wso, "weaponId", data.weaponId);
             wso.ApplyModifiedPropertiesWithoutUndo();
 
-            EditorUtility.SetDirty(hero.gameObject);
-            Debug.Log($"[Setup] Hero '{data.name}' (type {data.heroType}) configured");
+            EditorUtility.SetDirty(go);
+            Debug.Log($"[Setup] Weapon '{data.name}' configured");
         }
 
         private static void SetValue(SerializedObject so, string prop, float value)

@@ -39,7 +39,7 @@ namespace _TDS.GameplayScene.SkillSystem
         [SerializeField] protected int weaponId;
 
         [Header("Owner")]
-        [SerializeField] protected HeroController owner; // SC04 - force attack direction
+        // SC04 - force target: weapon tự quản (không còn HeroController)
 
         [Header("Find Target")]
         [SerializeField] protected float retryFindTargetDelay = 0.2f;
@@ -97,6 +97,9 @@ namespace _TDS.GameplayScene.SkillSystem
         protected bool hasTarget;
         protected float cooldownTimer;
 
+        // SC04 - mục tiêu bị ép (force target)
+        private int forcedTargetEntity = -1;
+
         // Mục tiêu hiện tại (entity + destination)
         protected int primaryTargetEntity;
         protected int secondaryTargetEntity;
@@ -129,6 +132,15 @@ namespace _TDS.GameplayScene.SkillSystem
         public int PrimaryTargetEntity => primaryTargetEntity;
         public int SecondaryTargetEntity => secondaryTargetEntity;
 
+        /// <summary>Ép weapon nhắm mục tiêu cụ thể (-1 = bỏ ép, tự tìm như cũ).</summary>
+        public void ForceTarget(int entityId) => forcedTargetEntity = entityId;
+
+        public void ClearForceTarget() => forcedTargetEntity = -1;
+
+        public bool HasForcedTarget => forcedTargetEntity >= 0;
+
+        public int ForcedTargetEntity => forcedTargetEntity;
+
         /// <summary>deltaTime của riêng weapon – tôn trọng Pause + TimeScale.</summary>
         protected float DeltaTime => isPaused || Mathf.Approximately(timeScale, 0f) ? 0f : Time.deltaTime * timeScale;
 
@@ -143,7 +155,6 @@ namespace _TDS.GameplayScene.SkillSystem
          * ===================================================================================== */
         protected virtual void Awake()
         {
-            if (owner == null) owner = GetComponentInParent<HeroController>();
             if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
             outlineRenderer = spriteRenderer;
             if (animator == null) animator = GetComponent<Animator>();
@@ -449,14 +460,14 @@ namespace _TDS.GameplayScene.SkillSystem
             float range = EffectiveAttackRange();
             float rangeSqr = range * range;
 
-            // SC04: mục tiêu bị ép (force target) được ưu tiên trục tiếp nếu còn sống và trong tàm
-            if (owner != null && owner.HasForcedTarget && runner.IsAlive(owner.ForcedTargetEntity)
-                && runner.TryGetAgent(owner.ForcedTargetEntity, out AgentData forcedData))
+            // SC04: mục tiêu bị ép (force target) được ưu tiên trực tiếp nếu còn sống và trong tầm
+            if (HasForcedTarget && runner.IsAlive(forcedTargetEntity)
+                && runner.TryGetAgent(forcedTargetEntity, out AgentData forcedData))
             {
                 Vector2 forcedPos = new Vector2(forcedData.position.x, forcedData.position.y);
                 if ((forcedPos - (Vector2)center).sqrMagnitude <= rangeSqr)
                 {
-                    primaryTargetEntity = owner.ForcedTargetEntity;
+                    primaryTargetEntity = forcedTargetEntity;
                     primaryDestination = forcedPos;
                     hasTarget = true;
                     return true;
