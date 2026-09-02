@@ -4,6 +4,7 @@ using System.Diagnostics;
 using _GameToolkit.ResourceManagement;
 using _GameToolkit.Share;
 using _GameToolkit.Updater;
+using _TDS.Battle;
 using _TDS.Gameplay.Manager;
 using _TDS.Gameplay.Model;
 using _TDS.Gameplay.Utils;

@@ -17,10 +17,6 @@ namespace _TDS.GameConfig
         public float moveSpeed;
         public float stopDistance;
 
-        // Presentation
-        public string deathAudioClipName;
-        public string deathVfxName;
-
         // Gameplay
         public float damageCooldown;
         public float attackRange;

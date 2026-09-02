@@ -732,6 +732,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1168235904}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1243898919
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1243898920}
+  - component: {fileID: 1243898921}
+  m_Layer: 0
+  m_Name: AgentMovementRunner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1243898920
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1243898919}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1977149735}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1243898921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1243898919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63ad13bd5b0b45ea84537606168407f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_TDS.Battle.AgentMovementRunner
+  stopDistance: 1.6
+  simulator:
+    enableGizmos: 1
+    destination:
+      x: 0
+      y: 0
 --- !u!1 &1331360984
 GameObject:
   m_ObjectHideFlags: 0
@@ -976,6 +1026,7 @@ MonoBehaviour:
   maxTicksPerFrame: 5
   updatables:
   - {fileID: 286812850}
+  - {fileID: 1243898921}
   - {fileID: 1502112196}
   - {fileID: 1880548099}
 --- !u!114 &1708898554
@@ -1076,6 +1127,7 @@ Transform:
   - {fileID: 1502112195}
   - {fileID: 286812849}
   - {fileID: 1880548098}
+  - {fileID: 1243898920}
   m_Father: {fileID: 1708898550}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2025598561

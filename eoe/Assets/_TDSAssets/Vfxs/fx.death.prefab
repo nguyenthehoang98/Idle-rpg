@@ -118,7 +118,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6045341589512146165}
         m_TargetAssemblyTypeName: _Game.GamePlay.Model.EventDestroyObject, Assembly-CSharp
-        m_MethodName: Trigger
+        m_MethodName: Release
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

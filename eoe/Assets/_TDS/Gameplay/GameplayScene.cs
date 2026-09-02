@@ -12,16 +12,14 @@ namespace _TDS.Gameplay
     {
         private UpdateRunner runner;
         private SpawnMonsterRunner spawnRunner;
-
-        private AgentManager agentManager;
+        private AgentMovementRunner agentRunner;
         private int level = 1;
 
         private void Awake()
         {
             runner = GetComponent<UpdateRunner>();
             runner.TryGetRunner(out spawnRunner);
-            
-            agentManager = new AgentManager();
+            runner.TryGetRunner(out agentRunner);
         }
 
         private void OnEnable()
@@ -44,9 +42,9 @@ namespace _TDS.Gameplay
         {
             Stopwatch sw = Stopwatch.StartNew();
 
-            await agentManager.Initialize();
+            agentRunner.Initialize();
 
-            await spawnRunner.LoadLevelAsync(level);
+            await spawnRunner.LoadLevelAsync(agentRunner, level);
             
             sw.Stop();
             
@@ -58,7 +56,7 @@ namespace _TDS.Gameplay
         private void OnDestroy()
         {
             spawnRunner.Dispose();
-            agentManager.Dispose();
+            agentRunner.Dispose();
         }
 
         private void TimeScaleChanged(float deltaTime)

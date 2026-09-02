@@ -24,7 +24,7 @@
         2,
         3
       ],
-      "RandomPortal": 0,
+      "RandomPortal": 1,
       "SpawnStartTime": 1.0,
       "SpawnEndTime": 5.0
     },
@@ -52,7 +52,7 @@
         6,
         7
       ],
-      "RandomPortal": 7,
+      "RandomPortal": 4,
       "SpawnStartTime": 3.0,
       "SpawnEndTime": 6.0
     },
@@ -108,7 +108,7 @@
         2,
         3
       ],
-      "RandomPortal": 2,
+      "RandomPortal": 3,
       "SpawnStartTime": 10.0,
       "SpawnEndTime": 12.0
     },
@@ -136,7 +136,7 @@
         6,
         7
       ],
-      "RandomPortal": 4,
+      "RandomPortal": 7,
       "SpawnStartTime": 13.0,
       "SpawnEndTime": 18.0
     }

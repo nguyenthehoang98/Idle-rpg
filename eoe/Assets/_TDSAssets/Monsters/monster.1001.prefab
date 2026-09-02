@@ -61,7 +61,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f12ceaa8174b824195954f73695067d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game._GamePlay2.Monster
-  scaleTransform: {fileID: 6619085215776799793}
+  scale: {fileID: 6619085215776799793}
   OnBeHit:
     m_PersistentCalls:
       m_Calls:
@@ -80,7 +80,7 @@ MonoBehaviour:
   OnDeath:
     m_PersistentCalls:
       m_Calls: []
-  radius: 0.3
+  deathVfx: {fileID: 3520684215985857136, guid: d4e05df0a033f2849a09f73d90249352, type: 3}
 --- !u!1 &7311540164983544154
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,6 +149,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5667090380951180666
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -194,6 +195,7 @@ SpriteRenderer:
   m_SortingLayerID: -723229829
   m_SortingLayer: 1
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: 100045609, guid: 1528c5f7a83bebe479476df603ec9052, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -203,7 +205,6 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &6001956111885337862
 MonoBehaviour:
@@ -246,6 +247,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cc6819e64e4c44beb63ea2ef45e1a6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LitMotion.Animation::LitMotion.Animation.LitMotionAnimation
+  debug: 0
   isReverseWhenStop: 1
   autoStopMode: 1
   autoPlayMode: 0
@@ -261,6 +263,7 @@ MonoBehaviour:
     - rid: 607417095885946943
       type: {class: SpriteRendererMaterialAnimation, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
       data:
+        type: 
         displayName: -> float 1
         enabled: 1
         target: {fileID: 5667090380951180666}
@@ -307,6 +310,7 @@ MonoBehaviour:
     - rid: 607417095885946946
       type: {class: SpriteRendererMaterialAnimation, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
       data:
+        type: 
         displayName: -> float 0
         enabled: 1
         target: {fileID: 5667090380951180666}

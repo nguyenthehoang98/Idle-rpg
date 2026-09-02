@@ -1,11 +1,11 @@
 using _GameToolkit.ResourceManagement;
 using UnityEngine;
 
-namespace _TDS.Gameplay.Model
+namespace _TDS.Utils
 {
-    public class EventDestroyObject : MonoBehaviour
+    public class PoolObject : MonoBehaviour
     {
-        public void Trigger()
+        public void Release()
         {
             Pool.Destroy(gameObject);
         }

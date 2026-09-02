@@ -5,8 +5,6 @@ using _GameToolkit.ResourceManagement;
 using _GameToolkit.Share;
 using _GameToolkit.Updater;
 using _TDS.GameConfig;
-using _TDS.Gameplay.Manager;
-using _TDS.Gameplay.Model;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -26,6 +24,7 @@ namespace _TDS.Battle
         private List<SpawnConfigData> currents;
         private SpawnTimer[] timers;
 
+        private AgentMovementRunner agentMovementRunner;
         private SpawnConfig spawnConfig;
         private MonsterConfig monsterConfig;
         private int maximumWave;
@@ -71,8 +70,10 @@ namespace _TDS.Battle
             }
         }
 
-        public async UniTask LoadLevelAsync(int level)
+        public async UniTask LoadLevelAsync(AgentMovementRunner agent, int level)
         {
+            agentMovementRunner = agent;
+            
             monsterConfig = ConfigManager.Get<MonsterConfig>();
            
             spawnConfig = ConfigManager.Get<SpawnConfig>();
@@ -115,13 +116,6 @@ namespace _TDS.Battle
                         continue;
                     }
 
-                    if (!string.IsNullOrEmpty(monsterData.deathVfxName) && paths.Add(monsterData.deathVfxName))
-                    {
-                        go = await AssetLoader.GetAssetCached<GameObject>(monsterData.deathVfxName);
-                        
-                        Pool.RegisterPool(go, true);
-                    }
-
                     go = await AssetLoader.GetAssetCached<GameObject>(monsterData.prefabName);
 
                     cachedMonster.TryAdd(monsterId, go);
@@ -129,12 +123,6 @@ namespace _TDS.Battle
                     if (paths.Add(monsterData.prefabName))
                     {
                         Pool.RegisterPool(go, true);
-                    }
-
-                    if (!string.IsNullOrEmpty(monsterData.deathAudioClipName) &&
-                        paths.Add(monsterData.deathAudioClipName))
-                    {
-                        await AssetLoader.GetAssetCached<AudioClip>(monsterData.deathAudioClipName);
                     }
                 }
             }
@@ -176,7 +164,7 @@ namespace _TDS.Battle
 
             monsterConfig.TryGetMonster(data.monsterId, out MonsterConfigData monsterData);
 
-            AgentManager.Create_Agent(instance.GetComponent<Monster>(), data.scale, monsterData);
+            agentMovementRunner.Create_Agent(instance.GetComponent<Monster>(), data.scale, monsterData);
         }
         
         private void LoadWaveConfigData(int wave)
