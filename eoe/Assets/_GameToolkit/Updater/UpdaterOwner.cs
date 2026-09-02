@@ -1,23 +1,31 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
-namespace _KITSystem.Schedule
+namespace _GameToolkit.Updater
 {
-    public class TickSystemOwner : MonoBehaviour
+    public class UpdaterOwner : MonoBehaviour
     {
+        [SerializeField] private bool playOnStart = true;
+        
         [SerializeField] private bool useUnscaledTime = false;
+       
         [SerializeField] private int targetFPS = 30;
+       
         [SerializeField, Range(1, 5)] protected float loop = 1;
+      
         [SerializeField, Range(1, 10)] private int maxTicksPerFrame = 5;
-        [SerializeReference] public List<ITickable> tickables = new List<ITickable>();
-
+       
+        [SerializeField] private List<BaseUpdatable> updatables = new List<BaseUpdatable>();
+        
         private bool isPaused = true;
+        
         private float accumulator;
+        
         private int tickableCount;
 
         public event Action<float> OnChangeScaleTime;
+        
         public event Action<bool> OnChangePause;
 
         public bool IsPaused
@@ -26,12 +34,14 @@ namespace _KITSystem.Schedule
             set
             {
                 isPaused = value;
+                
                 OnChangePause?.Invoke(isPaused);
             }
         }
 
         public float TickInterval { get; private set; }
-        public float Time {get; private set;}
+        
+        public static float Time { get; private set; }
 
         public float Loop
         {
@@ -46,27 +56,22 @@ namespace _KITSystem.Schedule
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            if(Application.isPlaying) OnChangeScaleTime?.Invoke(loop);
+            if (Application.isPlaying) OnChangeScaleTime?.Invoke(loop);
         }
 #endif
-
-        public async Task Initialize()
-        {
-            Task[] tasks = new Task[tickables.Count];
-            for (int i = 0; i < tickables.Count; i++)
-            {
-                tasks[i] = tickables[i].Initialize();
-            }
-
-            await Task.WhenAll(tasks);
-        }
 
         private void Awake()
         {
             Application.runInBackground = true;
             Application.targetFrameRate = 60;
             TickInterval = 1f / targetFPS;
-            tickableCount = tickables.Count;
+            tickableCount = updatables.Count;
+            Time = 0;
+        }
+
+        private void Start()
+        {
+            if (playOnStart) IsPaused = false;
         }
 
         private void Update()
@@ -85,7 +90,7 @@ namespace _KITSystem.Schedule
             {
                 for (int i = 0; i < tickableCount; i++)
                 {
-                    tickables[i].Tick(TickInterval);
+                    updatables[i].Tick(TickInterval);
                 }
 
                 accumulator -= TickInterval;
@@ -100,14 +105,6 @@ namespace _KITSystem.Schedule
 
                     break;
                 }
-            }
-        }
-
-        private void OnDisable()
-        {
-            foreach (var tickable in tickables)
-            {
-                tickable.Dispose();
             }
         }
 
@@ -127,11 +124,11 @@ namespace _KITSystem.Schedule
             }
         }
 
-        public bool TryGetTickable<T>(out T tickable) where T : ITickable
+        public bool TryGet<T>(out T tickable) where T : BaseUpdatable
         {
-            for (int i = 0; i < tickables.Count; i++)
+            for (int i = 0; i < updatables.Count; i++)
             {
-                if (tickables[i] is T tt)
+                if (updatables[i] is T tt)
                 {
                     tickable = tt;
                     return true;

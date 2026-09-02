@@ -1,5 +1,5 @@
 using _GameToolkit.Resource;
-using _KITSystem.Utils;
+using _GameToolkit.Utils;
 using UnityEngine;
 
 namespace _TDS.Gameplay.Model
@@ -10,7 +10,7 @@ namespace _TDS.Gameplay.Model
         
         private void OnEnable()
         {
-            this.WaitInvoke(duration, () => { Pool.Destroy(gameObject); });
+            Timing.CallDelayed(duration, () => { Pool.Destroy(gameObject); });
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using _GameToolkit.GameConfig;
 using _GameToolkit.Resource;
-using _KITSystem.Schedule;
 using _KITSystem.Utils;
 using _TDS.GameConfig;
 using _TDS.Gameplay.Data;
@@ -14,7 +13,7 @@ using Object = UnityEngine.Object;
 namespace _TDS.Gameplay.Manager
 {
     [Serializable]
-    public sealed class SpawnManager : ITickable
+    public sealed class SpawnManager
     {
         [SerializeField] private Transform[] portals;
 

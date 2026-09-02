@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using _KITSystem.Utils;
+using System.Runtime.CompilerServices;
 using RVO;
 using Unity.Mathematics;
 using UnityEngine;
@@ -15,20 +15,11 @@ namespace _GameToolkit.Avoidance
         [SerializeField] private bool enableGizmos;
 #endif
         [SerializeField] private float2 destination;
-        [SerializeField] private float defaultAgentRadius = 0.5f;
-        [SerializeField, Range(0.1f, 0.9f), Tooltip("Hệ số bỏ qua việc kiểm tra khoảng cách")]
-        private float deltaIgnoreCheckNeighborDistance = 0.2f;
-        /*[SerializeField, Range(0.1f, 1.0f), Tooltip("Khoảng cách bắt đầu kiểm soát việc tắc nghẽn di chuyển")]
-        private float deltaStuckDistance = 0.2f;
-        [SerializeField, Range(1, 20), Tooltip("Số frame được tính là stop")]
-        private int stuckFrameCount;*/
 
         private Dictionary<int, AgentData> containers = new Dictionary<int, AgentData>();        
         private List<int> agents = new List<int>();
         private Simulator simulator;
         private IGrid grid;
-        private float ignoreCheckNeighborDistanceSq;
-        //private float deltaDistanceStuckSq;
         
         public virtual void Tick(float deltaTime)
         {
@@ -100,10 +91,7 @@ namespace _GameToolkit.Avoidance
             grid = new FixedUniformGrid(1);
             simulator = new Simulator();
             simulator.SetTimeStep(0.25f);
-            simulator.SetAgentDefaults(5f, 10, 10f, 10f, defaultAgentRadius, 1f, float2.zero);
-            float a = 2 * (1 + deltaIgnoreCheckNeighborDistance) * defaultAgentRadius;
-            ignoreCheckNeighborDistanceSq = a * a;
-            //deltaDistanceStuckSq = deltaStuckDistance * deltaStuckDistance;
+            simulator.SetAgentDefaults(5f, 10, 10f, 10f, 1, 1f, float2.zero);
         }
 
         private void ReachedGoal()
@@ -114,8 +102,8 @@ namespace _GameToolkit.Avoidance
 
                 if (temp.isStopped) continue;
 
-                float2 previous = temp.position;
                 float2 position = simulator.GetAgentPosition(agent);
+             
                 temp.position = position;
 
                 grid.Insert(agent, new float2(position.x, position.y));
@@ -128,53 +116,6 @@ namespace _GameToolkit.Avoidance
                     continue;
                 }
 
-                int query = grid.Query(position, new float2(3, 3), out int[] results);
-                int frontBlockedCount = 0;
-
-                float2 dirToGoal = MathUtils.NormalizeSafe(-position);
-                for (int i1 = 0; i1 < query; i1++)
-                {
-                    int otherId = results[i1];
-                    if (otherId == agent)
-                        continue;
-
-                    // chỉ quan tâm frontier
-                    if (containers.TryGetValue(otherId, out AgentData other))
-                    {
-                        if (!other.isStopped) continue;
-                    }
-
-                    float2 otherPos = simulator.GetAgentPosition(otherId);
-                    float2 toOther = otherPos - position;
-                    float lengthsq = math.lengthsq(toOther);
-                    if (lengthsq > ignoreCheckNeighborDistanceSq)
-                        continue;
-
-                    float dot = math.dot(dirToGoal, MathUtils.NormalizeSafe(toOther));
-                    if (dot < 0.5f)
-                        continue;
-
-                    frontBlockedCount++;
-                }
-
-                /*float movedDistanceSq = math.distancesq(position, previous);
-                bool stuck = movedDistanceSq < deltaDistanceStuckSq;
-                bool crowdedFront = frontBlockedCount >= 2;
-                if (crowdedFront && stuck)
-                {
-                    temp.stuckFrames++;
-                }
-                else
-                {
-                    temp.stuckFrames = 0;
-                }
-
-                if (temp.stuckFrames >= stuckFrameCount)
-                {
-                    temp.isStopped = true;
-                    StopAgent(agent);
-                }*/
-
                 containers[agent] = temp;
             }
         }
@@ -184,7 +125,7 @@ namespace _GameToolkit.Avoidance
             foreach (int agent in agents)
             {
                 float2 position = simulator.GetAgentPosition(agent);
-                float2 goalVector = MathUtils.NormalizeSafe(destination - position);
+                float2 goalVector = NormalizeSafe(destination - position);
                 if (containers[agent].isStopped)
                 {
                 }
@@ -240,6 +181,14 @@ namespace _GameToolkit.Avoidance
         public virtual void Dispose()
         {
             simulator?.Dispose();
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static Vector2 NormalizeSafe(Vector2 v)
+        {
+            float magSq = v.sqrMagnitude;
+            if (magSq < 1e-6f) return Vector2.zero;
+            return v * (1.0f / Mathf.Sqrt(magSq));
         }
     }
     

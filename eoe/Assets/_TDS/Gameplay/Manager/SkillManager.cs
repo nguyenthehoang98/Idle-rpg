@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using _GameToolkit.Resource;
 using _GameToolkit.SkillSystem.Core;
 using _GameToolkit.SkillSystem.Imp;
+using _GameToolkit.Utils;
 using _KITSystem.Entity;
-using _KITSystem.Schedule;
 using _KITSystem.Utils;
 using _TDS.GameConfig;
 using _TDS.Gameplay.Data;
@@ -18,14 +18,14 @@ using Random = UnityEngine.Random;
 namespace _TDS.Gameplay.Manager
 {
     [Serializable]
-    public sealed class SkillManager : Spu, ITickable
+    public sealed class SkillManager : Spu
     {
         static SkillManager instance;
 
         public event Action<PostDamageParams> OnPostDamage;
         public event Action<PostEarnExpParams> OnPostEarnExp;
 
-        private Dictionary<int, Coroutine> coroutinesResetFutureHealth = new Dictionary<int, Coroutine>();
+        private Dictionary<int, CoroutineHandle> coroutinesResetFutureHealth = new Dictionary<int, CoroutineHandle>();
         private IQuery query;
         private HashSet<string> names;
 
@@ -341,20 +341,18 @@ namespace _TDS.Gameplay.Manager
 
             healthData.PredictedHealth -= damage;
 
-            MonoBehaviour pool = Pool.Instance;
-            
             if (coroutinesResetFutureHealth.TryGetValue(entityTarget, out var coroutine))
             {
-                pool.StopCoroutine(coroutine);
+                Timing.KillCoroutines(coroutine);
             }
 
-            coroutinesResetFutureHealth[entityTarget] = pool.WaitInvoke(1, () =>
+            coroutinesResetFutureHealth[entityTarget] = Timing.CallDelayed(1, () =>
             {
                 if (!EntityManager.IsEntityAlive(entityTarget)) return;
-                
+
                 ref HealthData healthData = ref ComponentManager<HealthData>.Get(entityTarget);
                 healthData.PredictedHealth = healthData.CurrentHealth;
-            });
+            }, null);
         }
         
         private bool OnDamageEntityFunction(SkillData skillData, SkillRuntimeData runtimeData,

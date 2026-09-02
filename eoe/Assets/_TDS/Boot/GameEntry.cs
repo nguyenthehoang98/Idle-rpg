@@ -1,6 +1,7 @@
 using _GameToolkit.GameConfig;
 using _GameToolkit.Resource;
-using _KITSystem.Utils;
+using _GameToolkit.Startup;
+using _TDS.GameConfig;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -9,62 +10,65 @@ using UnityEditor.SceneManagement;
 #endif
 namespace _TDS.Boot
 {
-    public class GameEntry : KitEntryScene
+    public class GameEntry : BootScene
     {
-        private float elapsed = 1;
+        private float elapsedTime = 1;
         
         private bool isLoadingScene = false;
         
         [SerializeField] private GameObject loadingScene;
-        
-        protected override void OnNewGame()
-        {
-            // todo: khởi tạo userdata
-        }
-
-        protected override void InitService()
-        {
-            // Tạo các service mạng
-        }
 
         protected override async void OnStart()
         {
+            base.OnStart();
+            
             AssetManager.SetAssetLocal();
             
-            ChangeSceneAsync("GameplayScene");
+            LoadSceneAsync("GameplayScene");
             
             isLoadingScene = true;
-            
-            await ConfigManager.Load(new string[] { "MonsterConfig", "LevelConfig", "WeaponConfig", "PlayerConfig" });
+
+            await ConfigManager.Load(new string[]
+            {
+                nameof(MonsterConfig), 
+                nameof(LevelConfig), 
+                nameof(WeaponConfig), 
+                nameof(PlayerConfig),  
+            });
         }
 
         private void Update()
         {
             if (isLoadingScene)
             {
-                elapsed -= Time.deltaTime;
-                if (elapsed <= 0)
-                {
-                    StopChangeScene();
-                    isLoadingScene = false;
-                }
+                elapsedTime -= Time.deltaTime;
+              
+                if (elapsedTime <= 0) CloseLoadingScene();
             }
         }
-
-        public override void HideLoadingScene()
+        
+        protected override void OnStartLoadingScene()
         {
-            if (loadingScene != null && loadingScene.activeInHierarchy)
-            {
-                loadingScene.gameObject.SetActive(false);
-            }
-        }
-
-        public override void ShowLoadingScene()
-        {
+            base.OnStartLoadingScene();
+            
+            isLoadingScene = true;
+            
             if (loadingScene != null && loadingScene.activeInHierarchy)
             {
                 loadingScene.gameObject.SetActive(true);
             }
+        }
+        
+        protected override void OnCloseLoadingScene()
+        {
+            base.OnCloseLoadingScene();
+            
+            if (loadingScene != null && loadingScene.activeInHierarchy)
+            {
+                loadingScene.gameObject.SetActive(false);
+            }
+            
+            isLoadingScene = false;
         }
 
 #if UNITY_EDITOR

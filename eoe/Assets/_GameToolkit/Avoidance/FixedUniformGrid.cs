@@ -1,20 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace _GameToolkit.Avoidance
 {
-    [System.Serializable]
     public class FixedUniformGrid : IGrid
     {
         private readonly float invCellSize;
 
         // Flat entry pool với linked list per cell
-        [SerializeField] private int[] entryCellHash;
-        [SerializeField] private int[] entryUnitId;
-        [SerializeField] private int[] entryNext;
-        [SerializeField] private int entryCount;
+        private int[] entryCellHash;
+        private int[] entryUnitId;
+        private int[] entryNext;
+        private int entryCount;
         private int freeHead = -1;
 
         // cellHash -> headEntryIndex

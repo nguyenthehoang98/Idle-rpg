@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using _GameToolkit.GameConfig;
 using _GameToolkit.Resource;
-using _KITSystem.Schedule;
+using _GameToolkit.Startup;
+using _GameToolkit.Updater;
+using _GameToolkit.Utils;
 using _KITSystem.Utils;
 using _TDS.GameConfig;
 using _TDS.Gameplay.Data;
@@ -15,7 +17,7 @@ using Debug = UnityEngine.Debug;
 
 namespace _TDS.Gameplay.Manager
 {
-    [RequireComponent(typeof(TickSystemOwner))]
+    [RequireComponent(typeof(UpdaterOwner))]
     public sealed class GameManager : MonoBehaviour
     {
         [SerializeField] private BottomPanel bottomPanel;
@@ -30,7 +32,7 @@ namespace _TDS.Gameplay.Manager
         private HashSet<string> assetPath = new HashSet<string>();
         private Dictionary<int, BaseWeapon> weaponContainer = new Dictionary<int, BaseWeapon>();
         private Dictionary<int, int> damageMemory = new Dictionary<int, int>();
-        private TickSystemOwner owner;
+        private UpdaterOwner owner;
         private SpawnManager spawnManager;
         private SkillManager skillManager;
         private WeaponConfig weaponConfig;
@@ -45,9 +47,9 @@ namespace _TDS.Gameplay.Manager
         {
             energy.enabled = false;
 
-            owner = GetComponent<TickSystemOwner>();
+            /*owner = GetComponent<TickSystemOwner>();
             owner.TryGetTickable(out skillManager);
-            owner.TryGetTickable(out spawnManager);
+            owner.TryGetTickable(out spawnManager);*/
 
             owner.OnChangePause += ChangePause;
             owner.OnChangeScaleTime += ChangeScaleTime;
@@ -84,8 +86,6 @@ namespace _TDS.Gameplay.Manager
 
             await BuildHero(10);
 
-            await owner.Initialize();
-
             for (int i = 0; i < equipments.Length; i++)
             {
                 await Equip(equipments[i]);
@@ -103,7 +103,7 @@ namespace _TDS.Gameplay.Manager
 
             energy.enabled = true;
 
-            KitEntryScene.Instance.HideLoadingScene();
+            BootScene.Instance.CloseLoadingScene();
         }
 
         private void OnDestroy()
@@ -260,9 +260,9 @@ namespace _TDS.Gameplay.Manager
                 f2 /= speed;
                 float f3 = 0.5f + 0.1f * i;
                 f3 /= speed;
-                this.WaitInvoke(f1, () => { equipmentActivation.ReleaseAnimation(index, speed); });
-                this.WaitInvoke(f2, () => { equipmentQueue.PushAnimation(index, speed); });
-                this.WaitInvoke(f3, () =>
+                Timing.CallDelayed(f1, () => { equipmentActivation.ReleaseAnimation(index, speed); });
+                Timing.CallDelayed(f2, () => { equipmentQueue.PushAnimation(index, speed); });
+                Timing.CallDelayed(f3, () =>
                 {
                     if (equipmentQueue.TryGetWeaponData(index, out WeaponData weaponData))
                         equipmentActivation.SetWeapon(index, weaponData);
@@ -271,7 +271,7 @@ namespace _TDS.Gameplay.Manager
                 d = Mathf.Max(d, f1, f2, f3);
             }
 
-            this.WaitInvoke(d, () =>
+            Timing.CallDelayed(d, () =>
             {
                 Dictionary<int, int> dict = new Dictionary<int, int>();
 

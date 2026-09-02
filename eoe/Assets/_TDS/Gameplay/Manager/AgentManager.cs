@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using _GameToolkit.Avoidance;
-using _KITSystem.Schedule;
 using _TDS.GameConfig;
 using _TDS.Gameplay.Data;
 using _TDS.Gameplay.Model;
@@ -12,7 +11,7 @@ using UnityEngine;
 namespace _TDS.Gameplay.Manager
 {
     [Serializable]
-    public sealed class AgentManager : AgentSimulator, ITickable
+    public sealed class AgentManager : AgentSimulator
     {
         [SerializeField] private float stopDistance = 1.6f;
         

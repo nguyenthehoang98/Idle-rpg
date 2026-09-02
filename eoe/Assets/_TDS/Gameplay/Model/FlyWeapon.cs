@@ -1,4 +1,4 @@
-using _KITSystem.Utils;
+using _GameToolkit.Utils;
 using LitMotion.Animation;
 using UnityEngine;
 
@@ -47,7 +47,7 @@ namespace _TDS.Gameplay.Model
 
                 completeAnimation.Play();
 
-                this.WaitInvoke(duration, StopAttack);
+                Timing.CallDelayed(duration, StopAttack);
             }
             else
             {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _GameToolkit.Resource;
+using _GameToolkit.Utils;
 using _KITSystem.Utils;
 using _TDS.GameConfig;
 using _TDS.Gameplay.Utils;
@@ -94,7 +95,7 @@ namespace _TDS.Gameplay.View
             slot.Speed = speed;
             slot.PlayPush();
             
-            this.WaitInvoke(slotPushDuration / speed, () =>
+            Timing.CallDelayed(slotPushDuration / speed, () =>
             {
                 slot.ResetIcon();
             });
@@ -117,10 +118,10 @@ namespace _TDS.Gameplay.View
                 int idx = equipments.IndexOf(item);
                 array[idx]--;
                 list.RemoveAt(0);
-                this.WaitInvoke(duration, () => { slots[0].SetDissolve(0.25f); });
+                Timing.CallDelayed(duration, () => { slots[0].SetDissolve(0.25f); });
             }
 
-            this.WaitInvoke(duration + d, RefreshUI);
+            Timing.CallDelayed(duration + d, RefreshUI);
         }
 
         public bool TryGetWeaponData(int idx, out WeaponData weaponData)
