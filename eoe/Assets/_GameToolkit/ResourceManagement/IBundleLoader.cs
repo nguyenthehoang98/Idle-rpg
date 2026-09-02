@@ -1,6 +1,6 @@
 using Cysharp.Threading.Tasks;
 
-namespace _Toolkit.ResourceManagement
+namespace _GameToolkit.ResourceManagement
 {
     internal interface IBundleLoader
     {

@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace _Toolkit.ResourceManagement
+namespace _GameToolkit.ResourceManagement
 {
     internal class CloudBundleLoader : IBundleLoader
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Pool;
 using Object = UnityEngine.Object;
 
-namespace _Toolkit.ResourceManagement
+namespace _GameToolkit.ResourceManagement
 {
     internal class PoolInternal : IDisposable
     {

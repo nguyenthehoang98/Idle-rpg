@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using _GameToolkit.GameConfig;
+using _GameToolkit.ResourceManagement;
 using _GameToolkit.Shared;
+using _GameToolkit.Updater;
 using _TDS.GameConfig;
 using _TDS.Gameplay.Data;
 using _TDS.Gameplay.Model;
 using _TDS.Gameplay.Utils;
 using _TDS.Gameplay.View;
-using _Toolkit.ResourceManagement;
-using _Toolkit.Updater;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using BootScene = _GameToolkit.Startup.BootScene;

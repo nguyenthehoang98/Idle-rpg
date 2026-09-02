@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace _Toolkit.Updater
+namespace _GameToolkit.Updater
 {
     public sealed class UpdateRunner : MonoBehaviour
     {

@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace _Toolkit.ResourceManagement
+namespace _GameToolkit.ResourceManagement
 {
     class PoolViewerWindow : EditorWindow
     {

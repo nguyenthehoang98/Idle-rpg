@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace _Toolkit.ResourceManagement
+namespace _GameToolkit.ResourceManagement
 {
     /// <summary>
     /// cần option object xóa ở trong scene.

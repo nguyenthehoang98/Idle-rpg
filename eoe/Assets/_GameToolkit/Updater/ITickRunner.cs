@@ -1,4 +1,4 @@
-﻿namespace _Toolkit.Updater
+﻿namespace _GameToolkit.Updater
 {
     public interface ITickRunner
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 using _GameToolkit.Shared;
-using _Toolkit.Updater;
+using _GameToolkit.Updater;
 
 namespace _GameToolkit.Collider
 {

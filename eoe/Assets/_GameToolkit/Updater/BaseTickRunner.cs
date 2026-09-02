@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace _Toolkit.Updater
+namespace _GameToolkit.Updater
 {
     public abstract class BaseTickRunner : MonoBehaviour
     {

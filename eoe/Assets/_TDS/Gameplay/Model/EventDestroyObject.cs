@@ -1,5 +1,4 @@
-
-using _Toolkit.ResourceManagement;
+using _GameToolkit.ResourceManagement;
 using UnityEngine;
 
 namespace _TDS.Gameplay.Model

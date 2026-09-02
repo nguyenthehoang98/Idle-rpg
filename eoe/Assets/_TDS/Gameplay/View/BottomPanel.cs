@@ -1,7 +1,7 @@
 
+using _GameToolkit.ResourceManagement;
 using _TDS.Gameplay.Manager;
 using _TDS.Gameplay.Utils;
-using _Toolkit.ResourceManagement;
 using LitMotion.Animation;
 using UnityEngine;
 using UnityEngine.UI;

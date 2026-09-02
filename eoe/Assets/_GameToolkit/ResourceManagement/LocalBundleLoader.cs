@@ -7,7 +7,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 
-namespace _Toolkit.ResourceManagement
+namespace _GameToolkit.ResourceManagement
 {
     internal class LocalBundleLoader : IBundleLoader
     {
