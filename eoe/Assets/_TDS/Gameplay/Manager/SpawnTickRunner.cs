@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using _GameToolkit.GameConfig;
 using _GameToolkit.ResourceManagement;
 using _GameToolkit.Share;
+using _GameToolkit.Updater;
 using _TDS.GameConfig;
 using _TDS.Gameplay.Data;
 using _TDS.Gameplay.Model;
@@ -12,12 +13,11 @@ using Object = UnityEngine.Object;
 
 namespace _TDS.Gameplay.Manager
 {
-    [Serializable]
-    public sealed class SpawnManager
+    public sealed class SpawnTickRunner : TickRunner
     {
         [SerializeField] private Transform[] portals;
 
-        public event Action<int> OnWaveSpawnCompleted;
+        public event Action<int> OnSpawnCompleted;
       
         private Dictionary<int, GameObject> cachedMonster = new Dictionary<int, GameObject>();
         private HashSet<string> names = new HashSet<string>();
@@ -41,6 +41,7 @@ namespace _TDS.Gameplay.Manager
             LevelConfig levelConfig = ConfigManager.Get<LevelConfig>();
             
             bool found = levelConfig.TryGetLevelData(level, out levelData);
+            
             if (!found) Debug.LogError($"Level {level} not found");
         }
 
@@ -89,6 +90,7 @@ namespace _TDS.Gameplay.Manager
             }
 
             go = await AssetLoader.GetAsset<GameObject>(levelData.backgroundPrefabName);
+            
             Object.Instantiate(go).transform.position = Vector3.zero;
 
             LoadWave(1);
@@ -130,7 +132,7 @@ namespace _TDS.Gameplay.Manager
             return false;
         }
 
-        public void Tick(float deltaTime)
+        public override void Tick(float deltaTime)
         {
             if (IsPaused || IsCompleted) return;
 
@@ -164,7 +166,7 @@ namespace _TDS.Gameplay.Manager
 
                 LoadWave(waveIndex);
 
-                OnWaveSpawnCompleted?.Invoke(wave);
+                OnSpawnCompleted?.Invoke(wave);
             }
         }
 

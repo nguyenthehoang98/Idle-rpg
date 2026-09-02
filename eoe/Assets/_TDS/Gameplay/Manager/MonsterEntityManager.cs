@@ -3,8 +3,6 @@ using System.Collections.Generic;
 
 using _TDS.GameConfig;
 using _TDS.Gameplay.Data;
-using _TDS.Gameplay.Entity;
-using UnityEngine;
 
 namespace _TDS.Gameplay.Manager
 {

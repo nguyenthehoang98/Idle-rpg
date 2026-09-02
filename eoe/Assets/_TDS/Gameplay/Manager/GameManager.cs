@@ -5,7 +5,6 @@ using _GameToolkit.ResourceManagement;
 using _GameToolkit.Share;
 using _GameToolkit.Updater;
 using _TDS.GameConfig;
-using _TDS.Gameplay.Data;
 using _TDS.Gameplay.Model;
 using _TDS.Gameplay.Utils;
 using _TDS.Gameplay.View;
@@ -32,10 +31,9 @@ namespace _TDS.Gameplay.Manager
         private Dictionary<int, Weapon> weaponContainer = new Dictionary<int, Weapon>();
         private Dictionary<int, int> damageMemory = new Dictionary<int, int>();
         private UpdateRunner runner;
-        private SpawnManager spawnManager;
+        private SpawnTickRunner spawnRunner;
         private WeaponConfig weaponConfig;
         private PlayerConfig playerConfig;
-        private PlayerRuntimeData player;
 
         private int totalMonsterAlive;
         private int currentWeaponSlot;
@@ -46,7 +44,7 @@ namespace _TDS.Gameplay.Manager
             energy.enabled = false;
 
             runner = GetComponent<UpdateRunner>();
-            //runner.TryGetRunner(out spawnManager);
+            runner.TryGetRunner(out spawnRunner);
 
             runner.OnPauseChanged += ChangePause;
             runner.OnTimeScaleChanged += ChangeScaleTime;
@@ -65,12 +63,12 @@ namespace _TDS.Gameplay.Manager
         {
             playerConfig = ConfigManager.Get<PlayerConfig>();
             weaponConfig = ConfigManager.Get<WeaponConfig>();
-            player = new PlayerRuntimeData();
 
-            spawnManager.SetLevel(1);
+            spawnRunner.SetLevel(1);
 
             // load 
             Stopwatch sw = Stopwatch.StartNew();
+            
             await RegisterPools<GameObject>(new string[]
             {
                 Path.TEXT_DAMAGE_NORMAL, Path.TEXT_DAMAGE_CRITICAL
@@ -89,6 +87,8 @@ namespace _TDS.Gameplay.Manager
             }
 
             equipmentQueue.Init(weaponConfig, equipments);
+
+            await spawnRunner.Initialize();
 
             sw.Stop();
             
@@ -349,9 +349,9 @@ namespace _TDS.Gameplay.Manager
         {
             totalMonsterAlive--;
 
-            if (totalMonsterAlive == 0 && spawnManager.IsPaused)
+            if (totalMonsterAlive == 0 && spawnRunner.IsPaused)
             {
-                spawnManager.IsPaused = false;
+                spawnRunner.IsPaused = false;
             }
         }
 
