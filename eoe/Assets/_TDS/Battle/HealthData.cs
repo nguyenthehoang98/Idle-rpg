@@ -1,4 +1,4 @@
-namespace _TDS.Gameplay.Entity
+namespace _TDS.Battle
 {
     public struct HealthData
     {

@@ -1,5 +1,6 @@
 using System;
 using _GameToolkit.ResourceManagement;
+using _GameToolkit.Share;
 using _TDS.GameConfig;
 using _TDS.Gameplay.Manager;
 using Cysharp.Threading.Tasks;
@@ -68,7 +69,7 @@ namespace _TDS.Gameplay.Model
                 deathAudioClip = await AssetLoader.GetAssetCached<AudioClip>(monsterConfigData.deathAudioClipName);
             }
 
-            if (vfxPrefab == null)
+            if (vfxPrefab == null && !string.IsNullOrEmpty(monsterConfigData.deathVfxName))
             {
                 vfxPrefab = await AssetLoader.GetAssetCached<GameObject>(monsterConfigData.deathVfxName);
             }
@@ -99,7 +100,7 @@ namespace _TDS.Gameplay.Model
         {
             if (!isInitialized) return;
             
-            SoundManager.Instance.PlayOneShot(deathAudioClip);
+            SoundUtils.Instance.PlayOneShot(deathAudioClip);
 
             if (vfxPrefab != null)
             {

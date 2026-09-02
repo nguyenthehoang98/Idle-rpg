@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using _GameToolkit.Avoidance;
+using _GameToolkit.Entities;
 using _TDS.GameConfig;
 using _TDS.Gameplay.Model;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace _TDS.Gameplay.Manager
+namespace _TDS.Battle
 {
     [Serializable]
     public sealed class AgentManager : AgentSimulator
@@ -154,10 +155,16 @@ namespace _TDS.Gameplay.Manager
             monster.Initialize(monsterConfigData, scaleDefinition);
             
             Temp temp = new Temp(monster, agent);
-            additional.Enqueue(temp);
-            container.Add(agent, temp);
             
-            MonsterEntityManager.CreateEntity(agent, scaleDefinition, monsterConfigData);
+            additional.Enqueue(temp);
+            
+            container.Add(agent, temp);
+
+            int health = Mathf.CeilToInt(monsterConfigData.health * scaleDefinition.healthMultiplier);
+            int attack = Mathf.CeilToInt(monsterConfigData.attack * scaleDefinition.attackMultiplier);
+            int exp = Mathf.CeilToInt(monsterConfigData.exp * scaleDefinition.expMultiplier);
+            
+            ComponentManager<HealthData>.Add(agent, new HealthData(health));
         }
 
         private void DestroyAgent_Private(int agent)

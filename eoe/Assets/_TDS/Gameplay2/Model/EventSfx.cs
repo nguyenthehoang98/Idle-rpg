@@ -1,3 +1,4 @@
+using _GameToolkit.Share;
 using _TDS.Gameplay.Manager;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ namespace _TDS.Gameplay.Model
 
         public void Trigger()
         {
-            SoundManager.Instance.PlayOneShot(sfx);
+            SoundUtils.Instance.PlayOneShot(sfx);
         }
     }
 }

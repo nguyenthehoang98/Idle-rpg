@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace _TDS.Gameplay.Manager
+namespace _GameToolkit.Share
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(AudioSource))]
-    public sealed class SoundManager : MonoBehaviour
+    public sealed class SoundUtils : MonoBehaviour
     {
-        public static SoundManager Instance { get; private set; }
+        public static SoundUtils Instance { get; private set; }
 
         [SerializeField] private float defaultPlayInterval = 0.1f;
 
@@ -28,7 +28,7 @@ namespace _TDS.Gameplay.Manager
         {
             if (clip == null)
             {
-                Debug.LogWarning($"{nameof(SoundManager)}::PlayOneShot - Clip is null.");
+                Debug.LogWarning($"{nameof(SoundUtils)}::PlayOneShot - Clip is null.");
                 return;
             }
 

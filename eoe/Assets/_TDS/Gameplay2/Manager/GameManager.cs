@@ -300,12 +300,12 @@ namespace _TDS.Gameplay2.Manager
                 return;
             }
 
-            SoundManager.Instance.PlayOneShot(await AssetLoader.GetAssetCached<AudioClip>(Path.SFX_ENERGY_FULL));
+            SoundUtils.Instance.PlayOneShot(await AssetLoader.GetAssetCached<AudioClip>(Path.SFX_ENERGY_FULL));
         }
 
         private async void FillEnergy()
         {
-            SoundManager.Instance.PlayOneShot(await AssetLoader.GetAssetCached<AudioClip>(Path.SFX_ENERGY));
+            SoundUtils.Instance.PlayOneShot(await AssetLoader.GetAssetCached<AudioClip>(Path.SFX_ENERGY));
 
             //equipmentQueue.Increase();
         }
