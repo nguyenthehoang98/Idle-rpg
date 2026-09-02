@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using _GameToolkit.GameConfig;
-using _GameToolkit.Resource;
-using _KITSystem.Utils;
+using _GameToolkit.Shared;
 using _TDS.GameConfig;
 using _TDS.Gameplay.Data;
 using _TDS.Gameplay.Model;
+using _Toolkit.ResourceManagement;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -66,14 +66,14 @@ namespace _TDS.Gameplay.Manager
                 }
 
                 // CACHE VFX
-                go = await AssetManager.GetAssetCached<GameObject>(monsterData.deathVfx);
+                go = await AssetLoader.GetAssetCached<GameObject>(monsterData.deathVfx);
                     
                 if (names.Add(monsterData.deathVfx))
                 {
                     Pool.RegisterPool(go, true);
                 }
 
-                go = await AssetManager.GetAssetCached<GameObject>(monsterData.prefabName);
+                go = await AssetLoader.GetAssetCached<GameObject>(monsterData.prefabName);
 
                 cachedMonster.TryAdd(monsterId, go);
                     
@@ -84,11 +84,11 @@ namespace _TDS.Gameplay.Manager
                     
                 if (!string.IsNullOrEmpty(monsterData.deathAudioClip) && names.Add(monsterData.deathAudioClip))
                 {
-                    await AssetManager.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
+                    await AssetLoader.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
                 }
             }
 
-            go = await AssetManager.GetAsset<GameObject>(levelData.backgroundPrefabName);
+            go = await AssetLoader.GetAsset<GameObject>(levelData.backgroundPrefabName);
             Object.Instantiate(go).transform.position = Vector3.zero;
 
             LoadWave(1);
@@ -210,7 +210,7 @@ namespace _TDS.Gameplay.Manager
 
             foreach (var name in names)
             {
-                AssetManager.UnCache(name);
+                AssetLoader.UnCache(name);
             }
 
             names = null;

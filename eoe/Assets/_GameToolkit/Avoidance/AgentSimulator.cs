@@ -12,7 +12,7 @@ namespace _GameToolkit.Avoidance
     {
         [Header("Agent default settings")]
 #if UNITY_EDITOR
-        [SerializeField] private bool enableGizmos;
+        public bool enableGizmos;
 #endif
         [SerializeField] private float2 destination;
 

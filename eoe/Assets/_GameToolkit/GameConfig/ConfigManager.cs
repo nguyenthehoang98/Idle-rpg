@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using _GameToolkit.Resource;
+using _Toolkit.ResourceManagement;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
@@ -11,7 +11,7 @@ namespace _GameToolkit.GameConfig
 {
     public static class ConfigManager
     {
-        private static Dictionary<Type, IGameConfig> cache;
+        private static Dictionary<Type, IConfig> cache;
 
         public static async UniTask Load(string[] assetsPath, bool checkExist = true)
         {
@@ -25,12 +25,12 @@ namespace _GameToolkit.GameConfig
             Type[] allType = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(x => x.GetTypes()).Where(x =>
                 {
-                    if (typeof(IGameConfig).IsAssignableFrom(x) && !x.IsInterface)
+                    if (typeof(IConfig).IsAssignableFrom(x) && !x.IsInterface)
                         return !x.IsAbstract;
                     return false;
                 }).Select(x => x).ToArray();
 
-            cache = new Dictionary<Type, IGameConfig>();
+            cache = new Dictionary<Type, IConfig>();
             
             UniTask<TextAsset>[] loadTasks = new UniTask<TextAsset>[assetsPath.Length];
             
@@ -44,7 +44,7 @@ namespace _GameToolkit.GameConfig
                 
                 types[i] = type;
 
-                loadTasks[i] = AssetManager.GetAsset<TextAsset>(assetsPath[i]);
+                loadTasks[i] = AssetLoader.GetAsset<TextAsset>(assetsPath[i]);
             }
             
             TextAsset[] assets = await UniTask.WhenAll(loadTasks);
@@ -55,7 +55,7 @@ namespace _GameToolkit.GameConfig
                 
                 object asset = JsonUtility.FromJson(assets[i].text, type);
 
-                IGameConfig config = asset as IGameConfig;
+                IConfig config = asset as IConfig;
 
                 config.OnMappingValue();
 
@@ -77,9 +77,9 @@ namespace _GameToolkit.GameConfig
             return null;
         }
 
-        public static T Get<T>() where T : class, IGameConfig
+        public static T Get<T>() where T : class, IConfig
         {
-            if (cache.TryGetValue(typeof(T), out IGameConfig config))
+            if (cache.TryGetValue(typeof(T), out IConfig config))
             {
                 return config as T;
             }

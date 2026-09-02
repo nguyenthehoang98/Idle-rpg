@@ -10,7 +10,7 @@ using UnityEditor;
 namespace _TDS.GameConfig
 {
     [Serializable]
-    public class LevelConfig : IGameConfig
+    public class LevelConfig : IConfig
     {
         [SerializeField] private List<LevelData> levels = new List<LevelData>();
         [SerializeField] private List<SpawnData> spawns = new List<SpawnData>();

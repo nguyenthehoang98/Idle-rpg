@@ -1,6 +1,7 @@
-using _GameToolkit.Resource;
+
 using _TDS.Gameplay.Manager;
 using _TDS.Gameplay.Utils;
+using _Toolkit.ResourceManagement;
 using LitMotion.Animation;
 using UnityEngine;
 using UnityEngine.UI;
@@ -49,7 +50,7 @@ namespace _TDS.Gameplay.View
             hammerAnimation.Play();
             equipmentQueue.Decrease(0.25f);
             RefreshUI();
-            SoundManager.Instance.PlayOneShot(await AssetManager.GetAssetCached<AudioClip>(Path.SFX_HAMMER));
+            SoundManager.Instance.PlayOneShot(await AssetLoader.GetAssetCached<AudioClip>(Path.SFX_HAMMER));
         }
 
         private void HammerComplete()

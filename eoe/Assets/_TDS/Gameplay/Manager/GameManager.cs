@@ -1,23 +1,22 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using _GameToolkit.GameConfig;
-using _GameToolkit.Resource;
-using _GameToolkit.Startup;
-using _GameToolkit.Updater;
-using _GameToolkit.Utils;
-using _KITSystem.Utils;
+using _GameToolkit.Shared;
 using _TDS.GameConfig;
 using _TDS.Gameplay.Data;
 using _TDS.Gameplay.Model;
 using _TDS.Gameplay.Utils;
 using _TDS.Gameplay.View;
+using _Toolkit.ResourceManagement;
+using _Toolkit.Updater;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using BootScene = _GameToolkit.Startup.BootScene;
 using Debug = UnityEngine.Debug;
 
 namespace _TDS.Gameplay.Manager
 {
-    [RequireComponent(typeof(UpdaterOwner))]
+    [RequireComponent(typeof(UpdateRunner))]
     public sealed class GameManager : MonoBehaviour
     {
         [SerializeField] private BottomPanel bottomPanel;
@@ -32,7 +31,7 @@ namespace _TDS.Gameplay.Manager
         private HashSet<string> assetPath = new HashSet<string>();
         private Dictionary<int, BaseWeapon> weaponContainer = new Dictionary<int, BaseWeapon>();
         private Dictionary<int, int> damageMemory = new Dictionary<int, int>();
-        private UpdaterOwner owner;
+        private UpdateRunner runner;
         private SpawnManager spawnManager;
         private SkillManager skillManager;
         private WeaponConfig weaponConfig;
@@ -51,8 +50,8 @@ namespace _TDS.Gameplay.Manager
             owner.TryGetTickable(out skillManager);
             owner.TryGetTickable(out spawnManager);*/
 
-            owner.OnChangePause += ChangePause;
-            owner.OnChangeScaleTime += ChangeScaleTime;
+            runner.OnPauseChanged += ChangePause;
+            runner.OnTimeScaleChanged += ChangeScaleTime;
             skillManager.OnPostDamage += PostDamage;
             skillManager.OnPostEarnExp += EarnExp;
 
@@ -97,9 +96,9 @@ namespace _TDS.Gameplay.Manager
             
             Debug.Log($"GameManager init in {sw.ElapsedMilliseconds}ms");
             
-            owner.IsPaused = false;
+            runner.IsPaused = false;
             
-            owner.Loop = 1;
+            runner.Loop = 1;
 
             energy.enabled = true;
 
@@ -108,8 +107,8 @@ namespace _TDS.Gameplay.Manager
 
         private void OnDestroy()
         {
-            owner.OnChangePause -= ChangePause;
-            owner.OnChangeScaleTime -= ChangeScaleTime;
+            runner.OnPauseChanged -= ChangePause;
+            runner.OnTimeScaleChanged -= ChangeScaleTime;
             skillManager.OnPostDamage -= PostDamage;
             skillManager.OnPostEarnExp -= EarnExp;
 
@@ -122,7 +121,7 @@ namespace _TDS.Gameplay.Manager
 
             foreach (var path in assetPath)
             {
-                AssetManager.UnCache(path);
+                AssetLoader.UnCache(path);
             }
         }
 
@@ -138,14 +137,14 @@ namespace _TDS.Gameplay.Manager
 
             if (!string.IsNullOrEmpty(projectileName))
             {
-                GameObject projectile = await AssetManager.GetAssetCached<GameObject>(projectileName);                
+                GameObject projectile = await AssetLoader.GetAssetCached<GameObject>(projectileName);                
             
                 Pool.RegisterPool(projectile, true);
                 
                 assetPath.Add(projectileName);
             }
 
-            GameObject go = await AssetManager.GetAsset<GameObject>(weaponData.prefabName);
+            GameObject go = await AssetLoader.GetAsset<GameObject>(weaponData.prefabName);
             
             go = Object.Instantiate(go, slots[currentWeaponSlot]);
            
@@ -199,13 +198,13 @@ namespace _TDS.Gameplay.Manager
             {
                 GameObject go = null;
               
-                go = await AssetManager.GetAsset<GameObject>(heroData.prefabName);
+                go = await AssetLoader.GetAsset<GameObject>(heroData.prefabName);
                
                 Object.Instantiate(go, Vector3.zero, Quaternion.identity);
 
                 if (playerConfig.TryGetWing(heroData.wingId, out WingData wingData) && !string.IsNullOrEmpty(wingData.wingName))
                 {
-                    go = await AssetManager.GetAsset<GameObject>(wingData.wingName);
+                    go = await AssetLoader.GetAsset<GameObject>(wingData.wingName);
                     Object.Instantiate(go, Vector3.zero, Quaternion.identity);
                 }
             }
@@ -218,7 +217,7 @@ namespace _TDS.Gameplay.Manager
             // Load song song
             for (int i = 0; i < paths.Length; i++)
             {
-                tasks[i] = AssetManager.GetAssetCached<T>(paths[i]);
+                tasks[i] = AssetLoader.GetAssetCached<T>(paths[i]);
             }
 
             T[] assets = await UniTask.WhenAll(tasks);
@@ -302,12 +301,12 @@ namespace _TDS.Gameplay.Manager
                 return;
             }
 
-            SoundManager.Instance.PlayOneShot(await AssetManager.GetAssetCached<AudioClip>(Path.SFX_ENERGY_FULL));
+            SoundManager.Instance.PlayOneShot(await AssetLoader.GetAssetCached<AudioClip>(Path.SFX_ENERGY_FULL));
         }
 
         private async void FillEnergy()
         {
-            SoundManager.Instance.PlayOneShot(await AssetManager.GetAssetCached<AudioClip>(Path.SFX_ENERGY));
+            SoundManager.Instance.PlayOneShot(await AssetLoader.GetAssetCached<AudioClip>(Path.SFX_ENERGY));
 
             equipmentQueue.Increase();
         }
@@ -326,7 +325,7 @@ namespace _TDS.Gameplay.Manager
         {
             foreach (var pair in weaponContainer)
             {
-                pair.Value.ChangeTimeScale(owner.Loop, owner.TickInterval / owner.Loop);
+                pair.Value.ChangeTimeScale(runner.Loop, runner.TickInterval / runner.Loop);
             }
         }
 
@@ -337,14 +336,14 @@ namespace _TDS.Gameplay.Manager
                 weapon.IncreaseUpgradeData(@params);
 
                 SoundManager.Instance.PlayOneShot(
-                    await AssetManager.GetAssetCached<AudioClip>(Path.SFX_POWER_SELECT));
+                    await AssetLoader.GetAssetCached<AudioClip>(Path.SFX_POWER_SELECT));
                 await UniTask.WaitForSeconds(0.2f);
 
                 cardUIPicker.Hide();
                 bottomPanel.Show();
 
                 await UniTask.WaitForSeconds(0.2f);
-                owner.IsPaused = false;
+                runner.IsPaused = false;
             }
         }
 
@@ -374,11 +373,11 @@ namespace _TDS.Gameplay.Manager
                 player.CurrentExp -= data.exp;
 
                 SoundManager.Instance.PlayOneShot(
-                    await AssetManager.GetAssetCached<AudioClip>(Path.SFX_LEVEL_UP));
+                    await AssetLoader.GetAssetCached<AudioClip>(Path.SFX_LEVEL_UP));
 
                 await UniTask.WaitForSeconds(0.25f);
 
-                owner.IsPaused = true;
+                runner.IsPaused = true;
 
                 await UniTask.WaitForSeconds(0.25f);
 

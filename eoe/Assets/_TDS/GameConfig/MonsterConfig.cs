@@ -6,7 +6,7 @@ using UnityEngine;
 namespace _TDS.GameConfig
 {
     [Serializable]
-    public class MonsterConfig : IGameConfig
+    public class MonsterConfig : IConfig
     {
         [SerializeField] private List<MonsterData> monsters = new List<MonsterData>();
 

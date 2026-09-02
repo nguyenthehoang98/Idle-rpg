@@ -1,8 +1,9 @@
 using System;
-using _GameToolkit.Resource;
+
 using _TDS.GameConfig;
 using _TDS.Gameplay.Data;
 using _TDS.Gameplay.Manager;
+using _Toolkit.ResourceManagement;
 using Cysharp.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
@@ -67,12 +68,12 @@ namespace _TDS.Gameplay.Model
         {
             if (deathAudioClip == null && !string.IsNullOrEmpty(monsterData.deathAudioClip))
             {
-                deathAudioClip = await AssetManager.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
+                deathAudioClip = await AssetLoader.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
             }
 
             if (vfxPrefab == null)
             {
-                vfxPrefab = await AssetManager.GetAssetCached<GameObject>(monsterData.deathVfx);
+                vfxPrefab = await AssetLoader.GetAssetCached<GameObject>(monsterData.deathVfx);
             }
             
             deathVolume = monsterData.volume;

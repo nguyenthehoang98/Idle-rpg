@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using _GameToolkit.Resource;
+
 using _TDS.GameConfig;
 using _TDS.Gameplay.Utils;
+using _Toolkit.ResourceManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -48,7 +49,7 @@ namespace _TDS.Gameplay.View
            
             if (!string.IsNullOrEmpty(data.iconName))
             {
-                sl.SetIcon(await AssetManager.GetAssetCached<Sprite>(data.iconName));                
+                sl.SetIcon(await AssetLoader.GetAssetCached<Sprite>(data.iconName));                
             }
         }
 

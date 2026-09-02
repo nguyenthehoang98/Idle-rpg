@@ -1,16 +1,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using _GameToolkit.Resource;
+using _GameToolkit.Entities;
 using _GameToolkit.SkillSystem.Core;
 using _GameToolkit.SkillSystem.Imp;
-using _KITSystem.Entity;
+
 using _TDS.GameConfig;
 using _TDS.Gameplay.Data;
 using _TDS.Gameplay.Entity;
 using _TDS.Gameplay.Manager;
 using _TDS.Gameplay.Utils;
 using _TDS.Gameplay.View;
+using _Toolkit.ResourceManagement;
 using Cysharp.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -105,7 +106,7 @@ namespace _TDS.Gameplay.Model
             
             if (!isCachedAudioClip)
             {
-                audioClip = await AssetManager.GetAssetCached<AudioClip>(weaponData.audioClip);
+                audioClip = await AssetLoader.GetAssetCached<AudioClip>(weaponData.audioClip);
                 isCachedAudioClip = true;
             }
             
@@ -121,7 +122,7 @@ namespace _TDS.Gameplay.Model
         {
             string audioPath = WeaponData.audioClip;
             
-            if (!string.IsNullOrEmpty(audioPath)) AssetManager.UnCache(audioPath);
+            if (!string.IsNullOrEmpty(audioPath)) AssetLoader.UnCache(audioPath);
         }
 
         public List<CardItemData> GetUpgradeDataAvailable()

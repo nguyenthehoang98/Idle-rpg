@@ -10,7 +10,7 @@ using UnityEditor;
 namespace _TDS.GameConfig
 {
     [Serializable]
-    public class WeaponConfig : IGameConfig
+    public class WeaponConfig : IConfig
     {
         [SerializeField] private List<WeaponData> weapons = new List<WeaponData>();
         [SerializeField] private List<WeaponUpgradeData> upgrades = new List<WeaponUpgradeData>();

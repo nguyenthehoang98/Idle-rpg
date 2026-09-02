@@ -1,6 +1,7 @@
 using System;
-using _GameToolkit.Resource;
+
 using _GameToolkit.SkillSystem.Imp;
+using _Toolkit.ResourceManagement;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;

@@ -1,4 +1,5 @@
-using _GameToolkit.Resource;
+
+using _Toolkit.ResourceManagement;
 using TMPro;
 using UnityEngine;
 

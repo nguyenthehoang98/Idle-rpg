@@ -9,7 +9,7 @@ namespace _TDS.GameConfig
 {
 #if UNITY_EDITOR
     [Serializable]
-    public class SkillConfig : IGameConfig
+    public class SkillConfig : IConfig
     {
         [SerializeField] private List<SkillData> skills = new List<SkillData>();
 

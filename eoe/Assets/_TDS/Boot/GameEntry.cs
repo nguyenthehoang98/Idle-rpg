@@ -1,7 +1,9 @@
+
+
 using _GameToolkit.GameConfig;
-using _GameToolkit.Resource;
 using _GameToolkit.Startup;
 using _TDS.GameConfig;
+using _Toolkit.ResourceManagement;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -22,7 +24,7 @@ namespace _TDS.Boot
         {
             base.OnStart();
             
-            AssetManager.SetAssetLocal();
+            AssetLoader.SetAssetLocal();
             
             LoadSceneAsync("GameplayScene");
             

@@ -6,7 +6,7 @@ using UnityEngine;
 namespace _TDS.GameConfig
 {
     [Serializable]
-    public class PlayerConfig : IGameConfig
+    public class PlayerConfig : IConfig
     {
         [SerializeField] private List<HeroData> heros = new List<HeroData>();
         [SerializeField] private List<WingData> wings = new List<WingData>();

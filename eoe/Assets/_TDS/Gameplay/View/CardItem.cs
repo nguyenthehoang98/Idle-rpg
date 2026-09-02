@@ -1,8 +1,9 @@
 using System;
-using _GameToolkit.Resource;
+
 using _TDS.GameConfig;
 using _TDS.Gameplay.Utils;
 using _TDS.Utils;
+using _Toolkit.ResourceManagement;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -50,7 +51,7 @@ namespace _TDS.Gameplay.View
             {
                 PowerItem item = items[i];
                 WeaponUpgradeData data = satellites[i];
-                item.imgIcon.sprite = await AssetManager.GetAssetCached<Sprite>(data.iconName);
+                item.imgIcon.sprite = await AssetLoader.GetAssetCached<Sprite>(data.iconName);
 
                 if (data.Equals(upgradeData))
                 {

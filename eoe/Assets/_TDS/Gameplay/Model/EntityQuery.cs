@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using _GameToolkit.Avoidance;
+using _GameToolkit.Entities;
 using _GameToolkit.SkillSystem.Core;
-using _KITSystem.Entity;
+
 using _TDS.Gameplay.Manager;
 using Unity.Mathematics;
 using UnityEngine;
@@ -29,7 +30,7 @@ namespace _TDS.Gameplay.Model
 
                 if (!MonsterEntityManager.TryGetEntity(data.agent, out int entity)) continue;
 
-                if (!EntityManager.IsEntityAlive(entity)) continue;
+                if (!ComponentManager<AliveComponent>.Has(entity)) continue;
 
                 switch (type)
                 {
@@ -77,7 +78,7 @@ namespace _TDS.Gameplay.Model
 
                 if (!MonsterEntityManager.TryGetEntity(data.agent, out int entity)) continue;
 
-                if (!EntityManager.IsEntityAlive(entity)) continue;
+                if (!ComponentManager<AliveComponent>.Has(entity)) continue;
 
                 if (funcFilterEntity(entity))
                 {
@@ -123,8 +124,7 @@ namespace _TDS.Gameplay.Model
                 if (!MonsterEntityManager.TryGetEntity(data.agent, out int entity))
                     continue;
 
-                if (!EntityManager.IsEntityAlive(entity))
-                    continue;
+                if (!ComponentManager<AliveComponent>.Has(entity)) continue;
 
                 if (!funcFilterEntity(entity))
                     continue;

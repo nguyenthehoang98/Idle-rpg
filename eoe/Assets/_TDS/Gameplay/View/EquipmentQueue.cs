@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using _GameToolkit.Resource;
-using _GameToolkit.Utils;
-using _KITSystem.Utils;
+using _GameToolkit.Shared;
 using _TDS.GameConfig;
 using _TDS.Gameplay.Utils;
+using _Toolkit.ResourceManagement;
 using UnityEngine;
 
 namespace _TDS.Gameplay.View
@@ -145,7 +144,7 @@ namespace _TDS.Gameplay.View
                 
                 if (!string.IsNullOrEmpty(weaponData.iconName))
                 {
-                    slots[i].SetIcon(await AssetManager.GetAssetCached<Sprite>(weaponData.iconName));                
+                    slots[i].SetIcon(await AssetLoader.GetAssetCached<Sprite>(weaponData.iconName));                
                 }
             }
             

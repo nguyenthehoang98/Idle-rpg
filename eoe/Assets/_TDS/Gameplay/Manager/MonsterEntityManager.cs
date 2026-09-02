@@ -1,5 +1,6 @@
+using System;
 using System.Collections.Generic;
-using _KITSystem.Entity;
+
 using _TDS.GameConfig;
 using _TDS.Gameplay.Data;
 using _TDS.Gameplay.Entity;
@@ -14,7 +15,7 @@ namespace _TDS.Gameplay.Manager
         
         public static int CreateEntity(int agent, MonsterRuntimeData runtimeData, MonsterData monsterData)
         {
-            int entity = EntityManager.NewEntity();
+            /*int entity = EntityManager.NewEntity();
             
             int health = Mathf.CeilToInt(monsterData.health * runtimeData.HealthScale);
             int attack = Mathf.CeilToInt(monsterData.attack * runtimeData.AttackScale);
@@ -26,7 +27,9 @@ namespace _TDS.Gameplay.Manager
             agentToEntity.Add(agent, entity);
             entityToAgent.Add(entity, agent);
 
-            return entity;
+            return entity;*/
+
+            throw new NotImplementedException("Chưa có code");
         }
 
         public static bool TryGetAgent(int entity, out int agent)

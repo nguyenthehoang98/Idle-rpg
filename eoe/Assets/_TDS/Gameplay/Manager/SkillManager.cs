@@ -1,17 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using _GameToolkit.Resource;
+using _GameToolkit.Entities;
+using _GameToolkit.Shared;
 using _GameToolkit.SkillSystem.Core;
 using _GameToolkit.SkillSystem.Imp;
-using _GameToolkit.Utils;
-using _KITSystem.Entity;
-using _KITSystem.Utils;
+
+
+
 using _TDS.GameConfig;
 using _TDS.Gameplay.Data;
 using _TDS.Gameplay.Entity;
 using _TDS.Gameplay.Model;
 using _TDS.Gameplay.Utils;
+using _Toolkit.ResourceManagement;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -44,7 +46,7 @@ namespace _TDS.Gameplay.Manager
 
             foreach (var name in names)
             {
-                AssetManager.UnCache(name);
+                AssetLoader.UnCache(name);
             }
 
             names = null;
@@ -193,7 +195,7 @@ namespace _TDS.Gameplay.Manager
             }
             else
             {
-                GameObject prefab = await AssetManager.GetAssetCached<GameObject>(skillData.prefabName);
+                GameObject prefab = await AssetLoader.GetAssetCached<GameObject>(skillData.prefabName);
                 
                 if (prefab == null)
                 {
@@ -331,7 +333,7 @@ namespace _TDS.Gameplay.Manager
         /// </summary>
         private void PredictedTargetDamage(SkillRuntimeData runtimeData, int entityTarget)
         {
-            if (!EntityManager.IsEntityAlive(entityTarget)) return;
+            if (!ComponentManager<AliveComponent>.Has(entityTarget)) return;
             
             runtimeData.CritChance = 0; // Lấy dmg gốc là được
             
@@ -348,7 +350,7 @@ namespace _TDS.Gameplay.Manager
 
             coroutinesResetFutureHealth[entityTarget] = Timing.CallDelayed(1, () =>
             {
-                if (!EntityManager.IsEntityAlive(entityTarget)) return;
+                if (!ComponentManager<AliveComponent>.Has(entityTarget)) return;
 
                 ref HealthData healthData = ref ComponentManager<HealthData>.Get(entityTarget);
                 healthData.PredictedHealth = healthData.CurrentHealth;
@@ -382,7 +384,10 @@ namespace _TDS.Gameplay.Manager
 
                 float explosiveDamagePercent = runtimeData.ExplosiveDamagePercent;
                 
-                List<int> entities = query.GetAllEntities(position, size, EntityManager.IsEntityAlive);
+                List<int> entities = query.GetAllEntities(position, size, e =>
+                {
+                    return ComponentManager<AliveComponent>.Has(e);
+                });
 
                 for (int i = 0; i < entities.Count; i++)
                 {
@@ -426,7 +431,7 @@ namespace _TDS.Gameplay.Manager
             int entity, Vector3 textDamagePosition,
             float scaleDamage, bool lastCollision, ref Action onProjectileDestroyed)
         {
-            if (!EntityManager.IsEntityAlive(entity)) return false;
+            if (!ComponentManager<AliveComponent>.Has(entity)) return false;
             
             ref HealthData health = ref ComponentManager<HealthData>.Get(entity);
             
@@ -490,7 +495,7 @@ namespace _TDS.Gameplay.Manager
         {
             if (string.IsNullOrEmpty(prefabName)) return;
 
-            GameObject go = await AssetManager.GetAssetCached<GameObject>(prefabName);
+            GameObject go = await AssetLoader.GetAssetCached<GameObject>(prefabName);
 
             if (names.Add(prefabName)) Pool.RegisterPool(go, true);
 
@@ -500,7 +505,7 @@ namespace _TDS.Gameplay.Manager
 
         private async void SpawnTextDamage(int damage, bool critical, Vector3 position)
         {
-            GameObject go = await AssetManager.GetAssetCached<GameObject>(critical
+            GameObject go = await AssetLoader.GetAssetCached<GameObject>(critical
                     ? Path.TEXT_DAMAGE_CRITICAL
                     : Path.TEXT_DAMAGE_NORMAL);
 
