@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using _GameToolkit.GameConfig;
 using _GameToolkit.ResourceManagement;
 using _GameToolkit.Share;
 using _GameToolkit.Updater;
-using _TDS.GameConfig;
+using _TDS.Gameplay.Manager;
 using _TDS.Gameplay.Model;
 using _TDS.Gameplay.Utils;
 using _TDS.Gameplay.View;
@@ -15,7 +14,7 @@ using BootScene = _GameToolkit.Startup.BootScene;
 using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 
-namespace _TDS.Gameplay.Manager
+namespace _TDS.Gameplay2.Manager
 {
     [RequireComponent(typeof(UpdateRunner))]
     public sealed class GameManager : MonoBehaviour
@@ -33,7 +32,6 @@ namespace _TDS.Gameplay.Manager
         //private Dictionary<int, Weapon> weaponContainer = new Dictionary<int, Weapon>();
         private Dictionary<int, int> damageMemory = new Dictionary<int, int>();
         private UpdateRunner runner;
-        private SpawnTickRunner spawnRunner;
 
         private int totalMonsterAlive;
         private int currentWeaponSlot;
@@ -44,7 +42,7 @@ namespace _TDS.Gameplay.Manager
             energy.enabled = false;
 
             runner = GetComponent<UpdateRunner>();
-            runner.TryGetRunner(out spawnRunner);
+           // runner.TryGetRunner(out spawnRunner);
 
             runner.OnPauseChanged += ChangePause;
             runner.OnTimeScaleChanged += ChangeScaleTime;
@@ -61,7 +59,7 @@ namespace _TDS.Gameplay.Manager
 
         private async void Start()
         {
-            spawnRunner.SetLevel(1);
+            //spawnRunner.SetLevel(1);
 
             // load 
             Stopwatch sw = Stopwatch.StartNew();
@@ -85,7 +83,7 @@ namespace _TDS.Gameplay.Manager
 
             //equipmentQueue.Init(weaponConfig, equipments);
 
-            await spawnRunner.Initialize();
+            //await spawnRunner.Initialize();
 
             sw.Stop();
             
@@ -114,7 +112,7 @@ namespace _TDS.Gameplay.Manager
             energy.OnFill -= FillEnergy;
             //equipmentQueue.OnQueueFull -= QueueFull;
 
-            spawnRunner.Dispose();
+            //spawnRunner.Dispose();
             
             foreach (var path in assetPath)
             {
@@ -352,10 +350,10 @@ namespace _TDS.Gameplay.Manager
         {
             totalMonsterAlive--;
 
-            if (totalMonsterAlive == 0 && spawnRunner.IsPaused)
+            /*if (totalMonsterAlive == 0 && spawnRunner.IsPaused)
             {
                 spawnRunner.IsPaused = false;
-            }
+            }*/
         }
 
         private void MonsterEnable(Monster m)

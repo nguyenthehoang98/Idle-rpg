@@ -1,7 +1,6 @@
 using System;
 using _GameToolkit.ResourceManagement;
 using _TDS.GameConfig;
-using _TDS.Gameplay.Data;
 using _TDS.Gameplay.Manager;
 using Cysharp.Threading.Tasks;
 using UnityEditor;

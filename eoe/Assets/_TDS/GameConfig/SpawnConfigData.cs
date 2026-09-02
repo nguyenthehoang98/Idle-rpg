@@ -1,9 +1,7 @@
 ﻿using System;
 using _GameToolkit.Share;
 using Newtonsoft.Json;
-using Unity.Collections;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace _TDS.GameConfig
 {

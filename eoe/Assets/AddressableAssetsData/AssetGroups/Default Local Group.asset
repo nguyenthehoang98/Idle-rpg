@@ -66,7 +66,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2d095e496fb61304eb29c5d159d8bbaf
-    m_Address: Bee.Monster
+    m_Address: monster.1001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

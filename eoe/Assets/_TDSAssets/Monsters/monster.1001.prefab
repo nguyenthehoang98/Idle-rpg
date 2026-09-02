@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6916752702028918783}
   - component: {fileID: 2438915518772011536}
   m_Layer: 0
-  m_Name: Bee.Monster
+  m_Name: monster.1001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

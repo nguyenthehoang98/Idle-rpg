@@ -2,16 +2,16 @@
   "spawns": [
     {
       "definition": {
-        "level": 0,
-        "wave": 0
+        "level": 1,
+        "wave": 1
       },
       "monsterId": 1001,
       "total": 10,
       "scale": {
-        "attackMultiplier": 0.0,
-        "healthMultiplier": 0.0,
-        "expMultiplier": 0.0,
-        "sizeMultiplier": 0.0
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
       },
       "spawnRadius": 1.0,
       "spawnsTime": [
@@ -24,22 +24,22 @@
         2,
         3
       ],
-      "RandomPortal": 2,
+      "RandomPortal": 0,
       "SpawnStartTime": 1.0,
       "SpawnEndTime": 5.0
     },
     {
       "definition": {
-        "level": 0,
-        "wave": 0
+        "level": 1,
+        "wave": 2
       },
       "monsterId": 1001,
       "total": 15,
       "scale": {
-        "attackMultiplier": 0.0,
-        "healthMultiplier": 0.0,
-        "expMultiplier": 0.0,
-        "sizeMultiplier": 0.0
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
       },
       "spawnRadius": 1.0,
       "spawnsTime": [
@@ -52,22 +52,22 @@
         6,
         7
       ],
-      "RandomPortal": 6,
+      "RandomPortal": 7,
       "SpawnStartTime": 3.0,
       "SpawnEndTime": 6.0
     },
     {
       "definition": {
-        "level": 0,
-        "wave": 0
+        "level": 1,
+        "wave": 3
       },
       "monsterId": 1001,
       "total": 20,
       "scale": {
-        "attackMultiplier": 0.0,
-        "healthMultiplier": 0.0,
-        "expMultiplier": 0.0,
-        "sizeMultiplier": 0.0
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
       },
       "spawnRadius": 1.0,
       "spawnsTime": [
@@ -86,16 +86,16 @@
     },
     {
       "definition": {
-        "level": 0,
-        "wave": 0
+        "level": 1,
+        "wave": 4
       },
       "monsterId": 1001,
       "total": 25,
       "scale": {
-        "attackMultiplier": 0.0,
-        "healthMultiplier": 0.0,
-        "expMultiplier": 0.0,
-        "sizeMultiplier": 0.0
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
       },
       "spawnRadius": 1.0,
       "spawnsTime": [
@@ -108,22 +108,22 @@
         2,
         3
       ],
-      "RandomPortal": 0,
+      "RandomPortal": 2,
       "SpawnStartTime": 10.0,
       "SpawnEndTime": 12.0
     },
     {
       "definition": {
-        "level": 0,
-        "wave": 0
+        "level": 1,
+        "wave": 5
       },
       "monsterId": 1001,
       "total": 30,
       "scale": {
-        "attackMultiplier": 0.0,
-        "healthMultiplier": 0.0,
-        "expMultiplier": 0.0,
-        "sizeMultiplier": 0.0
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
       },
       "spawnRadius": 1.0,
       "spawnsTime": [

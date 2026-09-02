@@ -12,7 +12,7 @@ using UnityEditor.SceneManagement;
 #endif
 namespace _TDS.Boot
 {
-    public class GameEntry : BootScene
+    public class EntryScene : BootScene
     {
         private float elapsedTime = 1;
         

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using _GameToolkit.Avoidance;
 using _TDS.GameConfig;
-using _TDS.Gameplay.Data;
 using _TDS.Gameplay.Model;
 using Unity.Mathematics;
 using UnityEngine;

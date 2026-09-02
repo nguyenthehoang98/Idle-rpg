@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 
 using _TDS.GameConfig;
-using _TDS.Gameplay.Data;
 
 namespace _TDS.Gameplay.Manager
 {

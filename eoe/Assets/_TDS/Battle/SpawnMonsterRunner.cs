@@ -1,42 +1,80 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using _GameToolkit.GameConfig;
 using _GameToolkit.ResourceManagement;
 using _GameToolkit.Share;
 using _GameToolkit.Updater;
 using _TDS.GameConfig;
-using _TDS.Gameplay.Data;
+using _TDS.Gameplay.Manager;
 using _TDS.Gameplay.Model;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace _TDS.Gameplay.Manager
+namespace _TDS.Battle
 {
-    public sealed class SpawnTickRunner : TickRunner
+    public class SpawnMonsterRunner : TickRunner
     {
         [SerializeField] private Transform[] portals;
+       
+        private readonly Dictionary<int, GameObject> cachedMonster = new Dictionary<int, GameObject>();
 
-        public event Action<int> OnSpawnCompleted;
-
-        private Dictionary<int, GameObject> cachedMonster = new Dictionary<int, GameObject>();
-        private HashSet<string> names = new HashSet<string>();
-        private SpawnTimer[] temps;
-
-        private Dictionary<int, List<SpawnConfigData>> cachedByLevel;
+        private readonly Dictionary<int, List<SpawnConfigData>> cachedByLevel =  new Dictionary<int, List<SpawnConfigData>>();
+       
+        private readonly HashSet<string> paths = new HashSet<string>();
+       
         private List<SpawnConfigData> currents;
-        private MonsterConfig monsterConfig;
+        private SpawnTimer[] timers;
+
         private SpawnConfig spawnConfig;
+        private MonsterConfig monsterConfig;
         private int maximumWave;
         private int waveIndex;
 
+        public event Action<int> OnSpawnCompleted;
         public bool IsPaused { get; set; }
         public bool IsCompleted { get; private set; }
+        
+        public override void Tick(float deltaTime)
+        {
+            if (IsPaused || IsCompleted || currents == null || timers == null) return;
 
-        public void SetLevel(int level)
+            bool isWaveCompleted = true;
+
+            for (var i = 0; i < currents.Count; i++)
+            {
+                SpawnTimer data = timers[i];
+
+                int count = data.Spawn(deltaTime);
+
+                if (count > 0)
+                {
+                    for (int j = 0; j < count; j++) SpawnMonster(currents[i]);
+                }
+
+                if (!data.IsFinished) isWaveCompleted = false;
+
+                timers[i] = data;
+            }
+
+            if (isWaveCompleted)
+            {
+                IsPaused = true;
+
+                int wave = waveIndex;
+
+                waveIndex++;
+
+                LoadWaveConfigData(waveIndex);
+
+                OnSpawnCompleted?.Invoke(wave);
+            }
+        }
+
+        public async UniTask LoadLevelAsync(int level)
         {
             monsterConfig = ConfigManager.Get<MonsterConfig>();
+           
             spawnConfig = ConfigManager.Get<SpawnConfig>();
 
             if (!spawnConfig.TryGetSpawn(level, out var list))
@@ -45,8 +83,6 @@ namespace _TDS.Gameplay.Manager
             }
             else
             {
-                cachedByLevel = new Dictionary<int, List<SpawnConfigData>>();
-
                 foreach (var item in list)
                 {
                     int wave = item.definition.wave;
@@ -61,12 +97,8 @@ namespace _TDS.Gameplay.Manager
                     }
                 }
             }
-        }
 
-        public async UniTask Initialize()
-        {
             GameObject go;
-
             foreach (var pair in cachedByLevel)
             {
                 foreach (var spawn in pair.Value)
@@ -83,10 +115,10 @@ namespace _TDS.Gameplay.Manager
                         continue;
                     }
 
-                    go = await AssetLoader.GetAssetCached<GameObject>(monsterData.deathVfxName);
-
-                    if (names.Add(monsterData.deathVfxName))
+                    if (!string.IsNullOrEmpty(monsterData.deathVfxName) && paths.Add(monsterData.deathVfxName))
                     {
+                        go = await AssetLoader.GetAssetCached<GameObject>(monsterData.deathVfxName);
+                        
                         Pool.RegisterPool(go, true);
                     }
 
@@ -94,12 +126,13 @@ namespace _TDS.Gameplay.Manager
 
                     cachedMonster.TryAdd(monsterId, go);
 
-                    if (names.Add(monsterData.prefabName))
+                    if (paths.Add(monsterData.prefabName))
                     {
                         Pool.RegisterPool(go, true);
                     }
 
-                    if (!string.IsNullOrEmpty(monsterData.deathAudioClipName) && names.Add(monsterData.deathAudioClipName))
+                    if (!string.IsNullOrEmpty(monsterData.deathAudioClipName) &&
+                        paths.Add(monsterData.deathAudioClipName))
                     {
                         await AssetLoader.GetAssetCached<AudioClip>(monsterData.deathAudioClipName);
                     }
@@ -107,80 +140,32 @@ namespace _TDS.Gameplay.Manager
             }
 
             string background = "1.background";
+           
+            Debug.Log($"Fixed background is '{background}'");
 
             go = await AssetLoader.GetAsset<GameObject>(background);
-
-            Debug.LogError($"Fixed background is '{background}'");
-
+            
             Object.Instantiate(go).transform.position = Vector3.zero;
-
-            LoadWave(1);
+            
+            LoadWaveConfigData(1);
 
             await UniTask.CompletedTask;
         }
 
-        private bool LoadWave(int wave)
+        public void Dispose()
         {
-            if (wave >= 0 && wave <= maximumWave)
+            foreach (var pair in cachedMonster)
             {
-                waveIndex = wave;
-
-                currents = cachedByLevel[wave];
-
-                temps = new SpawnTimer[currents.Count];
-
-                for (int i = 0; i < currents.Count; i++)
-                {
-                    SpawnConfigData spawn = currents[i];
-
-                    temps[i] = new SpawnTimer(spawn.SpawnStartTime, spawn.SpawnEndTime, spawn.total);
-                }
-
-                return true;
+                Pool.UnRegisterPool(pair.Value);
             }
 
-            IsCompleted = true;
-
-            return false;
-        }
-
-        public override void Tick(float deltaTime)
-        {
-            if (IsPaused || IsCompleted) return;
-
-            bool isWaveCompleted = true;
-
-            for (var i = 0; i < currents.Count; i++)
+            foreach (var path in paths)
             {
-                SpawnTimer data = temps[i];
-
-                int count = data.Spawn(deltaTime);
-
-                if (count > 0)
-                {
-                    for (int j = 0; j < count; j++) Spawn(currents[i]);
-                }
-
-                if (!data.IsFinished) isWaveCompleted = false;
-
-                temps[i] = data;
-            }
-
-            if (isWaveCompleted)
-            {
-                IsPaused = true;
-
-                int wave = waveIndex;
-
-                waveIndex++;
-
-                LoadWave(waveIndex);
-
-                OnSpawnCompleted?.Invoke(wave);
+                AssetLoader.UnCache(path);
             }
         }
-
-        private void Spawn(SpawnConfigData data)
+        
+        private void SpawnMonster(SpawnConfigData data)
         {
             Vector3 position = portals[data.RandomPortal].position + new Vector3(
                 RandomUtils.Range(-data.spawnRadius, data.spawnRadius),
@@ -193,24 +178,30 @@ namespace _TDS.Gameplay.Manager
 
             AgentManager.Create_Agent(instance.GetComponent<Monster>(), data.scale, monsterData);
         }
-
-        public void Dispose()
+        
+        private void LoadWaveConfigData(int wave)
         {
-            foreach (var pair in cachedMonster)
+            if (wave >= 0 && wave <= maximumWave)
             {
-                Pool.UnRegisterPool(pair.Value);
+                waveIndex = wave;
+
+                currents = cachedByLevel[wave];
+
+                timers = new SpawnTimer[currents.Count];
+
+                for (int i = 0; i < currents.Count; i++)
+                {
+                    SpawnConfigData spawn = currents[i];
+
+                    timers[i] = new SpawnTimer(spawn.SpawnStartTime, spawn.SpawnEndTime, spawn.total);
+                }
+
+                return;
             }
 
-            cachedMonster = null;
-
-            foreach (var name in names)
-            {
-                AssetLoader.UnCache(name);
-            }
-
-            names = null;
+            IsCompleted = true;
         }
-
+        
         private struct SpawnTimer
         {
             private readonly int total;

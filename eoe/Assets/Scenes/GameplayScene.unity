@@ -254,7 +254,7 @@ GameObject:
   - component: {fileID: 286812849}
   - component: {fileID: 286812850}
   m_Layer: 0
-  m_Name: SpawnTickRunner
+  m_Name: SpawnMonsterRunner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -296,9 +296,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 286812848}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0616655f91b4c4fa77dd14c3220658a, type: 3}
+  m_Script: {fileID: 11500000, guid: 679b51988b2f85c499cb08e2dd921e0f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::_TDS.Gameplay.Manager.SpawnTickRunner
+  m_EditorClassIdentifier: Assembly-CSharp::_TDS.Battle.SpawnMonsterRunner
   portals:
   - {fileID: 1696421123}
   - {fileID: 738869808}
@@ -635,28 +635,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1168235904}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &983035829 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 782803612255873150, guid: 972344802c905a247b362e370067ba05, type: 3}
-  m_PrefabInstance: {fileID: 8357001130564312416}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2169fccd7084c029b98216994bcdadb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.View.EquipmentQueue
---- !u!114 &1074248198 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1240508676277401311, guid: 972344802c905a247b362e370067ba05, type: 3}
-  m_PrefabInstance: {fileID: 8357001130564312416}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d003b3c8b7494b0fa712c61c179a35e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.Manager.EnergyManager
 --- !u!1 &1143688529
 GameObject:
   m_ObjectHideFlags: 0
@@ -816,17 +794,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 286812849}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1374644340 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8274604874273214139, guid: 972344802c905a247b362e370067ba05, type: 3}
-  m_PrefabInstance: {fileID: 8357001130564312416}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0957ebeac6454233a801cc798f22cd53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.View.EquipmentActivation
 --- !u!1 &1502112194
 GameObject:
   m_ObjectHideFlags: 0
@@ -912,10 +879,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1708898550}
   - component: {fileID: 1708898552}
-  - component: {fileID: 1708898551}
   - component: {fileID: 1708898553}
+  - component: {fileID: 1708898554}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -938,29 +905,6 @@ Transform:
   - {fileID: 1977149735}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1708898551
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1708898549}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dbafcedd9ae4a07b69bc87d6d05b8ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.Manager.GameManager
-  bottomPanel: {fileID: 8357001130564312417}
-  cardUIPicker: {fileID: 1931167400}
-  energy: {fileID: 1074248198}
-  equipmentQueue: {fileID: 983035829}
-  equipmentActivation: {fileID: 1374644340}
-  equipments: ef030000000000000000000000000000
-  slots:
-  - {fileID: 1143688530}
-  - {fileID: 1219510552}
-  - {fileID: 789294256}
-  - {fileID: 788879348}
 --- !u!114 &1708898552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1034,6 +978,18 @@ MonoBehaviour:
   - {fileID: 286812850}
   - {fileID: 1502112196}
   - {fileID: 1880548099}
+--- !u!114 &1708898554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708898549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb1d1eadee7263147970b18ee796a64b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_TDS.Gameplay.GameplayScene
 --- !u!224 &1740821505 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2647833869170970314, guid: 972344802c905a247b362e370067ba05, type: 3}
@@ -1088,17 +1044,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2748899826320280426, guid: 65bfa4849999a1549931fae99d48bbd3, type: 3}
   m_PrefabInstance: {fileID: 4475309639526082813}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1931167400 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 932330563802625033, guid: 65bfa4849999a1549931fae99d48bbd3, type: 3}
-  m_PrefabInstance: {fileID: 4475309639526082813}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5f44fe6f6764da9bae7b9c5cb7385c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.View.UpgradeCardUIPicker
 --- !u!1 &1977149734
 GameObject:
   m_ObjectHideFlags: 0
@@ -1250,7 +1195,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2081720019
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1577,17 +1522,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 972344802c905a247b362e370067ba05, type: 3}
---- !u!114 &8357001130564312417 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 649311985383495547, guid: 972344802c905a247b362e370067ba05, type: 3}
-  m_PrefabInstance: {fileID: 8357001130564312416}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6cdc5a65471492789823cbc1e48fa19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.View.BottomPanel
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

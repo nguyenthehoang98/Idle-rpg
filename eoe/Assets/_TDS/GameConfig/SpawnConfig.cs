@@ -25,7 +25,7 @@ namespace _TDS.GameConfig
             {
                 int level = data.definition.level;
                
-                if (cached.TryGetValue(level, out var list))
+                if (cached.TryGetValue(level, out List<SpawnConfigData> list))
                 {
                     list.Add(data);        
                 }
