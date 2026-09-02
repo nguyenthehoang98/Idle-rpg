@@ -11,7 +11,7 @@ namespace _GameToolkit.GameConfig
 {
     public static class ConfigManager
     {
-        private static Dictionary<Type, IConfig> cache;
+        private static Dictionary<Type, Config> cache;
 
         public static async UniTask Load(string[] assetsPath, bool checkExist = true)
         {
@@ -25,12 +25,12 @@ namespace _GameToolkit.GameConfig
             Type[] allType = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(x => x.GetTypes()).Where(x =>
                 {
-                    if (typeof(IConfig).IsAssignableFrom(x) && !x.IsInterface)
+                    if (typeof(Config).IsAssignableFrom(x) && !x.IsInterface)
                         return !x.IsAbstract;
                     return false;
                 }).Select(x => x).ToArray();
 
-            cache = new Dictionary<Type, IConfig>();
+            cache = new Dictionary<Type, Config>();
             
             UniTask<TextAsset>[] loadTasks = new UniTask<TextAsset>[assetsPath.Length];
             
@@ -55,7 +55,7 @@ namespace _GameToolkit.GameConfig
                 
                 object asset = JsonUtility.FromJson(assets[i].text, type);
 
-                IConfig config = asset as IConfig;
+                Config config = asset as Config;
 
                 config.OnMappingValue();
 
@@ -77,9 +77,9 @@ namespace _GameToolkit.GameConfig
             return null;
         }
 
-        public static T Get<T>() where T : class, IConfig
+        public static T Get<T>() where T : Config
         {
-            if (cache.TryGetValue(typeof(T), out IConfig config))
+            if (cache.TryGetValue(typeof(T), out Config config))
             {
                 return config as T;
             }

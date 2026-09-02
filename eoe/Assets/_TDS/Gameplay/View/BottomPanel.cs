@@ -1,4 +1,5 @@
 
+/*
 using _GameToolkit.ResourceManagement;
 using _TDS.Gameplay.Manager;
 using _TDS.Gameplay.Utils;
@@ -93,4 +94,4 @@ namespace _TDS.Gameplay.View
             closeAnimation.Play();
         }
     }
-}
+}*/

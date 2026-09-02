@@ -9,7 +9,11 @@
       "moveSpeed": 0.3,
       "stopDistance": 1.5,
       "deathAudioClipName": null,
-      "deathVfxName": null
+      "deathVfxName": null,
+      "damageCooldown": 0.0,
+      "attackRange": 2.0,
+      "knockbackResistance": 1.0,
+      "gold": 5
     }
   ]
 }

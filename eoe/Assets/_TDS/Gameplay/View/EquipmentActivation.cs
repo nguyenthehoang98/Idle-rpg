@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using System.Collections.Generic;
 using _GameToolkit.ResourceManagement;
 using _TDS.GameConfig;
@@ -67,4 +67,4 @@ namespace _TDS.Gameplay.View
             img.color = color;
         }
     }
-}
+}*/

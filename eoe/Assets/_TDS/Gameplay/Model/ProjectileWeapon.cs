@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 
 namespace _TDS.Gameplay.Model
 {
@@ -10,7 +10,7 @@ namespace _TDS.Gameplay.Model
         
         /*
          * @Abstract
-         */
+         #1#
         protected override void OnPlayAttack()
         {
             base.OnPlayAttack();
@@ -22,7 +22,7 @@ namespace _TDS.Gameplay.Model
         
         /*
          * @private. callback animation
-         */
+         #1#
         public void ExecuteAnimation()
         {
             if (!IsActivated || !IsAttacking) return;
@@ -37,4 +37,4 @@ namespace _TDS.Gameplay.Model
 
         protected override bool UseWeapon => false;
     }
-}
+}*/

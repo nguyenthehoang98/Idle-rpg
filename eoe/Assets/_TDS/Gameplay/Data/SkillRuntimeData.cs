@@ -23,6 +23,6 @@ namespace _TDS.Gameplay.Data
         public Vector2 Muzzle;
         public Vector2 Destination;
         public bool UseWeapon;
-        public Weapon Weapon;
+        //public Weapon Weapon;
     }
 }

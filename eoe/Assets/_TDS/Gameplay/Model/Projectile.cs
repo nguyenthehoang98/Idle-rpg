@@ -86,7 +86,7 @@ namespace _TDS.Gameplay.Model
 #endif
         }*/
 
-        public void Initialize(Weapon weapon)
+        /*public void Initialize(Weapon weapon)
         {
             blockRotation = false;
             elapsedTime = 0;
@@ -105,7 +105,7 @@ namespace _TDS.Gameplay.Model
             EnableTrail();
 
             onInitialize?.Invoke();
-        }
+        }*/
 
         public void ImmediatelySetPosition(Vector3 position)
         {

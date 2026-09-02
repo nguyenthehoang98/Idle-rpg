@@ -74,7 +74,7 @@ namespace _TDS.Gameplay.Model
                 vfxPrefab = await AssetLoader.GetAssetCached<GameObject>(monsterConfigData.deathVfxName);
             }
             
-            scaleTransform.localScale = scaleDefinition.sizeScale * Vector3.one;
+            scaleTransform.localScale = scaleDefinition.sizeMultiplier * Vector3.one;
             
             OnMonsterEnable?.Invoke(this);
             

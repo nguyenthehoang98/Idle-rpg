@@ -10,13 +10,13 @@ namespace _TDS.GameConfig
     [Serializable, ExcelAsset(
          ExcelPath = "Assets/Excels/MonsterConfig.xlsx",
          ConfigPath = "Assets/_TDSAssets/Config/MonsterConfig.json")]
-    public class MonsterConfig : IConfig
+    public class MonsterConfig : Config
     {
         [SerializeField, JsonProperty] private List<MonsterConfigData> monsters = new List<MonsterConfigData>();
 
         private Dictionary<int, MonsterConfigData> cached;
 
-        public void OnMappingValue()
+        public override void OnMappingValue()
         {
             cached = new Dictionary<int, MonsterConfigData>();
 
@@ -24,14 +24,6 @@ namespace _TDS.GameConfig
             {
                 if (!cached.TryAdd(data.id, data)) Debug.LogError($"Duplicate monster '{data.id}'");
             }
-        }
-
-        public void OnImported()
-        {
-        }
-
-        public void OnCompleteImported()
-        {
         }
 
         public bool TryGetMonster(int monsterId, out MonsterConfigData data)

@@ -1,25 +1,26 @@
 using System;
 using System.Collections.Generic;
 using _GameToolkit.GameConfig;
-using _GameToolkit.Skills;
+using ExcelExtension;
+using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace _TDS.GameConfig
 {
-#if UNITY_EDITOR
-    [Serializable]
-    public class SkillConfig : IConfig
+    [Serializable, ExcelAsset(
+         ExcelPath = "Assets/Excels/SkillConfig.xlsx",
+         ConfigPath = "Assets/_TDSAssets/Config/SkillConfig.json")]
+    public class SkillConfig : Config
     {
-        [SerializeField] private List<SkillData> skills = new List<SkillData>();
+        [SerializeField, JsonProperty] private List<SkillConfigData> skills = new List<SkillConfigData>();
 
-        private Dictionary<int, SkillData> cached;
+        private Dictionary<int, SkillConfigData> cached;
 
-        public void OnMappingValue()
+        public override void OnMappingValue()
         {
-            cached = new Dictionary<int, SkillData>();
+            cached = new Dictionary<int, SkillConfigData>();
 
-            foreach (SkillData skillData in skills)
+            foreach (SkillConfigData skillData in skills)
             {
                 if (!cached.TryAdd(skillData.skillId, skillData))
                 {
@@ -28,54 +29,9 @@ namespace _TDS.GameConfig
             }
         }
 
-        public void OnImported()
+        public bool TryGetSkill(int skillId, out SkillConfigData data)
         {
+            return cached.TryGetValue(skillId, out data);
         }
-
-        public void OnCompleteImported()
-        {
-        }
-
-        public bool TryGetSkillOnEditor(int skillId, out SkillData skill)
-        {
-            return cached.TryGetValue(skillId, out skill);
-        }
-    }
-#endif
-
-    [Serializable]
-    public struct SkillData
-    {
-        public int skillId;
-        public string prefabName;
-
-        public float damageTickInterval;
-
-        [FormerlySerializedAs("findTarget")] public TargetSelectionType targetSelection;
-        public float attackRange;
-
-        public float projectileDuration;
-        public float boomerangOutboundDuration;
-        public float boomerangReturnDuration;
-        public float boomerangHangDuration;
-        public TrajectoryStationaryPivot stationaryPivot;
-        public float stationaryRandomRadius;
-        public float stationaryDuration;
-        public float splineWindupDuration;
-        public float splineExecuteDuration;
-        public float splineRecoveryDuration;
-
-        public float collisionStartDelay;
-        public float collisionDuration;
-        public float targetHitCooldown;
-        public int maxHitCount;
-
-        public float spreadAngleStep;
-        public float parallelDistanceStep;
-    }
-
-    public enum TrajectoryStationaryPivot
-    {
-        Weapon, Enemy, Random
     }
 }

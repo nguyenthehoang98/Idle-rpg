@@ -1,4 +1,4 @@
-using System;
+/*using System;
 using System.Collections.Generic;
 using _TDS.GameConfig;
 using Cysharp.Threading.Tasks;
@@ -41,4 +41,4 @@ namespace _TDS.Gameplay.View
             closeAnimation.Play();
         }
     }
-}
+}*/

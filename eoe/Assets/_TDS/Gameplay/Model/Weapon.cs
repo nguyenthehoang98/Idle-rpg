@@ -1,4 +1,4 @@
-using System;
+/*using System;
 using System.Collections;
 using System.Collections.Generic;
 using _GameToolkit.ResourceManagement;
@@ -30,13 +30,13 @@ namespace _TDS.Gameplay.Model
         [SerializeField] private float rotationDuration = 0.15f;
         [SerializeField] private Transform muzzle;
 
-        private WeaponUpgradeData current;
-        private WeaponUpgradeData levelUp;
-        private WeaponUpgradeData powerX2;
-        private WeaponUpgradeData powerX3;
+        //private WeaponUpgradeData current;
+        //private WeaponUpgradeData levelUp;
+        //private WeaponUpgradeData powerX2;
+        //private WeaponUpgradeData powerX3;
 
-        private Dictionary<int, List<WeaponUpgradeData>> upgradesData;
-        private WeaponUpgradeData[] groups;
+        //private Dictionary<int, List<WeaponUpgradeData>> upgradesData;
+        //private WeaponUpgradeData[] groups;
         private bool[] isUpgraded;
         private int[] currentLevel = new int[2];
 
@@ -55,7 +55,7 @@ namespace _TDS.Gameplay.Model
 
         protected WeaponUpgradeData CurrentUpgradeData => current;
         protected DependencyResetAttack DependencyReset => dependencyReset;
-        protected SkillData SkillData { get; private set; }
+        protected SkillConfigData SkillConfigData { get; private set; }
         protected WeaponData WeaponData { get; private set; }
         protected float DeltaTime { get; private set; } = 0.034f;
         protected float TimeScale { get; private set; } = 1f;
@@ -86,7 +86,7 @@ namespace _TDS.Gameplay.Model
             powerX3 = upgradeDataX3;
             upgradesData = dict;
             WeaponData = weaponData;
-            SkillData = weaponData.skillData;
+            SkillConfigData = weaponData.skillConfigData;
             currentLevel = new int[2] { 1, 1 };
 
             rotatePivot.localScale = new Vector3(faceFlip, 1, 1);
@@ -256,7 +256,7 @@ namespace _TDS.Gameplay.Model
                 
                 Vector3 position = GetMuzzlePosition();
 
-                bool found = FindTarget(SkillData.targetSelection, position);
+                bool found = FindTarget(SkillConfigData.targetSelection, position);
                 
                 if (!found)
                 {
@@ -388,7 +388,7 @@ namespace _TDS.Gameplay.Model
         protected bool FindTarget(TargetSelectionType selectionType, Vector3 position)
         {
             Vector3 center = Vector3.zero;
-            float radius = SkillData.attackRange + CurrentUpgradeData.attackRange;
+            float radius = SkillConfigData.attackRange + CurrentUpgradeData.attackRange;
             float sqrRadius = radius * radius;
 
             /*query.FindTarget(type, center, position, radius, (e, float2) =>
@@ -401,7 +401,7 @@ namespace _TDS.Gameplay.Model
 
                 float d = math.lengthsq(float2);
                 return d <= sqrRadius;
-            }, out QueryResult result);*/
+            }, out QueryResult result);#1#
             
             entity = -1;
             destination = Vector3.zero;
@@ -415,7 +415,7 @@ namespace _TDS.Gameplay.Model
             {
                 entity = result.Secondary.Entity;
                 destination = result.Secondary.Position;
-            }*/
+            }#1#
 
             return entity != -1;
         }
@@ -488,4 +488,4 @@ namespace _TDS.Gameplay.Model
             }
         }
     }
-}
+}*/

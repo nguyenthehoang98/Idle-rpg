@@ -34,8 +34,8 @@ namespace _TDS.Boot
             {
                 nameof(MonsterConfig), 
                 nameof(SpawnConfig), 
-                nameof(WeaponConfig), 
-                nameof(PlayerConfig),  
+                nameof(SkillConfig), 
+                nameof(ExpConfig),  
             });
         }
 

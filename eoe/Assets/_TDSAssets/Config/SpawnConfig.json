@@ -2,17 +2,16 @@
   "spawns": [
     {
       "definition": {
-        "level": 1,
-        "wave": 1
+        "level": 0,
+        "wave": 0
       },
       "monsterId": 1001,
       "total": 10,
       "scale": {
-        "attackScale": 1.0,
-        "defenseScale": 2.0,
-        "healthScale": 1.0,
-        "expScale": 1.0,
-        "sizeScale": 1.0
+        "attackMultiplier": 0.0,
+        "healthMultiplier": 0.0,
+        "expMultiplier": 0.0,
+        "sizeMultiplier": 0.0
       },
       "spawnRadius": 1.0,
       "spawnsTime": [
@@ -24,21 +23,23 @@
         1,
         2,
         3
-      ]
+      ],
+      "RandomPortal": 2,
+      "SpawnStartTime": 1.0,
+      "SpawnEndTime": 5.0
     },
     {
       "definition": {
-        "level": 1,
-        "wave": 2
+        "level": 0,
+        "wave": 0
       },
       "monsterId": 1001,
       "total": 15,
       "scale": {
-        "attackScale": 1.0,
-        "defenseScale": 1.0,
-        "healthScale": 1.0,
-        "expScale": 1.0,
-        "sizeScale": 1.0
+        "attackMultiplier": 0.0,
+        "healthMultiplier": 0.0,
+        "expMultiplier": 0.0,
+        "sizeMultiplier": 0.0
       },
       "spawnRadius": 1.0,
       "spawnsTime": [
@@ -50,21 +51,23 @@
         5,
         6,
         7
-      ]
+      ],
+      "RandomPortal": 6,
+      "SpawnStartTime": 3.0,
+      "SpawnEndTime": 6.0
     },
     {
       "definition": {
-        "level": 1,
-        "wave": 3
+        "level": 0,
+        "wave": 0
       },
       "monsterId": 1001,
       "total": 20,
       "scale": {
-        "attackScale": 1.0,
-        "defenseScale": 1.0,
-        "healthScale": 1.0,
-        "expScale": 1.0,
-        "sizeScale": 1.0
+        "attackMultiplier": 0.0,
+        "healthMultiplier": 0.0,
+        "expMultiplier": 0.0,
+        "sizeMultiplier": 0.0
       },
       "spawnRadius": 1.0,
       "spawnsTime": [
@@ -76,21 +79,23 @@
         9,
         10,
         11
-      ]
+      ],
+      "RandomPortal": 10,
+      "SpawnStartTime": 5.0,
+      "SpawnEndTime": 9.0
     },
     {
       "definition": {
-        "level": 1,
-        "wave": 4
+        "level": 0,
+        "wave": 0
       },
       "monsterId": 1001,
       "total": 25,
       "scale": {
-        "attackScale": 1.0,
-        "defenseScale": 1.0,
-        "healthScale": 1.0,
-        "expScale": 1.0,
-        "sizeScale": 1.0
+        "attackMultiplier": 0.0,
+        "healthMultiplier": 0.0,
+        "expMultiplier": 0.0,
+        "sizeMultiplier": 0.0
       },
       "spawnRadius": 1.0,
       "spawnsTime": [
@@ -102,21 +107,23 @@
         1,
         2,
         3
-      ]
+      ],
+      "RandomPortal": 0,
+      "SpawnStartTime": 10.0,
+      "SpawnEndTime": 12.0
     },
     {
       "definition": {
-        "level": 1,
-        "wave": 5
+        "level": 0,
+        "wave": 0
       },
       "monsterId": 1001,
       "total": 30,
       "scale": {
-        "attackScale": 1.0,
-        "defenseScale": 1.0,
-        "healthScale": 1.0,
-        "expScale": 1.0,
-        "sizeScale": 1.0
+        "attackMultiplier": 0.0,
+        "healthMultiplier": 0.0,
+        "expMultiplier": 0.0,
+        "sizeMultiplier": 0.0
       },
       "spawnRadius": 1.0,
       "spawnsTime": [
@@ -128,7 +135,10 @@
         5,
         6,
         7
-      ]
+      ],
+      "RandomPortal": 4,
+      "SpawnStartTime": 13.0,
+      "SpawnEndTime": 18.0
     }
   ]
 }

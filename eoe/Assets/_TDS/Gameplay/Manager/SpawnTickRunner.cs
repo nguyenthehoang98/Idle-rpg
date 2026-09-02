@@ -133,7 +133,7 @@ namespace _TDS.Gameplay.Manager
                 {
                     SpawnConfigData spawn = currents[i];
 
-                    temps[i] = new SpawnTimer(spawn.spawnsTime[0], spawn.spawnsTime[1], spawn.total);
+                    temps[i] = new SpawnTimer(spawn.SpawnStartTime, spawn.SpawnEndTime, spawn.total);
                 }
 
                 return true;
@@ -182,14 +182,7 @@ namespace _TDS.Gameplay.Manager
 
         private void Spawn(SpawnConfigData data)
         {
-            int portalIndex = data.portals[0];
-
-            if (data.portals.Length > 1)
-            {
-                portalIndex = RandomUtils.Range(0, data.portals.Length);
-            }
-
-            Vector3 position = portals[portalIndex].position + new Vector3(
+            Vector3 position = portals[data.RandomPortal].position + new Vector3(
                 RandomUtils.Range(-data.spawnRadius, data.spawnRadius),
                 RandomUtils.Range(-data.spawnRadius, data.spawnRadius)
             );
@@ -198,9 +191,7 @@ namespace _TDS.Gameplay.Manager
 
             monsterConfig.TryGetMonster(data.monsterId, out MonsterConfigData monsterData);
 
-            Monster monster = instance.GetComponent<Monster>();
-
-            AgentManager.Create_Agent(monster, data.scale, monsterData);
+            AgentManager.Create_Agent(instance.GetComponent<Monster>(), data.scale, monsterData);
         }
 
         public void Dispose()

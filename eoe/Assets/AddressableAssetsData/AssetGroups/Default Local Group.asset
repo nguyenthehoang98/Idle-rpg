@@ -20,11 +20,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 11093f1620fa70a419f8349093fa7af0
-    m_Address: WeaponConfig
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 16060bc016f979d45892b8b8dfae864a
     m_Address: T_Powerup.Skill.1002.3
     m_ReadOnly: 0
@@ -107,11 +102,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5ca95fea7e18dc143aa411d80b171ea9
     m_Address: Gun.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5d6ddb7f70cb4de4fb354a518020c358
-    m_Address: PlayerConfig
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -247,6 +237,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e2610a4b8e71c7e449756965d4f888ed
     m_Address: T_Powerup.Skill.1002.8
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ec50cf74d1299bb42aec2d114d0235c3
+    m_Address: ExpConfig
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

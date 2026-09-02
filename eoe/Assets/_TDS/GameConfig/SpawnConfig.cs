@@ -11,13 +11,13 @@ namespace _TDS.GameConfig
     [Serializable, ExcelAsset(
          ExcelPath = "Assets/Excels/SpawnConfig.xlsx",
          ConfigPath = "Assets/_TDSAssets/Config/SpawnConfig.json")]
-    public class SpawnConfig : IConfig
+    public class SpawnConfig : Config
     {
         [SerializeField, JsonProperty] private List<SpawnConfigData> spawns = new List<SpawnConfigData>();
 
         private Dictionary<int, List<SpawnConfigData>> cached;
         
-        public void OnMappingValue()
+        public override void OnMappingValue()
         {
             cached = new Dictionary<int, List<SpawnConfigData>>();
 
@@ -36,7 +36,7 @@ namespace _TDS.GameConfig
             }
         }
 
-        public void OnImported()
+        public override void OnImported()
         {
             for (int i = 0; i < spawns.Count; i++)
             {
@@ -46,7 +46,7 @@ namespace _TDS.GameConfig
             }
         }
 
-        public void OnCompleteImported()
+        public override void OnCompleteImported()
         {
 #if UNITY_EDITOR
             string path = Path.Combine(ConfigPath.Folder, nameof(MonsterConfig), ".json");
@@ -61,7 +61,7 @@ namespace _TDS.GameConfig
             {
                 int monsterId = spawn.monsterId;
                 
-                if (monsterConfig.TryGetMonster(monsterId, out MonsterConfigData data)) continue;
+                if (monsterConfig.TryGetMonster(monsterId, out _)) continue;
 
                 Debug.LogError($"Not found monster '{monsterId}', json '{JsonUtility.ToJson(spawn)}'");
             }

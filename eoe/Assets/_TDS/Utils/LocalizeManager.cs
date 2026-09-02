@@ -19,7 +19,7 @@ namespace _TDS.Utils
         private const string CRIT_DAMAGE_UPGRADE = "Crit damage +{0}%";
         private const string KILL_INSTANT_BELOW_HEALTH_UPGRADE = "Instant kill below health +{0}%";
         
-        public static StringBuilder GetUpgradeWeaponLocalize(WeaponUpgradeData data)
+        /*public static StringBuilder GetUpgradeWeaponLocalize(WeaponUpgradeData data)
         {
             StringBuilder sb = new StringBuilder();
             if (data.attackRate > 0) sb.AppendLine(string.Format(ATTACK_SPEED_UPGRADE, data.attackRate * 100));
@@ -35,7 +35,7 @@ namespace _TDS.Utils
             if (data.critDamage > 0) sb.AppendLine(string.Format(CRIT_DAMAGE_UPGRADE, data.critDamage * 100));
             if (data.executeHealthPercent > 0) sb.AppendLine(string.Format(KILL_INSTANT_BELOW_HEALTH_UPGRADE, data.executeHealthPercent * 100));
             return sb;
-        }
+        }*/
 
         public static string GetPowerLevel(int currentGroup)
         {

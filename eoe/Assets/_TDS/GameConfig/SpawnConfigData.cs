@@ -1,47 +1,81 @@
 ﻿using System;
+using _GameToolkit.Share;
 using Newtonsoft.Json;
+using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _TDS.GameConfig
 {
     [Serializable]
     public struct SpawnConfigData
     {
-        [JsonIgnore] public int[] definitionId;
+        [JsonIgnore] public int[] definitionValues;
         public SpawnDefinition definition;
         public int monsterId;
         public int total;
-        [JsonIgnore] public float[] scales;
+        [JsonIgnore] private float[] scaleValues;
         public SpawnScaleDefinition scale;
         public float spawnRadius;
-        public float[] spawnsTime;
-        public int[] portals;
+        [JsonProperty, SerializeField] private float[] spawnsTime;
+        [JsonProperty, SerializeField] private int[] portals;
+
+        public int RandomPortal
+        {
+            get
+            {
+                if (portals.Length > 1)
+                {
+                    int index = RandomUtils.Range(0, portals.Length);
+                    return portals[index];
+                }
+
+                return 0;
+            }
+        }
+        
+        public float SpawnStartTime
+        {
+            get
+            {
+                if (spawnsTime.Length == 2) return spawnsTime[0];
+                return 0;
+            }
+        }
+
+        public float SpawnEndTime
+        {
+            get
+            {
+                if (spawnsTime.Length == 2) return spawnsTime[1];
+                return float.MaxValue;
+            }
+        }
 
         public void Parse()
         {
-            if (definitionId.Length == 2)
+            if (definitionValues.Length == 2)
             {
                 definition = new SpawnDefinition
                 {
-                    level = definitionId[0],
-                    wave = definitionId[1]
+                    level = definitionValues[0],
+                    wave = definitionValues[1]
                 };
             }
-            if (scales.Length == 5)
+            if (scaleValues.Length == 4)
             {
                 scale = new SpawnScaleDefinition
                 {
-                    attackScale = scales[0],
-                    defenseScale = scales[1],
-                    healthScale = scales[2],
-                    expScale = scales[3],
-                    sizeScale = scales[4]
+                    attackMultiplier = scaleValues[0],
+                    healthMultiplier = scaleValues[1],
+                    expMultiplier = scaleValues[2],
+                    sizeMultiplier = scaleValues[3]
                 };
             }
             if (spawnsTime.Length != 2)
-                Debug.LogError($"Spawns time must be 2 or more '{JsonUtility.ToJson(definitionId)}'");
+                Debug.LogError($"Spawns time must be 2 or more '{JsonUtility.ToJson(definitionValues)}'");
             if (portals.Length == 0)
-                Debug.LogError($"No portal defined '{JsonUtility.ToJson(definitionId)}'");
+                Debug.LogError($"No portal defined '{JsonUtility.ToJson(definitionValues)}'");
         }
     }
 
@@ -53,11 +87,11 @@ namespace _TDS.GameConfig
     }
 
     [Serializable]
-    public struct   SpawnScaleDefinition
+    public struct SpawnScaleDefinition
     {
-        public float attackScale;
-        public float healthScale;
-        public float expScale;
-        public float sizeScale;
+        public float attackMultiplier;
+        public float healthMultiplier;
+        public float expMultiplier;
+        public float sizeMultiplier;
     }
 }

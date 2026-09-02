@@ -1,20 +1,24 @@
 ﻿namespace _GameToolkit.GameConfig
 {
-    public interface IConfig
+    public abstract class Config
     {
         /// <summary>
         /// Gọi khi init value
         /// </summary>
-        void OnMappingValue();
-        
+        public abstract void OnMappingValue();
+
         /// <summary>
         /// Xử lý khi import file
         /// </summary>
-        void OnImported();
-        
+        public virtual void OnImported()
+        {
+        }
+
         /// <summary>
         /// Import lại toàn bộ file
         /// </summary>
-        void OnCompleteImported();
+        public virtual void OnCompleteImported()
+        {
+        }
     }
 }

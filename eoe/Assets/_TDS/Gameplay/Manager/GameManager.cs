@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using _GameToolkit.GameConfig;
@@ -12,28 +13,27 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using BootScene = _GameToolkit.Startup.BootScene;
 using Debug = UnityEngine.Debug;
+using Object = UnityEngine.Object;
 
 namespace _TDS.Gameplay.Manager
 {
     [RequireComponent(typeof(UpdateRunner))]
     public sealed class GameManager : MonoBehaviour
     {
-        [SerializeField] private BottomPanel bottomPanel;
-        [SerializeField] private UpgradeCardUIPicker cardUIPicker;
+        //[SerializeField] private BottomPanel bottomPanel;
+        //[SerializeField] private UpgradeCardUIPicker cardUIPicker;
         [SerializeField] private Energy energy;
-        [SerializeField] private EquipmentQueue equipmentQueue;
-        [SerializeField] private EquipmentActivation equipmentActivation;
+        //[SerializeField] private EquipmentQueue equipmentQueue;
+        //[SerializeField] private EquipmentActivation equipmentActivation;
 
         [SerializeField] private int[] equipments = new int[4];
         [SerializeField] private Transform[] slots = new Transform[4];
 
         private HashSet<string> assetPath = new HashSet<string>();
-        private Dictionary<int, Weapon> weaponContainer = new Dictionary<int, Weapon>();
+        //private Dictionary<int, Weapon> weaponContainer = new Dictionary<int, Weapon>();
         private Dictionary<int, int> damageMemory = new Dictionary<int, int>();
         private UpdateRunner runner;
         private SpawnTickRunner spawnRunner;
-        private WeaponConfig weaponConfig;
-        private PlayerConfig playerConfig;
 
         private int totalMonsterAlive;
         private int currentWeaponSlot;
@@ -54,16 +54,13 @@ namespace _TDS.Gameplay.Manager
             Monster.OnMonsterEnable += MonsterEnable;
             Monster.OnMonsterDisable += MonsterDisable;
 
-            cardUIPicker.OnPickCard += PickCard;
+            //cardUIPicker.OnPickCard += PickCard;
             energy.OnFill += FillEnergy;
-            equipmentQueue.OnQueueFull += QueueFull;
+            //equipmentQueue.OnQueueFull += QueueFull;
         }
 
         private async void Start()
         {
-            playerConfig = ConfigManager.Get<PlayerConfig>();
-            weaponConfig = ConfigManager.Get<WeaponConfig>();
-
             spawnRunner.SetLevel(1);
 
             // load 
@@ -86,7 +83,7 @@ namespace _TDS.Gameplay.Manager
                 await Equip(equipments[i]);
             }
 
-            equipmentQueue.Init(weaponConfig, equipments);
+            //equipmentQueue.Init(weaponConfig, equipments);
 
             await spawnRunner.Initialize();
 
@@ -113,9 +110,9 @@ namespace _TDS.Gameplay.Manager
             Monster.OnMonsterEnable -= MonsterEnable;
             Monster.OnMonsterDisable -= MonsterDisable;
 
-            cardUIPicker.OnPickCard -= PickCard;
+            //cardUIPicker.OnPickCard -= PickCard;
             energy.OnFill -= FillEnergy;
-            equipmentQueue.OnQueueFull -= QueueFull;
+            //equipmentQueue.OnQueueFull -= QueueFull;
 
             spawnRunner.Dispose();
             
@@ -127,13 +124,13 @@ namespace _TDS.Gameplay.Manager
 
         private async UniTask Equip(int weaponId)
         {
-            if (!weaponConfig.TryGetWeaponData(weaponId, out WeaponData weaponData))
+            /*if (!weaponConfig.TryGetWeaponData(weaponId, out WeaponData weaponData))
             {
                 Debug.LogWarning($"Not found weapon with id '{weaponId}'");
                 return;
             }
 
-            string projectileName = weaponData.skillData.prefabName;
+            string projectileName = weaponData.skillConfigData.prefabName;
 
             if (!string.IsNullOrEmpty(projectileName))
             {
@@ -189,25 +186,22 @@ namespace _TDS.Gameplay.Manager
             // Mặc định sẽ có sẵn ở level 1
             weapon.IncreaseUpgradeData(dict[1][0]);
 
-            weaponContainer[weaponId] = weapon;
+            weaponContainer[weaponId] = weapon;*/
+
+            throw new NotImplementedException("equp");
         }
 
         private async UniTask BuildHero(int heroId)
         {
-            if (playerConfig.TryGetHero(heroId, out HeroData heroData))
+            /*if (playerConfig.TryGetHero(heroId, out HeroData heroData))
             {
                 GameObject go = null;
               
                 go = await AssetLoader.GetAsset<GameObject>(heroData.prefabName);
                
                 Object.Instantiate(go, Vector3.zero, Quaternion.identity);
-
-                if (playerConfig.TryGetWing(heroData.wingId, out WingData wingData) && !string.IsNullOrEmpty(wingData.wingName))
-                {
-                    go = await AssetLoader.GetAsset<GameObject>(wingData.wingName);
-                    Object.Instantiate(go, Vector3.zero, Quaternion.identity);
-                }
-            }
+            }*/
+            throw new NotImplementedException("Chua build hero");
         }
 
         private async UniTask RegisterPools<T>(string[] paths) where T : Object
@@ -259,13 +253,20 @@ namespace _TDS.Gameplay.Manager
                 f2 /= speed;
                 float f3 = 0.5f + 0.1f * i;
                 f3 /= speed;
-                Timing.CallDelayed(f1, () => { equipmentActivation.ReleaseAnimation(index, speed); });
-                Timing.CallDelayed(f2, () => { equipmentQueue.PushAnimation(index, speed); });
+                Timing.CallDelayed(f1, () =>
+                {
+                    //equipmentActivation.ReleaseAnimation(index, speed);
+                });
+                Timing.CallDelayed(f2, () =>
+                {
+                    //equipmentQueue.PushAnimation(index, speed);
+                });
                 Timing.CallDelayed(f3, () =>
                 {
-                    if (equipmentQueue.TryGetWeaponData(index, out WeaponData weaponData))
-                        equipmentActivation.SetWeapon(index, weaponData);
-                    equipmentActivation.IdleAnimation(index, speed);
+                    /*if (equipmentQueue.TryGetWeaponData(index, out WeaponData weaponData))
+                        equipmentActivation.SetWeapon(index, weaponData);*/
+                    throw new NotImplementedException("set equipment weapon");
+                    //equipmentActivation.IdleAnimation(index, speed);
                 });
                 d = Mathf.Max(d, f1, f2, f3);
             }
@@ -274,23 +275,23 @@ namespace _TDS.Gameplay.Manager
             {
                 Dictionary<int, int> dict = new Dictionary<int, int>();
 
-                List<int> list = equipmentQueue.GetAllEquipment();
-                foreach (var id in list)
+                //List<int> list = equipmentQueue.GetAllEquipment();
+                /*foreach (var id in list)
                 {
                     if (!dict.TryAdd(id, 1)) dict[id]++;
-                }
+                }*/
 
                 foreach (var pair in dict)
                 {
-                    weaponContainer[pair.Key].Level = pair.Value;
+                    //weaponContainer[pair.Key].Level = pair.Value;
                 }
 
-                foreach (var pair in weaponContainer)
+                //foreach (var pair in weaponContainer)
                 {
-                    equipmentActivation.SetBackgroundColor(list, pair.Key, pair.Value.Level);
+                    //equipmentActivation.SetBackgroundColor(list, pair.Key, pair.Value.Level);
                 }
 
-                equipmentQueue.Clear();
+                //equipmentQueue.Clear();
 
                 energy.SetAnimating(false);
             });
@@ -308,28 +309,28 @@ namespace _TDS.Gameplay.Manager
         {
             SoundManager.Instance.PlayOneShot(await AssetLoader.GetAssetCached<AudioClip>(Path.SFX_ENERGY));
 
-            equipmentQueue.Increase();
+            //equipmentQueue.Increase();
         }
 
         private void ChangePause(bool paused)
         {
-            foreach (var pair in weaponContainer)
+            /*foreach (var pair in weaponContainer)
             {
                 pair.Value.Pause(paused);
-            }
+            }*/
 
             energy.SetPause(paused);
         }
 
         private void ChangeScaleTime(float deltaTime)
         {
-            foreach (var pair in weaponContainer)
+            /*foreach (var pair in weaponContainer)
             {
                 pair.Value.ChangeTimeScale(runner.Loop, runner.TickInterval / runner.Loop);
-            }
+            }*/
         }
 
-        private async void PickCard(WeaponUpgradeData @params)
+        /*private async void PickCard(WeaponUpgradeData @params)
         {
             if (weaponContainer.TryGetValue(@params.id, out Weapon weapon))
             {
@@ -345,7 +346,7 @@ namespace _TDS.Gameplay.Manager
                 await UniTask.WaitForSeconds(0.2f);
                 runner.IsPaused = false;
             }
-        }
+        }*/
 
         private void MonsterDisable(Monster m)
         {
