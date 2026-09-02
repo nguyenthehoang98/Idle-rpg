@@ -11,7 +11,7 @@ namespace _TDS.Gameplay.Manager
         private static Dictionary<int, int> agentToEntity = new Dictionary<int, int>();
         private static Dictionary<int, int> entityToAgent = new Dictionary<int, int>();
         
-        public static int CreateEntity(int agent, MonsterRuntimeData runtimeData, MonsterData monsterData)
+        public static int CreateEntity(int agent, SpawnScaleDefinition spawnScale, MonsterData monsterData)
         {
             /*int entity = EntityManager.NewEntity();
             

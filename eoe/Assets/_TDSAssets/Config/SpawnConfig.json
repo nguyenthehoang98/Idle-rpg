@@ -1,0 +1,134 @@
+{
+    "spawns": [
+        {
+            "definition": {
+                "level": 1,
+                "wave": 1
+            },
+            "monsterId": 1001,
+            "total": 10,
+            "scale": {
+                "attackScale": 1.0,
+                "defenseScale": 2.0,
+                "healthScale": 1.0,
+                "expScale": 1.0,
+                "sizeScale": 1.0
+            },
+            "spawnRadius": 1.0,
+            "spawnsTime": [
+                1.0,
+                5.0
+            ],
+            "portals": [
+                0,
+                1,
+                2,
+                3
+            ]
+        },
+        {
+            "definition": {
+                "level": 1,
+                "wave": 2
+            },
+            "monsterId": 1001,
+            "total": 15,
+            "scale": {
+                "attackScale": 1.0,
+                "defenseScale": 1.0,
+                "healthScale": 1.0,
+                "expScale": 1.0,
+                "sizeScale": 1.0
+            },
+            "spawnRadius": 1.0,
+            "spawnsTime": [
+                3.0,
+                6.0
+            ],
+            "portals": [
+                4,
+                5,
+                6,
+                7
+            ]
+        },
+        {
+            "definition": {
+                "level": 1,
+                "wave": 3
+            },
+            "monsterId": 1001,
+            "total": 20,
+            "scale": {
+                "attackScale": 1.0,
+                "defenseScale": 1.0,
+                "healthScale": 1.0,
+                "expScale": 1.0,
+                "sizeScale": 1.0
+            },
+            "spawnRadius": 1.0,
+            "spawnsTime": [
+                5.0,
+                9.0
+            ],
+            "portals": [
+                8,
+                9,
+                10,
+                11
+            ]
+        },
+        {
+            "definition": {
+                "level": 1,
+                "wave": 4
+            },
+            "monsterId": 1001,
+            "total": 25,
+            "scale": {
+                "attackScale": 1.0,
+                "defenseScale": 1.0,
+                "healthScale": 1.0,
+                "expScale": 1.0,
+                "sizeScale": 1.0
+            },
+            "spawnRadius": 1.0,
+            "spawnsTime": [
+                10.0,
+                12.0
+            ],
+            "portals": [
+                0,
+                1,
+                2,
+                3
+            ]
+        },
+        {
+            "definition": {
+                "level": 1,
+                "wave": 5
+            },
+            "monsterId": 1001,
+            "total": 30,
+            "scale": {
+                "attackScale": 1.0,
+                "defenseScale": 1.0,
+                "healthScale": 1.0,
+                "expScale": 1.0,
+                "sizeScale": 1.0
+            },
+            "spawnRadius": 1.0,
+            "spawnsTime": [
+                13.0,
+                18.0
+            ],
+            "portals": [
+                4,
+                5,
+                6,
+                7
+            ]
+        }
+    ]
+}

@@ -230,11 +230,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: da47545e2a842514ba076f556fbe83ba
-    m_Address: LevelConfig
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: daaf644f5837cd841b39d8bab8b778ee
     m_Address: T_Powerup.Skill.1001.1
     m_ReadOnly: 0

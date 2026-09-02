@@ -6,21 +6,21 @@ namespace _TDS.GameConfig
     public struct PowerFormula
     {
         [SerializeField] private int id;
-        [SerializeField] private float a;
-        [SerializeField] private float b;
+        [SerializeField] private float coefficient;
+        [SerializeField] private float exponent;
 
-        public PowerFormula(int id, float a, float b)
+        public PowerFormula(int id, float coefficient, float exponent)
         {
-            this.a = a;
-            this.b = b;
             this.id = id;
+            this.coefficient = coefficient;
+            this.exponent = exponent;
         }
 
         public int Id => id;
 
         public float Evaluate(float x)
         {
-            return a * Mathf.Pow(x, b);
+            return coefficient * Mathf.Pow(x, exponent);
         }
     }
 }

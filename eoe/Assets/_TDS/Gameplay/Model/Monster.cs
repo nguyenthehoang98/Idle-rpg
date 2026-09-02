@@ -63,7 +63,7 @@ namespace _TDS.Gameplay.Model
             transform.position = Vector3.Lerp(previousPosition, targetPosition, t);
         }
 
-        public async void Initialize(MonsterData monsterData, MonsterRuntimeData runtimeData)
+        public async void Initialize(MonsterData monsterData, SpawnScaleDefinition scaleDefinition)
         {
             if (deathAudioClip == null && !string.IsNullOrEmpty(monsterData.deathAudioClip))
             {
@@ -77,7 +77,7 @@ namespace _TDS.Gameplay.Model
             
             deathVolume = monsterData.volume;
 
-            scaleTransform.localScale = runtimeData.Scale * Vector3.one;
+            scaleTransform.localScale = scaleDefinition.sizeScale * Vector3.one;
             
             OnMonsterEnable?.Invoke(this);
             

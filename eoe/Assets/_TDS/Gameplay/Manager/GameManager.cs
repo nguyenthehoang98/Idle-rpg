@@ -117,6 +117,8 @@ namespace _TDS.Gameplay.Manager
             energy.OnFill -= FillEnergy;
             equipmentQueue.OnQueueFull -= QueueFull;
 
+            spawnRunner.Dispose();
+            
             foreach (var path in assetPath)
             {
                 AssetLoader.UnCache(path);

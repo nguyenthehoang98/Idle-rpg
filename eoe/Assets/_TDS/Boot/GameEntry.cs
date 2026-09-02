@@ -33,7 +33,7 @@ namespace _TDS.Boot
             await ConfigManager.Load(new string[]
             {
                 nameof(MonsterConfig), 
-                nameof(LevelConfig), 
+                nameof(SpawnConfig), 
                 nameof(WeaponConfig), 
                 nameof(PlayerConfig),  
             });

@@ -8,6 +8,7 @@ using _GameToolkit.Updater;
 using _TDS.GameConfig;
 using _TDS.Gameplay.Data;
 using _TDS.Gameplay.Model;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -18,17 +19,16 @@ namespace _TDS.Gameplay.Manager
         [SerializeField] private Transform[] portals;
 
         public event Action<int> OnSpawnCompleted;
-      
+
         private Dictionary<int, GameObject> cachedMonster = new Dictionary<int, GameObject>();
         private HashSet<string> names = new HashSet<string>();
         private SpawnTimer[] temps;
-       
-        private MonsterConfig monsterConfig;
-       
-        private SpawnData[] currentSpawnsData;
-        private LevelData levelData;
 
-        private int maxWave;
+        private Dictionary<int, List<SpawnConfigData>> cachedByLevel;
+        private List<SpawnConfigData> currents;
+        private MonsterConfig monsterConfig;
+        private SpawnConfig spawnConfig;
+        private int maximumWave;
         private int waveIndex;
 
         public bool IsPaused { get; set; }
@@ -37,91 +37,103 @@ namespace _TDS.Gameplay.Manager
         public void SetLevel(int level)
         {
             monsterConfig = ConfigManager.Get<MonsterConfig>();
-            
-            LevelConfig levelConfig = ConfigManager.Get<LevelConfig>();
-            
-            bool found = levelConfig.TryGetLevelData(level, out levelData);
-            
-            if (!found) Debug.LogError($"Level {level} not found");
+            spawnConfig = ConfigManager.Get<SpawnConfig>();
+
+            if (!spawnConfig.TryGetSpawn(level, out var list))
+            {
+                Debug.LogError($"[SpawnTickRunner] Could not find spawn config for {level}");
+            }
+            else
+            {
+                cachedByLevel = new Dictionary<int, List<SpawnConfigData>>();
+
+                foreach (var item in list)
+                {
+                    int wave = item.definition.wave;
+
+                    if (cachedByLevel.TryGetValue(wave, out var cached))
+                    {
+                        cached.Add(item);
+                    }
+                    else
+                    {
+                        cachedByLevel.Add(wave, new List<SpawnConfigData> { item });
+                    }
+                }
+            }
         }
 
-        public async Task Initialize()
+        public async UniTask Initialize()
         {
             GameObject go;
 
-            for (int i = 0; i < levelData.spawns.Length; i++)
+            foreach (var pair in cachedByLevel)
             {
-                SpawnData spawnData = levelData.spawns[i];
-
-                maxWave = Mathf.Max(maxWave, spawnData.wave);
-
-                int monsterId = spawnData.monster;
-
-                if (cachedMonster.ContainsKey(monsterId)) continue;
-
-                bool found = monsterConfig.TryGetMonsterData(monsterId, out var monsterData);
-                if (!found)
+                foreach (var spawn in pair.Value)
                 {
-                    Debug.LogError($"Not found monster data with id '{monsterId}'");
-                    continue;
-                }
+                    maximumWave = Mathf.Max(maximumWave, spawn.definition.wave);
 
-                // CACHE VFX
-                go = await AssetLoader.GetAssetCached<GameObject>(monsterData.deathVfx);
-                    
-                if (names.Add(monsterData.deathVfx))
-                {
-                    Pool.RegisterPool(go, true);
-                }
+                    int monsterId = spawn.monsterId;
 
-                go = await AssetLoader.GetAssetCached<GameObject>(monsterData.prefabName);
+                    if (cachedMonster.ContainsKey(monsterId)) continue;
 
-                cachedMonster.TryAdd(monsterId, go);
-                    
-                if (names.Add(monsterData.prefabName))
-                {
-                    Pool.RegisterPool(go, true);
-                }
-                    
-                if (!string.IsNullOrEmpty(monsterData.deathAudioClip) && names.Add(monsterData.deathAudioClip))
-                {
-                    await AssetLoader.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
+                    if (!monsterConfig.TryGetMonsterData(monsterId, out var monsterData))
+                    {
+                        Debug.LogError($"[SpawnTickRunner] Could not find monster '{monsterId}'");
+                        continue;
+                    }
+
+                    go = await AssetLoader.GetAssetCached<GameObject>(monsterData.deathVfx);
+
+                    if (names.Add(monsterData.deathVfx))
+                    {
+                        Pool.RegisterPool(go, true);
+                    }
+
+                    go = await AssetLoader.GetAssetCached<GameObject>(monsterData.prefabName);
+
+                    cachedMonster.TryAdd(monsterId, go);
+
+                    if (names.Add(monsterData.prefabName))
+                    {
+                        Pool.RegisterPool(go, true);
+                    }
+
+                    if (!string.IsNullOrEmpty(monsterData.deathAudioClip) && names.Add(monsterData.deathAudioClip))
+                    {
+                        await AssetLoader.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
+                    }
                 }
             }
 
-            go = await AssetLoader.GetAsset<GameObject>(levelData.backgroundPrefabName);
-            
+            string background = "1.background";
+
+            go = await AssetLoader.GetAsset<GameObject>(background);
+
+            Debug.LogError($"Fixed background is '{background}'");
+
             Object.Instantiate(go).transform.position = Vector3.zero;
 
             LoadWave(1);
 
-            await Task.CompletedTask;
+            await UniTask.CompletedTask;
         }
 
         private bool LoadWave(int wave)
         {
-            if (wave >= 0 && wave <= maxWave)
+            if (wave >= 0 && wave <= maximumWave)
             {
                 waveIndex = wave;
 
-                List<SpawnData> list = new List<SpawnData>();
+                currents = cachedByLevel[wave];
 
-                foreach (var spawnData in levelData.spawns)
+                temps = new SpawnTimer[currents.Count];
+
+                for (int i = 0; i < currents.Count; i++)
                 {
-                    if(spawnData.wave == wave) list.Add(spawnData);
-                }
+                    SpawnConfigData spawn = currents[i];
 
-                currentSpawnsData = list.ToArray();
-
-                SpawnData[] spawnsData = currentSpawnsData;
-
-                temps = new SpawnTimer[spawnsData.Length];
-
-                for (int i = 0; i < spawnsData.Length; i++)
-                {
-                    SpawnData spawnData = spawnsData[i];
-
-                    temps[i] = new SpawnTimer(spawnData.startTime, spawnData.endTime, spawnData.total);
+                    temps[i] = new SpawnTimer(spawn.spawnsTime[0], spawn.spawnsTime[1], spawn.total);
                 }
 
                 return true;
@@ -138,17 +150,15 @@ namespace _TDS.Gameplay.Manager
 
             bool isWaveCompleted = true;
 
-            for (var i = 0; i < currentSpawnsData.Length; i++)
+            for (var i = 0; i < currents.Count; i++)
             {
-                SpawnData spawnData = currentSpawnsData[i];
-
                 SpawnTimer data = temps[i];
 
                 int count = data.Spawn(deltaTime);
 
                 if (count > 0)
                 {
-                    for (int j = 0; j < count; j++) Spawn(spawnData);
+                    for (int j = 0; j < count; j++) Spawn(currents[i]);
                 }
 
                 if (!data.IsFinished) isWaveCompleted = false;
@@ -170,37 +180,29 @@ namespace _TDS.Gameplay.Manager
             }
         }
 
-        private void Spawn(SpawnData data)
+        private void Spawn(SpawnConfigData data)
         {
             int portalIndex = data.portals[0];
-            
+
             if (data.portals.Length > 1)
             {
                 portalIndex = RandomUtils.Range(0, data.portals.Length);
             }
 
             Vector3 position = portals[portalIndex].position + new Vector3(
-                RandomUtils.Range(-data.radius, data.radius),
-                RandomUtils.Range(-data.radius, data.radius)
+                RandomUtils.Range(-data.spawnRadius, data.spawnRadius),
+                RandomUtils.Range(-data.spawnRadius, data.spawnRadius)
             );
-            
-            GameObject instance = Pool.Instantiate(cachedMonster[data.monster], position, false);
-            
-            monsterConfig.TryGetMonsterData(data.monster, out MonsterData monsterData);
-            
+
+            GameObject instance = Pool.Instantiate(cachedMonster[data.monsterId], position, false);
+
+            monsterConfig.TryGetMonsterData(data.monsterId, out MonsterData monsterData);
+
             Monster monster = instance.GetComponent<Monster>();
-            
-            MonsterRuntimeData runtimeData = new MonsterRuntimeData
-            {
-                AttackScale = data.attackScale,
-                HealthScale = data.healthScale,
-                ExpScale = data.expScale,
-                Scale = data.scale,
-            };
-            
-            AgentManager.Create_Agent(monster, runtimeData, monsterData);
+
+            AgentManager.Create_Agent(monster, data.scale, monsterData);
         }
-        
+
         public void Dispose()
         {
             foreach (var pair in cachedMonster)
@@ -217,12 +219,10 @@ namespace _TDS.Gameplay.Manager
 
             names = null;
         }
-        
-        [Serializable]
+
         private struct SpawnTimer
         {
-            private int total;
-
+            private readonly int total;
             private readonly float startTime;
             private readonly float endTime;
 

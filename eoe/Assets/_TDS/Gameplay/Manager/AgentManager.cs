@@ -67,12 +67,12 @@ namespace _TDS.Gameplay.Manager
             instance = null;
         }
 
-        public static void Create_Agent(Monster monster, MonsterRuntimeData runtimeData, MonsterData monsterData)
+        public static void Create_Agent(Monster monster, SpawnScaleDefinition spawnScale, MonsterData monsterData)
         {
 #if !UNITY_EDITOR
             if (instance == null) return;
 #endif
-            instance.CreateAgent_Private(monster, runtimeData, monsterData);
+            instance.CreateAgent_Private(monster, spawnScale, monsterData);
         }
 
         public static int Query_Agent(float2 position, float2 size, out AgentData[] agentsData)
@@ -145,20 +145,20 @@ namespace _TDS.Gameplay.Manager
             instance.DestroyAgent_Private(agent);
         }
 
-        private void CreateAgent_Private(Monster monster, MonsterRuntimeData runtimeData, MonsterData monsterData)
+        private void CreateAgent_Private(Monster monster, SpawnScaleDefinition scaleDefinition, MonsterData monsterData)
         {
             int agent = CreateAgent(
                 monster.transform.position, monster.Radius, monsterData.speed,
                 stopDistance + monsterData.stopDistance
             ).agent;
             
-            monster.Initialize(monsterData, runtimeData);
+            monster.Initialize(monsterData, scaleDefinition);
             
             Temp temp = new Temp(monster, agent);
             additional.Enqueue(temp);
             container.Add(agent, temp);
             
-            MonsterEntityManager.CreateEntity(agent, runtimeData, monsterData);
+            MonsterEntityManager.CreateEntity(agent, scaleDefinition, monsterData);
         }
 
         private void DestroyAgent_Private(int agent)

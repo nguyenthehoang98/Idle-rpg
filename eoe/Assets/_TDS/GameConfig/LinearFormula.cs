@@ -6,21 +6,21 @@ namespace _TDS.GameConfig
     public struct LinearFormula
     {
         [SerializeField] private int id;
-        [SerializeField] private float a;
-        [SerializeField] private float b;
+        [SerializeField] private float coefficient;
+        [SerializeField] private float offset;
 
-        public LinearFormula(int id, float a, float b)
+        public LinearFormula(int id, float coefficient, float offset)
         {
-            this.a = a;
-            this.b = b;
             this.id = id;
+            this.coefficient = coefficient;
+            this.offset = offset;
         }
 
         public int Id => id;
 
-        public float Evaluate(int x)
+        public float Evaluate(float x)
         {
-            return a * x + b;
+            return coefficient * x + offset;
         }
     }
 }
