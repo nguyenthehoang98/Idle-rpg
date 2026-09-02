@@ -1,11 +1,8 @@
 using System;
 using UnityEngine;
 using UnityEngine.Splines;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
-namespace _KITSystem.SkillSystem.Imp
+namespace _GameToolkit.SkillSystem.Imp
 {
     [Serializable]
     public class TrajectoryData

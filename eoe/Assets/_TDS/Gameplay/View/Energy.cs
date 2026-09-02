@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace _Game.GamePlay.View
+namespace _TDS.Gameplay.View
 {
     public class Energy : MonoBehaviour, IViewTick
     {

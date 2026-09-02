@@ -1,9 +1,8 @@
-using _Game.GamePlay.Data;
 using _KITSystem.Utils;
 using LitMotion.Animation;
 using UnityEngine;
 
-namespace _Game.GamePlay.Model
+namespace _TDS.Gameplay.Model
 {
     [RequireComponent(typeof(Projectile))]
     public class FlyWeapon : BaseWeapon

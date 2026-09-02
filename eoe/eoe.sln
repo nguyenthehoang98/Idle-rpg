@@ -29,8 +29,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KITSystem.Entity", "KITSyst
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LitMotion.Editor", "LitMotion.Editor.csproj", "{e5615827-8df0-e522-d965-e83aa9dd8756}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolbarExtender.Editor", "ToolbarExtender.Editor.csproj", "{7af9ad24-b843-5219-70e5-dd426dd1f7e0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LitMotion.Tests.Benchmark", "LitMotion.Tests.Benchmark.csproj", "{08baeb02-3548-5356-b51f-41ed796ec007}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KITSystem.Schedule", "KITSystem.Schedule.csproj", "{8a9804cd-fe49-8582-7235-899a010bd7d4}"
@@ -72,8 +70,6 @@ Global
 		{8f209bf2-745d-0fde-eb92-92382b8436b0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{e5615827-8df0-e522-d965-e83aa9dd8756}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{e5615827-8df0-e522-d965-e83aa9dd8756}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7af9ad24-b843-5219-70e5-dd426dd1f7e0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7af9ad24-b843-5219-70e5-dd426dd1f7e0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08baeb02-3548-5356-b51f-41ed796ec007}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{08baeb02-3548-5356-b51f-41ed796ec007}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8a9804cd-fe49-8582-7235-899a010bd7d4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

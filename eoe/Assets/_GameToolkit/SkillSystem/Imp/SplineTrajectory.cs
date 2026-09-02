@@ -1,10 +1,10 @@
 using System;
-using _Game.GamePlay.Utils;
-using _KITSystem.SkillSystem.Core;
+using _GameToolkit.SkillSystem.Core;
+using _TDS.Gameplay.Utils;
 using UnityEngine;
 using UnityEngine.Splines;
 
-namespace _KITSystem.SkillSystem.Imp
+namespace _GameToolkit.SkillSystem.Imp
 {
     public class SplineTrajectory : BaseTrajectory
     {

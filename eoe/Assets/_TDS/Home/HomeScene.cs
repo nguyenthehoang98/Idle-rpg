@@ -2,7 +2,7 @@ using _KITSystem.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace _Game.Home
+namespace _TDS.Home
 {
     public class HomeScene : MonoBehaviour
     {

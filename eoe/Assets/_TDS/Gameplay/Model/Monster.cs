@@ -1,16 +1,14 @@
 using System;
-using _Game.Configs;
-using _Game.GamePlay.Data;
-using _Game.GamePlay.Manager;
-using _KITSystem.Resource;
+using _GameToolkit.Resource;
+using _TDS.GameConfig;
+using _TDS.Gameplay.Data;
+using _TDS.Gameplay.Manager;
 using Cysharp.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
-namespace _Game.GamePlay.Model
+namespace _TDS.Gameplay.Model
 {
     [RequireComponent(typeof(MonsterSortingLayer))]
     public class Monster : MonoBehaviour
@@ -69,12 +67,12 @@ namespace _Game.GamePlay.Model
         {
             if (deathAudioClip == null && !string.IsNullOrEmpty(monsterData.deathAudioClip))
             {
-                deathAudioClip = await AssetBundleManager.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
+                deathAudioClip = await AssetManager.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
             }
 
             if (vfxPrefab == null)
             {
-                vfxPrefab = await AssetBundleManager.GetAssetCached<GameObject>(monsterData.deathVfx);
+                vfxPrefab = await AssetManager.GetAssetCached<GameObject>(monsterData.deathVfx);
             }
             
             deathVolume = monsterData.volume;

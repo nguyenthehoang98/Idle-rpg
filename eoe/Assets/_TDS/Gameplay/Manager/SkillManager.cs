@@ -1,21 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using _Game.Configs;
-using _Game.GamePlay.Data;
-using _Game.GamePlay.Entity;
-using _Game.GamePlay.Model;
-using _Game.GamePlay.Utils;
+using _GameToolkit.Resource;
+using _GameToolkit.SkillSystem.Core;
+using _GameToolkit.SkillSystem.Imp;
 using _KITSystem.Entity;
-using _KITSystem.Resource;
 using _KITSystem.Schedule;
-using _KITSystem.SkillSystem.Core;
-using _KITSystem.SkillSystem.Imp;
 using _KITSystem.Utils;
+using _TDS.GameConfig;
+using _TDS.Gameplay.Data;
+using _TDS.Gameplay.Entity;
+using _TDS.Gameplay.Model;
+using _TDS.Gameplay.Utils;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace _Game.GamePlay.Manager
+namespace _TDS.Gameplay.Manager
 {
     [Serializable]
     public sealed class SkillManager : Spu, ITickable
@@ -44,7 +44,7 @@ namespace _Game.GamePlay.Manager
 
             foreach (var name in names)
             {
-                AssetBundleManager.UnCache(name);
+                AssetManager.UnCache(name);
             }
 
             names = null;
@@ -193,7 +193,7 @@ namespace _Game.GamePlay.Manager
             }
             else
             {
-                GameObject prefab = await AssetBundleManager.GetAssetCached<GameObject>(skillData.prefabName);
+                GameObject prefab = await AssetManager.GetAssetCached<GameObject>(skillData.prefabName);
                 
                 if (prefab == null)
                 {
@@ -492,7 +492,7 @@ namespace _Game.GamePlay.Manager
         {
             if (string.IsNullOrEmpty(prefabName)) return;
 
-            GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(prefabName);
+            GameObject go = await AssetManager.GetAssetCached<GameObject>(prefabName);
 
             if (names.Add(prefabName)) Pool.RegisterPool(go, true);
 
@@ -502,7 +502,7 @@ namespace _Game.GamePlay.Manager
 
         private async void SpawnTextDamage(int damage, bool critical, Vector3 position)
         {
-            GameObject go = await AssetBundleManager.GetAssetCached<GameObject>(critical
+            GameObject go = await AssetManager.GetAssetCached<GameObject>(critical
                     ? Path.TEXT_DAMAGE_CRITICAL
                     : Path.TEXT_DAMAGE_NORMAL);
 

@@ -1,8 +1,8 @@
 using System;
 using System.Text;
-using _Game.Configs;
+using _TDS.GameConfig;
 
-namespace _Game.Utils
+namespace _TDS.Utils
 {
     public static class LocalizeManager
     {

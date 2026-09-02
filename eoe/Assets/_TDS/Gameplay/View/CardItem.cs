@@ -1,14 +1,14 @@
 using System;
-using _Game.Configs;
-using _Game.GamePlay.Utils;
-using _Game.Utils;
-using _KITSystem.Resource;
+using _GameToolkit.Resource;
+using _TDS.GameConfig;
+using _TDS.Gameplay.Utils;
+using _TDS.Utils;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace _Game.GamePlay.View
+namespace _TDS.Gameplay.View
 {
     public struct CardItemData
     {
@@ -50,7 +50,7 @@ namespace _Game.GamePlay.View
             {
                 PowerItem item = items[i];
                 WeaponUpgradeData data = satellites[i];
-                item.imgIcon.sprite = await AssetBundleManager.GetAssetCached<Sprite>(data.iconName);
+                item.imgIcon.sprite = await AssetManager.GetAssetCached<Sprite>(data.iconName);
 
                 if (data.Equals(upgradeData))
                 {

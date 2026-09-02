@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace _KITSystem.SkillSystem.Core
+namespace _GameToolkit.SkillSystem.Core
 {
     public struct QueryResult
     {

@@ -1,17 +1,18 @@
-namespace _KITSystem.Config
+namespace _GameToolkit.GameConfig
 {
     public static class ConfigPath
     {
         private const string EditorPrefsKeyFolderPrefix = "ConfigDownloader_Folder";
 
-        private static string folder = "Assets/_Source/Configs";
+        private static string folder = "Assets/_TDSAssets/Config";
         
         public static string Folder
         {
             get
             {
 #if UNITY_EDITOR
-                return UnityEditor.EditorPrefs.GetString(EditorPrefsKeyFolderPrefix);
+                var p = UnityEditor.EditorPrefs.GetString(EditorPrefsKeyFolderPrefix);
+                if (!string.IsNullOrEmpty(p)) return p;
 #endif
                 return folder;
             }

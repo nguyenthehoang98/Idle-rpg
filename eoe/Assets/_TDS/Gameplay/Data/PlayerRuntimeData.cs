@@ -1,4 +1,4 @@
-namespace _Game.GamePlay.Data
+namespace _TDS.Gameplay.Data
 {
     public struct PlayerRuntimeData
     {

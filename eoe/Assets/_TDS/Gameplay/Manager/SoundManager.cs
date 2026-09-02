@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace _Game.GamePlay.Manager
+namespace _TDS.Gameplay.Manager
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(AudioSource))]

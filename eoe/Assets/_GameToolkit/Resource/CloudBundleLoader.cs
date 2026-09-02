@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace _KITSystem.Resource
+namespace _GameToolkit.Resource
 {
     internal class CloudBundleLoader : IBundleLoader
     {
@@ -18,7 +18,7 @@ namespace _KITSystem.Resource
 
         public IReadOnlyCollection<string> LoadedBundleNames => bundles.Keys;
 
-        public void SetDatabaseUrl(string url) => databaseUrl = url;
+        public CloudBundleLoader(string url) => databaseUrl = url;
 
         public UniTask<T> GetAsset<T>(string assetName) where T : UnityEngine.Object
         {

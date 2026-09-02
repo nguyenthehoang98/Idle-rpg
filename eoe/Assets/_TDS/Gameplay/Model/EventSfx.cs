@@ -1,7 +1,7 @@
-using _Game.GamePlay.Manager;
+using _TDS.Gameplay.Manager;
 using UnityEngine;
 
-namespace _Game.GamePlay.Model
+namespace _TDS.Gameplay.Model
 {
     public class EventSfx : MonoBehaviour
     {

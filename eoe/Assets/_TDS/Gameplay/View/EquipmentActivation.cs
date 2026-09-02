@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
-using _Game.Configs;
-using _Game.GamePlay.Utils;
-using _KITSystem.Resource;
+using _GameToolkit.Resource;
+using _TDS.GameConfig;
+using _TDS.Gameplay.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace _Game.GamePlay.View
+namespace _TDS.Gameplay.View
 {
     public class EquipmentActivation : MonoBehaviour
     {
@@ -48,7 +48,7 @@ namespace _Game.GamePlay.View
            
             if (!string.IsNullOrEmpty(data.iconName))
             {
-                sl.SetIcon(await AssetBundleManager.GetAssetCached<Sprite>(data.iconName));                
+                sl.SetIcon(await AssetManager.GetAssetCached<Sprite>(data.iconName));                
             }
         }
 

@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using _Game.Configs;
-using _Game.GamePlay.Utils;
-using _KITSystem.Resource;
+using _GameToolkit.Resource;
 using _KITSystem.Utils;
+using _TDS.GameConfig;
+using _TDS.Gameplay.Utils;
 using UnityEngine;
 
-namespace _Game.GamePlay.View
+namespace _TDS.Gameplay.View
 {
     public class EquipmentQueue : MonoBehaviour
     {
@@ -144,7 +144,7 @@ namespace _Game.GamePlay.View
                 
                 if (!string.IsNullOrEmpty(weaponData.iconName))
                 {
-                    slots[i].SetIcon(await AssetBundleManager.GetAssetCached<Sprite>(weaponData.iconName));                
+                    slots[i].SetIcon(await AssetManager.GetAssetCached<Sprite>(weaponData.iconName));                
                 }
             }
             

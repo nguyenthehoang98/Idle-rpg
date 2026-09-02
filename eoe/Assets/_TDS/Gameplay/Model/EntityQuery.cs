@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
-using _Game.GamePlay.Manager;
-using _Game.GamePlay.Utils;
+using _GameToolkit.Avoidance;
+using _GameToolkit.SkillSystem.Core;
 using _KITSystem.Entity;
-using _KITSystem.Grid;
-using _KITSystem.SkillSystem.Core;
+using _TDS.Gameplay.Manager;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace _Game.GamePlay.Model
+namespace _TDS.Gameplay.Model
 {
     [Serializable]
     public class EntityQuery : IQuery

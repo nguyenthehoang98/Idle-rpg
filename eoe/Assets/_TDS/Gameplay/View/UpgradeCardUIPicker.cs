@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using _Game.Configs;
+using _TDS.GameConfig;
 using Cysharp.Threading.Tasks;
 using LitMotion.Animation;
 using UnityEngine;
 
-namespace _Game.GamePlay.View
+namespace _TDS.Gameplay.View
 {
     public class UpgradeCardUIPicker : MonoBehaviour
     {

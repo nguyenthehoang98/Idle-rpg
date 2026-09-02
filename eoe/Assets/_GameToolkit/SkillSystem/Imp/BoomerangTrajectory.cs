@@ -1,8 +1,8 @@
 using System;
-using _KITSystem.SkillSystem.Core;
+using _GameToolkit.SkillSystem.Core;
 using UnityEngine;
 
-namespace _KITSystem.SkillSystem.Imp
+namespace _GameToolkit.SkillSystem.Imp
 {
     public class BoomerangTrajectory : BaseTrajectory
     {

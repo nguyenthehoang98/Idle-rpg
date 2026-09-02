@@ -1,25 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-using _Game.Configs;
-using _Game.GamePlay.Data;
-using _Game.GamePlay.Entity;
-using _Game.GamePlay.Manager;
-using _Game.GamePlay.Utils;
-using _Game.GamePlay.View;
+using _GameToolkit.Resource;
+using _GameToolkit.SkillSystem.Core;
+using _GameToolkit.SkillSystem.Imp;
 using _KITSystem.Entity;
-using _KITSystem.Resource;
-using _KITSystem.SkillSystem.Core;
-using _KITSystem.SkillSystem.Imp;
+using _TDS.GameConfig;
+using _TDS.Gameplay.Data;
+using _TDS.Gameplay.Entity;
+using _TDS.Gameplay.Manager;
+using _TDS.Gameplay.Utils;
+using _TDS.Gameplay.View;
 using Cysharp.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
-using Debug = UnityEngine.Debug;
 
-namespace _Game.GamePlay.Model
+namespace _TDS.Gameplay.Model
 {
     public abstract class BaseWeapon : MonoBehaviour
     {
@@ -108,7 +105,7 @@ namespace _Game.GamePlay.Model
             
             if (!isCachedAudioClip)
             {
-                audioClip = await AssetBundleManager.GetAssetCached<AudioClip>(weaponData.audioClip);
+                audioClip = await AssetManager.GetAssetCached<AudioClip>(weaponData.audioClip);
                 isCachedAudioClip = true;
             }
             
@@ -124,7 +121,7 @@ namespace _Game.GamePlay.Model
         {
             string audioPath = WeaponData.audioClip;
             
-            if (!string.IsNullOrEmpty(audioPath)) AssetBundleManager.UnCache(audioPath);
+            if (!string.IsNullOrEmpty(audioPath)) AssetManager.UnCache(audioPath);
         }
 
         public List<CardItemData> GetUpgradeDataAvailable()

@@ -1,13 +1,11 @@
 using System;
-using _KITSystem.Resource;
-using _KITSystem.SkillSystem.Imp;
+using _GameToolkit.Resource;
+using _GameToolkit.SkillSystem.Imp;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
-namespace _Game.GamePlay.Model
+namespace _TDS.Gameplay.Model
 {
     public class Projectile : MonoBehaviour
     {

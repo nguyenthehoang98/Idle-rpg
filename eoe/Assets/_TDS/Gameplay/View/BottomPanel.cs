@@ -1,11 +1,11 @@
-using _Game.GamePlay.Manager;
-using _Game.GamePlay.Utils;
-using _KITSystem.Resource;
+using _GameToolkit.Resource;
+using _TDS.Gameplay.Manager;
+using _TDS.Gameplay.Utils;
 using LitMotion.Animation;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace _Game.GamePlay.View
+namespace _TDS.Gameplay.View
 {
     public class BottomPanel : MonoBehaviour
     {
@@ -49,7 +49,7 @@ namespace _Game.GamePlay.View
             hammerAnimation.Play();
             equipmentQueue.Decrease(0.25f);
             RefreshUI();
-            SoundManager.Instance.PlayOneShot(await AssetBundleManager.GetAssetCached<AudioClip>(Path.SFX_HAMMER));
+            SoundManager.Instance.PlayOneShot(await AssetManager.GetAssetCached<AudioClip>(Path.SFX_HAMMER));
         }
 
         private void HammerComplete()

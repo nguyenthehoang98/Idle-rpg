@@ -7,7 +7,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 
-namespace _KITSystem.Resource
+namespace _GameToolkit.Resource
 {
     internal class LocalBundleLoader : IBundleLoader
     {
@@ -33,7 +33,6 @@ namespace _KITSystem.Resource
                 Dictionary.Remove(assetName);
 
                 Addressables.Release(entry.Handle);
-
 #if UNITY_EDITOR
                 Debug.Log($"[Loaded] Uncached asset: {assetName}");
 #endif

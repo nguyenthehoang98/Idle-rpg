@@ -1,8 +1,8 @@
-using _KITSystem.Resource;
+using _GameToolkit.Resource;
 using _KITSystem.Utils;
 using UnityEngine;
 
-namespace _Game.GamePlay.Model
+namespace _TDS.Gameplay.Model
 {
     public class DelayDestroyObject : MonoBehaviour
     {

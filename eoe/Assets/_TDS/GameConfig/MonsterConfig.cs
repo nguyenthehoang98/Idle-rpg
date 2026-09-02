@@ -1,16 +1,14 @@
 using System;
 using System.Collections.Generic;
-using _KITSystem.Config;
-using Newtonsoft.Json;
+using _GameToolkit.GameConfig;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace _Game.Configs
+namespace _TDS.GameConfig
 {
     [Serializable]
     public class MonsterConfig : IGameConfig
     {
-        [SerializeField, JsonProperty] private List<MonsterData> monsters = new List<MonsterData>();
+        [SerializeField] private List<MonsterData> monsters = new List<MonsterData>();
 
         private Dictionary<int, MonsterData> cached;
 
@@ -24,11 +22,11 @@ namespace _Game.Configs
             }
         }
 
-        public void OnPostImported()
+        public void OnImported()
         {
         }
 
-        public void OnValidateLinkConfig()
+        public void OnCompleteImported()
         {
         }
 

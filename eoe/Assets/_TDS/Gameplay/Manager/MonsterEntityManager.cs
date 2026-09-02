@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using _Game.Configs;
-using _Game.GamePlay.Data;
-using _Game.GamePlay.Entity;
 using _KITSystem.Entity;
+using _TDS.GameConfig;
+using _TDS.Gameplay.Data;
+using _TDS.Gameplay.Entity;
 using UnityEngine;
 
-namespace _Game.GamePlay.Manager
+namespace _TDS.Gameplay.Manager
 {
     public static class MonsterEntityManager
     {

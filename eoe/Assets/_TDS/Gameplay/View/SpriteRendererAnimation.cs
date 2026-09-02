@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace _Game.GamePlay.View
+namespace _TDS.Gameplay.View
 {
     public class SpriteRendererAnimation : BaseAnimation<SpriteRenderer>
     {

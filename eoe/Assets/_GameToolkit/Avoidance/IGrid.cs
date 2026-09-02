@@ -1,6 +1,6 @@
 using Unity.Mathematics;
 
-namespace _KITSystem.Grid
+namespace _GameToolkit.Avoidance
 {
     public interface IGrid
     {

@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using _Game.GamePlay;
-using _Game.GamePlay.Model;
-using _KITSystem.SkillSystem.Core;
+using _GameToolkit.SkillSystem.Core;
+using _TDS.Gameplay.Model;
 using UnityEngine;
 
-namespace _KITSystem.SkillSystem.Imp
+namespace _GameToolkit.SkillSystem.Imp
 {
     public struct DamageEntityInfo
     {

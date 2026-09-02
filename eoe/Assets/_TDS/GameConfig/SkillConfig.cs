@@ -1,16 +1,14 @@
 using System;
 using System.Collections.Generic;
-using _KITSystem.Config;
-using _KITSystem.SkillSystem.Core;
-using _KITSystem.SkillSystem.Imp;
+using _GameToolkit.GameConfig;
+using _GameToolkit.SkillSystem.Core;
+using _GameToolkit.SkillSystem.Imp;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace _Game.Configs
+namespace _TDS.GameConfig
 {
 #if UNITY_EDITOR
     [Serializable]
-    // không dùng cho runtime
     public class SkillConfig : IGameConfig
     {
         [SerializeField] private List<SkillData> skills = new List<SkillData>();
@@ -30,11 +28,11 @@ namespace _Game.Configs
             }
         }
 
-        public void OnPostImported()
+        public void OnImported()
         {
         }
 
-        public void OnValidateLinkConfig()
+        public void OnCompleteImported()
         {
         }
 
@@ -48,26 +46,14 @@ namespace _Game.Configs
     [Serializable]
     public struct SkillData
     {
-        /*
-         * @Default stat
-         */
         public int skillId;
-        public string prefabName; // Đọc từ weapon. monster
+        public string prefabName;
 
-        /*
-         * @Damage ticet
-         */
         public float damageTickInterval;
 
-        /*
-         * @Query entity
-         */
         public FindTargetType findTarget;
         public float attackRange;
 
-        /*
-         * @Trajectory
-         */
         public TrajectoryType trajectory;
         public float projectileDuration;
         public float boomerangOutboundDuration;
@@ -79,17 +65,12 @@ namespace _Game.Configs
         public float splineWindupDuration;
         public float splineExecuteDuration;
         public float splineRecoveryDuration;
-        /*
-         * @Collider
-         */
+
         public float collisionStartDelay;
         public float collisionDuration;
         public float targetHitCooldown;
         public int maxHitCount;
 
-        /*
-         * @Extra/bonus
-         */
         public float spreadAngleStep;
         public float parallelDistanceStep;
     }

@@ -1,19 +1,19 @@
 using System.Collections.Generic;
 using System.Diagnostics;
-using _Game.Configs;
-using _Game.GamePlay.Data;
-using _Game.GamePlay.Model;
-using _Game.GamePlay.Utils;
-using _Game.GamePlay.View;
-using _KITSystem.Config;
-using _KITSystem.Resource;
+using _GameToolkit.GameConfig;
+using _GameToolkit.Resource;
 using _KITSystem.Schedule;
 using _KITSystem.Utils;
+using _TDS.GameConfig;
+using _TDS.Gameplay.Data;
+using _TDS.Gameplay.Model;
+using _TDS.Gameplay.Utils;
+using _TDS.Gameplay.View;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-namespace _Game.GamePlay.Manager
+namespace _TDS.Gameplay.Manager
 {
     [RequireComponent(typeof(TickSystemOwner))]
     public sealed class GameManager : MonoBehaviour
@@ -122,7 +122,7 @@ namespace _Game.GamePlay.Manager
 
             foreach (var path in assetPath)
             {
-                AssetBundleManager.UnCache(path);
+                AssetManager.UnCache(path);
             }
         }
 
@@ -138,14 +138,14 @@ namespace _Game.GamePlay.Manager
 
             if (!string.IsNullOrEmpty(projectileName))
             {
-                GameObject projectile = await AssetBundleManager.GetAssetCached<GameObject>(projectileName);                
+                GameObject projectile = await AssetManager.GetAssetCached<GameObject>(projectileName);                
             
                 Pool.RegisterPool(projectile, true);
                 
                 assetPath.Add(projectileName);
             }
 
-            GameObject go = await AssetBundleManager.GetAsset<GameObject>(weaponData.prefabName);
+            GameObject go = await AssetManager.GetAsset<GameObject>(weaponData.prefabName);
             
             go = Object.Instantiate(go, slots[currentWeaponSlot]);
            
@@ -199,13 +199,13 @@ namespace _Game.GamePlay.Manager
             {
                 GameObject go = null;
               
-                go = await AssetBundleManager.GetAsset<GameObject>(heroData.prefabName);
+                go = await AssetManager.GetAsset<GameObject>(heroData.prefabName);
                
                 Object.Instantiate(go, Vector3.zero, Quaternion.identity);
 
                 if (playerConfig.TryGetWing(heroData.wingId, out WingData wingData) && !string.IsNullOrEmpty(wingData.wingName))
                 {
-                    go = await AssetBundleManager.GetAsset<GameObject>(wingData.wingName);
+                    go = await AssetManager.GetAsset<GameObject>(wingData.wingName);
                     Object.Instantiate(go, Vector3.zero, Quaternion.identity);
                 }
             }
@@ -218,7 +218,7 @@ namespace _Game.GamePlay.Manager
             // Load song song
             for (int i = 0; i < paths.Length; i++)
             {
-                tasks[i] = AssetBundleManager.GetAssetCached<T>(paths[i]);
+                tasks[i] = AssetManager.GetAssetCached<T>(paths[i]);
             }
 
             T[] assets = await UniTask.WhenAll(tasks);
@@ -302,12 +302,12 @@ namespace _Game.GamePlay.Manager
                 return;
             }
 
-            SoundManager.Instance.PlayOneShot(await AssetBundleManager.GetAssetCached<AudioClip>(Path.SFX_ENERGY_FULL));
+            SoundManager.Instance.PlayOneShot(await AssetManager.GetAssetCached<AudioClip>(Path.SFX_ENERGY_FULL));
         }
 
         private async void FillEnergy()
         {
-            SoundManager.Instance.PlayOneShot(await AssetBundleManager.GetAssetCached<AudioClip>(Path.SFX_ENERGY));
+            SoundManager.Instance.PlayOneShot(await AssetManager.GetAssetCached<AudioClip>(Path.SFX_ENERGY));
 
             equipmentQueue.Increase();
         }
@@ -337,7 +337,7 @@ namespace _Game.GamePlay.Manager
                 weapon.IncreaseUpgradeData(@params);
 
                 SoundManager.Instance.PlayOneShot(
-                    await AssetBundleManager.GetAssetCached<AudioClip>(Path.SFX_POWER_SELECT));
+                    await AssetManager.GetAssetCached<AudioClip>(Path.SFX_POWER_SELECT));
                 await UniTask.WaitForSeconds(0.2f);
 
                 cardUIPicker.Hide();
@@ -374,7 +374,7 @@ namespace _Game.GamePlay.Manager
                 player.CurrentExp -= data.exp;
 
                 SoundManager.Instance.PlayOneShot(
-                    await AssetBundleManager.GetAssetCached<AudioClip>(Path.SFX_LEVEL_UP));
+                    await AssetManager.GetAssetCached<AudioClip>(Path.SFX_LEVEL_UP));
 
                 await UniTask.WaitForSeconds(0.25f);
 

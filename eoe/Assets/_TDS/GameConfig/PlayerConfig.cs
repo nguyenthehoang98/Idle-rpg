@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using _KITSystem.Config;
+using _GameToolkit.GameConfig;
 using UnityEngine;
 
-namespace _Game.Configs
+namespace _TDS.GameConfig
 {
     [Serializable]
     public class PlayerConfig : IGameConfig
@@ -37,7 +37,7 @@ namespace _Game.Configs
             }
         }
 
-        public void OnPostImported()
+        public void OnImported()
         {
             foreach (var heroData in heros)
             {
@@ -55,7 +55,7 @@ namespace _Game.Configs
             }
         }
 
-        public void OnValidateLinkConfig()
+        public void OnCompleteImported()
         {
         }
 

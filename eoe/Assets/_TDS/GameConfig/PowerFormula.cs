@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+using UnityEngine;
 
-namespace _Game.Configs
+namespace _TDS.GameConfig
 {
     [System.Serializable]
     public struct PowerFormula

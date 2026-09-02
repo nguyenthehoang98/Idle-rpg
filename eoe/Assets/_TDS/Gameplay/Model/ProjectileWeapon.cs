@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace _Game.GamePlay.Model
+namespace _TDS.Gameplay.Model
 {
     public class ProjectileWeapon : BaseWeapon
     {

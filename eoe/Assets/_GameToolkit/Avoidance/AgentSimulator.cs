@@ -5,7 +5,7 @@ using RVO;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace _KITSystem.Grid
+namespace _GameToolkit.Avoidance
 {
     [Serializable]
     public class AgentSimulator : IDisposable

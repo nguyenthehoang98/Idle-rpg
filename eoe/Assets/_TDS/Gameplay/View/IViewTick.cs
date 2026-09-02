@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace _Game.GamePlay.View
+namespace _TDS.Gameplay.View
 {
     public interface IViewTick
     {

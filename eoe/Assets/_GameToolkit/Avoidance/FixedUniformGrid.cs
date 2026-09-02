@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace _KITSystem.Grid
+namespace _GameToolkit.Avoidance
 {
     [System.Serializable]
     public class FixedUniformGrid : IGrid

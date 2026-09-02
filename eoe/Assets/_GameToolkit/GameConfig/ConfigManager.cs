@@ -2,20 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using _KITSystem.Resource;
+using _GameToolkit.Resource;
 using Cysharp.Threading.Tasks;
-using K4os.Compression.LZ4;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-namespace _KITSystem.Config
+namespace _GameToolkit.GameConfig
 {
     public static class ConfigManager
     {
         private static Dictionary<Type, IGameConfig> cache;
 
-        public static async UniTask Load(string[] scriptObjectsPath, bool checkExist = true)
+        public static async UniTask Load(string[] assetsPath, bool checkExist = true)
         {
             if (cache != null && checkExist)
             {
@@ -34,32 +32,28 @@ namespace _KITSystem.Config
 
             cache = new Dictionary<Type, IGameConfig>();
             
-            UniTask<TextAsset>[] loadTasks = new UniTask<TextAsset>[scriptObjectsPath.Length];
+            UniTask<TextAsset>[] loadTasks = new UniTask<TextAsset>[assetsPath.Length];
             
-            Type[] types = new Type[scriptObjectsPath.Length];
+            Type[] types = new Type[assetsPath.Length];
 
-            for (int i = 0; i < scriptObjectsPath.Length; i++)
+            for (int i = 0; i < assetsPath.Length; i++)
             {
-                Type type = FindType(scriptObjectsPath[i], allType);
+                Type type = FindType(assetsPath[i], allType);
 
                 if (type == null) continue;
                 
                 types[i] = type;
-                
-                loadTasks[i] = AssetBundleManager.GetAsset<TextAsset>(scriptObjectsPath[i]);
+
+                loadTasks[i] = AssetManager.GetAsset<TextAsset>(assetsPath[i]);
             }
             
             TextAsset[] assets = await UniTask.WhenAll(loadTasks);
 
-            for (int i = 0; i < scriptObjectsPath.Length; i++)
+            for (int i = 0; i < assetsPath.Length; i++)
             {
                 Type type = types[i];
                 
-                byte[] unpick = LZ4Pickler.Unpickle(assets[i].bytes);
-
-                string text = Encoding.UTF8.GetString(unpick);
-
-                object asset = JsonUtility.FromJson(text, type);
+                object asset = JsonUtility.FromJson(assets[i].text, type);
 
                 IGameConfig config = asset as IGameConfig;
 
@@ -70,7 +64,7 @@ namespace _KITSystem.Config
 
             sw.Stop();
 
-            Debug.Log($"Load success '{scriptObjectsPath.Length}' config files, in {sw.ElapsedMilliseconds} ms");
+            Debug.Log($"Load success '{assetsPath.Length}' config files, in {sw.ElapsedMilliseconds} ms");
         }
 
         private static Type FindType(string typeName, Type[] sources)

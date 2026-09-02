@@ -1,12 +1,13 @@
-using _KITSystem.Config;
-using _KITSystem.Resource;
+using _GameToolkit.GameConfig;
+using _GameToolkit.Resource;
 using _KITSystem.Utils;
 using UnityEngine;
+
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
 #endif
-namespace _Game.Entry
+namespace _TDS.Boot
 {
     public class GameEntry : KitEntryScene
     {
@@ -28,7 +29,7 @@ namespace _Game.Entry
 
         protected override async void OnStart()
         {
-            AssetBundleManager.SetLocationBundle(true);
+            AssetManager.SetAssetLocal();
             
             ChangeSceneAsync("GameplayScene");
             

@@ -1,7 +1,7 @@
-using _Game.GamePlay.Data;
 using _KITSystem.Utils;
+using _TDS.Gameplay.Data;
 
-namespace _Game.GamePlay.Utils
+namespace _TDS.Gameplay.Utils
 {
     public static class Formula
     {

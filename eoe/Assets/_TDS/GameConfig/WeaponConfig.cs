@@ -1,16 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using _KITSystem.Config;
-using K4os.Compression.LZ4;
+using _GameToolkit.GameConfig;
 using UnityEngine;
-using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using System.IO;
 using UnityEditor;
 #endif
 
-namespace _Game.Configs
+namespace _TDS.GameConfig
 {
     [Serializable]
     public class WeaponConfig : IGameConfig
@@ -38,22 +35,19 @@ namespace _Game.Configs
             }
         }
 
-        public void OnPostImported()
+        public void OnImported()
         {
         }
 
-        public void OnValidateLinkConfig()
+        public void OnCompleteImported()
         {
 #if UNITY_EDITOR
             string path = Path.Combine(ConfigPath.Folder, "SkillConfig.json");
 
             TextAsset asset = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
+            if (asset == null) return;
             
-            byte[] unpick = LZ4Pickler.Unpickle(asset.bytes); 
-
-            string text = Encoding.UTF8.GetString(unpick);
-            
-            SkillConfig skillConfig = JsonUtility.FromJson<SkillConfig>(text);
+            SkillConfig skillConfig = JsonUtility.FromJson<SkillConfig>(asset.text);
             
             skillConfig.OnMappingValue();
 
@@ -121,28 +115,15 @@ namespace _Game.Configs
         public string iconName;
         public string explosivePrefabName;
 
-        /*
-         * @ Stat
-         */
         public float cooldown;
         public float attackSpeed;
         public int attack;
         public float critChance;
         public float critDamage;
 
-        /// <summary>
-        /// Runtime data
-        /// </summary>
         public SkillData skillData;
 
-        /// <summary>
-        /// Attack audio clip
-        /// </summary>
         public string audioClip;
-
-        /// <summary>
-        /// Attack volume
-        /// </summary>
         public float volume;
 
         public override int GetHashCode()

@@ -1,4 +1,4 @@
-namespace _KITSystem.SkillSystem.Imp
+namespace _GameToolkit.SkillSystem.Imp
 {
     public enum ColliderType
     {

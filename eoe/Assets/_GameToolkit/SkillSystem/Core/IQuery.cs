@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace _KITSystem.SkillSystem.Core
+namespace _GameToolkit.SkillSystem.Core
 {
     public interface IQuery
     {

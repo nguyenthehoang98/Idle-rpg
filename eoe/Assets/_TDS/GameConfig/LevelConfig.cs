@@ -1,22 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using _KITSystem.Config;
-using K4os.Compression.LZ4;
-using Newtonsoft.Json;
-using UnityEditor;
+using _GameToolkit.GameConfig;
 using UnityEngine;
-using UnityEngine.Serialization;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
-namespace _Game.Configs
+namespace _TDS.GameConfig
 {
     [Serializable]
     public class LevelConfig : IGameConfig
     {
-        [SerializeField, JsonProperty] private List<LevelData> levels = new List<LevelData>();
-       
-        [JsonProperty] private List<SpawnData> spawns = new List<SpawnData>();
+        [SerializeField] private List<LevelData> levels = new List<LevelData>();
+        [SerializeField] private List<SpawnData> spawns = new List<SpawnData>();
 
         private Dictionary<int, LevelData> cached;
 
@@ -30,7 +27,7 @@ namespace _Game.Configs
             }
         }
 
-        public void OnPostImported()
+        public void OnImported()
         {
             for (int i = 0; i < levels.Count; i++)
             {
@@ -49,18 +46,15 @@ namespace _Game.Configs
             }
         }
 
-        public void OnValidateLinkConfig()
+        public void OnCompleteImported()
         {
 #if UNITY_EDITOR
             string path = Path.Combine(ConfigPath.Folder, "MonsterConfig.json");
             
             TextAsset asset = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
-
-            byte[] unpick = LZ4Pickler.Unpickle(asset.bytes); 
-
-            string text = Encoding.UTF8.GetString(unpick);
+            if (asset == null) return;
             
-            MonsterConfig monsterConfig = JsonUtility.FromJson<MonsterConfig>(text);
+            MonsterConfig monsterConfig = JsonUtility.FromJson<MonsterConfig>(asset.text);
 
             monsterConfig.OnMappingValue();
 

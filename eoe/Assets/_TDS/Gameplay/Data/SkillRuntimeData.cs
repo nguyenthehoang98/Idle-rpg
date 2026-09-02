@@ -1,9 +1,8 @@
-using _Game.GamePlay.Model;
-using _KITSystem.SkillSystem.Imp;
+using _GameToolkit.SkillSystem.Imp;
+using _TDS.Gameplay.Model;
 using UnityEngine;
-using UnityEngine.Splines;
 
-namespace _Game.GamePlay.Data
+namespace _TDS.Gameplay.Data
 {
     public struct SkillRuntimeData
     {

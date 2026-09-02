@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace _KITSystem.SkillSystem.Core
+namespace _GameToolkit.SkillSystem.Core
 {
     [Serializable]
     /// <summary>

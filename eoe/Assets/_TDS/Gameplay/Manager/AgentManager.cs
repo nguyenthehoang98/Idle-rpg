@@ -1,17 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using _Game.Configs;
-using _Game.GamePlay.Data;
-using _Game.GamePlay.Model;
-using _KITSystem.Grid;
-using _KITSystem.Resource;
+using _GameToolkit.Avoidance;
 using _KITSystem.Schedule;
-using Cysharp.Threading.Tasks;
+using _TDS.GameConfig;
+using _TDS.Gameplay.Data;
+using _TDS.Gameplay.Model;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace _Game.GamePlay.Manager
+namespace _TDS.Gameplay.Manager
 {
     [Serializable]
     public sealed class AgentManager : AgentSimulator, ITickable

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace _Game.GamePlay.View
+namespace _TDS.Gameplay.View
 {
     public abstract class BaseAnimation<T> : MonoBehaviour
     {

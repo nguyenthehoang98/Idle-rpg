@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace _Game.GamePlay.Utils
+namespace _TDS.Gameplay.Utils
 {
     public static class GizmosLine
     {

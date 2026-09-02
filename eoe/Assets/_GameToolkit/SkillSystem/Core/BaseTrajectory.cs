@@ -1,8 +1,7 @@
 using System;
-using _KITSystem.Utils;
 using UnityEngine;
 
-namespace _KITSystem.SkillSystem.Core
+namespace _GameToolkit.SkillSystem.Core
 {
     public abstract class BaseTrajectory : IDisposable
     {

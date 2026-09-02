@@ -1,5 +1,5 @@
 {
-    "name": "KITSystem.Resource",
+    "name": "_GameToolkit.Resource",
     "rootNamespace": "",
     "references": [
         "GUID:f51ebe6a0ceec4240a699833d6309b23",
