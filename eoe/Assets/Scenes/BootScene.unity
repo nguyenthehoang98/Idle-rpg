@@ -641,7 +641,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86db7fcf0995dc642a6b9148fed9d522, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.Entry.GameEntry
-  enableDebug: 1
+  debugEnabled: 1
   loadingScene: {fileID: 91957239}
 --- !u!4 &1943253319
 Transform:

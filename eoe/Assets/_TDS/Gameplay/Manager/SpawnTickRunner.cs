@@ -77,15 +77,15 @@ namespace _TDS.Gameplay.Manager
 
                     if (cachedMonster.ContainsKey(monsterId)) continue;
 
-                    if (!monsterConfig.TryGetMonsterData(monsterId, out var monsterData))
+                    if (!monsterConfig.TryGetMonster(monsterId, out var monsterData))
                     {
                         Debug.LogError($"[SpawnTickRunner] Could not find monster '{monsterId}'");
                         continue;
                     }
 
-                    go = await AssetLoader.GetAssetCached<GameObject>(monsterData.deathVfx);
+                    go = await AssetLoader.GetAssetCached<GameObject>(monsterData.deathVfxName);
 
-                    if (names.Add(monsterData.deathVfx))
+                    if (names.Add(monsterData.deathVfxName))
                     {
                         Pool.RegisterPool(go, true);
                     }
@@ -99,9 +99,9 @@ namespace _TDS.Gameplay.Manager
                         Pool.RegisterPool(go, true);
                     }
 
-                    if (!string.IsNullOrEmpty(monsterData.deathAudioClip) && names.Add(monsterData.deathAudioClip))
+                    if (!string.IsNullOrEmpty(monsterData.deathAudioClipName) && names.Add(monsterData.deathAudioClipName))
                     {
-                        await AssetLoader.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
+                        await AssetLoader.GetAssetCached<AudioClip>(monsterData.deathAudioClipName);
                     }
                 }
             }
@@ -196,7 +196,7 @@ namespace _TDS.Gameplay.Manager
 
             GameObject instance = Pool.Instantiate(cachedMonster[data.monsterId], position, false);
 
-            monsterConfig.TryGetMonsterData(data.monsterId, out MonsterData monsterData);
+            monsterConfig.TryGetMonster(data.monsterId, out MonsterConfigData monsterData);
 
             Monster monster = instance.GetComponent<Monster>();
 

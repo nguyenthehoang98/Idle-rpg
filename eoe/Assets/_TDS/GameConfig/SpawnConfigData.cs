@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace _TDS.GameConfig
@@ -6,11 +7,11 @@ namespace _TDS.GameConfig
     [Serializable]
     public struct SpawnConfigData
     {
-        [NonSerialized] public int[] definitionId;
+        [JsonIgnore] public int[] definitionId;
         public SpawnDefinition definition;
         public int monsterId;
         public int total;
-        [NonSerialized] public float[] scales;
+        [JsonIgnore] public float[] scales;
         public SpawnScaleDefinition scale;
         public float spawnRadius;
         public float[] spawnsTime;
@@ -52,10 +53,9 @@ namespace _TDS.GameConfig
     }
 
     [Serializable]
-    public struct SpawnScaleDefinition
+    public struct   SpawnScaleDefinition
     {
         public float attackScale;
-        public float defenseScale;
         public float healthScale;
         public float expScale;
         public float sizeScale;

@@ -23,7 +23,6 @@ namespace _TDS.Gameplay.Model
 
         private GameObject vfxPrefab;
         private AudioClip deathAudioClip;
-        private float deathVolume;
         
         private Vector3 targetPosition;
         private Vector3 previousPosition;
@@ -63,20 +62,18 @@ namespace _TDS.Gameplay.Model
             transform.position = Vector3.Lerp(previousPosition, targetPosition, t);
         }
 
-        public async void Initialize(MonsterData monsterData, SpawnScaleDefinition scaleDefinition)
+        public async void Initialize(MonsterConfigData monsterConfigData, SpawnScaleDefinition scaleDefinition)
         {
-            if (deathAudioClip == null && !string.IsNullOrEmpty(monsterData.deathAudioClip))
+            if (deathAudioClip == null && !string.IsNullOrEmpty(monsterConfigData.deathAudioClipName))
             {
-                deathAudioClip = await AssetLoader.GetAssetCached<AudioClip>(monsterData.deathAudioClip);
+                deathAudioClip = await AssetLoader.GetAssetCached<AudioClip>(monsterConfigData.deathAudioClipName);
             }
 
             if (vfxPrefab == null)
             {
-                vfxPrefab = await AssetLoader.GetAssetCached<GameObject>(monsterData.deathVfx);
+                vfxPrefab = await AssetLoader.GetAssetCached<GameObject>(monsterConfigData.deathVfxName);
             }
             
-            deathVolume = monsterData.volume;
-
             scaleTransform.localScale = scaleDefinition.sizeScale * Vector3.one;
             
             OnMonsterEnable?.Invoke(this);
@@ -103,7 +100,7 @@ namespace _TDS.Gameplay.Model
         {
             if (!isInitialized) return;
             
-            SoundManager.Instance.PlayOneShot(deathAudioClip, deathVolume);
+            SoundManager.Instance.PlayOneShot(deathAudioClip);
 
             if (vfxPrefab != null)
             {

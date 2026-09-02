@@ -1,20 +1,24 @@
 using System;
 using System.Collections.Generic;
 using _GameToolkit.GameConfig;
+using ExcelExtension;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace _TDS.GameConfig
 {
-    [Serializable]
+    [Serializable, ExcelAsset(
+         ExcelPath = "Assets/Excels/MonsterConfig.xlsx",
+         ConfigPath = "Assets/_TDSAssets/Config/MonsterConfig.json")]
     public class MonsterConfig : IConfig
     {
-        [SerializeField] private List<MonsterData> monsters = new List<MonsterData>();
+        [SerializeField, JsonProperty] private List<MonsterConfigData> monsters = new List<MonsterConfigData>();
 
-        private Dictionary<int, MonsterData> cached;
+        private Dictionary<int, MonsterConfigData> cached;
 
         public void OnMappingValue()
         {
-            cached = new Dictionary<int, MonsterData>();
+            cached = new Dictionary<int, MonsterConfigData>();
 
             foreach (var data in monsters)
             {
@@ -30,24 +34,9 @@ namespace _TDS.GameConfig
         {
         }
 
-        public bool TryGetMonsterData(int monsterId, out MonsterData monsterData)
+        public bool TryGetMonster(int monsterId, out MonsterConfigData data)
         {
-            return cached.TryGetValue(monsterId, out monsterData);
+            return cached.TryGetValue(monsterId, out data);
         }
-    }
-
-    [Serializable]
-    public struct MonsterData
-    {
-        public int id;
-        public string prefabName;
-        public int health;
-        public int attack;
-        public int exp;
-        public float speed;
-        public float stopDistance;
-        public string deathAudioClip;
-        public float volume;
-        public string deathVfx;
     }
 }

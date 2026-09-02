@@ -225,6 +225,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d31354d01b2444742a89bdfcb94981a7
+    m_Address: SpawnConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d4e05df0a033f2849a09f73d90249352
     m_Address: fx.death
     m_ReadOnly: 0

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using _GameToolkit.GameConfig;
 using ExcelExtension;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace _TDS.GameConfig
@@ -12,25 +13,25 @@ namespace _TDS.GameConfig
          ConfigPath = "Assets/_TDSAssets/Config/SpawnConfig.json")]
     public class SpawnConfig : IConfig
     {
-        [SerializeField] private List<SpawnConfigData> spawns = new List<SpawnConfigData>();
+        [SerializeField, JsonProperty] private List<SpawnConfigData> spawns = new List<SpawnConfigData>();
 
-        private Dictionary<int, List<SpawnConfigData>> spawnCached;
+        private Dictionary<int, List<SpawnConfigData>> cached;
         
         public void OnMappingValue()
         {
-            spawnCached = new Dictionary<int, List<SpawnConfigData>>();
+            cached = new Dictionary<int, List<SpawnConfigData>>();
 
             foreach (var data in spawns)
             {
                 int level = data.definition.level;
                
-                if (spawnCached.TryGetValue(level, out var list))
+                if (cached.TryGetValue(level, out var list))
                 {
                     list.Add(data);        
                 }
                 else
                 {
-                    spawnCached.Add(level, new List<SpawnConfigData> { data });
+                    cached.Add(level, new List<SpawnConfigData> { data });
                 }
             }
         }
@@ -60,7 +61,7 @@ namespace _TDS.GameConfig
             {
                 int monsterId = spawn.monsterId;
                 
-                if (monsterConfig.TryGetMonsterData(monsterId, out MonsterData data)) continue;
+                if (monsterConfig.TryGetMonster(monsterId, out MonsterConfigData data)) continue;
 
                 Debug.LogError($"Not found monster '{monsterId}', json '{JsonUtility.ToJson(spawn)}'");
             }
@@ -69,7 +70,7 @@ namespace _TDS.GameConfig
 
         public bool TryGetSpawn(int level, out List<SpawnConfigData> data)
         {
-            return spawnCached.TryGetValue(level, out data);
+            return cached.TryGetValue(level, out data);
         }
     }
 }

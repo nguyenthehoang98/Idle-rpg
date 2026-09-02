@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using ExcelExtension;
+using Newtonsoft.Json;
 using NPOI.HSSF.UserModel;
 using NPOI.XSSF.UserModel;
 using NPOI.SS.UserModel;
@@ -55,7 +56,7 @@ public class ExcelImporter : AssetPostprocessor
 				if (File.Exists(fullPath))
 				{
 					string json = File.ReadAllText(fullPath);
-					object asset = JsonUtility.FromJson(json, cachedInfo.AssetType);
+					object asset = JsonConvert.DeserializeObject(json, cachedInfo.AssetType);
 					
 					try
 					{
@@ -66,7 +67,7 @@ public class ExcelImporter : AssetPostprocessor
 						Debug.LogError(e);
 					}
 					
-					json = JsonUtility.ToJson(asset, true);
+					json = JsonConvert.SerializeObject(asset, Formatting.Indented);
 					
 					File.WriteAllText(ConvertCShapePath(fullPath), json);
 				}
@@ -175,14 +176,14 @@ public class ExcelImporter : AssetPostprocessor
 				{
 					if (cell.CellType == CellType.Formula)
 						return (float) cell.NumericCellValue;
-					return float.Parse(cell.StringCellValue);
+					return float.Parse(cell.StringCellValue, NumberStyles.Float);
 				}
 
 				if (fieldInfo.FieldType == typeof(double))
 				{
 					if (cell.CellType == CellType.Formula) 
 						return (double) cell.NumericCellValue;
-					return double.Parse(cell.StringCellValue);
+					return double.Parse(cell.StringCellValue, NumberStyles.Number);
 				}
 
 				if (fieldInfo.FieldType == typeof(string))
@@ -236,7 +237,7 @@ public class ExcelImporter : AssetPostprocessor
 
 					for (int i = 0; i < elements.Length; i++)
 					{
-						array.SetValue(JsonUtility.FromJson(elements[i], elementType), i);
+						array.SetValue(JsonConvert.DeserializeObject(elements[i], elementType), i);
 					}
 
 					return CreateCollection(fieldInfo.FieldType, array);
@@ -246,7 +247,7 @@ public class ExcelImporter : AssetPostprocessor
 				{
 					try
 					{
-						return JsonUtility.FromJson(cell.CellFormula, fieldInfo.FieldType);
+						return JsonConvert.DeserializeObject(cell.CellFormula, fieldInfo.FieldType);
 					}
 					catch (ArgumentException e)
 					{
@@ -255,7 +256,7 @@ public class ExcelImporter : AssetPostprocessor
 					}
 				}
 				
-				return JsonUtility.FromJson(cell.StringCellValue, fieldInfo.FieldType);
+				return JsonConvert.DeserializeObject(cell.StringCellValue, fieldInfo.FieldType);
 				
 			case CellType.Boolean:
 				return cell.BooleanCellValue;
@@ -304,7 +305,6 @@ public class ExcelImporter : AssetPostprocessor
 			if (cell == null) continue;
 			
 			object fieldValue = CellToFieldObject(cell, entityField);
-
 			try
 			{
 				entityField.SetValue(entity, fieldValue);
@@ -339,7 +339,7 @@ public class ExcelImporter : AssetPostprocessor
 			// skip comment row
 			if(entryCell.CellType == CellType.String && entryCell.StringCellValue.StartsWith("#")) continue;
 
-			var entity = CreateEntityFromRow(row, excelColumnNames, entityType, sheet.SheetName);
+			object entity = CreateEntityFromRow(row, excelColumnNames, entityType, sheet.SheetName);
 			listAddMethod.Invoke(list, new object[] { entity });
 		}
 	
@@ -380,7 +380,7 @@ public class ExcelImporter : AssetPostprocessor
 			Debug.LogError(e);
 		}
 
-		string json = JsonUtility.ToJson(asset, true);
+		string json = JsonConvert.SerializeObject(asset, Formatting.Indented);// JsonUtility.ToJson(asset, true);
 
 		File.WriteAllText(ConvertCShapePath(path), json);
 	}
