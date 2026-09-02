@@ -50,7 +50,7 @@ namespace LitMotion.Animation.Editor
                 var parent = root;
                 Item lastItem = null;
 
-                for (int i = 0; i < splitStrings.Length; i++)
+                for (var i = 0; i < splitStrings.Length; i++)
                 {
                     var str = splitStrings[i];
 

@@ -11,7 +11,8 @@ namespace LitMotion.Animation.Components
     public sealed class DelayComponent : LitMotionAnimationComponent
     {
         [SerializeField] float delay;
-
+        [SerializeField] private UnityEvent onExecute;
+        
         public override float Duration()
         {
             return delay;
@@ -19,8 +20,17 @@ namespace LitMotion.Animation.Components
 
         public override MotionHandle Play()
         {
-            return LMotion.Create(0f, 1f, delay)
-                .RunWithoutBinding();
+            if (delay > 0)
+            {
+                return LMotion.Create(0f, 1f, delay)
+                    .WithOnComplete(() => { onExecute?.Invoke(); })
+                    .RunWithoutBinding();                
+            }
+            else
+            {
+                onExecute?.Invoke();
+                return MotionHandle.None;
+            }
         }
 
         public override void OnStop() { }
@@ -133,6 +143,11 @@ namespace LitMotion.Animation.Components
     {
         [SerializeField] LitMotionAnimation target;
 
+        public PlayLitMotionAnimationComponent() : base()
+        {
+            type = "Play LitMotion";
+        }
+        
         public override float Duration()
         {
             return target != null ? target.Duration() : 0;
@@ -141,7 +156,7 @@ namespace LitMotion.Animation.Components
         public override MotionHandle Play()
         {
             target.Play();
-            return LMotion.Create(0f, 1f, float.MaxValue)
+            return LMotion.Create(0f, 1f, target.Duration())
                 .Bind(this, (x, state) =>
                 {
                     if (target == null) TrackedHandle.TryComplete();

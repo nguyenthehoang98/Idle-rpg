@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using LitMotion.Collections;
 using UnityEngine;
 
@@ -27,6 +28,7 @@ namespace LitMotion.Animation
             Sequential
         }
 
+        [SerializeField] private bool debug;
         [SerializeField] private bool isReverseWhenStop = false;
         [SerializeField] AutoStopMode autoStopMode = AutoStopMode.OnDisable;
         [SerializeField] AutoPlayMode autoPlayMode = AutoPlayMode.OnStart;
@@ -41,6 +43,8 @@ namespace LitMotion.Animation
         [HideInInspector, SerializeField] int version;
 
         public IReadOnlyList<LitMotionAnimationComponent> Components => components;
+
+        private HashSet<int> handlesParallel = new HashSet<int>();
 
         void OnEnable()
         {
@@ -66,7 +70,7 @@ namespace LitMotion.Animation
                     if (isActive)
                     {
                         handle.Preserve();
-                        MotionManager.GetManagedDataRef(handle, false).OnCompleteAction += () =>
+                        MotionManager.GetManagedDataRef(handle).OnCompleteAction += () =>
                         {
                             MoveNextMotion();
                             CheckStop();
@@ -90,6 +94,8 @@ namespace LitMotion.Animation
 
         public float Duration()
         {
+            if (components == null) return 0;
+             
             float duration = 0;
             switch (animationMode)
             {
@@ -102,7 +108,6 @@ namespace LitMotion.Animation
                         duration += component.Duration();
                     }
 
-                    MoveNextMotion();
                     break;
                 case AnimationMode.Parallel:
                     foreach (LitMotionAnimationComponent component in components)
@@ -153,8 +158,12 @@ namespace LitMotion.Animation
                     }
 
                     MoveNextMotion();
+                    
                     break;
                 case AnimationMode.Parallel:
+
+                    handlesParallel.Clear();
+                    
                     foreach (LitMotionAnimationComponent component in components)
                     {
                         if (component == null) continue;
@@ -170,13 +179,20 @@ namespace LitMotion.Animation
                                 handle.Preserve();
                             }
 
-                            MotionManager.GetManagedDataRef(handle, false).OnCompleteAction += CheckStop;
+                            MotionManager.GetManagedDataRef(handle).OnCompleteAction += () =>
+                            {
+                                handlesParallel.Remove(handle.GetHashCode());
+
+                                if (handlesParallel.Count == 0) CheckStop();
+                            };
 
                             playingComponents.Add(component);
+
+                            handlesParallel.Add(handle.GetHashCode());
                         }
                         catch (Exception ex)
                         {
-                            Debug.LogException(ex);
+                            Debug.LogError("Error at " + GetPath(transform) + "\n" + ex.Message);
                         }
                     }
 
@@ -199,24 +215,11 @@ namespace LitMotion.Animation
 
         private void CheckStop()
         {
-            double time = 0;
-            double duration = 0;
-            foreach (LitMotionAnimationComponent comp in playingComponents.AsSpan())
-            {
-                time = Math.Max(time, comp.TrackedHandle.Time);
-                if (animationMode == AnimationMode.Sequential)
-                    duration += comp.TrackedHandle.TotalDuration;
-                else
-                    duration = Math.Max(duration, comp.TrackedHandle.TotalDuration);
-            }
+            if (animationMode == AnimationMode.Sequential && IsPlaying) return;
 
-            if (time >= duration)
-            {
-                if (Application.isPlaying && isActiveAndEnabled)
-                {
-                    Stop();
-                }
-            }
+            if (animationMode == AnimationMode.Parallel && handlesParallel.Count > 0) return;
+            
+            if (Application.isPlaying && isActiveAndEnabled) Stop();
         }
 
         public void Stop()
@@ -290,6 +293,19 @@ namespace LitMotion.Animation
                 autoPlayMode = playOnAwake ? AutoPlayMode.OnStart : AutoPlayMode.None;
                 version = 1;
             }
+        }
+        
+        private static string GetPath(Transform target)
+        {
+            string path = target.name;
+
+            while (target.parent != null)
+            {
+                target = target.parent;
+                path = target.name + "/" + path;
+            }
+
+            return path;
         }
     }
 }

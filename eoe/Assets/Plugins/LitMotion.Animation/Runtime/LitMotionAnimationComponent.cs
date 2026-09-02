@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace LitMotion.Animation
 {
@@ -19,6 +20,7 @@ namespace LitMotion.Animation
 #endif
         }
 
+        [HideInInspector] public string type = "";
         [SerializeField] string displayName;
         [SerializeField] bool enabled = true;
 

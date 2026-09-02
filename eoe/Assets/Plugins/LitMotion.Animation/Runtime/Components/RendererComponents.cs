@@ -112,6 +112,37 @@ namespace LitMotion.Animation.Components
         }
     }
 
+    [Serializable]
+    [LitMotionAnimationComponentMenu("Rendering/Skinned Mesh Renderer/Material Float Property")]
+    public sealed class SkinnedMeshRendererMaterialAnimation : FloatPropertyAnimationComponent<SkinnedMeshRenderer>
+    {
+        [SerializeField] private string propertyName = "";
+        
+        private MaterialPropertyBlock propertyBlock;
+
+        private int propertyId;
+        
+        public override MotionHandle Play()
+        {
+            propertyBlock = new MaterialPropertyBlock();
+            propertyId = Shader.PropertyToID(propertyName);
+            return base.Play();
+        }
+
+        protected override float GetValue(SkinnedMeshRenderer target)
+        {
+            target.GetPropertyBlock(propertyBlock);
+            return propertyBlock.GetFloat(propertyId);
+        }
+
+        protected override void SetValue(SkinnedMeshRenderer target, in float value)
+        {
+            target.GetPropertyBlock(propertyBlock);
+            propertyBlock.SetFloat(propertyId, value);
+            target.SetPropertyBlock(propertyBlock);
+        }
+    }
+
 #if LITMOTION_ANIMATION_RENDER_PIPELINES
 
     [Serializable]

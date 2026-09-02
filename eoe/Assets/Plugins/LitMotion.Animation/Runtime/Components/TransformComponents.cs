@@ -31,11 +31,19 @@ namespace LitMotion.Animation.Components
 
     [Serializable]
     [LitMotionAnimationComponentMenu("Transform/Position")]
-    public sealed class TransformPositionAnimation : TransformPositionAnimationBase<NoOptions, Vector3MotionAdapter> { }
+    public sealed class TransformPositionAnimation : TransformPositionAnimationBase<NoOptions, Vector3MotionAdapter>
+    {
+        public TransformPositionAnimation() : base()
+        {
+            type = "Position";
+        }
+    }
 
     [Serializable]
     [LitMotionAnimationComponentMenu("Transform/Position (Punch)")]
-    public sealed class TransformPositionPunchAnimation : TransformPositionAnimationBase<PunchOptions, Vector3PunchMotionAdapter> { }
+    public sealed class TransformPositionPunchAnimation : TransformPositionAnimationBase<PunchOptions, Vector3PunchMotionAdapter>
+    {
+    }
 
     [Serializable]
     [LitMotionAnimationComponentMenu("Transform/Position (Shake)")]
@@ -64,10 +72,16 @@ namespace LitMotion.Animation.Components
             return startValue + relativeValue;
         }
     }
-    
+
     [Serializable]
     [LitMotionAnimationComponentMenu("Transform/Rotation")]
-    public sealed class TransformRotationAnimation : TransformRotationAnimationBase<NoOptions, Vector3MotionAdapter> { }
+    public sealed class TransformRotationAnimation : TransformRotationAnimationBase<NoOptions, Vector3MotionAdapter>
+    {
+        public TransformRotationAnimation() : base()
+        {
+            type = "Rotation";
+        }
+    }
 
     [Serializable]
     [LitMotionAnimationComponentMenu("Transform/Rotation (Punch)")]
@@ -89,7 +103,11 @@ namespace LitMotion.Animation.Components
 
         protected override void SetValue(Transform target, in Vector3 value)
         {
-            target.localScale = value;
+            if(target != null) target.localScale = value;
+            else
+            {
+                Debug.LogWarning("Cannot set scale on a Transform");
+            }
         }
 
         protected override Vector3 GetRelativeValue(in Vector3 startValue, in Vector3 relativeValue)
@@ -100,7 +118,13 @@ namespace LitMotion.Animation.Components
 
     [Serializable]
     [LitMotionAnimationComponentMenu("Transform/Scale")]
-    public sealed class TransformScaleAnimation : TransformScaleAnimationBase<NoOptions, Vector3MotionAdapter> { }
+    public sealed class TransformScaleAnimation : TransformScaleAnimationBase<NoOptions, Vector3MotionAdapter>
+    {
+        public TransformScaleAnimation() : base()
+        {
+            type = "Scale";
+        }
+    }
 
     [Serializable]
     [LitMotionAnimationComponentMenu("Transform/Scale (Punch)")]

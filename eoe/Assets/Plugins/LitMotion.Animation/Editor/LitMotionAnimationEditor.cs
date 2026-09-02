@@ -99,6 +99,17 @@ namespace LitMotion.Animation.Editor
             box.Add(new PropertyField(serializedObject.FindProperty("autoStopMode")));
             box.Add(new PropertyField(serializedObject.FindProperty("animationMode")));
             box.Add(new PropertyField(serializedObject.FindProperty("isReverseWhenStop")));
+
+            var durationField = new FloatField("Total Duration") { isReadOnly = true };
+            durationField.SetEnabled(false);
+            box.Add(durationField);
+
+            box.schedule.Execute(() =>
+            {
+                if (target == null) return;
+                durationField.SetValueWithoutNotify(((LitMotionAnimation)target).Duration());
+            }).Every(100);
+
             return box;
         }
 
@@ -312,9 +323,14 @@ namespace LitMotion.Animation.Editor
                 {
                     settingPrex = "";
                 }
-                
-                view.Text = property.FindPropertyRelative("displayName").stringValue + settingPrex;
 
+                string t = property.FindPropertyRelative("type").stringValue;
+
+                if (!string.IsNullOrEmpty(t)) t = $"{t} - ";
+                else t = $"{property.managedReferenceValue.GetType().Name} - ";
+                
+                view.Text = t + property.FindPropertyRelative("displayName").stringValue + settingPrex;
+           
                 var targetProperty = property.FindPropertyRelative("target");
                 if (targetProperty != null)
                 {
@@ -323,7 +339,7 @@ namespace LitMotion.Animation.Editor
 
                 view.TrackPropertyValue(property.FindPropertyRelative("displayName"), x =>
                 {
-                    view.Text = x.stringValue;
+                    view.Text = t + x.stringValue + settingPrex;
                 });
 
                 view.Foldout.BindProperty(property);
