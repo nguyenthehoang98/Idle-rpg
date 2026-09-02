@@ -1,6 +1,6 @@
-﻿using _GameToolkit.Shared;
+﻿using _GameToolkit.Share;
 
-namespace _GameToolkit.SkillSystem
+namespace _GameToolkit.Skills
 {
     public sealed class HitInfo
     {

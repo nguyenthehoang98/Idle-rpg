@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace _GameToolkit.Shared
+namespace _GameToolkit.Share
 {
     public abstract class Unique : MonoBehaviour
     {

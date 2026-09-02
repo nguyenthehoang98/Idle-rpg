@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using _GameToolkit.ResourceManagement;
-using _GameToolkit.SkillSystem;
+using _GameToolkit.Skills;
 using _TDS.GameConfig;
 using _TDS.Gameplay.Data;
 using _TDS.Gameplay.Manager;
@@ -256,7 +256,7 @@ namespace _TDS.Gameplay.Model
                 
                 Vector3 position = GetMuzzlePosition();
 
-                bool found = FindTarget(SkillData.findTarget, position);
+                bool found = FindTarget(SkillData.targetSelection, position);
                 
                 if (!found)
                 {
@@ -385,7 +385,7 @@ namespace _TDS.Gameplay.Model
             rotatePivot.localScale = new Vector3(1, Mathf.Abs(angleTo) <= 90 ? 1 : -1f, 1);
         }
 
-        protected bool FindTarget(FindTargetType type, Vector3 position)
+        protected bool FindTarget(TargetSelectionType selectionType, Vector3 position)
         {
             Vector3 center = Vector3.zero;
             float radius = SkillData.attackRange + CurrentUpgradeData.attackRange;

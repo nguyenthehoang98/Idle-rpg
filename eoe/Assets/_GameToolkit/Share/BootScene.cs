@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace _GameToolkit.Shared
+namespace _GameToolkit.Share
 {
     public class BootScene : MonoBehaviour
     {

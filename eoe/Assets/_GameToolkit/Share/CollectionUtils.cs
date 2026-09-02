@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Random = System.Random;
 
-namespace _GameToolkit.Shared
+namespace _GameToolkit.Share
 {
     public static class CollectionUtils
     {

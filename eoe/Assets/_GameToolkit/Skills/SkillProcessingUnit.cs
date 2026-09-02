@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace _GameToolkit.SkillSystem
+namespace _GameToolkit.Skills
 {
     [Serializable]
     /// <summary>
     /// Logic tương tự MPU. nhưng khác 1 chút về skill
     /// Thay vì có 1 lớp Skill xử lý logic của các action thì mỗi action lại có 1 logic riêng, tương tự như request rồi có ref đến parent là skillId
     /// </summary>
-    public partial class Spu
+    public partial class SkillProcessingUnit
     {
         private int version;
         private int nextSkillInstanceId = 1;
@@ -39,19 +39,19 @@ namespace _GameToolkit.SkillSystem
             for (int i = 0; i < activeActions.Count; i++)
             {
                 ActionRuntime a = activeActions[i];
-                a.Action.Tick(deltaTime);
+                a.SkillAction.Tick(deltaTime);
                 activeActions[i] = a;
                 
-                if (a.Action.IsCompleted)
+                if (a.SkillAction.IsCompleted)
                 {
                     if (pendingActionRemoved.Count > totalActionFinished)
                     {
-                        pendingReasonActionRemoved[totalActionFinished] = a.Action.CompleteReason;
+                        pendingReasonActionRemoved[totalActionFinished] = a.SkillAction.CompleteReason;
                         pendingActionRemoved[totalActionFinished] = a.ActionInstanceId;
                     }
                     else
                     {
-                        pendingReasonActionRemoved.Add(a.Action.CompleteReason);
+                        pendingReasonActionRemoved.Add(a.SkillAction.CompleteReason);
                         pendingActionRemoved.Add(a.ActionInstanceId);
                     }
 
@@ -110,11 +110,11 @@ namespace _GameToolkit.SkillSystem
             return id;
         }
         
-        public void RequestAddAction(int skillId, IAction action, Action<int> callback = null)
+        public void RequestAddAction(int skillId, ISkillAction skillAction, Action<int> callback = null)
         {
             pendingCommands.Enqueue(() =>
             {
-                int id = AddAction_Internal(skillId, action);
+                int id = AddAction_Internal(skillId, skillAction);
                 callback?.Invoke(id);
             });
         }
@@ -134,18 +134,18 @@ namespace _GameToolkit.SkillSystem
             return mapActionIdToIndex.ContainsKey(actionId);
         }
 
-        public bool TryGetAction(int actionId, out IAction action)
+        public bool TryGetAction(int actionId, out ISkillAction skillAction)
         {
             if (mapActionIdToIndex.TryGetValue(actionId, out int index))
             {
                 if ((uint)index < activeActions.Count)
                 {
-                    action = activeActions[index].Action;
+                    skillAction = activeActions[index].SkillAction;
                     return true;
                 }
             }
 
-            action = null;
+            skillAction = null;
             return false;
         }
 
@@ -168,7 +168,7 @@ namespace _GameToolkit.SkillSystem
             });
         }
 
-        private int AddAction_Internal(int skillId, IAction action)
+        private int AddAction_Internal(int skillId, ISkillAction skillAction)
         {
             int actionId = nextActionId++;
 
@@ -178,7 +178,7 @@ namespace _GameToolkit.SkillSystem
                 mapActionsIndex[skillId] = list;
             }
             
-            action.Startup();
+            skillAction.Startup();
 
             int index = activeActions.Count;
 
@@ -186,7 +186,7 @@ namespace _GameToolkit.SkillSystem
             {
                 SkillInstanceId = skillId,
                 ActionInstanceId = actionId,
-                Action = action
+                SkillAction = skillAction
             };
 
             activeActions.Add(runtime);
@@ -207,9 +207,9 @@ namespace _GameToolkit.SkillSystem
 
             ActionRuntime removed = activeActions[idx];
 
-            if (interrupted) removed.Action.Interrupt();
+            if (interrupted) removed.SkillAction.Interrupt();
 
-            removed.Action.Shutdown();
+            removed.SkillAction.Shutdown();
             
             // remove khỏi skill map
             if (mapActionsIndex.TryGetValue(removed.SkillInstanceId, out List<int> list))
@@ -259,7 +259,7 @@ namespace _GameToolkit.SkillSystem
         }
     }
     
-    public partial class Spu
+    public partial class SkillProcessingUnit
     {
 #if UNITY_EDITOR
         [Serializable]
@@ -270,7 +270,7 @@ namespace _GameToolkit.SkillSystem
             public int ActionInstanceId;
             public float ElapsedTime;
             public bool MarkedForRemoval;
-            public IAction Action;
+            public ISkillAction SkillAction;
         }
     }
 }

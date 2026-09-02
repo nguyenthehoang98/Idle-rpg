@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
-namespace _GameToolkit.SkillSystem
+namespace _GameToolkit.Skills
 {
-    public abstract class SkillAction : IAction
+    public abstract class SkillAction : ISkillAction
     {
         private readonly float lifeTime;
         private float elapsedTime;

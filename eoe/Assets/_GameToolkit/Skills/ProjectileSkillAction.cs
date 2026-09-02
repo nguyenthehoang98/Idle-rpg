@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using _GameToolkit.Collider;
-using _GameToolkit.Shared;
+using _GameToolkit.Colliders;
+using _GameToolkit.Share;
 
-namespace _GameToolkit.SkillSystem
+namespace _GameToolkit.Skills
 {
     public class ProjectileSkillAction : SkillAction
     {
@@ -11,17 +11,16 @@ namespace _GameToolkit.SkillSystem
         private readonly float hitInterval;
         private readonly float damageInterval;
         private readonly int hitCount;
-
+        
         public event Func<HitInfo, bool> OnDamaged;
-
+        
         private readonly HashSet<Unique> currentColliders = new HashSet<Unique>();
         private float colliderElapsedTime;
         private float damageTickerElapsedTime;
         private int totalHit;
-
+        
         public ProjectileSkillAction(float lifeTime, CollisionDetector[] detectors,
-            float damageInterval, float hitInterval, int hitCount)
-            : base(lifeTime)
+            float damageInterval, float hitInterval, int hitCount) : base(lifeTime)
         {
             this.detectors = detectors;
             this.damageInterval = damageInterval;
@@ -32,38 +31,13 @@ namespace _GameToolkit.SkillSystem
         public override void Startup()
         {
             base.Startup();
-
             for (int i = 0; i < detectors.Length; i++)
             {
                 detectors[i].Startup();
                 detectors[i].OnOverlapped += Overlapped;
             }
         }
-
-        private void Overlapped(Unique unique)
-        {
-            if (totalHit >= hitCount)
-            {
-                Shutdown();
-                return;
-            }
-
-            if (currentColliders.Add(unique))
-            {
-                HitInfo info = new HitInfo(unique, totalHit + 1 == hitCount);
-
-                if (OnDamaged != null && OnDamaged.Invoke(info))
-                {
-                    totalHit++;
-
-                    if (totalHit == hitCount)
-                    {
-                        Interrupt();
-                    }
-                }
-            }
-        }
-
+        
         public override void Shutdown()
         {
             base.Shutdown();
@@ -74,7 +48,7 @@ namespace _GameToolkit.SkillSystem
                 detectors[i].Shutdown();
             }
         }
-
+        
         protected override void OnTick(float deltaTime)
         {
             // (1) todo: reset collider interval
@@ -102,6 +76,30 @@ namespace _GameToolkit.SkillSystem
                 }
 
                 damageTickerElapsedTime = 0;
+            }
+        }
+        
+        private void Overlapped(Unique unique)
+        {
+            if (totalHit >= hitCount)
+            {
+                Shutdown();
+                return;
+            }
+
+            if (currentColliders.Add(unique))
+            {
+                HitInfo info = new HitInfo(unique, totalHit + 1 == hitCount);
+
+                if (OnDamaged != null && OnDamaged.Invoke(info))
+                {
+                    totalHit++;
+
+                    if (totalHit == hitCount)
+                    {
+                        Interrupt();
+                    }
+                }
             }
         }
     }

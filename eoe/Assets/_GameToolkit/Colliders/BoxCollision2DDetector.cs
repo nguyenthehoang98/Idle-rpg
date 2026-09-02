@@ -1,22 +1,22 @@
-﻿using _GameToolkit.Shared;
+﻿using _GameToolkit.Share;
 using UnityEngine;
 
-namespace _GameToolkit.Collider
+namespace _GameToolkit.Colliders
 {
     [RequireComponent(typeof(BoxCollider2D))]
     sealed class BoxCollision2DDetector : CollisionDetector
     {
-        private BoxCollider2D collider2D;
+        private BoxCollider2D boxCollider2D;
 
         protected override void Awake()
         {
             base.Awake();
-            collider2D = GetComponent<BoxCollider2D>();
+            boxCollider2D = GetComponent<BoxCollider2D>();
         }
 
         public override void Tick(float deltaTime)
         {
-            Vector2 size = Vector2.Scale(collider2D.size, transform.lossyScale);
+            Vector2 size = Vector2.Scale(boxCollider2D.size, transform.lossyScale);
 
             int count = Physics2D.OverlapBox(
                 transform.position, size, transform.eulerAngles.z, ContactFilter, Results

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _GameToolkit.ResourceManagement;
-using _GameToolkit.Shared;
+using _GameToolkit.Share;
 using _TDS.GameConfig;
 using _TDS.Gameplay.Utils;
 using UnityEngine;

@@ -1,24 +1,24 @@
-﻿using _GameToolkit.Shared;
+﻿using _GameToolkit.Share;
 using UnityEngine;
 
-namespace _GameToolkit.Collider
+namespace _GameToolkit.Colliders
 {
     [RequireComponent(typeof(CapsuleCollider2D))]
-    sealed class CapsuleCollision2DDetector : CollisionDetector
+    internal sealed class CapsuleCollision2DDetector : CollisionDetector
     {
-        CapsuleCollider2D collider2D;
+        private CapsuleCollider2D capsuleCollider2D;
         private CapsuleDirection2D direction;
 
         protected override void Awake()
         {
             base.Awake();
-            collider2D = GetComponent<CapsuleCollider2D>();
-            direction = collider2D.direction;
+            capsuleCollider2D = GetComponent<CapsuleCollider2D>();
+            direction = capsuleCollider2D.direction;
         }
 
         public override void Tick(float deltaTime)
         {
-            Vector2 size = Vector2.Scale(collider2D.size, transform.lossyScale);
+            Vector2 size = Vector2.Scale(capsuleCollider2D.size, transform.lossyScale);
 
             int count = Physics2D.OverlapCapsule(
                 transform.position, size, direction, transform.eulerAngles.z, ContactFilter, Results

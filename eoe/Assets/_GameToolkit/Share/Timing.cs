@@ -4,7 +4,7 @@ using UnityEngine.Assertions;
 using UnityEngine.Profiling;
 using Object = UnityEngine.Object;
 
-namespace _GameToolkit.Shared
+namespace _GameToolkit.Share
 {
     // /////////////////////////////////////////////////////////////////////////////////////////
 //                              More Effective Coroutines

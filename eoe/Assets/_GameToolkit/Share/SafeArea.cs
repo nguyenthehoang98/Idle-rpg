@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace _GameToolkit.Shared
+namespace _GameToolkit.Share
 {
     /// <summary>
     /// Safe area implementation for notched mobile devices. Usage:

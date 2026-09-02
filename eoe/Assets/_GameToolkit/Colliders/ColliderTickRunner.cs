@@ -1,7 +1,7 @@
 ﻿using System;
 using _GameToolkit.Updater;
 
-namespace _GameToolkit.Collider
+namespace _GameToolkit.Colliders
 {
     public sealed class ColliderTickRunner : TickRunner<CollisionDetector>, IDisposable
     {

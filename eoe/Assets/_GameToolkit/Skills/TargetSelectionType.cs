@@ -1,6 +1,6 @@
-namespace _GameToolkit.SkillSystem
+namespace _GameToolkit.Skills
 {
-    public enum FindTargetType
+    public enum TargetSelectionType
     {
         None = 0,
         Nearest,

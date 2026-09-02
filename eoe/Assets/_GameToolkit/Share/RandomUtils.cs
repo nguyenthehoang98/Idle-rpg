@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace _GameToolkit.Shared
+namespace _GameToolkit.Share
 {
     public static class RandomUtils
     {

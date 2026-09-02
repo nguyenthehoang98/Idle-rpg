@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using _GameToolkit.GameConfig;
-using _GameToolkit.SkillSystem;
+using _GameToolkit.Skills;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _TDS.GameConfig
 {
@@ -50,7 +51,7 @@ namespace _TDS.GameConfig
 
         public float damageTickInterval;
 
-        public FindTargetType findTarget;
+        [FormerlySerializedAs("findTarget")] public TargetSelectionType targetSelection;
         public float attackRange;
 
         public float projectileDuration;

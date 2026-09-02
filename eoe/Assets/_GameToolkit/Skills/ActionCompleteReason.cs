@@ -1,4 +1,4 @@
-﻿namespace _GameToolkit.SkillSystem
+﻿namespace _GameToolkit.Skills
 {
     public enum ActionCompleteReason
     {

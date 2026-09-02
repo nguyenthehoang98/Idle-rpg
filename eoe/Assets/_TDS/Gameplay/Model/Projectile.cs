@@ -1,5 +1,5 @@
 using System;
-using _GameToolkit.Collider;
+using _GameToolkit.Colliders;
 using _GameToolkit.ResourceManagement;
 using UnityEngine;
 using UnityEngine.Events;

@@ -1,9 +1,9 @@
 ﻿using System;
-using _GameToolkit.Shared;
+using _GameToolkit.Share;
 using _GameToolkit.Updater;
 using UnityEngine;
 
-namespace _GameToolkit.Collider
+namespace _GameToolkit.Colliders
 {
     [Serializable]
     public abstract class CollisionDetector : MonoBehaviour, ITickRunner

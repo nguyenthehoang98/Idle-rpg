@@ -1,23 +1,23 @@
-﻿using _GameToolkit.Shared;
+﻿using _GameToolkit.Share;
 using UnityEngine;
 
-namespace _GameToolkit.Collider
+namespace _GameToolkit.Colliders
 {
     [RequireComponent(typeof(CircleCollider2D))]
     sealed class CircleCollision2DDetector : CollisionDetector
     {
-        CircleCollider2D collider2D;
+        private CircleCollider2D circleCollider2D;
 
         protected override void Awake()
         {
             base.Awake();
-            collider2D = GetComponent<CircleCollider2D>();
+            circleCollider2D = GetComponent<CircleCollider2D>();
         }
 
         public override void Tick(float deltaTime)
         {
             int count = Physics2D.OverlapCircle(
-                transform.position, collider2D.radius, ContactFilter, Results
+                transform.position, circleCollider2D.radius, ContactFilter, Results
             );
             
             for (int i = 0; i < count; i++)

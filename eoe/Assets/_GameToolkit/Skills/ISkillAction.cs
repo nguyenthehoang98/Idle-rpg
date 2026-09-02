@@ -1,6 +1,6 @@
-namespace _GameToolkit.SkillSystem
+namespace _GameToolkit.Skills
 {
-    public interface IAction
+    public interface ISkillAction
     {
         void Startup();
         void Tick(float deltaTime);

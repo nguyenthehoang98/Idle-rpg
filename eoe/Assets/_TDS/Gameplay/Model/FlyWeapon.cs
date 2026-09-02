@@ -1,4 +1,4 @@
-using _GameToolkit.Shared;
+using _GameToolkit.Share;
 using LitMotion.Animation;
 using UnityEngine;
 
