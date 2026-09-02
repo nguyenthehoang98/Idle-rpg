@@ -4,7 +4,7 @@ using UnityEngine;
 namespace _GameToolkit.Collider
 {
     [RequireComponent(typeof(CapsuleCollider2D))]
-    sealed class CapsuleCollision2DDetector : BaseCollisionDetector
+    sealed class CapsuleCollision2DDetector : CollisionDetector
     {
         CapsuleCollider2D collider2D;
         private CapsuleDirection2D direction;

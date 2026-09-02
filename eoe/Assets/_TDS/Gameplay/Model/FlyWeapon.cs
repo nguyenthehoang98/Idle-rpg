@@ -5,7 +5,7 @@ using UnityEngine;
 namespace _TDS.Gameplay.Model
 {
     [RequireComponent(typeof(Projectile))]
-    public class FlyWeapon : BaseWeapon
+    public class FlyWeapon : Weapon
     {
         [Header("Animation")]
         [SerializeField] private Animator animator;

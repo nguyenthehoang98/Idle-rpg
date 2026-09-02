@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _TDS.Gameplay.Model
 {
-    public class ProjectileWeapon : BaseWeapon
+    public class ProjectileWeapon : Weapon
     {
         private static readonly int AttackAnimator = Animator.StringToHash("Attack");
         

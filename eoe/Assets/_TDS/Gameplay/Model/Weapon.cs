@@ -1,25 +1,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using _GameToolkit.Entities;
 using _GameToolkit.ResourceManagement;
-using _GameToolkit.SkillSystem.Core;
-using _GameToolkit.SkillSystem.Imp;
-
+using _GameToolkit.SkillSystem;
 using _TDS.GameConfig;
 using _TDS.Gameplay.Data;
-using _TDS.Gameplay.Entity;
 using _TDS.Gameplay.Manager;
 using _TDS.Gameplay.Utils;
 using _TDS.Gameplay.View;
 using Cysharp.Threading.Tasks;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace _TDS.Gameplay.Model
 {
-    public abstract class BaseWeapon : MonoBehaviour
+    public abstract class Weapon : MonoBehaviour
     {
         private static readonly int OutlineColorProperty = Shader.PropertyToID("_OutlineColor");
 
@@ -30,7 +25,6 @@ namespace _TDS.Gameplay.Model
         [Header("Components")]
         [SerializeField] private new SpriteRenderer renderer;
         [SerializeField] private float adjustOutlineColorDuration = 0.2f;
-        [SerializeField] protected TrajectoryData trajectory;
         [SerializeField] protected Transform rotatePivot;
         [SerializeField] private AnimationCurve rotationCurve;
         [SerializeField] private float rotationDuration = 0.15f;
@@ -46,7 +40,6 @@ namespace _TDS.Gameplay.Model
         private bool[] isUpgraded;
         private int[] currentLevel = new int[2];
 
-        private IQuery query;
         private Coroutine adjustOutlineColorCoroutine;
         private MaterialPropertyBlock propertyBlock;
         
@@ -94,7 +87,6 @@ namespace _TDS.Gameplay.Model
             upgradesData = dict;
             WeaponData = weaponData;
             SkillData = weaponData.skillData;
-            query = new EntityQuery();
             currentLevel = new int[2] { 1, 1 };
 
             rotatePivot.localScale = new Vector3(faceFlip, 1, 1);
@@ -320,12 +312,11 @@ namespace _TDS.Gameplay.Model
                 Destination = destinationPosition,
                 Muzzle = muzzlePosition,
                 Entity = entity,
-                Trajectory = trajectory,
                 UseWeapon = UseWeapon,
                 Weapon = this,
             };
             
-            SkillManager.CastSkill(SkillData, GetSkillData(runtimeData));
+            //SkillManager.CastSkill(SkillData, GetSkillData(runtimeData));
         }
         
         public void StopAttack()
@@ -400,7 +391,7 @@ namespace _TDS.Gameplay.Model
             float radius = SkillData.attackRange + CurrentUpgradeData.attackRange;
             float sqrRadius = radius * radius;
 
-            query.FindTarget(type, center, position, radius, (e, float2) =>
+            /*query.FindTarget(type, center, position, radius, (e, float2) =>
             {
                 HealthData healthData = ComponentManager<HealthData>.Get(e);
                 if (healthData.PredictedHealth <= 0)
@@ -410,12 +401,12 @@ namespace _TDS.Gameplay.Model
 
                 float d = math.lengthsq(float2);
                 return d <= sqrRadius;
-            }, out QueryResult result);
+            }, out QueryResult result);*/
             
             entity = -1;
             destination = Vector3.zero;
 
-            if (result.Primary.IsValid)
+            /*if (result.Primary.IsValid)
             {
                 entity = result.Primary.Entity;
                 destination = result.Primary.Position;
@@ -424,7 +415,7 @@ namespace _TDS.Gameplay.Model
             {
                 entity = result.Secondary.Entity;
                 destination = result.Secondary.Position;
-            }
+            }*/
 
             return entity != -1;
         }

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace _GameToolkit.Collider
 {
     [RequireComponent(typeof(CircleCollider2D))]
-    sealed class CircleCollision2DDetector : BaseCollisionDetector
+    sealed class CircleCollision2DDetector : CollisionDetector
     {
         CircleCollider2D collider2D;
 

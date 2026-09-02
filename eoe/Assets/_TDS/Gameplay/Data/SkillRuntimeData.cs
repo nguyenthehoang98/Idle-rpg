@@ -1,4 +1,4 @@
-using _GameToolkit.SkillSystem.Imp;
+using _GameToolkit.SkillSystem;
 using _TDS.Gameplay.Model;
 using UnityEngine;
 
@@ -20,11 +20,10 @@ namespace _TDS.Gameplay.Data
         public string ExplosivePrefabName;
         public float ExecuteHealthPercent;
         public DependencyResetAttack DependencyReset; 
-        public TrajectoryData Trajectory;
         public Vector2 Pivot;
         public Vector2 Muzzle;
         public Vector2 Destination;
         public bool UseWeapon;
-        public BaseWeapon Weapon;
+        public Weapon Weapon;
     }
 }

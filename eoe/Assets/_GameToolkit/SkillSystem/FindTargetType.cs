@@ -1,4 +1,4 @@
-namespace _GameToolkit.SkillSystem.Core
+namespace _GameToolkit.SkillSystem
 {
     public enum FindTargetType
     {

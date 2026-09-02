@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _GameToolkit.GameConfig;
-using _GameToolkit.SkillSystem.Core;
-using _GameToolkit.SkillSystem.Imp;
+using _GameToolkit.SkillSystem;
 using UnityEngine;
 
 namespace _TDS.GameConfig
@@ -54,7 +53,6 @@ namespace _TDS.GameConfig
         public FindTargetType findTarget;
         public float attackRange;
 
-        public TrajectoryType trajectory;
         public float projectileDuration;
         public float boomerangOutboundDuration;
         public float boomerangReturnDuration;

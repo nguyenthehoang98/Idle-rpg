@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace _GameToolkit.SkillSystem.Core
+namespace _GameToolkit.SkillSystem
 {
     [Serializable]
     /// <summary>
@@ -42,16 +42,16 @@ namespace _GameToolkit.SkillSystem.Core
                 a.Action.Tick(deltaTime);
                 activeActions[i] = a;
                 
-                if (a.Action.IsFinished)
+                if (a.Action.IsCompleted)
                 {
                     if (pendingActionRemoved.Count > totalActionFinished)
                     {
-                        pendingReasonActionRemoved[totalActionFinished] = a.Action.Reason;
+                        pendingReasonActionRemoved[totalActionFinished] = a.Action.CompleteReason;
                         pendingActionRemoved[totalActionFinished] = a.ActionInstanceId;
                     }
                     else
                     {
-                        pendingReasonActionRemoved.Add(a.Action.Reason);
+                        pendingReasonActionRemoved.Add(a.Action.CompleteReason);
                         pendingActionRemoved.Add(a.ActionInstanceId);
                     }
 
@@ -178,7 +178,7 @@ namespace _GameToolkit.SkillSystem.Core
                 mapActionsIndex[skillId] = list;
             }
             
-            action.Start();
+            action.Startup();
 
             int index = activeActions.Count;
 
@@ -209,7 +209,7 @@ namespace _GameToolkit.SkillSystem.Core
 
             if (interrupted) removed.Action.Interrupt();
 
-            removed.Action.Stop();
+            removed.Action.Shutdown();
             
             // remove khỏi skill map
             if (mapActionsIndex.TryGetValue(removed.SkillInstanceId, out List<int> list))

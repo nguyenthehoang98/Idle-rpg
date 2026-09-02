@@ -11,7 +11,7 @@ namespace _GameToolkit.Updater
         [SerializeField] private int targetFPS = 30;
         [SerializeField, Range(1, 5)] private float loop = 1;
         [SerializeField, Range(1, 10)] private int maxTicksPerFrame = 5;
-        [SerializeField] private List<BaseTickRunner> updatables = new List<BaseTickRunner>();
+        [SerializeField] private List<TickRunner> updatables = new List<TickRunner>();
 
         public event Action<float> OnTimeScaleChanged;
         public event Action<bool> OnPauseChanged;
@@ -115,7 +115,7 @@ namespace _GameToolkit.Updater
             }
         }
 
-        public bool TryGetRunner<T>(out T tickable) where T : BaseTickRunner
+        public bool TryGetRunner<T>(out T tickable) where T : TickRunner
         {
             for (int i = 0; i < updatables.Count; i++)
             {

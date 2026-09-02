@@ -29,11 +29,10 @@ namespace _TDS.Gameplay.Manager
         [SerializeField] private Transform[] slots = new Transform[4];
 
         private HashSet<string> assetPath = new HashSet<string>();
-        private Dictionary<int, BaseWeapon> weaponContainer = new Dictionary<int, BaseWeapon>();
+        private Dictionary<int, Weapon> weaponContainer = new Dictionary<int, Weapon>();
         private Dictionary<int, int> damageMemory = new Dictionary<int, int>();
         private UpdateRunner runner;
         private SpawnManager spawnManager;
-        private SkillManager skillManager;
         private WeaponConfig weaponConfig;
         private PlayerConfig playerConfig;
         private PlayerRuntimeData player;
@@ -46,14 +45,13 @@ namespace _TDS.Gameplay.Manager
         {
             energy.enabled = false;
 
-            /*owner = GetComponent<TickSystemOwner>();
-            owner.TryGetTickable(out skillManager);
-            owner.TryGetTickable(out spawnManager);*/
+            runner = GetComponent<UpdateRunner>();
+            //runner.TryGetRunner(out spawnManager);
 
             runner.OnPauseChanged += ChangePause;
             runner.OnTimeScaleChanged += ChangeScaleTime;
-            skillManager.OnPostDamage += PostDamage;
-            skillManager.OnPostEarnExp += EarnExp;
+            //skillManager.OnPostDamage += PostDamage;
+            //skillManager.OnPostEarnExp += EarnExp;
 
             Monster.OnMonsterEnable += MonsterEnable;
             Monster.OnMonsterDisable += MonsterDisable;
@@ -109,8 +107,8 @@ namespace _TDS.Gameplay.Manager
         {
             runner.OnPauseChanged -= ChangePause;
             runner.OnTimeScaleChanged -= ChangeScaleTime;
-            skillManager.OnPostDamage -= PostDamage;
-            skillManager.OnPostEarnExp -= EarnExp;
+            //skillManager.OnPostDamage -= PostDamage;
+            //skillManager.OnPostEarnExp -= EarnExp;
 
             Monster.OnMonsterEnable -= MonsterEnable;
             Monster.OnMonsterDisable -= MonsterDisable;
@@ -180,7 +178,7 @@ namespace _TDS.Gameplay.Manager
 
             currentWeaponSlot++;
 
-            BaseWeapon weapon = go.GetComponent<BaseWeapon>();
+            Weapon weapon = go.GetComponent<Weapon>();
             
             if (weapon == null) Debug.LogError($"Gameobject '{go}' not attach Weapon component");
 
@@ -331,7 +329,7 @@ namespace _TDS.Gameplay.Manager
 
         private async void PickCard(WeaponUpgradeData @params)
         {
-            if (weaponContainer.TryGetValue(@params.id, out BaseWeapon weapon))
+            if (weaponContainer.TryGetValue(@params.id, out Weapon weapon))
             {
                 weapon.IncreaseUpgradeData(@params);
 
@@ -362,7 +360,7 @@ namespace _TDS.Gameplay.Manager
             totalMonsterAlive++;
         }
 
-        private async void EarnExp(PostEarnExpParams @params)
+        /*private async void EarnExp(PostEarnExpParams @params)
         {
             player.CurrentExp += @params.Exp;
 
@@ -383,9 +381,9 @@ namespace _TDS.Gameplay.Manager
 
                 PickCardItemData();
             }
-        }
+        }*/
 
-        private async void PickCardItemData()
+        /*private async void PickCardItemData()
         {
             List<CardItemData> temp = new List<CardItemData>();
             foreach (var pair in weaponContainer)
@@ -409,14 +407,14 @@ namespace _TDS.Gameplay.Manager
             await cardUIPicker.Show(collects);
 
             bottomPanel.Hide();
-        }
+        }*/
 
-        private void PostDamage(PostDamageParams @params)
+        /*private void PostDamage(PostDamageParams @params)
         {
             if (!damageMemory.TryAdd(@params.Source.skillId, @params.Damage))
             {
                 damageMemory[@params.Source.skillId] += @params.Damage;
             }
-        }
+        }*/
     }
 }

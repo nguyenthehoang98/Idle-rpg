@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _TDS.Gameplay.View
 {
-    public class SpriteRendererAnimation : BaseAnimation<SpriteRenderer>
+    public class SpriteRendererAnimation : FrameAnimation<SpriteRenderer>
     {
         protected override void OnUpdateFrame(Sprite sprite)
         {

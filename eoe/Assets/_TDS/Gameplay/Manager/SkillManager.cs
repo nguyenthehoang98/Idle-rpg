@@ -1,664 +1,344 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+/*using System.Collections.Generic;
+using _GameToolkit.Avoidance;
 using _GameToolkit.Entities;
 using _GameToolkit.ResourceManagement;
 using _GameToolkit.Shared;
-using _GameToolkit.SkillSystem.Core;
-using _GameToolkit.SkillSystem.Imp;
-
-
-
-using _TDS.GameConfig;
-using _TDS.Gameplay.Data;
-using _TDS.Gameplay.Entity;
 using _TDS.Gameplay.Model;
-using _TDS.Gameplay.Utils;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace _TDS.Gameplay.Manager
 {
-    [Serializable]
-    public sealed class SkillManager : Spu
+    public static class SkillFactory
     {
-        static SkillManager instance;
+        private static Dictionary<int, CoroutineHandle> PredictedHealthCoroutines = new Dictionary<int, CoroutineHandle>();
+        private static HashSet<string> assetPaths = new HashSet<string>();
 
-        public event Action<PostDamageParams> OnPostDamage;
-        public event Action<PostEarnExpParams> OnPostEarnExp;
-
-        private Dictionary<int, CoroutineHandle> coroutinesResetFutureHealth = new Dictionary<int, CoroutineHandle>();
-        private IQuery query;
-        private HashSet<string> names;
-
-        public Task Initialize()
+        //private static SkillTickRunner Runner;
+        private static int NextActionId = 0;
+        
+        /*public static void Initialize(SkillTickRunner runner)
         {
-            query = new EntityQuery();
-            names = new HashSet<string>();
-
-            instance = this;
-            return Task.CompletedTask;
-        }
-
-        public override void Dispose()
+            SkillFactory.Runner = runner;
+            SkillFactory.NextActionId = 0;
+        }#1#
+        
+        public static void BuildSkill(SkillContext context)
         {
-            base.Dispose();
-
-            foreach (var name in names)
+            if (context.Fire.UseEquipment)
             {
-                AssetLoader.UnCache(name);
-            }
+                // Duration tính từ quãng đường / tốc độ (config chỉ set Speed)
+                float distance = Vector3.Distance(context.Fire.EquipmentMuzzle, context.Fire.ProjectileDestination);
+                context.Projectile.Duration = distance / Mathf.Max(0.01f, context.Projectile.Speed);
 
-            names = null;
-
-            instance = null;
-        }
-
-        public static void CastSkill(SkillData skillData, SkillRuntimeData runtimeData)
-        {
-            Vector3 position = runtimeData.Muzzle;
-            Vector3 destination = runtimeData.Destination;
-            int entityTarget = runtimeData.Entity;
-            
-            if (instance == null)
-            {
-                Debug.LogError("Instance SkillManager is null");
+                BuildSkill_Private(
+                    context, context.Fire.EquipmentMuzzle, context.Fire.ProjectileDestination, 1
+                );
                 return;
             }
 
-            // ~todo: force cast skill if weapon can fly
-            if (runtimeData.UseWeapon)
-            {
-                instance.CastSkill_Private(skillData, runtimeData, position, destination, 1);
-                
-                return;
-            }
+            PredictedTargetDamage(context);
 
-            float projectileScale = runtimeData.ProjectileScaleBonus + 1;
+            bool shouldContinue = true;
 
-            instance.PredictedTargetDamage(runtimeData, entityTarget);
-            
+            Vector3 destination = context.Fire.ProjectileDestination;
+            Vector3 position = context.Fire.EquipmentMuzzle;
             Vector3 direction = (destination - position).normalized;
-            
-            bool extra = false;
-            
             Vector3 perpendicular = new Vector3(-direction.y, direction.x, 0);
-            
-            float parallelSpacing = skillData.parallelDistanceStep;
 
-            if (runtimeData.ProjectilesPerShot > 0)
+            if (context.SpreadProjectileCount > 0)
             {
-                int count = runtimeData.ProjectilesPerShot + 1;
+                int count = context.SpreadProjectileCount;
 
-                float scaleDamage = 1f;//runtimeData.ParallelDamagePercent;
-             
+                float d = Mathf.CeilToInt(context.SpreadProjectileCount / 2f) * context.ProjectileDistanceStep;
+
+                Vector3 left = position - d * perpendicular;
+
+                int mid = count / 2;
+
+                Vector3 right = position + d * perpendicular;
+
+                float scaleDamage = context.SpreadDamageScale;
+
                 for (int i = 0; i < count; i++)
                 {
-                    float offset = (i - (count - 1) * 0.5f) * parallelSpacing * projectileScale;
+                    float angle = (i - (count - 1) * 0.5f) * context.ProjectileAngleStep / Mathf.Max(1, count - 1);
+
+                    Vector3 dir = Quaternion.Euler(0, 0, angle) * direction;
+
+                    Vector3 final;
+
+                    if (i >= count / 2) final = right;
+
+                    else final = left;
+
+                    BuildSkill_Private(context, final, final + dir * 100f, mid == i ? 1 : scaleDamage);
+                }
+
+                shouldContinue = false;
+            }
+
+            if (context.ParallelProjectileCount > 0)
+            {
+                int count = context.ParallelProjectileCount + 1;
+
+                float scaleDamage = context.ParallelDamageScale;
+
+                float space = context.ProjectileDistanceStep;
+
+                float size = context.Projectile.SizeScale;
+
+                for (int i = 0; i < count; i++)
+                {
+                    float offset = (i - (count - 1) * 0.5f) * space * size;
 
                     Vector3 offsetPos = position + perpendicular * offset;
-                    
+
                     Vector3 offsetDest = destination + perpendicular * offset;
 
-                    instance.CastSkill_Private(skillData, runtimeData, offsetPos, offsetDest, scaleDamage);
+                    BuildSkill_Private(context, offsetPos, offsetDest, scaleDamage);
                 }
-                    
-                extra = true;
+
+                shouldContinue = false;
             }
 
-            if (runtimeData.SpreadProjectileCount > 0)
+            if (!shouldContinue)
             {
-                int count = runtimeData.SpreadProjectileCount + 1;
-                
-                float angleStep = skillData.spreadAngleStep;
-
-                float scaleDamage = 1f;//runtimeData.SpreadDamagePercent;
-
-                float d = Mathf.CeilToInt(runtimeData.ProjectilesPerShot / 2f) * parallelSpacing;
-                
-                Vector3 left = position - d * perpendicular;
-                
-                int mid = count / 2;
-                
-                Vector3 right = position + d * perpendicular;
-                
-                for (int i = 0; i < count; i++)
-                {
-                    float angle = (i - (count - 1) * 0.5f) * angleStep / Mathf.Max(1, count - 1);
-                    
-                    Vector3 dir = Quaternion.Euler(0, 0, angle) * direction;
-                    
-                    Vector3 final;
-                    
-                    if (i >= count / 2) final = right;
-                    
-                    else final = left;
-                    
-                    instance.CastSkill_Private(skillData, runtimeData, final, final + dir * 100f,  mid == i ? 1 : scaleDamage);
-                }
-                    
-                extra = true;
+                BuildSkill_Private(context, position, destination, 1);
             }
-                
-            if(!extra) instance.CastSkill_Private(skillData, runtimeData, position, destination, 1);
         }
-        
-        private async void CastSkill_Private(SkillData skillData, SkillRuntimeData runtimeData, Vector3 position, Vector3 destination, float scaleDamage)
-        {
-            float lifeTime = 0;
-            
-            BaseTrajectory trajectory = GetTrajectory(runtimeData, skillData, ref position, ref destination, ref lifeTime);
-            if (trajectory == null)
-            {
-#if UNITY_EDITOR
-                Debug.LogError("Stop cast skill because Trajectory is null, skillId " + skillData.skillId);
-#endif
-                return;
-            }
-            
-            Projectile projectile = null;
-           
-            List<BaseCollider> colliders = new List<BaseCollider>();
-            
-            bool useWeapon = runtimeData.UseWeapon;
-            
-            float projectileScale = runtimeData.ProjectileScaleBonus + 1;
-          
-            if (useWeapon)
-            {
-                projectile = runtimeData.Weapon.GetComponent<Projectile>();
-          
-                if (projectile == null)
-                {
-#if UNITY_EDITOR
-                    Debug.LogError("Stop cast skill because Projectile Component is null, prefab " + runtimeData.Weapon.name);
-#endif
-                    return;
-                }
-                
-                projectile.SetSizeScale(projectileScale);
 
-                for (int i = 0; i < projectile.Colliders.Length; i++)
-                {
-                    BaseCollider collider = GetCollider(projectile.Colliders[i], skillData);
-                    
-                    if (collider == null)
-                    {
-#if UNITY_EDITOR
-                        Debug.LogError("Stop cast skill because Collider is null, skillId " + skillData.skillId);
-#endif
-                        continue;
-                    }
-                    
-                    colliders.Add(collider);
-                }
+        private static async void BuildSkill_Private(SkillContext context, Vector3 from,
+            Vector3 to, float damageScale)
+        {
+            Projectile projectile;
+            
+            if (context.Fire.UseEquipment)
+            {
+                // Equipment.projectile là reference tới prefab asset -> phải instantiate, không dùng trực tiếp
+                GameObject equipmentPrefab = context.Fire.Equipment.projectile.gameObject;
+
+                Pool.RegisterPool(equipmentPrefab, true); // idempotent
+
+                projectile = Pool.Instantiate(equipmentPrefab, from, false).GetComponent<Projectile>();
             }
             else
             {
-                GameObject prefab = await AssetLoader.GetAssetCached<GameObject>(skillData.prefabName);
-                
-                if (prefab == null)
+                // GetAssetCached + RegisterPool: GetAsset thường sẽ release handle ngay sau load,
+                // prefab sống trong pool nhưng asset đã bị release -> hỏng khi build.
+                GameObject go = await AssetLoader.GetAssetCached<GameObject>(context.AssetName);
+
+                if (go == null)
                 {
-#if UNITY_EDITOR
-                    Debug.LogError("Stop cast skill because prefab is null, skillId " + skillData.skillId);
-#endif
+                    Debug.LogError($"[SkillManager] Projectile prefab '{context.AssetName}' not found (check Addressables)");
+                    context.Fire.Equipment.StopAttack();
                     return;
                 }
-                
-                // ~ get component in prefab
-                projectile = prefab.GetComponent<Projectile>();
-                
-                if (projectile == null)
-                {
-#if UNITY_EDITOR
-                    Debug.LogError("Stop cast skill because Projectile Component is null, prefab " + prefab.name);
-#endif
-                    return;
-                }
-                
-                projectile.SetSizeScale(projectileScale);
 
-                for (int i = 0; i < projectile.Colliders.Length; i++)
-                {
-                    BaseCollider collider = GetCollider(projectile.Colliders[i], skillData);
+                if (assetPaths.Add(context.AssetName)) Pool.RegisterPool(go, true);
 
-                    if (collider == null)
-                    {
-#if UNITY_EDITOR
-                        Debug.LogError("Stop cast skill because Collider is null, skillId " + skillData.skillId);
-#endif
-                        continue;
-                    }
-                    
-                    colliders.Add(collider);
-                }
-                
-                GameObject go = Pool.Instantiate(prefab, position, false);
-
-                projectile = go.GetComponent<Projectile>();
-                
-                projectile.Rotate(destination - position);
+                projectile = Pool.Instantiate(go, from, false).GetComponent<Projectile>();
             }
             
-            Action onProjectileDestroyed = () => { };
-            
-            int maxHitCount = skillData.maxHitCount <= 0 ? int.MaxValue : skillData.maxHitCount;
-            maxHitCount += runtimeData.BonusPierceCount;
+            projectile.Initialize(from, to, context.Projectile);
+            projectile.EnsureValid(out float lifetime);
+            projectile.OnPhaseChanged += context.Fire.Equipment.OnProjectilePhaseChange;
 
-            CastProjectileAction castProjectileAction = new CastProjectileAction(lifeTime, colliders, trajectory,
-                info => OnDamageEntityFunction(skillData, runtimeData, info, scaleDamage, ref onProjectileDestroyed),
-                projectile, skillData.damageTickInterval, maxHitCount,
-                skillData.targetHitCooldown
+            ProjectileSkillAction skillAction = new ProjectileSkillAction(
+                lifetime, projectile.CollisionDetectors(), 
+                context.Damage.DamageInterval, context.Damage.HitInterval, context.Damage.HitCount
             );
-            
-            castProjectileAction.OnComplete += () =>
-            {
-                projectile.Destroy(onProjectileDestroyed);
 
-                if (runtimeData.DependencyReset == DependencyResetAttack.Skill)
+            skillAction.OnDamaged += info => OnDamagedFunc(context, info, projectile, damageScale);
+            skillAction.OnComplete += () =>
+            {
+                if (context.ResetTiming == AttackResetTiming.OnSkillFinished)
                 {
-                    runtimeData.Weapon.StopAttack();
+                    context.Fire.Equipment.StopAttack();
                 }
             };
+
+            Runner.QueueAddSkillAction(NextActionId++, skillAction);
             
-            RequestAddAction(1, castProjectileAction);
-
-            //~ custom
-            if (useWeapon)
-            {
-                if (trajectory is BoomerangTrajectory boomerangTrajectory)
-                {
-                    FlyWeapon flyWeapon = runtimeData.Weapon as FlyWeapon;
-                    
-                    boomerangTrajectory.OnChangePhase += phase =>
-                    {
-                        switch (phase)
-                        {
-                            case BoomerangTrajectory.Phase.Outbound:
-                                flyWeapon.Startup();
-                                break;
-                            case BoomerangTrajectory.Phase.Hang:
-                                projectile.StopLerpMotion();
-                                flyWeapon.Phase01();
-                                break;
-                            case BoomerangTrajectory.Phase.Return:
-                                projectile.StopLerpMotion();
-                                flyWeapon.Phase02();
-                                break;
-                            case BoomerangTrajectory.Phase.Complete:
-                                flyWeapon.Complete();
-                                break;
-                        }
-                    };
-                }
-                else if (trajectory is SplineTrajectory splineTrajectory)
-                {
-                    FlyWeapon flyWeapon = runtimeData.Weapon as FlyWeapon;
-                    
-                    splineTrajectory.OnChangePhase += phase =>
-                    {
-                        switch (phase)
-                        {
-                            case SplineTrajectory.Phase.Windup:
-                                flyWeapon.Startup();
-                                break;
-                            case SplineTrajectory.Phase.Execute:
-                                projectile.StopLerpMotion();
-                                flyWeapon.Phase01();
-                                break;
-                            case SplineTrajectory.Phase.Recovery:
-                                projectile.StopLerpMotion();
-                                flyWeapon.Phase02();
-                                break;
-                            case SplineTrajectory.Phase.Complete:
-                                flyWeapon.Complete();
-                                break;
-                        }
-                    };
-                }
-            }
-            
-            projectile.ImmediatelySetPosition(trajectory.EvaluatePosition(0));
-
-            projectile.Initialize(runtimeData.Weapon);
-
-            if(!useWeapon) projectile.Active();
+            projectile.Startup();
         }
-        
-        /*
-         * @Damage & Hp calculate
-         */
-        /// <summary>
-        /// Phương thức này mục đích là gán HP entity đang bị ngắm & tính hp ngay khi bắn để tránh các vũ khí đều tranh vào 1 entity
-        /// </summary>
-        private void PredictedTargetDamage(SkillRuntimeData runtimeData, int entityTarget)
+
+        private static bool OnDamagedFunc(SkillContext context, HitInfo hitInfo, Projectile projectile, float scaleDamage)
         {
-            if (!ComponentManager<AliveComponent>.Has(entityTarget)) return;
+            bool alive = MonsterTickRunner.Instance.TryGet(context.TargetEntity, out MonsterTickRunner.Data data);
+
+            if (!alive) return false;
             
-            runtimeData.CritChance = 0; // Lấy dmg gốc là được
-            
-            int damage = Mathf.CeilToInt(Formula.CalculateFinalDamage(runtimeData, out bool critical));
+            float explosionRadius = Mathf.Max(0, context.ExplosiveRadius);
 
-            ref HealthData healthData = ref ComponentManager<HealthData>.Get(entityTarget);
-
-            healthData.PredictedHealth -= damage;
-
-            if (coroutinesResetFutureHealth.TryGetValue(entityTarget, out var coroutine))
+            if (explosionRadius == 0)
             {
-                Timing.KillCoroutines(coroutine);
+                Vector3 textDamagePosition = hitInfo.Unique.transform.position;
+               
+                projectile.EvaluateTextDamagePosition(ref textDamagePosition);
+
+                return ValidateCalculatorDamage(
+                    context, projectile, textDamagePosition, context.TargetEntity,
+                    hitInfo.IsLastHit, scaleDamage
+                );
             }
-
-            coroutinesResetFutureHealth[entityTarget] = Timing.CallDelayed(1, () =>
+            else
             {
-                if (!ComponentManager<AliveComponent>.Has(entityTarget)) return;
+                MonsterTickRunner.Instance.TryGetAgent(data.agent, out AgentData agentData);
 
-                ref HealthData healthData = ref ComponentManager<HealthData>.Get(entityTarget);
-                healthData.PredictedHealth = healthData.CurrentHealth;
-            }, null);
-        }
-        
-        private bool OnDamageEntityFunction(SkillData skillData, SkillRuntimeData runtimeData,
-            DamageEntityInfo info, float scaleDamage, ref Action onProjectileDestroyed)
-        {
-            float radius = Mathf.Max(0, runtimeData.ExplosiveRadius);
-
-            Vector3 position = Vector3.zero;
-            int agent;
-
-            bool valid = MonsterEntityManager.TryGetAgent(info.entity, out agent)
-                         && AgentManager.TryGet_AgentPosition(agent, out position);
-
-            if (!valid) return false;
-
-            if (radius > 0)
-            {
+                Vector3 explosionPosition = new Vector3(agentData.position.x, agentData.position.y);
                 
-                SpawnExplosiveAura(runtimeData.ExplosivePrefabName, position);
+                SpawnExplosive(context.ExplosiveAssetName, explosionPosition);
                 
-#if UNITY_EDITOR
-                GizmosLine.Circle(position, radius, Color.yellow, 0.1f);
-#endif
-                Vector2 size = Vector2.one * radius / 2f;
-                
-                float sqr = Mathf.Pow(radius, 2);
+                ContactFilter2D filter = new ContactFilter2D();
+                filter.useLayerMask = false;
 
-                float explosiveDamagePercent = runtimeData.ExplosiveDamagePercent;
+                Collider2D[] results = new Collider2D[20];
                 
-                List<int> entities = query.GetAllEntities(position, size, e =>
+                int count = Physics2D.OverlapCircle(
+                    explosionPosition, explosionRadius, filter, results
+                );
+                
+                float explosiveDamagePercent = context.ExplosiveDamageScale;
+                
+                for (int i = 0; i < count; i++)
                 {
-                    return ComponentManager<AliveComponent>.Has(e);
-                });
+                    Unique unique = results[i].GetComponent<Unique>();
 
-                for (int i = 0; i < entities.Count; i++)
-                {
-                    int e = entities[i];
-
-                    if (!MonsterEntityManager.TryGetAgent(e, out int a)) continue;
-
-                    if (!AgentManager.TryGet_AgentPosition(a, out Vector3 p)) continue;
-
-                    float d = Vector3.SqrMagnitude(p - position);
-
-                    if (d < sqr)
+                    if (unique != null)
                     {
-                        float dmg = (e == info.entity ? 1 : explosiveDamagePercent) * scaleDamage;
+                        float explosionDamageScale = (unique == hitInfo.Unique ? 1 : explosiveDamagePercent) * scaleDamage;
 
-                        Vector3 textDamagePosition = (skillData.trajectory == TrajectoryType.Stationary || !info.useProjectilePosition)
-                            ? position
-                            : info.projectilePosition;
+                        Vector3 textDamagePosition = unique.transform.position;
+
+                        projectile.EvaluateTextDamagePosition(ref textDamagePosition);
                         
-                        return CalculatorDamage(skillData, runtimeData,
-                            info.entity, textDamagePosition, dmg, info.isLastCollision, ref onProjectileDestroyed
+                        return ValidateCalculatorDamage(
+                            context, projectile, textDamagePosition, unique.Id(),
+                            hitInfo.IsLastHit, explosionDamageScale
                         );
                     }
                 }
-            }
-            else
-            {
-                Vector3 textDamagePosition = (skillData.trajectory == TrajectoryType.Stationary || !info.useProjectilePosition)
-                    ? position
-                    : info.projectilePosition;
-                
-                return CalculatorDamage(skillData, runtimeData,
-                    info.entity, textDamagePosition, scaleDamage, info.isLastCollision, ref onProjectileDestroyed
-                );
-            }
 
-            return false;
+                return true;
+            }
         }
 
-        private bool CalculatorDamage(SkillData skillData, SkillRuntimeData runtimeData, 
-            int entity, Vector3 textDamagePosition,
-            float scaleDamage, bool lastCollision, ref Action onProjectileDestroyed)
+        private static bool ValidateCalculatorDamage(SkillContext context, Projectile projectile,
+            Vector3 textDamagePosition, int entity,
+            bool lastCollision, float scaleDamage
+        )
         {
-            if (!ComponentManager<AliveComponent>.Has(entity)) return false;
-            
-            ref HealthData health = ref ComponentManager<HealthData>.Get(entity);
-            
-            if(health.CurrentHealth <= 0) return false;
-            
-            int damage = Mathf.CeilToInt(Formula.CalculateFinalDamage(runtimeData, out bool critical) * scaleDamage);
-            
+            bool alive = MonsterTickRunner.Instance.TryGet(entity, out MonsterTickRunner.Data data);
+
+            if (!alive) return false;
+
+            ref HealthComponent health = ref ComponentManager<HealthComponent>.Get(entity);
+
+            if (health.CurrentHealth <= 0) return false;
+
+            int damage = Mathf.CeilToInt(DamageFormula.DamageOutput(context, out bool critical) * scaleDamage);
+
             health.CurrentHealth -= damage;
-            
-            int currentHealth = health.CurrentHealth;
 
-            if (AgentManager.TryGet_Monster(entity, out Monster monster) && currentHealth > 0)
-            {
-                monster.BeHit();
-            }
-
-            OnPostDamage?.Invoke(new PostDamageParams
-            {
-                Damage = damage,
-                Source = skillData
-            });
-                
-            SpawnTextDamage(damage, critical, textDamagePosition);
-
-            float killInstantBelow = runtimeData.ExecuteHealthPercent;
-            
             float healthPercent = health.CurrentHealth / (float)health.MaxHealth;
             
-            bool shouldKillInstantMonster = healthPercent <= killInstantBelow;
+            bool killInstant = (healthPercent) <= context.InstantKillTargetBelowHealthPercent;
 
-            if (healthPercent <= 0 || shouldKillInstantMonster)
+            if (killInstant) damage += health.CurrentHealth;
+            
+            data.monster.TakeDamagePost(damage);
+            
+            SpawnTextDamage(damage, critical, killInstant, textDamagePosition);
+
+            if (killInstant || healthPercent <= 0)
             {
-                if (ComponentManager<StatData>.TryGet(entity, out StatData data))
+                if (lastCollision)
                 {
-                    OnPostEarnExp?.Invoke(new PostEarnExpParams
+                    projectile.OnDestroy += () =>
                     {
-                        Exp = data.Exp
-                    });
+                        MonsterTickRunner.Instance.Remove(data);
+                    };
                 }
-
-                if (MonsterEntityManager.TryGetAgent(entity, out int agent))
+                else
                 {
-                    if (lastCollision)
-                    {
-                        AgentManager.Destroy_Agent(agent, ref onProjectileDestroyed);
-                    }
-                    else
-                    {
-                        AgentManager.Destroy_Agent(agent);                        
-                    }
+                    MonsterTickRunner.Instance.Remove(data);
                 }
             }
 
             return true;
         }
-
-        /*
-         * @Spawn objects
-         */
-        private async void SpawnExplosiveAura(string prefabName, Vector3 position)
+        
+        private static async void SpawnExplosive(string prefabName, Vector3 position)
         {
             if (string.IsNullOrEmpty(prefabName)) return;
 
             GameObject go = await AssetLoader.GetAssetCached<GameObject>(prefabName);
 
-            if (names.Add(prefabName)) Pool.RegisterPool(go, true);
+            if (assetPaths.Add(prefabName)) Pool.RegisterPool(go, true);
 
             GameObject o = Pool.Instantiate(go);
+            
             o.transform.position = position;
         }
-
-        private async void SpawnTextDamage(int damage, bool critical, Vector3 position)
+        
+        private static async void SpawnTextDamage(int damage, bool critical, bool killInstant, Vector3 position)
         {
-            GameObject go = await AssetLoader.GetAssetCached<GameObject>(critical
-                    ? Path.TEXT_DAMAGE_CRITICAL
-                    : Path.TEXT_DAMAGE_NORMAL);
+            string path = Path.TEXT_DAMAGE_NORMAL;
 
-            TextDamage ins = Pool.Instantiate(go).GetComponent<TextDamage>();
+            if (killInstant)
+            {
+                if (critical) path = Path.TEXT_DAMAGE_CRITICAL_INSTANT_KILL;
+                else path = Path.TEXT_DAMAGE_NORMAL_INSTANT_KILL;
+            }
+            else
+            {
+                if (critical) path = Path.TEXT_DAMAGE_NORMAL;
+            }
+
+            GameObject go = await AssetLoader.GetAssetCached<GameObject>(path);
+
+            TextDamage td = Pool.Instantiate(go).GetComponent<TextDamage>();
+            
             float offsetX = RandomUtils.Range(-0.3f, 0.3f);
-            ins.transform.position = position + new Vector3(offsetX, 0, 0);
-
-            ins.Execute(damage);
+            
+            td.transform.position = position + new Vector3(offsetX, 0, 0);
+            
+            td.Execute(damage);
         }
 
         /*
-         * @Build element
-         */
-        private BaseCollider GetCollider(ColliderData colliderData, SkillData skillData)
+     * @Damage & Hp calculate
+     * Phương thức này mục đích là gán HP entity đang bị ngắm & tính hp ngay khi bắn để tránh các vũ khí đều tranh vào 1 entity
+     #1#
+        private static void PredictedTargetDamage(SkillContext context)
         {
-            switch (colliderData.type)
-            {
-                case ColliderType.Circle:
-                    return new CircleCollider(query, colliderData.relativePosition,
-                        skillData.collisionStartDelay, skillData.collisionDuration, colliderData.circleRadius
-                    );
-                case ColliderType.Rectangle:
-                    return new RectangleCollider(query, colliderData.relativePosition,
-                        skillData.collisionStartDelay, skillData.collisionDuration, colliderData.rectangleSize,
-                        colliderData.dependencyRelativeRotation
-                    );
-                default:
-                    Debug.LogError("Unknown Collider type " + colliderData.type);
-                    return null;
-            }
-        }
-        
-        private BaseTrajectory GetTrajectory(SkillRuntimeData runtimeData, SkillData skillData, ref Vector3 position, 
-            ref Vector3 destination, ref float duration)
-        {
-            float distance = 0;
-
-            bool found = DistanceToCircleEdge(position, destination, skillData.attackRange + runtimeData.AttackRange,
-                out distance, out Vector3 hitPoint
-            );
-
-            if (!found)
-            {
-                hitPoint = destination;
-                
-                distance = Vector3.Distance(position, destination);
-            }
-
-            TrajectoryData trajectoryData = runtimeData.Trajectory;
+            int entity = context.TargetEntity;
             
-            switch (skillData.trajectory)
+            if (!MonsterTickRunner.Instance.IsAlive(context.TargetEntity)) return;
+
+            context.CritRate = 0;
+
+            int damage = Mathf.CeilToInt(DamageFormula.DamageOutput(context, out bool critical));
+
+            ref HealthComponent health = ref ComponentManager<HealthComponent>.Get(entity);
+
+            health.PredictedHealth -= damage;
+
+            if (PredictedHealthCoroutines.TryGetValue(entity, out CoroutineHandle coroutine))
             {
-                case TrajectoryType.Projectile:
-                    
-                    duration = skillData.projectileDuration;
-                    
-                    float speed = distance / duration;
-                    
-                    return new ProjectileTrajectory(trajectoryData.projectileCurve, speed,
-                        duration, position, destination
-                    );
-                
-                case TrajectoryType.Boomerang:
-                    
-                    duration = skillData.boomerangOutboundDuration + skillData.boomerangHangDuration +
-                               skillData.boomerangReturnDuration;
-                    
-                    return new BoomerangTrajectory(trajectoryData.boomerangInitCurve,
-                        trajectoryData.boomerangReturnCurve, skillData.boomerangOutboundDuration,
-                        skillData.boomerangHangDuration, skillData.boomerangReturnDuration,
-                        position, hitPoint);
-                
-                case TrajectoryType.Spline:
-
-                    duration = skillData.splineWindupDuration
-                               + skillData.splineExecuteDuration
-                               + skillData.splineRecoveryDuration;
-                    
-                    return new SplineTrajectory(trajectoryData.spline.Spline,
-                        skillData.splineWindupDuration, skillData.splineExecuteDuration,
-                        skillData.splineRecoveryDuration,
-                        position, destination
-                    );
-                
-                case TrajectoryType.Stationary:
-                    
-                    duration = skillData.stationaryDuration;
-                    
-                    switch (skillData.stationaryPivot)
-                    {
-                        case TrajectoryStationaryPivot.Enemy:
-                            position = runtimeData.Muzzle;
-                            destination = runtimeData.Destination;
-                            break;
-                        case TrajectoryStationaryPivot.Random:
-                            position = runtimeData.Muzzle;
-                            destination = RandomPositionInRadius(position, skillData.stationaryRandomRadius);
-                            break;
-                        case TrajectoryStationaryPivot.Weapon:
-                            position = runtimeData.Pivot;
-                            destination = runtimeData.Muzzle;
-                            break;
-                        default:
-                            Debug.LogError("Undefined Trajectory Stationary Pivot");
-                            break;
-                    }
-
-                    return new StationaryTrajectory(position, destination);
-                
-                default:
-                    Debug.LogError("Unknown Trajectory type " + skillData.trajectory);
-                    return null;
-            }
-        }
-        
-        private static Vector2 RandomPositionInRadius(Vector2 position, float radius)
-        {
-            return position + Random.insideUnitCircle * radius;
-        }
-        
-        private static bool DistanceToCircleEdge(Vector3 position, Vector3 destination, float radius,
-            out float distance, out Vector3 hitPoint)
-        {
-            Vector3 dir = (destination - position).normalized;
-
-            // position = ray origin
-            // center = Vector3.zero
-            float b = Vector3.Dot(position, dir);
-            float c = Vector3.Dot(position, position) - radius * radius;
-
-            float delta = b * b - c;
-
-            if (delta < 0f)
-            {
-                distance = -1f;
-                hitPoint = Vector3.zero;
-                return false;
+                Timing.Instance.KillCoroutinesOnInstance(coroutine);
             }
 
-            distance = -b + Mathf.Sqrt(delta);
-            hitPoint = position + dir * distance;
-            return true;
+            PredictedHealthCoroutines[entity] = Timing.Instance.CallDelayedOnInstance(1, () =>
+            {
+                if (!MonsterTickRunner.Instance.IsAlive(context.TargetEntity)) return;
+
+                ref HealthComponent health = ref ComponentManager<HealthComponent>.Get(entity);
+
+                health.PredictedHealth = health.CurrentHealth;
+            });
         }
-    }
 
-    public struct PostDamageParams
-    {
-        public SkillData Source;
-        public int Damage;
+        public static void Dispose() => SkillFactory.Runner = null;
     }
-
-    public struct PostEarnExpParams
-    {
-        public int Exp;
-    }
-}
+}*/

@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 namespace _TDS.Gameplay.View
 {
-    public abstract class BaseAnimation<T> : MonoBehaviour
+    public abstract class FrameAnimation<T> : MonoBehaviour
     {
         [SerializeField] private bool playOnEnable;
         [SerializeField] protected T reference;

@@ -1,11 +1,12 @@
 ﻿using System;
 using _GameToolkit.Shared;
+using _GameToolkit.Updater;
 using UnityEngine;
 
 namespace _GameToolkit.Collider
 {
     [Serializable]
-    public abstract class BaseCollisionDetector : MonoBehaviour, ICollisionDetector
+    public abstract class CollisionDetector : MonoBehaviour, ITickRunner
     {
         [SerializeField] private int maxResults = 10;
         [SerializeField] protected LayerMask layerMask;
@@ -58,10 +59,10 @@ namespace _GameToolkit.Collider
         {
         }
 
-        public abstract void Tick(float deltaTime);
-
         protected virtual void OnShutdown()
         {
         }
+
+        public abstract void Tick(float deltaTime);
     }
 }

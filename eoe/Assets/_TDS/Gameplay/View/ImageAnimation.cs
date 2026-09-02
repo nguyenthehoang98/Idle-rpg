@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace _TDS.Gameplay.View
 {
-    public class ImageAnimation : BaseAnimation<Image>
+    public class ImageAnimation : FrameAnimation<Image>
     {
         protected override void OnUpdateFrame(Sprite sprite)
         {

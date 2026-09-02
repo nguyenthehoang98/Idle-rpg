@@ -4,7 +4,7 @@ using UnityEngine;
 namespace _GameToolkit.Collider
 {
     [RequireComponent(typeof(BoxCollider2D))]
-    sealed class BoxCollision2DDetector : BaseCollisionDetector
+    sealed class BoxCollision2DDetector : CollisionDetector
     {
         private BoxCollider2D collider2D;
 

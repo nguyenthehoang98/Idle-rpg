@@ -1,7 +1,6 @@
 using System;
+using _GameToolkit.Collider;
 using _GameToolkit.ResourceManagement;
-using _GameToolkit.SkillSystem.Imp;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,9 +20,9 @@ namespace _TDS.Gameplay.Model
         [SerializeField] private Transform scalePivot;
         [SerializeField] private Transform rotatePivot;
         [SerializeField] private TrailRenderer trailRenderer;
-        [SerializeField] private ColliderData[] colliders = new ColliderData[0];
+        [SerializeField] private CollisionDetector[] colliders = new CollisionDetector[0];
 
-        public ColliderData[] Colliders { get; private set; }
+        public CollisionDetector[] Colliders { get; private set; }
 
         private Action onDestroyCallback;
 
@@ -45,7 +44,7 @@ namespace _TDS.Gameplay.Model
 
         private bool blockRotation = false;
 
-        private void OnDrawGizmos()
+        /*private void OnDrawGizmos()
         {
 #if UNITY_EDITOR
             if (Application.isPlaying) return;
@@ -85,9 +84,9 @@ namespace _TDS.Gameplay.Model
                 }
             }
 #endif
-        }
+        }*/
 
-        public void Initialize(BaseWeapon weapon)
+        public void Initialize(Weapon weapon)
         {
             blockRotation = false;
             elapsedTime = 0;
@@ -193,11 +192,11 @@ namespace _TDS.Gameplay.Model
 
         public void SetSizeScale(float scale)
         {
-            Colliders = new ColliderData[colliders.Length];
+            /*Colliders = new BaseCollisionDetector[colliders.Length];
 
             for (int i = 0; i < Colliders.Length; i++)
             {
-                ColliderData colliderData = colliders[i];
+                BaseCollisionDetector colliderData = colliders[i];
 
                 // Circle luôn scale đều
                 colliderData.circleRadius *= scale;
@@ -244,7 +243,7 @@ namespace _TDS.Gameplay.Model
             if (trailRenderer != null)
             {
                 trailRenderer.widthMultiplier = scale;
-            }
+            }*/
         }
 
         public void EnableTrail()

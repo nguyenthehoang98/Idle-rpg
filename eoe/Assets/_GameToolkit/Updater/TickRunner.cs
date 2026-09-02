@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace _GameToolkit.Updater
 {
-    public abstract class BaseTickRunner : MonoBehaviour
+    public abstract class TickRunner : MonoBehaviour
     {
         public abstract void Tick(float deltaTime);
     }
 
-    public abstract class BaseTickRunner<T> : BaseTickRunner where T : ITickRunner
+    public abstract class TickRunner<T> : TickRunner where T : ITickRunner
     {
         Queue<T> addition = new Queue<T>();
         Queue<T> remove = new Queue<T>();
