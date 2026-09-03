@@ -44,7 +44,7 @@ namespace _TDS.Battle
 
         private void RemoveMonster(Monster monster) => monsters.Remove(monster);
 
-        public async UniTaskVoid Initialize(HeroConfigData heroConfigData, SkillConfigData skillConfigData)
+        public void Initialize(HeroConfigData heroConfigData, SkillConfigData skillConfigData)
         {
             SkillConfig = skillConfigData;
 
@@ -71,6 +71,7 @@ namespace _TDS.Battle
         // Loop tìm & đánh theo step, chạy bằng Coroutine thay vì Update
         protected virtual IEnumerator AutoAttackEnumerator()
         {
+            Debug.Log("Start AutoAttackEnumerator");
             while (true)
             {
                 // AttackSpeed = số đòn / giây -> chờ 1/value
@@ -80,6 +81,8 @@ namespace _TDS.Battle
 
                 Monster target = FindTarget(SkillConfig.findTarget);
 
+                Debug.Log($"Find monster target '{target}' - {SkillConfig.findTarget} - {monsters.Count}");
+                
                 if (target == null) continue;
 
                 CastSkill(target);
@@ -93,8 +96,7 @@ namespace _TDS.Battle
 
             Vector3 position = transform.position;
             Monster best = null;
-            float bestScore = selectionType is TargetSelectionType.Farthest or TargetSelectionType.HpHighest or TargetSelectionType.AtkHighest
-                ? float.MinValue : float.MaxValue;
+            float bestScore = float.MinValue; // score càng cao càng tốt
 
             foreach (Monster monster in monsters)
             {
@@ -102,21 +104,21 @@ namespace _TDS.Battle
 
                 float sqrDistance = (monster.transform.position - position).sqrMagnitude;
 
-                if (sqrDistance > sqrRange) continue;
+                if (sqrDistance > sqrRange) continue; // ngoài tầm đánh
 
+                // đảo dấu nhóm muốn "càng nhỏ càng tốt" để so theo max thống nhất
                 float score;
 
                 switch (selectionType)
                 {
                     case TargetSelectionType.Farthest: score = sqrDistance; break;
-                    case TargetSelectionType.HpLowest: score = monster.CurrentHealth; break;
-                    case TargetSelectionType.HpHighest: score = -monster.CurrentHealth; break;
+                    case TargetSelectionType.HpLowest: score = -monster.CurrentHealth; break;
+                    case TargetSelectionType.HpHighest: score = monster.CurrentHealth; break;
                     case TargetSelectionType.AtkLowest: score = -monster.Attack; break;
                     case TargetSelectionType.AtkHighest: score = monster.Attack; break;
-                    default: score = sqrDistance; break; // Nearest, None
+                    default: score = -sqrDistance; break; // Nearest, None: gần nhất
                 }
 
-                // so sánh: score lớn = tốt hơn
                 if (score > bestScore)
                 {
                     bestScore = score;

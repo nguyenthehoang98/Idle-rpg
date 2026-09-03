@@ -17,8 +17,6 @@ namespace _TDS.Gameplay
     {
         [SerializeField] private Transform[] slots;
 
-        private readonly List<Hero> heroes = new List<Hero>();
-
         private void Awake()
         {
             if (slots == null || slots.Length == 0)
@@ -63,9 +61,9 @@ namespace _TDS.Gameplay
                     continue;
                 }
 
-                hero.Initialize(heroData, skillData);
+                Debug.Log($"Hero added {heroData.id}");
 
-                heroes.Add(hero);
+                hero.Initialize(heroData, skillData);
             }
         }
     }

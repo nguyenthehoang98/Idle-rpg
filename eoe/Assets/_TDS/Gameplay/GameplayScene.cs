@@ -44,18 +44,13 @@ namespace _TDS.Gameplay
 
             await spawnRunner.LoadLevelAsync(agentRunner, level);
 
-            await BuildHeroes();
+            await heroSlotManager.BuildHeroes(heroIds);;
             
             sw.Stop();
             
             Debug.Log($"Gameplay init in {sw.ElapsedMilliseconds}ms");
             
             BootScene.Instance.CloseLoadingScene();
-        }
-
-        private UniTask BuildHeroes()
-        {
-            return heroSlotManager.BuildHeroes(heroIds);
         }
 
         private void OnDestroy()

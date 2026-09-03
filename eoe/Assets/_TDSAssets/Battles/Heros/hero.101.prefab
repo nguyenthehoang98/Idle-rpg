@@ -155,8 +155,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 2095058935
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 1295217020, guid: cc98c77de915dfe4fbad47fd5b32f43e, type: 3}
@@ -181,7 +181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab652e4c850d49d49d0220100f792723, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_TDS.Gameplay.View.SpriteRendererAnimation
-  playOnEnable: 0
+  playOnEnable: 1
   reference: {fileID: 5710554649000928979}
   sprites:
   - {fileID: 1295217020, guid: cc98c77de915dfe4fbad47fd5b32f43e, type: 3}
@@ -190,7 +190,7 @@ MonoBehaviour:
   - {fileID: -915032141, guid: cc98c77de915dfe4fbad47fd5b32f43e, type: 3}
   - {fileID: 87204570, guid: cc98c77de915dfe4fbad47fd5b32f43e, type: 3}
   - {fileID: -1746742729, guid: cc98c77de915dfe4fbad47fd5b32f43e, type: 3}
-  loop: 0
+  loop: 1
   frameRate: 8
   OnEventCompleted:
     m_PersistentCalls:

@@ -48,7 +48,7 @@ TagManager:
   - name: Projectile
     uniqueID: 1228164997
     locked: 0
-  - name: Weapon
+  - name: Hero
     uniqueID: 2095058935
     locked: 0
   - name: Vfx
