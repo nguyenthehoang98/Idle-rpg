@@ -8,19 +8,18 @@ using Debug = UnityEngine.Debug;
 
 namespace _TDS.Gameplay
 {
-    [RequireComponent(typeof(UpdateRunner))]
     public class GameplayScene : MonoBehaviour
     {
         [SerializeField] private int[] heroIds = new int[4] { 101, 0, 0, 0 };
-         
-        private UpdateRunner runner;
+        [SerializeField] private HeroSlotManager heroSlotManager;
+        [SerializeField] private UpdateRunner runner;
+        
         private SpawnMonsterRunner spawnRunner;
         private AgentMovementRunner agentRunner;
         private int level = 1;
         
         private void Awake()
         {
-            runner = GetComponent<UpdateRunner>();
             runner.TryGetRunner(out spawnRunner);
             runner.TryGetRunner(out agentRunner);
         }
@@ -45,7 +44,7 @@ namespace _TDS.Gameplay
 
             await spawnRunner.LoadLevelAsync(agentRunner, level);
 
-            await BuildHero();
+            await BuildHeroes();
             
             sw.Stop();
             
@@ -54,9 +53,9 @@ namespace _TDS.Gameplay
             BootScene.Instance.CloseLoadingScene();
         }
 
-        private UniTask BuildHero()
+        private UniTask BuildHeroes()
         {
-            return UniTask.CompletedTask;
+            return heroSlotManager.BuildHeroes(heroIds);
         }
 
         private void OnDestroy()

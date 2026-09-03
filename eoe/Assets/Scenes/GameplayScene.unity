@@ -855,8 +855,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1168235904}
+  - component: {fileID: 1168235905}
   m_Layer: 0
-  m_Name: Slots
+  m_Name: HeroSlotManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -881,6 +882,23 @@ Transform:
   - {fileID: 788879348}
   m_Father: {fileID: 1708898550}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1168235905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1168235903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 083e3b0e9bfd3a24d8d189dedd79ab09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_TDS.Gameplay.HeroSlotManager
+  slots:
+  - {fileID: 1143688530}
+  - {fileID: 1219510552}
+  - {fileID: 789294256}
+  - {fileID: 788879348}
 --- !u!1 &1219510551
 GameObject:
   m_ObjectHideFlags: 0
@@ -1168,8 +1186,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1708898550}
-  - component: {fileID: 1708898552}
-  - component: {fileID: 1708898553}
   - component: {fileID: 1708898554}
   m_Layer: 0
   m_Name: Root
@@ -1195,80 +1211,6 @@ Transform:
   - {fileID: 1977149735}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1708898552
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1708898549}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1904574f96345f49e71308c826143be, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: KITSystem.Schedule::_KITSystem.Schedule.TickSystemOwner
-  useUnscaledTime: 0
-  targetFPS: 30
-  loop: 1
-  maxTicksPerFrame: 5
-  tickables:
-  - rid: 607416954887602262
-  - rid: 607416954887602263
-  - rid: 607417000826765380
-  references:
-    version: 2
-    RefIds:
-    - rid: 607416954887602262
-      type: {class: SpawnManager, ns: _Game.GamePlay.Manager, asm: Assembly-CSharp}
-      data:
-        portals:
-        - {fileID: 1696421123}
-        - {fileID: 738869808}
-        - {fileID: 159821639}
-        - {fileID: 310851830}
-        - {fileID: 666750049}
-        - {fileID: 142980493}
-        - {fileID: 283213693}
-        - {fileID: 154638110}
-        - {fileID: 1353705220}
-        - {fileID: 1331360985}
-        - {fileID: 2025598562}
-        - {fileID: 404237089}
-    - rid: 607416954887602263
-      type: {class: AgentManager, ns: _Game.GamePlay.Manager, asm: Assembly-CSharp}
-      data:
-        enableGizmos: 1
-        destination:
-          x: 0
-          y: 0
-        defaultAgentRadius: 0.5
-        deltaIgnoreCheckNeighborDistance: 0.5
-        stopDistance: 1.6
-    - rid: 607417000826765380
-      type: {class: SkillManager, ns: _Game.GamePlay.Manager, asm: Assembly-CSharp}
-      data: 
---- !u!114 &1708898553
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1708898549}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12e5d4a9e12a47a299eb6d4f7f726c80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Toolkit.Updater::_GameToolkit.Updater.UpdateRunner
-  playOnStart: 1
-  useUnscaledTime: 0
-  targetFPS: 30
-  loop: 1
-  maxTicksPerFrame: 5
-  updatables:
-  - {fileID: 286812850}
-  - {fileID: 1243898921}
-  - {fileID: 1502112196}
-  - {fileID: 1880548099}
 --- !u!114 &1708898554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1281,6 +1223,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb1d1eadee7263147970b18ee796a64b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_TDS.Gameplay.GameplayScene
+  heroIds: 65000000000000000000000000000000
+  heroSlotManager: {fileID: 1168235905}
+  runner: {fileID: 1977149736}
 --- !u!224 &1740821505 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2647833869170970314, guid: 972344802c905a247b362e370067ba05, type: 3}
@@ -1344,6 +1289,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1977149735}
+  - component: {fileID: 1977149736}
   m_Layer: 0
   m_Name: Updaters
   m_TagString: Untagged
@@ -1370,6 +1316,28 @@ Transform:
   - {fileID: 1243898920}
   m_Father: {fileID: 1708898550}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1977149736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1977149734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12e5d4a9e12a47a299eb6d4f7f726c80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Toolkit.Updater::_GameToolkit.Updater.UpdateRunner
+  playOnStart: 1
+  useUnscaledTime: 0
+  targetFPS: 30
+  loop: 1
+  maxTicksPerFrame: 5
+  updatables:
+  - {fileID: 286812850}
+  - {fileID: 1243898921}
+  - {fileID: 1880548099}
+  - {fileID: 1502112196}
 --- !u!1 &2025598561
 GameObject:
   m_ObjectHideFlags: 0

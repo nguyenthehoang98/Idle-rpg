@@ -26,9 +26,9 @@ namespace _TDS.GameConfig
             }
         }
 
-        public bool TryGetMonster(int monsterId, out HeroConfigData data)
+        public bool TryGetHero(int heroId, out HeroConfigData data)
         {
-            return cached.TryGetValue(monsterId, out data);
+            return cached.TryGetValue(heroId, out data);
         }
     }
 }

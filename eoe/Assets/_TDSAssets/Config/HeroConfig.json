@@ -2,7 +2,7 @@
   "heros": [
     {
       "id": 101,
-      "prefabName": "Hero.101",
+      "prefabName": "hero.101",
       "health": 10,
       "attack": 2,
       "attackRange": 5.0,
