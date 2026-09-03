@@ -7,9 +7,14 @@ namespace _TDS.Gameplay
     {
         private SkillProcessingUnit processingUnits;
 
-        private void Awake()
+        public void Initialize()
         {
             processingUnits = new SkillProcessingUnit();
+        }
+
+        public SkillProcessingUnit Unit
+        {
+            get { return processingUnits; }
         }
 
         public override void Tick(float deltaTime)

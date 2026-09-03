@@ -2,7 +2,6 @@ using System.Diagnostics;
 using _GameToolkit.Startup;
 using _GameToolkit.Updater;
 using _TDS.Battle;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -16,12 +15,14 @@ namespace _TDS.Gameplay
         
         private SpawnMonsterRunner spawnRunner;
         private AgentMovementRunner agentRunner;
+        private SkillTickRunner skillRunner;
         private int level = 1;
         
         private void Awake()
         {
             runner.TryGetRunner(out spawnRunner);
             runner.TryGetRunner(out agentRunner);
+            runner.TryGetRunner(out skillRunner);
         }
 
         private void OnEnable()
@@ -41,22 +42,29 @@ namespace _TDS.Gameplay
             Stopwatch sw = Stopwatch.StartNew();
 
             agentRunner.Initialize();
+            
+            skillRunner.Initialize();
+            
+            SkillFactory.Initialize(skillRunner.Unit);
 
             await spawnRunner.LoadLevelAsync(agentRunner, level);
 
-            await heroSlotManager.BuildHeroes(heroIds);;
+            await heroSlotManager.BuildHeroes(heroIds);
             
             sw.Stop();
             
             Debug.Log($"Gameplay init in {sw.ElapsedMilliseconds}ms");
             
             BootScene.Instance.CloseLoadingScene();
+
+            runner.IsPaused = false;
         }
 
         private void OnDestroy()
         {
             spawnRunner.Dispose();
             agentRunner.Dispose();
+            SkillFactory.Dispose();
         }
 
         private void TimeScaleChanged(float deltaTime)

@@ -131,8 +131,11 @@ namespace _TDS.Battle
 
         protected virtual void CastSkill(Monster target)
         {
-            // Hook: tạo skill theo AttackId tại đây (projectile, damage...)
-            Debug.Log($"{name} attack {target.name}");
+            // bắn projectile từ vị trí hero tới target
+            SkillFactory.CastSkillAsync(SkillConfig, transform.position, target, damage =>
+            {
+                target.TakeDamage((int)damage);
+            }).Forget();
         }
     }
 }

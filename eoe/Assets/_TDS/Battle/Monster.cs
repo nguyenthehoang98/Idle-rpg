@@ -44,6 +44,15 @@ namespace _TDS.Battle
             Attack = attack;
         }
 
+        public void TakeDamage(int damage)
+        {
+            if (damage <= 0 || CurrentHealth <= 0) return;
+
+            CurrentHealth = Mathf.Max(0, CurrentHealth - damage);
+
+            if (CurrentHealth <= 0) Death();
+        }
+
         private bool isInitialized;
 
         private void Awake()

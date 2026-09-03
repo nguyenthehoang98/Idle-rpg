@@ -215,6 +215,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c7f6a076a012aaa47b5ecc90fbdc532c
+    m_Address: skill.autopistol
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ca443e74b1d53c94090f02bc03354fa6
     m_Address: Nunchaku.Equipment
     m_ReadOnly: 0
