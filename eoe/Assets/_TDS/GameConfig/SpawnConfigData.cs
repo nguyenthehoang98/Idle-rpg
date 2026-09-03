@@ -18,6 +18,7 @@ namespace _TDS.GameConfig
         [JsonProperty, SerializeField] private float[] spawnsTime;
         [JsonProperty, SerializeField] private int[] portals;
 
+        [JsonIgnore]
         public int RandomPortal
         {
             get
@@ -31,7 +32,8 @@ namespace _TDS.GameConfig
                 return 0;
             }
         }
-        
+
+        [JsonIgnore]
         public float SpawnStartTime
         {
             get
@@ -41,6 +43,7 @@ namespace _TDS.GameConfig
             }
         }
 
+        [JsonIgnore]
         public float SpawnEndTime
         {
             get
@@ -60,6 +63,7 @@ namespace _TDS.GameConfig
                     wave = definitionValues[1]
                 };
             }
+
             if (scaleValues.Length == 4)
             {
                 scale = new SpawnScaleDefinition
@@ -70,6 +74,7 @@ namespace _TDS.GameConfig
                     sizeMultiplier = scaleValues[3]
                 };
             }
+
             if (spawnsTime.Length != 2)
                 Debug.LogError($"Spawns time must be 2 or more '{JsonUtility.ToJson(definitionValues)}'");
             if (portals.Length == 0)

@@ -1,5 +1,4 @@
 using _GameToolkit.Share;
-using _TDS.Gameplay.Manager;
 using UnityEngine;
 
 namespace _TDS.Gameplay.Model

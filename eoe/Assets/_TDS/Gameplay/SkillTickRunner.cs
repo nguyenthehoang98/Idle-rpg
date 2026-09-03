@@ -1,7 +1,7 @@
 ﻿using _GameToolkit.Skills;
 using _GameToolkit.Updater;
 
-namespace _TDS.Gameplay.Manager
+namespace _TDS.Gameplay
 {
     public class SkillTickRunner : TickRunner
     {

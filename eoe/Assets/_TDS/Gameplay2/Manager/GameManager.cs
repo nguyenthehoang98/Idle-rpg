@@ -1,4 +1,4 @@
-using System;
+/*using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using _GameToolkit.ResourceManagement;
@@ -185,7 +185,7 @@ namespace _TDS.Gameplay2.Manager
             // Mặc định sẽ có sẵn ở level 1
             weapon.IncreaseUpgradeData(dict[1][0]);
 
-            weaponContainer[weaponId] = weapon;*/
+            weaponContainer[weaponId] = weapon;#1#
 
             throw new NotImplementedException("equp");
         }
@@ -199,7 +199,7 @@ namespace _TDS.Gameplay2.Manager
                 go = await AssetLoader.GetAsset<GameObject>(heroData.prefabName);
                
                 Object.Instantiate(go, Vector3.zero, Quaternion.identity);
-            }*/
+            }#1#
             throw new NotImplementedException("Chua build hero");
         }
 
@@ -235,7 +235,7 @@ namespace _TDS.Gameplay2.Manager
 
         /*
          * @Callback
-         */
+         #1#
 
         private async void QueueFull()
         {
@@ -263,7 +263,7 @@ namespace _TDS.Gameplay2.Manager
                 Timing.CallDelayed(f3, () =>
                 {
                     /*if (equipmentQueue.TryGetWeaponData(index, out WeaponData weaponData))
-                        equipmentActivation.SetWeapon(index, weaponData);*/
+                        equipmentActivation.SetWeapon(index, weaponData);#1#
                     throw new NotImplementedException("set equipment weapon");
                     //equipmentActivation.IdleAnimation(index, speed);
                 });
@@ -278,7 +278,7 @@ namespace _TDS.Gameplay2.Manager
                 /*foreach (var id in list)
                 {
                     if (!dict.TryAdd(id, 1)) dict[id]++;
-                }*/
+                }#1#
 
                 foreach (var pair in dict)
                 {
@@ -316,7 +316,7 @@ namespace _TDS.Gameplay2.Manager
             /*foreach (var pair in weaponContainer)
             {
                 pair.Value.Pause(paused);
-            }*/
+            }#1#
 
             energy.SetPause(paused);
         }
@@ -326,7 +326,7 @@ namespace _TDS.Gameplay2.Manager
             /*foreach (var pair in weaponContainer)
             {
                 pair.Value.ChangeTimeScale(runner.Loop, runner.TickInterval / runner.Loop);
-            }*/
+            }#1#
         }
 
         /*private async void PickCard(WeaponUpgradeData @params)
@@ -345,7 +345,7 @@ namespace _TDS.Gameplay2.Manager
                 await UniTask.WaitForSeconds(0.2f);
                 runner.IsPaused = false;
             }
-        }*/
+        }#1#
 
         private void MonsterDisable(Monster m)
         {
@@ -354,7 +354,7 @@ namespace _TDS.Gameplay2.Manager
             /*if (totalMonsterAlive == 0 && spawnRunner.IsPaused)
             {
                 spawnRunner.IsPaused = false;
-            }*/
+            }#1#
         }
 
         private void MonsterEnable(Monster m)
@@ -383,7 +383,7 @@ namespace _TDS.Gameplay2.Manager
 
                 PickCardItemData();
             }
-        }*/
+        }#1#
 
         /*private async void PickCardItemData()
         {
@@ -409,7 +409,7 @@ namespace _TDS.Gameplay2.Manager
             await cardUIPicker.Show(collects);
 
             bottomPanel.Hide();
-        }*/
+        }#1#
 
         /*private void PostDamage(PostDamageParams @params)
         {
@@ -417,6 +417,6 @@ namespace _TDS.Gameplay2.Manager
             {
                 damageMemory[@params.Source.skillId] += @params.Damage;
             }
-        }*/
+        }#1#
     }
-}
+}*/
