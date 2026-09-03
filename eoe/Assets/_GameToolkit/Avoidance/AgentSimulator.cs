@@ -19,7 +19,6 @@ namespace _GameToolkit.Avoidance
         private Dictionary<int, AgentData> containers = new Dictionary<int, AgentData>();        
         private List<int> agents = new List<int>();
         private Simulator simulator;
-        private IGrid grid;
         
         public virtual void Tick(float deltaTime)
         {
@@ -36,24 +35,6 @@ namespace _GameToolkit.Avoidance
             ReachedGoal();
             
             simulator.DoStep();
-        }
-        
-        public int QueryAgent(float2 position, float2 size, out AgentData[] agentsData)
-        {
-            int query = grid.Query(position, size, out int[] results);
-            agentsData = new AgentData[query];
-            int index = 0;
-            for (int i = 0; i < query; i++)
-            {
-                int id = results[i];
-                if (containers.TryGetValue(id, out AgentData data))
-                {
-                    agentsData[index] = data;
-                    index++;
-                }
-            }
-
-            return index;
         }
         
         protected void StopAgent(int agent)
@@ -88,7 +69,6 @@ namespace _GameToolkit.Avoidance
 
         public void Initialize()
         {
-            grid = new FixedUniformGrid(1);
             simulator = new Simulator();
             simulator.SetTimeStep(0.25f);
             simulator.SetAgentDefaults(5f, 10, 10f, 10f, 1, 1f, float2.zero);
@@ -105,8 +85,6 @@ namespace _GameToolkit.Avoidance
                 float2 position = simulator.GetAgentPosition(agent);
              
                 temp.position = position;
-
-                grid.Insert(agent, new float2(position.x, position.y));
 
                 if (math.lengthsq(position) < temp.stopDistanceSq)
                 {
@@ -157,8 +135,6 @@ namespace _GameToolkit.Avoidance
             
             containers.Add(agent, data);
             
-            grid.Insert(agent, position);
-            
             return data;
         }
 
@@ -173,7 +149,6 @@ namespace _GameToolkit.Avoidance
             {
                 simulator.EnsureCompleted();
                 simulator.RemoveAgent(agent);
-                grid.Remove(agent);
                 containers.Remove(agent);
             }
         }

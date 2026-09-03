@@ -1,6 +1,7 @@
+using _TDS.Gameplay.View;
 using UnityEngine;
 
-namespace _TDS.Gameplay.View
+namespace _TDS.Battle
 {
     public class SpriteRendererAnimation : FrameAnimation<SpriteRenderer>
     {

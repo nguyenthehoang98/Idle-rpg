@@ -34,6 +34,16 @@ namespace _TDS.Battle
             get { return GetComponent<CircleCollider2D>().radius; }
         }
 
+        public int MaxHealth { get; private set; }
+        public int CurrentHealth { get; private set; }
+        public int Attack { get; private set; }
+
+        public void SetCombatData(int maxHealth, int attack)
+        {
+            MaxHealth = CurrentHealth = maxHealth;
+            Attack = attack;
+        }
+
         private bool isInitialized;
 
         private void Awake()

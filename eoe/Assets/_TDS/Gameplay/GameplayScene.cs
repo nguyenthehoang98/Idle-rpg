@@ -2,6 +2,7 @@ using System.Diagnostics;
 using _GameToolkit.Startup;
 using _GameToolkit.Updater;
 using _TDS.Battle;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -10,11 +11,13 @@ namespace _TDS.Gameplay
     [RequireComponent(typeof(UpdateRunner))]
     public class GameplayScene : MonoBehaviour
     {
+        [SerializeField] private int[] heroIds = new int[4] { 101, 0, 0, 0 };
+         
         private UpdateRunner runner;
         private SpawnMonsterRunner spawnRunner;
         private AgentMovementRunner agentRunner;
         private int level = 1;
-
+        
         private void Awake()
         {
             runner = GetComponent<UpdateRunner>();
@@ -26,16 +29,12 @@ namespace _TDS.Gameplay
         {
             runner.OnPauseChanged += PauseChanged;
             runner.OnTimeScaleChanged += TimeScaleChanged;
-            /*Monster.OnMonsterEnable += MonsterEnable;
-            Monster.OnMonsterDisable += MonsterDisable;*/
         }
 
         private void OnDisable()
         {
             runner.OnPauseChanged -= PauseChanged;
             runner.OnTimeScaleChanged -= TimeScaleChanged;
-            /*Monster.OnMonsterEnable -= MonsterEnable;
-            Monster.OnMonsterDisable -= MonsterDisable;*/
         }
 
         private async void Start()
@@ -45,12 +44,19 @@ namespace _TDS.Gameplay
             agentRunner.Initialize();
 
             await spawnRunner.LoadLevelAsync(agentRunner, level);
+
+            await BuildHero();
             
             sw.Stop();
             
             Debug.Log($"Gameplay init in {sw.ElapsedMilliseconds}ms");
             
             BootScene.Instance.CloseLoadingScene();
+        }
+
+        private UniTask BuildHero()
+        {
+            return UniTask.CompletedTask;
         }
 
         private void OnDestroy()

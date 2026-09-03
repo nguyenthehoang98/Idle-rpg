@@ -23,10 +23,7 @@
         1,
         2,
         3
-      ],
-      "RandomPortal": 1,
-      "SpawnStartTime": 1.0,
-      "SpawnEndTime": 5.0
+      ]
     },
     {
       "definition": {
@@ -51,10 +48,7 @@
         5,
         6,
         7
-      ],
-      "RandomPortal": 4,
-      "SpawnStartTime": 3.0,
-      "SpawnEndTime": 6.0
+      ]
     },
     {
       "definition": {
@@ -79,10 +73,7 @@
         9,
         10,
         11
-      ],
-      "RandomPortal": 10,
-      "SpawnStartTime": 5.0,
-      "SpawnEndTime": 9.0
+      ]
     },
     {
       "definition": {
@@ -107,10 +98,7 @@
         1,
         2,
         3
-      ],
-      "RandomPortal": 3,
-      "SpawnStartTime": 10.0,
-      "SpawnEndTime": 12.0
+      ]
     },
     {
       "definition": {
@@ -135,10 +123,7 @@
         5,
         6,
         7
-      ],
-      "RandomPortal": 7,
-      "SpawnStartTime": 13.0,
-      "SpawnEndTime": 18.0
+      ]
     }
   ]
 }

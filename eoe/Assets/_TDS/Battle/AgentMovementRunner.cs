@@ -5,7 +5,6 @@ using _GameToolkit.Avoidance;
 using _GameToolkit.Entities;
 using _GameToolkit.Updater;
 using _TDS.GameConfig;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace _TDS.Battle
@@ -63,6 +62,12 @@ namespace _TDS.Battle
 
         public void Create_Agent(Monster monster, SpawnScaleDefinition scaleDefinition, MonsterConfigData monsterConfigData)
         {
+            int health = Mathf.CeilToInt(monsterConfigData.health * scaleDefinition.healthMultiplier);
+            int attack = Mathf.CeilToInt(monsterConfigData.attack * scaleDefinition.attackMultiplier);
+            int exp = Mathf.CeilToInt(monsterConfigData.exp * scaleDefinition.expMultiplier);
+
+            monster.SetCombatData(health, attack);
+
             int agent = simulator.CreateAgent(
                 monster.transform.position, monster.Radius, monsterConfigData.moveSpeed,
                 stopDistance + monsterConfigData.stopDistance
@@ -76,16 +81,7 @@ namespace _TDS.Battle
             
             container.Add(agent, temp);
 
-            int health = Mathf.CeilToInt(monsterConfigData.health * scaleDefinition.healthMultiplier);
-            int attack = Mathf.CeilToInt(monsterConfigData.attack * scaleDefinition.attackMultiplier);
-            int exp = Mathf.CeilToInt(monsterConfigData.exp * scaleDefinition.expMultiplier);
-            
             ComponentManager<HealthData>.Add(agent, new HealthData(health));
-        }
-
-        public int Query_Agent(float2 position, float2 size, out AgentData[] agentsData)
-        {
-            return simulator.QueryAgent(position, size, out agentsData);
         }
 
         public bool TryGet_AgentPosition(int agent, out Vector3 position)

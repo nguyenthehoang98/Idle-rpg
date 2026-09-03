@@ -1,0 +1,19 @@
+{
+  "heros": [
+    {
+      "id": 101,
+      "prefabName": "Hero.101",
+      "health": 10,
+      "attack": 2,
+      "attackRange": 5.0,
+      "attackSpeed": 0.7,
+      "critChance": 0.5,
+      "critDamage": 1.0,
+      "skillCooldown": 2.0,
+      "expMultiplier": 1.0,
+      "attackId": 2001,
+      "skillId": 2001,
+      "ultimateId": 2001
+    }
+  ]
+}

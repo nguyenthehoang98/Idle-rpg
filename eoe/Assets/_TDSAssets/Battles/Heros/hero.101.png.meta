@@ -164,7 +164,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: T_Diamond_0
+      name: hero.101_0
       rect:
         serializedVersion: 2
         x: 0
@@ -177,16 +177,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 808e0a9ca36cfe680800000000000000
-      internalID: -8723535997400193016
+      spriteID: 60f9d2b9434d5354fb9567765d792aee
+      internalID: 1295217020
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: T_Diamond_1
+      name: hero.101_1
       rect:
         serializedVersion: 2
         x: 32
@@ -199,16 +199,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 79e0ebeb3251797a0800000000000000
-      internalID: -6370599904624111977
+      spriteID: 4fb4fd0a122016049a0aec112b655f0d
+      internalID: -1501528006
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: T_Diamond_2
+      name: hero.101_2
       rect:
         serializedVersion: 2
         x: 64
@@ -221,16 +221,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d62b51e7f6fe58d20800000000000000
-      internalID: 3280291165745033837
+      spriteID: e021acded37dbc94aade97a7132248ad
+      internalID: -206905008
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: T_Diamond_3
+      name: hero.101_3
       rect:
         serializedVersion: 2
         x: 96
@@ -243,16 +243,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 454e7a453b409ced0800000000000000
-      internalID: -2393376558704761772
+      spriteID: 11426e41f0cb0134abaf66823e12ae00
+      internalID: -915032141
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: T_Diamond_4
+      name: hero.101_4
       rect:
         serializedVersion: 2
         x: 128
@@ -265,16 +265,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d611a4546b8d15010800000000000000
-      internalID: 1175959255078539629
+      spriteID: 81bedc6dc9dd78249bbebe77355c9639
+      internalID: 87204570
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: T_Diamond_5
+      name: hero.101_5
       rect:
         serializedVersion: 2
         x: 160
@@ -287,10 +287,10 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: cb2a497f3161d08b0800000000000000
-      internalID: -5184463321019669828
+      spriteID: 924939113805a5243a7d8c8be2940965
+      internalID: -1746742729
       vertices: []
       indices: 
       edges: []
@@ -309,14 +309,14 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":32.0,"y":32.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":6.0,"y":1.0},"gridSpriteSize":{"x":32.0,"y":32.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      T_Diamond_0: -8723535997400193016
-      T_Diamond_1: -6370599904624111977
-      T_Diamond_2: 3280291165745033837
-      T_Diamond_3: -2393376558704761772
-      T_Diamond_4: 1175959255078539629
-      T_Diamond_5: -5184463321019669828
+      hero.101_0: 1295217020
+      hero.101_1: -1501528006
+      hero.101_2: -206905008
+      hero.101_3: -915032141
+      hero.101_4: 87204570
+      hero.101_5: -1746742729
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

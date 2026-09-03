@@ -36,6 +36,7 @@ namespace _TDS.Boot
                 nameof(SpawnConfig), 
                 nameof(SkillConfig), 
                 nameof(ExpConfig),  
+                nameof(HeroConfig),  
             });
         }
 
