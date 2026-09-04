@@ -17,13 +17,13 @@
 | Big 0 - Contract | 4/4 | Done |
 | Big 0.5 - Remote verification | 3/5 | Partial - compile/EditMode ready |
 | Big 1 - Circuit simulation | 5/5 | Done |
-| Big 2 - Combat integration | 3/6 | In progress |
+| Big 2 - Combat integration | 4/6 | In progress |
 | Big 3 - Shop loop | 0/6 | Not started |
 | Big 4 - Augments | 0/5 | Not started |
 | Big 5 - Content/tuning | 0/5 | Not started |
 | Big 6 - Verification | 0/4 | Not started |
 
-**Current status:** Design docs đã commit; Energy Circuit core 5/5; item modifiers, board runtime và circuit tick runner đã test/verify; hero combat engagement đã fix và verify.
+**Current status:** Design docs đã commit; Energy Circuit core 5/5; item modifiers, board runtime, circuit tick runner và Hero Overdrive contract đã test/verify; hero combat engagement đã fix và verify.
 
 ---
 
@@ -266,16 +266,16 @@
 
 **Verify:** `tools/verify-unity.ps1 -Mode all` — compile pass, 34 EditMode tests pass; `CircuitTickRunner` được serialize trong `UpdateRunner` trước `SkillTickRunner` và có test activation/reset.
 
-## B-03 - Thêm Hero Overdrive contract `[P0]`
+## B-03 - Thêm Hero Overdrive contract `[P0]` `[x]`
 
-- [ ] Thêm API kích hoạt Overdrive cho hero.
-- [ ] Overdrive có start/end state rõ ràng.
-- [ ] Không để nhiều Overdrive chồng sai lên nhau.
-- [ ] Hero bình thường vẫn attack khi chưa Overdrive.
+- [x] Thêm API kích hoạt Overdrive cho hero.
+- [x] Overdrive có start/end state rõ ràng.
+- [x] Không để nhiều Overdrive chồng sai lên nhau.
+- [x] Hero bình thường vẫn attack khi chưa Overdrive.
 
 **Acceptance:** Hero nhận activation event và trở lại trạng thái bình thường sau duration.
 
-**Verify:** Unit/integration test state; manual test với hero thật.
+**Verify:** `tools/verify-unity.ps1 -Mode all` — compile pass, 36 EditMode tests pass; test state start/end và overlap; `GameplayScene` maps hero activation event theo `HeroId`.
 
 **Files dự kiến:** `Assets/_TDS/Battle/Hero.cs`, config/stat liên quan.
 

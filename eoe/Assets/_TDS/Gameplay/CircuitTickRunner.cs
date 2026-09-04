@@ -45,6 +45,11 @@ namespace _TDS.Gameplay
             {
                 OnActivation?.Invoke(activations[i]);
             }
+
+            foreach (Hero hero in Hero.AliveHeroes)
+            {
+                hero.TickOverdrive(deltaTime);
+            }
         }
 
         public void ResetCircuit()

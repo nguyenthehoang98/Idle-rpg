@@ -25,6 +25,13 @@ namespace _TDS.Battle
         public static IReadOnlyCollection<Hero> AliveHeroes => aliveHeroes;
         /// <summary>Hero chết (hp <= 0). UI/gameplay lắng nghe để xử lý thua.</summary>
         public event Action OnDied;
+        public event Action<Hero> OnOverdriveStarted;
+        public event Action<Hero> OnOverdriveEnded;
+
+        public int HeroId { get; private set; }
+        public bool IsOverdriveActive { get; private set; }
+        public float OverdriveRemaining { get; private set; }
+        public int OverdriveActivations { get; private set; }
 
         public int CurrentHealth { get; private set; }
         public int MaxHealth { get; private set; }
@@ -87,7 +94,11 @@ namespace _TDS.Battle
 
         public void Initialize(HeroConfigData heroConfigData, SkillConfigData skillConfigData)
         {
+            HeroId = heroConfigData.id;
             SkillConfig = skillConfigData;
+            IsOverdriveActive = false;
+            OverdriveRemaining = 0f;
+            OverdriveActivations = 0;
 
             MaxHealth = Mathf.Max(1, heroConfigData.health);
             CurrentHealth = MaxHealth;
@@ -191,6 +202,47 @@ namespace _TDS.Battle
 
                 Heal(CombatDamage.CalculateLifeSteal(dealt, lifesteal));
             }).Forget();
+        }
+
+        public bool TryStartOverdrive(float duration)
+        {
+            if (duration <= 0f)
+            {
+                throw new ArgumentOutOfRangeException(nameof(duration), duration, "Overdrive duration must be positive.");
+            }
+
+            if (IsDead || IsOverdriveActive)
+            {
+                return false;
+            }
+
+            IsOverdriveActive = true;
+            OverdriveRemaining = duration;
+            OverdriveActivations++;
+            OnOverdriveStarted?.Invoke(this);
+            return true;
+        }
+
+        public void TickOverdrive(float deltaTime)
+        {
+            if (deltaTime < 0f)
+            {
+                throw new ArgumentOutOfRangeException(nameof(deltaTime), deltaTime, "Overdrive delta time cannot be negative.");
+            }
+
+            if (!IsOverdriveActive)
+            {
+                return;
+            }
+
+            OverdriveRemaining = Mathf.Max(0f, OverdriveRemaining - deltaTime);
+            if (OverdriveRemaining > 0f)
+            {
+                return;
+            }
+
+            IsOverdriveActive = false;
+            OnOverdriveEnded?.Invoke(this);
         }
 
         public void Heal(int amount)

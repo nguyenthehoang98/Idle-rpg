@@ -36,12 +36,14 @@ namespace _TDS.Gameplay
         {
             runner.OnPauseChanged += PauseChanged;
             runner.OnTimeScaleChanged += TimeScaleChanged;
+            circuitRunner.OnActivation += OnCircuitActivation;
         }
 
         private void OnDisable()
         {
             runner.OnPauseChanged -= PauseChanged;
             runner.OnTimeScaleChanged -= TimeScaleChanged;
+            circuitRunner.OnActivation -= OnCircuitActivation;
         }
 
         private async void Start()
@@ -90,6 +92,22 @@ namespace _TDS.Gameplay
             spawnRunner?.Dispose();
             agentRunner?.Dispose();
             SkillFactory.Dispose();
+        }
+
+        private void OnCircuitActivation(CircuitActivationEvent activation)
+        {
+            if (activation.Content.Type != CircuitSlotContentType.Hero)
+            {
+                return;
+            }
+
+            foreach (Hero hero in Hero.AliveHeroes)
+            {
+                if (hero.HeroId == activation.Content.Id)
+                {
+                    hero.TryStartOverdrive(EnergyCircuit.DefaultOverdriveDuration);
+                }
+            }
         }
 
         private void OnWaveSpawnCompleted(int wave) =>
