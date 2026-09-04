@@ -11,7 +11,6 @@ namespace _TDS.Battle
     [Serializable]
     public sealed class AgentMovementRunner : TickRunner
     {
-        [SerializeField] private float stopDistance = 1.6f;
         [SerializeField] private AgentSimulator simulator;
         
         private Dictionary<int, Temp> container = new Dictionary<int, Temp>();
@@ -60,6 +59,16 @@ namespace _TDS.Battle
 
         public override void Tick(float deltaTime)
         {
+            // monster đi tới hero sống đầu tiên (nếu có), không phải (0,0) cố định
+            Vector2 goal = Vector2.zero;
+            foreach (Hero hero in Hero.AliveHeroes)
+            {
+                if (hero == null || hero.IsDead) continue;
+                goal = hero.transform.position;
+                break;
+            }
+            simulator.Destination = goal;
+
             simulator.Tick(deltaTime);
 
             while (additional.Count > 0) list.Add(additional.Dequeue());
@@ -82,6 +91,12 @@ namespace _TDS.Battle
                     Vector3 position = new Vector3(agent.position.x, agent.position.y);
                     
                     temp.Monster.SetPosition(position, deltaTime);
+
+                    // monster tới đích (isStopped) -> tấn công hero gần nhất trong tầm
+                    if (agent.isStopped)
+                    {
+                        MonsterTickAttack(temp.Monster, deltaTime);
+                    }
                 }
             }
             
@@ -97,17 +112,53 @@ namespace _TDS.Battle
             simulator.Dispose();
         }
 
+        /// <summary>Monster stopped tấn công hero gần nhất trong attackRange, theo damageCooldown.</summary>
+        private void MonsterTickAttack(Monster monster, float deltaTime)
+        {
+            monster.AttackTimer -= deltaTime;
+            if (monster.AttackTimer > 0f) return;
+
+            Hero target = FindNearestHero(monster.transform.position, monster.AttackRange);
+            if (target == null) return;
+
+            monster.AttackTimer = monster.DamageCooldown > 0 ? monster.DamageCooldown : 0.1f; // cooldown=0 -> attack 10/s
+            target.TakeDamage(monster.Attack);
+        }
+
+        private static Hero FindNearestHero(Vector3 from, float range)
+        {
+            Hero best = null;
+            float bestSqr = range * range;
+
+            foreach (Hero hero in Hero.AliveHeroes)
+            {
+                if (hero == null || hero.IsDead) continue;
+
+                float sqr = (hero.transform.position - from).sqrMagnitude;
+                if (sqr <= bestSqr)
+                {
+                    bestSqr = sqr;
+                    best = hero;
+                }
+            }
+
+            return best;
+        }
+
         public void Create_Agent(Monster monster, SpawnScaleDefinition scaleDefinition, MonsterConfigData monsterConfigData)
         {
             int health = Mathf.CeilToInt(monsterConfigData.health * scaleDefinition.healthMultiplier);
             int attack = Mathf.CeilToInt(monsterConfigData.attack * scaleDefinition.attackMultiplier);
             int exp = Mathf.CeilToInt(monsterConfigData.exp * scaleDefinition.expMultiplier);
 
-            monster.SetCombatData(health, attack);
+            monster.SetCombatData(health, attack, monsterConfigData.attackRange, monsterConfigData.damageCooldown);
+
+            // dừng khi tới tầm đánh hero (attackRange), không dừng quá xa
+            float stopDist = Mathf.Max(monsterConfigData.attackRange, monster.Radius);
 
             int agent = simulator.CreateAgent(
                 monster.transform.position, monster.Radius, monsterConfigData.moveSpeed,
-                stopDistance + monsterConfigData.stopDistance
+                stopDist
             ).agent;
             
             monster.Initialize(scaleDefinition);

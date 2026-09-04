@@ -52,6 +52,9 @@ namespace _TDS.Gameplay
             spawnRunner.OnWaveCleared += OnWaveCleared;
             spawnRunner.OnGameWin += OnGameWin;
 
+            // theo dõi hero chết -> hết hero = thua
+            Hero.OnHeroDisable += OnHeroDied;
+
             await spawnRunner.LoadLevelAsync(agentRunner, level);
 
             await heroSlotManager.BuildHeroes(heroIds);
@@ -67,6 +70,8 @@ namespace _TDS.Gameplay
 
         private void OnDestroy()
         {
+            Hero.OnHeroDisable -= OnHeroDied;
+
             if (spawnRunner != null)
             {
                 spawnRunner.OnSpawnCompleted -= OnWaveSpawnCompleted;
@@ -87,6 +92,26 @@ namespace _TDS.Gameplay
 
         private void OnGameWin() =>
             Debug.Log("[Gameplay] 🏆 WIN GAME! Diệt hết toàn bộ quái vật");
+
+        private void OnHeroDied(Hero hero)
+        {
+            // chỉ xử lý khi hero thực sự chết (OnHeroDisable cũng fire khi scene off/pool)
+            if (hero == null || !hero.IsDead) return;
+
+            Debug.Log($"[Gameplay] Hero {hero.name} chết!");
+
+            // hết hero sống -> thua
+            int alive = 0;
+            foreach (Hero h in Hero.AliveHeroes)
+            {
+                if (h != null && !h.IsDead) alive++;
+            }
+
+            if (alive == 0)
+            {
+                Debug.Log("[Gameplay] 💀 THUA! Toàn bộ hero đã chết");
+            }
+        }
 
         private void TimeScaleChanged(float deltaTime)
         {

@@ -17,6 +17,18 @@ namespace _TDS.Battle
         protected int AttackId { get; private set; }
         protected SkillConfigData SkillConfig { get; private set; }
 
+        /// <summary>Hero sống trên sân (đăng ký khi enable, gỡ khi disable/dead).</summary>
+        public static event Action<Hero> OnHeroEnable;
+        public static event Action<Hero> OnHeroDisable;
+        private static readonly HashSet<Hero> aliveHeroes = new HashSet<Hero>();
+        public static IReadOnlyCollection<Hero> AliveHeroes => aliveHeroes;
+        /// <summary>Hero chết (hp <= 0). UI/gameplay lắng nghe để xử lý thua.</summary>
+        public event Action OnDied;
+
+        public int CurrentHealth { get; private set; }
+        public int MaxHealth { get; private set; }
+        public bool IsDead => CurrentHealth <= 0;
+
         public Stat GetStat(StatId id)
         {
             return stats != null && stats.TryGetValue(id, out Stat stat) ? stat : null;
@@ -26,17 +38,45 @@ namespace _TDS.Battle
         {
             Monster.OnMonsterEnable += AddMonster;
             Monster.OnMonsterDisable += RemoveMonster;
+            aliveHeroes.Add(this);
+            OnHeroEnable?.Invoke(this);
         }
 
         private void OnDisable()
         {
             Monster.OnMonsterEnable -= AddMonster;
             Monster.OnMonsterDisable -= RemoveMonster;
+            aliveHeroes.Remove(this);
+            OnHeroDisable?.Invoke(this);
 
             if (attackCoroutine != null)
             {
                 StopCoroutine(attackCoroutine);
                 attackCoroutine = null;
+            }
+        }
+
+        public void TakeDamage(int damage)
+        {
+            if (damage <= 0 || IsDead) return;
+
+            CurrentHealth = Mathf.Max(0, CurrentHealth - damage);
+
+            Debug.Log($"[Hero:{name}] TakeDamage({damage}) hp {CurrentHealth + damage} -> {CurrentHealth}");
+
+            if (CurrentHealth <= 0)
+            {
+                aliveHeroes.Remove(this);
+                Debug.Log($"[Hero:{name}] DIE");
+
+                if (attackCoroutine != null)
+                {
+                    StopCoroutine(attackCoroutine);
+                    attackCoroutine = null;
+                }
+
+                OnDied?.Invoke();
+                OnHeroDisable?.Invoke(this);
             }
         }
 
@@ -48,9 +88,12 @@ namespace _TDS.Battle
         {
             SkillConfig = skillConfigData;
 
+            MaxHealth = Mathf.Max(1, heroConfigData.health);
+            CurrentHealth = MaxHealth;
+
             stats = new Dictionary<StatId, Stat>
             {
-                { StatId.MaxHealth, new Stat(heroConfigData.health) },
+                { StatId.MaxHealth, new Stat(MaxHealth) },
                 { StatId.Attack, new Stat(heroConfigData.attack) },
                 { StatId.AttackRange, new Stat(heroConfigData.attackRange) },
                 { StatId.AttackSpeed, new Stat(heroConfigData.attackSpeed) },

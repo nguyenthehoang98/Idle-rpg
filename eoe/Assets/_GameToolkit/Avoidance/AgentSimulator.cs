@@ -16,6 +16,13 @@ namespace _GameToolkit.Avoidance
 #endif
         [SerializeField] private float2 destination;
 
+        /// <summary>Điểm đến các agent hướng tới (mặc định hero). Gán động mỗi tick.</summary>
+        public Vector2 Destination
+        {
+            get => new Vector2(destination.x, destination.y);
+            set => destination = new float2(value.x, value.y);
+        }
+
         private Dictionary<int, AgentData> containers = new Dictionary<int, AgentData>();        
         private List<int> agents = new List<int>();
         private Simulator simulator;

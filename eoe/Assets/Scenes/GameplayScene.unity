@@ -1034,7 +1034,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63ad13bd5b0b45ea84537606168407f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_TDS.Battle.AgentMovementRunner
-  stopDistance: 1.6
   simulator:
     enableGizmos: 1
     destination:

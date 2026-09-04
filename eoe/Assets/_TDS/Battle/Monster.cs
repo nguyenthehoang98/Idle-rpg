@@ -37,10 +37,17 @@ namespace _TDS.Battle
         public int CurrentHealth { get; private set; }
         public int Attack { get; private set; }
 
-        public void SetCombatData(int maxHealth, int attack)
+        public float AttackRange { get; private set; }
+        public float DamageCooldown { get; private set; }
+        public float AttackTimer { get; set; }
+
+        public void SetCombatData(int maxHealth, int attack, float attackRange = 1f, float damageCooldown = 1f)
         {
             MaxHealth = CurrentHealth = maxHealth;
             Attack = attack;
+            AttackRange = attackRange;
+            DamageCooldown = Mathf.Max(0f, damageCooldown);
+            AttackTimer = 0f;
         }
 
         public void TakeDamage(int damage)
