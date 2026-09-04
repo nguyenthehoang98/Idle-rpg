@@ -2,114 +2,132 @@
 
 ## Trạng thái
 
-**Draft - chỉ bắt đầu implement sau khi gameplay spec được xác nhận.**
+**Draft - dùng để triển khai sau khi Big Todo 0 được xác nhận.**
 
-## Overview
+- Design docs: hoàn tất.
+- Code implementation: chưa bắt đầu.
+- Các mục `Open` là blocker trước khi code phần phụ thuộc.
 
-Thêm Energy Circuit, Overdrive, Shop giữa wave và Augment checkpoint vào combat hiện tại. Giữ nguyên core auto-combat và wave spawn; chỉ thêm lớp chuẩn bị/build để người chơi có quyết định.
+## Mục tiêu MVP
 
-## Progress snapshot
+Một run 5 wave có auto-combat, Energy Circuit, Shop sau mỗi wave, Augment sau wave 3 và boss ở wave 5.
 
-| Hạng mục | Trạng thái | Ghi chú |
+Người chơi không điều khiển hero liên tục. Quyết định chính là:
+
+1. Đặt hero/item trên 8 slot.
+2. Tạo thứ tự pulse và combo phù hợp.
+3. Mua/thay đổi board sau mỗi wave.
+4. Chọn Augment thay đổi hướng build.
+
+## Tiến độ
+
+| Big Todo | Nội dung | Trạng thái |
 |---|---|---|
-| Game design docs | Done | MVP, Energy Circuit, Shop/Augment đã ghi lại |
-| Existing auto-combat | Baseline ready | Hero, monster, projectile, status effect, wave đã có |
-| Circuit simulation | Not started | P0 - cần làm trước các phần UI |
-| Combat integration | Not started | Phụ thuộc circuit simulation |
-| Shop | Not started | Phụ thuộc board state và run gold |
-| Augment | Not started | Phụ thuộc Energy Circuit và Shop flow |
-| Content/tuning | Not started | Làm sau khi full loop chạy được |
+| 0 | Chốt contract và quyết định còn mở | In review |
+| 1 | Circuit simulation | Not started |
+| 2 | Board và combat integration | Not started |
+| 3 | Wave result và Shop | Not started |
+| 4 | Augment checkpoint | Not started |
+| 5 | Content và tuning | Not started |
+| 6 | Full verification và polish MVP | Not started |
 
-**Tiến độ feature mới:** Design 100%, implementation 0%.
+**Tổng quan:** design hoàn tất; implementation 0%.
 
-## Nguyên tắc triển khai
+## Nguyên tắc kiến trúc
 
-- Ưu tiên simulation logic trước UI.
-- Tái sử dụng hero, skill, stat và wave hiện có.
-- Không trộn Energy Circuit với RVO movement.
-- Mỗi task để project ở trạng thái build được.
-- Dùng config/data đơn giản trước, chưa tạo hệ thống generic cho mọi loại effect.
+### Energy Circuit
 
-## Phases
+- Circuit simulation là logic riêng, không nhét vào RVO movement.
+- Simulation nhận `deltaTime`, cập nhật pulse/stack và trả ra activation events.
+- Không dùng generic effect framework cho MVP; mỗi item/augment chỉ cần behavior nhỏ, rõ ràng.
+- Logic core phải test được không cần scene hoặc UI.
 
-### Phase 1: Contract và simulation
+### Combat
 
-- Định nghĩa slot, pulse, stack, threshold và Overdrive state.
-- Viết test cho pulse và activation.
-- Chưa cần Shop UI.
+- Tái sử dụng `Hero`, `Monster`, `SkillFactory` và wave hiện tại.
+- `Hero` giữ logic auto-target/attack.
+- Circuit chỉ quyết định khi nào hero được Overdrive và hiệu ứng Overdrive là gì.
+- Không sửa RVO trừ khi integration phát hiện vấn đề cụ thể.
 
-### Phase 2: Board và combat integration
+### Shop và Run
 
-- Tạo board 8 slot.
-- Cho phép đặt hero/item.
-- Kết nối Overdrive với hero hiện tại.
-- Thêm VFX/SFX hoặc placeholder rõ ràng.
+- Run state giữ gold, board, owned hero/item và Augment đã chọn.
+- Shop chỉ mở giữa wave, không cho mua trong combat.
+- Board state phải giữ nguyên khi chuyển từ Shop sang wave tiếp theo.
 
-### Phase 3: Wave result và Shop
+## Dependency graph
 
-- Chặn giữa các wave tại Shop.
-- Thêm gold trong run.
-- Mua/bán/đổi vị trí hero và item.
-- Thêm refresh giới hạn.
-
-### Phase 4: Augment
-
-- Checkpoint sau wave 3.
-- Hiển thị 3 lựa chọn.
-- Lưu một Augment đến hết run.
-- Kết nối một số Augment với Energy Circuit.
-
-### Phase 5: Content và tuning
-
-- 2 hero active.
-- Item Generator, Amplifier, Battery, Relay.
-- 3 Overdrive identity.
-- 6-10 Augment.
-- Boss wave.
-- Tuning pulse, stack, gold và shop offer.
+```text
+D-01..D-04: Contract decisions
+        ↓
+C-01..C-05: Circuit simulation + tests
+        ↓
+B-01..B-05: Board + Hero Overdrive + playable wave
+        ↓
+S-01..S-06: Run state + Shop + board editing
+        ↓
+A-01..A-05: Augment checkpoint + effects
+        ↓
+T-01..T-05: Content + tuning
+        ↓
+V-01..V-04: Full verification + MVP sign-off
+```
 
 ## Checkpoints
 
-### Checkpoint 1 - Circuit simulation
+### Checkpoint A - Circuit isolated
 
-- Pulse chạy đúng thứ tự.
-- Stack tăng đúng slot.
-- Hero kích hoạt Overdrive khi đủ stack.
-- Không có lỗi job/NativeContainer.
+Sau Big Todo 1:
 
-### Checkpoint 2 - Playable combat loop
+- Pulse đi đúng thứ tự.
+- Stack chỉ tăng đúng slot.
+- Threshold kích hoạt đúng một lần.
+- Item modifier có test.
+- Không cần Unity scene để test logic.
 
-- Có thể chạy hết một wave.
-- Hero/item đặt trên board tạo khác biệt thực tế.
-- Overdrive có feedback nhìn thấy được.
+### Checkpoint B - Playable combat
 
-### Checkpoint 3 - Shop loop
+Sau Big Todo 2:
+
+- Có thể chạy một wave từ đầu đến cuối.
+- Hero vẫn đánh bình thường khi chưa Overdrive.
+- Overdrive tạo khác biệt nhìn thấy được.
+- Circuit không làm hỏng wave/RVO hiện tại.
+
+### Checkpoint C - Shop loop
+
+Sau Big Todo 3:
 
 - Wave kết thúc mở Shop.
-- Người chơi mua/bán/thay đổi slot.
-- Wave mới dùng đúng board state.
+- Người chơi mua/bán/thay đổi board.
+- Wave mới dùng đúng state vừa chỉnh.
+- Không thể thay đổi board giữa combat.
 
-### Checkpoint 4 - MVP run
+### Checkpoint D - Full MVP run
 
-- Run 5 wave hoàn chỉnh.
+Sau Big Todo 4-6:
+
+- Chạy được 5 wave và boss.
 - Augment sau wave 3 hoạt động.
-- Wave 5 boss cần build chứ không chỉ chờ auto-combat.
+- Có ít nhất một build DPS và một build defense khả dụng.
+- Test, compile và manual playtest đều pass.
 
-## Risks và hướng giảm thiểu
+## Quy tắc triển khai từng task
 
-| Risk | Tác động | Giảm thiểu |
+- Mỗi sub-task phải hoàn thành trong một phiên tập trung.
+- Mỗi sub-task có acceptance criteria và verification riêng trong `tasks/todo.md`.
+- Không bắt đầu task có dependency chưa pass.
+- Sau mỗi Big Todo, cập nhật checkbox và progress trong `tasks/todo.md`.
+- Nếu quyết định gameplay thay đổi, sửa docs game design trước rồi mới sửa code.
+
+## Rủi ro và giảm thiểu
+
+| Rủi ro | Tác động | Giảm thiểu |
 |---|---|---|
-| Pulse quá chậm | Không có cảm giác power | Tuning để hero có Overdrive trong 8-15 giây |
-| Build tối ưu duy nhất | Shop mất ý nghĩa | Có build DPS, AOE, defense và boss |
-| UI khó đọc | Người chơi không hiểu circuit | Pulse/stack/Overdrive phải hiển thị trực tiếp |
-| Shop random quá tệ | Người chơi thua vì may rủi | 2 offer liên quan build, 1 offer mở hướng mới |
-| Scope phình to | Không hoàn thành MVP | Chưa làm meta progression, PvP, crafting |
-| Overdrive chỉ tăng số | Thiếu feeling | Mỗi hero có thay đổi projectile/behavior rõ ràng |
-
-## Open questions
-
-- Dạng hiển thị circuit: vòng tròn, line hay grid.
-- Board có cho mọi slot nhận hero/item hay phân loại slot.
-- Có bench cho hero chưa dùng hay không.
-- Gold nhận theo kill, wave hay cả hai.
-- Có cần pause thật sự trong Shop hay chỉ chuyển scene/panel.
+| Pulse quá chậm | Không có power feeling | Tuning để hero có Overdrive khoảng 8-15 giây |
+| Circuit chỉ là trang trí | Người chơi không cần suy nghĩ | Vị trí phải thay đổi thời điểm/hiệu ứng activation |
+| Shop random quá tệ | Thua vì may rủi | 2 offer liên quan build, 1 offer mở hướng mới |
+| Một build luôn tối ưu | Mất giá trị lựa chọn | Có build DPS, AOE, defense và boss |
+| Overdrive chỉ tăng số | Thiếu feeling | Thay đổi projectile/behavior + VFX/SFX |
+| Scope phình to | Không hoàn thành MVP | Chưa làm meta progression, PvP, crafting, deck đầy đủ |
+| Logic phụ thuộc UI | Khó test và sửa | Circuit/Shop/Run state tách khỏi MonoBehaviour khi có thể |
