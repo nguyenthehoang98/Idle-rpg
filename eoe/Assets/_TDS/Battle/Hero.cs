@@ -134,6 +134,7 @@ namespace _TDS.Battle
             // bắn projectile từ vị trí hero tới target
             SkillFactory.CastSkillAsync(SkillConfig, transform.position, target, (monster, damage) =>
             {
+                monster.BeHit(); // kích hoạt OnBeHit (animation/hiệu ứng trúng đòn)
                 monster.TakeDamage((int)(damage * attack));
             }).Forget();
         }
