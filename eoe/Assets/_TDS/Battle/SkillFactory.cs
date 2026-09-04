@@ -197,7 +197,11 @@ namespace _TDS.Battle
 
                 float dmg = damageScale; // base damage; Hero nhân với attack stat
 
+                Debug.Log($"[SkillFactory] HIT scale={damageScale} monster hpBefore={m.CurrentHealth} isDot={isDot}");
+
                 onDamage?.Invoke(m, dmg);
+
+                Debug.Log($"[SkillFactory] hpAfter={m.CurrentHealth} totalDamage={dmg}\n");
 
                 if (isDot)
                 {

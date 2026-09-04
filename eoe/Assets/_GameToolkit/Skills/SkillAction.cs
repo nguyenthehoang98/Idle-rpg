@@ -35,14 +35,12 @@ namespace _GameToolkit.Skills
 
         public virtual void Startup()
         {
-            Debug.Log("Starting skill action " + GetHashCode());
         }
 
         protected abstract void OnTick(float deltaTime);
 
         public virtual void Shutdown()
         {
-            Debug.Log("Stopping skill action " + GetHashCode());
             OnComplete?.Invoke();
         }
 

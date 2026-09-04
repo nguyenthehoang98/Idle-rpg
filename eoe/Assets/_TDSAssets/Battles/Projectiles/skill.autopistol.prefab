@@ -98,7 +98,7 @@ MonoBehaviour:
   maxResults: 10
   layerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 192
 --- !u!1 &7205557598562475082
 GameObject:
   m_ObjectHideFlags: 0

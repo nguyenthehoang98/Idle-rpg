@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 1812827932710553515}
   - component: {fileID: 6916752702028918783}
   - component: {fileID: 2438915518772011536}
-  m_Layer: 0
+  - component: {fileID: 4336736201484552347}
+  - component: {fileID: 7131055885100923008}
+  m_Layer: 6
   m_Name: monster.1001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67,7 +69,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7900986512524848744}
         m_TargetAssemblyTypeName: LitMotion.Animation.LitMotionAnimation, LitMotion.Animation
-        m_MethodName: Restart
+        m_MethodName: Play
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -81,6 +83,58 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   deathVfx: {fileID: 3520684215985857136, guid: d4e05df0a033f2849a09f73d90249352, type: 3}
+--- !u!58 &4336736201484552347
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2511300413166779072}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 0.5
+--- !u!114 &7131055885100923008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2511300413166779072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d88ab52cbf5b40adaddbc62750c93f9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Toolkit.Collider::_GameToolkit.Colliders.CircleCollision2DDetector
+  maxResults: 10
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &7311540164983544154
 GameObject:
   m_ObjectHideFlags: 0
@@ -90,7 +144,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6619085215776799793}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: scale
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +179,7 @@ GameObject:
   - component: {fileID: 5667090380951180666}
   - component: {fileID: 6001956111885337862}
   - component: {fileID: 7900986512524848744}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: renderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -251,7 +305,7 @@ MonoBehaviour:
   isReverseWhenStop: 1
   autoStopMode: 1
   autoPlayMode: 0
-  animationMode: 1
+  animationMode: 0
   components:
   - rid: 607417095885946943
   - rid: 607417095885946946
@@ -344,7 +398,7 @@ MonoBehaviour:
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
-          delay: 0
+          delay: 0.15
           delayType: 0
           loops: 1
           loopType: 0

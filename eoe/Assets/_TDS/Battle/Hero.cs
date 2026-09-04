@@ -81,8 +81,6 @@ namespace _TDS.Battle
 
                 Monster target = FindTarget(SkillConfig.findTarget);
 
-                Debug.Log($"Find monster target '{target}' - {SkillConfig.findTarget} - {monsters.Count}");
-                
                 if (target == null) continue;
 
                 CastSkill(target);
