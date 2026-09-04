@@ -174,25 +174,30 @@ namespace LitMotion.Animation
                             MotionHandle handle = component.Play();
                             component.TrackedHandle = handle;
 
+                            // Giống guard của nhánh Sequential (MoveNextMotion): chỉ đăng ký
+                            // OnCompleteAction khi handle còn sống. Nếu Play() trả về handle đã chết
+                            // (motion bị dispose ngay trong frame — vd delay=0 + duration ngắn, hoặc
+                            // play chồng), GetManagedDataRef bên dưới sẽ throw
+                            // "Motion has been destroyed" → gãy cả loop parallel.
                             if (handle.IsActive())
                             {
                                 handle.Preserve();
+
+                                MotionManager.GetManagedDataRef(handle).OnCompleteAction += () =>
+                                {
+                                    handlesParallel.Remove(handle.GetHashCode());
+
+                                    if (handlesParallel.Count == 0) CheckStop();
+                                };
+
+                                playingComponents.Add(component);
+
+                                handlesParallel.Add(handle.GetHashCode());
                             }
-
-                            MotionManager.GetManagedDataRef(handle).OnCompleteAction += () =>
-                            {
-                                handlesParallel.Remove(handle.GetHashCode());
-
-                                if (handlesParallel.Count == 0) CheckStop();
-                            };
-
-                            playingComponents.Add(component);
-
-                            handlesParallel.Add(handle.GetHashCode());
                         }
                         catch (Exception ex)
                         {
-                            Debug.LogError("Error at " + GetPath(transform) + "\n" + ex.Message);
+                            Debug.LogError($"Error at object {GetPath(transform)} \n\n DisplayName: {component.DisplayName} \n\n Exception: {ex}");
                         }
                     }
 

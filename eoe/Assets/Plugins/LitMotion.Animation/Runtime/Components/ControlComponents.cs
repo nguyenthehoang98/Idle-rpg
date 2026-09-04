@@ -15,6 +15,7 @@ namespace LitMotion.Animation.Components
         
         public override float Duration()
         {
+            if (delay == 0) return Mathf.Epsilon;
             return delay;
         }
 
