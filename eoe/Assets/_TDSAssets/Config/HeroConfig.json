@@ -6,7 +6,7 @@
       "health": 10,
       "attack": 5,
       "attackRange": 5.0,
-      "attackSpeed": 0.7,
+      "attackSpeed": 2.0,
       "critChance": 0.5,
       "critDamage": 1.0,
       "skillCooldown": 2.0,
