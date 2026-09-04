@@ -16,7 +16,7 @@
 |---|---:|---|
 | Big 0 - Contract | 4/4 | Done |
 | Big 0.5 - Remote verification | 3/5 | Partial - compile/EditMode ready |
-| Big 1 - Circuit simulation | 0/5 | Not started |
+| Big 1 - Circuit simulation | 1/5 | In progress |
 | Big 2 - Combat integration | 0/5 | Not started |
 | Big 3 - Shop loop | 0/6 | Not started |
 | Big 4 - Augments | 0/5 | Not started |
@@ -155,17 +155,17 @@
 
 **Mục tiêu:** Circuit chạy đúng độc lập với UI và scene.
 
-## C-01 - Tạo contract/state cho circuit `[P0]`
+## C-01 - Tạo contract/state cho circuit `[P0]` `[x]`
 
-- [ ] Tạo type cho slot state.
-- [ ] Tạo type cho slot content: empty, hero, item.
-- [ ] Tạo type cho activation event.
-- [ ] Tạo state cho pulse index, stack, active duration.
-- [ ] Không để state phụ thuộc `MonoBehaviour` nếu không cần.
+- [x] Tạo type cho slot state.
+- [x] Tạo type cho slot content: empty, hero, item.
+- [x] Tạo type cho activation event.
+- [x] Tạo state cho pulse index, stack, active duration.
+- [x] Không để state phụ thuộc `MonoBehaviour` nếu không cần.
 
 **Acceptance:** Có thể tạo một circuit 8 slot trong test bằng code thuần.
 
-**Verify:** Compile Unity; test khởi tạo circuit với slot trống.
+**Verify:** `tools/verify-unity.ps1 -Mode all` — compile pass, 11 EditMode tests pass.
 
 **Files dự kiến:** `Assets/_TDS/Battle/EnergyCircuit.cs`, test tương ứng.
 
