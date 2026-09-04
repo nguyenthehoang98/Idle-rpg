@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace _TDS.Battle
 {
@@ -83,7 +84,10 @@ namespace _TDS.Battle
         public float PulseInterval { get; }
         public int ActivationThreshold { get; }
         public float OverdriveDuration { get; }
+        // Index of the slot that will receive the next pulse.
         public int PulseIndex { get; private set; }
+
+        private float elapsedSincePulse;
 
         public EnergyCircuit(
             int slotCount = DefaultSlotCount,
@@ -115,9 +119,23 @@ namespace _TDS.Battle
             slots[index] = new CircuitSlotState(content, 0, 0f);
         }
 
+        public void Tick(float deltaTime, List<CircuitActivationEvent> activations)
+        {
+            if (deltaTime < 0f) throw new ArgumentOutOfRangeException(nameof(deltaTime));
+            if (activations == null) throw new ArgumentNullException(nameof(activations));
+
+            elapsedSincePulse += deltaTime;
+            while (elapsedSincePulse >= PulseInterval)
+            {
+                elapsedSincePulse -= PulseInterval;
+                PulseIndex = (PulseIndex + 1) % SlotCount;
+            }
+        }
+
         public void Reset()
         {
             PulseIndex = 0;
+            elapsedSincePulse = 0f;
 
             for (int i = 0; i < slots.Length; i++)
             {

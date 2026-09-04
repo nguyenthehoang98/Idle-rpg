@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using NUnit.Framework;
 using _TDS.Battle;
 
@@ -49,6 +50,49 @@ namespace _TDS.Tests.Editor
             Assert.That(activation.SlotIndex, Is.EqualTo(3));
             Assert.That(activation.Content.Type, Is.EqualTo(CircuitSlotContentType.Hero));
             Assert.That(activation.Content.Id, Is.EqualTo(101));
+        }
+
+        [Test]
+        public void PulseDoesNotAdvanceBeforeInterval()
+        {
+            EnergyCircuit circuit = new EnergyCircuit();
+
+            circuit.Tick(0.49f, new List<CircuitActivationEvent>());
+
+            Assert.That(circuit.PulseIndex, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void PulseAdvancesOneSlotPerIntervalAndWraps()
+        {
+            EnergyCircuit circuit = new EnergyCircuit();
+            List<CircuitActivationEvent> activations = new List<CircuitActivationEvent>();
+
+            for (int i = 0; i < circuit.SlotCount; i++)
+            {
+                circuit.Tick(circuit.PulseInterval, activations);
+                Assert.That(circuit.PulseIndex, Is.EqualTo((i + 1) % circuit.SlotCount));
+            }
+        }
+
+        [Test]
+        public void LargeDeltaTimeProcessesEveryPulse()
+        {
+            EnergyCircuit circuit = new EnergyCircuit();
+
+            circuit.Tick(2.1f, new List<CircuitActivationEvent>());
+
+            Assert.That(circuit.PulseIndex, Is.EqualTo(4));
+        }
+
+        [Test]
+        public void EmptySlotsDoNotStopPulseTraversal()
+        {
+            EnergyCircuit circuit = new EnergyCircuit();
+
+            circuit.Tick(4f, new List<CircuitActivationEvent>());
+
+            Assert.That(circuit.PulseIndex, Is.EqualTo(0));
         }
 
         [Test]

@@ -16,7 +16,7 @@
 |---|---:|---|
 | Big 0 - Contract | 4/4 | Done |
 | Big 0.5 - Remote verification | 3/5 | Partial - compile/EditMode ready |
-| Big 1 - Circuit simulation | 1/5 | In progress |
+| Big 1 - Circuit simulation | 2/5 | In progress |
 | Big 2 - Combat integration | 0/5 | Not started |
 | Big 3 - Shop loop | 0/6 | Not started |
 | Big 4 - Augments | 0/5 | Not started |
@@ -169,17 +169,17 @@
 
 **Files dự kiến:** `Assets/_TDS/Battle/EnergyCircuit.cs`, test tương ứng.
 
-## C-02 - Implement pulse traversal `[P0]`
+## C-02 - Implement pulse traversal `[P0]` `[x]`
 
-- [ ] Nhận `deltaTime`.
-- [ ] Pulse đi đúng một slot theo mỗi interval.
-- [ ] Pulse quay lại slot đầu sau slot cuối.
-- [ ] Hỗ trợ `deltaTime` lớn hơn một interval mà không mất pulse.
-- [ ] Empty slot không làm pulse dừng.
+- [x] Nhận `deltaTime`.
+- [x] Pulse đi đúng một slot theo mỗi interval.
+- [x] Pulse quay lại slot đầu sau slot cuối.
+- [x] Hỗ trợ `deltaTime` lớn hơn một interval mà không mất pulse.
+- [x] Empty slot không làm pulse dừng.
 
 **Acceptance:** Pulse traversal deterministic và không phụ thuộc frame rate.
 
-**Verify:** Unit test với nhiều `deltaTime` và nhiều vòng lặp.
+**Verify:** `tools/verify-unity.ps1 -Mode all` — compile pass, 15 EditMode tests pass.
 
 **Files dự kiến:** `EnergyCircuit.cs`, `EnergyCircuitTests.cs`.
 
