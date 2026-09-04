@@ -25,8 +25,8 @@ Người chơi không điều khiển hero liên tục. Quyết định chính l
 |---|---|---|
 | 0 | Chốt contract và quyết định còn mở | Done |
 | 0.5 | Remote verification foundation | Partial - compile/EditMode ready |
-| 1 | Circuit simulation | Not started |
-| 2 | Board và combat integration | Not started |
+| 1 | Circuit simulation | In progress - 4/5 |
+| 2 | Board và combat integration | In progress - hero engagement fix |
 | 3 | Wave result và Shop | Not started |
 | 4 | Augment checkpoint | Not started |
 | 5 | Content và tuning | Not started |

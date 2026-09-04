@@ -115,6 +115,30 @@ namespace _TDS.Battle
             simulator.Dispose();
         }
 
+        public static float CalculateStopDistance(
+            float monsterAttackRange,
+            float monsterRadius,
+            float heroAttackRange)
+        {
+            float engagementRange = Mathf.Min(monsterAttackRange, heroAttackRange);
+            return Mathf.Max(monsterRadius, engagementRange);
+        }
+
+        private static float GetMaxHeroAttackRange(float fallback)
+        {
+            float maxRange = 0f;
+
+            foreach (Hero hero in Hero.AliveHeroes)
+            {
+                if (hero == null || hero.IsDead) continue;
+
+                var stat = hero.GetStat(StatId.AttackRange);
+                if (stat != null) maxRange = Mathf.Max(maxRange, stat.Value);
+            }
+
+            return maxRange > 0f ? maxRange : fallback;
+        }
+
         /// <summary>Monster stopped tấn công hero gần nhất trong attackRange, theo damageCooldown.</summary>
         private void MonsterTickAttack(Monster monster, float deltaTime)
         {
@@ -156,8 +180,12 @@ namespace _TDS.Battle
 
             monster.SetCombatData(health, attack, monsterConfigData.attackRange, monsterConfigData.damageCooldown);
 
-            // dừng khi tới tầm đánh hero (attackRange), không dừng quá xa
-            float stopDist = Mathf.Max(monsterConfigData.attackRange, monster.Radius);
+            // Dừng ở khoảng cách mà cả monster và hero đều có thể đánh nhau.
+            float heroAttackRange = GetMaxHeroAttackRange(monsterConfigData.attackRange);
+            float stopDist = CalculateStopDistance(
+                monsterConfigData.attackRange,
+                monster.Radius,
+                heroAttackRange);
 
             int agent = simulator.CreateAgent(
                 monster.transform.position, monster.Radius, monsterConfigData.moveSpeed,

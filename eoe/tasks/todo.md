@@ -17,13 +17,13 @@
 | Big 0 - Contract | 4/4 | Done |
 | Big 0.5 - Remote verification | 3/5 | Partial - compile/EditMode ready |
 | Big 1 - Circuit simulation | 4/5 | In progress |
-| Big 2 - Combat integration | 0/5 | Not started |
+| Big 2 - Combat integration | 1/6 | In progress |
 | Big 3 - Shop loop | 0/6 | Not started |
 | Big 4 - Augments | 0/5 | Not started |
 | Big 5 - Content/tuning | 0/5 | Not started |
 | Big 6 - Verification | 0/4 | Not started |
 
-**Current status:** Design docs đã commit; code implementation chưa bắt đầu.
+**Current status:** Design docs đã commit; Energy Circuit core 4/5; hero combat engagement đã fix và verify.
 
 ---
 
@@ -227,6 +227,18 @@
 # Big Todo 2 - Board và combat integration
 
 **Dependency:** Big Todo 1.
+
+## B-00 - Khôi phục hero/monster engagement `[P0]` `[x]`
+
+- [x] Xác định monster dừng ở `attackRange = 2`, ngoài `hero.attackRange = 1`.
+- [x] Tính stop distance bằng khoảng giao nhau giữa monster range và hero range.
+- [x] Giữ khoảng cách tối thiểu theo radius để không overlap.
+- [x] Thêm regression tests cho stop distance.
+
+**Acceptance:** Monster dừng trong tầm hero và hero có thể tìm target để tấn công.
+
+**Verify:** Headless gameplay log có `SkillFactory.CastSkillAsync` và `[Monster:monster.1001] Death`; 23 EditMode tests pass.
+
 
 **Mục tiêu:** Circuit thật sự ảnh hưởng đến combat hiện tại.
 
