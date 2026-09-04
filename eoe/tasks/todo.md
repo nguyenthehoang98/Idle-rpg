@@ -16,7 +16,7 @@
 |---|---:|---|
 | Big 0 - Contract | 4/4 | Done |
 | Big 0.5 - Remote verification | 3/5 | Partial - compile/EditMode ready |
-| Big 1 - Circuit simulation | 2/5 | In progress |
+| Big 1 - Circuit simulation | 3/5 | In progress |
 | Big 2 - Combat integration | 0/5 | Not started |
 | Big 3 - Shop loop | 0/6 | Not started |
 | Big 4 - Augments | 0/5 | Not started |
@@ -183,17 +183,17 @@
 
 **Files dự kiến:** `EnergyCircuit.cs`, `EnergyCircuitTests.cs`.
 
-## C-03 - Implement stack/threshold `[P0]`
+## C-03 - Implement stack/threshold `[P0]` `[x]`
 
-- [ ] Slot có content nhận stack khi pulse đi qua.
-- [ ] Slot trống không nhận stack.
-- [ ] Đủ threshold tạo một activation event.
-- [ ] Stack reset đúng theo contract.
-- [ ] Không tạo activation event lặp sai trong cùng một pulse.
+- [x] Slot có content nhận stack khi pulse đi qua.
+- [x] Slot trống không nhận stack.
+- [x] Đủ threshold tạo một activation event.
+- [x] Stack reset đúng theo contract.
+- [x] Không tạo activation event lặp sai trong cùng một pulse.
 
 **Acceptance:** Event có đúng slot, loại content và số stack tại thời điểm activation.
 
-**Verify:** Unit test threshold dưới, bằng và vượt ngưỡng.
+**Verify:** `tools/verify-unity.ps1 -Mode all` — compile pass, 18 EditMode tests pass.
 
 **Files dự kiến:** `EnergyCircuit.cs`, `EnergyCircuitTests.cs`.
 

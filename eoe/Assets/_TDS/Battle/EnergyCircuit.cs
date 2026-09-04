@@ -63,11 +63,13 @@ namespace _TDS.Battle
     {
         public int SlotIndex { get; }
         public CircuitSlotContent Content { get; }
+        public int StackAtActivation { get; }
 
-        public CircuitActivationEvent(int slotIndex, CircuitSlotContent content)
+        public CircuitActivationEvent(int slotIndex, CircuitSlotContent content, int stackAtActivation)
         {
             SlotIndex = slotIndex;
             Content = content;
+            StackAtActivation = stackAtActivation;
         }
     }
 
@@ -124,12 +126,63 @@ namespace _TDS.Battle
             if (deltaTime < 0f) throw new ArgumentOutOfRangeException(nameof(deltaTime));
             if (activations == null) throw new ArgumentNullException(nameof(activations));
 
-            elapsedSincePulse += deltaTime;
-            while (elapsedSincePulse >= PulseInterval)
+            float remaining = deltaTime;
+            while (remaining > 0f)
             {
-                elapsedSincePulse -= PulseInterval;
+                float timeToPulse = PulseInterval - elapsedSincePulse;
+                float step = Math.Min(remaining, timeToPulse);
+                AdvanceActiveSlots(step);
+                elapsedSincePulse += step;
+                remaining -= step;
+
+                if (elapsedSincePulse < PulseInterval)
+                {
+                    continue;
+                }
+
+                elapsedSincePulse = 0f;
+                ProcessPulse(activations);
                 PulseIndex = (PulseIndex + 1) % SlotCount;
             }
+        }
+
+        private void AdvanceActiveSlots(float deltaTime)
+        {
+            if (deltaTime <= 0f)
+            {
+                return;
+            }
+
+            for (int i = 0; i < slots.Length; i++)
+            {
+                CircuitSlotState slot = slots[i];
+                if (!slot.IsActive)
+                {
+                    continue;
+                }
+
+                float activeRemaining = Math.Max(0f, slot.ActiveRemaining - deltaTime);
+                slots[i] = new CircuitSlotState(slot.Content, slot.Stack, activeRemaining);
+            }
+        }
+
+        private void ProcessPulse(List<CircuitActivationEvent> activations)
+        {
+            CircuitSlotState slot = slots[PulseIndex];
+            if (slot.Content.Type == CircuitSlotContentType.Empty || slot.IsActive)
+            {
+                return;
+            }
+
+            int stack = slot.Stack + 1;
+            if (stack < ActivationThreshold)
+            {
+                slots[PulseIndex] = new CircuitSlotState(slot.Content, stack, 0f);
+                return;
+            }
+
+            activations.Add(new CircuitActivationEvent(PulseIndex, slot.Content, stack));
+            slots[PulseIndex] = new CircuitSlotState(slot.Content, 0, OverdriveDuration);
         }
 
         public void Reset()

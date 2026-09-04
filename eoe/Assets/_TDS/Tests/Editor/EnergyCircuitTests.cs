@@ -45,11 +45,57 @@ namespace _TDS.Tests.Editor
         {
             CircuitActivationEvent activation = new CircuitActivationEvent(
                 3,
-                CircuitSlotContent.Hero(101));
+                CircuitSlotContent.Hero(101),
+                3);
 
             Assert.That(activation.SlotIndex, Is.EqualTo(3));
             Assert.That(activation.Content.Type, Is.EqualTo(CircuitSlotContentType.Hero));
             Assert.That(activation.Content.Id, Is.EqualTo(101));
+            Assert.That(activation.StackAtActivation, Is.EqualTo(3));
+        }
+
+        [Test]
+        public void PulseAddsStackOnlyToContentAtCurrentIndex()
+        {
+            EnergyCircuit circuit = new EnergyCircuit();
+            circuit.SetContent(0, CircuitSlotContent.Hero(101));
+            List<CircuitActivationEvent> activations = new List<CircuitActivationEvent>();
+
+            circuit.Tick(circuit.PulseInterval, activations);
+
+            Assert.That(circuit.GetSlot(0).Stack, Is.EqualTo(1));
+            Assert.That(circuit.GetSlot(1).Stack, Is.EqualTo(0));
+            Assert.That(activations, Is.Empty);
+        }
+
+        [Test]
+        public void ThresholdCreatesOneActivationAndResetsStack()
+        {
+            EnergyCircuit circuit = new EnergyCircuit();
+            circuit.SetContent(0, CircuitSlotContent.Hero(101));
+            List<CircuitActivationEvent> activations = new List<CircuitActivationEvent>();
+
+            circuit.Tick(8.5f, activations);
+
+            Assert.That(activations, Has.Count.EqualTo(1));
+            Assert.That(activations[0].SlotIndex, Is.EqualTo(0));
+            Assert.That(activations[0].StackAtActivation, Is.EqualTo(3));
+            Assert.That(circuit.GetSlot(0).Stack, Is.EqualTo(0));
+            Assert.That(circuit.GetSlot(0).IsActive, Is.True);
+        }
+
+        [Test]
+        public void ActiveSlotDoesNotAccumulateOrReactivate()
+        {
+            EnergyCircuit circuit = new EnergyCircuit();
+            circuit.SetContent(0, CircuitSlotContent.Hero(101));
+            List<CircuitActivationEvent> activations = new List<CircuitActivationEvent>();
+
+            circuit.Tick(8.5f, activations);
+            circuit.Tick(4f, activations);
+
+            Assert.That(activations, Has.Count.EqualTo(1));
+            Assert.That(circuit.GetSlot(0).Stack, Is.EqualTo(0));
         }
 
         [Test]
