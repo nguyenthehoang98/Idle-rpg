@@ -17,13 +17,13 @@
 | Big 0 - Contract | 4/4 | Done |
 | Big 0.5 - Remote verification | 3/5 | Partial - compile/EditMode ready |
 | Big 1 - Circuit simulation | 5/5 | Done |
-| Big 2 - Combat integration | 2/6 | In progress |
+| Big 2 - Combat integration | 3/6 | In progress |
 | Big 3 - Shop loop | 0/6 | Not started |
 | Big 4 - Augments | 0/5 | Not started |
 | Big 5 - Content/tuning | 0/5 | Not started |
 | Big 6 - Verification | 0/4 | Not started |
 
-**Current status:** Design docs đã commit; Energy Circuit core 5/5; item modifiers và board runtime đã test/verify; hero combat engagement đã fix và verify.
+**Current status:** Design docs đã commit; Energy Circuit core 5/5; item modifiers, board runtime và circuit tick runner đã test/verify; hero combat engagement đã fix và verify.
 
 ---
 
@@ -255,16 +255,16 @@
 
 **Files dự kiến:** `Assets/_TDS/Gameplay/`, `Assets/_TDS/Battle/`.
 
-## B-02 - Kết nối circuit với Tick runner `[P0]`
+## B-02 - Kết nối circuit với Tick runner `[P0]` `[x]`
 
-- [ ] Chọn một owner duy nhất để tick circuit.
-- [ ] Tick circuit trước/đúng thời điểm combat cần activation.
-- [ ] Không tick hai lần trong một frame.
-- [ ] Reset circuit khi bắt đầu run mới.
+- [x] Chọn một owner duy nhất để tick circuit.
+- [x] Tick circuit trước/đúng thời điểm combat cần activation.
+- [x] Không tick hai lần trong một frame.
+- [x] Reset circuit khi bắt đầu run mới.
 
 **Acceptance:** Pulse tốc độ ổn định khi thay đổi frame rate/time scale.
 
-**Verify:** Debug log hoặc test instrumentation trong một Play Mode run.
+**Verify:** `tools/verify-unity.ps1 -Mode all` — compile pass, 34 EditMode tests pass; `CircuitTickRunner` được serialize trong `UpdateRunner` trước `SkillTickRunner` và có test activation/reset.
 
 ## B-03 - Thêm Hero Overdrive contract `[P0]`
 

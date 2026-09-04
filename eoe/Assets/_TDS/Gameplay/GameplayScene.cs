@@ -12,7 +12,8 @@ namespace _TDS.Gameplay
         [SerializeField] private int[] heroIds = new int[4] { 101, 0, 0, 0 };
         [SerializeField] private HeroSlotManager heroSlotManager;
         [SerializeField] private UpdateRunner runner;
-        
+        [SerializeField] private CircuitTickRunner circuitRunner;
+
         private SpawnMonsterRunner spawnRunner;
         private AgentMovementRunner agentRunner;
         private SkillTickRunner skillRunner;
@@ -28,6 +29,7 @@ namespace _TDS.Gameplay
             runner.TryGetRunner(out spawnRunner);
             runner.TryGetRunner(out agentRunner);
             runner.TryGetRunner(out skillRunner);
+            runner.TryGetRunner(out circuitRunner);
         }
 
         private void OnEnable()
@@ -47,7 +49,8 @@ namespace _TDS.Gameplay
             Stopwatch sw = Stopwatch.StartNew();
 
             agentRunner.Initialize();
-            
+            circuitRunner.Initialize(board);
+
             skillRunner.Initialize();
             
             SkillFactory.Initialize(skillRunner.Unit);
