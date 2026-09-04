@@ -10,7 +10,6 @@ namespace _TDS.GameConfig
         public string prefabName;
         public float damageTickInterval;
         public TargetSelectionType findTarget;
-        public float attackRange;
         public float projectileSpeed;
         public float projectileStartDuration;
         public float projectileDuration;

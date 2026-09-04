@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using _GameToolkit.Avoidance;
 using _GameToolkit.Entities;
 using _GameToolkit.Updater;
@@ -25,6 +24,37 @@ namespace _TDS.Battle
             simulator.Initialize();
         }
 
+        private void OnEnable()
+        {
+            Monster.OnMonsterDisable += RemoveAgent;
+        }
+
+        private void OnDisable()
+        {
+            Monster.OnMonsterDisable -= RemoveAgent;
+        }
+
+        // Monster chết -> bỏ agent khỏi simulator & container (không gọi lại Death)
+        private void RemoveAgent(Monster monster)
+        {
+            int foundAgent = -1;
+            Temp found = null;
+
+            foreach (KeyValuePair<int, Temp> pair in container)
+            {
+                if (pair.Value.Monster != monster) continue;
+                foundAgent = pair.Key;
+                found = pair.Value;
+                break;
+            }
+
+            if (foundAgent != -1)
+            {
+                container.Remove(foundAgent);
+                remove.Enqueue(found); // Tick() sẽ gọi simulator.DestroyAgent
+            }
+        }
+
         public override void Tick(float deltaTime)
         {
             simulator.Tick(deltaTime);
@@ -35,15 +65,20 @@ namespace _TDS.Battle
             {
                 Temp temp = list[i];
                 
-                if (temp == null) list.RemoveAt(i);
-                else
+                if (temp == null) { list.RemoveAt(i); continue; }
+
+                // agent đã bị remove (monster chết) -> dọn khỏi list
+                if (!container.ContainsKey(temp.Agent))
                 {
-                    if (simulator.TryGetAgent(temp.Agent, out var agent))
-                    {
-                        Vector3 position = new Vector3(agent.position.x, agent.position.y);
-                        
-                        temp.Monster.SetPosition(position, deltaTime);
-                    }
+                    list.RemoveAt(i);
+                    continue;
+                }
+
+                if (simulator.TryGetAgent(temp.Agent, out var agent))
+                {
+                    Vector3 position = new Vector3(agent.position.x, agent.position.y);
+                    
+                    temp.Monster.SetPosition(position, deltaTime);
                 }
             }
             
@@ -51,7 +86,6 @@ namespace _TDS.Battle
             {
                 Temp temp = remove.Dequeue();
                 simulator.DestroyAgent(temp.Agent);
-                Destroy_Agent(temp.Agent);
             }
         }
 

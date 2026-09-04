@@ -131,10 +131,12 @@ namespace _TDS.Battle
 
         protected virtual void CastSkill(Monster target)
         {
+            float attack = GetStat(StatId.Attack).Value;
+
             // bắn projectile từ vị trí hero tới target
-            SkillFactory.CastSkillAsync(SkillConfig, transform.position, target, damage =>
+            SkillFactory.CastSkillAsync(SkillConfig, transform.position, target, (monster, damage) =>
             {
-                target.TakeDamage((int)damage);
+                monster.TakeDamage((int)(damage * attack));
             }).Forget();
         }
     }
