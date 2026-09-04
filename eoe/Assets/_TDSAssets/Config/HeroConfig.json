@@ -4,7 +4,7 @@
       "id": 101,
       "prefabName": "hero.101",
       "health": 10,
-      "attack": 2,
+      "attack": 5,
       "attackRange": 5.0,
       "attackSpeed": 0.7,
       "critChance": 0.5,

@@ -11,7 +11,6 @@ using UnityEngine.Events;
 namespace _TDS.Battle
 {
     [RequireComponent(typeof(MonsterSortingLayer))]
-    [RequireComponent(typeof(CircleCollision2DDetector))]
     public class Monster : Unique
     {
         [SerializeField] private Transform scale;
