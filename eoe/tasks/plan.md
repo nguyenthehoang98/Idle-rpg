@@ -23,7 +23,7 @@ Người chơi không điều khiển hero liên tục. Quyết định chính l
 
 | Big Todo | Nội dung | Trạng thái |
 |---|---|---|
-| 0 | Chốt contract và quyết định còn mở | In review |
+| 0 | Chốt contract và quyết định còn mở | Done |
 | 0.5 | Remote verification foundation | Partial - compile/EditMode ready |
 | 1 | Circuit simulation | Not started |
 | 2 | Board và combat integration | Not started |
@@ -49,7 +49,7 @@ Mỗi dòng là một increment độc lập. Chỉ chuyển sang dòng tiếp t
 | 6 | Content/tuning | Làm T-01 đến T-05 | 5 wave + boss có ít nhất 2 build | 2 phiên |
 | 7 | Self-play/QA | Làm R-04, R-05 và V-01 đến V-04 | Headless self-play lặp lại ổn định | 1-2 phiên |
 
-**Next action:** chốt Big Todo 0, sau đó bắt đầu `C-01`. Không mở rộng content trước khi Checkpoint A và B pass.
+**Next action:** bắt đầu `C-01` bằng test contract/state. Không mở rộng content trước khi Checkpoint A và B pass.
 
 ## Nguyên tắc kiến trúc
 

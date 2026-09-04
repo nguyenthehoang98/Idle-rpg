@@ -14,7 +14,7 @@
 
 | Big Todo | Done | Trạng thái |
 |---|---:|---|
-| Big 0 - Contract | 0/4 | In review |
+| Big 0 - Contract | 4/4 | Done |
 | Big 0.5 - Remote verification | 3/5 | Partial - compile/EditMode ready |
 | Big 1 - Circuit simulation | 0/5 | Not started |
 | Big 2 - Combat integration | 0/5 | Not started |
@@ -27,49 +27,49 @@
 
 ---
 
-# Big Todo 0 - Chốt contract trước khi code
+# Big Todo 0 - Chốt contract trước khi code ✅
 
 **Mục tiêu:** loại bỏ các quyết định có thể làm thay đổi toàn bộ implementation.
 
-## D-01 - Chốt layout circuit `[P0]`
+## D-01 - Chốt layout circuit `[P0]` `[x]`
 
-- [ ] Chọn một layout MVP: vòng tròn, line hoặc grid.
-- [ ] Chốt thứ tự pulse trong layout.
-- [ ] Chốt số slot mặc định là 8.
+- [x] Chọn layout logic MVP là vòng một chiều; UI có thể vẽ vòng tròn hoặc line.
+- [x] Chốt thứ tự pulse `0 → 1 → ... → 7 → 0`.
+- [x] Chốt số slot mặc định là 8.
 
 **Acceptance:** Có một sơ đồ hoặc mô tả không còn mơ hồ về slot kế tiếp của mỗi slot.
 
 **Verify:** Cập nhật `docs/game-design/energy-circuit.md` và `mvp.md`.
 
-## D-02 - Chốt luật stack/activation `[P0]`
+## D-02 - Chốt luật stack/activation `[P0]` `[x]`
 
-- [ ] Chốt pulse interval ban đầu.
-- [ ] Chốt activation threshold.
-- [ ] Chốt Overdrive duration.
-- [ ] Chốt stack có tích trong lúc Overdrive hay không.
-- [ ] Chốt behavior khi activation xảy ra lúc Overdrive đang active.
+- [x] Chốt pulse interval ban đầu là `0.5s`.
+- [x] Chốt activation threshold là `3`.
+- [x] Chốt Overdrive duration là `5s`.
+- [x] Stack không tích trong lúc Overdrive active.
+- [x] Activation trong lúc Overdrive active bị bỏ qua; pulse vẫn tiếp tục chạy.
 
 **Acceptance:** Có bảng luật cho empty slot, hero slot, item slot, threshold và reset.
 
 **Verify:** Viết lại phần luật MVP trong `energy-circuit.md` nếu quyết định thay đổi.
 
-## D-03 - Chốt board và ownership `[P0]`
+## D-03 - Chốt board và ownership `[P0]` `[x]`
 
-- [ ] Chốt hero/item có thể đặt vào mọi slot hay slot có type riêng.
-- [ ] Chốt số hero active.
-- [ ] Chốt có bench hay không.
-- [ ] Chốt item có bị mất khi thay thế hay bán được.
+- [x] Hero/item có thể đặt vào mọi slot; không có slot type riêng.
+- [x] Tối đa 3 hero active.
+- [x] Không có bench trong MVP.
+- [x] Bán/thay hero/item trả 100% giá trong prototype; content bị gỡ khỏi board.
 
 **Acceptance:** Có state diagram cho board trước và sau Shop.
 
 **Verify:** Cập nhật `mvp.md` và `shop-and-augments.md`.
 
-## D-04 - Chốt cadence Shop/Augment `[P0]`
+## D-04 - Chốt cadence Shop/Augment `[P0]` `[x]`
 
-- [ ] Chốt Shop mở sau mọi wave.
-- [ ] Chốt Augment checkpoint sau wave 3.
-- [ ] Chốt thứ tự `Reward → Augment → Shop → Next wave`.
-- [ ] Chốt gold đến từ wave, kill hoặc cả hai.
+- [x] Shop mở sau mọi wave.
+- [x] Augment checkpoint diễn ra sau wave 3.
+- [x] Chốt thứ tự `Reward → Augment → Shop → Next wave`.
+- [x] Gold đến từ hoàn thành wave, elite kill và boss; regular kill không cộng gold trực tiếp.
 
 **Acceptance:** Có flow hoàn chỉnh cho run 5 wave.
 

@@ -2,7 +2,7 @@
 
 ## Trạng thái
 
-**Draft - chờ xác nhận trước khi implement.**
+**MVP contract v1 - đã chốt để implement.**
 
 ## Mục tiêu
 
@@ -50,11 +50,14 @@ Wave tiếp theo
 
 ## Board
 
-- Tổng cộng 8 slot.
-- Mỗi slot chứa tối đa một hero hoặc một item.
-- Hero không nằm trong slot không tham gia combat trong MVP.
+- Tổng cộng 8 slot theo vòng logic một chiều.
+- Mỗi slot chứa tối đa một hero, một item hoặc để trống; không có slot type riêng.
+- Tối đa 3 hero active trên board trong MVP; không có bench.
+- Hero/item không nằm trên board không tham gia combat.
 - Slot trống vẫn cho pulse đi qua nhưng không tạo hiệu ứng.
-- Thứ tự slot là cố định trong run, người chơi được thay đổi nội dung slot tại Shop.
+- Thứ tự slot cố định trong run; người chơi chỉ thay đổi nội dung slot tại Shop.
+- Bán hero/item trả 100% giá trong prototype và xóa content khỏi board.
+- Thay content tại một slot phải hoàn tất trước khi wave mới bắt đầu.
 
 ## Combat
 
@@ -119,9 +122,9 @@ Ví dụ:
 - Deck draw/discard đầy đủ.
 - Branching map lớn.
 
-## Open questions
+## Contract v1 đã chốt
 
-- Circuit hiển thị dạng vòng tròn, đường thẳng hay grid?
-- Có cho phép đổi chiều pulse trong MVP không?
-- Hero có thể đặt vào mọi slot hay chỉ hero slot riêng?
-- Shop có cho giữ hero/item sang wave tiếp theo hay toàn bộ offer chỉ là tạm thời?
+- Circuit hiển thị có thể là vòng tròn hoặc đường thẳng ở UI, nhưng thứ tự logic luôn là vòng 8 slot.
+- Pulse chỉ chạy một chiều trong MVP.
+- Hero và item có thể đặt vào mọi slot.
+- Hero/item đã mua được giữ đến hết run hoặc bị bán; Shop không reset board giữa các wave.

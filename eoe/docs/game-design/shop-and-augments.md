@@ -1,12 +1,16 @@
 # Shop và Augments
 
+## Trạng thái
+
+**MVP contract v1 - đã chốt để implement.**
+
 ## Mục đích
 
 Shop và Augment tạo ra quyết định giữa các wave. Combat vẫn tự động và nhanh, nhưng người chơi phải chuẩn bị cho wave tiếp theo.
 
 ## Shop timing
 
-Shop mở sau mỗi wave.
+Shop mở sau mỗi wave. Gold đến từ hoàn thành wave, elite kill và boss reward; regular kill không trực tiếp cộng gold trong MVP.
 
 Thứ tự mặc định:
 
@@ -51,13 +55,13 @@ Quy tắc phân phối đề xuất:
 
 Người chơi có thể:
 
-- Mua hero/item.
-- Bán hero/item.
+- Mua hero/item và giữ chúng đến hết run.
+- Bán hero/item khỏi board.
 - Đổi vị trí các slot.
 - Để slot trống.
 - Thay hero active bằng hero mới.
 
-Trong prototype, bán lại 100% giá để kiểm thử build nhanh. Khi gameplay đã ổn, giảm giá bán xuống 70% nếu cần tạo quyết định kinh tế rõ hơn.
+MVP giới hạn 3 hero active và không có bench. Trong prototype, bán lại 100% giá để kiểm thử build nhanh; thay đổi này chỉ được cân nhắc sau khi core loop ổn định.
 
 ## Hero trong Shop
 
@@ -123,6 +127,8 @@ Hero không nên chỉ khác nhau ở damage. Mỗi hero cần có Overdrive ri�
 - Mỗi lần kích hoạt Overdrive nhận một refresh token.
 
 ## Augment checkpoint MVP
+
+Flow cố định là `Reward → Augment (sau wave 3) → Shop → Next wave`.
 
 Với run 5 wave:
 

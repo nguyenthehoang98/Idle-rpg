@@ -1,5 +1,9 @@
 # Energy Circuit
 
+## Trạng thái
+
+**MVP contract v1 - đã chốt để implement.**
+
 ## Mục đích
 
 Energy Circuit là hệ thống tạo quyết định chiến thuật chính của game. Hero và item được đặt trên slot cố định; một pulse năng lượng đi qua từng slot theo thứ tự.
@@ -20,17 +24,27 @@ Mỗi slot có:
 - Trạng thái active/Overdrive.
 - Hiệu ứng khi pulse đi qua.
 
-## Luật đề xuất cho MVP
+## Luật MVP đã chốt
 
-- Pulse chạy tuần tự qua 8 slot.
-- Sau slot cuối, pulse quay lại slot đầu.
+- Circuit là một vòng logic 8 slot, thứ tự `0 → 1 → ... → 7 → 0`.
+- Pulse chỉ đi một chiều; không đổi chiều trong MVP.
+- Pulse chạy mỗi `0.5s`; `deltaTime` lớn có thể tạo nhiều pulse nhưng không bỏ qua slot.
 - Slot trống không nhận stack nhưng không chặn pulse.
-- Slot có nội dung nhận stack khi pulse đi qua.
-- Ngưỡng mặc định: 3 stack.
-- Khi đủ ngưỡng, slot kích hoạt hiệu ứng.
-- Hero kích hoạt Overdrive trong thời gian giới hạn.
-- Stack được reset sau khi kích hoạt.
-- Overdrive không cộng dồn; chỉ có một trạng thái Overdrive trên mỗi hero.
+- Slot có hero hoặc item nhận một stack khi pulse đi qua.
+- Ngưỡng kích hoạt là 3 stack.
+- Khi đủ ngưỡng, slot phát một activation event và stack reset về 0.
+- Slot đang active không tích stack và không kích hoạt lại; pulse tiếp tục chạy.
+- Hero kích hoạt Overdrive trong 5 giây; Overdrive không cộng dồn.
+- Khi Overdrive hết thời gian, slot trở về trạng thái chờ stack mới.
+
+### Bảng hành vi
+
+| Slot | Pulse đi qua | Stack | Activation |
+|---|---|---:|---|
+| Empty | Có | Không đổi | Không |
+| Hero inactive | Có | +1 | Khi đạt 3 |
+| Item inactive | Có | +1 | Khi đạt 3 |
+| Hero/item active | Có | Không đổi | Không |
 
 Các giá trị trên là giá trị tuning ban đầu, không phải hằng số thiết kế:
 
@@ -147,9 +161,8 @@ Nếu đổi vị trí không làm thay đổi thời điểm hoặc hiệu ứn
 
 Nếu buff chỉ là tăng stat ẩn, game sẽ mất feeling. Mỗi hero cần một thay đổi dễ quan sát.
 
-## Chưa chốt
+## Giới hạn contract v1
 
-- Có cho phép đổi chiều pulse không.
-- Có cho phép item tác động nhiều slot hay chỉ slot kế bên.
-- Có cho phép stack tiếp tục tích trong lúc Overdrive đang active không.
-- Có giới hạn số item cùng loại trong một circuit không.
+- Item chỉ tác động slot kế bên hoặc slot được chỉ rõ bởi behavior của item; không có generic effect framework.
+- Không giới hạn loại item trong circuit ở tầng simulation; Shop/tuning chịu trách nhiệm giới hạn offer.
+- Augment có thể thay đổi luật stack/pulse bằng modifier rõ ràng, nhưng base circuit giữ nguyên contract trên.
