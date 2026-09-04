@@ -42,6 +42,7 @@ Trải nghiệm cốt lõi:
 - [Shop và Augments](shop-and-augments.md)
 - [Implementation plan](../../tasks/plan.md)
 - [Task checklist](../../tasks/todo.md)
+- [Remote verification](../engineering/remote-verification.md)
 
 ## Không làm trong MVP
 

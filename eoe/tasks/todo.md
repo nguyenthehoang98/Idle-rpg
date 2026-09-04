@@ -15,6 +15,7 @@
 | Big Todo | Done | Trạng thái |
 |---|---:|---|
 | Big 0 - Contract | 0/4 | In review |
+| Big 0.5 - Remote verification | 3/5 | Partial - compile/EditMode ready |
 | Big 1 - Circuit simulation | 0/5 | Not started |
 | Big 2 - Combat integration | 0/5 | Not started |
 | Big 3 - Shop loop | 0/6 | Not started |
@@ -73,6 +74,78 @@
 **Acceptance:** Có flow hoàn chỉnh cho run 5 wave.
 
 **Verify:** Cập nhật `mvp.md` và `shop-and-augments.md`.
+
+---
+
+# Big Todo 0.5 - Remote verification foundation
+
+**Dependency:** Big Todo 0 chỉ cần chốt command contract; không phụ thuộc gameplay code.
+
+**Mục tiêu:** Pi agent có thể compile và chạy test mà không mở Unity Editor bằng UI.
+
+## R-01 - Chốt verification command contract `[P0]` `[x]`
+
+- [x] Chuẩn hóa `compile`, `editmode`, `playmode` và `all` theo từng tầng.
+- [x] Chọn artifact directory `Temp/Verification/`.
+- [x] Quy định exit code khác 0 khi compile/test fail.
+- [x] Ghi command và workflow trong `docs/engineering/remote-verification.md`.
+
+**Acceptance:** Một agent mới đọc doc có thể chạy compile/EditMode từ terminal.
+
+**Verify:** Đọc lại doc và chạy command trên máy remote/local.
+
+## R-02 - Tạo headless compile runner `[P0]` `[x]`
+
+- [x] Tạo `tools/verify-unity.ps1`.
+- [x] Tự tìm Unity hoặc nhận `UNITY_PATH`.
+- [x] Chạy Unity bằng `-batchmode -nographics -quit`.
+- [x] Lưu log theo timestamp.
+- [x] Fail khi Unity exit code khác 0 hoặc log có compile error.
+
+**Acceptance:** Compile không cần mở Unity UI và trả status rõ ràng.
+
+**Verify:** `powershell -ExecutionPolicy Bypass -File tools/verify-unity.ps1 -Mode compile`.
+
+## R-03 - Tạo headless EditMode runner `[P0]` `[x]`
+
+- [x] Chạy Unity Test Framework bằng `-runTests -testPlatform editmode`.
+- [x] Lưu test result XML.
+- [x] Fail nếu result không phải `Passed` hoặc có failed test.
+- [x] Hiển thị artifact path trong output.
+
+**Acceptance:** Agent đọc được số test pass/fail từ terminal hoặc XML.
+
+**Verify:** `powershell -ExecutionPolicy Bypass -File tools/verify-unity.ps1 -Mode editmode`.
+
+## R-04 - Headless PlayMode smoke test `[P0]`
+
+- [ ] Tạo test scene tối thiểu hoặc entry point không cần thao tác UI.
+- [ ] Chạy flow start run → wave → Shop/checkpoint bằng `-testPlatform playmode`.
+- [ ] Ghi summary: current wave, gold, activation count, monster killed, win/fail.
+- [ ] Fail test khi có exception, timeout hoặc state không hợp lệ.
+
+**Acceptance:** Gameplay flow chính chạy được trong headless PlayMode.
+
+**Verify:** Chạy filter smoke test bằng PowerShell runner.
+
+## R-05 - Deterministic self-play bot `[P0]`
+
+- [ ] Tạo seed cố định cho run test.
+- [ ] Bot mua build tối thiểu theo rule đã biết.
+- [ ] Bot chọn Augment theo tag/strategy cố định.
+- [ ] Bot chạy đến boss hoặc fail bằng timeout rõ ràng.
+- [ ] Xuất summary dễ đọc cho Pi agent.
+
+**Acceptance:** Một test lặp lại cho cùng kết quả và không cần chuột/keyboard.
+
+**Verify:** Chạy self-play ít nhất 3 lần cùng seed; kết quả không đổi.
+
+## Remote verification checkpoint
+
+- [x] Compile headless pass trên project hiện tại.
+- [x] EditMode tests headless pass trên project hiện tại.
+- [ ] PlayMode smoke test pass.
+- [ ] Deterministic self-play pass.
 
 ---
 
@@ -449,9 +522,9 @@
 
 **Acceptance:** Unity batch compile exit code 0.
 
-**Verify:** Unity batchmode compile command của project.
+**Verify:** `powershell -ExecutionPolicy Bypass -File tools/verify-unity.ps1 -Mode compile`.
 
-## V-03 - Full manual run `[P0]`
+## V-03 - Full run verification `[P0]`
 
 - [ ] Bắt đầu run mới.
 - [ ] Chơi qua wave 1-5.
@@ -459,10 +532,11 @@
 - [ ] Chọn Augment sau wave 3.
 - [ ] Đánh boss.
 - [ ] Retry tạo run sạch.
+- [ ] Chạy lại cùng flow bằng headless self-play.
 
-**Acceptance:** Full loop không cần debug intervention.
+**Acceptance:** Full loop không cần debug intervention hoặc thao tác UI trong test.
 
-**Verify:** Play Mode checklist và ghi lại lỗi phát sinh.
+**Verify:** Headless PlayMode smoke test + deterministic self-play; manual Play Mode chỉ dùng để review visual/feeling.
 
 ## V-04 - MVP review `[P0]`
 

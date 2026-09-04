@@ -24,6 +24,7 @@ Người chơi không điều khiển hero liên tục. Quyết định chính l
 | Big Todo | Nội dung | Trạng thái |
 |---|---|---|
 | 0 | Chốt contract và quyết định còn mở | In review |
+| 0.5 | Remote verification foundation | Partial - compile/EditMode ready |
 | 1 | Circuit simulation | Not started |
 | 2 | Board và combat integration | Not started |
 | 3 | Wave result và Shop | Not started |
@@ -60,6 +61,8 @@ Người chơi không điều khiển hero liên tục. Quyết định chính l
 ```text
 D-01..D-04: Contract decisions
         ↓
+R-01..R-05: Remote compile/test/self-play foundation
+        ↓
 C-01..C-05: Circuit simulation + tests
         ↓
 B-01..B-05: Board + Hero Overdrive + playable wave
@@ -73,7 +76,26 @@ T-01..T-05: Content + tuning
 V-01..V-04: Full verification + MVP sign-off
 ```
 
+## Phases
+
+### Phase 0.5: Remote verification foundation
+
+- Có script compile headless: `tools/verify-unity.ps1 -Mode compile`.
+- Có script chạy EditMode tests headless: `tools/verify-unity.ps1 -Mode editmode`.
+- Log/XML được lưu trong `Temp/Verification/`.
+- Bổ sung headless PlayMode smoke test và deterministic self-play sau khi combat loop có thể chạy.
+
+### Phase 1: Contract và simulation
+
 ## Checkpoints
+
+### Checkpoint R - Remote verification foundation
+
+- Compile headless pass.
+- EditMode tests headless pass.
+- Script trả exit code khác 0 khi compile/test fail.
+- Artifact log/XML có thể đọc lại từ terminal.
+- Headless PlayMode smoke test còn là task sau khi combat loop chạy được.
 
 ### Checkpoint A - Circuit isolated
 
@@ -110,6 +132,7 @@ Sau Big Todo 4-6:
 - Chạy được 5 wave và boss.
 - Augment sau wave 3 hoạt động.
 - Có ít nhất một build DPS và một build defense khả dụng.
+- Headless PlayMode smoke test và deterministic self-play pass.
 - Test, compile và manual playtest đều pass.
 
 ## Quy tắc triển khai từng task
