@@ -14,7 +14,7 @@ namespace _TDS.Battle
     ///
     /// Quỹ đạo = hướng/tốc độ hiện tại, cập nhật mỗi tick qua UpdateMotion(dt).
     /// Subclass ghi đè UpdateMotion để có quỹ đạo riêng (cong, boomerang, đuổi target...).
-    /// Abstract: prefab phải gắn subclass cụ thể (StraightProjectile/CurveProjectile/...),
+    /// Abstract: prefab phải gắn subclass cụ thể (StraightProjectile/SpeedCurveProjectile/...),
     /// không gắn base trực tiếp.
     /// </summary>
     public abstract class Projectile : MonoBehaviour, ITickRunner
