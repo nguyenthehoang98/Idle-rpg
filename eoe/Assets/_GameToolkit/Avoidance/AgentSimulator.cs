@@ -152,6 +152,7 @@ namespace _GameToolkit.Avoidance
         
         public void SetAgentMaxSpeed(int agent, float speed)
         {
+            simulator.EnsureCompleted();
             simulator.SetAgentMaxSpeed(agent, Mathf.Max(0f, speed));
         }
 

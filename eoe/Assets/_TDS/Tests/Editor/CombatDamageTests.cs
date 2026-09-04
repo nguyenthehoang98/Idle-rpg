@@ -1,11 +1,33 @@
 using NUnit.Framework;
+using _GameToolkit.Avoidance;
 using _TDS.Battle;
 using _TDS.GameConfig;
+using UnityEngine;
 
 namespace _TDS.Tests.Editor
 {
     public class CombatDamageTests
     {
+        [Test]
+        public void SetAgentMaxSpeedCompletesPreviousSimulationStep()
+        {
+            AgentSimulator simulator = new AgentSimulator();
+            simulator.Initialize();
+
+            try
+            {
+                int agent = simulator.CreateAgent(
+                    new Vector2(10f, 0f), 1f, 1f, 0.1f).agent;
+                simulator.Tick(0.1f);
+
+                Assert.DoesNotThrow(() => simulator.SetAgentMaxSpeed(agent, 0.5f));
+            }
+            finally
+            {
+                simulator.Dispose();
+            }
+        }
+
         [Test]
         public void CritDamageOneDoublesBaseDamage()
         {
