@@ -72,26 +72,35 @@ namespace _TDS.Battle
                 Pool.RegisterPool(prefab, true);
             }
 
+            // totalDuration = thời gian bay hết projectileDuration (đạn bay rồi tự huỷ)
+            float totalDuration = Mathf.Max(0.01f, skillConfig.projectileDuration);
+
+            int hitCount = Mathf.Max(1, skillConfig.hitCount);
+
+            // ===== spawn thẳng tại target (PlaceProjectile): không bay, đặt ngay tại vị trí đích =====
+            if (skillConfig.spawnAtTarget)
+            {
+                if (target == null)
+                {
+                    Debug.LogWarning($"[SkillFactory] skill {skillConfig.skillId} spawnAtTarget nhưng không có target");
+                    return;
+                }
+
+                SpawnProjectile(skillConfig, prefab, target.transform.position, target.transform.position,
+                    1f, totalDuration, hitCount, onDamage, spawnAtTarget: true);
+                return;
+            }
+
             // hướng gốc: từ hero tới target (hoặc hướng mặt nếu không có target)
             Vector3 baseDir = target != null
                 ? (target.transform.position - from).normalized
                 : Vector3.right;
 
             // ===== xây danh sách viên đạn =====
-            // Ngữ nghĩa count (spread/parallelProjectileCount) = SỐ VIÊN PHỤ, mỗi viên phụ +1 đối xứng
-            // quanh viên chính (góc / lane ngang). Viên chính luôn bắn scale 1 thẳng baseDir từ `from`.
-            // - spread   : count = n -> bắn n viên phụ tỏa đều 2 bên (góc lệch = i*angleStep/2 mỗi bên),
-            //              viên chính thẳng giữa.
-            // - parallel : count = n -> bắn n viên phụ dịch ngang lane (cách projectileDistanceStep),
-            //              đối xứng quanh trục.
-            // Thường chỉ 1 trong 2 > 0 (config ngầm định, không cộng gộp).
+            // Ngữ nghĩa count = SỐ VIÊN PHỤ (mỗi viên +1 đối xứng quanh viên chính). Viên chính luôn bắn scale 1.
+            // spread: xoay góc; parallel: dịch lane ngang. Thường chỉ 1 trong 2 > 0.
             int parallelCount = Mathf.Max(0, skillConfig.parallelProjectileCount);
             int spreadCount = Mathf.Max(0, skillConfig.spreadProjectileCount);
-
-            // totalDuration = thời gian bay hết projectileDuration (đạn bay rồi tự huỷ)
-            float totalDuration = Mathf.Max(0.01f, skillConfig.projectileDuration);
-
-            int hitCount = Mathf.Max(1, skillConfig.hitCount);
 
             // viên chính scale 1, thẳng baseDir, spawn tại `from`
             SpawnProjectile(skillConfig, prefab, from, baseDir, 1f,
@@ -150,7 +159,7 @@ namespace _TDS.Battle
         private static void SpawnProjectile(SkillConfigData skillConfig, GameObject prefab,
             Vector3 origin, Vector3 dir, float damageScale,
             float totalDuration, int hitCount,
-            Action<Monster, float> onDamage)
+            Action<Monster, float> onDamage, bool spawnAtTarget = false)
         {
             GameObject go = Pool.Instantiate(prefab, origin, true);
             go.transform.rotation = Quaternion.identity;
@@ -163,7 +172,15 @@ namespace _TDS.Battle
                 return;
             }
 
-            projectile.Setup(origin, dir, skillConfig.projectileSpeed, totalDuration);
+            if (spawnAtTarget)
+            {
+                // sinh thẳng tại chỗ (đích = vị trí spawn), không bay
+                projectile.SetupAt(origin, dir, totalDuration);
+            }
+            else
+            {
+                projectile.Setup(origin, dir, skillConfig.projectileSpeed, totalDuration);
+            }
 
             CollisionDetector[] detectors = go.GetComponentsInChildren<CollisionDetector>();
             if (detectors.Length == 0)

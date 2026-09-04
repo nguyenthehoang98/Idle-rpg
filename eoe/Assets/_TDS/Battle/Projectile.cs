@@ -13,34 +13,54 @@ namespace _TDS.Battle
     /// chứ KHÔNG theo frame Unity -> đồng bộ với va chạm, không xuyên monster.
     ///
     /// Quỹ đạo = hướng/tốc độ hiện tại, cập nhật mỗi tick qua UpdateMotion(dt).
-    /// Subclass ghi đè UpdateMotion để có quỹ đạo riêng (cong, boomerang, đuổi target...).
+    /// Subclass ghi đè Move(dt) để tự đặt vị trí (lerp theo curve, đuổi target, teleport...).
+    ///
     /// Abstract: prefab phải gắn subclass cụ thể (StraightProjectile/SpeedCurveProjectile/...),
     /// không gắn base trực tiếp.
     /// </summary>
     public abstract class Projectile : MonoBehaviour, ITickRunner
     {
         protected Vector3 direction;
+        protected Vector3 destination;   // đích (thường là vị trí target) — subclass có thể dùng
         protected float speed;
         protected float totalDuration;
         protected float elapsed;
-        protected bool running;
+        protected bool moving = true;    // có di chuyển không (false = đứng yên nhưng vẫn đếm thời gian sống)
         protected bool destroyed;
         private bool registered;
 
-        /// <summary>Đạn bay hết duration (hoặc bị StopMotion) -> skill có thể dọn action nếu cần.</summary>
+        /// <summary>Đạn hết duration (hoặc bị DestroySelf) -> skill có thể dọn action nếu cần.</summary>
         public event Action OnFinished;
 
+        /// <summary>Khởi tạo đạn bay từ `from` theo hướng `direction`.</summary>
         public void Setup(Vector3 from, Vector3 direction, float speed, float totalDuration)
         {
             this.direction = direction.sqrMagnitude > 1e-6f ? direction.normalized : Vector3.right;
             this.speed = Mathf.Max(0.01f, speed);
             this.totalDuration = Mathf.Max(0.01f, totalDuration);
-            elapsed = 0;
-            running = true;
-            destroyed = false;
-            transform.position = from;
+            destination = from + this.direction;
+            moving = true;
+            Init(from);
+        }
 
-            OnSetup(from);
+        /// <summary>Khởi tạo đạn sinh thẳng tại `spawn` (không bay), dùng cho skill đặt tại chỗ / tại target.</summary>
+        public void SetupAt(Vector3 spawn, Vector3 toward, float totalDuration)
+        {
+            direction = toward.sqrMagnitude > 1e-6f ? (toward - spawn).normalized : Vector3.right;
+            speed = 0f; // không bay
+            this.totalDuration = Mathf.Max(0.01f, totalDuration);
+            destination = toward;
+            moving = false; // sinh tại chỗ, không di chuyển
+            Init(spawn);
+        }
+
+        private void Init(Vector3 spawn)
+        {
+            elapsed = 0;
+            destroyed = false;
+            transform.position = spawn;
+
+            OnSetup(spawn);
 
             RotateToDirection();
 
@@ -52,23 +72,24 @@ namespace _TDS.Battle
         {
         }
 
-        /// <summary>Cập nhật quỹ đạo mỗi tick. Base: bay thẳng. Subclass ghi đè để đổi hướng/tốc độ.</summary>
+        /// <summary>Cập nhật quỹ đạo mỗi tick (xoay hướng, tham số...). Base: không làm gì.</summary>
         protected virtual void UpdateMotion(float dt)
         {
-            // không làm gì: hướng + speed cố định
         }
 
-        /// <summary>Di chuyển 1 bước mỗi tick. Base: tiến thẳng theo direction*speed.
-        /// Subclass ghi đè để tự đặt vị trí (lerp theo curve, đuổi target...).</summary>
+        /// <summary>Di chuyển 1 bước mỗi tick. Base: tiến thẳng theo direction*speed nếu moving.
+        /// Subclass ghi đè để tự đặt vị trí (lerp theo curve, đuổi target, teleport...).</summary>
         protected virtual void Move(float dt)
         {
+            if (!moving) return;
+
             transform.position += direction * (speed * dt);
         }
 
         /// <summary>Được ProjectileTickRunner gọi mỗi tick 30Hz (đồng bộ với va chạm).</summary>
         public void Tick(float deltaTime)
         {
-            if (!running) return;
+            if (destroyed) return;
 
             UpdateMotion(deltaTime);
 
@@ -79,17 +100,17 @@ namespace _TDS.Battle
             if (elapsed >= totalDuration) DestroySelf();
         }
 
-        /// <summary>Dừng bay tại chỗ (DOT: giữ vị trí để detector còn overlap).</summary>
+        /// <summary>Dừng di chuyển tại chỗ (DOT: giữ vị trí để detector còn overlap), vẫn đếm thời gian sống.</summary>
         public void StopMotion()
         {
-            running = false;
+            moving = false;
         }
 
         public void DestroySelf()
         {
             if (destroyed) return;
             destroyed = true;
-            running = false;
+            moving = false;
             UnregisterTick();
             OnFinished?.Invoke();
             Pool.Destroy(gameObject);

@@ -19,6 +19,8 @@ namespace _TDS.Battle
 
         protected override void Move(float dt)
         {
+            if (!moving) return; // DOT / StopMotion: đứng yên
+
             // elapsed đã được base cộng dt trước khi gọi Move
             float t = Mathf.Clamp01(elapsed / totalDuration);
 

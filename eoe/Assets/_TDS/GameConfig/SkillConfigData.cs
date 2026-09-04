@@ -12,6 +12,8 @@ namespace _TDS.GameConfig
         public TargetSelectionType findTarget;
         public float projectileSpeed;
         public float projectileDuration;
+        /// <summary>true: spawn thẳng tại target (PlaceProjectile), không bay. false: bắn từ hero.</summary>
+        public bool spawnAtTarget;
         public float sizeMultiplier;
         public float collisionDelayInit;
         public float collisionDuration;
