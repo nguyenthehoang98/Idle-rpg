@@ -86,6 +86,9 @@ namespace _TDS.Battle
                     continue;
                 }
 
+                simulator.SetAgentMaxSpeed(temp.Agent,
+                    temp.Monster.IsStunned ? 0f : temp.MoveSpeed * temp.Monster.MoveSpeedMultiplier);
+
                 if (simulator.TryGetAgent(temp.Agent, out var agent))
                 {
                     Vector3 position = new Vector3(agent.position.x, agent.position.y);
@@ -93,7 +96,7 @@ namespace _TDS.Battle
                     temp.Monster.SetPosition(position, deltaTime);
 
                     // monster tới đích (isStopped) -> tấn công hero gần nhất trong tầm
-                    if (agent.isStopped)
+                    if (agent.isStopped && !temp.Monster.IsStunned && !temp.Monster.IsSilenced)
                     {
                         MonsterTickAttack(temp.Monster, deltaTime);
                     }
@@ -163,7 +166,7 @@ namespace _TDS.Battle
             
             monster.Initialize(scaleDefinition);
             
-            Temp temp = new Temp(monster, agent);
+            Temp temp = new Temp(monster, agent, monsterConfigData.moveSpeed);
             
             additional.Enqueue(temp);
             
@@ -225,11 +228,13 @@ namespace _TDS.Battle
         {
             public Monster Monster;
             public int Agent;
+            public float MoveSpeed;
 
-            public Temp(Monster monster, int agent)
+            public Temp(Monster monster, int agent, float moveSpeed)
             {
                 Monster = monster;
                 Agent = agent;
+                MoveSpeed = moveSpeed;
             }
         }
     }

@@ -204,6 +204,8 @@ namespace _TDS.Battle
                 dotInterval, skillConfig.hitInterval, hitCount,
                 collisionDelayInit, collisionDuration
             );
+            HashSet<Monster> modifierTargets = new HashSet<Monster>();
+            action.OnComplete += modifierTargets.Clear;
 
             action.OnDamaged += (HitInfo info) =>
             {
@@ -213,6 +215,7 @@ namespace _TDS.Battle
                 float dmg = damageScale; // base damage; Hero nhân với attack stat
 
                 onDamage?.Invoke(m, dmg);
+                if (modifierTargets.Add(m)) ApplyModifier(skillConfig, m);
 
                 if (isDot)
                 {
@@ -227,6 +230,50 @@ namespace _TDS.Battle
 
                 return true;
             };
+
+            unit.RequestAddAction(skillConfig.skillId, action);
+        }
+
+        private static void ApplyModifier(SkillConfigData skillConfig, Monster target)
+        {
+            if (target == null || target.CurrentHealth <= 0) return;
+            if (!SkillModifierSelector.TrySelect(
+                    skillConfig.modifiers,
+                    UnityEngine.Random.value,
+                    UnityEngine.Random.value,
+                    out SkillModifierData modifier)) return;
+
+            float lifeTime = Mathf.Max(0.01f, modifier.duration);
+            float tickInterval = Mathf.Max(0.01f, modifier.tickInterval);
+            float tickElapsed = 0f;
+
+            ModifierSkillAction action = new ModifierSkillAction(
+                lifeTime,
+                modifierAction => target.ApplyModifier(modifierAction, modifier),
+                (modifierAction, deltaTime) =>
+                {
+                    if (target == null || target.CurrentHealth <= 0)
+                    {
+                        modifierAction.Interrupt();
+                        return;
+                    }
+
+                    if (modifier.type != SkillModifierType.Bleed) return;
+
+                    tickElapsed += deltaTime;
+                    while (tickElapsed >= tickInterval)
+                    {
+                        tickElapsed -= tickInterval;
+                        target.TakeDamage(Mathf.Max(1, Mathf.RoundToInt(modifier.value)));
+
+                        if (target.CurrentHealth <= 0)
+                        {
+                            modifierAction.Interrupt();
+                            break;
+                        }
+                    }
+                },
+                modifierAction => target.RemoveModifier(modifierAction));
 
             unit.RequestAddAction(skillConfig.skillId, action);
         }

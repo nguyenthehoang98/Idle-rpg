@@ -3,6 +3,25 @@ using _GameToolkit.Skills;
 
 namespace _TDS.GameConfig
 {
+    public enum SkillModifierType
+    {
+        Slow = 1,
+        Bleed = 2,
+        Silence = 3,
+        Stun = 4,
+    }
+
+    [Serializable]
+    public struct SkillModifierData
+    {
+        public SkillModifierType type;
+        public float weight;
+        public float successRate;
+        public float duration;
+        public float value;
+        public float tickInterval;
+    }
+
     [Serializable]
     public struct SkillConfigData
     {
@@ -29,5 +48,6 @@ namespace _TDS.GameConfig
         public float explosiveRadius;
         public float explosiveDamageScale;
         public float instantKillTargetBelowHealthPercent;
+        public SkillModifierData[] modifiers;
     }
 }

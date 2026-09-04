@@ -22,7 +22,17 @@
       "explosivePrefabName": null,
       "explosiveRadius": 0.0,
       "explosiveDamageScale": 0.0,
-      "instantKillTargetBelowHealthPercent": 0.0
+      "instantKillTargetBelowHealthPercent": 0.0,
+      "modifiers": [
+        {
+          "type": 1,
+          "weight": 1.0,
+          "successRate": 0.5,
+          "duration": 2.0,
+          "value": 0.4,
+          "tickInterval": 0.0
+        }
+      ]
     },
     {
       "skillId": 2002,
@@ -46,7 +56,8 @@
       "explosivePrefabName": null,
       "explosiveRadius": 0.0,
       "explosiveDamageScale": 0.0,
-      "instantKillTargetBelowHealthPercent": 0.0
+      "instantKillTargetBelowHealthPercent": 0.0,
+      "modifiers": []
     },
     {
       "skillId": 2003,
@@ -70,7 +81,8 @@
       "explosivePrefabName": null,
       "explosiveRadius": 0.0,
       "explosiveDamageScale": 0.0,
-      "instantKillTargetBelowHealthPercent": 0.0
+      "instantKillTargetBelowHealthPercent": 0.0,
+      "modifiers": []
     },
     {
       "skillId": 2004,
@@ -94,7 +106,8 @@
       "explosivePrefabName": null,
       "explosiveRadius": 0.0,
       "explosiveDamageScale": 0.0,
-      "instantKillTargetBelowHealthPercent": 0.0
+      "instantKillTargetBelowHealthPercent": 0.0,
+      "modifiers": []
     },
     {
       "skillId": 2005,
@@ -118,7 +131,8 @@
       "explosivePrefabName": null,
       "explosiveRadius": 2.0,
       "explosiveDamageScale": 0.5,
-      "instantKillTargetBelowHealthPercent": 0.0
+      "instantKillTargetBelowHealthPercent": 0.0,
+      "modifiers": []
     },
     {
       "skillId": 2006,
@@ -142,7 +156,8 @@
       "explosivePrefabName": null,
       "explosiveRadius": 3.0,
       "explosiveDamageScale": 1.0,
-      "instantKillTargetBelowHealthPercent": 0.0
+      "instantKillTargetBelowHealthPercent": 0.0,
+      "modifiers": []
     },
     {
       "skillId": 2007,
@@ -166,7 +181,8 @@
       "explosivePrefabName": null,
       "explosiveRadius": 0.0,
       "explosiveDamageScale": 0.0,
-      "instantKillTargetBelowHealthPercent": 0.0
+      "instantKillTargetBelowHealthPercent": 0.0,
+      "modifiers": []
     },
     {
       "skillId": 2008,
@@ -190,7 +206,8 @@
       "explosivePrefabName": null,
       "explosiveRadius": 2.5,
       "explosiveDamageScale": 0.3,
-      "instantKillTargetBelowHealthPercent": 0.0
+      "instantKillTargetBelowHealthPercent": 0.0,
+      "modifiers": []
     },
     {
       "skillId": 2009,
@@ -214,7 +231,8 @@
       "explosivePrefabName": null,
       "explosiveRadius": 0.0,
       "explosiveDamageScale": 0.0,
-      "instantKillTargetBelowHealthPercent": 0.0
+      "instantKillTargetBelowHealthPercent": 0.0,
+      "modifiers": []
     },
     {
       "skillId": 2010,
@@ -238,7 +256,8 @@
       "explosivePrefabName": null,
       "explosiveRadius": 2.0,
       "explosiveDamageScale": 0.8,
-      "instantKillTargetBelowHealthPercent": 0.0
+      "instantKillTargetBelowHealthPercent": 0.0,
+      "modifiers": []
     }
   ]
 }

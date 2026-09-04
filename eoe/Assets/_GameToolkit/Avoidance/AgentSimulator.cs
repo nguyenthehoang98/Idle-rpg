@@ -150,6 +150,11 @@ namespace _GameToolkit.Avoidance
             return containers.TryGetValue(agent, out agentData);
         }
         
+        public void SetAgentMaxSpeed(int agent, float speed)
+        {
+            simulator.SetAgentMaxSpeed(agent, Mathf.Max(0f, speed));
+        }
+
         public void DestroyAgent(int agent)
         {
             if (agents.Remove(agent))

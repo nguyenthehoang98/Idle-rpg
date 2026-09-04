@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _GameToolkit.Colliders;
+using _GameToolkit.Skills;
 using _GameToolkit.ResourceManagement;
 using _GameToolkit.Share;
 using _TDS.GameConfig;
@@ -27,6 +28,26 @@ namespace _TDS.Battle
         private Vector3 previousPosition;
         private float elapsedTime;
         private float deltaTime;
+        private readonly Dictionary<ModifierSkillAction, SkillModifierData> activeModifiers =
+            new Dictionary<ModifierSkillAction, SkillModifierData>();
+
+        public bool IsStunned => HasModifier(SkillModifierType.Stun);
+        public bool IsSilenced => HasModifier(SkillModifierType.Silence);
+
+        public float MoveSpeedMultiplier
+        {
+            get
+            {
+                float multiplier = 1f;
+                foreach (SkillModifierData modifier in activeModifiers.Values)
+                {
+                    if (modifier.type != SkillModifierType.Slow) continue;
+                    multiplier = Mathf.Min(multiplier, 1f - Mathf.Clamp01(modifier.value));
+                }
+
+                return multiplier;
+            }
+        }
 
         public float Radius
         {
@@ -59,6 +80,27 @@ namespace _TDS.Battle
 
             if (CurrentHealth <= 0) Death();
             return dealt;
+        }
+
+        public void ApplyModifier(ModifierSkillAction action, SkillModifierData modifier)
+        {
+            if (action == null) return;
+            activeModifiers[action] = modifier;
+        }
+
+        public void RemoveModifier(ModifierSkillAction action)
+        {
+            if (action != null) activeModifiers.Remove(action);
+        }
+
+        private bool HasModifier(SkillModifierType type)
+        {
+            foreach (SkillModifierData modifier in activeModifiers.Values)
+            {
+                if (modifier.type == type) return true;
+            }
+
+            return false;
         }
 
         private bool isInitialized;
@@ -125,6 +167,12 @@ namespace _TDS.Battle
 
             isInitialized = false;
 
+            foreach (ModifierSkillAction action in activeModifiers.Keys)
+            {
+                action.Interrupt();
+            }
+
+            activeModifiers.Clear();
             OnDeath?.Invoke();
 
             Destroy();

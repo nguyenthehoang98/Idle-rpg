@@ -195,16 +195,18 @@ public class ExcelImporter : AssetPostprocessor
 				    (fieldInfo.FieldType.IsGenericType && fieldInfo.FieldType.GetGenericTypeDefinition() == typeof(List<>)))
 				{
 					string raw = cell.StringCellValue;
+					Type elementType = fieldInfo.FieldType.IsArray
+						? fieldInfo.FieldType.GetElementType()
+						: fieldInfo.FieldType.GetGenericArguments()[0];
+
+					if (!elementType.IsPrimitive && raw.TrimStart().StartsWith("["))
+						return JsonConvert.DeserializeObject(raw, fieldInfo.FieldType);
 
 					string[] elements = raw
 						.Trim('[', ']')
 						.Split(',', StringSplitOptions.RemoveEmptyEntries)
 						.Select(e => e.Trim())
 						.ToArray();
-
-					Type elementType = fieldInfo.FieldType.IsArray
-						? fieldInfo.FieldType.GetElementType()
-						: fieldInfo.FieldType.GetGenericArguments()[0];
 
 					// ===== Primitive =====
 					if (elementType == typeof(string))

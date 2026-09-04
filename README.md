@@ -31,7 +31,10 @@
 - Nhiều projectile theo spread góc hoặc parallel lane.
 - Hit count, hit interval, collision delay và collision window.
 - Critical hit và lifesteal: `critDamage = 1` nghĩa là đòn crit gây 2x damage; lifesteal là phần trăm damage thực nhận hồi cho hero.
-- Damage over time ở mức framework, cần kiểm tra lại config/implementation trước khi dùng production.
+- Modifier skill chạy bằng `ModifierSkillAction`: weighted selection + success rate cho slow, bleed, silence và stun.
+- Slow/stun/silence đã tác động lên movement/đòn đánh của monster; bleed gây damage theo tick.
+- `SkillModifierData`: `weight` dùng để chọn weighted modifier, `successRate` là xác suất áp dụng; `duration` tính bằng giây, `value` là % slow hoặc damage mỗi tick, `tickInterval` dùng cho bleed.
+- Damage over time của projectile ở mức framework, cần kiểm tra lại config/implementation trước khi dùng production.
 - Sự kiện wave clear, win, hero death và monster hit/death.
 
 ## Battle còn có thể làm
@@ -55,7 +58,7 @@
 
 - Tạo prefab thật cho shotgun, rifle, sniper, magic bolt, AOE, chain lightning, poison cloud, heal và fireball.
 - Nối các field skill đang có nhưng chưa dùng: cooldown, explosion, execute dưới ngưỡng HP, skill/ultimate riêng.
-- Thêm trạng thái: stun, slow, poison, burn, knockback và resistance.
+- Mở rộng trạng thái: poison, burn, knockback, resistance, stacking và icon/UI thời gian còn lại.
 - Thêm nhiều loại monster: tank, ranged, healer, elite và boss; mỗi loại có behavior/target priority riêng.
 - Thêm wave modifier và boss wave để tránh 5 wave hiện tại chỉ tăng số lượng quái.
 
