@@ -114,7 +114,6 @@ namespace _GameToolkit.Skills
         {
             if (totalHit >= hitCount)
             {
-                Debug.Log($"[PSA] blocked overlap: totalHit={totalHit} >= hitCount={hitCount}");
                 Shutdown();
                 return;
             }
@@ -135,7 +134,7 @@ namespace _GameToolkit.Skills
             }
             else
             {
-                Debug.Log($"[PSA] DUP overlap unique={unique.name} ignored (already counted this interval)");
+                // overlap trùng unique trong cùng chu kỳ hitInterval -> bỏ qua (dedupe)
             }
         }
     }

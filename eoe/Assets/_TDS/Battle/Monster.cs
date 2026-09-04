@@ -47,8 +47,6 @@ namespace _TDS.Battle
         {
             if (damage <= 0 || CurrentHealth <= 0) return;
 
-            Debug.Log($"[Monster:{name}] TakeDamage({damage}) hp {CurrentHealth} -> {CurrentHealth - damage}");
-
             CurrentHealth = Mathf.Max(0, CurrentHealth - damage);
 
             if (CurrentHealth <= 0) Death();

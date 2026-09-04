@@ -15,8 +15,7 @@ namespace _TDS.Battle
     /// được xử lý trong SkillProcessingUnit (tự quản vòng tick).
     ///
     /// Cách map SkillConfigData:
-    /// - totalDuration = projectileStartDuration + projectileDuration + projectileEndDuration
-    /// - start/end dành cho trajectory đặc biệt (tạm thời pending, không xử lý)
+    /// - totalDuration = projectileDuration (đạn bay đúng thời gian này rồi tự huỷ)
     /// - collisionDelayInit / collisionDuration: cửa sổ bật/tắt detector va chạm
     /// - hitCount: giới hạn số target (min 1)
     /// - hitInterval > 0: DOT (tick damage lặp). = 0: hit 1 lần
@@ -89,9 +88,8 @@ namespace _TDS.Battle
             int parallelCount = Mathf.Max(0, skillConfig.parallelProjectileCount);
             int spreadCount = Mathf.Max(0, skillConfig.spreadProjectileCount);
 
-            // totalDuration
-            float totalDuration = Mathf.Max(0.01f,
-                skillConfig.projectileStartDuration + skillConfig.projectileDuration + skillConfig.projectileEndDuration);
+            // totalDuration = thời gian bay hết projectileDuration (đạn bay rồi tự huỷ)
+            float totalDuration = Mathf.Max(0.01f, skillConfig.projectileDuration);
 
             int hitCount = Mathf.Max(1, skillConfig.hitCount);
 
@@ -197,11 +195,7 @@ namespace _TDS.Battle
 
                 float dmg = damageScale; // base damage; Hero nhân với attack stat
 
-                Debug.Log($"[SkillFactory] HIT scale={damageScale} monster hpBefore={m.CurrentHealth} isDot={isDot}");
-
                 onDamage?.Invoke(m, dmg);
-
-                Debug.Log($"[SkillFactory] hpAfter={m.CurrentHealth} totalDamage={dmg}\n");
 
                 if (isDot)
                 {

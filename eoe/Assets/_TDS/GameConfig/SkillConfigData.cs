@@ -11,9 +11,7 @@ namespace _TDS.GameConfig
         public float damageTickInterval;
         public TargetSelectionType findTarget;
         public float projectileSpeed;
-        public float projectileStartDuration;
         public float projectileDuration;
-        public float projectileEndDuration;
         public float sizeMultiplier;
         public float collisionDelayInit;
         public float collisionDuration;
