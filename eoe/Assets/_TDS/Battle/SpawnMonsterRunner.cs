@@ -31,15 +31,59 @@ namespace _TDS.Battle
         private int waveIndex;
 
         public event Action<int> OnSpawnCompleted;
+        /// <summary>Đã spawn xong wave + giết hết quái -> wave cleared (waveIndex vừa xong).</summary>
+        public event Action<int> OnWaveCleared;
+        /// <summary>Diệt hết quái wave cuối -> thắng game.</summary>
+        public event Action OnGameWin;
         public bool IsPaused { get; set; }
+        /// <summary>Đã spawn hết toàn bộ wave config.</summary>
         public bool IsCompleted { get; private set; }
-        
+
+        public int CurrentWave => waveIndex;
+        private bool waitingKillAll; // spawn xong wave, đang chờ diệt hết quái trên sân
+
         public override void Tick(float deltaTime)
         {
+            // đang chờ diệt hết quái của wave vừa spawn xong (KHÔNG bị IsPaused chặn)
+            if (waitingKillAll)
+            {
+                if (agentMovementRunner.AliveCount > 0) return;
+
+                // hết quái trên sân -> wave cleared
+                waitingKillAll = false;
+
+                int clearedWave = waveIndex;
+                OnWaveCleared?.Invoke(clearedWave);
+                Debug.Log($"[SpawnMonsterRunner] Wave {clearedWave} cleared");
+
+                if (waveIndex >= maximumWave)
+                {
+                    // diệt hết wave cuối -> win
+                    IsCompleted = true;
+                    OnGameWin?.Invoke();
+                    Debug.Log($"[SpawnMonsterRunner] WIN GAME! All waves cleared (wave {clearedWave}/{maximumWave})");
+                    return;
+                }
+
+                waveIndex++;
+                LoadWaveConfigData(waveIndex);
+                IsPaused = false; // resume spawn wave mới
+                Debug.Log($"[SpawnMonsterRunner] Start wave {waveIndex}");
+                return;
+            }
+
             if (IsPaused || IsCompleted || currents == null || timers == null) return;
 
-            bool isWaveCompleted = true;
+            // spawn xong wave (timer hết) -> chuyển sang chờ diệt hết quái
+            if (AllTimersFinished())
+            {
+                waitingKillAll = true;
+                IsPaused = true; // tạm pause spawn (chờ kill all)
+                OnSpawnCompleted?.Invoke(waveIndex);
+                return;
+            }
 
+            // đang spawn wave hiện tại
             for (var i = 0; i < currents.Count; i++)
             {
                 SpawnTimer data = timers[i];
@@ -51,23 +95,18 @@ namespace _TDS.Battle
                     for (int j = 0; j < count; j++) SpawnMonster(currents[i]);
                 }
 
-                if (!data.IsFinished) isWaveCompleted = false;
-
                 timers[i] = data;
             }
+        }
 
-            if (isWaveCompleted)
+        private bool AllTimersFinished()
+        {
+            if (timers == null) return true;
+            for (int i = 0; i < timers.Length; i++)
             {
-                IsPaused = true;
-
-                int wave = waveIndex;
-
-                waveIndex++;
-
-                LoadWaveConfigData(waveIndex);
-
-                OnSpawnCompleted?.Invoke(wave);
+                if (!timers[i].IsFinished) return false;
             }
+            return true;
         }
 
         public async UniTask LoadLevelAsync(AgentMovementRunner agent, int level)

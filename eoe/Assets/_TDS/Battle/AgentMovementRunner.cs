@@ -24,6 +24,9 @@ namespace _TDS.Battle
             simulator.Initialize();
         }
 
+        /// <summary>Số quái còn sống trên sân (container = agent chưa bị remove khi chết).</summary>
+        public int AliveCount => container.Count;
+
         private void OnEnable()
         {
             Monster.OnMonsterDisable += RemoveAgent;

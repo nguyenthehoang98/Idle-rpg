@@ -47,6 +47,11 @@ namespace _TDS.Gameplay
             
             SkillFactory.Initialize(skillRunner.Unit);
 
+            // theo dõi wave: spawn xong -> chờ kill all -> wave mới -> hết wave -> win
+            spawnRunner.OnSpawnCompleted += OnWaveSpawnCompleted;
+            spawnRunner.OnWaveCleared += OnWaveCleared;
+            spawnRunner.OnGameWin += OnGameWin;
+
             await spawnRunner.LoadLevelAsync(agentRunner, level);
 
             await heroSlotManager.BuildHeroes(heroIds);
@@ -62,10 +67,26 @@ namespace _TDS.Gameplay
 
         private void OnDestroy()
         {
-            spawnRunner.Dispose();
-            agentRunner.Dispose();
+            if (spawnRunner != null)
+            {
+                spawnRunner.OnSpawnCompleted -= OnWaveSpawnCompleted;
+                spawnRunner.OnWaveCleared -= OnWaveCleared;
+                spawnRunner.OnGameWin -= OnGameWin;
+            }
+
+            spawnRunner?.Dispose();
+            agentRunner?.Dispose();
             SkillFactory.Dispose();
         }
+
+        private void OnWaveSpawnCompleted(int wave) =>
+            Debug.Log($"[Gameplay] Wave {wave} spawn xong, chờ diệt hết quái...");
+
+        private void OnWaveCleared(int wave) =>
+            Debug.Log($"[Gameplay] Diệt hết quái wave {wave} -> wave mới");
+
+        private void OnGameWin() =>
+            Debug.Log("[Gameplay] 🏆 WIN GAME! Diệt hết toàn bộ quái vật");
 
         private void TimeScaleChanged(float deltaTime)
         {

@@ -103,6 +103,8 @@ namespace _TDS.Battle
 
             OnDeath?.Invoke();
 
+            Debug.Log($"[Monster:{name}] Death");
+
             if (deathVfx != null)
             {
                 GameObject ps = Pool.Instantiate(deathVfx.gameObject);
