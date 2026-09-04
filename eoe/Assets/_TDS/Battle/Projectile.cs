@@ -58,6 +58,13 @@ namespace _TDS.Battle
             // không làm gì: hướng + speed cố định
         }
 
+        /// <summary>Di chuyển 1 bước mỗi tick. Base: tiến thẳng theo direction*speed.
+        /// Subclass ghi đè để tự đặt vị trí (lerp theo curve, đuổi target...).</summary>
+        protected virtual void Move(float dt)
+        {
+            transform.position += direction * (speed * dt);
+        }
+
         /// <summary>Được ProjectileTickRunner gọi mỗi tick 30Hz (đồng bộ với va chạm).</summary>
         public void Tick(float deltaTime)
         {
@@ -67,7 +74,7 @@ namespace _TDS.Battle
 
             elapsed += deltaTime;
 
-            transform.position += direction * (speed * deltaTime);
+            Move(deltaTime);
 
             if (elapsed >= totalDuration) DestroySelf();
         }
