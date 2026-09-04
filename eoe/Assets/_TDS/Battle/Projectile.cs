@@ -1,5 +1,6 @@
 using System;
 using _GameToolkit.ResourceManagement;
+using _GameToolkit.Updater;
 using UnityEngine;
 
 namespace _TDS.Battle
@@ -8,11 +9,13 @@ namespace _TDS.Battle
     /// Projectile base: tự quản lý vòng đời (bay, tự huỷ sau duration). Skill chỉ spawn
     /// + đăng ký va chạm, không can thiệp quỹ đạo.
     ///
-    /// Quỹ đạo = hướng/tốc độ hiện tại, cập nhật mỗi frame qua UpdateMotion(dt).
-    /// Subclass ghi đè UpdateMotion để có quỹ đạo riêng (cong, boomerang, đuổi theo target...)
-    /// mà không cần sửa Skill/SkillFactory.
+    /// Đạn di chuyển theo tick 30Hz (ProjectileTickRunner, cùng nhịp ColliderTickRunner)
+    /// chứ KHÔNG theo frame Unity -> đồng bộ với va chạm, không xuyên monster.
+    ///
+    /// Quỹ đạo = hướng/tốc độ hiện tại, cập nhật mỗi tick qua UpdateMotion(dt).
+    /// Subclass ghi đè UpdateMotion để có quỹ đạo riêng (cong, boomerang, đuổi target...).
     /// </summary>
-    public class Projectile : MonoBehaviour
+    public class Projectile : MonoBehaviour, ITickRunner
     {
         protected Vector3 direction;
         protected float speed;
@@ -20,6 +23,7 @@ namespace _TDS.Battle
         protected float elapsed;
         protected bool running;
         protected bool destroyed;
+        private bool registered;
 
         /// <summary>Đạn bay hết duration (hoặc bị StopMotion) -> skill có thể dọn action nếu cần.</summary>
         public event Action OnFinished;
@@ -37,6 +41,8 @@ namespace _TDS.Battle
             OnSetup(from);
 
             RotateToDirection();
+
+            RegisterTick();
         }
 
         /// <summary>Hook khởi tạo cho subclass (lưu vị trí gốc, tham số quỹ đạo...).</summary>
@@ -44,10 +50,24 @@ namespace _TDS.Battle
         {
         }
 
-        /// <summary>Cập nhật quỹ đạo mỗi frame. Base: bay thẳng. Subclass ghi đè để đổi hướng/tốc độ.</summary>
+        /// <summary>Cập nhật quỹ đạo mỗi tick. Base: bay thẳng. Subclass ghi đè để đổi hướng/tốc độ.</summary>
         protected virtual void UpdateMotion(float dt)
         {
             // không làm gì: hướng + speed cố định
+        }
+
+        /// <summary>Được ProjectileTickRunner gọi mỗi tick 30Hz (đồng bộ với va chạm).</summary>
+        public void Tick(float deltaTime)
+        {
+            if (!running) return;
+
+            UpdateMotion(deltaTime);
+
+            elapsed += deltaTime;
+
+            transform.position += direction * (speed * deltaTime);
+
+            if (elapsed >= totalDuration) DestroySelf();
         }
 
         /// <summary>Dừng bay tại chỗ (DOT: giữ vị trí để detector còn overlap).</summary>
@@ -61,8 +81,23 @@ namespace _TDS.Battle
             if (destroyed) return;
             destroyed = true;
             running = false;
+            UnregisterTick();
             OnFinished?.Invoke();
             Pool.Destroy(gameObject);
+        }
+
+        private void RegisterTick()
+        {
+            if (registered || ProjectileTickRunner.Instance == null) return;
+            registered = true;
+            ProjectileTickRunner.Instance.Add(this);
+        }
+
+        private void UnregisterTick()
+        {
+            if (!registered || ProjectileTickRunner.Instance == null) return;
+            registered = false;
+            ProjectileTickRunner.Instance.Remove(this);
         }
 
         protected void RotateToDirection()
@@ -71,17 +106,10 @@ namespace _TDS.Battle
             transform.rotation = Quaternion.Euler(0, 0, angle);
         }
 
-        protected virtual void Update()
+        protected virtual void OnDisable()
         {
-            if (!running) return;
-
-            UpdateMotion(Time.deltaTime);
-
-            elapsed += Time.deltaTime;
-
-            transform.position += direction * (speed * Time.deltaTime);
-
-            if (elapsed >= totalDuration) DestroySelf();
+            // object về pool (SetActive false) -> phải rời khỏi runner để không tick object ẩn
+            UnregisterTick();
         }
     }
 }
