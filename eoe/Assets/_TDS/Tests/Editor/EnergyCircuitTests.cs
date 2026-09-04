@@ -181,6 +181,78 @@ namespace _TDS.Tests.Editor
         }
 
         [Test]
+        public void GeneratorAddsEnergyToTheNextContentSlot()
+        {
+            EnergyCircuit circuit = new EnergyCircuit();
+            circuit.SetItem(0, 201, CircuitItemType.Generator);
+            circuit.SetContent(1, CircuitSlotContent.Hero(101));
+
+            circuit.Tick(circuit.PulseInterval, new List<CircuitActivationEvent>());
+
+            Assert.That(circuit.GetSlot(0).Stack, Is.EqualTo(1));
+            Assert.That(circuit.GetSlot(1).Stack, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void GeneratorAndHeroAccumulateTogether()
+        {
+            EnergyCircuit circuit = new EnergyCircuit();
+            circuit.SetItem(0, 201, CircuitItemType.Generator);
+            circuit.SetContent(1, CircuitSlotContent.Hero(101));
+
+            circuit.Tick(circuit.PulseInterval * 2f, new List<CircuitActivationEvent>());
+
+            Assert.That(circuit.GetSlot(1).Stack, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void AmplifierAddsAnExtraStackToTheNextContentSlot()
+        {
+            EnergyCircuit circuit = new EnergyCircuit();
+            circuit.SetItem(0, 202, CircuitItemType.Amplifier);
+            circuit.SetContent(1, CircuitSlotContent.Hero(101));
+
+            circuit.Tick(circuit.PulseInterval, new List<CircuitActivationEvent>());
+
+            Assert.That(circuit.GetSlot(1).Stack, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void BatteryStoresOverflowAndRestoresItAfterOverdrive()
+        {
+            EnergyCircuit circuit = new EnergyCircuit();
+            circuit.SetItem(0, 202, CircuitItemType.Amplifier, 3);
+            circuit.SetItem(1, 203, CircuitItemType.Battery);
+            List<CircuitActivationEvent> activations = new List<CircuitActivationEvent>();
+
+            circuit.Tick(circuit.PulseInterval * 2f, activations);
+
+            Assert.That(activations, Has.Count.EqualTo(1));
+            Assert.That(activations[0].SlotIndex, Is.EqualTo(1));
+            Assert.That(activations[0].StackAtActivation, Is.EqualTo(4));
+            Assert.That(circuit.GetSlot(1).StoredEnergy, Is.EqualTo(1));
+
+            circuit.Tick(circuit.OverdriveDuration, activations);
+
+            Assert.That(circuit.GetSlot(1).IsActive, Is.False);
+            Assert.That(circuit.GetSlot(1).Stack, Is.EqualTo(1));
+            Assert.That(circuit.GetSlot(1).StoredEnergy, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void RelayTransfersItsAccumulatedStackToTheNextContentSlot()
+        {
+            EnergyCircuit circuit = new EnergyCircuit();
+            circuit.SetItem(0, 204, CircuitItemType.Relay);
+            circuit.SetContent(1, CircuitSlotContent.Hero(101));
+
+            circuit.Tick(circuit.PulseInterval * 9f, new List<CircuitActivationEvent>());
+
+            Assert.That(circuit.GetSlot(0).Stack, Is.EqualTo(2));
+            Assert.That(circuit.GetSlot(1).Stack, Is.EqualTo(2));
+        }
+
+        [Test]
         public void SlotIndexMustBeWithinCircuit()
         {
             EnergyCircuit circuit = new EnergyCircuit();

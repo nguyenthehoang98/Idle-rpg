@@ -3,6 +3,15 @@ using System.Collections.Generic;
 
 namespace _TDS.Battle
 {
+    public enum CircuitItemType
+    {
+        None,
+        Generator,
+        Amplifier,
+        Battery,
+        Relay,
+    }
+
     public enum CircuitSlotContentType
     {
         Empty,
@@ -48,13 +57,19 @@ namespace _TDS.Battle
     {
         public CircuitSlotContent Content { get; }
         public int Stack { get; }
+        public int StoredEnergy { get; }
         public float ActiveRemaining { get; }
         public bool IsActive => ActiveRemaining > 0f;
 
-        internal CircuitSlotState(CircuitSlotContent content, int stack, float activeRemaining)
+        internal CircuitSlotState(
+            CircuitSlotContent content,
+            int stack,
+            float activeRemaining,
+            int storedEnergy = 0)
         {
             Content = content;
             Stack = stack;
+            StoredEnergy = storedEnergy;
             ActiveRemaining = activeRemaining;
         }
     }
@@ -81,6 +96,8 @@ namespace _TDS.Battle
         public const float DefaultOverdriveDuration = 5f;
 
         private readonly CircuitSlotState[] slots;
+        private readonly CircuitItemType[] itemTypes;
+        private readonly int[] itemPowers;
 
         public int SlotCount => slots.Length;
         public float PulseInterval { get; }
@@ -103,6 +120,8 @@ namespace _TDS.Battle
             if (overdriveDuration <= 0f) throw new ArgumentOutOfRangeException(nameof(overdriveDuration));
 
             slots = new CircuitSlotState[slotCount];
+            itemTypes = new CircuitItemType[slotCount];
+            itemPowers = new int[slotCount];
             PulseInterval = pulseInterval;
             ActivationThreshold = activationThreshold;
             OverdriveDuration = overdriveDuration;
@@ -118,7 +137,27 @@ namespace _TDS.Battle
         public void SetContent(int index, CircuitSlotContent content)
         {
             ValidateSlotIndex(index);
+            itemTypes[index] = CircuitItemType.None;
+            itemPowers[index] = 1;
             slots[index] = new CircuitSlotState(content, 0, 0f);
+        }
+
+        public void SetItem(int index, int id, CircuitItemType type, int power = 1)
+        {
+            ValidateSlotIndex(index);
+            if (type == CircuitItemType.None)
+            {
+                throw new ArgumentException("An item slot needs an item type.", nameof(type));
+            }
+
+            if (power <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(power), power, "Item power must be positive.");
+            }
+
+            itemTypes[index] = type;
+            itemPowers[index] = power;
+            slots[index] = new CircuitSlotState(CircuitSlotContent.Item(id), 0, 0f);
         }
 
         public void Tick(float deltaTime, List<CircuitActivationEvent> activations)
@@ -162,27 +201,77 @@ namespace _TDS.Battle
                 }
 
                 float activeRemaining = Math.Max(0f, slot.ActiveRemaining - deltaTime);
-                slots[i] = new CircuitSlotState(slot.Content, slot.Stack, activeRemaining);
+                int stack = slot.Stack;
+                int storedEnergy = slot.StoredEnergy;
+                if (activeRemaining <= 0f && storedEnergy > 0)
+                {
+                    int restored = Math.Min(storedEnergy, ActivationThreshold - 1);
+                    stack = restored;
+                    storedEnergy -= restored;
+                }
+
+                slots[i] = new CircuitSlotState(slot.Content, stack, activeRemaining, storedEnergy);
             }
         }
 
         private void ProcessPulse(List<CircuitActivationEvent> activations)
         {
-            CircuitSlotState slot = slots[PulseIndex];
+            CircuitSlotState beforePulse = slots[PulseIndex];
+            if (beforePulse.Content.Type == CircuitSlotContentType.Empty || beforePulse.IsActive)
+            {
+                return;
+            }
+
+            ApplyEnergy(PulseIndex, 1, activations);
+            CircuitSlotState afterPulse = slots[PulseIndex];
+            if (afterPulse.IsActive)
+            {
+                return;
+            }
+
+            int nextIndex = (PulseIndex + 1) % SlotCount;
+            switch (itemTypes[PulseIndex])
+            {
+                case CircuitItemType.Generator:
+                    ApplyEnergy(nextIndex, itemPowers[PulseIndex], activations);
+                    break;
+                case CircuitItemType.Amplifier:
+                    ApplyEnergy(nextIndex, itemPowers[PulseIndex] + 1, activations);
+                    break;
+                case CircuitItemType.Relay:
+                    ApplyEnergy(nextIndex, beforePulse.Stack, activations);
+                    break;
+            }
+        }
+
+        private void ApplyEnergy(int index, int amount, List<CircuitActivationEvent> activations)
+        {
+            if (amount <= 0)
+            {
+                return;
+            }
+
+            CircuitSlotState slot = slots[index];
             if (slot.Content.Type == CircuitSlotContentType.Empty || slot.IsActive)
             {
                 return;
             }
 
-            int stack = slot.Stack + 1;
+            int stack = slot.Stack + amount;
             if (stack < ActivationThreshold)
             {
-                slots[PulseIndex] = new CircuitSlotState(slot.Content, stack, 0f);
+                slots[index] = new CircuitSlotState(slot.Content, stack, 0f, slot.StoredEnergy);
                 return;
             }
 
-            activations.Add(new CircuitActivationEvent(PulseIndex, slot.Content, stack));
-            slots[PulseIndex] = new CircuitSlotState(slot.Content, 0, OverdriveDuration);
+            int storedEnergy = slot.StoredEnergy;
+            if (itemTypes[index] == CircuitItemType.Battery)
+            {
+                storedEnergy += stack - ActivationThreshold;
+            }
+
+            activations.Add(new CircuitActivationEvent(index, slot.Content, stack));
+            slots[index] = new CircuitSlotState(slot.Content, 0, OverdriveDuration, storedEnergy);
         }
 
         public void Reset()
@@ -192,6 +281,8 @@ namespace _TDS.Battle
 
             for (int i = 0; i < slots.Length; i++)
             {
+                itemTypes[i] = CircuitItemType.None;
+                itemPowers[i] = 1;
                 slots[i] = new CircuitSlotState(CircuitSlotContent.Empty, 0, 0f);
             }
         }

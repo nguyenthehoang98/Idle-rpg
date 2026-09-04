@@ -77,19 +77,19 @@ Mỗi hero nên có một Overdrive identity rõ ràng:
 
 ### Generator
 
-Tạo thêm stack cho slot kế tiếp hoặc tăng tốc pulse trong phạm vi nhỏ.
+Khi pulse đi qua, Generator nhận stack cơ bản và tạo thêm `power` stack cho slot kế tiếp.
 
 ### Amplifier
 
-Tăng số stack hero nhận khi pulse đi qua.
+Khi pulse đi qua, slot kế tiếp nhận `1 + power` stack; `power = 1` là tuning mặc định.
 
 ### Battery
 
-Giữ stack dư và dùng cho lần kích hoạt tiếp theo.
+Khi số stack nhận vào vượt activation threshold, Battery lưu phần dư. Khi Overdrive kết thúc, phần dư được hoàn trả vào stack, tối đa `threshold - 1`.
 
 ### Relay
 
-Chuyển một phần stack sang slot kế bên.
+Khi pulse đi qua, Relay nhận stack cơ bản và chuyển stack đã có trước pulse sang slot kế tiếp. Relay không làm thay đổi thứ tự pulse.
 
 ### Converter
 

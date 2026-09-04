@@ -16,14 +16,14 @@
 |---|---:|---|
 | Big 0 - Contract | 4/4 | Done |
 | Big 0.5 - Remote verification | 3/5 | Partial - compile/EditMode ready |
-| Big 1 - Circuit simulation | 4/5 | In progress |
+| Big 1 - Circuit simulation | 5/5 | Done |
 | Big 2 - Combat integration | 1/6 | In progress |
 | Big 3 - Shop loop | 0/6 | Not started |
 | Big 4 - Augments | 0/5 | Not started |
 | Big 5 - Content/tuning | 0/5 | Not started |
 | Big 6 - Verification | 0/4 | Not started |
 
-**Current status:** Design docs đã commit; Energy Circuit core 4/5; hero combat engagement đã fix và verify.
+**Current status:** Design docs đã commit; Energy Circuit core 5/5; item modifiers đã test và verify; hero combat engagement đã fix và verify.
 
 ---
 
@@ -197,17 +197,17 @@
 
 **Files dự kiến:** `EnergyCircuit.cs`, `EnergyCircuitTests.cs`.
 
-## C-04 - Implement item modifiers `[P0]`
+## C-04 - Implement item modifiers `[P0]` `[x]`
 
-- [ ] Generator tăng stack hoặc pulse theo contract.
-- [ ] Amplifier tăng stack nhận được.
-- [ ] Battery lưu stack dư theo contract.
-- [ ] Relay chuyển stack sang slot kế tiếp.
-- [ ] Item modifier không phá thứ tự pulse.
+- [x] Generator tăng stack cho slot kế tiếp theo contract.
+- [x] Amplifier tăng stack nhận được.
+- [x] Battery lưu stack dư theo contract.
+- [x] Relay chuyển stack sang slot kế tiếp.
+- [x] Item modifier không phá thứ tự pulse.
 
 **Acceptance:** Mỗi item có một test behavior; không dùng reflection để test private state.
 
-**Verify:** Unit test từng item và một test combo Generator → Hero.
+**Verify:** `tools/verify-unity.ps1 -Mode all` — compile pass, 28 EditMode tests pass; test combo Generator → Hero pass.
 
 **Files dự kiến:** `EnergyCircuit.cs`, item data/config, tests.
 

@@ -5,7 +5,7 @@
 **Draft - dùng để triển khai sau khi Big Todo 0 được xác nhận.**
 
 - Design docs: hoàn tất.
-- Code implementation: chưa bắt đầu.
+- Code implementation: circuit core C-01 đến C-05 hoàn tất; combat/shop còn lại.
 - Các mục `Open` là blocker trước khi code phần phụ thuộc.
 
 ## Mục tiêu MVP
@@ -42,14 +42,14 @@ Mỗi dòng là một increment độc lập. Chỉ chuyển sang dòng tiếp t
 |---:|---|---|---|---|
 | 0 | Verification foundation | Compile/EditMode chạy headless | `verify-unity.ps1 -Mode all` pass | Đã xong |
 | 1 | Contract lock | Chốt D-01 đến D-04 | Không còn blocker gameplay cho circuit | 1 phiên |
-| 2 | Circuit core | Làm C-01 đến C-05 | Circuit tests pass, không cần scene | 1-2 phiên |
+| 2 | Circuit core | Làm C-01 đến C-05 | Circuit tests pass, không cần scene | Đã xong |
 | 3 | Combat slice | Làm B-01 đến B-05 | Một wave có Overdrive hoạt động | 1-2 phiên |
 | 4 | Shop slice | Làm S-01 đến S-06 | Wave → Shop → wave pass | 2 phiên |
 | 5 | Augment slice | Làm A-01 đến A-05 | Wave 3 chọn Augment và ảnh hưởng build | 1-2 phiên |
 | 6 | Content/tuning | Làm T-01 đến T-05 | 5 wave + boss có ít nhất 2 build | 2 phiên |
 | 7 | Self-play/QA | Làm R-04, R-05 và V-01 đến V-04 | Headless self-play lặp lại ổn định | 1-2 phiên |
 
-**Next action:** bắt đầu `C-01` bằng test contract/state. Không mở rộng content trước khi Checkpoint A và B pass.
+**Next action:** bắt đầu `B-01` bằng board runtime và giữ combat slice nhỏ. Không mở rộng content trước khi Checkpoint B pass.
 
 ## Nguyên tắc kiến trúc
 
