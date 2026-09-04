@@ -142,6 +142,45 @@ namespace _TDS.Tests.Editor
         }
 
         [Test]
+        public void CircuitSupportsMultipleContentSlots()
+        {
+            EnergyCircuit circuit = new EnergyCircuit();
+            circuit.SetContent(0, CircuitSlotContent.Hero(101));
+            circuit.SetContent(1, CircuitSlotContent.Item(201));
+            List<CircuitActivationEvent> activations = new List<CircuitActivationEvent>();
+
+            circuit.Tick(1f, activations);
+
+            Assert.That(circuit.GetSlot(0).Stack, Is.EqualTo(1));
+            Assert.That(circuit.GetSlot(1).Stack, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void CircuitCanRunThreeCompleteLoops()
+        {
+            EnergyCircuit circuit = new EnergyCircuit();
+
+            circuit.Tick(circuit.PulseInterval * circuit.SlotCount * 3, new List<CircuitActivationEvent>());
+
+            Assert.That(circuit.PulseIndex, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void ResetReturnsCircuitToInitialState()
+        {
+            EnergyCircuit circuit = new EnergyCircuit();
+            circuit.SetContent(0, CircuitSlotContent.Hero(101));
+            circuit.Tick(8.5f, new List<CircuitActivationEvent>());
+
+            circuit.Reset();
+
+            Assert.That(circuit.PulseIndex, Is.EqualTo(0));
+            Assert.That(circuit.GetSlot(0).Content.Type, Is.EqualTo(CircuitSlotContentType.Empty));
+            Assert.That(circuit.GetSlot(0).Stack, Is.EqualTo(0));
+            Assert.That(circuit.GetSlot(0).IsActive, Is.False);
+        }
+
+        [Test]
         public void SlotIndexMustBeWithinCircuit()
         {
             EnergyCircuit circuit = new EnergyCircuit();

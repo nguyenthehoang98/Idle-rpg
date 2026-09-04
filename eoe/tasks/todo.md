@@ -16,7 +16,7 @@
 |---|---:|---|
 | Big 0 - Contract | 4/4 | Done |
 | Big 0.5 - Remote verification | 3/5 | Partial - compile/EditMode ready |
-| Big 1 - Circuit simulation | 3/5 | In progress |
+| Big 1 - Circuit simulation | 4/5 | In progress |
 | Big 2 - Combat integration | 0/5 | Not started |
 | Big 3 - Shop loop | 0/6 | Not started |
 | Big 4 - Augments | 0/5 | Not started |
@@ -211,16 +211,16 @@
 
 **Files dự kiến:** `EnergyCircuit.cs`, item data/config, tests.
 
-## C-05 - Checkpoint circuit `[P0]`
+## C-05 - Checkpoint circuit `[P0]` `[x]`
 
-- [ ] Test circuit với 8 slot.
-- [ ] Test nhiều hero/item trong cùng circuit.
-- [ ] Test circuit chạy liên tục ít nhất 3 vòng.
-- [ ] Test circuit dispose/reset nếu có resource native hoặc pooled state.
+- [x] Test circuit với 8 slot.
+- [x] Test nhiều hero/item trong cùng circuit.
+- [x] Test circuit chạy liên tục ít nhất 3 vòng.
+- [x] Test circuit reset; circuit hiện chưa giữ resource native hoặc pooled state.
 
 **Acceptance:** Circuit test suite pass và không có allocation/resource leak mới.
 
-**Verify:** Unity EditMode tests và `git diff --check`.
+**Verify:** `tools/verify-unity.ps1 -Mode all` — compile pass, 21 EditMode tests pass; `git diff --check` pass.
 
 ---
 
