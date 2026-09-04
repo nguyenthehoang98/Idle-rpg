@@ -10,6 +10,7 @@ namespace _TDS.Battle
         CritDamage = 6,
         SkillCooldown = 7,
         ExpMultiplier = 8,
+        Lifesteal = 9,
         AttackSpeed = 10,
     }
 }

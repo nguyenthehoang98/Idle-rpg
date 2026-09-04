@@ -50,13 +50,15 @@ namespace _TDS.Battle
             AttackTimer = 0f;
         }
 
-        public void TakeDamage(int damage)
+        public int TakeDamage(int damage)
         {
-            if (damage <= 0 || CurrentHealth <= 0) return;
+            if (damage <= 0 || CurrentHealth <= 0) return 0;
 
-            CurrentHealth = Mathf.Max(0, CurrentHealth - damage);
+            int dealt = Mathf.Min(damage, CurrentHealth);
+            CurrentHealth -= dealt;
 
             if (CurrentHealth <= 0) Death();
+            return dealt;
         }
 
         private bool isInitialized;

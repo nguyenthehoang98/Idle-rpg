@@ -14,6 +14,7 @@ namespace _TDS.GameConfig
         public float attackSpeed;
         public float critChance;
         public float critDamage;
+        public float lifesteal;
         public float skillCooldown;
         public float expMultiplier;
         

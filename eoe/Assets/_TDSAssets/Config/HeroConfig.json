@@ -9,6 +9,7 @@
       "attackSpeed": 0.5,
       "critChance": 0.5,
       "critDamage": 1.0,
+      "lifesteal": 0.0,
       "skillCooldown": 2.0,
       "expMultiplier": 1.0,
       "attackId": 2001,

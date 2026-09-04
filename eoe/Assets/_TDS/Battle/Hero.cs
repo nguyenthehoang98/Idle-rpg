@@ -100,6 +100,7 @@ namespace _TDS.Battle
                 { StatId.AttackSpeed, new Stat(heroConfigData.attackSpeed) },
                 { StatId.CritChance, new Stat(heroConfigData.critChance) },
                 { StatId.CritDamage, new Stat(heroConfigData.critDamage) },
+                { StatId.Lifesteal, new Stat(heroConfigData.lifesteal) },
                 { StatId.SkillCooldown, new Stat(heroConfigData.skillCooldown) },
                 { StatId.ExpMultiplier, new Stat(heroConfigData.expMultiplier) },
             };
@@ -174,13 +175,28 @@ namespace _TDS.Battle
         protected virtual void CastSkill(Monster target)
         {
             float attack = GetStat(StatId.Attack).Value;
+            float critChance = GetStat(StatId.CritChance).Value;
+            float critDamage = GetStat(StatId.CritDamage).Value;
+            float lifesteal = GetStat(StatId.Lifesteal).Value;
 
             // bắn projectile từ vị trí hero tới target
             SkillFactory.CastSkillAsync(SkillConfig, transform.position, target, (monster, damage) =>
             {
+                CombatDamage.DamageResult result = CombatDamage.Calculate(
+                    damage, attack, critChance, critDamage, UnityEngine.Random.value);
                 monster.BeHit(); // kích hoạt OnBeHit (animation/hiệu ứng trúng đòn)
-                monster.TakeDamage((int)(damage * attack));
+                int dealt = monster.TakeDamage(result.Amount);
+
+                if (dealt <= 0) return;
+
+                Heal(CombatDamage.CalculateLifeSteal(dealt, lifesteal));
             }).Forget();
+        }
+
+        public void Heal(int amount)
+        {
+            if (amount <= 0 || IsDead) return;
+            CurrentHealth = Mathf.Min(MaxHealth, CurrentHealth + amount);
         }
     }
 }
