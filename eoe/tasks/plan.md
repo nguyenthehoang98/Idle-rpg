@@ -43,7 +43,7 @@ Mỗi dòng là một increment độc lập. Chỉ chuyển sang dòng tiếp t
 | 0 | Verification foundation | Compile/EditMode chạy headless | `verify-unity.ps1 -Mode all` pass | Đã xong |
 | 1 | Contract lock | Chốt D-01 đến D-04 | Không còn blocker gameplay cho circuit | 1 phiên |
 | 2 | Circuit core | Làm C-01 đến C-05 | Circuit tests pass, không cần scene | Đã xong |
-| 3 | Combat slice | Làm B-01 đến B-05 | Một wave có Overdrive hoạt động | 1-2 phiên |
+| 3 | Combat slice | Làm B-01 đến B-05 | Một wave có Overdrive hoạt động | Đang làm — B-01 xong |
 | 4 | Shop slice | Làm S-01 đến S-06 | Wave → Shop → wave pass | 2 phiên |
 | 5 | Augment slice | Làm A-01 đến A-05 | Wave 3 chọn Augment và ảnh hưởng build | 1-2 phiên |
 | 6 | Content/tuning | Làm T-01 đến T-05 | 5 wave + boss có ít nhất 2 build | 2 phiên |
@@ -112,7 +112,7 @@ V-01..V-04: Full verification + MVP sign-off
 - EditMode tests headless pass.
 - Script trả exit code khác 0 khi compile/test fail.
 - Artifact log/XML có thể đọc lại từ terminal.
-- Headless PlayMode smoke test còn là task sau khi combat loop chạy được.
+- Headless PlayMode smoke test còn là task sau khi combat loop chạy được; B-01 đã có board contract verification.
 
 ### Checkpoint A - Circuit isolated
 

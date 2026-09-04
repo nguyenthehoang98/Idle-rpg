@@ -16,10 +16,15 @@ namespace _TDS.Gameplay
         private SpawnMonsterRunner spawnRunner;
         private AgentMovementRunner agentRunner;
         private SkillTickRunner skillRunner;
+        private CircuitBoard board;
         private int level = 1;
+
+        public CircuitBoard Board => board;
         
         private void Awake()
         {
+            board = CircuitBoard.FromHeroes(heroIds);
+
             runner.TryGetRunner(out spawnRunner);
             runner.TryGetRunner(out agentRunner);
             runner.TryGetRunner(out skillRunner);
