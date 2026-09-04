@@ -17,13 +17,13 @@
 | Big 0 - Contract | 4/4 | Done |
 | Big 0.5 - Remote verification | 3/5 | Partial - compile/EditMode ready |
 | Big 1 - Circuit simulation | 5/5 | Done |
-| Big 2 - Combat integration | 4/6 | In progress |
+| Big 2 - Combat integration | 5/6 | In progress |
 | Big 3 - Shop loop | 0/6 | Not started |
 | Big 4 - Augments | 0/5 | Not started |
 | Big 5 - Content/tuning | 0/5 | Not started |
 | Big 6 - Verification | 0/4 | Not started |
 
-**Current status:** Design docs đã commit; Energy Circuit core 5/5; item modifiers, board runtime, circuit tick runner và Hero Overdrive contract đã test/verify; hero combat engagement đã fix và verify.
+**Current status:** Design docs đã commit; Energy Circuit core 5/5; item modifiers, board runtime, circuit tick runner, Hero Overdrive contract và ba Overdrive identities đã test/verify; hero combat engagement đã fix và verify.
 
 ---
 
@@ -279,16 +279,16 @@
 
 **Files dự kiến:** `Assets/_TDS/Battle/Hero.cs`, config/stat liên quan.
 
-## B-04 - Tạo 3 Overdrive identity `[P0]`
+## B-04 - Tạo 3 Overdrive identity `[P0]` `[x]`
 
-- [ ] DPS: tăng tốc đánh hoặc projectile.
-- [ ] AOE: tạo damage diện rộng hoặc chain.
-- [ ] Defense: shield/heal/damage reduction.
-- [ ] Mỗi identity có feedback khác nhau.
+- [x] DPS: tăng tốc đánh hoặc projectile.
+- [x] AOE: tạo damage diện rộng hoặc chain.
+- [x] Defense: shield/heal/damage reduction.
+- [x] Mỗi identity có feedback khác nhau.
 
 **Acceptance:** Có thể phân biệt ba Overdrive chỉ bằng gameplay/VFX.
 
-**Verify:** Manual Play Mode test trong wave có nhiều quái.
+**Verify:** `tools/verify-unity.ps1 -Mode all` — compile pass, 39 EditMode tests pass; DPS attack-speed modifier, AOE multi-target attack window và Defense shield có behavior tests.
 
 ## B-05 - Circuit combat checkpoint `[P0]`
 

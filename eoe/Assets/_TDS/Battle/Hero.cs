@@ -9,11 +9,23 @@ using UnityEngine;
 
 namespace _TDS.Battle
 {
+    public enum OverdriveIdentity
+    {
+        None,
+        Dps,
+        Aoe,
+        Defense,
+    }
+
     public class Hero : MonoBehaviour
     {
         private Dictionary<StatId, Stat> stats;
         private readonly HashSet<Monster> monsters = new HashSet<Monster>();
         private Coroutine attackCoroutine;
+        private StatModifier overdriveAttackSpeedModifier;
+        private bool hasOverdriveAttackSpeedModifier;
+
+        [SerializeField] private OverdriveIdentity overdriveIdentity = OverdriveIdentity.Dps;
 
         protected int AttackId { get; private set; }
         protected SkillConfigData SkillConfig { get; private set; }
@@ -32,6 +44,9 @@ namespace _TDS.Battle
         public bool IsOverdriveActive { get; private set; }
         public float OverdriveRemaining { get; private set; }
         public int OverdriveActivations { get; private set; }
+        public OverdriveIdentity OverdriveIdentity => overdriveIdentity;
+        public int OverdriveShield { get; private set; }
+        public bool IsAreaOverdriveActive => IsOverdriveActive && overdriveIdentity == OverdriveIdentity.Aoe;
 
         public int CurrentHealth { get; private set; }
         public int MaxHealth { get; private set; }
@@ -68,9 +83,23 @@ namespace _TDS.Battle
         {
             if (damage <= 0 || IsDead) return;
 
+            int healthBefore = CurrentHealth;
+            if (OverdriveShield > 0)
+            {
+                int absorbed = Mathf.Min(OverdriveShield, damage);
+                OverdriveShield -= absorbed;
+                damage -= absorbed;
+            }
+
+            if (damage <= 0)
+            {
+                Debug.Log($"[Hero:{name}] TakeDamage absorbed by Overdrive shield");
+                return;
+            }
+
             CurrentHealth = Mathf.Max(0, CurrentHealth - damage);
 
-            Debug.Log($"[Hero:{name}] TakeDamage({damage}) hp {CurrentHealth + damage} -> {CurrentHealth}");
+            Debug.Log($"[Hero:{name}] TakeDamage({healthBefore - CurrentHealth}) hp {healthBefore} -> {CurrentHealth}");
 
             if (CurrentHealth <= 0)
             {
@@ -99,6 +128,8 @@ namespace _TDS.Battle
             IsOverdriveActive = false;
             OverdriveRemaining = 0f;
             OverdriveActivations = 0;
+            OverdriveShield = 0;
+            hasOverdriveAttackSpeedModifier = false;
 
             MaxHealth = Mathf.Max(1, heroConfigData.health);
             CurrentHealth = MaxHealth;
@@ -185,23 +216,63 @@ namespace _TDS.Battle
 
         protected virtual void CastSkill(Monster target)
         {
+            if (IsAreaOverdriveActive)
+            {
+                float sqrRange = GetStat(StatId.AttackRange).Value;
+                sqrRange *= sqrRange;
+
+                foreach (Monster monster in monsters)
+                {
+                    if (monster == null || !monster.isActiveAndEnabled)
+                    {
+                        continue;
+                    }
+
+                    if ((monster.transform.position - transform.position).sqrMagnitude <= sqrRange)
+                    {
+                        CastSkillAtTarget(monster);
+                    }
+                }
+
+                return;
+            }
+
+            CastSkillAtTarget(target);
+        }
+
+        private void CastSkillAtTarget(Monster target)
+        {
             float attack = GetStat(StatId.Attack).Value;
             float critChance = GetStat(StatId.CritChance).Value;
             float critDamage = GetStat(StatId.CritDamage).Value;
             float lifesteal = GetStat(StatId.Lifesteal).Value;
 
-            // bắn projectile từ vị trí hero tới target
             SkillFactory.CastSkillAsync(SkillConfig, transform.position, target, (monster, damage) =>
             {
                 CombatDamage.DamageResult result = CombatDamage.Calculate(
                     damage, attack, critChance, critDamage, UnityEngine.Random.value);
-                monster.BeHit(); // kích hoạt OnBeHit (animation/hiệu ứng trúng đòn)
+                monster.BeHit();
                 int dealt = monster.TakeDamage(result.Amount);
 
                 if (dealt <= 0) return;
 
                 Heal(CombatDamage.CalculateLifeSteal(dealt, lifesteal));
             }).Forget();
+        }
+
+        public void SetOverdriveIdentity(OverdriveIdentity identity)
+        {
+            if (identity == OverdriveIdentity.None)
+            {
+                throw new ArgumentException("An active hero needs an Overdrive identity.", nameof(identity));
+            }
+
+            if (IsOverdriveActive)
+            {
+                throw new InvalidOperationException("Overdrive identity cannot change while active.");
+            }
+
+            overdriveIdentity = identity;
         }
 
         public bool TryStartOverdrive(float duration)
@@ -219,6 +290,19 @@ namespace _TDS.Battle
             IsOverdriveActive = true;
             OverdriveRemaining = duration;
             OverdriveActivations++;
+
+            switch (overdriveIdentity)
+            {
+                case OverdriveIdentity.Dps:
+                    overdriveAttackSpeedModifier = new StatModifier(0.5f, StatModType.PercentAdd, this);
+                    GetStat(StatId.AttackSpeed).AddModifier(overdriveAttackSpeedModifier);
+                    hasOverdriveAttackSpeedModifier = true;
+                    break;
+                case OverdriveIdentity.Defense:
+                    OverdriveShield = Mathf.CeilToInt(MaxHealth * 0.25f);
+                    break;
+            }
+
             OnOverdriveStarted?.Invoke(this);
             return true;
         }
@@ -242,6 +326,13 @@ namespace _TDS.Battle
             }
 
             IsOverdriveActive = false;
+            if (hasOverdriveAttackSpeedModifier)
+            {
+                GetStat(StatId.AttackSpeed).RemoveModifier(overdriveAttackSpeedModifier);
+                hasOverdriveAttackSpeedModifier = false;
+            }
+
+            OverdriveShield = 0;
             OnOverdriveEnded?.Invoke(this);
         }
 
