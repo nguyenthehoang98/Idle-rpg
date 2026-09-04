@@ -3,10 +3,10 @@
     {
       "id": 101,
       "prefabName": "hero.101",
-      "health": 10,
+      "health": 20,
       "attack": 5,
-      "attackRange": 5.0,
-      "attackSpeed": 2.0,
+      "attackRange": 1.0,
+      "attackSpeed": 0.5,
       "critChance": 0.5,
       "critDamage": 1.0,
       "skillCooldown": 2.0,
