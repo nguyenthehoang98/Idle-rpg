@@ -9,5 +9,6 @@
 - [x] Add modifier visual tint feedback without new assets.
 - [ ] Add modifier VFX particle assets.
 - [x] Add Normal/Elite/Boss ranks and monster skill rotation.
-- [ ] Add resistance and stacking rules for monster statuses.
+- [x] Add resistance and stacking rules for monster statuses.
+- [x] Add post-wave shop/upgrade roll UI with config-backed hero and skill-specific upgrades.
 - [ ] Add save game and offline progress.

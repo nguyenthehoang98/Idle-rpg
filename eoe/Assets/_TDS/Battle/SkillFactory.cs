@@ -275,12 +275,20 @@ namespace _TDS.Battle
             float lifeTime = Mathf.Max(0.01f, modifier.duration);
             float tickInterval = Mathf.Max(0.01f, modifier.tickInterval);
             float tickElapsed = 0f;
+            float resistanceRoll = UnityEngine.Random.value;
+            bool applied = false;
 
             ModifierSkillAction action = new ModifierSkillAction(
                 lifeTime,
-                modifierAction => target.ApplyModifier(modifierAction, modifier),
+                modifierAction => applied = target.TryApplyModifier(modifierAction, modifier, resistanceRoll),
                 (modifierAction, deltaTime) =>
                 {
+                    if (!applied)
+                    {
+                        modifierAction.Interrupt();
+                        return;
+                    }
+
                     if (target == null || target.CurrentHealth <= 0)
                     {
                         modifierAction.Interrupt();
@@ -302,7 +310,10 @@ namespace _TDS.Battle
                         }
                     }
                 },
-                modifierAction => target.RemoveModifier(modifierAction));
+                modifierAction =>
+                {
+                    if (applied) target.RemoveModifier(modifierAction);
+                });
 
             unit.RequestAddAction(skillConfig.skillId, action);
         }

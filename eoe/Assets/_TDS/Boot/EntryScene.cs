@@ -29,6 +29,7 @@ namespace _TDS.Boot
                 nameof(SkillConfig),
                 nameof(ExpConfig),
                 nameof(HeroConfig),
+                nameof(UpgradeConfig),
             });
 
             LoadSceneAsync("HomeScene");

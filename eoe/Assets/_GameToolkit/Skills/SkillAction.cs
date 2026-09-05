@@ -5,7 +5,7 @@ namespace _GameToolkit.Skills
 {
     public abstract class SkillAction : ISkillAction
     {
-        private readonly float lifeTime;
+        private float lifeTime;
         private float elapsedTime;
         
         public event Action OnComplete;
@@ -47,6 +47,13 @@ namespace _GameToolkit.Skills
         public void Interrupt() => Complete(ActionCompleteReason.Interrupt);
 
         public void EndCycle() => Complete(ActionCompleteReason.EndLifeCycle);
+
+        public void Refresh(float duration)
+        {
+            if (IsCompleted) return;
+            lifeTime = Mathf.Max(0.01f, duration);
+            elapsedTime = 0f;
+        }
 
         private void Complete(ActionCompleteReason reason)
         {

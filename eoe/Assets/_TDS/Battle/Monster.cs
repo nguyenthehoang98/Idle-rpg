@@ -26,7 +26,9 @@ namespace _TDS.Battle
         public event Action<SkillModifierType> OnModifierApplied;
         public event Action<SkillModifierType> OnModifierRemoved;
 
-        private static HashSet<int> deathVfxInPool = new HashSet<int>();
+        private static readonly HashSet<int> deathVfxInPool = new HashSet<int>();
+        // Slow keeps the strongest value and refreshes; Silence/Stun refresh; Bleed stacks up to three.
+        public const int MaxBleedStacks = 3;
 
         private Vector3 targetPosition;
         private Vector3 previousPosition;
@@ -69,6 +71,7 @@ namespace _TDS.Battle
         public int GoldReward { get; private set; }
         public MonsterRank Rank { get; private set; }
         public IReadOnlyList<MonsterSkillConfigData> Skills { get; private set; }
+        public IReadOnlyList<MonsterStatusResistanceData> StatusResistances { get; private set; }
 
         public float AttackRange { get; private set; }
         public float DamageCooldown { get; private set; }
@@ -82,7 +85,8 @@ namespace _TDS.Battle
             int experienceReward = 0,
             int goldReward = 0,
             MonsterRank rank = MonsterRank.Normal,
-            MonsterSkillConfigData[] skills = null)
+            MonsterSkillConfigData[] skills = null,
+            MonsterStatusResistanceData[] statusResistances = null)
         {
             MaxHealth = CurrentHealth = maxHealth;
             Attack = attack;
@@ -92,6 +96,7 @@ namespace _TDS.Battle
             GoldReward = Mathf.Max(0, goldReward);
             Rank = rank;
             Skills = skills ?? Array.Empty<MonsterSkillConfigData>();
+            StatusResistances = statusResistances ?? Array.Empty<MonsterStatusResistanceData>();
             nextSkillIndex = 0;
             skillTimer = 0f;
             AttackTimer = 0f;
@@ -126,6 +131,39 @@ namespace _TDS.Battle
             skillTimer = Mathf.Max(0.1f, skill.cooldown);
         }
 
+        public float GetStatusResistance(SkillModifierType type)
+        {
+            for (int i = 0; i < StatusResistances.Count; i++)
+            {
+                if (StatusResistances[i].type == type)
+                {
+                    return Mathf.Clamp01(StatusResistances[i].resistance);
+                }
+            }
+
+            return 0f;
+        }
+
+        public int GetModifierStackCount(SkillModifierType type)
+        {
+            int count = 0;
+            foreach (SkillModifierData modifier in activeModifiers.Values)
+            {
+                if (modifier.type == type) count++;
+            }
+
+            return count;
+        }
+
+        public bool TryApplyModifier(
+            ModifierSkillAction action,
+            SkillModifierData modifier,
+            float resistanceRoll)
+        {
+            if (resistanceRoll < GetStatusResistance(modifier.type)) return false;
+            return ApplyModifier(action, modifier);
+        }
+
         public int TakeDamage(int damage)
         {
             if (damage <= 0 || CurrentHealth <= 0) return 0;
@@ -137,12 +175,42 @@ namespace _TDS.Battle
             return dealt;
         }
 
-        public void ApplyModifier(ModifierSkillAction action, SkillModifierData modifier)
+        public bool ApplyModifier(ModifierSkillAction action, SkillModifierData modifier)
         {
-            if (action == null) return;
+            if (action == null) return false;
+
+            if (modifier.type == SkillModifierType.Bleed &&
+                GetModifierStackCount(SkillModifierType.Bleed) >= MaxBleedStacks)
+            {
+                return false;
+            }
+
+            if (modifier.type != SkillModifierType.Bleed)
+            {
+                foreach (KeyValuePair<ModifierSkillAction, SkillModifierData> pair in activeModifiers)
+                {
+                    if (pair.Value.type != modifier.type) continue;
+
+                    SkillModifierData refreshed = modifier;
+                    if (modifier.type == SkillModifierType.Slow)
+                    {
+                        refreshed.value = Mathf.Max(pair.Value.value, modifier.value);
+                    }
+
+                    pair.Key.Refresh(Mathf.Max(0.01f, refreshed.duration));
+                    activeModifiers[pair.Key] = refreshed;
+                    // The new action only requested a refresh; keep the old tracked action as the owner.
+                    if (!ReferenceEquals(pair.Key, action)) action.Interrupt();
+                    RefreshModifierVisual();
+                    OnModifierApplied?.Invoke(refreshed.type);
+                    return true;
+                }
+            }
+
             activeModifiers[action] = modifier;
             RefreshModifierVisual();
             OnModifierApplied?.Invoke(modifier.type);
+            return true;
         }
 
         public void RemoveModifier(ModifierSkillAction action)

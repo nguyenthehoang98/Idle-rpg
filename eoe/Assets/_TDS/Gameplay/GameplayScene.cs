@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using _GameToolkit.GameConfig;
 using _GameToolkit.Startup;
 using _GameToolkit.Updater;
 using _TDS.Battle;
@@ -21,6 +23,8 @@ namespace _TDS.Gameplay
         private SkillTickRunner skillRunner;
         private CircuitBoard board;
         private GameplayHud hud;
+        private WaveUpgradePanel upgradePanel;
+        private UpgradeConfig upgradeConfig;
         private int level = 1;
         private readonly BattleRunRewards rewards = new BattleRunRewards();
         private readonly List<Hero> trackedHeroes = new List<Hero>();
@@ -42,6 +46,7 @@ namespace _TDS.Gameplay
                 hud = gameObject.AddComponent<GameplayHud>();
             }
 
+            upgradePanel = gameObject.AddComponent<WaveUpgradePanel>();
             runner.TryGetRunner(out spawnRunner);
             runner.TryGetRunner(out agentRunner);
             runner.TryGetRunner(out skillRunner);
@@ -80,7 +85,7 @@ namespace _TDS.Gameplay
             hud.SetStatus("LOADING BATTLE");
 
             skillRunner.Initialize();
-            
+            upgradeConfig = ConfigManager.Get<UpgradeConfig>();
             SkillFactory.Initialize(skillRunner.Unit);
 
             // theo dõi wave: spawn xong -> chờ kill all -> wave mới -> hết wave -> win
@@ -149,12 +154,119 @@ namespace _TDS.Gameplay
         private void OnWaveCleared(int wave)
         {
             hud.SetWave(wave);
-            hud.SetStatus("WAVE CLEARED");
-            Debug.Log($"[Gameplay] Diệt hết quái wave {wave} -> wave mới");
+            hud.SetStatus("CHOOSE UPGRADE");
+            PauseUpgradeFlow();
+            upgradePanel.ShowChoice(wave, rewards.Gold, ShowShop, ShowUpgradeRoll);
+            Debug.Log($"[Gameplay] Diệt hết quái wave {wave} -> mở upgrade choice");
+        }
+
+        private void ShowShop()
+        {
+            PauseUpgradeFlow();
+            upgradePanel.ShowCards(
+                "GOLD SHOP",
+                "BUY ONE ITEM WITH RUN GOLD",
+                rewards.Gold,
+                PickCards(upgradeConfig.ShopItems, 3),
+                requiresGold: true,
+                ApplyUpgradeCard);
+        }
+
+        private void ShowUpgradeRoll()
+        {
+            PauseUpgradeFlow();
+            List<UpgradeCardConfigData> candidates = new List<UpgradeCardConfigData>();
+            candidates.AddRange(upgradeConfig.HeroUpgrades);
+
+            HashSet<int> skillIds = new HashSet<int>();
+            foreach (Hero hero in trackedHeroes)
+            {
+                if (hero != null && hero.SkillId > 0) skillIds.Add(hero.SkillId);
+            }
+
+            foreach (int skillId in skillIds)
+            {
+                candidates.AddRange(upgradeConfig.GetSkillPool(skillId));
+            }
+
+            upgradePanel.ShowCards(
+                "UPGRADE ROLL",
+                "ROLL 3 CARDS · CHOOSE ONE",
+                rewards.Gold,
+                PickCards(candidates, 3),
+                requiresGold: false,
+                ApplyUpgradeCard);
+        }
+
+        private void ApplyUpgradeCard(UpgradeCardConfigData card)
+        {
+            if (card.kind == UpgradeCardKind.ShopItem && !rewards.TrySpendGold(card.cost))
+            {
+                return;
+            }
+
+            bool applied = false;
+            foreach (Hero hero in trackedHeroes)
+            {
+                if (hero == null) continue;
+                if (card.kind == UpgradeCardKind.SkillStat)
+                {
+                    if (hero.SkillId == card.skillId)
+                    {
+                        applied |= hero.ApplySkillUpgrade(card.skillStat, card.value, card.percent);
+                    }
+                }
+                else if (card.heroId == 0 || hero.HeroId == card.heroId)
+                {
+                    applied |= hero.ApplyHeroUpgrade(card.heroStat, card.value, card.percent);
+                }
+            }
+
+            if (!applied)
+            {
+                if (card.kind == UpgradeCardKind.ShopItem) rewards.RefundGold(card.cost);
+                Debug.LogWarning($"[Gameplay] Upgrade card '{card.id}' did not match a hero");
+                return;
+            }
+
+            rewards.RecordUpgrade(card.id);
+            upgradePanel.Hide();
+            ResumeUpgradeFlow();
+            hud.SetStatus($"UPGRADE: {card.title}");
+        }
+
+        private void PauseUpgradeFlow()
+        {
+            runner.IsPaused = true;
+            if (spawnRunner != null) spawnRunner.IsPaused = true;
+        }
+
+        private void ResumeUpgradeFlow()
+        {
+            if (spawnRunner != null) spawnRunner.IsPaused = false;
+            runner.IsPaused = false;
+        }
+
+        private static List<UpgradeCardConfigData> PickCards(
+            IReadOnlyList<UpgradeCardConfigData> source,
+            int count)
+        {
+            List<UpgradeCardConfigData> pool = new List<UpgradeCardConfigData>(source ?? Array.Empty<UpgradeCardConfigData>());
+            List<UpgradeCardConfigData> result = new List<UpgradeCardConfigData>();
+            int amount = Mathf.Min(count, pool.Count);
+            for (int i = 0; i < amount; i++)
+            {
+                int index = UnityEngine.Random.Range(0, pool.Count);
+                result.Add(pool[index]);
+                pool.RemoveAt(index);
+            }
+
+            return result;
         }
 
         private void OnGameWin()
         {
+            upgradePanel?.Hide();
             if (resultReported) return;
             resultReported = true;
             hud.SetStatus($"VICTORY  +{rewards.Experience} EXP  +{rewards.Gold} GOLD");
@@ -229,6 +341,7 @@ namespace _TDS.Gameplay
 
             if (alive == 0 && !resultReported)
             {
+                upgradePanel?.Hide();
                 resultReported = true;
                 hud.SetStatus($"DEFEAT  +{rewards.Experience} EXP  +{rewards.Gold} GOLD");
                 hud.ShowResult(false, rewards);

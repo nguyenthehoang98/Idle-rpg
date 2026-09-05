@@ -225,7 +225,8 @@ namespace _TDS.Battle
                 exp,
                 monsterConfigData.gold,
                 monsterConfigData.rank,
-                monsterConfigData.skills);
+                monsterConfigData.skills,
+                monsterConfigData.statusResistances);
 
             // Dừng ở khoảng cách mà cả monster và hero đều có thể đánh nhau.
             float heroAttackRange = GetMaxHeroAttackRange(monsterConfigData.attackRange);

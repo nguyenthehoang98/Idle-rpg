@@ -42,6 +42,7 @@ namespace _TDS.Battle
         public event Action<Hero> OnOverdriveEnded;
 
         public int HeroId { get; private set; }
+        public int SkillId => AttackId;
         public bool IsOverdriveActive { get; private set; }
         public float OverdriveRemaining { get; private set; }
         public int OverdriveActivations { get; private set; }
@@ -156,6 +157,98 @@ namespace _TDS.Battle
             {
                 attackCoroutine = StartCoroutine(AutoAttackEnumerator());
             }
+        }
+
+        public bool ApplyHeroUpgrade(StatId statId, float value, bool percent)
+        {
+            Stat stat = GetStat(statId);
+            if (stat == null) return false;
+
+            float previousMaxHealth = MaxHealth;
+            stat.AddModifier(new StatModifier(
+                value,
+                percent ? StatModType.PercentAdd : StatModType.Flat,
+                this));
+
+            if (statId == StatId.MaxHealth)
+            {
+                MaxHealth = Mathf.Max(1, Mathf.RoundToInt(stat.Value));
+                CurrentHealth = Mathf.Clamp(
+                    CurrentHealth + Mathf.RoundToInt(MaxHealth - previousMaxHealth),
+                    0,
+                    MaxHealth);
+            }
+
+            return true;
+        }
+
+        public bool ApplySkillUpgrade(SkillUpgradeStat statId, float value, bool percent)
+        {
+            SkillConfigData skill = SkillConfig;
+            float Apply(float current)
+            {
+                return percent ? current * (1f + value) : current + value;
+            }
+
+            switch (statId)
+            {
+                case SkillUpgradeStat.ProjectileSpeed:
+                    skill.projectileSpeed = Mathf.Max(0f, Apply(skill.projectileSpeed));
+                    break;
+                case SkillUpgradeStat.ProjectileDuration:
+                    skill.projectileDuration = Mathf.Max(0.01f, Apply(skill.projectileDuration));
+                    break;
+                case SkillUpgradeStat.HitCount:
+                    skill.hitCount = Mathf.Max(1, Mathf.RoundToInt(Apply(skill.hitCount)));
+                    break;
+                case SkillUpgradeStat.HitInterval:
+                    skill.hitInterval = Mathf.Max(0f, Apply(skill.hitInterval));
+                    break;
+                case SkillUpgradeStat.CollisionDuration:
+                    skill.collisionDuration = Mathf.Max(0f, Apply(skill.collisionDuration));
+                    break;
+                case SkillUpgradeStat.CollisionDelayInit:
+                    skill.collisionDelayInit = Mathf.Max(0f, Apply(skill.collisionDelayInit));
+                    break;
+                case SkillUpgradeStat.SizeMultiplier:
+                    skill.sizeMultiplier = Mathf.Max(0f, Apply(skill.sizeMultiplier));
+                    break;
+                case SkillUpgradeStat.SpreadDamageScale:
+                    skill.spreadDamageScale = Mathf.Max(0f, Apply(skill.spreadDamageScale));
+                    break;
+                case SkillUpgradeStat.ParallelDamageScale:
+                    skill.parallelDamageScale = Mathf.Max(0f, Apply(skill.parallelDamageScale));
+                    break;
+                case SkillUpgradeStat.ProjectileDistanceStep:
+                    skill.projectileDistanceStep = Mathf.Max(0f, Apply(skill.projectileDistanceStep));
+                    break;
+                case SkillUpgradeStat.ProjectileAngleStep:
+                    skill.projectileAngleStep = Mathf.Max(0f, Apply(skill.projectileAngleStep));
+                    break;
+                case SkillUpgradeStat.SpreadProjectileCount:
+                    skill.spreadProjectileCount = Mathf.Max(0, Mathf.RoundToInt(Apply(skill.spreadProjectileCount)));
+                    break;
+                case SkillUpgradeStat.ParallelProjectileCount:
+                    skill.parallelProjectileCount = Mathf.Max(0, Mathf.RoundToInt(Apply(skill.parallelProjectileCount)));
+                    break;
+                case SkillUpgradeStat.ExplosiveRadius:
+                    skill.explosiveRadius = Mathf.Max(0f, Apply(skill.explosiveRadius));
+                    break;
+                case SkillUpgradeStat.ExplosiveDamageScale:
+                    skill.explosiveDamageScale = Mathf.Max(0f, Apply(skill.explosiveDamageScale));
+                    break;
+                case SkillUpgradeStat.InstantKillTargetBelowHealthPercent:
+                    skill.instantKillTargetBelowHealthPercent = Mathf.Clamp01(Apply(skill.instantKillTargetBelowHealthPercent));
+                    break;
+                case SkillUpgradeStat.DamageTickInterval:
+                    skill.damageTickInterval = Mathf.Max(0f, Apply(skill.damageTickInterval));
+                    break;
+                default:
+                    return false;
+            }
+
+            SkillConfig = skill;
+            return true;
         }
 
         // Loop tìm & đánh theo step, chạy bằng Coroutine thay vì Update

@@ -18,6 +18,13 @@ namespace _TDS.GameConfig
     }
 
     [Serializable]
+    public struct MonsterStatusResistanceData
+    {
+        public SkillModifierType type;
+        public float resistance;
+    }
+
+    [Serializable]
     public struct MonsterConfigData
     {
         public int id;
@@ -29,6 +36,7 @@ namespace _TDS.GameConfig
         public int attack;
         public int exp;
         public MonsterSkillConfigData[] skills;
+        public MonsterStatusResistanceData[] statusResistances;
 
         // Movement
         public float moveSpeed;

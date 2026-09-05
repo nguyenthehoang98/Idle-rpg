@@ -28,10 +28,39 @@ namespace _TDS.Tests.PlayMode
             elapsed = 0f;
             string outcome = null;
             string status = null;
-            while (elapsed < 90f)
+            bool selectedUpgrade = false;
+            bool shopTested = false;
+            while (elapsed < 180f)
             {
+                Button shopButton = GameObject.Find("GoldShop")?.GetComponent<Button>();
+                if (!shopTested && shopButton != null && shopButton.gameObject.activeInHierarchy)
+                {
+                    shopButton.onClick.Invoke();
+                    shopTested = true;
+                }
+
+                Button cardButton = GameObject.Find("Card0")?.GetComponent<Button>();
+                if (cardButton != null && cardButton.gameObject.activeInHierarchy)
+                {
+                    if (cardButton.interactable)
+                    {
+                        cardButton.onClick.Invoke();
+                    }
+                    else
+                    {
+                        GameObject.Find("Back")?.GetComponent<Button>()?.onClick.Invoke();
+                    }
+                }
+
+                Button rollButton = GameObject.Find("UpgradeRoll")?.GetComponent<Button>();
+                if (rollButton != null && rollButton.gameObject.activeInHierarchy)
+                {
+                    rollButton.onClick.Invoke();
+                }
+
                 Text statusText = GameObject.Find("Status")?.GetComponent<Text>();
                 status = statusText?.text;
+                selectedUpgrade |= !string.IsNullOrEmpty(status) && status.StartsWith("UPGRADE:");
                 if (!string.IsNullOrEmpty(status) &&
                     (status.StartsWith("VICTORY") || status.StartsWith("DEFEAT")))
                 {
@@ -45,6 +74,8 @@ namespace _TDS.Tests.PlayMode
 
             Debug.Log($"[GameplayLevel1Outcome] outcome={outcome ?? "TIMEOUT"}, status={status ?? "<none>"}, elapsed={elapsed:0.0}s");
             Assert.That(outcome == "VICTORY" || outcome == "DEFEAT", Is.True);
+            Assert.That(selectedUpgrade, Is.True, "The post-wave upgrade choice was not applied");
+            Assert.That(shopTested, Is.True, "The Gold Shop path was not shown");
         }
     }
 }
