@@ -30,5 +30,16 @@ namespace _TDS.GameConfig
         {
             return cached.TryGetValue(level, out data);
         }
+
+        public int GetLevelForExperience(int experience)
+        {
+            int level = 1;
+            while (cached.TryGetValue(level + 1, out ExpConfigData next) && experience >= next.requiredExp)
+            {
+                level++;
+            }
+
+            return level;
+        }
     }
 }

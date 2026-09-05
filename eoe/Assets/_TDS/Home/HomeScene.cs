@@ -56,7 +56,7 @@ namespace _TDS.Home
                 OfflineReward offlineReward = GameProgress.LastOfflineReward;
                 spec.hint = offlineReward.HasReward
                     ? $"OFFLINE +{offlineReward.Experience} EXP  +{offlineReward.Gold} GOLD"
-                    : $"TOTAL  {GameProgress.State.totalExperience} EXP  {GameProgress.State.totalGold} GOLD";
+                    : $"PLAYER LV {GameProgress.State.playerLevel}  ·  {GameProgress.State.totalExperience} EXP  ·  {GameProgress.State.totalGold} GOLD";
             }
             EnsureEventSystem();
 

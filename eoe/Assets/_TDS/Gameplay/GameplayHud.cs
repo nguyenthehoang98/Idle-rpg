@@ -1,3 +1,4 @@
+using System;
 using _TDS.Battle;
 using _TDS.GameConfig;
 using UnityEngine;
@@ -25,6 +26,8 @@ namespace _TDS.Gameplay
         private Text resultTitle;
         private Text resultRewards;
         private GameObject resultOverlay;
+        private Action<float> setTimeScale;
+        private readonly Button[] speedButtons = new Button[3];
         private float modifierFeedbackRemaining;
         private string statusBeforeModifier;
         private Color statusBeforeModifierColor;
@@ -65,6 +68,12 @@ namespace _TDS.Gameplay
                     slotImages[i].color = SlotColor;
                 }
             }
+        }
+
+        public void BindTimeScale(Action<float> setter)
+        {
+            setTimeScale = setter;
+            SetSpeed(1f);
         }
 
         public void Initialize(CircuitBoard board, int level)
@@ -175,7 +184,8 @@ namespace _TDS.Gameplay
             waveText = CreateText("Wave", topBar.transform, "LEVEL 1", 28, AccentColor,
                 new Vector2(0.43f, 0f), new Vector2(0.65f, 1f), TextAnchor.MiddleCenter);
             statusText = CreateText("Status", topBar.transform, "AUTO COMBAT", 22, MutedColor,
-                new Vector2(0.65f, 0f), new Vector2(0.94f, 1f), TextAnchor.MiddleRight);
+                new Vector2(0.55f, 0f), new Vector2(0.7f, 1f), TextAnchor.MiddleRight);
+            BuildSpeedControls(topBar.transform);
 
             Image circuitPanel = CreatePanel("CircuitPanel", root, PanelColor);
             SetRect(circuitPanel.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f),
@@ -218,6 +228,56 @@ namespace _TDS.Gameplay
             }
 
             BuildResultOverlay(root);
+        }
+
+        private void BuildSpeedControls(Transform parent)
+        {
+            GameObject speedRoot = new GameObject("SpeedControls", typeof(RectTransform));
+            speedRoot.transform.SetParent(parent, false);
+            RectTransform speedRect = speedRoot.GetComponent<RectTransform>();
+            SetRect(speedRect, new Vector2(0.72f, 0.16f), new Vector2(0.96f, 0.84f), Vector2.zero, Vector2.zero);
+            HorizontalLayoutGroup layout = speedRoot.AddComponent<HorizontalLayoutGroup>();
+            layout.spacing = 4f;
+            layout.padding = new RectOffset(2, 2, 2, 2);
+            layout.childControlWidth = true;
+            layout.childControlHeight = true;
+            layout.childForceExpandWidth = true;
+            layout.childForceExpandHeight = true;
+
+            float[] speeds = { 1f, 2f, 4f };
+            for (int i = 0; i < speeds.Length; i++)
+            {
+                float speed = speeds[i];
+                GameObject buttonObject = new GameObject($"Speed{speed:0}", typeof(RectTransform));
+                buttonObject.transform.SetParent(speedRoot.transform, false);
+                Image image = buttonObject.AddComponent<Image>();
+                image.color = speed == 1f ? AccentColor : SlotColor;
+                Button button = buttonObject.AddComponent<Button>();
+                button.targetGraphic = image;
+                ColorBlock colors = button.colors;
+                colors.normalColor = image.color;
+                colors.highlightedColor = ParseColor("7DD3FC");
+                colors.pressedColor = ParseColor("2DD4BF");
+                colors.disabledColor = EmptyColor;
+                button.colors = colors;
+                Text label = CreateText("Label", buttonObject.transform, $"{speed:0}X", 15, TextColor,
+                    Vector2.zero, Vector2.one, TextAnchor.MiddleCenter);
+                label.raycastTarget = false;
+                button.onClick.AddListener(() => SetSpeed(speed));
+                speedButtons[i] = button;
+            }
+        }
+
+        private void SetSpeed(float speed)
+        {
+            setTimeScale?.Invoke(speed);
+            for (int i = 0; i < speedButtons.Length; i++)
+            {
+                if (speedButtons[i] == null) continue;
+                speedButtons[i].GetComponent<Image>().color = speedButtons[i].name == $"Speed{speed:0}"
+                    ? AccentColor
+                    : SlotColor;
+            }
         }
 
         private void BuildResultOverlay(Transform root)

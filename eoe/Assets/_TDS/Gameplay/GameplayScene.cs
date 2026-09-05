@@ -25,6 +25,7 @@ namespace _TDS.Gameplay
         private GameplayHud hud;
         private WaveUpgradePanel upgradePanel;
         private UpgradeConfig upgradeConfig;
+        private ExpConfig expConfig;
         private int level = 1;
         private readonly BattleRunRewards rewards = new BattleRunRewards();
         private readonly List<Hero> trackedHeroes = new List<Hero>();
@@ -82,10 +83,12 @@ namespace _TDS.Gameplay
             agentRunner.Initialize();
             circuitRunner.Initialize(board);
             hud.Initialize(board, level);
+            hud.BindTimeScale(speed => runner.Loop = speed);
             hud.SetStatus("LOADING BATTLE");
 
             skillRunner.Initialize();
             upgradeConfig = ConfigManager.Get<UpgradeConfig>();
+            expConfig = ConfigManager.Get<ExpConfig>();
             SkillFactory.Initialize(skillRunner.Unit);
 
             // theo dõi wave: spawn xong -> chờ kill all -> wave mới -> hết wave -> win
@@ -269,7 +272,7 @@ namespace _TDS.Gameplay
             upgradePanel?.Hide();
             if (resultReported) return;
             resultReported = true;
-            GameProgress.SaveRun(level, heroIds, rewards, victory: true);
+            GameProgress.SaveRun(level, heroIds, rewards, victory: true, expConfig: expConfig);
             hud.SetStatus($"VICTORY  +{rewards.Experience} EXP  +{rewards.Gold} GOLD");
             hud.ShowResult(true, rewards);
             Debug.Log($"[Gameplay] 🏆 WIN GAME! EXP={rewards.Experience}, GOLD={rewards.Gold}");
@@ -344,7 +347,7 @@ namespace _TDS.Gameplay
             {
                 upgradePanel?.Hide();
                 resultReported = true;
-                GameProgress.SaveRun(level, heroIds, rewards, victory: false);
+                GameProgress.SaveRun(level, heroIds, rewards, victory: false, expConfig: expConfig);
                 hud.SetStatus($"DEFEAT  +{rewards.Experience} EXP  +{rewards.Gold} GOLD");
                 hud.ShowResult(false, rewards);
                 Debug.Log($"[Gameplay] 💀 THUA! EXP={rewards.Experience}, GOLD={rewards.Gold}");

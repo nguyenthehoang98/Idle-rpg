@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _TDS.GameConfig;
 using UnityEngine;
 
 namespace _TDS.Gameplay
@@ -9,6 +10,7 @@ namespace _TDS.Gameplay
     {
         public int version = 1;
         public int campaignLevel = RunSelection.DefaultLevel;
+        public int playerLevel = 1;
         public int totalExperience;
         public int totalGold;
         public int[] selectedHeroIds = Array.Empty<int>();
@@ -73,11 +75,18 @@ namespace _TDS.Gameplay
                 state = NewState();
             }
 
+            state.campaignLevel = Math.Max(RunSelection.DefaultLevel, state.campaignLevel);
+            state.playerLevel = Math.Max(1, state.playerLevel);
             lastOfflineReward = CollectOffline(DateTime.UtcNow.Ticks);
             Save();
         }
 
-        public static void SaveRun(int level, int[] heroIds, BattleRunRewards rewards, bool victory)
+        public static void SaveRun(
+            int level,
+            int[] heroIds,
+            BattleRunRewards rewards,
+            bool victory,
+            ExpConfig expConfig = null)
         {
             EnsureLoaded();
             if (rewards == null) return;
@@ -86,6 +95,10 @@ namespace _TDS.Gameplay
             state.campaignLevel = Math.Max(state.campaignLevel, Math.Max(RunSelection.DefaultLevel, nextLevel));
             state.totalExperience += Math.Max(0, rewards.Experience);
             state.totalGold += Math.Max(0, rewards.Gold);
+            if (expConfig != null)
+            {
+                state.playerLevel = expConfig.GetLevelForExperience(state.totalExperience);
+            }
             state.selectedHeroIds = heroIds == null ? Array.Empty<int>() : (int[])heroIds.Clone();
             state.selectedUpgradeIds.AddRange(rewards.SelectedUpgradeIds);
             Save();
