@@ -23,7 +23,15 @@ namespace _TDS.Gameplay
             Circuit = new EnergyCircuit(board.SlotCount);
             for (int i = 0; i < board.SlotCount; i++)
             {
-                Circuit.SetContent(i, board.GetContent(i));
+                CircuitSlotContent content = board.GetContent(i);
+                if (content.Type == CircuitSlotContentType.Item)
+                {
+                    Circuit.SetItem(i, content.Id, board.GetItemType(i), board.GetItemPower(i));
+                }
+                else
+                {
+                    Circuit.SetContent(i, content);
+                }
             }
 
             TickCount = 0;

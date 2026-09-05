@@ -41,6 +41,18 @@ namespace _TDS.Tests.Editor
         }
 
         [Test]
+        public void BoardPreservesItemBehaviorForCircuitRuntime()
+        {
+            CircuitBoard board = new CircuitBoard();
+
+            board.SetItem(0, 201, CircuitItemType.Generator, 2);
+
+            Assert.That(board.GetContent(0).Type, Is.EqualTo(CircuitSlotContentType.Item));
+            Assert.That(board.GetItemType(0), Is.EqualTo(CircuitItemType.Generator));
+            Assert.That(board.GetItemPower(0), Is.EqualTo(2));
+        }
+
+        [Test]
         public void BoardRejectsInvalidSlotAndContentIds()
         {
             CircuitBoard board = new CircuitBoard();

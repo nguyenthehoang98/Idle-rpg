@@ -8,6 +8,8 @@ namespace _TDS.Battle
         public const int DefaultSlotCount = EnergyCircuit.DefaultSlotCount;
 
         private readonly CircuitSlotContent[] contents;
+        private readonly CircuitItemType[] itemTypes;
+        private readonly int[] itemPowers;
 
         public int SlotCount => contents.Length;
 
@@ -19,6 +21,8 @@ namespace _TDS.Battle
             }
 
             contents = new CircuitSlotContent[slotCount];
+            itemTypes = new CircuitItemType[slotCount];
+            itemPowers = new int[slotCount];
             Reset();
         }
 
@@ -54,6 +58,38 @@ namespace _TDS.Battle
         {
             ValidateSlotIndex(index);
             contents[index] = content;
+            itemTypes[index] = CircuitItemType.None;
+            itemPowers[index] = 1;
+        }
+
+        public void SetItem(int index, int id, CircuitItemType type, int power = 1)
+        {
+            ValidateSlotIndex(index);
+            if (type == CircuitItemType.None)
+            {
+                throw new ArgumentException("An item slot needs an item type.", nameof(type));
+            }
+
+            if (power <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(power), power, "Item power must be positive.");
+            }
+
+            contents[index] = CircuitSlotContent.Item(id);
+            itemTypes[index] = type;
+            itemPowers[index] = power;
+        }
+
+        public CircuitItemType GetItemType(int index)
+        {
+            ValidateSlotIndex(index);
+            return itemTypes[index];
+        }
+
+        public int GetItemPower(int index)
+        {
+            ValidateSlotIndex(index);
+            return itemPowers[index];
         }
 
         public void ClearSlot(int index)
@@ -66,6 +102,8 @@ namespace _TDS.Battle
             for (int i = 0; i < contents.Length; i++)
             {
                 contents[i] = CircuitSlotContent.Empty;
+                itemTypes[i] = CircuitItemType.None;
+                itemPowers[i] = 1;
             }
         }
 
