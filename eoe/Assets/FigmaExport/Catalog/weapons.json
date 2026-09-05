@@ -1,0 +1,292 @@
+{
+  "source": "Original vector catalog generated for this project; no external artwork copied.",
+  "weapons": [
+    {
+      "id": "weapon_01",
+      "name": "Plasma Saber",
+      "type": "melee",
+      "projectile": null
+    },
+    {
+      "id": "weapon_02",
+      "name": "Arc Bow",
+      "type": "ranged",
+      "projectile": "projectile_01"
+    },
+    {
+      "id": "weapon_03",
+      "name": "Pulse Staff",
+      "type": "ranged",
+      "projectile": "projectile_02"
+    },
+    {
+      "id": "weapon_04",
+      "name": "Void Dagger",
+      "type": "melee",
+      "projectile": null
+    },
+    {
+      "id": "weapon_05",
+      "name": "Coil Rifle",
+      "type": "ranged",
+      "projectile": "projectile_03"
+    },
+    {
+      "id": "weapon_06",
+      "name": "Ember Cannon",
+      "type": "ranged",
+      "projectile": "projectile_04"
+    },
+    {
+      "id": "weapon_07",
+      "name": "Frost Wand",
+      "type": "ranged",
+      "projectile": "projectile_05"
+    },
+    {
+      "id": "weapon_08",
+      "name": "Thorn Launcher",
+      "type": "ranged",
+      "projectile": "projectile_06"
+    },
+    {
+      "id": "weapon_09",
+      "name": "Gravity Hammer",
+      "type": "melee",
+      "projectile": null
+    },
+    {
+      "id": "weapon_10",
+      "name": "Solar Spear",
+      "type": "melee",
+      "projectile": null
+    },
+    {
+      "id": "weapon_11",
+      "name": "Chain Blaster",
+      "type": "ranged",
+      "projectile": "projectile_07"
+    },
+    {
+      "id": "weapon_12",
+      "name": "Prism Chakram",
+      "type": "ranged",
+      "projectile": "projectile_08"
+    },
+    {
+      "id": "weapon_13",
+      "name": "Rune Tome",
+      "type": "ranged",
+      "projectile": "projectile_09"
+    },
+    {
+      "id": "weapon_14",
+      "name": "Railgun",
+      "type": "ranged",
+      "projectile": "projectile_10"
+    },
+    {
+      "id": "weapon_15",
+      "name": "Toxic Sprayer",
+      "type": "ranged",
+      "projectile": "projectile_11"
+    },
+    {
+      "id": "weapon_16",
+      "name": "Shock Baton",
+      "type": "melee",
+      "projectile": null
+    },
+    {
+      "id": "weapon_17",
+      "name": "Twin Blades",
+      "type": "melee",
+      "projectile": null
+    },
+    {
+      "id": "weapon_18",
+      "name": "Meteor Scepter",
+      "type": "ranged",
+      "projectile": "projectile_12"
+    },
+    {
+      "id": "weapon_19",
+      "name": "Wind Fan",
+      "type": "ranged",
+      "projectile": "projectile_13"
+    },
+    {
+      "id": "weapon_20",
+      "name": "Crystal Lance",
+      "type": "melee",
+      "projectile": null
+    },
+    {
+      "id": "weapon_21",
+      "name": "Drone Controller",
+      "type": "ranged",
+      "projectile": "projectile_14"
+    },
+    {
+      "id": "weapon_22",
+      "name": "Bloom Staff",
+      "type": "ranged",
+      "projectile": "projectile_15"
+    },
+    {
+      "id": "weapon_23",
+      "name": "Sonic Horn",
+      "type": "ranged",
+      "projectile": "projectile_16"
+    },
+    {
+      "id": "weapon_24",
+      "name": "Magma Gauntlet",
+      "type": "ranged",
+      "projectile": "projectile_17"
+    },
+    {
+      "id": "weapon_25",
+      "name": "Moon Scythe",
+      "type": "melee",
+      "projectile": null
+    },
+    {
+      "id": "weapon_26",
+      "name": "Neon Crossbow",
+      "type": "ranged",
+      "projectile": "projectile_18"
+    },
+    {
+      "id": "weapon_27",
+      "name": "Orbit Ring",
+      "type": "ranged",
+      "projectile": "projectile_19"
+    },
+    {
+      "id": "weapon_28",
+      "name": "Ash Flail",
+      "type": "melee",
+      "projectile": null
+    },
+    {
+      "id": "weapon_29",
+      "name": "Quantum Pistol",
+      "type": "ranged",
+      "projectile": "projectile_20"
+    },
+    {
+      "id": "weapon_30",
+      "name": "Star Harpoon",
+      "type": "ranged",
+      "projectile": "projectile_21"
+    }
+  ],
+  "projectiles": [
+    {
+      "id": "projectile_01",
+      "name": "Arc Arrow",
+      "type": "arrow"
+    },
+    {
+      "id": "projectile_02",
+      "name": "Pulse Orb",
+      "type": "orb"
+    },
+    {
+      "id": "projectile_03",
+      "name": "Coil Bolt",
+      "type": "bolt"
+    },
+    {
+      "id": "projectile_04",
+      "name": "Ember Shell",
+      "type": "shell"
+    },
+    {
+      "id": "projectile_05",
+      "name": "Frost Shard",
+      "type": "shard"
+    },
+    {
+      "id": "projectile_06",
+      "name": "Thorn Dart",
+      "type": "dart"
+    },
+    {
+      "id": "projectile_07",
+      "name": "Chain Bolt",
+      "type": "chain"
+    },
+    {
+      "id": "projectile_08",
+      "name": "Prism Disc",
+      "type": "disc"
+    },
+    {
+      "id": "projectile_09",
+      "name": "Rune Sigil",
+      "type": "sigil"
+    },
+    {
+      "id": "projectile_10",
+      "name": "Rail Slug",
+      "type": "slug"
+    },
+    {
+      "id": "projectile_11",
+      "name": "Toxic Droplet",
+      "type": "drop"
+    },
+    {
+      "id": "projectile_12",
+      "name": "Meteor Core",
+      "type": "core"
+    },
+    {
+      "id": "projectile_13",
+      "name": "Wind Blade",
+      "type": "blade"
+    },
+    {
+      "id": "projectile_14",
+      "name": "Micro Drone",
+      "type": "drone"
+    },
+    {
+      "id": "projectile_15",
+      "name": "Bloom Seed",
+      "type": "seed"
+    },
+    {
+      "id": "projectile_16",
+      "name": "Sonic Wave",
+      "type": "wave"
+    },
+    {
+      "id": "projectile_17",
+      "name": "Magma Fist",
+      "type": "fist"
+    },
+    {
+      "id": "projectile_18",
+      "name": "Neon Bolt",
+      "type": "neon"
+    },
+    {
+      "id": "projectile_19",
+      "name": "Orbit Ring",
+      "type": "ring"
+    },
+    {
+      "id": "projectile_20",
+      "name": "Quantum Shot",
+      "type": "quantum"
+    },
+    {
+      "id": "projectile_21",
+      "name": "Star Harpoon",
+      "type": "harpoon"
+    }
+  ]
+}

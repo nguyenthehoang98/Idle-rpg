@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="950" viewBox="0 0 960 950">
+<title>Top View RPG Projectiles Catalog</title><desc>Original named projectiles for later selection.</desc>
+<defs><style>.card{fill:#172238;stroke:#334155;stroke-width:2}.ink{stroke:#07111F;stroke-width:4;stroke-linejoin:round;stroke-linecap:round}.thin{stroke:#07111F;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}.label{fill:#F8FAFC;font-family:Arial,sans-serif;font-size:12px;font-weight:bold;text-anchor:middle}.sub{fill:#A8B5C7;font-family:Arial,sans-serif;font-size:10px;text-anchor:middle}</style></defs>
+<rect class="card" x="10" y="10" width="140" height="170" rx="12"/>
+<g id="projectile_01" transform="translate(80 82)">
+<ellipse cx="0" cy="43" rx="34" ry="8" fill="#050B16" opacity=".42"/><path class="ink" fill="#F97316" d="M-52 0 20-12 52 0 20 12z"/><path class="thin" fill="#FDE047" d="M-20 0 18-5 30 0 18 5z"/>
+<text class="label" y="75">01 Arc Arrow</text><text class="sub" y="91">arrow</text></g>
+<rect class="card" x="170" y="10" width="140" height="170" rx="12"/>
+<g id="projectile_02" transform="translate(240 82)">
+<ellipse cx="0" cy="43" rx="34" ry="8" fill="#050B16" opacity=".42"/><circle class="ink" cx="0" cy="0" r="28" fill="#5EEAD4"/><circle class="thin" cx="0" cy="0" r="12" fill="#F8FAFC"/>
+<text class="label" y="75">02 Pulse Orb</text><text class="sub" y="91">orb</text></g>
+<rect class="card" x="330" y="10" width="140" height="170" rx="12"/>
+<g id="projectile_03" transform="translate(400 82)">
+<ellipse cx="0" cy="43" rx="34" ry="8" fill="#050B16" opacity=".42"/><path class="ink" fill="#A78BFA" d="M-52 0 0-15 52 0 0 15z"/><path class="thin" fill="#C4B5FD" d="M-23 0 0-6 23 0 0 6z"/>
+<text class="label" y="75">03 Coil Bolt</text><text class="sub" y="91">bolt</text></g>
+<rect class="card" x="490" y="10" width="140" height="170" rx="12"/>
+<g id="projectile_04" transform="translate(560 82)">
+<ellipse cx="0" cy="43" rx="34" ry="8" fill="#050B16" opacity=".42"/><path class="ink" fill="#F43F5E" d="M-28-20c0-15 12-25 28-25s28 10 28 25v40c0 15-12 25-28 25s-28-10-28-25z"/><path class="thin" fill="#FDA4AF" d="M-12-18h24v36h-24z"/>
+<text class="label" y="75">04 Ember Shell</text><text class="sub" y="91">shell</text></g>
+<rect class="card" x="650" y="10" width="140" height="170" rx="12"/>
+<g id="projectile_05" transform="translate(720 82)">
+<ellipse cx="0" cy="43" rx="34" ry="8" fill="#050B16" opacity=".42"/><path class="ink" fill="#38BDF8" d="M0-50 20 0 0 50-20 0z"/><path class="thin" fill="#BAE6FD" d="M0-25 9 0 0 25-9 0z"/>
+<text class="label" y="75">05 Frost Shard</text><text class="sub" y="91">shard</text></g>
+<rect class="card" x="810" y="10" width="140" height="170" rx="12"/>
+<g id="projectile_06" transform="translate(880 82)">
+<ellipse cx="0" cy="43" rx="34" ry="8" fill="#050B16" opacity=".42"/><path class="ink" fill="#A3E635" d="M-48 0 22-11 48 0 22 11z"/><path class="thin" fill="#D9F99D" d="M22-18 48 0 22 18z"/>
+<text class="label" y="75">06 Thorn Dart</text><text class="sub" y="91">dart</text></g>
+<rect class="card" x="10" y="200" width="140" height="170" rx="12"/>
+<g id="projectile_07" transform="translate(80 272)">
+<ellipse cx="0" cy="43" rx="34" ry="8" fill="#050B16" opacity=".42"/><path class="ink" fill="#F59E0B" d="M-37 0c0-28 18-42 37-42S37-28 37 0 19 42 0 42-37 28-37 0z"/><path class="thin" fill="#FEF3C7" d="M-19-8h38v16h-38z"/>
+<text class="label" y="75">07 Chain Bolt</text><text class="sub" y="91">chain</text></g>
+<rect class="card" x="170" y="200" width="140" height="170" rx="12"/>
+<g id="projectile_08" transform="translate(240 272)">
+<ellipse cx="0" cy="43" rx="34" ry="8" fill="#050B16" opacity=".42"/><path class="ink" fill="#E879F9" d="M-7-45h14v90H-7zM-29-7h58v14h-58z"/><circle cx="0" cy="0" r="8" fill="#F5D0FE" stroke="#07111F" stroke-width="3"/>
+<text class="label" y="75">08 Prism Disc</text><text class="sub" y="91">disc</text></g>
+<rect class="card" x="330" y="200" width="140" height="170" rx="12"/>
+<g id="projectile_09" transform="translate(400 272)">
+<ellipse cx="0" cy="43" rx="34" ry="8" fill="#050B16" opacity=".42"/><path class="ink" fill="#F97316" d="M-50 0 0-25 50 0 0 25z"/><path class="thin" fill="#FDE047" d="M-26 0 0-12 26 0 0 12z"/>
+<text class="label" y="75">09 Rune Sigil</text><text class="sub" y="91">sigil</text></g>
+<rect class="card" x="490" y="200" width="140" height="170" rx="12"/>
+<g id="projectile_10" transform="translate(560 272)">
+<ellipse cx="0" cy="43" rx="34" ry="8" fill="#050B16" opacity=".42"/><circle class="ink" cx="0" cy="0" r="36" fill="none" stroke="#5EEAD4"/><circle class="thin" cx="0" cy="0" r="16" fill="#F8FAFC"/><path class="thin" d="M-47-47 47 47M47-47-47 47"/>
+<text class="label" y="75">10 Rail Slug</text><text class="sub" y="91">slug</text></g>
+<rect class="card" x="650" y="200" width="140" height="170" rx="12"/>
+<g id="projectile_11" transform="translate(720 272)">
+<ellipse cx="0" cy="43" rx="34" ry="8" fill="#050B16" opacity=".42"/><path class="ink" fill="#A78BFA" d="M-49 0 22-13 49 0 22 13z"/><path class="ink" fill="#C4B5FD" d="M22-24 49 0 22 24z"/>
+<text class="label" y="75">11 Toxic Droplet</text><text class="sub" y="91">drop</text></g>
+<rect class="card" x="810" y="200" width="140" height="170" rx="12"/>
+<g id="projectile_12" transform="translate(880 272)">
+<ellipse cx="0" cy="43" rx="34" ry="8" fill="#050B16" opacity=".42"/><path class="ink" fill="#F43F5E" d="M-52 0 20-12 52 0 20 12z"/><path class="thin" fill="#FDA4AF" d="M-20 0 18-5 30 0 18 5z"/>
+<text class="label" y="75">12 Meteor Core</text><text class="sub" y="91">core</text></g>
+<rect class="card" x="10" y="390" width="140" height="170" rx="12"/>
+<g id="projectile_13" transform="translate(80 462)">
+<ellipse cx="0" cy="43" rx="34" ry="8" fill="#050B16" opacity=".42"/><circle class="ink" cx="0" cy="0" r="28" fill="#38BDF8"/><circle class="thin" cx="0" cy="0" r="12" fill="#BAE6FD"/>
+<text class="label" y="75">13 Wind Blade</text><text class="sub" y="91">blade</text></g>
+<rect class="card" x="170" y="390" width="140" height="170" rx="12"/>
+<g id="projectile_14" transform="translate(240 462)">
+<ellipse cx="0" cy="43" rx="34" ry="8" fill="#050B16" opacity=".42"/><path class="ink" fill="#A3E635" d="M-52 0 0-15 52 0 0 15z"/><path class="thin" fill="#D9F99D" d="M-23 0 0-6 23 0 0 6z"/>
+<text class="label" y="75">14 Micro Drone</text><text class="sub" y="91">drone</text></g>
+<rect class="card" x="330" y="390" width="140" height="170" rx="12"/>
+<g id="projectile_15" transform="translate(400 462)">
+<ellipse cx="0" cy="43" rx="34" ry="8" fill="#050B16" opacity=".42"/><path class="ink" fill="#F59E0B" d="M-28-20c0-15 12-25 28-25s28 10 28 25v40c0 15-12 25-28 25s-28-10-28-25z"/><path class="thin" fill="#FEF3C7" d="M-12-18h24v36h-24z"/>
+<text class="label" y="75">15 Bloom Seed</text><text class="sub" y="91">seed</text></g>
+<rect class="card" x="490" y="390" width="140" height="170" rx="12"/>
+<g id="projectile_16" transform="translate(560 462)">
+<ellipse cx="0" cy="43" rx="34" ry="8" fill="#050B16" opacity=".42"/><path class="ink" fill="#E879F9" d="M0-50 20 0 0 50-20 0z"/><path class="thin" fill="#F5D0FE" d="M0-25 9 0 0 25-9 0z"/>
+<text class="label" y="75">16 Sonic Wave</text><text class="sub" y="91">wave</text></g>
+<rect class="card" x="650" y="390" width="140" height="170" rx="12"/>
+<g id="projectile_17" transform="translate(720 462)">
+<ellipse cx="0" cy="43" rx="34" ry="8" fill="#050B16" opacity=".42"/><path class="ink" fill="#F97316" d="M-48 0 22-11 48 0 22 11z"/><path class="thin" fill="#FDE047" d="M22-18 48 0 22 18z"/>
+<text class="label" y="75">17 Magma Fist</text><text class="sub" y="91">fist</text></g>
+<rect class="card" x="810" y="390" width="140" height="170" rx="12"/>
+<g id="projectile_18" transform="translate(880 462)">
+<ellipse cx="0" cy="43" rx="34" ry="8" fill="#050B16" opacity=".42"/><path class="ink" fill="#5EEAD4" d="M-37 0c0-28 18-42 37-42S37-28 37 0 19 42 0 42-37 28-37 0z"/><path class="thin" fill="#F8FAFC" d="M-19-8h38v16h-38z"/>
+<text class="label" y="75">18 Neon Bolt</text><text class="sub" y="91">neon</text></g>
+<rect class="card" x="10" y="580" width="140" height="170" rx="12"/>
+<g id="projectile_19" transform="translate(80 652)">
+<ellipse cx="0" cy="43" rx="34" ry="8" fill="#050B16" opacity=".42"/><path class="ink" fill="#A78BFA" d="M-7-45h14v90H-7zM-29-7h58v14h-58z"/><circle cx="0" cy="0" r="8" fill="#C4B5FD" stroke="#07111F" stroke-width="3"/>
+<text class="label" y="75">19 Orbit Ring</text><text class="sub" y="91">ring</text></g>
+<rect class="card" x="170" y="580" width="140" height="170" rx="12"/>
+<g id="projectile_20" transform="translate(240 652)">
+<ellipse cx="0" cy="43" rx="34" ry="8" fill="#050B16" opacity=".42"/><path class="ink" fill="#F43F5E" d="M-50 0 0-25 50 0 0 25z"/><path class="thin" fill="#FDA4AF" d="M-26 0 0-12 26 0 0 12z"/>
+<text class="label" y="75">20 Quantum Shot</text><text class="sub" y="91">quantum</text></g>
+<rect class="card" x="330" y="580" width="140" height="170" rx="12"/>
+<g id="projectile_21" transform="translate(400 652)">
+<ellipse cx="0" cy="43" rx="34" ry="8" fill="#050B16" opacity=".42"/><circle class="ink" cx="0" cy="0" r="36" fill="none" stroke="#38BDF8"/><circle class="thin" cx="0" cy="0" r="16" fill="#BAE6FD"/><path class="thin" d="M-47-47 47 47M47-47-47 47"/>
+<text class="label" y="75">21 Star Harpoon</text><text class="sub" y="91">harpoon</text></g>
+</svg>
