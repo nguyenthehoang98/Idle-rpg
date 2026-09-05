@@ -20,8 +20,10 @@ namespace _TDS.Gameplay
         private CircuitBoard board;
         private GameplayHud hud;
         private int level = 1;
+        private readonly BattleRunRewards rewards = new BattleRunRewards();
 
         public CircuitBoard Board => board;
+        public BattleRunRewards Rewards => rewards;
         
         private void Awake()
         {
@@ -44,6 +46,7 @@ namespace _TDS.Gameplay
             runner.OnPauseChanged += PauseChanged;
             runner.OnTimeScaleChanged += TimeScaleChanged;
             circuitRunner.OnActivation += OnCircuitActivation;
+            Monster.OnMonsterRewarded += OnMonsterRewarded;
         }
 
         private void OnDisable()
@@ -51,6 +54,7 @@ namespace _TDS.Gameplay
             runner.OnPauseChanged -= PauseChanged;
             runner.OnTimeScaleChanged -= TimeScaleChanged;
             circuitRunner.OnActivation -= OnCircuitActivation;
+            Monster.OnMonsterRewarded -= OnMonsterRewarded;
         }
 
         private async void Start()
@@ -137,8 +141,14 @@ namespace _TDS.Gameplay
 
         private void OnGameWin()
         {
-            hud.SetStatus("VICTORY");
-            Debug.Log("[Gameplay] 🏆 WIN GAME! Diệt hết toàn bộ quái vật");
+            hud.SetStatus($"VICTORY  +{rewards.Experience} EXP  +{rewards.Gold} GOLD");
+            Debug.Log($"[Gameplay] 🏆 WIN GAME! EXP={rewards.Experience}, GOLD={rewards.Gold}");
+        }
+
+        private void OnMonsterRewarded(Monster monster, int experience, int gold)
+        {
+            rewards.Add(experience, gold);
+            Debug.Log($"[Gameplay] Reward monster={monster.name}: EXP +{experience}, GOLD +{gold}");
         }
 
         private void OnHeroDied(Hero hero)
@@ -157,8 +167,8 @@ namespace _TDS.Gameplay
 
             if (alive == 0)
             {
-                hud.SetStatus("DEFEAT");
-                Debug.Log("[Gameplay] 💀 THUA! Toàn bộ hero đã chết");
+                hud.SetStatus($"DEFEAT  +{rewards.Experience} EXP  +{rewards.Gold} GOLD");
+                Debug.Log($"[Gameplay] 💀 THUA! EXP={rewards.Experience}, GOLD={rewards.Gold}");
             }
         }
 

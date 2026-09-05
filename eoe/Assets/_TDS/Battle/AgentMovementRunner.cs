@@ -178,7 +178,13 @@ namespace _TDS.Battle
             int attack = Mathf.CeilToInt(monsterConfigData.attack * scaleDefinition.attackMultiplier);
             int exp = Mathf.CeilToInt(monsterConfigData.exp * scaleDefinition.expMultiplier);
 
-            monster.SetCombatData(health, attack, monsterConfigData.attackRange, monsterConfigData.damageCooldown);
+            monster.SetCombatData(
+                health,
+                attack,
+                monsterConfigData.attackRange,
+                monsterConfigData.damageCooldown,
+                exp,
+                monsterConfigData.gold);
 
             // Dừng ở khoảng cách mà cả monster và hero đều có thể đánh nhau.
             float heroAttackRange = GetMaxHeroAttackRange(monsterConfigData.attackRange);

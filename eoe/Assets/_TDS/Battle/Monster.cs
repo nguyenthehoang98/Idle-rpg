@@ -21,6 +21,7 @@ namespace _TDS.Battle
 
         public static event Action<Monster> OnMonsterEnable;
         public static event Action<Monster> OnMonsterDisable;
+        public static event Action<Monster, int, int> OnMonsterRewarded;
 
         private static HashSet<int> deathVfxInPool = new HashSet<int>();
 
@@ -57,17 +58,27 @@ namespace _TDS.Battle
         public int MaxHealth { get; private set; }
         public int CurrentHealth { get; private set; }
         public int Attack { get; private set; }
+        public int ExperienceReward { get; private set; }
+        public int GoldReward { get; private set; }
 
         public float AttackRange { get; private set; }
         public float DamageCooldown { get; private set; }
         public float AttackTimer { get; set; }
 
-        public void SetCombatData(int maxHealth, int attack, float attackRange = 1f, float damageCooldown = 1f)
+        public void SetCombatData(
+            int maxHealth,
+            int attack,
+            float attackRange = 1f,
+            float damageCooldown = 1f,
+            int experienceReward = 0,
+            int goldReward = 0)
         {
             MaxHealth = CurrentHealth = maxHealth;
             Attack = attack;
             AttackRange = attackRange;
             DamageCooldown = Mathf.Max(0f, damageCooldown);
+            ExperienceReward = Mathf.Max(0, experienceReward);
+            GoldReward = Mathf.Max(0, goldReward);
             AttackTimer = 0f;
         }
 
@@ -104,6 +115,7 @@ namespace _TDS.Battle
         }
 
         private bool isInitialized;
+        private bool rewardGranted;
 
         private void Awake()
         {
@@ -126,6 +138,7 @@ namespace _TDS.Battle
 
         public void Initialize(SpawnScaleDefinition scaleDefinition)
         {
+            rewardGranted = false;
             scale.localScale = scaleDefinition.sizeMultiplier * Vector3.one;
 
             OnMonsterEnable?.Invoke(this);
@@ -153,6 +166,7 @@ namespace _TDS.Battle
             if (!isInitialized) return;
 
             OnDeath?.Invoke();
+            GrantRewardOnce();
 
             Debug.Log($"[Monster:{name}] Death");
 
@@ -173,9 +187,19 @@ namespace _TDS.Battle
             }
 
             activeModifiers.Clear();
-            OnDeath?.Invoke();
 
             Destroy();
+        }
+
+        private void GrantRewardOnce()
+        {
+            if (rewardGranted)
+            {
+                return;
+            }
+
+            rewardGranted = true;
+            OnMonsterRewarded?.Invoke(this, ExperienceReward, GoldReward);
         }
 
         private async void Destroy()
