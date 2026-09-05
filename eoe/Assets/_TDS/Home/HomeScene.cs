@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Newtonsoft.Json;
 using _GameToolkit.Startup;
 using _TDS.Gameplay;
 using UnityEngine;
@@ -56,12 +58,18 @@ namespace _TDS.Home
             Image background = CreateImage("Background", root, BackgroundColor);
             Stretch(background.rectTransform);
 
+            FigmaNode importedImage = FindNodeByType(LoadHierarchyRoot(), "RECTANGLE");
+            if (importedImage != null)
+            {
+                CreateFigmaImage(root, importedImage);
+            }
+
             Image panel = CreateImage("Panel", root, PanelColor);
             SetRect(panel.rectTransform, new Vector2(0.08f, 0.1f), new Vector2(0.92f, 0.9f), Vector2.zero, Vector2.zero);
 
-            CreateText("Title", panel.rectTransform, spec.title, 34, TextColor,
+            CreateText("Title", panel.rectTransform, spec.title, spec.titleFontSize, TextColor,
                 new Vector2(0.08f, 0.78f), new Vector2(0.92f, 0.94f), TextAnchor.MiddleCenter);
-            CreateText("Subtitle", panel.rectTransform, spec.subtitle, 16, MutedColor,
+            CreateText("Subtitle", panel.rectTransform, spec.subtitle, spec.subtitleFontSize, MutedColor,
                 new Vector2(0.08f, 0.68f), new Vector2(0.92f, 0.78f), TextAnchor.MiddleCenter);
 
             GameObject levelRow = CreateObject("LevelRow", panel.rectTransform);
@@ -70,8 +78,8 @@ namespace _TDS.Home
             HorizontalLayoutGroup row = levelRow.AddComponent<HorizontalLayoutGroup>();
             row.spacing = 12f;
             row.padding = new RectOffset(4, 4, 4, 4);
-            row.childForceExpandWidth = true;
-            row.childForceExpandHeight = true;
+            row.childForceExpandWidth = false;
+            row.childForceExpandHeight = false;
             row.childControlWidth = true;
             row.childControlHeight = true;
 
@@ -80,7 +88,7 @@ namespace _TDS.Home
                 CreateLevelButton(rowRect, spec.buttons[i]);
             }
 
-            CreateText("Hint", panel.rectTransform, spec.hint, 14, MutedColor,
+            CreateText("Hint", panel.rectTransform, spec.hint, spec.hintFontSize, MutedColor,
                 new Vector2(0.08f, 0.1f), new Vector2(0.92f, 0.2f), TextAnchor.MiddleCenter);
             BindButtons();
         }
@@ -90,6 +98,14 @@ namespace _TDS.Home
             GameObject buttonObject = CreateObject($"Level{spec.level}", parent);
             Image image = buttonObject.AddComponent<Image>();
             image.color = spec.level == RunSelection.SelectedLevel ? AccentColor : ParseColor("243552");
+
+            LayoutElement layout = buttonObject.AddComponent<LayoutElement>();
+            layout.minWidth = spec.width;
+            layout.minHeight = spec.height;
+            layout.preferredWidth = spec.width;
+            layout.preferredHeight = spec.height;
+            layout.flexibleWidth = 0f;
+            layout.flexibleHeight = 0f;
 
             Button button = buttonObject.AddComponent<Button>();
             button.targetGraphic = image;
@@ -103,13 +119,19 @@ namespace _TDS.Home
             button.colors = colors;
 
             Text label = CreateText("Label", buttonObject.GetComponent<RectTransform>(),
-                spec.label, 18, TextColor,
+                spec.label, spec.labelFontSize, TextColor,
                 Vector2.zero, Vector2.one, TextAnchor.MiddleCenter);
             label.raycastTarget = false;
         }
 
         private HomeUiSpec LoadSpec()
         {
+            HomeUiSpec hierarchySpec = LoadHierarchySpec();
+            if (hierarchySpec != null)
+            {
+                return hierarchySpec;
+            }
+
             TextAsset asset = Resources.Load<TextAsset>("UI/ui-spec");
             if (asset != null)
             {
@@ -121,6 +143,200 @@ namespace _TDS.Home
             }
 
             return HomeUiSpec.Default();
+        }
+
+        private static FigmaNode LoadHierarchyRoot()
+        {
+            TextAsset asset = Resources.Load<TextAsset>("UI/hierarchy");
+            return asset == null ? null : JsonConvert.DeserializeObject<FigmaNode>(asset.text);
+        }
+
+        private static HomeUiSpec LoadHierarchySpec()
+        {
+            TextAsset asset = Resources.Load<TextAsset>("UI/hierarchy");
+            if (asset == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                FigmaNode root = JsonConvert.DeserializeObject<FigmaNode>(asset.text);
+                if (root == null)
+                {
+                    return null;
+                }
+
+                HomeUiSpec spec = HomeUiSpec.Default();
+                spec.title = ReadText(FindNode(root, "Title"), "Title", spec.title, out spec.titleFontSize);
+                spec.subtitle = ReadText(FindNode(root, "Subtitle"), "Subtitle", spec.subtitle, out spec.subtitleFontSize);
+                spec.hint = ReadText(FindNode(root, "Hint"), "Hint", spec.hint, out spec.hintFontSize);
+
+                FigmaNode grid = FindNode(root, "LevelGrid");
+                if (grid?.children == null)
+                {
+                    return spec;
+                }
+
+                List<HomeUiButtonSpec> buttons = new List<HomeUiButtonSpec>();
+                for (int i = 0; i < grid.children.Length; i++)
+                {
+                    FigmaNode levelNode = grid.children[i];
+                    if (!levelNode.name.StartsWith("Level") ||
+                        !int.TryParse(levelNode.name.Substring("Level".Length), out int level))
+                    {
+                        continue;
+                    }
+
+                    FigmaNode labelNode = FindNode(levelNode, "Label");
+                    string label = ReadText(labelNode, "Label", $"LEVEL {level}\\n\\nSTART", out int labelFontSize);
+                    FigmaComponent rect = FindComponent(levelNode, "RectTransform");
+                    buttons.Add(new HomeUiButtonSpec
+                    {
+                        level = level,
+                        label = label,
+                        width = rect?.width > 0f ? rect.width : 148f,
+                        height = rect?.height > 0f ? rect.height : 180f,
+                        labelFontSize = labelFontSize,
+                    });
+                }
+
+                if (buttons.Count > 0)
+                {
+                    spec.buttons = buttons.ToArray();
+                }
+
+                return spec;
+            }
+            catch (System.Exception exception)
+            {
+                Debug.LogWarning($"Unable to load Figma hierarchy: {exception.Message}");
+                return null;
+            }
+        }
+
+        private static string ReadText(
+            FigmaNode node,
+            string _name,
+            string fallback,
+            out int fontSize)
+        {
+            fontSize = 18;
+            FigmaComponent text = FindComponent(node, "Text");
+            if (text == null)
+            {
+                return fallback;
+            }
+
+            fontSize = Mathf.Max(1, Mathf.RoundToInt(text.fontSize));
+            return string.IsNullOrEmpty(text.text) ? fallback : text.text;
+        }
+
+        private static FigmaNode FindNodeByType(FigmaNode node, string type)
+        {
+            if (node == null)
+            {
+                return null;
+            }
+            if (node.type == type && FindComponent(node, "Image") != null)
+            {
+                return node;
+            }
+            if (node.children == null)
+            {
+                return null;
+            }
+
+            for (int i = 0; i < node.children.Length; i++)
+            {
+                FigmaNode match = FindNodeByType(node.children[i], type);
+                if (match != null)
+                {
+                    return match;
+                }
+            }
+            return null;
+        }
+
+        private static FigmaNode FindNode(FigmaNode node, string name)
+        {
+            if (node == null)
+            {
+                return null;
+            }
+            if (node.name == name)
+            {
+                return node;
+            }
+            if (node.children == null)
+            {
+                return null;
+            }
+
+            for (int i = 0; i < node.children.Length; i++)
+            {
+                FigmaNode match = FindNode(node.children[i], name);
+                if (match != null)
+                {
+                    return match;
+                }
+            }
+            return null;
+        }
+
+        private static void CreateFigmaImage(RectTransform parent, FigmaNode node)
+        {
+            FigmaComponent rect = FindComponent(node, "RectTransform");
+            FigmaComponent imageData = FindComponent(node, "Image");
+            if (rect == null || imageData == null || string.IsNullOrEmpty(imageData.sourceImage))
+            {
+                return;
+            }
+
+            string resourcePath = $"UI/FigmaExport/Images/{System.IO.Path.GetFileNameWithoutExtension(imageData.sourceImage)}";
+            Sprite sprite = Resources.Load<Sprite>(resourcePath);
+            if (sprite == null)
+            {
+                Sprite[] sprites = Resources.LoadAll<Sprite>(resourcePath);
+                sprite = sprites.Length > 0 ? sprites[0] : null;
+            }
+            if (sprite == null)
+            {
+                Debug.LogWarning($"Figma image not found in Resources: {resourcePath}");
+                return;
+            }
+
+            GameObject imageObject = CreateObject(node.name, parent);
+            RectTransform imageRect = imageObject.GetComponent<RectTransform>();
+            imageRect.anchorMin = new Vector2(0.5f, 0.5f);
+            imageRect.anchorMax = new Vector2(0.5f, 0.5f);
+            imageRect.pivot = new Vector2(0.5f, 0.5f);
+            imageRect.sizeDelta = new Vector2(rect.width, rect.height);
+            imageRect.anchoredPosition = new Vector2(rect.x, rect.y);
+
+            Image image = imageObject.AddComponent<Image>();
+            image.sprite = sprite;
+            image.preserveAspect = true;
+            image.color = imageData.color == null
+                ? Color.white
+                : new Color(imageData.color.r, imageData.color.g, imageData.color.b, imageData.color.a);
+        }
+
+        private static FigmaComponent FindComponent(FigmaNode node, string name)
+        {
+            if (node?.components == null)
+            {
+                return null;
+            }
+
+            for (int i = 0; i < node.components.Length; i++)
+            {
+                if (node.components[i].component == name)
+                {
+                    return node.components[i];
+                }
+            }
+            return null;
         }
 
         private void BindButtons()
@@ -256,6 +472,9 @@ namespace _TDS.Home
         public string title;
         public string subtitle;
         public string hint;
+        public int titleFontSize = 34;
+        public int subtitleFontSize = 16;
+        public int hintFontSize = 14;
         public HomeUiButtonSpec[] buttons;
 
         public static HomeUiSpec Default()
@@ -276,6 +495,9 @@ namespace _TDS.Home
                 {
                     level = level,
                     label = $"LEVEL {level}\n\nSTART",
+                    width = 148f,
+                    height = 180f,
+                    labelFontSize = 18,
                 };
             }
 
@@ -288,5 +510,40 @@ namespace _TDS.Home
     {
         public int level;
         public string label;
+        public float width = 148f;
+        public float height = 180f;
+        public int labelFontSize = 18;
+    }
+
+    [System.Serializable]
+    sealed class FigmaNode
+    {
+        public string name;
+        public string type;
+        public FigmaNode[] children;
+        public FigmaComponent[] components;
+    }
+
+    [System.Serializable]
+    sealed class FigmaComponent
+    {
+        public string component;
+        public float width;
+        public float height;
+        public float x;
+        public float y;
+        public string text;
+        public float fontSize;
+        public string sourceImage;
+        public FigmaColor color;
+    }
+
+    [System.Serializable]
+    sealed class FigmaColor
+    {
+        public float r;
+        public float g;
+        public float b;
+        public float a = 1f;
     }
 }
