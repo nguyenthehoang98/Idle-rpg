@@ -33,10 +33,17 @@ namespace _TDS.Home
 
         private void BuildUi()
         {
-            if (transform.Find("HomeCanvas") != null)
+            Transform existingCanvas = transform.Find("HomeCanvas");
+            if (existingCanvas != null)
             {
-                BindButtons();
-                return;
+                if (!Application.isPlaying)
+                {
+                    BindButtons();
+                    return;
+                }
+
+                existingCanvas.gameObject.SetActive(false);
+                Destroy(existingCanvas.gameObject);
             }
 
             font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
