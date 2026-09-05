@@ -136,7 +136,7 @@ namespace _TDS.Home
             TextAnchor alignment)
         {
             GameObject textObject = CreateObject(objectName, parent);
-            RectTransform rect = textObject.AddComponent<RectTransform>();
+            RectTransform rect = textObject.GetComponent<RectTransform>();
             SetRect(rect, anchorMin, anchorMax, Vector2.zero, Vector2.zero);
 
             Text text = textObject.AddComponent<Text>();
