@@ -21,6 +21,6 @@
 - [ ] Add/maintain logic tests for every new behavior.
 - [x] Add config validation tests for 20 campaign levels and hero/monster/skill prefab coverage.
 - [ ] Add common integration tests for Boot, config loading, Addressables and required scene components.
-- [x] Expand TDS PlayMode tests for stuck waves, pause/resume, shop/roll, result loop, and Victory/Defeat timeout.
+- [x] Expand TDS PlayMode tests for stuck waves, pause/resume, shop/roll, result loop, Level 1/2 clearability, Level 3 upgrade-gated clear, and Victory/Defeat timeout.
 - [ ] Fail PlayMode on unexpected runtime errors, missing scripts or missing Addressables.
 - [x] Run EditMode, TDS PlayMode and Windows Player build before merging this campaign expansion.

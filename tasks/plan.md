@@ -88,7 +88,7 @@ Run the real game flow and fail on hangs or runtime errors:
 3. Windows Player build validation.
 4. `git diff --check`.
 
-Current baseline: **58 EditMode tests**, **3 TDS PlayMode tests**, Level 1 result-loop smoke, 20-level config validation, hero/monster/skill prefab coverage, Level 20 startup smoke, and Windows Player build passing. Explicit runtime error/stuck assertions and full progression-loop coverage remain backlog items.
+Current baseline: **59 EditMode tests**, **5 TDS PlayMode tests**, Level 1/2 clearability, Level 3 upgrade-gated clear, result-loop smoke, 20-level config validation, hero/monster/skill prefab coverage, Level 20 startup smoke, and Windows Player build passing. Explicit runtime error/stuck assertions and full progression-loop coverage remain backlog items.
 
 ## Risks
 - Pooled monsters can emit duplicate death events; reward emission must be guarded at the source.

@@ -10,6 +10,26 @@ namespace _TDS.Tests.Editor
     public sealed class CampaignConfigTests
     {
         [Test]
+        public void LevelThreeIntroducesTheUpgradeRequiredDifficultySpike()
+        {
+            string path = Path.Combine(Application.dataPath, "_TDSAssets/Config/SpawnConfig.json");
+            SpawnFile file = JsonUtility.FromJson<SpawnFile>(File.ReadAllText(path));
+            SpawnRow boss = null;
+            float levelTwoHealth = 0f;
+            foreach (SpawnRow row in file.spawns)
+            {
+                if (row.definition.level == 2) levelTwoHealth = Mathf.Max(levelTwoHealth, row.scale.healthMultiplier);
+                if (row.definition.level == 3 && row.definition.wave == 5) boss = row;
+            }
+
+            Assert.That(levelTwoHealth, Is.LessThanOrEqualTo(0.9f));
+            Assert.That(boss, Is.Not.Null);
+            Assert.That(boss.monsterId, Is.EqualTo(1003));
+            Assert.That(boss.scale.healthMultiplier, Is.GreaterThanOrEqualTo(1.8f));
+            Assert.That(boss.scale.attackMultiplier, Is.GreaterThanOrEqualTo(1.5f));
+        }
+
+        [Test]
         public void SpawnConfigDefinesTwentyFiveWaveCampaign()
         {
             string path = Path.Combine(Application.dataPath, "_TDSAssets/Config/SpawnConfig.json");
@@ -47,6 +67,7 @@ namespace _TDS.Tests.Editor
             public SpawnDefinition definition;
             public int monsterId;
             public int total;
+            public SpawnScaleDefinition scale;
             public float[] spawnsTime;
             public int[] portals;
         }

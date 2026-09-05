@@ -80,7 +80,7 @@ namespace _TDS.Tests.PlayMode
             }
 
             Debug.Log($"[GameplayLevel1Outcome] outcome={outcome ?? "TIMEOUT"}, status={status ?? "<none>"}, elapsed={elapsed:0.0}s");
-            Assert.That(outcome == "VICTORY" || outcome == "DEFEAT", Is.True);
+            Assert.That(outcome, Is.EqualTo("VICTORY"), "Level 1 must be clearable without a loss");
             Assert.That(selectedUpgrade, Is.True, "The post-wave upgrade choice was not applied");
             Assert.That(shopTested, Is.True, "The Gold Shop path was not shown");
 
