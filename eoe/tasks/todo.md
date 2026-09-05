@@ -573,3 +573,44 @@ Một Big Todo chỉ được đánh dấu `[x]` khi:
 - Không có file debug/test tạm không cần thiết.
 - Không thay đổi scope ngoài plan mà chưa cập nhật docs.
 - Có commit nhỏ, mô tả đúng một logical increment.
+
+---
+
+# Big Todo 7 - UI, content và entry flow
+
+**Mục tiêu:** Tạo flow `Entry → Home → chọn level → Gameplay`, HUD shape native và content prototype mở rộng.
+
+## F-01 - Entry/Home flow `[P0]`
+
+- [ ] Config load xong mới mở Home.
+- [ ] Home có 5 lựa chọn level.
+- [ ] Lựa chọn level được truyền sang Gameplay.
+- [ ] Không còn Entry load thẳng Gameplay.
+
+## F-02 - Home level select UI `[P0]`
+
+- [ ] Dựng UI bằng UGUI native.
+- [ ] Hiển thị title và 5 level card/button.
+- [ ] Button có trạng thái hover/pressed và touch target đủ lớn.
+- [ ] Click level chuyển sang Gameplay.
+
+## F-03 - Gameplay HUD `[P0]`
+
+- [ ] Hiển thị level, wave và trạng thái battle.
+- [ ] Hiển thị 8 slot Energy Circuit.
+- [ ] Slot hero/empty và activation feedback khác nhau.
+- [ ] Không che khu vực combat chính.
+
+## F-04 - Prototype content `[P0]`
+
+- [ ] Có 5 hero config/prefab, skill ID 2001-2005.
+- [ ] Có 3 monster config/prefab thường.
+- [ ] Có 5 level, mỗi level có đủ 5 wave spawn.
+- [ ] Asset mới được thêm vào Addressables.
+
+## F-05 - Flow verification `[P0]`
+
+- [ ] Compile pass.
+- [ ] EditMode tests pass.
+- [ ] Manual PlayMode: Entry → Home → level → Gameplay.
+- [ ] Không có missing Addressable asset cho 5 hero/3 monster/5 skill.

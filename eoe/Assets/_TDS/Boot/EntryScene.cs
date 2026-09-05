@@ -14,10 +14,6 @@ namespace _TDS.Boot
 {
     public class EntryScene : BootScene
     {
-        private float elapsedTime = 1;
-        
-        private bool isLoadingScene = false;
-        
         [SerializeField] private GameObject loadingScene;
 
         protected override async void OnStart()
@@ -25,36 +21,23 @@ namespace _TDS.Boot
             base.OnStart();
             
             AssetLoader.SetAssetLocal();
-            
-            LoadSceneAsync("GameplayScene");
-            
-            isLoadingScene = true;
 
-            await ConfigManager.Load(new string[]
+            await ConfigManager.Load(new[]
             {
-                nameof(MonsterConfig), 
-                nameof(SpawnConfig), 
-                nameof(SkillConfig), 
-                nameof(ExpConfig),  
-                nameof(HeroConfig),  
+                nameof(MonsterConfig),
+                nameof(SpawnConfig),
+                nameof(SkillConfig),
+                nameof(ExpConfig),
+                nameof(HeroConfig),
             });
-        }
 
-        private void Update()
-        {
-            if (isLoadingScene)
-            {
-                elapsedTime -= Time.deltaTime;
-              
-                if (elapsedTime <= 0) CloseLoadingScene();
-            }
+            LoadSceneAsync("HomeScene");
+            CloseLoadingScene();
         }
         
         protected override void OnStartLoadingScene()
         {
             base.OnStartLoadingScene();
-            
-            isLoadingScene = true;
             
             if (loadingScene != null && loadingScene.activeInHierarchy)
             {
@@ -71,7 +54,6 @@ namespace _TDS.Boot
                 loadingScene.gameObject.SetActive(false);
             }
             
-            isLoadingScene = false;
         }
 
 #if UNITY_EDITOR

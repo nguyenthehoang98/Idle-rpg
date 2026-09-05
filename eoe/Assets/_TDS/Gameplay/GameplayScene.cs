@@ -18,13 +18,20 @@ namespace _TDS.Gameplay
         private AgentMovementRunner agentRunner;
         private SkillTickRunner skillRunner;
         private CircuitBoard board;
+        private GameplayHud hud;
         private int level = 1;
 
         public CircuitBoard Board => board;
         
         private void Awake()
         {
+            level = RunSelection.SelectedLevel;
             board = CircuitBoard.FromHeroes(heroIds);
+            hud = gameObject.GetComponent<GameplayHud>();
+            if (hud == null)
+            {
+                hud = gameObject.AddComponent<GameplayHud>();
+            }
 
             runner.TryGetRunner(out spawnRunner);
             runner.TryGetRunner(out agentRunner);
@@ -52,6 +59,8 @@ namespace _TDS.Gameplay
 
             agentRunner.Initialize();
             circuitRunner.Initialize(board);
+            hud.Initialize(board, level);
+            hud.SetStatus("LOADING BATTLE");
 
             skillRunner.Initialize();
             
@@ -96,6 +105,8 @@ namespace _TDS.Gameplay
 
         private void OnCircuitActivation(CircuitActivationEvent activation)
         {
+            hud.ActivateSlot(activation.SlotIndex);
+
             if (activation.Content.Type != CircuitSlotContentType.Hero)
             {
                 return;
@@ -103,21 +114,32 @@ namespace _TDS.Gameplay
 
             foreach (Hero hero in Hero.AliveHeroes)
             {
-                if (hero.HeroId == activation.Content.Id)
+                if (hero.HeroId == activation.Content.Id && hero.TryStartOverdrive(EnergyCircuit.DefaultOverdriveDuration))
                 {
-                    hero.TryStartOverdrive(EnergyCircuit.DefaultOverdriveDuration);
+                    hud.SetStatus("OVERDRIVE ACTIVE");
                 }
             }
         }
 
-        private void OnWaveSpawnCompleted(int wave) =>
+        private void OnWaveSpawnCompleted(int wave)
+        {
+            hud.SetWave(wave);
+            hud.SetStatus("FIGHTING");
             Debug.Log($"[Gameplay] Wave {wave} spawn xong, chờ diệt hết quái...");
+        }
 
-        private void OnWaveCleared(int wave) =>
+        private void OnWaveCleared(int wave)
+        {
+            hud.SetWave(wave);
+            hud.SetStatus("WAVE CLEARED");
             Debug.Log($"[Gameplay] Diệt hết quái wave {wave} -> wave mới");
+        }
 
-        private void OnGameWin() =>
+        private void OnGameWin()
+        {
+            hud.SetStatus("VICTORY");
             Debug.Log("[Gameplay] 🏆 WIN GAME! Diệt hết toàn bộ quái vật");
+        }
 
         private void OnHeroDied(Hero hero)
         {
@@ -135,6 +157,7 @@ namespace _TDS.Gameplay
 
             if (alive == 0)
             {
+                hud.SetStatus("DEFEAT");
                 Debug.Log("[Gameplay] 💀 THUA! Toàn bộ hero đã chết");
             }
         }

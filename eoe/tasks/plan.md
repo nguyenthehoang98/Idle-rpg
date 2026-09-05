@@ -160,6 +160,35 @@ Sau Big Todo 4-6:
 - Sau mỗi Big Todo, cập nhật checkbox và progress trong `tasks/todo.md`.
 - Nếu quyết định gameplay thay đổi, sửa docs game design trước rồi mới sửa code.
 
+## Phase 7: UI, content và entry flow
+
+### Mục tiêu
+
+Tạo vertical slice người chơi có thể vào `Entry → Home → chọn level → Gameplay`, đồng thời mở rộng dữ liệu prototype lên 5 hero, 3 monster và 5 level. UI dùng UGUI native với shape/màu placeholder; không thêm package khi chưa cần.
+
+### Thứ tự triển khai
+
+1. Entry load config rồi mở Home.
+2. Home dựng UI chọn level 1-5 và lưu lựa chọn run.
+3. Gameplay đọc level đã chọn và hiển thị HUD/Circuit board.
+4. Mở rộng Excel/config và prefab placeholder, cập nhật Addressables.
+5. Compile, EditMode và manual PlayMode flow.
+
+### Quyết định scope
+
+- Dùng UGUI runtime-generated để tránh một scene YAML lớn và dễ thay placeholder sau này.
+- Asset mới tạm dùng prefab/sprite shape hiện có với tint khác nhau; SVG chỉ thêm khi cần visual identity thật.
+- Mỗi hero dùng một skill ID khác nhau từ `2001` đến `2005`; projectile prefab placeholder được nhân bản theo address.
+- Mỗi level có 5 wave; boss, shop và augment chưa nằm trong increment này.
+
+### Exit criteria
+
+- Boot không vào thẳng Gameplay; config load xong mới vào Home.
+- Home có 5 nút level và click level mở đúng Gameplay.
+- Gameplay dùng level đã chọn và có HUD hiển thị wave/circuit/status.
+- Config có 5 hero, 3 monster, 5 level × 5 wave; prefab/address tồn tại.
+- Unity compile và EditMode pass.
+
 ## Rủi ro và giảm thiểu
 
 | Rủi ro | Tác động | Giảm thiểu |
