@@ -62,7 +62,7 @@ Skill `2001` hiện có ví dụ slow 40%, thời gian 2 giây, tỉ lệ thành
 2. Chạy battle runtime và kiểm tra slow/bleed/silence/stun trên prefab thật.
 3. Thêm UI icon, thời gian còn lại và feedback khi modifier thành công.
 4. Thêm EXP/gold, reward và màn hình win/lose thật.
-5. Tạo thêm prefab projectile cho các skill còn lại.
+5. Hoàn thiện behavior projectile và VFX feedback trên prefab đã được cấu hình.
 6. Thêm boss, elite, resistance và stacking rule cho status.
 7. Thêm save game và offline progress.
 

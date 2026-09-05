@@ -21,7 +21,7 @@
 - 1 monster: `1001`, máu 10, attack 2.
 - Level 1 có 5 wave: lần lượt 10, 15, 20, 25, 30 quái.
 - 12 portal được chia theo từng wave.
-- Có 10 skill config `2001`–`2010`, nhưng asset projectile hiện chỉ có `skill.autopistol`; các prefab còn lại cần được tạo trước khi gán vào hero.
+- Có 10 skill config `2001`–`2010`, mỗi skill đã có prefab projectile tương ứng; coverage test kiểm tra prefab có `Projectile` và `CollisionDetector`.
 
 ### Cơ chế đã hỗ trợ trong code
 
@@ -56,7 +56,7 @@
 
 ### P2 — Mở rộng chiến đấu
 
-- Tạo prefab thật cho shotgun, rifle, sniper, magic bolt, AOE, chain lightning, poison cloud, heal và fireball.
+- Kiểm tra behavior thực tế của shotgun, rifle, sniper, magic bolt, AOE, chain lightning, poison cloud, heal và fireball.
 - Nối các field skill đang có nhưng chưa dùng: cooldown, explosion, execute dưới ngưỡng HP, skill/ultimate riêng.
 - Mở rộng trạng thái: poison, burn, knockback, resistance, stacking và icon/UI thời gian còn lại.
 - Thêm nhiều loại monster: tank, ranged, healer, elite và boss; mỗi loại có behavior/target priority riêng.
