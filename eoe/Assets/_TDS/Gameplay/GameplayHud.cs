@@ -93,7 +93,7 @@ namespace _TDS.Gameplay
 
         private void BuildUi()
         {
-            font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
 
             Canvas canvas = CreateCanvas();
             RectTransform root = canvas.GetComponent<RectTransform>();

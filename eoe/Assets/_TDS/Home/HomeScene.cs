@@ -39,7 +39,7 @@ namespace _TDS.Home
                 return;
             }
 
-            font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             EnsureEventSystem();
 
             Canvas canvas = CreateCanvas();
@@ -57,7 +57,7 @@ namespace _TDS.Home
                 new Vector2(0.08f, 0.68f), new Vector2(0.92f, 0.78f), TextAnchor.MiddleCenter);
 
             GameObject levelRow = CreateObject("LevelRow", panel.rectTransform);
-            RectTransform rowRect = levelRow.AddComponent<RectTransform>();
+            RectTransform rowRect = levelRow.GetComponent<RectTransform>();
             SetRect(rowRect, new Vector2(0.06f, 0.26f), new Vector2(0.94f, 0.66f), Vector2.zero, Vector2.zero);
             HorizontalLayoutGroup row = levelRow.AddComponent<HorizontalLayoutGroup>();
             row.spacing = 12f;

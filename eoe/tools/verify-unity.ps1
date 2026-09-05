@@ -4,7 +4,8 @@ param(
     [string]$Mode = 'all',
     [string]$ProjectPath = '',
     [string]$UnityPath = '',
-    [string]$ResultsDirectory = ''
+    [string]$ResultsDirectory = '',
+    [string]$TestFilter = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -133,7 +134,7 @@ if ($Mode -eq 'compile' -or $Mode -eq 'all') {
 }
 
 if ($Mode -eq 'editmode' -or $Mode -eq 'all') {
-    Invoke-UnityStep -Name 'editmode' -Arguments @(
+    $editModeArguments = @(
         '-batchmode',
         '-nographics',
         '-projectPath',
@@ -146,11 +147,15 @@ if ($Mode -eq 'editmode' -or $Mode -eq 'all') {
         '-logFile',
         '-'
     )
+    if (-not [string]::IsNullOrWhiteSpace($TestFilter)) {
+        $editModeArguments += @('-testFilter', $TestFilter)
+    }
+    Invoke-UnityStep -Name 'editmode' -Arguments $editModeArguments
     Assert-TestResult -TestPlatform 'editmode' -LogPath (Join-Path $ResultsDirectory "$stamp-editmode.log")
 }
 
 if ($Mode -eq 'playmode') {
-    Invoke-UnityStep -Name 'playmode' -Arguments @(
+    $playModeArguments = @(
         '-batchmode',
         '-nographics',
         '-projectPath',
@@ -163,6 +168,10 @@ if ($Mode -eq 'playmode') {
         '-logFile',
         '-'
     )
+    if (-not [string]::IsNullOrWhiteSpace($TestFilter)) {
+        $playModeArguments += @('-testFilter', $TestFilter)
+    }
+    Invoke-UnityStep -Name 'playmode' -Arguments $playModeArguments
     Assert-TestResult -TestPlatform 'playmode' -LogPath (Join-Path $ResultsDirectory "$stamp-playmode.log")
 }
 
