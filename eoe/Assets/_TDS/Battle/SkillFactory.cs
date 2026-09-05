@@ -110,7 +110,7 @@ namespace _TDS.Battle
                     return;
                 }
 
-                SpawnProjectile(skillConfig, prefab, target.transform.position, target.transform.position,
+                SpawnProjectile(skillConfig, prefab, target, target.transform.position, target.transform.position,
                     1f, totalDuration, hitCount, onDamage, spawnAtTarget: true);
                 return;
             }
@@ -127,7 +127,7 @@ namespace _TDS.Battle
             int spreadCount = Mathf.Max(0, skillConfig.spreadProjectileCount);
 
             // viên chính scale 1, thẳng baseDir, spawn tại `from`
-            SpawnProjectile(skillConfig, prefab, from, baseDir, 1f,
+            SpawnProjectile(skillConfig, prefab, target, from, baseDir, 1f,
                 totalDuration, hitCount, onDamage);
 
             // debug: 1 ray / viên, đúng vị trí spawn + hướng, dài = quãng đường bay được
@@ -175,12 +175,12 @@ namespace _TDS.Battle
 
             foreach (var shot in shots)
             {
-                SpawnProjectile(skillConfig, prefab, from + shot.offset, shot.dir, shot.scale,
+                SpawnProjectile(skillConfig, prefab, target, from + shot.offset, shot.dir, shot.scale,
                     totalDuration, hitCount, onDamage);
             }
         }
 
-        private static void SpawnProjectile(SkillConfigData skillConfig, GameObject prefab,
+        private static void SpawnProjectile(SkillConfigData skillConfig, GameObject prefab, Unique target,
             Vector3 origin, Vector3 dir, float damageScale,
             float totalDuration, int hitCount,
             Action<Unique, float> onDamage, bool spawnAtTarget = false)
