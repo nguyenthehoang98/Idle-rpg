@@ -4,6 +4,7 @@ using _GameToolkit.GameConfig;
 using _GameToolkit.ResourceManagement;
 using _GameToolkit.Startup;
 using _TDS.GameConfig;
+using _TDS.Gameplay;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -21,6 +22,12 @@ namespace _TDS.Boot
             base.OnStart();
             
             AssetLoader.SetAssetLocal();
+            GameProgress.Load();
+            OfflineReward offlineReward = GameProgress.LastOfflineReward;
+            if (offlineReward.HasReward)
+            {
+                Debug.Log($"[Progress] Offline reward: +{offlineReward.Experience} EXP +{offlineReward.Gold} GOLD ({offlineReward.Minutes} min)");
+            }
 
             await ConfigManager.Load(new[]
             {
@@ -46,6 +53,16 @@ namespace _TDS.Boot
             }
         }
         
+        private void OnApplicationPause(bool pauseStatus)
+        {
+            if (pauseStatus) GameProgress.Save();
+        }
+
+        private void OnApplicationQuit()
+        {
+            GameProgress.Save();
+        }
+
         protected override void OnCloseLoadingScene()
         {
             base.OnCloseLoadingScene();

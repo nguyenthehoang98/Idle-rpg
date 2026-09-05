@@ -50,6 +50,14 @@ namespace _TDS.Home
 
             font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             HomeUiSpec spec = LoadSpec();
+            if (Application.isPlaying)
+            {
+                GameProgress.Load();
+                OfflineReward offlineReward = GameProgress.LastOfflineReward;
+                spec.hint = offlineReward.HasReward
+                    ? $"OFFLINE +{offlineReward.Experience} EXP  +{offlineReward.Gold} GOLD"
+                    : $"TOTAL  {GameProgress.State.totalExperience} EXP  {GameProgress.State.totalGold} GOLD";
+            }
             EnsureEventSystem();
 
             Canvas canvas = CreateCanvas();
@@ -117,6 +125,7 @@ namespace _TDS.Home
             colors.selectedColor = AccentColor;
             colors.disabledColor = ParseColor("334155");
             button.colors = colors;
+            button.interactable = !Application.isPlaying || spec.level <= GameProgress.State.campaignLevel;
 
             Text label = CreateText("Label", buttonObject.GetComponent<RectTransform>(),
                 spec.label, spec.labelFontSize, TextColor,

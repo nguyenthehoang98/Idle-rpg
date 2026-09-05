@@ -269,6 +269,7 @@ namespace _TDS.Gameplay
             upgradePanel?.Hide();
             if (resultReported) return;
             resultReported = true;
+            GameProgress.SaveRun(level, heroIds, rewards, victory: true);
             hud.SetStatus($"VICTORY  +{rewards.Experience} EXP  +{rewards.Gold} GOLD");
             hud.ShowResult(true, rewards);
             Debug.Log($"[Gameplay] 🏆 WIN GAME! EXP={rewards.Experience}, GOLD={rewards.Gold}");
@@ -343,6 +344,7 @@ namespace _TDS.Gameplay
             {
                 upgradePanel?.Hide();
                 resultReported = true;
+                GameProgress.SaveRun(level, heroIds, rewards, victory: false);
                 hud.SetStatus($"DEFEAT  +{rewards.Experience} EXP  +{rewards.Gold} GOLD");
                 hud.ShowResult(false, rewards);
                 Debug.Log($"[Gameplay] 💀 THUA! EXP={rewards.Experience}, GOLD={rewards.Gold}");
