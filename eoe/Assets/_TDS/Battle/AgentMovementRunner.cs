@@ -4,6 +4,7 @@ using _GameToolkit.Avoidance;
 using _GameToolkit.Entities;
 using _GameToolkit.Updater;
 using _TDS.GameConfig;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace _TDS.Battle
@@ -17,10 +18,16 @@ namespace _TDS.Battle
         private List<Temp> list = new List<Temp>();
         private Queue<Temp> additional = new Queue<Temp>();
         private Queue<Temp> remove = new Queue<Temp>();
+        private SkillConfig skillConfig;
 
         public void Initialize()
         {
             simulator.Initialize();
+        }
+
+        public void SetSkillConfig(SkillConfig config)
+        {
+            skillConfig = config;
         }
 
         /// <summary>Số quái còn sống trên sân (container = agent chưa bị remove khi chết).</summary>
@@ -142,14 +149,46 @@ namespace _TDS.Battle
         /// <summary>Monster stopped tấn công hero gần nhất trong attackRange, theo damageCooldown.</summary>
         private void MonsterTickAttack(Monster monster, float deltaTime)
         {
-            monster.AttackTimer -= deltaTime;
-            if (monster.AttackTimer > 0f) return;
-
             Hero target = FindNearestHero(monster.transform.position, monster.AttackRange);
             if (target == null) return;
 
+            if (TryCastSkill(monster, target, deltaTime))
+            {
+                return;
+            }
+
+            monster.AttackTimer -= deltaTime;
+            if (monster.AttackTimer > 0f) return;
+
             monster.AttackTimer = monster.DamageCooldown > 0 ? monster.DamageCooldown : 0.1f; // cooldown=0 -> attack 10/s
             target.TakeDamage(monster.Attack);
+        }
+
+        private bool TryCastSkill(Monster monster, Hero target, float deltaTime)
+        {
+            if (skillConfig == null || !monster.TryGetReadySkill(deltaTime, out MonsterSkillConfigData skill))
+            {
+                return false;
+            }
+
+            if (!skillConfig.TryGetSkill(skill.skillId, out SkillConfigData config))
+            {
+                Debug.LogWarning($"[AgentMovementRunner] Monster {monster.name} references missing skill {skill.skillId}");
+                monster.CommitSkill(skill);
+                return false;
+            }
+
+            SkillFactory.CastSkillAsync(config, monster.transform.position, target, (hero, damage) =>
+            {
+                if (hero == null || hero.IsDead) return;
+
+                int amount = Mathf.Max(1, Mathf.RoundToInt(
+                    damage * monster.Attack * Mathf.Max(0f, skill.damageMultiplier)));
+                hero.TakeDamage(amount);
+            }).Forget();
+
+            monster.CommitSkill(skill);
+            return true;
         }
 
         private static Hero FindNearestHero(Vector3 from, float range)
@@ -184,7 +223,9 @@ namespace _TDS.Battle
                 monsterConfigData.attackRange,
                 monsterConfigData.damageCooldown,
                 exp,
-                monsterConfigData.gold);
+                monsterConfigData.gold,
+                monsterConfigData.rank,
+                monsterConfigData.skills);
 
             // Dừng ở khoảng cách mà cả monster và hero đều có thể đánh nhau.
             float heroAttackRange = GetMaxHeroAttackRange(monsterConfigData.attackRange);

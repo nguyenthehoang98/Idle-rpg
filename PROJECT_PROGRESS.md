@@ -15,6 +15,13 @@ Unity: `6000.3.21f1`
 - Object pool cho monster, projectile và VFX.
 - Wave clear, win và lose event/log cơ bản.
 
+### Monster rank và skill
+
+- `1001` là Normal: chỉ đánh thường.
+- `1002` là Elite: đánh thường và dùng skill `2002` theo cooldown.
+- `1003` là Boss: đánh thường và luân phiên skill `2005`, `2006`, `2007`.
+- Skill monster dùng projectile config hiện có và gây damage lên hero gần nhất.
+
 ### Chỉ số hero
 
 - Attack, attack speed, attack range, max health.
@@ -63,7 +70,7 @@ Skill `2001` hiện có ví dụ slow 40%, thời gian 2 giây, tỉ lệ thành
 3. Thêm UI icon, thời gian còn lại và feedback khi modifier thành công.
 4. Thêm EXP/gold, reward và màn hình win/lose thật.
 5. Hoàn thiện behavior projectile và VFX feedback trên prefab đã được cấu hình.
-6. Thêm boss, elite, resistance và stacking rule cho status.
+6. Thêm resistance và stacking rule cho status; mở rộng skill/telegraph cho Elite và Boss.
 7. Thêm save game và offline progress.
 
 ## Trạng thái working tree

@@ -72,6 +72,44 @@ namespace _TDS.Tests.Editor
         }
 
         [Test]
+        public void MonsterSkillCycleSupportsEliteAndBossRanks()
+        {
+            GameObject gameObject = new GameObject("MonsterRankTests");
+            Monster monster = gameObject.AddComponent<Monster>();
+            monster.SetCombatData(
+                10,
+                2,
+                rank: MonsterRank.Elite,
+                skills: new[]
+                {
+                    new MonsterSkillConfigData { skillId = 2002, cooldown = 4f, damageMultiplier = 1.5f },
+                });
+
+            Assert.That(monster.Rank, Is.EqualTo(MonsterRank.Elite));
+            Assert.That(monster.TryGetReadySkill(0f, out MonsterSkillConfigData eliteSkill), Is.True);
+            Assert.That(eliteSkill.skillId, Is.EqualTo(2002));
+            monster.CommitSkill(eliteSkill);
+            Assert.That(monster.TryGetReadySkill(0f, out _), Is.False);
+            Assert.That(monster.TryGetReadySkill(4f, out _), Is.True);
+
+            monster.SetCombatData(
+                10,
+                2,
+                rank: MonsterRank.Boss,
+                skills: new[]
+                {
+                    new MonsterSkillConfigData { skillId = 2005, cooldown = 1f, damageMultiplier = 2f },
+                    new MonsterSkillConfigData { skillId = 2006, cooldown = 1f, damageMultiplier = 1.25f },
+                });
+
+            Assert.That(monster.TryGetReadySkill(0f, out MonsterSkillConfigData firstBossSkill), Is.True);
+            monster.CommitSkill(firstBossSkill);
+            Assert.That(monster.TryGetReadySkill(1f, out MonsterSkillConfigData secondBossSkill), Is.True);
+            Assert.That(secondBossSkill.skillId, Is.EqualTo(2006));
+            Object.DestroyImmediate(gameObject);
+        }
+
+        [Test]
         public void MonsterReportsModifierApplyAndRemove()
         {
             GameObject gameObject = new GameObject("ModifierFeedbackMonster");

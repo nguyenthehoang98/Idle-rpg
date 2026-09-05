@@ -8,5 +8,6 @@
 - [x] Add modifier application feedback in the gameplay HUD.
 - [x] Add modifier visual tint feedback without new assets.
 - [ ] Add modifier VFX particle assets.
-- [ ] Add boss/elite/resistance/stacking rules.
+- [x] Add Normal/Elite/Boss ranks and monster skill rotation.
+- [ ] Add resistance and stacking rules for monster statuses.
 - [ ] Add save game and offline progress.

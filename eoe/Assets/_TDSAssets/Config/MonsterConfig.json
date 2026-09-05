@@ -3,9 +3,11 @@
     {
       "id": 1001,
       "prefabName": "monster.1001",
+      "rank": 0,
       "health": 10,
       "attack": 2,
       "exp": 5,
+      "skills": [],
       "moveSpeed": 0.7,
       "stopDistance": 0.5,
       "damageCooldown": 0.0,
@@ -16,9 +18,17 @@
     {
       "id": 1002,
       "prefabName": "monster.1002",
+      "rank": 1,
       "health": 14,
       "attack": 3,
       "exp": 7,
+      "skills": [
+        {
+          "skillId": 2002,
+          "cooldown": 4.0,
+          "damageMultiplier": 1.5
+        }
+      ],
       "moveSpeed": 0.9,
       "stopDistance": 0.5,
       "damageCooldown": 0.0,
@@ -29,9 +39,27 @@
     {
       "id": 1003,
       "prefabName": "monster.1003",
+      "rank": 2,
       "health": 28,
       "attack": 4,
       "exp": 10,
+      "skills": [
+        {
+          "skillId": 2005,
+          "cooldown": 5.0,
+          "damageMultiplier": 2.0
+        },
+        {
+          "skillId": 2006,
+          "cooldown": 7.0,
+          "damageMultiplier": 1.25
+        },
+        {
+          "skillId": 2007,
+          "cooldown": 6.0,
+          "damageMultiplier": 1.0
+        }
+      ],
       "moveSpeed": 0.5,
       "stopDistance": 0.7,
       "damageCooldown": 0.0,

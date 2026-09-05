@@ -36,6 +36,8 @@ namespace _TDS.Battle
             new Dictionary<ModifierSkillAction, SkillModifierData>();
         private SpriteRenderer[] statusRenderers;
         private Color[] baseRendererColors;
+        private int nextSkillIndex;
+        private float skillTimer;
 
         public bool IsStunned => HasModifier(SkillModifierType.Stun);
         public bool IsSilenced => HasModifier(SkillModifierType.Silence);
@@ -65,6 +67,8 @@ namespace _TDS.Battle
         public int Attack { get; private set; }
         public int ExperienceReward { get; private set; }
         public int GoldReward { get; private set; }
+        public MonsterRank Rank { get; private set; }
+        public IReadOnlyList<MonsterSkillConfigData> Skills { get; private set; }
 
         public float AttackRange { get; private set; }
         public float DamageCooldown { get; private set; }
@@ -76,7 +80,9 @@ namespace _TDS.Battle
             float attackRange = 1f,
             float damageCooldown = 1f,
             int experienceReward = 0,
-            int goldReward = 0)
+            int goldReward = 0,
+            MonsterRank rank = MonsterRank.Normal,
+            MonsterSkillConfigData[] skills = null)
         {
             MaxHealth = CurrentHealth = maxHealth;
             Attack = attack;
@@ -84,7 +90,40 @@ namespace _TDS.Battle
             DamageCooldown = Mathf.Max(0f, damageCooldown);
             ExperienceReward = Mathf.Max(0, experienceReward);
             GoldReward = Mathf.Max(0, goldReward);
+            Rank = rank;
+            Skills = skills ?? Array.Empty<MonsterSkillConfigData>();
+            nextSkillIndex = 0;
+            skillTimer = 0f;
             AttackTimer = 0f;
+        }
+
+        public bool TryGetReadySkill(float deltaTime, out MonsterSkillConfigData skill)
+        {
+            skill = default;
+            if (Rank == MonsterRank.Normal || Skills == null || Skills.Count == 0)
+            {
+                return false;
+            }
+
+            skillTimer -= Mathf.Max(0f, deltaTime);
+            if (skillTimer > 0f)
+            {
+                return false;
+            }
+
+            skill = Skills[nextSkillIndex % Skills.Count];
+            return skill.skillId > 0;
+        }
+
+        public void CommitSkill(MonsterSkillConfigData skill)
+        {
+            if (Skills == null || Skills.Count == 0)
+            {
+                return;
+            }
+
+            nextSkillIndex = (nextSkillIndex + 1) % Skills.Count;
+            skillTimer = Mathf.Max(0.1f, skill.cooldown);
         }
 
         public int TakeDamage(int damage)

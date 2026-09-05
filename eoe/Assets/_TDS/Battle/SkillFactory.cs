@@ -45,8 +45,32 @@ namespace _TDS.Battle
             registeredPools.Clear();
         }
 
-        public static async UniTask CastSkillAsync(SkillConfigData skillConfig, Vector3 from, Monster target,
+        public static UniTask CastSkillAsync(SkillConfigData skillConfig, Vector3 from, Monster target,
             Action<Monster, float> onDamage)
+        {
+            return CastSkillAsync(skillConfig, from, (Unique)target, (unique, damage) =>
+            {
+                if (unique is Monster monster)
+                {
+                    onDamage?.Invoke(monster, damage);
+                }
+            });
+        }
+
+        public static UniTask CastSkillAsync(SkillConfigData skillConfig, Vector3 from, Hero target,
+            Action<Hero, float> onDamage)
+        {
+            return CastSkillAsync(skillConfig, from, (Unique)target, (unique, damage) =>
+            {
+                if (unique is Hero hero)
+                {
+                    onDamage?.Invoke(hero, damage);
+                }
+            });
+        }
+
+        private static async UniTask CastSkillAsync(SkillConfigData skillConfig, Vector3 from, Unique target,
+            Action<Unique, float> onDamage)
         {
             if (unit == null)
             {
@@ -159,7 +183,7 @@ namespace _TDS.Battle
         private static void SpawnProjectile(SkillConfigData skillConfig, GameObject prefab,
             Vector3 origin, Vector3 dir, float damageScale,
             float totalDuration, int hitCount,
-            Action<Monster, float> onDamage, bool spawnAtTarget = false)
+            Action<Unique, float> onDamage, bool spawnAtTarget = false)
         {
             GameObject go = Pool.Instantiate(prefab, origin, true);
             go.transform.rotation = Quaternion.identity;
@@ -209,13 +233,18 @@ namespace _TDS.Battle
 
             action.OnDamaged += (HitInfo info) =>
             {
+                if (info.Unique == null ||
+                    (target is Monster && !(info.Unique is Monster)) ||
+                    (target is Hero && !(info.Unique is Hero)))
+                {
+                    return false;
+                }
+
+                float dmg = damageScale; // base damage; caller applies its attack stat
+
+                onDamage?.Invoke(info.Unique, dmg);
                 Monster m = info.Unique as Monster;
-                if (m == null) return false;
-
-                float dmg = damageScale; // base damage; Hero nhân với attack stat
-
-                onDamage?.Invoke(m, dmg);
-                if (modifierTargets.Add(m)) ApplyModifier(skillConfig, m);
+                if (m != null && modifierTargets.Add(m)) ApplyModifier(skillConfig, m);
 
                 if (isDot)
                 {

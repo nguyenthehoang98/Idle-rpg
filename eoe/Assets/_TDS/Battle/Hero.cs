@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using _GameToolkit.Skills;
+using _GameToolkit.Share;
 using _GameToolkit.Statistics;
 using _TDS.GameConfig;
 using Cysharp.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace _TDS.Battle
         Defense,
     }
 
-    public class Hero : MonoBehaviour
+    public class Hero : Unique
     {
         private Dictionary<StatId, Stat> stats;
         private readonly HashSet<Monster> monsters = new HashSet<Monster>();
@@ -340,6 +341,11 @@ namespace _TDS.Battle
         {
             if (amount <= 0 || IsDead) return;
             CurrentHealth = Mathf.Min(MaxHealth, CurrentHealth + amount);
+        }
+
+        public override int Id()
+        {
+            return HeroId != 0 ? HeroId : GetHashCode();
         }
     }
 }

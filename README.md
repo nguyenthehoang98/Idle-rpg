@@ -18,7 +18,7 @@
 ### Dữ liệu hiện tại
 
 - 1 hero: `101`, máu 20, attack 5, attack speed 0.5 đòn/giây, crit chance 50%, crit damage +100%, lifesteal 0%.
-- 1 monster: `1001`, máu 10, attack 2.
+- 3 loại monster: `1001` Normal (đánh thường), `1002` Elite (đánh thường + skill `2002`), `1003` Boss (đánh thường + skill `2005`, `2006`, `2007`).
 - Level 1 có 5 wave: lần lượt 10, 15, 20, 25, 30 quái.
 - 12 portal được chia theo từng wave.
 - Có 10 skill config `2001`–`2010`, mỗi skill đã có prefab projectile tương ứng; coverage test kiểm tra prefab có `Projectile` và `CollisionDetector`.
@@ -59,7 +59,7 @@
 - Kiểm tra behavior thực tế của shotgun, rifle, sniper, magic bolt, AOE, chain lightning, poison cloud, heal và fireball.
 - Nối các field skill đang có nhưng chưa dùng: cooldown, explosion, execute dưới ngưỡng HP, skill/ultimate riêng.
 - Mở rộng trạng thái: poison, burn, knockback, resistance, stacking và icon/UI thời gian còn lại.
-- Thêm nhiều loại monster: tank, ranged, healer, elite và boss; mỗi loại có behavior/target priority riêng.
+- Mở rộng behavior/target priority cho monster; Elite và Boss hiện đã có rank và skill rotation cơ bản.
 - Thêm wave modifier và boss wave để tránh 5 wave hiện tại chỉ tăng số lượng quái.
 
 ### P3 — Đúng chất idle RPG

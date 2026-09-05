@@ -114,6 +114,7 @@ namespace _TDS.Battle
             agentMovementRunner = agent;
             
             monsterConfig = ConfigManager.Get<MonsterConfig>();
+            agentMovementRunner.SetSkillConfig(ConfigManager.Get<SkillConfig>());
            
             spawnConfig = ConfigManager.Get<SpawnConfig>();
 
