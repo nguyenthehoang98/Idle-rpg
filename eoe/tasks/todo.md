@@ -582,35 +582,35 @@ Một Big Todo chỉ được đánh dấu `[x]` khi:
 
 ## F-01 - Entry/Home flow `[P0]`
 
-- [ ] Config load xong mới mở Home.
-- [ ] Home có 5 lựa chọn level.
-- [ ] Lựa chọn level được truyền sang Gameplay.
-- [ ] Không còn Entry load thẳng Gameplay.
+- [x] Config load xong mới mở Home.
+- [x] Home có 5 lựa chọn level.
+- [x] Lựa chọn level được truyền sang Gameplay.
+- [x] Không còn Entry load thẳng Gameplay.
 
 ## F-02 - Home level select UI `[P0]`
 
-- [ ] Dựng UI bằng UGUI native.
-- [ ] Hiển thị title và 5 level card/button.
-- [ ] Button có trạng thái hover/pressed và touch target đủ lớn.
-- [ ] Click level chuyển sang Gameplay.
+- [x] Dựng UI bằng UGUI native.
+- [x] Hiển thị title và 5 level card/button.
+- [x] Button có trạng thái hover/pressed và touch target đủ lớn.
+- [x] Click level chuyển sang Gameplay.
 
 ## F-03 - Gameplay HUD `[P0]`
 
-- [ ] Hiển thị level, wave và trạng thái battle.
-- [ ] Hiển thị 8 slot Energy Circuit.
-- [ ] Slot hero/empty và activation feedback khác nhau.
-- [ ] Không che khu vực combat chính.
+- [x] Hiển thị level, wave và trạng thái battle.
+- [x] Hiển thị 8 slot Energy Circuit.
+- [x] Slot hero/empty và activation feedback khác nhau.
+- [x] Không che khu vực combat chính.
 
 ## F-04 - Prototype content `[P0]`
 
-- [ ] Có 5 hero config/prefab, skill ID 2001-2005.
-- [ ] Có 3 monster config/prefab thường.
-- [ ] Có 5 level, mỗi level có đủ 5 wave spawn.
-- [ ] Asset mới được thêm vào Addressables.
+- [x] Có 5 hero config/prefab, skill ID 2001-2005.
+- [x] Có 3 monster config/prefab thường.
+- [x] Có 5 level, mỗi level có đủ 5 wave spawn.
+- [x] Asset mới được thêm vào Addressables.
 
 ## F-05 - Flow verification `[P0]`
 
-- [ ] Compile pass.
-- [ ] EditMode tests pass.
+- [x] Compile pass.
+- [x] EditMode tests pass.
 - [ ] Manual PlayMode: Entry → Home → level → Gameplay.
-- [ ] Không có missing Addressable asset cho 5 hero/3 monster/5 skill.
+- [x] Không có missing Addressable asset cho 5 hero/3 monster/5 skill.
