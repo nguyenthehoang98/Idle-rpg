@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="700" viewBox="0 0 1280 700">
+  <title>Top View RPG Character and Monster Set</title>
+  <desc>Ten flat vector top-view units for Figma preview: four heroes and six monsters.</desc>
+  <defs>
+    <style>
+      .card{fill:#172238;stroke:#334155;stroke-width:2}
+      .ink{stroke:#07111F;stroke-width:6;stroke-linejoin:round;stroke-linecap:round}
+      .thin{stroke:#07111F;stroke-width:3;stroke-linejoin:round;stroke-linecap:round}
+      .label{fill:#F8FAFC;font-family:Arial,sans-serif;font-size:15px;font-weight:bold;text-anchor:middle}
+      .sub{fill:#A8B5C7;font-family:Arial,sans-serif;font-size:11px;text-anchor:middle}
+    </style>
+  </defs>
+
+  <!-- Preview cards. Remove these cards and labels when exporting units for the game. -->
+  <g id="PreviewCards" opacity="0.98">
+    <rect class="card" x="12" y="12" width="232" height="320" rx="16"/>
+    <rect class="card" x="268" y="12" width="232" height="320" rx="16"/>
+    <rect class="card" x="524" y="12" width="232" height="320" rx="16"/>
+    <rect class="card" x="780" y="12" width="232" height="320" rx="16"/>
+    <rect class="card" x="1036" y="12" width="232" height="320" rx="16"/>
+    <rect class="card" x="12" y="356" width="232" height="320" rx="16"/>
+    <rect class="card" x="268" y="356" width="232" height="320" rx="16"/>
+    <rect class="card" x="524" y="356" width="232" height="320" rx="16"/>
+    <rect class="card" x="780" y="356" width="232" height="320" rx="16"/>
+    <rect class="card" x="1036" y="356" width="232" height="320" rx="16"/>
+  </g>
+
+  <!-- 1. Neon Knight -->
+  <g id="NeonKnight" transform="translate(128 160)">
+    <ellipse cx="0" cy="78" rx="57" ry="17" fill="#050B16" opacity=".45"/>
+    <path class="ink" fill="#155E75" d="M-42 10c-21 26-23 68-9 82 14 14 37 3 51-7 14 10 37 21 51 7 14-14 12-56-9-82z"/>
+    <path class="ink" fill="#334155" d="M-37-18c-9 18-8 49 0 66l37 18 37-18c8-17 9-48 0-66z"/>
+    <path class="thin" fill="#5EEAD4" d="M-11 5h22v42l-11 8-11-8z"/>
+    <path class="ink" fill="#A78BFA" d="M-48-37c0-28 21-48 48-48s48 20 48 48c0 17-8 30-20 40L0 20l-28-17c-12-10-20-23-20-40z"/>
+    <path class="thin" fill="#F8FAFC" d="M-34-36c0-18 15-31 34-31s34 13 34 31c0 10-5 18-13 24L0 0l-21-12c-8-6-13-14-13-24z"/>
+    <path class="thin" fill="#07111F" d="M-18-35c5-5 31-5 36 0-4 13-10 18-18 18s-14-5-18-18z"/>
+    <circle cx="-9" cy="-34" r="3" fill="#5EEAD4"/><circle cx="9" cy="-34" r="3" fill="#5EEAD4"/>
+    <text class="label" y="116">NEON KNIGHT</text><text class="sub" y="134">hero / tank</text>
+  </g>
+
+  <!-- 2. Arcane Mage -->
+  <g id="ArcaneMage" transform="translate(384 160)">
+    <ellipse cx="0" cy="78" rx="53" ry="16" fill="#050B16" opacity=".45"/>
+    <path class="ink" fill="#4C1D95" d="M-48 4c-15 27-15 65 0 79 16 15 34 3 48-7 14 10 32 22 48 7 15-14 15-52 0-79z"/>
+    <path class="ink" fill="#7C3AED" d="M-38-13h76l-9 67L0 70l-29-16z"/>
+    <path class="thin" fill="#C4B5FD" d="M-18 2h36v42L0 55l-18-11z"/>
+    <path class="ink" fill="#F97316" d="M-42-30 0-91l42 61-42 22z"/>
+    <path class="thin" fill="#FBBF24" d="M-18-31 0-65l18 34z"/>
+    <circle cx="0" cy="-67" r="6" fill="#5EEAD4" stroke="#07111F" stroke-width="4"/>
+    <path class="ink" fill="#F8FAFC" d="M-31-28c0-20 14-34 31-34s31 14 31 34c0 10-4 18-12 24L0 7l-19-11c-8-6-12-14-12-24z"/>
+    <path class="thin" fill="#07111F" d="M-16-26c5-5 27-5 32 0-3 11-9 16-16 16s-13-5-16-16z"/>
+    <circle cx="-8" cy="-26" r="3" fill="#7C3AED"/><circle cx="8" cy="-26" r="3" fill="#7C3AED"/>
+    <text class="label" y="116">ARCANE MAGE</text><text class="sub" y="134">hero / caster</text>
+  </g>
+
+  <!-- 3. Circuit Rogue -->
+  <g id="CircuitRogue" transform="translate(640 160)">
+    <ellipse cx="0" cy="78" rx="50" ry="15" fill="#050B16" opacity=".45"/>
+    <path class="ink" fill="#0F766E" d="M-38 6c-17 22-19 58-6 75 13 16 31 5 44-5 13 10 31 21 44 5 13-17 11-53-6-75z"/>
+    <path class="ink" fill="#1E293B" d="M-30-15 0-29l30 14 12 56-42 18-42-18z"/>
+    <path class="thin" fill="#F97316" d="M-23 3 0-7 23 3v31L0 44l-23-10z"/>
+    <path class="ink" fill="#111827" d="M-43-38c5-29 22-44 43-44s38 15 43 44l-22 19H-21z"/>
+    <path class="thin" fill="#F8FAFC" d="M-31-34c4-16 15-25 31-25s27 9 31 25c-8 10-19 15-31 15s-23-5-31-15z"/>
+    <path class="thin" fill="#07111F" d="M-24-35h48"/>
+    <circle cx="-10" cy="-35" r="3" fill="#5EEAD4"/><circle cx="10" cy="-35" r="3" fill="#5EEAD4"/>
+    <path class="ink" fill="#94A3B8" d="M43 17 67 3l9 8-25 25z"/>
+    <text class="label" y="116">CIRCUIT ROGUE</text><text class="sub" y="134">hero / melee</text>
+  </g>
+
+  <!-- 4. Solar Ranger -->
+  <g id="SolarRanger" transform="translate(896 160)">
+    <ellipse cx="0" cy="78" rx="55" ry="16" fill="#050B16" opacity=".45"/>
+    <path class="ink" fill="#166534" d="M-45 2c-20 26-19 67-3 81 15 13 34 2 48-8 14 10 33 21 48 8 16-14 17-55-3-81z"/>
+    <path class="ink" fill="#365314" d="M-36-13h72l-6 58L0 67l-30-22z"/>
+    <path class="thin" fill="#FACC15" d="M-15 2h30v39L0 49l-15-8z"/>
+    <path class="ink" fill="#713F12" d="M-46-37c6-28 23-47 46-47s40 19 46 47l-25 12H-21z"/>
+    <path class="thin" fill="#FDE68A" d="M-31-35c6-17 16-25 31-25s25 8 31 25c-9 8-20 12-31 12s-22-4-31-12z"/>
+    <path class="thin" fill="#07111F" d="M-21-33h42"/>
+    <circle cx="-9" cy="-34" r="3" fill="#F97316"/><circle cx="9" cy="-34" r="3" fill="#F97316"/>
+    <path class="ink" fill="none" d="M44 15c27 7 39 25 39 46"/><path class="thin" fill="none" d="M58 21c19 7 27 19 27 35"/>
+    <text class="label" y="116">SOLAR RANGER</text><text class="sub" y="134">hero / ranged</text>
+  </g>
+
+  <!-- 5. Acid Slime -->
+  <g id="AcidSlime" transform="translate(1152 160)">
+    <ellipse cx="0" cy="76" rx="58" ry="18" fill="#050B16" opacity=".45"/>
+    <path class="ink" fill="#65A30D" d="M-55 34c2-43 24-69 55-69s53 26 55 69c2 25-19 42-55 42s-57-17-55-42z"/>
+    <path class="thin" fill="#A3E635" d="M-33 30c3-24 14-40 33-40s30 16 33 40c1 14-11 25-33 25s-34-11-33-25z"/>
+    <circle cx="-17" cy="28" r="6" fill="#07111F"/><circle cx="17" cy="28" r="6" fill="#07111F"/>
+    <circle cx="-15" cy="26" r="2" fill="#F8FAFC"/><circle cx="19" cy="26" r="2" fill="#F8FAFC"/>
+    <path class="thin" fill="none" d="M-13 47c7 7 19 7 26 0"/>
+    <circle cx="35" cy="-5" r="8" fill="#FDE047" stroke="#07111F" stroke-width="4"/>
+    <text class="label" y="116">ACID SLIME</text><text class="sub" y="134">monster / blob</text>
+  </g>
+
+  <!-- 6. Iron Goblin -->
+  <g id="IronGoblin" transform="translate(128 504)">
+    <ellipse cx="0" cy="78" rx="55" ry="17" fill="#050B16" opacity=".45"/>
+    <path class="ink" fill="#365314" d="M-45 8c-18 25-17 61-3 77 14 15 34 4 48-6 14 10 34 21 48 6 14-16 15-52-3-77z"/>
+    <path class="ink" fill="#4D7C0F" d="M-35-4h70l-7 55L0 70l-28-19z"/>
+    <path class="thin" fill="#A3E635" d="M-16 8h32v34L0 50l-16-8z"/>
+    <path class="ink" fill="#334155" d="M-48-37 0-68l48 31-14 14H-34z"/>
+    <path class="thin" fill="#94A3B8" d="M-29-36 0-53l29 17-29 10z"/>
+    <path class="ink" fill="#A3E635" d="M-31-26c6-12 17-19 31-19s25 7 31 19c-7 13-17 19-31 19s-24-6-31-19z"/>
+    <circle cx="-10" cy="-27" r="4" fill="#7F1D1D"/><circle cx="10" cy="-27" r="4" fill="#7F1D1D"/>
+    <path class="thin" fill="none" d="M-15-10h30"/>
+    <text class="label" y="116">IRON GOBLIN</text><text class="sub" y="134">monster / raider</text>
+  </g>
+
+  <!-- 7. Frost Wolf -->
+  <g id="FrostWolf" transform="translate(384 504)">
+    <ellipse cx="0" cy="75" rx="58" ry="17" fill="#050B16" opacity=".45"/>
+    <path class="ink" fill="#475569" d="M-50 25c-4-28 7-55 28-65l-5-28 27 18 27-18-5 28c21 10 32 37 28 65-4 29-22 45-50 45s-46-16-50-45z"/>
+    <path class="thin" fill="#BAE6FD" d="M-28 22c-2-22 10-39 28-39s30 17 28 39c-2 18-12 28-28 28s-26-10-28-28z"/>
+    <path class="thin" fill="#0F172A" d="M-22 16c7-8 15-12 22-12s15 4 22 12c-4 17-11 24-22 24s-18-7-22-24z"/>
+    <circle cx="-9" cy="17" r="3" fill="#5EEAD4"/><circle cx="9" cy="17" r="3" fill="#5EEAD4"/>
+    <path class="thin" fill="#F8FAFC" d="M-7 34h14l-7 8z"/>
+    <path class="thin" fill="none" d="M-36 55c-18 12-27 22-29 37M36 55c18 12 27 22 29 37"/>
+    <text class="label" y="116">FROST WOLF</text><text class="sub" y="134">monster / hunter</text>
+  </g>
+
+  <!-- 8. Bone Caster -->
+  <g id="BoneCaster" transform="translate(640 504)">
+    <ellipse cx="0" cy="78" rx="52" ry="16" fill="#050B16" opacity=".45"/>
+    <path class="ink" fill="#334155" d="M-39 4c-18 26-16 61-3 77 13 16 29 4 42-6 13 10 29 22 42 6 13-16 15-51-3-77z"/>
+    <path class="ink" fill="#E2E8F0" d="M-39-29 0-66l39 37-11 47L0 65l-28-47z"/>
+    <path class="thin" fill="#94A3B8" d="M-19-24 0-43l19 19-6 31L0 44l-13-37z"/>
+    <circle cx="-10" cy="-15" r="6" fill="#7C3AED" stroke="#07111F" stroke-width="4"/><circle cx="10" cy="-15" r="6" fill="#7C3AED" stroke="#07111F" stroke-width="4"/>
+    <path class="thin" fill="none" d="M-10 7h20"/>
+    <path class="ink" fill="none" d="M39 18c24-10 38-3 48 13"/><circle cx="89" cy="31" r="7" fill="#A78BFA" stroke="#07111F" stroke-width="4"/>
+    <text class="label" y="116">BONE CASTER</text><text class="sub" y="134">monster / mage</text>
+  </g>
+
+  <!-- 9. Moss Golem -->
+  <g id="MossGolem" transform="translate(896 504)">
+    <ellipse cx="0" cy="78" rx="61" ry="18" fill="#050B16" opacity=".45"/>
+    <path class="ink" fill="#57534E" d="M-56 21c0-42 23-67 56-67s56 25 56 67c0 36-22 55-56 55s-56-19-56-55z"/>
+    <path class="thin" fill="#78716C" d="M-38 21c0-26 15-44 38-44s38 18 38 44c0 23-15 36-38 36s-38-13-38-36z"/>
+    <path class="ink" fill="#166534" d="M-34-43c2-22 18-35 34-35s32 13 34 35c-12 8-22 11-34 11s-22-3-34-11z"/>
+    <circle cx="-14" cy="17" r="7" fill="#FACC15" stroke="#07111F" stroke-width="4"/><circle cx="14" cy="17" r="7" fill="#FACC15" stroke="#07111F" stroke-width="4"/>
+    <path class="thin" fill="none" d="M-17 43c11 8 23 8 34 0"/>
+    <path class="ink" fill="#166534" d="M-55 15-78 33l21 16M55 15l23 18-21 16"/>
+    <text class="label" y="116">MOSS GOLEM</text><text class="sub" y="134">monster / boss</text>
+  </g>
+
+  <!-- 10. Void Wisp -->
+  <g id="VoidWisp" transform="translate(1152 504)">
+    <ellipse cx="0" cy="80" rx="50" ry="14" fill="#050B16" opacity=".55"/>
+    <path class="ink" fill="#312E81" d="M-12 70c-29-13-43-38-37-67 5-24 22-42 49-52 27 10 44 28 49 52 6 29-8 54-37 67z"/>
+    <path class="thin" fill="#7C3AED" d="M0-27c19 9 28 22 26 38-2 20-13 31-26 38-13-7-24-18-26-38-2-16 7-29 26-38z"/>
+    <path class="ink" fill="#0F172A" d="M-37-46c-15-23 4-42 19-30L0-57l18-19c15-12 34 7 19 30L0-20z"/>
+    <circle cx="-11" cy="5" r="7" fill="#5EEAD4" stroke="#07111F" stroke-width="4"/><circle cx="11" cy="5" r="7" fill="#5EEAD4" stroke="#07111F" stroke-width="4"/>
+    <path class="thin" fill="none" d="M-12 29c8 6 16 6 24 0"/>
+    <path class="thin" fill="none" d="M-39 48c-16 9-24 20-27 34M39 48c16 9 24 20 27 34"/>
+    <text class="label" y="116">VOID WISP</text><text class="sub" y="134">monster / elite</text>
+  </g>
+</svg>
