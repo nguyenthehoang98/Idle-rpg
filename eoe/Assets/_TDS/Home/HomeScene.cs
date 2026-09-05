@@ -40,6 +40,7 @@ namespace _TDS.Home
             }
 
             font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            HomeUiSpec spec = LoadSpec();
             EnsureEventSystem();
 
             Canvas canvas = CreateCanvas();
@@ -51,9 +52,9 @@ namespace _TDS.Home
             Image panel = CreateImage("Panel", root, PanelColor);
             SetRect(panel.rectTransform, new Vector2(0.08f, 0.1f), new Vector2(0.92f, 0.9f), Vector2.zero, Vector2.zero);
 
-            CreateText("Title", panel.rectTransform, "IDLE // CIRCUIT", 34, TextColor,
+            CreateText("Title", panel.rectTransform, spec.title, 34, TextColor,
                 new Vector2(0.08f, 0.78f), new Vector2(0.92f, 0.94f), TextAnchor.MiddleCenter);
-            CreateText("Subtitle", panel.rectTransform, "SELECT A LEVEL", 16, MutedColor,
+            CreateText("Subtitle", panel.rectTransform, spec.subtitle, 16, MutedColor,
                 new Vector2(0.08f, 0.68f), new Vector2(0.92f, 0.78f), TextAnchor.MiddleCenter);
 
             GameObject levelRow = CreateObject("LevelRow", panel.rectTransform);
@@ -67,21 +68,21 @@ namespace _TDS.Home
             row.childControlWidth = true;
             row.childControlHeight = true;
 
-            for (int level = 1; level <= 5; level++)
+            for (int i = 0; i < spec.buttons.Length; i++)
             {
-                CreateLevelButton(rowRect, level);
+                CreateLevelButton(rowRect, spec.buttons[i]);
             }
 
-            CreateText("Hint", panel.rectTransform, "CHOOSE A LEVEL TO START THE RUN", 14, MutedColor,
+            CreateText("Hint", panel.rectTransform, spec.hint, 14, MutedColor,
                 new Vector2(0.08f, 0.1f), new Vector2(0.92f, 0.2f), TextAnchor.MiddleCenter);
             BindButtons();
         }
 
-        private void CreateLevelButton(RectTransform parent, int level)
+        private void CreateLevelButton(RectTransform parent, HomeUiButtonSpec spec)
         {
-            GameObject buttonObject = CreateObject($"Level{level}", parent);
+            GameObject buttonObject = CreateObject($"Level{spec.level}", parent);
             Image image = buttonObject.AddComponent<Image>();
-            image.color = level == RunSelection.SelectedLevel ? AccentColor : ParseColor("243552");
+            image.color = spec.level == RunSelection.SelectedLevel ? AccentColor : ParseColor("243552");
 
             Button button = buttonObject.AddComponent<Button>();
             button.targetGraphic = image;
@@ -95,9 +96,24 @@ namespace _TDS.Home
             button.colors = colors;
 
             Text label = CreateText("Label", buttonObject.GetComponent<RectTransform>(),
-                $"LEVEL {level}\n\nSTART", 18, TextColor,
+                spec.label, 18, TextColor,
                 Vector2.zero, Vector2.one, TextAnchor.MiddleCenter);
             label.raycastTarget = false;
+        }
+
+        private HomeUiSpec LoadSpec()
+        {
+            TextAsset asset = Resources.Load<TextAsset>("UI/ui-spec");
+            if (asset != null)
+            {
+                HomeUiSpec spec = JsonUtility.FromJson<HomeUiSpec>(asset.text);
+                if (spec != null && spec.buttons != null && spec.buttons.Length > 0)
+                {
+                    return spec;
+                }
+            }
+
+            return HomeUiSpec.Default();
         }
 
         private void BindButtons()
@@ -224,5 +240,46 @@ namespace _TDS.Home
         {
             return ColorUtility.TryParseHtmlString($"#{html}", out Color color) ? color : Color.white;
         }
+    }
+
+    [System.Serializable]
+    public sealed class HomeUiSpec
+    {
+        public string screen;
+        public string title;
+        public string subtitle;
+        public string hint;
+        public HomeUiButtonSpec[] buttons;
+
+        public static HomeUiSpec Default()
+        {
+            HomeUiSpec spec = new HomeUiSpec
+            {
+                screen = "home",
+                title = "IDLE // CIRCUIT",
+                subtitle = "SELECT A LEVEL",
+                hint = "CHOOSE A LEVEL TO START THE RUN",
+                buttons = new HomeUiButtonSpec[5],
+            };
+
+            for (int i = 0; i < spec.buttons.Length; i++)
+            {
+                int level = i + 1;
+                spec.buttons[i] = new HomeUiButtonSpec
+                {
+                    level = level,
+                    label = $"LEVEL {level}\n\nSTART",
+                };
+            }
+
+            return spec;
+        }
+    }
+
+    [System.Serializable]
+    public sealed class HomeUiButtonSpec
+    {
+        public int level;
+        public string label;
     }
 }

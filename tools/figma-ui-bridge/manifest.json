@@ -1,0 +1,12 @@
+{
+  "name": "Idle RPG UI Bridge",
+  "id": "idle-rpg-ui-bridge",
+  "api": "1.0.0",
+  "main": "code.js",
+  "ui": "ui.html",
+  "editorType": ["figma"],
+  "networkAccess": {
+    "allowedDomains": ["http://127.0.0.1:8787"],
+    "devAllowedDomains": ["http://127.0.0.1:8787"]
+  }
+}
