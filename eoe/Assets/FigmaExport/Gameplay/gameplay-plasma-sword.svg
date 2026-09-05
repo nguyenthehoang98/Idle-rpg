@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <title>Gameplay Plasma Sword</title>
+  <g id="PlasmaSword" transform="rotate(45 16 16)" stroke="#07111F" stroke-linejoin="round">
+    <path fill="#5EEAD4" stroke-width="2.2" d="M16 2 19 20 16 25 13 20z"/>
+    <path fill="#F8FAFC" stroke-width=".9" d="M16 6 17 19 16 21 15 19z"/>
+    <path fill="#334155" stroke-width="2.2" d="M12 22h8v6h-8z"/>
+    <path fill="#F97316" stroke-width="1.5" d="M10 21h12v3H10z"/>
+  </g>
+</svg>
