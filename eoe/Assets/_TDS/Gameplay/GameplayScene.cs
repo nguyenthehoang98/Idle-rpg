@@ -142,6 +142,7 @@ namespace _TDS.Gameplay
         private void OnGameWin()
         {
             hud.SetStatus($"VICTORY  +{rewards.Experience} EXP  +{rewards.Gold} GOLD");
+            hud.ShowResult(true, rewards);
             Debug.Log($"[Gameplay] 🏆 WIN GAME! EXP={rewards.Experience}, GOLD={rewards.Gold}");
         }
 
@@ -168,6 +169,7 @@ namespace _TDS.Gameplay
             if (alive == 0)
             {
                 hud.SetStatus($"DEFEAT  +{rewards.Experience} EXP  +{rewards.Gold} GOLD");
+                hud.ShowResult(false, rewards);
                 Debug.Log($"[Gameplay] 💀 THUA! EXP={rewards.Experience}, GOLD={rewards.Gold}");
             }
         }
