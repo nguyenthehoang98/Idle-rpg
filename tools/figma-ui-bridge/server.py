@@ -1,20 +1,38 @@
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from urllib.parse import parse_qs, urlparse
 import json
+import time
 
 ROOT = Path(__file__).resolve().parents[2]
 COMMAND_PATH = Path(__file__).with_name("commands") / "latest.json"
 UNITY_SPEC_PATH = ROOT / "Assets" / "Resources" / "UI" / "ui-spec.json"
 EXPORT_PATH = Path(__file__).with_name("exports") / "figma-ui-spec.json"
+last_plugin_seen = 0.0
 
 
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
-        if self.path != "/command":
-            self.send_error(404)
+        global last_plugin_seen
+        request = urlparse(self.path)
+        if request.path == "/command":
+            if "figma-plugin" in parse_qs(request.query).get("client", []):
+                last_plugin_seen = time.time()
+            self.send_json(json.loads(COMMAND_PATH.read_text(encoding="utf-8")))
             return
 
-        self.send_json(json.loads(COMMAND_PATH.read_text(encoding="utf-8")))
+        if request.path == "/status":
+            self.send_json({"connected": time.time() - last_plugin_seen < 3, "lastPluginSeen": last_plugin_seen})
+            return
+
+        self.send_error(404)
+
+    def do_OPTIONS(self):
+        self.send_response(204)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.end_headers()
 
     def do_POST(self):
         if self.path != "/export":

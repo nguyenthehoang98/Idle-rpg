@@ -1,7 +1,9 @@
-const BRIDGE_URL = "http://127.0.0.1:8787";
+const BRIDGE_URL = "http://localhost:8787";
+const AUTO_POLL_MS = 800;
 let lastCommandId = "";
 
 figma.showUI(__html__, { width: 300, height: 220 });
+setInterval(() => void pullCommand(true), AUTO_POLL_MS);
 
 figma.ui.onmessage = async (message) => {
   if (message.type === "pull") {
@@ -13,12 +15,12 @@ figma.ui.onmessage = async (message) => {
   }
 };
 
-async function pullCommand() {
+async function pullCommand(silent = false) {
   try {
-    const response = await fetch(`${BRIDGE_URL}/command`);
+    const response = await fetch(`${BRIDGE_URL}/command?client=figma-plugin`);
     const command = await response.json();
     if (!command.id || command.id === lastCommandId) {
-      notify("No new command");
+      if (!silent) notify("No new command");
       return;
     }
 
@@ -31,7 +33,7 @@ async function pullCommand() {
 
     notify(`Unknown command: ${command.type}`);
   } catch (error) {
-    notify(`Bridge error: ${error.message}`);
+    if (!silent) notify(`Bridge error: ${error.message}`);
   }
 }
 
