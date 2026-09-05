@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 namespace _TDS.Home
 {
+    [ExecuteAlways]
     public class HomeScene : MonoBehaviour
     {
         private static readonly Color BackgroundColor = ParseColor("0B1220");
@@ -22,8 +23,22 @@ namespace _TDS.Home
             BuildUi();
         }
 
+        private void OnEnable()
+        {
+            if (!Application.isPlaying)
+            {
+                BuildUi();
+            }
+        }
+
         private void BuildUi()
         {
+            if (transform.Find("HomeCanvas") != null)
+            {
+                BindButtons();
+                return;
+            }
+
             font = Resources.GetBuiltinResource<Font>("Arial.ttf");
             EnsureEventSystem();
 
@@ -59,6 +74,7 @@ namespace _TDS.Home
 
             CreateText("Hint", panel.rectTransform, "CHOOSE A LEVEL TO START THE RUN", 14, MutedColor,
                 new Vector2(0.08f, 0.1f), new Vector2(0.92f, 0.2f), TextAnchor.MiddleCenter);
+            BindButtons();
         }
 
         private void CreateLevelButton(RectTransform parent, int level)
@@ -77,12 +93,32 @@ namespace _TDS.Home
             colors.selectedColor = AccentColor;
             colors.disabledColor = ParseColor("334155");
             button.colors = colors;
-            button.onClick.AddListener(() => StartLevel(level));
 
             Text label = CreateText("Label", buttonObject.GetComponent<RectTransform>(),
                 $"LEVEL {level}\n\nSTART", 18, TextColor,
                 Vector2.zero, Vector2.one, TextAnchor.MiddleCenter);
             label.raycastTarget = false;
+        }
+
+        private void BindButtons()
+        {
+            Button[] buttons = GetComponentsInChildren<Button>(true);
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                Button button = buttons[i];
+                if (!button.name.StartsWith("Level"))
+                {
+                    continue;
+                }
+
+                if (!int.TryParse(button.name.Substring("Level".Length), out int level))
+                {
+                    continue;
+                }
+
+                button.onClick.RemoveAllListeners();
+                button.onClick.AddListener(() => StartLevel(level));
+            }
         }
 
         private void StartLevel(int level)
