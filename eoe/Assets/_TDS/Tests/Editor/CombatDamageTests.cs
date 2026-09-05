@@ -75,6 +75,9 @@ namespace _TDS.Tests.Editor
         public void MonsterReportsModifierApplyAndRemove()
         {
             GameObject gameObject = new GameObject("ModifierFeedbackMonster");
+            GameObject rendererObject = new GameObject("Renderer");
+            rendererObject.transform.SetParent(gameObject.transform);
+            SpriteRenderer renderer = rendererObject.AddComponent<SpriteRenderer>();
             Monster monster = gameObject.AddComponent<Monster>();
             ModifierSkillAction action = new ModifierSkillAction(1f, null, null, null);
             SkillModifierType applied = SkillModifierType.Slow;
@@ -87,6 +90,12 @@ namespace _TDS.Tests.Editor
 
             Assert.That(applied, Is.EqualTo(SkillModifierType.Stun));
             Assert.That(removed, Is.EqualTo(SkillModifierType.Stun));
+            Assert.That(renderer.color.r, Is.EqualTo(1f));
+            Assert.That(renderer.color.g, Is.EqualTo(1f));
+            monster.ApplyModifier(action, new SkillModifierData { type = SkillModifierType.Slow });
+            Assert.That(renderer.color.g, Is.LessThan(1f));
+            monster.RemoveModifier(action);
+            Assert.That(renderer.color, Is.EqualTo(Color.white));
             Object.DestroyImmediate(gameObject);
         }
     }

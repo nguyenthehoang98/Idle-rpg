@@ -6,6 +6,7 @@
 - [x] Add result feedback after the approved SVG UI is converted to runtime UI.
 - [x] Verify projectile prefab coverage for configured skills.
 - [x] Add modifier application feedback in the gameplay HUD.
-- [ ] Add modifier VFX assets/feedback.
+- [x] Add modifier visual tint feedback without new assets.
+- [ ] Add modifier VFX particle assets.
 - [ ] Add boss/elite/resistance/stacking rules.
 - [ ] Add save game and offline progress.

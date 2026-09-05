@@ -34,6 +34,8 @@ namespace _TDS.Battle
         private float deltaTime;
         private readonly Dictionary<ModifierSkillAction, SkillModifierData> activeModifiers =
             new Dictionary<ModifierSkillAction, SkillModifierData>();
+        private SpriteRenderer[] statusRenderers;
+        private Color[] baseRendererColors;
 
         public bool IsStunned => HasModifier(SkillModifierType.Stun);
         public bool IsSilenced => HasModifier(SkillModifierType.Silence);
@@ -100,6 +102,7 @@ namespace _TDS.Battle
         {
             if (action == null) return;
             activeModifiers[action] = modifier;
+            RefreshModifierVisual();
             OnModifierApplied?.Invoke(modifier.type);
         }
 
@@ -111,6 +114,7 @@ namespace _TDS.Battle
             }
 
             activeModifiers.Remove(action);
+            RefreshModifierVisual();
             OnModifierRemoved?.Invoke(modifier.type);
         }
 
@@ -124,11 +128,64 @@ namespace _TDS.Battle
             return false;
         }
 
+        private void RefreshModifierVisual()
+        {
+            if (statusRenderers == null || statusRenderers.Length == 0)
+            {
+                CacheStatusRenderers();
+            }
+
+            if (statusRenderers.Length == 0)
+            {
+                return;
+            }
+
+            Color tint = Color.white;
+            if (IsStunned)
+            {
+                tint = new Color(1f, 0.45f, 0.1f, 1f);
+            }
+            else if (HasModifier(SkillModifierType.Bleed))
+            {
+                tint = new Color(1f, 0.35f, 0.45f, 1f);
+            }
+            else if (IsSilenced)
+            {
+                tint = new Color(0.75f, 0.45f, 1f, 1f);
+            }
+            else if (HasModifier(SkillModifierType.Slow))
+            {
+                tint = new Color(1f, 0.8f, 0.25f, 1f);
+            }
+
+            for (int i = 0; i < statusRenderers.Length; i++)
+            {
+                Color baseColor = baseRendererColors[i];
+                statusRenderers[i].color = new Color(
+                    baseColor.r * tint.r,
+                    baseColor.g * tint.g,
+                    baseColor.b * tint.b,
+                    baseColor.a);
+            }
+        }
+
+        private void CacheStatusRenderers()
+        {
+            statusRenderers = GetComponentsInChildren<SpriteRenderer>(true);
+            baseRendererColors = new Color[statusRenderers.Length];
+            for (int i = 0; i < statusRenderers.Length; i++)
+            {
+                baseRendererColors[i] = statusRenderers[i].color;
+            }
+        }
+
         private bool isInitialized;
         private bool rewardGranted;
 
         private void Awake()
         {
+            CacheStatusRenderers();
+
             if (deathVfx != null && deathVfxInPool.Add(deathVfx.GetHashCode()))
             {
                 Pool.RegisterPool(deathVfx.gameObject, true);
@@ -150,6 +207,7 @@ namespace _TDS.Battle
         {
             rewardGranted = false;
             scale.localScale = scaleDefinition.sizeMultiplier * Vector3.one;
+            RefreshModifierVisual();
 
             OnMonsterEnable?.Invoke(this);
 
@@ -197,6 +255,7 @@ namespace _TDS.Battle
             }
 
             activeModifiers.Clear();
+            RefreshModifierVisual();
 
             Destroy();
         }
