@@ -75,7 +75,9 @@ namespace _TDS.Gameplay
                 state = NewState();
             }
 
-            state.campaignLevel = Math.Max(RunSelection.DefaultLevel, state.campaignLevel);
+            state.campaignLevel = Math.Min(
+                RunSelection.MaxCampaignLevel,
+                Math.Max(RunSelection.DefaultLevel, state.campaignLevel));
             state.playerLevel = Math.Max(1, state.playerLevel);
             state.selectedHeroIds ??= Array.Empty<int>();
             state.selectedUpgradeIds ??= new List<int>();
@@ -94,7 +96,9 @@ namespace _TDS.Gameplay
             if (rewards == null) return;
 
             int nextLevel = victory ? level + 1 : level;
-            state.campaignLevel = Math.Max(state.campaignLevel, Math.Max(RunSelection.DefaultLevel, nextLevel));
+            state.campaignLevel = Math.Min(
+                RunSelection.MaxCampaignLevel,
+                Math.Max(state.campaignLevel, Math.Max(RunSelection.DefaultLevel, nextLevel)));
             state.totalExperience += Math.Max(0, rewards.Experience);
             state.totalGold += Math.Max(0, rewards.Gold);
             if (expConfig != null)

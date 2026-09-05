@@ -27,7 +27,11 @@ namespace _TDS.Gameplay
         private Text resultRewards;
         private GameObject resultOverlay;
         private Action<float> setTimeScale;
+        private Action<bool> continueRun;
+        private Action returnHome;
         private readonly Button[] speedButtons = new Button[3];
+        private Button resultContinueButton;
+        private Text resultContinueLabel;
         private float modifierFeedbackRemaining;
         private string statusBeforeModifier;
         private Color statusBeforeModifierColor;
@@ -74,6 +78,12 @@ namespace _TDS.Gameplay
         {
             setTimeScale = setter;
             SetSpeed(1f);
+        }
+
+        public void BindResultActions(Action<bool> onContinue, Action onHome)
+        {
+            continueRun = onContinue;
+            returnHome = onHome;
         }
 
         public void Initialize(CircuitBoard board, int level)
@@ -162,6 +172,9 @@ namespace _TDS.Gameplay
             resultTitle.text = victory ? "VICTORY" : "DEFEAT";
             resultTitle.color = victory ? AccentColor : ParseColor("FB7185");
             resultRewards.text = $"{rewards.DefeatedMonsters} MONSTERS DEFEATED\n+{rewards.Experience} EXP   +{rewards.Gold} GOLD";
+            resultContinueLabel.text = victory ? "NEXT LEVEL" : "RETRY";
+            resultContinueButton.onClick.RemoveAllListeners();
+            resultContinueButton.onClick.AddListener(() => continueRun?.Invoke(victory));
         }
 
         private void BuildUi()
@@ -291,14 +304,41 @@ namespace _TDS.Gameplay
             SetRect(scrim.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
             Image card = CreatePanel("ResultCard", resultOverlay.transform, PanelColor);
-            SetRect(card.rectTransform, new Vector2(0.1f, 0.39f), new Vector2(0.9f, 0.61f),
+            SetRect(card.rectTransform, new Vector2(0.1f, 0.32f), new Vector2(0.9f, 0.68f),
                 Vector2.zero, Vector2.zero);
 
             resultTitle = CreateText("ResultTitle", card.transform, "RESULT", 44, AccentColor,
-                new Vector2(0.08f, 0.5f), new Vector2(0.92f, 0.84f), TextAnchor.MiddleCenter);
+                new Vector2(0.08f, 0.7f), new Vector2(0.92f, 0.92f), TextAnchor.MiddleCenter);
             resultRewards = CreateText("ResultRewards", card.transform, "", 22, TextColor,
-                new Vector2(0.08f, 0.14f), new Vector2(0.92f, 0.52f), TextAnchor.MiddleCenter);
+                new Vector2(0.08f, 0.43f), new Vector2(0.92f, 0.68f), TextAnchor.MiddleCenter);
+            resultContinueButton = CreateResultButton("Continue", card.transform, AccentColor,
+                new Vector2(0.08f, 0.2f), new Vector2(0.5f, 0.38f));
+            resultContinueLabel = resultContinueButton.GetComponentInChildren<Text>();
+            Button homeButton = CreateResultButton("Home", card.transform, SlotColor,
+                new Vector2(0.54f, 0.2f), new Vector2(0.92f, 0.38f));
+            homeButton.onClick.AddListener(() => returnHome?.Invoke());
             resultOverlay.SetActive(false);
+        }
+
+        private Button CreateResultButton(
+            string objectName,
+            Transform parent,
+            Color color,
+            Vector2 anchorMin,
+            Vector2 anchorMax)
+        {
+            GameObject buttonObject = new GameObject(objectName, typeof(RectTransform));
+            buttonObject.transform.SetParent(parent, false);
+            RectTransform rect = buttonObject.GetComponent<RectTransform>();
+            SetRect(rect, anchorMin, anchorMax, Vector2.zero, Vector2.zero);
+            Image image = buttonObject.AddComponent<Image>();
+            image.color = color;
+            Button button = buttonObject.AddComponent<Button>();
+            button.targetGraphic = image;
+            Text label = CreateText("Label", buttonObject.transform, objectName.ToUpperInvariant(), 18,
+                TextColor, Vector2.zero, Vector2.one, TextAnchor.MiddleCenter);
+            label.raycastTarget = false;
+            return button;
         }
 
         private Canvas CreateCanvas()

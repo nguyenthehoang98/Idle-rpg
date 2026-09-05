@@ -82,14 +82,14 @@ namespace _TDS.Home
 
             GameObject levelRow = CreateObject("LevelRow", panel.rectTransform);
             RectTransform rowRect = levelRow.GetComponent<RectTransform>();
-            SetRect(rowRect, new Vector2(0.06f, 0.26f), new Vector2(0.94f, 0.66f), Vector2.zero, Vector2.zero);
-            HorizontalLayoutGroup row = levelRow.AddComponent<HorizontalLayoutGroup>();
-            row.spacing = 12f;
+            SetRect(rowRect, new Vector2(0.06f, 0.18f), new Vector2(0.94f, 0.7f), Vector2.zero, Vector2.zero);
+            GridLayoutGroup row = levelRow.AddComponent<GridLayoutGroup>();
+            row.cellSize = new Vector2(148f, 72f);
+            row.spacing = new Vector2(12f, 8f);
             row.padding = new RectOffset(4, 4, 4, 4);
-            row.childForceExpandWidth = false;
-            row.childForceExpandHeight = false;
-            row.childControlWidth = true;
-            row.childControlHeight = true;
+            row.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            row.constraintCount = 5;
+            row.childAlignment = TextAnchor.UpperCenter;
 
             for (int i = 0; i < spec.buttons.Length; i++)
             {
@@ -210,11 +210,23 @@ namespace _TDS.Home
                     });
                 }
 
-                if (buttons.Count > 0)
+                HashSet<int> levels = new HashSet<int>();
+                for (int i = 0; i < buttons.Count; i++) levels.Add(buttons[i].level);
+                for (int level = 1; level <= RunSelection.MaxCampaignLevel; level++)
                 {
-                    spec.buttons = buttons.ToArray();
+                    if (levels.Contains(level)) continue;
+                    buttons.Add(new HomeUiButtonSpec
+                    {
+                        level = level,
+                        label = $"LEVEL {level}\\n\\nSTART",
+                        width = 148f,
+                        height = 72f,
+                        labelFontSize = 14,
+                    });
                 }
 
+                buttons.Sort((left, right) => left.level.CompareTo(right.level));
+                spec.buttons = buttons.ToArray();
                 return spec;
             }
             catch (System.Exception exception)
@@ -494,7 +506,7 @@ namespace _TDS.Home
                 title = "IDLE // CIRCUIT",
                 subtitle = "SELECT A LEVEL",
                 hint = "CHOOSE A LEVEL TO START THE RUN",
-                buttons = new HomeUiButtonSpec[5],
+                buttons = new HomeUiButtonSpec[RunSelection.MaxCampaignLevel],
             };
 
             for (int i = 0; i < spec.buttons.Length; i++)
@@ -505,8 +517,8 @@ namespace _TDS.Home
                     level = level,
                     label = $"LEVEL {level}\n\nSTART",
                     width = 148f,
-                    height = 180f,
-                    labelFontSize = 18,
+                    height = 72f,
+                    labelFontSize = 14,
                 };
             }
 

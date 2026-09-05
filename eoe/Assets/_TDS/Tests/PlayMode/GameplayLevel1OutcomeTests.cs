@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,6 +14,11 @@ namespace _TDS.Tests.PlayMode
         [UnityTest]
         public IEnumerator Level1ReachesWinOrLose()
         {
+            Type runSelection = Type.GetType("_TDS.Gameplay.RunSelection, Assembly-CSharp");
+            Assert.That(runSelection, Is.Not.Null);
+            runSelection.GetMethod("SelectLevel", BindingFlags.Public | BindingFlags.Static)
+                .Invoke(null, new object[] { 1 });
+
             yield return SceneManager.LoadSceneAsync("BootScene");
 
             float elapsed = 0f;
@@ -76,6 +83,26 @@ namespace _TDS.Tests.PlayMode
             Assert.That(outcome == "VICTORY" || outcome == "DEFEAT", Is.True);
             Assert.That(selectedUpgrade, Is.True, "The post-wave upgrade choice was not applied");
             Assert.That(shopTested, Is.True, "The Gold Shop path was not shown");
+
+            yield return null;
+            Button continueButton = GameObject.Find("Continue")?.GetComponent<Button>();
+            Assert.That(continueButton, Is.Not.Null, "The result loop button was not shown");
+            continueButton.onClick.Invoke();
+            elapsed = 0f;
+            while (SceneManager.GetActiveScene().name != "GamePlayScene" && elapsed < 20f)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                yield return null;
+            }
+
+            Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo("GamePlayScene"));
+            while (elapsed < 40f)
+            {
+                Text restartedStatus = GameObject.Find("Status")?.GetComponent<Text>();
+                if (!string.IsNullOrEmpty(restartedStatus?.text) && restartedStatus.text != "LOADING BATTLE") break;
+                elapsed += Time.unscaledDeltaTime;
+                yield return null;
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ namespace _TDS.Tests.PlayMode
     public sealed class HomeFlowSmokeTests
     {
         [UnityTest]
-        public IEnumerator HomeSceneBuildsFiveLevelButtons()
+        public IEnumerator HomeSceneBuildsTwentyLevelButtons()
         {
             yield return SceneManager.LoadSceneAsync("HomeScene");
             yield return null;
@@ -25,15 +25,15 @@ namespace _TDS.Tests.PlayMode
 
             RectTransform level1 = canvasObject.transform.Find("Panel/LevelRow/Level1")?.GetComponent<RectTransform>();
             Assert.That(level1, Is.Not.Null);
-            Assert.That(level1.rect.width, Is.EqualTo(177.6f).Within(1));
+            Assert.That(level1.rect.width, Is.EqualTo(148f).Within(1));
 
             Image importedImage = canvasObject.transform.Find("santa-claus 1")?.GetComponent<Image>();
             Assert.That(importedImage, Is.Not.Null);
             Assert.That(importedImage.sprite, Is.Not.Null);
 
             Button[] buttons = canvasObject.GetComponentsInChildren<Button>(true);
-            Assert.That(buttons, Has.Length.EqualTo(5));
-            for (int level = 1; level <= 5; level++)
+            Assert.That(buttons, Has.Length.EqualTo(20));
+            for (int level = 1; level <= 20; level++)
             {
                 Assert.That(canvasObject.transform.Find($"Panel/LevelRow/Level{level}"), Is.Not.Null);
             }

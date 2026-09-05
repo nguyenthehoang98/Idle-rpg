@@ -7,6 +7,7 @@ using _GameToolkit.Updater;
 using _TDS.Battle;
 using _TDS.GameConfig;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
 
 namespace _TDS.Gameplay
@@ -84,6 +85,7 @@ namespace _TDS.Gameplay
             circuitRunner.Initialize(board);
             hud.Initialize(board, level);
             hud.BindTimeScale(speed => runner.Loop = speed);
+            hud.BindResultActions(ContinueAfterResult, ReturnHome);
             hud.SetStatus("LOADING BATTLE");
 
             skillRunner.Initialize();
@@ -265,6 +267,31 @@ namespace _TDS.Gameplay
             }
 
             return result;
+        }
+
+        private void ContinueAfterResult(bool victory)
+        {
+            RunSelection.SelectLevel(victory
+                ? Mathf.Min(RunSelection.MaxCampaignLevel, level + 1)
+                : level);
+            LoadScene("GamePlayScene");
+        }
+
+        private void ReturnHome()
+        {
+            LoadScene("HomeScene");
+        }
+
+        private static void LoadScene(string sceneName)
+        {
+            if (BootScene.Instance == null)
+            {
+                SceneManager.LoadScene(sceneName);
+                return;
+            }
+
+            BootScene.Instance.LoadSceneAsync(sceneName);
+            BootScene.Instance.CloseLoadingScene();
         }
 
         private void OnGameWin()

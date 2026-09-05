@@ -32,10 +32,6 @@ namespace _GameToolkit.ResourceManagement
 
                 loader = new LocalBundleLoader();
             }
-            else
-            {
-                Debug.LogError("AssetBundleManager already initialized");
-            }
         }
 
         public static void SetAssetCloud(string databaseUri)
@@ -45,10 +41,6 @@ namespace _GameToolkit.ResourceManagement
                 isInitialized = true;
 
                 loader = new CloudBundleLoader(databaseUri);
-            }
-            else
-            {
-                Debug.LogError("AssetBundleManager already initialized");
             }
         }
 

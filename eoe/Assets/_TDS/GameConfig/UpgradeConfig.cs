@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using _GameToolkit.GameConfig;
+using Newtonsoft.Json;
 using ExcelExtension;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace _TDS.GameConfig
         ConfigPath = "Assets/_TDSAssets/Config/UpgradeConfig.json")]
     public sealed class UpgradeConfig : Config
     {
-        [SerializeField] private List<UpgradeCardConfigData> cards = new List<UpgradeCardConfigData>();
+        [SerializeField, JsonProperty] private List<UpgradeCardConfigData> cards = new List<UpgradeCardConfigData>();
 
         private List<UpgradeCardConfigData> shopItems;
         private List<UpgradeCardConfigData> heroUpgrades;
@@ -37,8 +38,8 @@ namespace _TDS.GameConfig
             }
         }
 
-        public IReadOnlyList<UpgradeCardConfigData> ShopItems => shopItems;
-        public IReadOnlyList<UpgradeCardConfigData> HeroUpgrades => heroUpgrades;
+        [JsonIgnore] public IReadOnlyList<UpgradeCardConfigData> ShopItems => shopItems;
+        [JsonIgnore] public IReadOnlyList<UpgradeCardConfigData> HeroUpgrades => heroUpgrades;
 
         public IReadOnlyList<UpgradeCardConfigData> GetSkillPool(int skillId)
         {

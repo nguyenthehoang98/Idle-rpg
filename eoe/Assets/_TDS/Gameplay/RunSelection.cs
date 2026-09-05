@@ -5,6 +5,7 @@ namespace _TDS.Gameplay
     public static class RunSelection
     {
         public const int DefaultLevel = 1;
+        public const int MaxCampaignLevel = 20;
 
         public static int SelectedLevel { get; private set; } = DefaultLevel;
 
