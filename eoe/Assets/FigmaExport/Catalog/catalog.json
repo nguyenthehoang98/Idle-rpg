@@ -1,0 +1,307 @@
+{
+  "source": "Original vector catalog generated for this project; no external artwork copied.",
+  "heroes": [
+    {
+      "id": "hero_01",
+      "name": "Neon Vanguard",
+      "role": "tank"
+    },
+    {
+      "id": "hero_02",
+      "name": "Arc Mechanist",
+      "role": "tech"
+    },
+    {
+      "id": "hero_03",
+      "name": "Prism Ranger",
+      "role": "ranged"
+    },
+    {
+      "id": "hero_04",
+      "name": "Ember Duelist",
+      "role": "melee"
+    },
+    {
+      "id": "hero_05",
+      "name": "Tide Warden",
+      "role": "support"
+    },
+    {
+      "id": "hero_06",
+      "name": "Volt Scout",
+      "role": "scout"
+    },
+    {
+      "id": "hero_07",
+      "name": "Lunar Medic",
+      "role": "healer"
+    },
+    {
+      "id": "hero_08",
+      "name": "Iron Marshal",
+      "role": "tank"
+    },
+    {
+      "id": "hero_09",
+      "name": "Moss Keeper",
+      "role": "nature"
+    },
+    {
+      "id": "hero_10",
+      "name": "Rift Hacker",
+      "role": "tech"
+    },
+    {
+      "id": "hero_11",
+      "name": "Solar Monk",
+      "role": "melee"
+    },
+    {
+      "id": "hero_12",
+      "name": "Frost Captain",
+      "role": "tank"
+    },
+    {
+      "id": "hero_13",
+      "name": "Thorn Archer",
+      "role": "ranged"
+    },
+    {
+      "id": "hero_14",
+      "name": "Echo Bard",
+      "role": "support"
+    },
+    {
+      "id": "hero_15",
+      "name": "Nova Alchemist",
+      "role": "caster"
+    },
+    {
+      "id": "hero_16",
+      "name": "Crimson Pilot",
+      "role": "tech"
+    },
+    {
+      "id": "hero_17",
+      "name": "Void Tactician",
+      "role": "control"
+    },
+    {
+      "id": "hero_18",
+      "name": "Circuit Monk",
+      "role": "melee"
+    },
+    {
+      "id": "hero_19",
+      "name": "Storm Lancer",
+      "role": "melee"
+    },
+    {
+      "id": "hero_20",
+      "name": "Dawn Guardian",
+      "role": "tank"
+    },
+    {
+      "id": "hero_21",
+      "name": "Glass Assassin",
+      "role": "stealth"
+    },
+    {
+      "id": "hero_22",
+      "name": "Orbit Engineer",
+      "role": "tech"
+    },
+    {
+      "id": "hero_23",
+      "name": "Rune Weaver",
+      "role": "caster"
+    },
+    {
+      "id": "hero_24",
+      "name": "Copper Gunner",
+      "role": "ranged"
+    },
+    {
+      "id": "hero_25",
+      "name": "Azure Summoner",
+      "role": "caster"
+    },
+    {
+      "id": "hero_26",
+      "name": "Ash Raider",
+      "role": "melee"
+    },
+    {
+      "id": "hero_27",
+      "name": "Star Navigator",
+      "role": "support"
+    },
+    {
+      "id": "hero_28",
+      "name": "Quantum Knight",
+      "role": "tank"
+    },
+    {
+      "id": "hero_29",
+      "name": "Bloom Alchemist",
+      "role": "nature"
+    },
+    {
+      "id": "hero_30",
+      "name": "Chrome Herald",
+      "role": "support"
+    }
+  ],
+  "monsters": [
+    {
+      "id": "monster_01",
+      "name": "Acid Slime",
+      "role": "blob"
+    },
+    {
+      "id": "monster_02",
+      "name": "Iron Goblin",
+      "role": "raider"
+    },
+    {
+      "id": "monster_03",
+      "name": "Frost Wolf",
+      "role": "hunter"
+    },
+    {
+      "id": "monster_04",
+      "name": "Bone Caster",
+      "role": "caster"
+    },
+    {
+      "id": "monster_05",
+      "name": "Moss Golem",
+      "role": "boss"
+    },
+    {
+      "id": "monster_06",
+      "name": "Void Wisp",
+      "role": "elite"
+    },
+    {
+      "id": "monster_07",
+      "name": "Ember Beetle",
+      "role": "swarm"
+    },
+    {
+      "id": "monster_08",
+      "name": "Crystal Crab",
+      "role": "armored"
+    },
+    {
+      "id": "monster_09",
+      "name": "Thorn Boar",
+      "role": "charger"
+    },
+    {
+      "id": "monster_10",
+      "name": "Plasma Bat",
+      "role": "swarm"
+    },
+    {
+      "id": "monster_11",
+      "name": "Sand Maw",
+      "role": "boss"
+    },
+    {
+      "id": "monster_12",
+      "name": "Neon Mantis",
+      "role": "hunter"
+    },
+    {
+      "id": "monster_13",
+      "name": "Rust Hound",
+      "role": "hunter"
+    },
+    {
+      "id": "monster_14",
+      "name": "Lava Imp",
+      "role": "caster"
+    },
+    {
+      "id": "monster_15",
+      "name": "Storm Crow",
+      "role": "flying"
+    },
+    {
+      "id": "monster_16",
+      "name": "Deep Eel",
+      "role": "aquatic"
+    },
+    {
+      "id": "monster_17",
+      "name": "Spore Shambler",
+      "role": "nature"
+    },
+    {
+      "id": "monster_18",
+      "name": "Glass Scorpion",
+      "role": "assassin"
+    },
+    {
+      "id": "monster_19",
+      "name": "Arc Jelly",
+      "role": "blob"
+    },
+    {
+      "id": "monster_20",
+      "name": "Cinder Wyrm",
+      "role": "boss"
+    },
+    {
+      "id": "monster_21",
+      "name": "Shadow Rat",
+      "role": "swarm"
+    },
+    {
+      "id": "monster_22",
+      "name": "Orbit Drone",
+      "role": "tech"
+    },
+    {
+      "id": "monster_23",
+      "name": "Rune Toad",
+      "role": "caster"
+    },
+    {
+      "id": "monster_24",
+      "name": "Toxic Hydra",
+      "role": "boss"
+    },
+    {
+      "id": "monster_25",
+      "name": "Metal Mimic",
+      "role": "armored"
+    },
+    {
+      "id": "monster_26",
+      "name": "Moon Moth",
+      "role": "flying"
+    },
+    {
+      "id": "monster_27",
+      "name": "Core Leech",
+      "role": "parasite"
+    },
+    {
+      "id": "monster_28",
+      "name": "Ash Revenant",
+      "role": "undead"
+    },
+    {
+      "id": "monster_29",
+      "name": "Prism Serpent",
+      "role": "elite"
+    },
+    {
+      "id": "monster_30",
+      "name": "Null Titan",
+      "role": "boss"
+    }
+  ]
+}
