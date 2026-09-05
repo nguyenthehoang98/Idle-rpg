@@ -285,6 +285,81 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 67304454a3254e4c8d28940a74658012
+    m_Address: hero.102
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e35054026d074eddb81adc21364c1291
+    m_Address: hero.103
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 22dc729857ac40c580e90efe49359d8a
+    m_Address: hero.104
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fab328547d23496f9b55783feaf3ba22
+    m_Address: hero.105
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 62f772a8f4104330becde46859988f1c
+    m_Address: monster.1002
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 80dae0841b97461d8ff4ef63ce1ffdf9
+    m_Address: monster.1003
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5bcf72add4354fe193fecbe5845deb66
+    m_Address: skill.shotgun
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1662e170fdf742b1b154e574ee0667b6
+    m_Address: skill.rifle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bef1ed22c8ec43188c68456377ccb5d8
+    m_Address: skill.sniper
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fb58b465aec5415b99554a5964f798d2
+    m_Address: skill.magic_bolt
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6f23dde9217e4c0a9eaa780e3a0a06b8
+    m_Address: skill.aoe_blast
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 10ad1e5c3a0e40e19dee0e173177cfc1
+    m_Address: skill.chain_lightning
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ff74c0eb4ac47c789bac34f08589483
+    m_Address: skill.poison_cloud
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4ba1bce767624017ad962146e9dd240d
+    m_Address: skill.heal
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7fa4164f9c1747a198571e4cc374da27
+    m_Address: skill.fireball
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 81e856b6bf7c41340a839ae2519e340e, type: 2}
   m_SchemaSet:

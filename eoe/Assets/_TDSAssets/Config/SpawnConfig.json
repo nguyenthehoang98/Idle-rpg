@@ -124,6 +124,506 @@
         6,
         7
       ]
+    },
+    {
+      "definition": {
+        "level": 2,
+        "wave": 1
+      },
+      "monsterId": 1001,
+      "total": 12,
+      "scale": {
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
+      },
+      "spawnRadius": 1.0,
+      "spawnsTime": [
+        1.0,
+        5.0
+      ],
+      "portals": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "definition": {
+        "level": 2,
+        "wave": 2
+      },
+      "monsterId": 1002,
+      "total": 18,
+      "scale": {
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
+      },
+      "spawnRadius": 1.0,
+      "spawnsTime": [
+        3.0,
+        6.0
+      ],
+      "portals": [
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "definition": {
+        "level": 2,
+        "wave": 3
+      },
+      "monsterId": 1002,
+      "total": 24,
+      "scale": {
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
+      },
+      "spawnRadius": 1.0,
+      "spawnsTime": [
+        5.0,
+        9.0
+      ],
+      "portals": [
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "definition": {
+        "level": 2,
+        "wave": 4
+      },
+      "monsterId": 1001,
+      "total": 30,
+      "scale": {
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
+      },
+      "spawnRadius": 1.0,
+      "spawnsTime": [
+        10.0,
+        12.0
+      ],
+      "portals": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "definition": {
+        "level": 2,
+        "wave": 5
+      },
+      "monsterId": 1002,
+      "total": 36,
+      "scale": {
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
+      },
+      "spawnRadius": 1.0,
+      "spawnsTime": [
+        13.0,
+        18.0
+      ],
+      "portals": [
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "definition": {
+        "level": 3,
+        "wave": 1
+      },
+      "monsterId": 1002,
+      "total": 15,
+      "scale": {
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
+      },
+      "spawnRadius": 1.0,
+      "spawnsTime": [
+        1.0,
+        5.0
+      ],
+      "portals": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "definition": {
+        "level": 3,
+        "wave": 2
+      },
+      "monsterId": 1002,
+      "total": 22,
+      "scale": {
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
+      },
+      "spawnRadius": 1.0,
+      "spawnsTime": [
+        3.0,
+        6.0
+      ],
+      "portals": [
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "definition": {
+        "level": 3,
+        "wave": 3
+      },
+      "monsterId": 1003,
+      "total": 30,
+      "scale": {
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
+      },
+      "spawnRadius": 1.0,
+      "spawnsTime": [
+        5.0,
+        9.0
+      ],
+      "portals": [
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "definition": {
+        "level": 3,
+        "wave": 4
+      },
+      "monsterId": 1002,
+      "total": 38,
+      "scale": {
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
+      },
+      "spawnRadius": 1.0,
+      "spawnsTime": [
+        10.0,
+        12.0
+      ],
+      "portals": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "definition": {
+        "level": 3,
+        "wave": 5
+      },
+      "monsterId": 1003,
+      "total": 46,
+      "scale": {
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
+      },
+      "spawnRadius": 1.0,
+      "spawnsTime": [
+        13.0,
+        18.0
+      ],
+      "portals": [
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "definition": {
+        "level": 4,
+        "wave": 1
+      },
+      "monsterId": 1001,
+      "total": 18,
+      "scale": {
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
+      },
+      "spawnRadius": 1.0,
+      "spawnsTime": [
+        1.0,
+        5.0
+      ],
+      "portals": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "definition": {
+        "level": 4,
+        "wave": 2
+      },
+      "monsterId": 1002,
+      "total": 26,
+      "scale": {
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
+      },
+      "spawnRadius": 1.0,
+      "spawnsTime": [
+        3.0,
+        6.0
+      ],
+      "portals": [
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "definition": {
+        "level": 4,
+        "wave": 3
+      },
+      "monsterId": 1001,
+      "total": 34,
+      "scale": {
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
+      },
+      "spawnRadius": 1.0,
+      "spawnsTime": [
+        5.0,
+        9.0
+      ],
+      "portals": [
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "definition": {
+        "level": 4,
+        "wave": 4
+      },
+      "monsterId": 1003,
+      "total": 42,
+      "scale": {
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
+      },
+      "spawnRadius": 1.0,
+      "spawnsTime": [
+        10.0,
+        12.0
+      ],
+      "portals": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "definition": {
+        "level": 4,
+        "wave": 5
+      },
+      "monsterId": 1002,
+      "total": 50,
+      "scale": {
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
+      },
+      "spawnRadius": 1.0,
+      "spawnsTime": [
+        13.0,
+        18.0
+      ],
+      "portals": [
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "definition": {
+        "level": 5,
+        "wave": 1
+      },
+      "monsterId": 1002,
+      "total": 22,
+      "scale": {
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
+      },
+      "spawnRadius": 1.0,
+      "spawnsTime": [
+        1.0,
+        5.0
+      ],
+      "portals": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "definition": {
+        "level": 5,
+        "wave": 2
+      },
+      "monsterId": 1003,
+      "total": 30,
+      "scale": {
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
+      },
+      "spawnRadius": 1.0,
+      "spawnsTime": [
+        3.0,
+        6.0
+      ],
+      "portals": [
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "definition": {
+        "level": 5,
+        "wave": 3
+      },
+      "monsterId": 1003,
+      "total": 40,
+      "scale": {
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
+      },
+      "spawnRadius": 1.0,
+      "spawnsTime": [
+        5.0,
+        9.0
+      ],
+      "portals": [
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "definition": {
+        "level": 5,
+        "wave": 4
+      },
+      "monsterId": 1002,
+      "total": 50,
+      "scale": {
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
+      },
+      "spawnRadius": 1.0,
+      "spawnsTime": [
+        10.0,
+        12.0
+      ],
+      "portals": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "definition": {
+        "level": 5,
+        "wave": 5
+      },
+      "monsterId": 1003,
+      "total": 60,
+      "scale": {
+        "attackMultiplier": 1.0,
+        "healthMultiplier": 1.0,
+        "expMultiplier": 1.0,
+        "sizeMultiplier": 1.0
+      },
+      "spawnRadius": 1.0,
+      "spawnsTime": [
+        13.0,
+        18.0
+      ],
+      "portals": [
+        4,
+        5,
+        6,
+        7
+      ]
     }
   ]
 }

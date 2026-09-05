@@ -12,6 +12,32 @@
       "attackRange": 2.0,
       "knockbackResistance": 1.0,
       "gold": 5
+    },
+    {
+      "id": 1002,
+      "prefabName": "monster.1002",
+      "health": 14,
+      "attack": 3,
+      "exp": 7,
+      "moveSpeed": 0.9,
+      "stopDistance": 0.5,
+      "damageCooldown": 0.0,
+      "attackRange": 2.0,
+      "knockbackResistance": 0.8,
+      "gold": 7
+    },
+    {
+      "id": 1003,
+      "prefabName": "monster.1003",
+      "health": 28,
+      "attack": 4,
+      "exp": 10,
+      "moveSpeed": 0.5,
+      "stopDistance": 0.7,
+      "damageCooldown": 0.0,
+      "attackRange": 2.0,
+      "knockbackResistance": 1.0,
+      "gold": 10
     }
   ]
 }
