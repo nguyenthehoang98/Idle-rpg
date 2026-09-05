@@ -12,3 +12,5 @@
 - [x] Add resistance and stacking rules for monster statuses.
 - [x] Add post-wave shop/upgrade roll UI with config-backed hero and skill-specific upgrades.
 - [x] Add save game and capped offline progress.
+- [x] Add persistent campaign XP/level tracking and 1x/2x/4x battle speed controls.
+- [ ] Add HP bars, damage numbers and status duration icons.
