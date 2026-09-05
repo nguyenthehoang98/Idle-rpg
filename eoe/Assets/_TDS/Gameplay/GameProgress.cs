@@ -77,6 +77,8 @@ namespace _TDS.Gameplay
 
             state.campaignLevel = Math.Max(RunSelection.DefaultLevel, state.campaignLevel);
             state.playerLevel = Math.Max(1, state.playerLevel);
+            state.selectedHeroIds ??= Array.Empty<int>();
+            state.selectedUpgradeIds ??= new List<int>();
             lastOfflineReward = CollectOffline(DateTime.UtcNow.Ticks);
             Save();
         }

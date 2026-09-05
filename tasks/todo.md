@@ -14,3 +14,12 @@
 - [x] Add save game and capped offline progress.
 - [x] Add persistent campaign XP/level tracking and 1x/2x/4x battle speed controls.
 - [ ] Add HP bars, damage numbers and status duration icons.
+
+## Quality gates after each feature
+
+- [ ] Add/maintain logic tests for every new behavior.
+- [ ] Add config validation tests for JSON/Excel IDs, references, pools and prefab coverage.
+- [ ] Add common integration tests for Boot, config loading, Addressables and required scene components.
+- [ ] Expand PlayMode gameplay tests for stuck waves, pause/resume, shop/roll, one-time rewards and Victory/Defeat timeout.
+- [ ] Fail PlayMode on unexpected runtime errors, missing scripts or missing Addressables.
+- [ ] Run EditMode, PlayMode and Windows Player build before merging each feature.
