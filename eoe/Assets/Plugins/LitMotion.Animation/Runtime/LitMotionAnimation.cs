@@ -29,7 +29,6 @@ namespace LitMotion.Animation
         }
 
         [SerializeField] private bool debug;
-        [SerializeField] private bool isReverseWhenStop = false;
         [SerializeField] AutoStopMode autoStopMode = AutoStopMode.OnDisable;
         [SerializeField] AutoPlayMode autoPlayMode = AutoPlayMode.OnStart;
         [SerializeField] AnimationMode animationMode;
@@ -142,6 +141,8 @@ namespace LitMotion.Animation
             }
 
             if (isPlaying) return;
+            
+            if(debug) Debug.LogError($"play LitMotionAnimation '{name}'");
 
             playingComponents.Clear();
 
@@ -229,13 +230,14 @@ namespace LitMotion.Animation
 
         public void Stop()
         {
+            if (debug) Debug.LogError($"stop LitMotionAnimation '{name}'");
             Span<LitMotionAnimationComponent> span = playingComponents.AsSpan();
             span.Reverse();
             foreach (LitMotionAnimationComponent component in span)
             {
                 MotionHandle handle = component.TrackedHandle;
                 handle.TryCancel();
-                if (isReverseWhenStop) component.OnStop();
+                component.OnStop();
                 component.TrackedHandle = handle;
             }
 
