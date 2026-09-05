@@ -23,6 +23,9 @@ namespace _TDS.Battle
         public static event Action<Monster> OnMonsterDisable;
         public static event Action<Monster, int, int> OnMonsterRewarded;
 
+        public event Action<SkillModifierType> OnModifierApplied;
+        public event Action<SkillModifierType> OnModifierRemoved;
+
         private static HashSet<int> deathVfxInPool = new HashSet<int>();
 
         private Vector3 targetPosition;
@@ -97,11 +100,18 @@ namespace _TDS.Battle
         {
             if (action == null) return;
             activeModifiers[action] = modifier;
+            OnModifierApplied?.Invoke(modifier.type);
         }
 
         public void RemoveModifier(ModifierSkillAction action)
         {
-            if (action != null) activeModifiers.Remove(action);
+            if (action == null || !activeModifiers.TryGetValue(action, out SkillModifierData modifier))
+            {
+                return;
+            }
+
+            activeModifiers.Remove(action);
+            OnModifierRemoved?.Invoke(modifier.type);
         }
 
         private bool HasModifier(SkillModifierType type)

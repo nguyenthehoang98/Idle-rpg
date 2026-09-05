@@ -1,4 +1,5 @@
 using _TDS.Battle;
+using _TDS.GameConfig;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,6 +25,9 @@ namespace _TDS.Gameplay
         private Text resultTitle;
         private Text resultRewards;
         private GameObject resultOverlay;
+        private float modifierFeedbackRemaining;
+        private string statusBeforeModifier;
+        private Color statusBeforeModifierColor;
         private Vector2Int lastScreenSize;
 
         private void Awake()
@@ -34,6 +38,19 @@ namespace _TDS.Gameplay
         private void Update()
         {
             ApplySafeArea();
+
+            if (modifierFeedbackRemaining > 0f)
+            {
+                modifierFeedbackRemaining -= Time.unscaledDeltaTime;
+                if (modifierFeedbackRemaining <= 0f)
+                {
+                    SetText(statusBeforeModifier, statusText);
+                    if (statusText != null)
+                    {
+                        statusText.color = statusBeforeModifierColor;
+                    }
+                }
+            }
 
             for (int i = 0; i < slotFeedback.Length; i++)
             {
@@ -83,7 +100,35 @@ namespace _TDS.Gameplay
 
         public void SetStatus(string status)
         {
+            if (modifierFeedbackRemaining > 0f)
+            {
+                statusBeforeModifier = status;
+                return;
+            }
+
             SetText(status, statusText);
+            if (statusText != null)
+            {
+                statusText.color = MutedColor;
+            }
+        }
+
+        public void ShowModifierFeedback(SkillModifierType type)
+        {
+            if (statusText == null)
+            {
+                return;
+            }
+
+            if (modifierFeedbackRemaining <= 0f)
+            {
+                statusBeforeModifier = statusText.text;
+                statusBeforeModifierColor = statusText.color;
+            }
+
+            statusText.text = $"STATUS: {type.ToString().ToUpperInvariant()}";
+            statusText.color = ModifierColor(type);
+            modifierFeedbackRemaining = 1f;
         }
 
         public void ActivateSlot(int slotIndex)
@@ -304,6 +349,18 @@ namespace _TDS.Gameplay
             {
                 text.text = value;
             }
+        }
+
+        private static Color ModifierColor(SkillModifierType type)
+        {
+            return type switch
+            {
+                SkillModifierType.Slow => ParseColor("FBBF24"),
+                SkillModifierType.Bleed => ParseColor("FB7185"),
+                SkillModifierType.Silence => ParseColor("C084FC"),
+                SkillModifierType.Stun => ParseColor("F97316"),
+                _ => AccentColor,
+            };
         }
 
         private static Color ParseColor(string html)

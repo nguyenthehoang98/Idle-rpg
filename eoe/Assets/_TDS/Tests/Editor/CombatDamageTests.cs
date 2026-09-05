@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using _GameToolkit.Avoidance;
+using _GameToolkit.Skills;
 using _TDS.Battle;
 using _TDS.GameConfig;
 using UnityEngine;
@@ -68,6 +69,25 @@ namespace _TDS.Tests.Editor
             Assert.That(SkillModifierSelector.TrySelect(
                 new[] { new SkillModifierData { type = SkillModifierType.Slow, successRate = 1f } },
                 0f, 0f, out _), Is.False);
+        }
+
+        [Test]
+        public void MonsterReportsModifierApplyAndRemove()
+        {
+            GameObject gameObject = new GameObject("ModifierFeedbackMonster");
+            Monster monster = gameObject.AddComponent<Monster>();
+            ModifierSkillAction action = new ModifierSkillAction(1f, null, null, null);
+            SkillModifierType applied = SkillModifierType.Slow;
+            SkillModifierType removed = SkillModifierType.Slow;
+            monster.OnModifierApplied += type => applied = type;
+            monster.OnModifierRemoved += type => removed = type;
+
+            monster.ApplyModifier(action, new SkillModifierData { type = SkillModifierType.Stun });
+            monster.RemoveModifier(action);
+
+            Assert.That(applied, Is.EqualTo(SkillModifierType.Stun));
+            Assert.That(removed, Is.EqualTo(SkillModifierType.Stun));
+            Object.DestroyImmediate(gameObject);
         }
     }
 }

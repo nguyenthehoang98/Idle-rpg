@@ -2,6 +2,7 @@ using System.Diagnostics;
 using _GameToolkit.Startup;
 using _GameToolkit.Updater;
 using _TDS.Battle;
+using _TDS.GameConfig;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -47,6 +48,8 @@ namespace _TDS.Gameplay
             runner.OnTimeScaleChanged += TimeScaleChanged;
             circuitRunner.OnActivation += OnCircuitActivation;
             Monster.OnMonsterRewarded += OnMonsterRewarded;
+            Monster.OnMonsterEnable += SubscribeMonsterModifierFeedback;
+            Monster.OnMonsterDisable += UnsubscribeMonsterModifierFeedback;
         }
 
         private void OnDisable()
@@ -55,6 +58,8 @@ namespace _TDS.Gameplay
             runner.OnTimeScaleChanged -= TimeScaleChanged;
             circuitRunner.OnActivation -= OnCircuitActivation;
             Monster.OnMonsterRewarded -= OnMonsterRewarded;
+            Monster.OnMonsterEnable -= SubscribeMonsterModifierFeedback;
+            Monster.OnMonsterDisable -= UnsubscribeMonsterModifierFeedback;
         }
 
         private async void Start()
@@ -150,6 +155,27 @@ namespace _TDS.Gameplay
         {
             rewards.Add(experience, gold);
             Debug.Log($"[Gameplay] Reward monster={monster.name}: EXP +{experience}, GOLD +{gold}");
+        }
+
+        private void SubscribeMonsterModifierFeedback(Monster monster)
+        {
+            if (monster != null)
+            {
+                monster.OnModifierApplied += OnModifierApplied;
+            }
+        }
+
+        private void UnsubscribeMonsterModifierFeedback(Monster monster)
+        {
+            if (monster != null)
+            {
+                monster.OnModifierApplied -= OnModifierApplied;
+            }
+        }
+
+        private void OnModifierApplied(SkillModifierType type)
+        {
+            hud?.ShowModifierFeedback(type);
         }
 
         private void OnHeroDied(Hero hero)
