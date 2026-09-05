@@ -6,6 +6,7 @@ namespace _TDS.Gameplay
 {
     public sealed class GameplayHud : MonoBehaviour
     {
+        private static readonly Color BackgroundColor = ParseColor("0B1220");
         private static readonly Color PanelColor = ParseColor("172238");
         private static readonly Color SlotColor = ParseColor("243552");
         private static readonly Color EmptyColor = ParseColor("334155");
@@ -18,10 +19,8 @@ namespace _TDS.Gameplay
         private readonly float[] slotFeedback = new float[EnergyCircuit.DefaultSlotCount];
 
         private Font font;
-        private RectTransform safeArea;
         private Text waveText;
         private Text statusText;
-        private Vector2Int lastScreenSize;
 
         private void Awake()
         {
@@ -30,8 +29,6 @@ namespace _TDS.Gameplay
 
         private void Update()
         {
-            ApplySafeArea();
-
             for (int i = 0; i < slotFeedback.Length; i++)
             {
                 if (slotFeedback[i] <= 0f)
@@ -99,44 +96,29 @@ namespace _TDS.Gameplay
             font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
 
             Canvas canvas = CreateCanvas();
-            RectTransform root = safeArea;
+            RectTransform root = canvas.GetComponent<RectTransform>();
 
-            Image topBar = CreatePanel("TopBar", root, PanelColor);
-            SetRect(topBar.rectTransform, new Vector2(0f, 1f), new Vector2(1f, 1f),
-                new Vector2(24f, -174f), new Vector2(-24f, -24f));
+            Image topBar = CreateImage("TopBar", root, PanelColor);
+            SetRect(topBar.rectTransform, new Vector2(0f, 0.86f), Vector2.one, Vector2.zero, Vector2.zero);
 
-            Image topAccent = CreateImage("Accent", topBar.transform, AccentColor);
-            SetRect(topAccent.rectTransform, new Vector2(0f, 0f), new Vector2(0f, 1f),
-                Vector2.zero, new Vector2(6f, 0f));
+            CreateText("Title", topBar.transform, "IDLE // CIRCUIT", 20, TextColor,
+                new Vector2(0.03f, 0f), new Vector2(0.35f, 1f), TextAnchor.MiddleLeft);
+            waveText = CreateText("Wave", topBar.transform, "LEVEL 1", 18, AccentColor,
+                new Vector2(0.4f, 0f), new Vector2(0.6f, 1f), TextAnchor.MiddleCenter);
+            statusText = CreateText("Status", topBar.transform, "AUTO COMBAT", 14, MutedColor,
+                new Vector2(0.65f, 0f), new Vector2(0.97f, 1f), TextAnchor.MiddleRight);
 
-            CreateText("Title", topBar.transform, "IDLE // CIRCUIT", 32, TextColor,
-                new Vector2(0.06f, 0f), new Vector2(0.43f, 1f), TextAnchor.MiddleLeft);
-            waveText = CreateText("Wave", topBar.transform, "LEVEL 1", 28, AccentColor,
-                new Vector2(0.43f, 0f), new Vector2(0.65f, 1f), TextAnchor.MiddleCenter);
-            statusText = CreateText("Status", topBar.transform, "AUTO COMBAT", 22, MutedColor,
-                new Vector2(0.65f, 0f), new Vector2(0.94f, 1f), TextAnchor.MiddleRight);
-
-            Image circuitPanel = CreatePanel("CircuitPanel", root, PanelColor);
-            SetRect(circuitPanel.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f),
-                new Vector2(24f, 36f), new Vector2(-24f, 390f));
-
-            CreateText("CircuitTitle", circuitPanel.transform, "ENERGY CIRCUIT", 24, TextColor,
-                new Vector2(0.04f, 0.79f), new Vector2(0.5f, 0.98f), TextAnchor.MiddleLeft);
-            CreateText("CircuitHint", circuitPanel.transform, "PULSE  ·  3 STACKS TO OVERDRIVE", 16, MutedColor,
-                new Vector2(0.04f, 0.64f), new Vector2(0.65f, 0.81f), TextAnchor.MiddleLeft);
-
-            Image circuitRule = CreateImage("Rule", circuitPanel.transform, AccentColor);
-            circuitRule.color = new Color(AccentColor.r, AccentColor.g, AccentColor.b, 0.35f);
-            SetRect(circuitRule.rectTransform, new Vector2(0.04f, 0.6f), new Vector2(0.96f, 0.6f),
-                Vector2.zero, new Vector2(0f, 2f));
+            Image circuitPanel = CreateImage("CircuitPanel", root, BackgroundColor);
+            SetRect(circuitPanel.rectTransform, new Vector2(0.04f, 0.03f), new Vector2(0.96f, 0.19f), Vector2.zero, Vector2.zero);
+            CreateText("CircuitTitle", circuitPanel.transform, "ENERGY CIRCUIT", 12, MutedColor,
+                new Vector2(0.02f, 0.68f), new Vector2(0.2f, 0.98f), TextAnchor.MiddleLeft);
 
             GameObject slotRowObject = new GameObject("Slots", typeof(RectTransform));
             slotRowObject.transform.SetParent(circuitPanel.transform, false);
             RectTransform slotRowRect = slotRowObject.GetComponent<RectTransform>();
-            SetRect(slotRowRect, new Vector2(0.03f, 0.08f), new Vector2(0.97f, 0.57f),
-                Vector2.zero, Vector2.zero);
+            SetRect(slotRowRect, new Vector2(0.2f, 0.12f), new Vector2(0.98f, 0.82f), Vector2.zero, Vector2.zero);
             HorizontalLayoutGroup slotRow = slotRowObject.AddComponent<HorizontalLayoutGroup>();
-            slotRow.spacing = 12f;
+            slotRow.spacing = 8f;
             slotRow.padding = new RectOffset(4, 4, 4, 4);
             slotRow.childControlWidth = true;
             slotRow.childControlHeight = true;
@@ -149,9 +131,8 @@ namespace _TDS.Gameplay
                 slotObject.transform.SetParent(slotRowObject.transform, false);
                 Image image = slotObject.AddComponent<Image>();
                 image.color = EmptyColor;
-                AddOutline(image, new Color(0.37f, 0.91f, 0.83f, 0.22f), 2f);
                 slotImages[i] = image;
-                slotLabels[i] = CreateText("Label", slotObject.transform, "·", 22, TextColor,
+                slotLabels[i] = CreateText("Label", slotObject.transform, "·", 12, TextColor,
                     Vector2.zero, Vector2.one, TextAnchor.MiddleCenter);
                 slotLabels[i].raycastTarget = false;
             }
@@ -167,37 +148,11 @@ namespace _TDS.Gameplay
 
             CanvasScaler scaler = canvasObject.AddComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1080f, 2160f);
+            scaler.referenceResolution = new Vector2(1280f, 720f);
             scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
             scaler.matchWidthOrHeight = 0.5f;
             canvasObject.AddComponent<GraphicRaycaster>();
-
-            GameObject safeAreaObject = new GameObject("SafeArea", typeof(RectTransform));
-            safeAreaObject.transform.SetParent(canvasObject.transform, false);
-            safeArea = safeAreaObject.GetComponent<RectTransform>();
-            ApplySafeArea();
             return canvas;
-        }
-
-        private void ApplySafeArea()
-        {
-            if (safeArea == null || Screen.width <= 0 || Screen.height <= 0)
-            {
-                return;
-            }
-
-            Vector2Int screenSize = new Vector2Int(Screen.width, Screen.height);
-            if (screenSize == lastScreenSize)
-            {
-                return;
-            }
-
-            lastScreenSize = screenSize;
-            Rect area = Screen.safeArea;
-            safeArea.anchorMin = new Vector2(area.xMin / Screen.width, area.yMin / Screen.height);
-            safeArea.anchorMax = new Vector2(area.xMax / Screen.width, area.yMax / Screen.height);
-            safeArea.offsetMin = Vector2.zero;
-            safeArea.offsetMax = Vector2.zero;
         }
 
         private Text CreateText(
@@ -233,21 +188,6 @@ namespace _TDS.Gameplay
             Image image = imageObject.AddComponent<Image>();
             image.color = color;
             return image;
-        }
-
-        private static Image CreatePanel(string objectName, Transform parent, Color color)
-        {
-            Image panel = CreateImage(objectName, parent, color);
-            AddOutline(panel, new Color(0.37f, 0.91f, 0.83f, 0.16f), 2f);
-            return panel;
-        }
-
-        private static void AddOutline(Image image, Color color, float distance)
-        {
-            Outline outline = image.gameObject.AddComponent<Outline>();
-            outline.effectColor = color;
-            outline.effectDistance = new Vector2(distance, distance);
-            outline.useGraphicAlpha = true;
         }
 
         private static void SetRect(RectTransform rect, Vector2 anchorMin, Vector2 anchorMax, Vector2 offsetMin, Vector2 offsetMax)
