@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5089bfaecdebf7944bf2483d18440e4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_TDS.Battle.Hero
+  overdriveIdentity: 1
 --- !u!1 &5429262146404348617
 GameObject:
   m_ObjectHideFlags: 0
@@ -159,7 +160,7 @@ SpriteRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 1295217020, guid: cc98c77de915dfe4fbad47fd5b32f43e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: be06aa69bd7b89640be2a4e9c1cf8ae2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -184,12 +185,12 @@ MonoBehaviour:
   playOnEnable: 1
   reference: {fileID: 5710554649000928979}
   sprites:
-  - {fileID: 1295217020, guid: cc98c77de915dfe4fbad47fd5b32f43e, type: 3}
-  - {fileID: -1501528006, guid: cc98c77de915dfe4fbad47fd5b32f43e, type: 3}
-  - {fileID: -206905008, guid: cc98c77de915dfe4fbad47fd5b32f43e, type: 3}
-  - {fileID: -915032141, guid: cc98c77de915dfe4fbad47fd5b32f43e, type: 3}
-  - {fileID: 87204570, guid: cc98c77de915dfe4fbad47fd5b32f43e, type: 3}
-  - {fileID: -1746742729, guid: cc98c77de915dfe4fbad47fd5b32f43e, type: 3}
+  - {fileID: 21300000, guid: be06aa69bd7b89640be2a4e9c1cf8ae2, type: 3}
+  - {fileID: 21300000, guid: be06aa69bd7b89640be2a4e9c1cf8ae2, type: 3}
+  - {fileID: 21300000, guid: be06aa69bd7b89640be2a4e9c1cf8ae2, type: 3}
+  - {fileID: 21300000, guid: be06aa69bd7b89640be2a4e9c1cf8ae2, type: 3}
+  - {fileID: 21300000, guid: be06aa69bd7b89640be2a4e9c1cf8ae2, type: 3}
+  - {fileID: 21300000, guid: be06aa69bd7b89640be2a4e9c1cf8ae2, type: 3}
   loop: 1
   frameRate: 8
   OnEventCompleted:

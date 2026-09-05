@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="190" viewBox="0 0 160 190">
+<title>hero.104</title>
+<defs><style>.card{fill:#172238;stroke:#334155;stroke-width:2}.ink{stroke:#07111F;stroke-width:4;stroke-linejoin:round;stroke-linecap:round}.thin{stroke:#07111F;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}.label{fill:#F8FAFC;font-family:Arial,sans-serif;font-size:12px;font-weight:bold;text-anchor:middle}.sub{fill:#A8B5C7;font-family:Arial,sans-serif;font-size:10px;text-anchor:middle}</style></defs>
+<g transform="translate(80 82)">
+<ellipse cx="0" cy="45" rx="34" ry="9" fill="#050B16" opacity=".45"/>
+<path class="ink" fill="#65A30D" d="M-12-40 0-62 12-40v25h-24z"/><path class="thin" fill="#D9F99D" d="M-5-42 0-52 5-42z"/>
+<path class="ink" fill="#166534" d="M-25 5c-14 14-16 36-7 44 8 7 21 2 32-4 11 6 24 11 32 4 9-8 7-30-7-44z"/>
+<path class="ink" fill="#65A30D" d="M-18-8c-5 9-5 23 0 31l18 9 18-9c5-8 5-22 0-31z"/>
+<path class="thin" fill="#D9F99D" d="M-7-2h14v23l-7 4-7-4z"/>
+<path class="ink" fill="#65A30D" d="M-28-28c0-17 12-28 28-28s28 11 28 28c0 9-4 17-11 22L0 3l-17-9c-7-5-11-13-11-22z"/>
+<path class="thin" fill="#F8FAFC" d="M-19-27c0-10 8-18 19-18s19 8 19 18c0 6-3 10-7 13L0-9l-12-5c-4-3-7-7-7-13z"/>
+<path class="thin" fill="#07111F" d="M-10-26c3-3 17-3 20 0-2 7-5 10-10 10s-8-3-10-10z"/>
+<circle cx="-5" cy="-26" r="2" fill="#D9F99D" stroke="none"/><circle cx="5" cy="-26" r="2" fill="#D9F99D" stroke="none"/>
+
+</g>
+</svg>

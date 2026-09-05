@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71a0dfb388fc490abe5977cb3b7c142e, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game._GamePlay2.MonsterSortingLayer
   rendererTransform: {fileID: 4651176741943372476}
   renderers:
@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f12ceaa8174b824195954f73695067d, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game._GamePlay2.Monster
   scale: {fileID: 6619085215776799793}
   OnBeHit:
@@ -75,7 +75,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument:
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
   OnDeath:
@@ -233,8 +233,8 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 100045609, guid: 1528c5f7a83bebe479476df603ec9052, type: 3}
-  m_Color: {r: 1.0, g: 0.4, b: 0.3, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 0b08d253ad0b2434c89a9fed76b30408, type: 3}
+  m_Color: {r: 1, g: 0.4, b: 0.3, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -253,20 +253,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab652e4c850d49d49d0220100f792723, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.GamePlay.View.SpriteRendererAnimation
   playOnEnable: 1
   reference: {fileID: 5667090380951180666}
   sprites:
-  - {fileID: 100045609, guid: 1528c5f7a83bebe479476df603ec9052, type: 3}
-  - {fileID: -1502832417, guid: 1528c5f7a83bebe479476df603ec9052, type: 3}
-  - {fileID: 354099005, guid: 1528c5f7a83bebe479476df603ec9052, type: 3}
-  - {fileID: -1288763876, guid: 1528c5f7a83bebe479476df603ec9052, type: 3}
-  - {fileID: -584863506, guid: 1528c5f7a83bebe479476df603ec9052, type: 3}
-  - {fileID: -405066379, guid: 1528c5f7a83bebe479476df603ec9052, type: 3}
-  - {fileID: 396094326, guid: 1528c5f7a83bebe479476df603ec9052, type: 3}
-  - {fileID: 1541569411, guid: 1528c5f7a83bebe479476df603ec9052, type: 3}
-  - {fileID: -30665858, guid: 1528c5f7a83bebe479476df603ec9052, type: 3}
+  - {fileID: 21300000, guid: 0b08d253ad0b2434c89a9fed76b30408, type: 3}
+  - {fileID: 21300000, guid: 0b08d253ad0b2434c89a9fed76b30408, type: 3}
+  - {fileID: 21300000, guid: 0b08d253ad0b2434c89a9fed76b30408, type: 3}
+  - {fileID: 21300000, guid: 0b08d253ad0b2434c89a9fed76b30408, type: 3}
+  - {fileID: 21300000, guid: 0b08d253ad0b2434c89a9fed76b30408, type: 3}
+  - {fileID: 21300000, guid: 0b08d253ad0b2434c89a9fed76b30408, type: 3}
+  - {fileID: 21300000, guid: 0b08d253ad0b2434c89a9fed76b30408, type: 3}
+  - {fileID: 21300000, guid: 0b08d253ad0b2434c89a9fed76b30408, type: 3}
+  - {fileID: 21300000, guid: 0b08d253ad0b2434c89a9fed76b30408, type: 3}
   loop: 1
   frameRate: 9
   OnEventCompleted:
@@ -282,7 +282,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9cc6819e64e4c44beb63ea2ef45e1a6d, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: LitMotion.Animation::LitMotion.Animation.LitMotionAnimation
   debug: 0
   isReverseWhenStop: 1
@@ -300,7 +300,7 @@ MonoBehaviour:
     - rid: 607417095885946943
       type: {class: SpriteRendererMaterialAnimation, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
       data:
-        type:
+        type: 
         displayName: -> float 1
         enabled: 1
         target: {fileID: 5667090380951180666}
@@ -347,7 +347,7 @@ MonoBehaviour:
     - rid: 607417095885946946
       type: {class: SpriteRendererMaterialAnimation, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
       data:
-        type:
+        type: 
         displayName: -> float 0
         enabled: 1
         target: {fileID: 5667090380951180666}
