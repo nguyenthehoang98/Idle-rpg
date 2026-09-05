@@ -48,6 +48,30 @@ namespace _TDS.Battle
             return board;
         }
 
+        public static CircuitBoard FromHeroesWithStarterGenerator(IReadOnlyList<int> heroIds)
+        {
+            if (heroIds == null)
+            {
+                throw new ArgumentNullException(nameof(heroIds));
+            }
+
+            CircuitBoard board = new CircuitBoard();
+            board.SetItem(0, 201, CircuitItemType.Generator);
+
+            int count = Math.Min(heroIds.Count, board.SlotCount - 1);
+            for (int i = 0; i < count; i++)
+            {
+                if (heroIds[i] == 0)
+                {
+                    continue;
+                }
+
+                board.SetContent(i + 1, CircuitSlotContent.Hero(heroIds[i]));
+            }
+
+            return board;
+        }
+
         public CircuitSlotContent GetContent(int index)
         {
             ValidateSlotIndex(index);

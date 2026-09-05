@@ -26,7 +26,7 @@ namespace _TDS.Gameplay
         private void Awake()
         {
             level = RunSelection.SelectedLevel;
-            board = CircuitBoard.FromHeroes(heroIds);
+            board = CircuitBoard.FromHeroesWithStarterGenerator(heroIds);
             hud = gameObject.GetComponent<GameplayHud>();
             if (hud == null)
             {

@@ -30,6 +30,18 @@ namespace _TDS.Tests.Editor
         }
 
         [Test]
+        public void StarterBoardPlacesGeneratorBeforeConfiguredHeroes()
+        {
+            CircuitBoard board = CircuitBoard.FromHeroesWithStarterGenerator(new[] { 101, 102, 0 });
+
+            Assert.That(board.GetContent(0).Type, Is.EqualTo(CircuitSlotContentType.Item));
+            Assert.That(board.GetItemType(0), Is.EqualTo(CircuitItemType.Generator));
+            Assert.That(board.GetContent(1).Id, Is.EqualTo(101));
+            Assert.That(board.GetContent(2).Id, Is.EqualTo(102));
+            Assert.That(board.GetContent(3).Type, Is.EqualTo(CircuitSlotContentType.Empty));
+        }
+
+        [Test]
         public void BoardCanReplaceAndClearSlotContent()
         {
             CircuitBoard board = new CircuitBoard();
