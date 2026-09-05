@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics;
 using _GameToolkit.Startup;
 using _GameToolkit.Updater;
@@ -10,7 +11,7 @@ namespace _TDS.Gameplay
 {
     public class GameplayScene : MonoBehaviour
     {
-        [SerializeField] private int[] heroIds = new int[4] { 101, 0, 0, 0 };
+        [SerializeField] private int[] heroIds = new int[4] { 101, 102, 0, 0 };
         [SerializeField] private HeroSlotManager heroSlotManager;
         [SerializeField] private UpdateRunner runner;
         [SerializeField] private CircuitTickRunner circuitRunner;
@@ -22,6 +23,11 @@ namespace _TDS.Gameplay
         private GameplayHud hud;
         private int level = 1;
         private readonly BattleRunRewards rewards = new BattleRunRewards();
+        private readonly List<Hero> trackedHeroes = new List<Hero>();
+        private int normalKills;
+        private int eliteKills;
+        private int bossKills;
+        private bool resultReported;
 
         public CircuitBoard Board => board;
         public BattleRunRewards Rewards => rewards;
@@ -48,6 +54,7 @@ namespace _TDS.Gameplay
             runner.OnTimeScaleChanged += TimeScaleChanged;
             circuitRunner.OnActivation += OnCircuitActivation;
             Monster.OnMonsterRewarded += OnMonsterRewarded;
+            Hero.OnHeroEnable += TrackHero;
             Monster.OnMonsterEnable += SubscribeMonsterModifierFeedback;
             Monster.OnMonsterDisable += UnsubscribeMonsterModifierFeedback;
         }
@@ -58,6 +65,7 @@ namespace _TDS.Gameplay
             runner.OnTimeScaleChanged -= TimeScaleChanged;
             circuitRunner.OnActivation -= OnCircuitActivation;
             Monster.OnMonsterRewarded -= OnMonsterRewarded;
+            Hero.OnHeroEnable -= TrackHero;
             Monster.OnMonsterEnable -= SubscribeMonsterModifierFeedback;
             Monster.OnMonsterDisable -= UnsubscribeMonsterModifierFeedback;
         }
@@ -99,6 +107,7 @@ namespace _TDS.Gameplay
         private void OnDestroy()
         {
             Hero.OnHeroDisable -= OnHeroDied;
+            trackedHeroes.Clear();
 
             if (spawnRunner != null)
             {
@@ -146,15 +155,41 @@ namespace _TDS.Gameplay
 
         private void OnGameWin()
         {
+            if (resultReported) return;
+            resultReported = true;
             hud.SetStatus($"VICTORY  +{rewards.Experience} EXP  +{rewards.Gold} GOLD");
             hud.ShowResult(true, rewards);
             Debug.Log($"[Gameplay] 🏆 WIN GAME! EXP={rewards.Experience}, GOLD={rewards.Gold}");
+            LogBattleReport("WIN");
         }
 
         private void OnMonsterRewarded(Monster monster, int experience, int gold)
         {
             rewards.Add(experience, gold);
+            switch (monster.Rank)
+            {
+                case MonsterRank.Elite: eliteKills++; break;
+                case MonsterRank.Boss: bossKills++; break;
+                default: normalKills++; break;
+            }
+
             Debug.Log($"[Gameplay] Reward monster={monster.name}: EXP +{experience}, GOLD +{gold}");
+        }
+
+        private void TrackHero(Hero hero)
+        {
+            if (hero != null && !trackedHeroes.Contains(hero)) trackedHeroes.Add(hero);
+        }
+
+        private void LogBattleReport(string outcome)
+        {
+            Debug.Log($"[BattleReport] outcome={outcome}");
+            foreach (Hero hero in trackedHeroes)
+            {
+                Debug.Log($"[BattleReport] hero={hero.HeroId} totalDamage={hero.TotalDamageDealt}");
+            }
+
+            Debug.Log($"[BattleReport] monsters normal={normalKills} elite={eliteKills} boss={bossKills}");
         }
 
         private void SubscribeMonsterModifierFeedback(Monster monster)
@@ -192,11 +227,13 @@ namespace _TDS.Gameplay
                 if (h != null && !h.IsDead) alive++;
             }
 
-            if (alive == 0)
+            if (alive == 0 && !resultReported)
             {
+                resultReported = true;
                 hud.SetStatus($"DEFEAT  +{rewards.Experience} EXP  +{rewards.Gold} GOLD");
                 hud.ShowResult(false, rewards);
                 Debug.Log($"[Gameplay] 💀 THUA! EXP={rewards.Experience}, GOLD={rewards.Gold}");
+                LogBattleReport("LOSE");
             }
         }
 

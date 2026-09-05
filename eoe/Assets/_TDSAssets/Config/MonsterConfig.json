@@ -10,7 +10,7 @@
       "skills": [],
       "moveSpeed": 0.7,
       "stopDistance": 0.5,
-      "damageCooldown": 0.0,
+      "damageCooldown": 1.0,
       "attackRange": 2.0,
       "knockbackResistance": 1.0,
       "gold": 5
@@ -31,7 +31,7 @@
       ],
       "moveSpeed": 0.9,
       "stopDistance": 0.5,
-      "damageCooldown": 0.0,
+      "damageCooldown": 1.0,
       "attackRange": 2.0,
       "knockbackResistance": 0.8,
       "gold": 7
@@ -62,7 +62,7 @@
       ],
       "moveSpeed": 0.5,
       "stopDistance": 0.7,
-      "damageCooldown": 0.0,
+      "damageCooldown": 1.0,
       "attackRange": 2.0,
       "knockbackResistance": 1.0,
       "gold": 10

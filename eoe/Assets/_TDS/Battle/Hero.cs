@@ -51,6 +51,7 @@ namespace _TDS.Battle
 
         public int CurrentHealth { get; private set; }
         public int MaxHealth { get; private set; }
+        public int TotalDamageDealt { get; private set; }
         public bool IsDead => CurrentHealth <= 0;
 
         public Stat GetStat(StatId id)
@@ -134,6 +135,7 @@ namespace _TDS.Battle
 
             MaxHealth = Mathf.Max(1, heroConfigData.health);
             CurrentHealth = MaxHealth;
+            TotalDamageDealt = 0;
 
             stats = new Dictionary<StatId, Stat>
             {
@@ -257,6 +259,7 @@ namespace _TDS.Battle
 
                 if (dealt <= 0) return;
 
+                TotalDamageDealt += dealt;
                 Heal(CombatDamage.CalculateLifeSteal(dealt, lifesteal));
             }).Forget();
         }

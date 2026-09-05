@@ -160,7 +160,7 @@ namespace _TDS.Battle
             monster.AttackTimer -= deltaTime;
             if (monster.AttackTimer > 0f) return;
 
-            monster.AttackTimer = monster.DamageCooldown > 0 ? monster.DamageCooldown : 0.1f; // cooldown=0 -> attack 10/s
+            monster.AttackTimer = monster.DamageCooldown > 0 ? monster.DamageCooldown : 1f; // missing cooldown defaults to 1 hit/s
             target.TakeDamage(monster.Attack);
         }
 

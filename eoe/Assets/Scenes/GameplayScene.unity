@@ -1222,7 +1222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb1d1eadee7263147970b18ee796a64b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_TDS.Gameplay.GameplayScene
-  heroIds: 65000000000000000000000000000000
+  heroIds: 65000000660000000000000000000000
   heroSlotManager: {fileID: 1168235905}
   runner: {fileID: 1977149736}
   circuitRunner: {fileID: 2100000002}
