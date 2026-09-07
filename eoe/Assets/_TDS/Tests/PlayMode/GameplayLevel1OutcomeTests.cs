@@ -14,6 +14,7 @@ namespace _TDS.Tests.PlayMode
         [UnityTest]
         public IEnumerator Level1ReachesWinOrLose()
         {
+            UnityEngine.Random.InitState(1);
             Type runSelection = Type.GetType("_TDS.Gameplay.RunSelection, Assembly-CSharp");
             Assert.That(runSelection, Is.Not.Null);
             runSelection.GetMethod("SelectLevel", BindingFlags.Public | BindingFlags.Static)
