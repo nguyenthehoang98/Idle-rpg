@@ -92,12 +92,31 @@ namespace _TDS.UI
             return button;
         }
 
-        protected Image CreateDivider(string objectName, Transform parent, Color color)
+        protected UiBadge CreateBadge(
+            string objectName,
+            Transform parent,
+            string label,
+            UiBadgeTone tone)
         {
             GameObject gameObject = CreateObject(objectName, parent);
-            Image image = gameObject.AddComponent<Image>();
-            image.color = color;
-            return image;
+            gameObject.AddComponent<Image>();
+            UiBadge badge = gameObject.AddComponent<UiBadge>();
+            badge.Apply(Theme, tone);
+            UiText text = CreateText("Label", gameObject.transform, label, UiTextRole.Caption, TextAnchor.MiddleCenter);
+            text.GetComponent<Text>().raycastTarget = false;
+            return badge;
+        }
+
+        protected UiDivider CreateDivider(
+            string objectName,
+            Transform parent,
+            UiDividerTone tone = UiDividerTone.Subtle)
+        {
+            GameObject gameObject = CreateObject(objectName, parent);
+            gameObject.AddComponent<Image>();
+            UiDivider divider = gameObject.AddComponent<UiDivider>();
+            divider.Apply(Theme, tone);
+            return divider;
         }
 
         protected static void SetRect(

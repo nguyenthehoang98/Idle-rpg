@@ -78,6 +78,8 @@ namespace _TDS.UI
             CreateHeader("LEVEL 01", "WAVE 03 / 05", UiPreviewPage.Gameplay);
             CreateMetric("Gold", "GOLD", "240", 0.06f, 0.88f, 0.28f);
             CreateMetric("Status", "STATUS", "OVERDRIVE READY", 0.32f, 0.88f, 0.62f);
+            UiBadge overdrive = CreateBadge("OverdriveBadge", ScreenContent, "OVERDRIVE", UiBadgeTone.Accent);
+            SetRect(overdrive.GetComponent<RectTransform>(), new Vector2(0.66f, 0.88f), new Vector2(0.94f, 0.94f));
 
             UiPanel battlefield = CreatePanel("Battlefield", ScreenContent, UiPanelTone.Background);
             SetRect(battlefield.GetComponent<RectTransform>(), new Vector2(0.06f, 0.43f), new Vector2(0.94f, 0.84f));
@@ -132,6 +134,8 @@ namespace _TDS.UI
             CreateHeader("SHOP", "SPEND GOLD / SHAPE YOUR BUILD", UiPreviewPage.Reward);
             CreateMetric("ShopGold", "RUN GOLD", "240", 0.06f, 0.87f, 0.4f);
             CreateMetric("Refresh", "REFRESH", "1 LEFT", 0.44f, 0.87f, 0.94f);
+            UiDivider shopDivider = CreateDivider("ShopDivider", ScreenContent, UiDividerTone.Accent);
+            SetRect(shopDivider.GetComponent<RectTransform>(), new Vector2(0.06f, 0.84f), new Vector2(0.94f, 0.845f));
             CreateOffer("Offer1", "GENERATOR", "Energy / Pulse", "40 GOLD", UiButtonTone.Primary, 0.06f, 0.62f);
             CreateOffer("Offer2", "AETHER", "DPS / Critical", "80 GOLD", UiButtonTone.Secondary, 0.06f, 0.4f);
             CreateOffer("Offer3", "BATTERY", "Energy / Defense", "60 GOLD", UiButtonTone.Secondary, 0.06f, 0.18f);
