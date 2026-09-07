@@ -121,6 +121,17 @@ namespace _TDS.Battle
             SetContent(index, CircuitSlotContent.Empty);
         }
 
+        public void SwapSlots(int firstIndex, int secondIndex)
+        {
+            ValidateSlotIndex(firstIndex);
+            ValidateSlotIndex(secondIndex);
+            if (firstIndex == secondIndex) return;
+
+            (contents[firstIndex], contents[secondIndex]) = (contents[secondIndex], contents[firstIndex]);
+            (itemTypes[firstIndex], itemTypes[secondIndex]) = (itemTypes[secondIndex], itemTypes[firstIndex]);
+            (itemPowers[firstIndex], itemPowers[secondIndex]) = (itemPowers[secondIndex], itemPowers[firstIndex]);
+        }
+
         public void Reset()
         {
             for (int i = 0; i < contents.Length; i++)

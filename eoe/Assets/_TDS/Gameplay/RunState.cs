@@ -77,6 +77,43 @@ namespace _TDS.Gameplay
             return TrySell(itemId, ownedItemIds, purchasedItemPrices);
         }
 
+        public bool TryPlaceHero(int heroId, int slotIndex)
+        {
+            if (!IsValidSlot(slotIndex) || !ownedHeroIds.Contains(heroId)) return false;
+            Board.SetContent(slotIndex, CircuitSlotContent.Hero(heroId));
+            return true;
+        }
+
+        public bool TryPlaceItem(int itemId, int slotIndex, CircuitItemType itemType, int power = 1)
+        {
+            if (!IsValidSlot(slotIndex) || !ownedItemIds.Contains(itemId) || itemType == CircuitItemType.None || power <= 0)
+            {
+                return false;
+            }
+
+            Board.SetItem(slotIndex, itemId, itemType, power);
+            return true;
+        }
+
+        public bool TrySwapSlots(int firstIndex, int secondIndex)
+        {
+            if (!IsValidSlot(firstIndex) || !IsValidSlot(secondIndex)) return false;
+            Board.SwapSlots(firstIndex, secondIndex);
+            return true;
+        }
+
+        public bool TryClearSlot(int slotIndex)
+        {
+            if (!IsValidSlot(slotIndex)) return false;
+            Board.ClearSlot(slotIndex);
+            return true;
+        }
+
+        private bool IsValidSlot(int index)
+        {
+            return index >= 0 && index < Board.SlotCount;
+        }
+
         private bool TrySell(int id, HashSet<int> ownedIds, Dictionary<int, int> prices)
         {
             if (!prices.TryGetValue(id, out int price)) return false;
