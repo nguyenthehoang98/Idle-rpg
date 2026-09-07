@@ -18,7 +18,7 @@
 | Big 0.5 - Remote verification | 3/5 | Partial - compile/EditMode ready |
 | Big 1 - Circuit simulation | 5/5 | Done |
 | Big 2 - Combat integration | 5/6 | In progress |
-| Big 3 - Shop loop | 0/6 | Not started |
+| Big 3 - Shop loop | 5/6 | In progress |
 | Big 4 - Augments | 0/5 | Not started |
 | Big 5 - Content/tuning | 0/5 | Not started |
 | Big 6 - Verification | 0/4 | Not started |
@@ -311,11 +311,11 @@
 
 ## S-01 - Tạo run state và gold `[P0]`
 
-- [ ] Tạo state chứa gold hiện tại.
-- [ ] Tạo state chứa board hiện tại.
-- [ ] Tạo state chứa owned hero/item trong run.
-- [ ] Reset state khi bắt đầu run.
-- [ ] Không lưu meta progression trong MVP.
+- [x] Tạo state chứa gold hiện tại.
+- [x] Tạo state chứa board hiện tại.
+- [x] Tạo state chứa owned hero/item trong run.
+- [x] Reset state khi bắt đầu run.
+- [x] Không lưu meta progression trong MVP.
 
 **Acceptance:** Start/retry run tạo state sạch, không giữ dữ liệu run cũ.
 
@@ -323,11 +323,11 @@
 
 ## S-02 - Tạo offer model `[P0]`
 
-- [ ] Định nghĩa hero offer.
-- [ ] Định nghĩa item offer.
-- [ ] Định nghĩa direct upgrade/utility offer.
-- [ ] Offer có price và tag.
-- [ ] Offer có purchased/unavailable state.
+- [x] Định nghĩa hero offer.
+- [x] Định nghĩa item offer.
+- [x] Định nghĩa direct upgrade/utility offer.
+- [x] Offer có price và tag.
+- [x] Offer có purchased/unavailable state.
 
 **Acceptance:** UI có thể render offer từ data mà không biết logic random bên trong.
 
@@ -335,11 +335,11 @@
 
 ## S-03 - Tạo shop generation `[P0]`
 
-- [ ] Sinh đúng số lượng offer.
-- [ ] Có ít nhất hai offer liên quan một phần tới build.
-- [ ] Có một offer mở hướng build mới.
-- [ ] Không sinh offer không hợp lệ.
-- [ ] Hỗ trợ refresh theo giới hạn.
+- [x] Sinh đúng số lượng offer.
+- [x] Có ít nhất hai offer liên quan một phần tới build.
+- [x] Có một offer mở hướng build mới.
+- [x] Không sinh offer không hợp lệ.
+- [x] Hỗ trợ refresh theo giới hạn.
 
 **Acceptance:** Cùng seed cho kết quả deterministic trong test.
 
@@ -347,11 +347,11 @@
 
 ## S-04 - Implement buy/sell `[P0]`
 
-- [ ] Mua hero khi đủ gold.
-- [ ] Mua item khi đủ gold.
-- [ ] Từ chối mua khi không đủ gold.
-- [ ] Bán/trả item theo contract.
-- [ ] Không mua cùng offer hai lần.
+- [x] Mua hero khi đủ gold.
+- [x] Mua item khi đủ gold.
+- [x] Từ chối mua khi không đủ gold.
+- [x] Bán/trả item theo contract.
+- [x] Không mua cùng offer hai lần.
 
 **Acceptance:** Gold và ownership luôn nhất quán sau mọi giao dịch.
 
@@ -359,11 +359,11 @@
 
 ## S-05 - Implement board editing trong Shop `[P0]`
 
-- [ ] Đặt hero vào slot.
-- [ ] Đặt item vào slot.
-- [ ] Đổi chỗ hai slot.
-- [ ] Xóa slot về empty.
-- [ ] Chặn board state không hợp lệ.
+- [x] Đặt hero vào slot.
+- [x] Đặt item vào slot.
+- [x] Đổi chỗ hai slot.
+- [x] Xóa slot về empty.
+- [x] Chặn board state không hợp lệ.
 
 **Acceptance:** Sau khi đóng Shop, board runtime phản ánh đúng lựa chọn.
 

@@ -27,7 +27,7 @@ Người chơi không điều khiển hero liên tục. Quyết định chính l
 | 0.5 | Remote verification foundation | Partial - compile/EditMode ready |
 | 1 | Circuit simulation | In progress - 4/5 |
 | 2 | Board và combat integration | In progress - B-01/B-04 complete |
-| 3 | Wave result và Shop | Not started |
+| 3 | Wave result và Shop | In progress - S-01 đến S-05 complete |
 | 4 | Augment checkpoint | Not started |
 | 5 | Content và tuning | Not started |
 | 6 | Full verification và polish MVP | Not started |
@@ -44,12 +44,12 @@ Mỗi dòng là một increment độc lập. Chỉ chuyển sang dòng tiếp t
 | 1 | Contract lock | Chốt D-01 đến D-04 | Không còn blocker gameplay cho circuit | 1 phiên |
 | 2 | Circuit core | Làm C-01 đến C-05 | Circuit tests pass, không cần scene | Đã xong |
 | 3 | Combat slice | Làm B-01 đến B-05 | Một wave có Overdrive hoạt động | Đang làm — B-01/B-04 xong |
-| 4 | Shop slice | Làm S-01 đến S-06 | Wave → Shop → wave pass | 2 phiên |
+| 4 | Shop slice | Làm S-01 đến S-06 | Wave → Shop → wave pass | Đang làm — S-01 đến S-05 xong |
 | 5 | Augment slice | Làm A-01 đến A-05 | Wave 3 chọn Augment và ảnh hưởng build | 1-2 phiên |
 | 6 | Content/tuning | Làm T-01 đến T-05 | 5 wave + boss có ít nhất 2 build | 2 phiên |
 | 7 | Self-play/QA | Làm R-04, R-05 và V-01 đến V-04 | Headless self-play lặp lại ổn định | 1-2 phiên |
 
-**Next action:** bắt đầu `B-05` bằng một wave checkpoint có hero + item + pulse và giữ combat slice nhỏ. Không mở rộng content trước khi Checkpoint B pass.
+**Next action:** hoàn tất `S-06` bằng cách nối RunState/Shop vào flow wave result hiện tại. Chưa mở rộng Augment UI trước khi Wave → Shop → Wave pass.
 
 ## Nguyên tắc kiến trúc
 
