@@ -7,6 +7,11 @@ namespace _TDS.UI
     {
         [SerializeField] private Vector2 referenceResolution = new Vector2(1080f, 2400f);
         [SerializeField] private float spacingUnit = 4f;
+        [SerializeField] private int displaySize = 40;
+        [SerializeField] private int headingSize = 24;
+        [SerializeField] private int bodySize = 18;
+        [SerializeField] private int labelSize = 14;
+        [SerializeField] private int captionSize = 12;
         [SerializeField] private Color background = Hex("0B1220");
         [SerializeField] private Color surface = Hex("172238");
         [SerializeField] private Color surfaceElevated = Hex("243552");
@@ -19,6 +24,11 @@ namespace _TDS.UI
 
         public Vector2 ReferenceResolution => referenceResolution;
         public float SpacingUnit => spacingUnit;
+        public int DisplaySize => displaySize;
+        public int HeadingSize => headingSize;
+        public int BodySize => bodySize;
+        public int LabelSize => labelSize;
+        public int CaptionSize => captionSize;
         public Color Background => background;
         public Color Surface => surface;
         public Color SurfaceElevated => surfaceElevated;
