@@ -151,6 +151,9 @@ namespace _TDS.UI
             CreateOffer("Augment1", "OVERCHARGE", "Every fourth pulse grants extra stack.", "ENERGY", UiButtonTone.Primary, 0.06f, 0.64f);
             CreateOffer("Augment2", "SCAVENGER", "Elite and boss rewards grant more gold.", "ECONOMY", UiButtonTone.Secondary, 0.06f, 0.43f);
             CreateOffer("Augment3", "CHAIN REACTION", "Overdrive kills can trigger an explosion.", "COMBAT", UiButtonTone.Secondary, 0.06f, 0.22f);
+            UiButton accept = CreateButton("AcceptAugment", ScreenContent, "LOCK AUGMENT", UiButtonTone.Primary, UiTextRole.Heading);
+            SetRect(accept.GetComponent<RectTransform>(), new Vector2(0.06f, 0.07f), new Vector2(0.94f, 0.15f));
+            accept.Button.onClick.AddListener(() => ShowPage(UiPreviewPage.Result));
         }
 
         private void BuildResult()

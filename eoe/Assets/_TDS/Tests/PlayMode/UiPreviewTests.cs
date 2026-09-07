@@ -2,6 +2,7 @@ using System.Collections;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using UnityEngine.UI;
 namespace _TDS.Tests.PlayMode
 {
     public sealed class UiPreviewTests
@@ -46,6 +47,29 @@ namespace _TDS.Tests.PlayMode
                 yield return null;
                 Assert.That(root.transform.Find("UiCanvas/SafeArea"), Is.Not.Null, pageName);
             }
+
+            Object.Destroy(root);
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator PreviewConnectsAugmentToResultAndHome()
+        {
+            GameObject root = new GameObject("UiPreviewFlowTestRoot");
+            System.Type screenType = System.Type.GetType("_TDS.UI.UiPreviewScreen, Assembly-CSharp");
+            System.Type pageType = System.Type.GetType("_TDS.UI.UiPreviewPage, Assembly-CSharp");
+            Component screen = root.AddComponent(screenType);
+            System.Reflection.MethodInfo showPage = screenType.GetMethod("ShowPage");
+            showPage.Invoke(screen, new[] { System.Enum.Parse(pageType, "Augment") });
+            yield return null;
+
+            root.transform.Find("UiCanvas/SafeArea/AcceptAugment").GetComponent<Button>().onClick.Invoke();
+            yield return null;
+            Assert.That(root.transform.Find("UiCanvas/SafeArea/ResultCard"), Is.Not.Null);
+
+            root.transform.Find("UiCanvas/SafeArea/ResultCard/NextLevel").GetComponent<Button>().onClick.Invoke();
+            yield return null;
+            Assert.That(root.transform.Find("UiCanvas/SafeArea/HeroCard"), Is.Not.Null);
 
             Object.Destroy(root);
             yield return null;
