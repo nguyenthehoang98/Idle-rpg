@@ -120,6 +120,14 @@ namespace _TDS.Gameplay
 
             prices.Remove(id);
             ownedIds.Remove(id);
+            for (int slot = 0; slot < Board.SlotCount; slot++)
+            {
+                if (Board.GetContent(slot).Id == id)
+                {
+                    Board.ClearSlot(slot);
+                }
+            }
+
             Gold += price;
             return true;
         }

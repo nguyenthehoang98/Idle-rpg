@@ -39,9 +39,11 @@ namespace _TDS.Tests.Editor
             RunOffer offer = new RunOffer(201, RunOfferKind.Item, "Generator", 35);
             state.AddGold(35);
             Assert.That(state.TryPurchase(offer), Is.True);
+            Assert.That(state.TryPlaceItem(201, 2, _TDS.Battle.CircuitItemType.Generator), Is.True);
 
             Assert.That(state.TrySellItem(201), Is.True);
             Assert.That(state.Gold, Is.EqualTo(35));
+            Assert.That(state.Board.GetContent(2).Type, Is.EqualTo(_TDS.Battle.CircuitSlotContentType.Empty));
             Assert.That(state.OwnedItemIds.Contains(201), Is.False);
             Assert.That(state.TrySellItem(201), Is.False);
         }
