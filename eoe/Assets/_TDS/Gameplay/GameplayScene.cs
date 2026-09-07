@@ -55,6 +55,11 @@ namespace _TDS.Gameplay
             runner.TryGetRunner(out circuitRunner);
         }
 
+        private void Update()
+        {
+            hud?.RefreshCircuit(circuitRunner?.Circuit);
+        }
+
         private void OnEnable()
         {
             runner.OnPauseChanged += PauseChanged;
@@ -84,6 +89,7 @@ namespace _TDS.Gameplay
             agentRunner.Initialize();
             circuitRunner.Initialize(board);
             hud.Initialize(board, level);
+            hud.SetGold(rewards.Gold);
             hud.BindTimeScale(speed => runner.Loop = speed);
             hud.BindResultActions(ContinueAfterResult, ReturnHome);
             hud.SetStatus("LOADING BATTLE");
@@ -235,6 +241,7 @@ namespace _TDS.Gameplay
             }
 
             rewards.RecordUpgrade(card.id);
+            hud.SetGold(rewards.Gold);
             upgradePanel.Hide();
             ResumeUpgradeFlow();
             hud.SetStatus($"UPGRADE: {card.title}");
@@ -309,6 +316,7 @@ namespace _TDS.Gameplay
         private void OnMonsterRewarded(Monster monster, int experience, int gold)
         {
             rewards.Add(experience, gold);
+            hud?.SetGold(rewards.Gold);
             switch (monster.Rank)
             {
                 case MonsterRank.Elite: eliteKills++; break;

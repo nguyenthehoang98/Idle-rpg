@@ -12,17 +12,24 @@ namespace _TDS.Gameplay
         private static readonly Color SlotColor = ParseColor("243552");
         private static readonly Color EmptyColor = ParseColor("334155");
         private static readonly Color AccentColor = ParseColor("5EEAD4");
+        private static readonly Color PulseColor = ParseColor("FDE047");
+        private static readonly Color OverdriveColor = ParseColor("FB7185");
+        private static readonly Color GoldColor = ParseColor("FDE047");
         private static readonly Color TextColor = ParseColor("F8FAFC");
         private static readonly Color MutedColor = ParseColor("A8B5C7");
 
         private readonly Image[] slotImages = new Image[EnergyCircuit.DefaultSlotCount];
         private readonly Text[] slotLabels = new Text[EnergyCircuit.DefaultSlotCount];
+        private readonly Text[] slotIndexLabels = new Text[EnergyCircuit.DefaultSlotCount];
+        private readonly Text[] slotStackLabels = new Text[EnergyCircuit.DefaultSlotCount];
+        private readonly Color[] slotBaseColors = new Color[EnergyCircuit.DefaultSlotCount];
         private readonly float[] slotFeedback = new float[EnergyCircuit.DefaultSlotCount];
 
         private Font font;
         private RectTransform safeArea;
         private Text waveText;
         private Text statusText;
+        private Text goldText;
         private Text resultTitle;
         private Text resultRewards;
         private GameObject resultOverlay;
@@ -69,7 +76,7 @@ namespace _TDS.Gameplay
                 slotFeedback[i] -= Time.unscaledDeltaTime;
                 if (slotFeedback[i] <= 0f)
                 {
-                    slotImages[i].color = SlotColor;
+                    slotImages[i].color = slotBaseColors[i];
                 }
             }
         }
@@ -99,11 +106,14 @@ namespace _TDS.Gameplay
                 CircuitSlotContent content = board.GetContent(i);
                 slotLabels[i].text = content.Type switch
                 {
-                    CircuitSlotContentType.Hero => $"H\n{content.Id}",
-                    CircuitSlotContentType.Item => $"I\n{content.Id}",
-                    _ => "·"
+                    CircuitSlotContentType.Hero => $"HERO\n{content.Id}",
+                    CircuitSlotContentType.Item => $"ITEM\n{content.Id}",
+                    _ => "EMPTY"
                 };
-                slotImages[i].color = content.Type == CircuitSlotContentType.Empty ? EmptyColor : SlotColor;
+                slotIndexLabels[i].text = $"{i + 1:00}";
+                slotStackLabels[i].text = "0/3";
+                slotBaseColors[i] = content.Type == CircuitSlotContentType.Empty ? EmptyColor : SlotColor;
+                slotImages[i].color = slotBaseColors[i];
             }
         }
 
@@ -115,6 +125,30 @@ namespace _TDS.Gameplay
         public void SetWave(int wave)
         {
             SetText("WAVE " + wave, waveText);
+        }
+
+        public void SetGold(int gold)
+        {
+            SetText($"GOLD  {Mathf.Max(0, gold)}", goldText);
+        }
+
+        public void RefreshCircuit(EnergyCircuit circuit)
+        {
+            if (circuit == null) return;
+
+            for (int i = 0; i < slotImages.Length && i < circuit.SlotCount; i++)
+            {
+                CircuitSlotState state = circuit.GetSlot(i);
+                slotStackLabels[i].text = state.IsActive
+                    ? "OVERDRIVE"
+                    : $"{state.Stack}/{circuit.ActivationThreshold}";
+                slotStackLabels[i].color = state.IsActive ? TextColor : MutedColor;
+
+                if (slotFeedback[i] > 0f) continue;
+                slotImages[i].color = state.IsActive
+                    ? OverdriveColor
+                    : i == circuit.PulseIndex ? PulseColor : slotBaseColors[i];
+            }
         }
 
         public void SetStatus(string status)
@@ -192,12 +226,14 @@ namespace _TDS.Gameplay
             SetRect(topAccent.rectTransform, new Vector2(0f, 0f), new Vector2(0f, 1f),
                 Vector2.zero, new Vector2(6f, 0f));
 
-            CreateText("Title", topBar.transform, "IDLE // CIRCUIT", 32, TextColor,
-                new Vector2(0.06f, 0f), new Vector2(0.43f, 1f), TextAnchor.MiddleLeft);
-            waveText = CreateText("Wave", topBar.transform, "LEVEL 1", 28, AccentColor,
-                new Vector2(0.43f, 0f), new Vector2(0.65f, 1f), TextAnchor.MiddleCenter);
-            statusText = CreateText("Status", topBar.transform, "AUTO COMBAT", 22, MutedColor,
-                new Vector2(0.55f, 0f), new Vector2(0.7f, 1f), TextAnchor.MiddleRight);
+            CreateText("Title", topBar.transform, "IDLE // CIRCUIT", 28, TextColor,
+                new Vector2(0.05f, 0f), new Vector2(0.29f, 1f), TextAnchor.MiddleLeft);
+            waveText = CreateText("Wave", topBar.transform, "LEVEL 1", 24, AccentColor,
+                new Vector2(0.3f, 0f), new Vector2(0.45f, 1f), TextAnchor.MiddleCenter);
+            statusText = CreateText("Status", topBar.transform, "AUTO COMBAT", 19, MutedColor,
+                new Vector2(0.46f, 0f), new Vector2(0.64f, 1f), TextAnchor.MiddleCenter);
+            goldText = CreateText("Gold", topBar.transform, "GOLD  0", 20, GoldColor,
+                new Vector2(0.65f, 0f), new Vector2(0.81f, 1f), TextAnchor.MiddleCenter);
             BuildSpeedControls(topBar.transform);
 
             Image circuitPanel = CreatePanel("CircuitPanel", root, PanelColor);
@@ -235,9 +271,16 @@ namespace _TDS.Gameplay
                 image.color = EmptyColor;
                 AddOutline(image, new Color(0.37f, 0.91f, 0.83f, 0.22f), 2f);
                 slotImages[i] = image;
-                slotLabels[i] = CreateText("Label", slotObject.transform, "·", 22, TextColor,
-                    Vector2.zero, Vector2.one, TextAnchor.MiddleCenter);
+                slotBaseColors[i] = EmptyColor;
+                slotIndexLabels[i] = CreateText("Index", slotObject.transform, $"{i + 1:00}", 13, MutedColor,
+                    new Vector2(0.08f, 0.72f), new Vector2(0.92f, 0.98f), TextAnchor.MiddleCenter);
+                slotLabels[i] = CreateText("Label", slotObject.transform, "EMPTY", 16, TextColor,
+                    new Vector2(0.06f, 0.22f), new Vector2(0.94f, 0.76f), TextAnchor.MiddleCenter);
+                slotStackLabels[i] = CreateText("Stack", slotObject.transform, "0/3", 12, MutedColor,
+                    new Vector2(0.08f, 0.02f), new Vector2(0.92f, 0.22f), TextAnchor.MiddleCenter);
+                slotIndexLabels[i].raycastTarget = false;
                 slotLabels[i].raycastTarget = false;
+                slotStackLabels[i].raycastTarget = false;
             }
 
             BuildResultOverlay(root);
@@ -248,7 +291,7 @@ namespace _TDS.Gameplay
             GameObject speedRoot = new GameObject("SpeedControls", typeof(RectTransform));
             speedRoot.transform.SetParent(parent, false);
             RectTransform speedRect = speedRoot.GetComponent<RectTransform>();
-            SetRect(speedRect, new Vector2(0.72f, 0.16f), new Vector2(0.96f, 0.84f), Vector2.zero, Vector2.zero);
+            SetRect(speedRect, new Vector2(0.82f, 0.16f), new Vector2(0.97f, 0.84f), Vector2.zero, Vector2.zero);
             HorizontalLayoutGroup layout = speedRoot.AddComponent<HorizontalLayoutGroup>();
             layout.spacing = 4f;
             layout.padding = new RectOffset(2, 2, 2, 2);
