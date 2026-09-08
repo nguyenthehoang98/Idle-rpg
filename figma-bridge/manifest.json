@@ -1,0 +1,13 @@
+{
+  "name": "Idle RPG UI Bridge",
+  "id": "com.idlerpg.ui-bridge",
+  "api": "1.0.0",
+  "main": "code.js",
+  "ui": "ui.html",
+  "editorType": ["figma"],
+  "networkAccess": {
+    "allowedDomains": ["http://127.0.0.1:38471"],
+    "devAllowedDomains": ["http://127.0.0.1:38471"],
+    "reasoning": "Connect only to the local loopback bridge used by the owner for draft UI generation."
+  }
+}

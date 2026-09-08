@@ -1,0 +1,10 @@
+{
+  "op": "create_frame",
+  "args": {
+    "name": "AI Draft / Home",
+    "width": 1080,
+    "height": 2400,
+    "x": 0,
+    "y": 0
+  }
+}
