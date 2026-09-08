@@ -17,13 +17,13 @@ if ($commands.Count -lt 1 -or $commands.Count -gt 50) { throw "Batch must contai
 $token = (& $python (Join-Path $root "bridge.py") token).Trim()
 $headers = @{ "X-Bridge-Token" = $token }
 $payload = @{ op = "batch"; args = @{ commands = $commands } } | ConvertTo-Json -Depth 20 -Compress
-$accepted = Invoke-RestMethod -Method Post -Uri "http://localhost:38471/command" -Headers $headers -ContentType "application/json" -Body $payload
+$accepted = Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:38471/command" -Headers $headers -ContentType "application/json" -Body $payload
 $id = $accepted.id
 $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
 
 while ((Get-Date) -lt $deadline) {
     Start-Sleep -Milliseconds 500
-    $events = Invoke-RestMethod -Uri "http://localhost:38471/events" -Headers $headers
+    $events = Invoke-RestMethod -Uri "http://127.0.0.1:38471/events" -Headers $headers
     $event = @($events.events) | Where-Object { $_.id -eq $id } | Select-Object -First 1
     if ($null -ne $event) {
         $event.result | ConvertTo-Json -Depth 30

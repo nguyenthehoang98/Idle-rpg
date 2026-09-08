@@ -28,7 +28,7 @@ $healthy = $false
 for ($attempt = 0; $attempt -lt 20; $attempt++) {
     Start-Sleep -Milliseconds 250
     try {
-        $health = Invoke-RestMethod -Uri "http://localhost:$port/health" -TimeoutSec 2
+        $health = Invoke-RestMethod -Uri "http://127.0.0.1:$port/health" -TimeoutSec 2
         if ($health.ok) { $healthy = $true; break }
     } catch { }
 }
@@ -39,7 +39,7 @@ if (-not $healthy) {
 }
 
 $token = (& $python (Join-Path $root "bridge.py") token).Trim()
-Write-Host "Figma bridge is ready on http://localhost:$port"
+Write-Host "Figma bridge is ready on http://127.0.0.1:$port"
 Write-Host "Token length: $($token.Length) characters"
 Write-Host "Plugin URL: http://localhost:$port"
 Write-Host "The token is intentionally not printed. Run: python bridge.py token"
