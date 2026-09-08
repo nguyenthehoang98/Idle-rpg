@@ -36,7 +36,20 @@ namespace _TDS.UI
             theme = nextTheme;
             tone = nextTone;
             image ??= GetComponent<Image>();
+            image.sprite = SpriteFor(nextTheme, nextTone);
+            image.type = image.sprite == null ? Image.Type.Simple : Image.Type.Sliced;
             image.color = ColorFor(nextTheme, nextTone);
+        }
+
+        private static Sprite SpriteFor(UiTheme theme, UiPanelTone tone)
+        {
+            return tone switch
+            {
+                UiPanelTone.Surface => theme.PanelSprite,
+                UiPanelTone.Elevated => theme.PanelSprite,
+                UiPanelTone.Accent => theme.PanelSelectedSprite,
+                _ => null,
+            };
         }
 
         private static Color ColorFor(UiTheme theme, UiPanelTone tone)

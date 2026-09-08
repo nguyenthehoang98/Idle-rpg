@@ -25,6 +25,24 @@ namespace _TDS.Tests.Editor
         }
 
         [Test]
+        public void ButtonUsesDisabledProductionSprite()
+        {
+            GameObject gameObject = new GameObject("Button");
+            gameObject.AddComponent<Image>();
+            UiButton button = gameObject.AddComponent<UiButton>();
+            UiTheme theme = ScriptableObject.CreateInstance<UiTheme>();
+
+            button.Apply(theme, UiButtonTone.Primary);
+            button.SetInteractable(false);
+
+            Assert.That(gameObject.GetComponent<Image>().sprite, Is.EqualTo(theme.ButtonDisabledSprite));
+            Assert.That(gameObject.GetComponent<Button>().interactable, Is.False);
+
+            Object.DestroyImmediate(theme);
+            Object.DestroyImmediate(gameObject);
+        }
+
+        [Test]
         public void ButtonSupportsDangerTone()
         {
             GameObject gameObject = new GameObject("Button");

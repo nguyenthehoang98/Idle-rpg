@@ -97,6 +97,12 @@ namespace _TDS.UI
                 UiPanel slot = CreatePanel($"Slot{i + 1:00}", circuit.transform, i == 3 ? UiPanelTone.Accent : UiPanelTone.Elevated);
                 float min = 0.04f + i * 0.12f;
                 SetRect(slot.GetComponent<RectTransform>(), new Vector2(min, 0.14f), new Vector2(min + 0.1f, 0.58f));
+                GameObject slotArtObject = CreateObject("SlotArt", slot.transform);
+                Image slotArt = slotArtObject.AddComponent<Image>();
+                slotArt.sprite = i == 3 ? Theme.SlotActiveSprite : Theme.SlotEmptySprite;
+                slotArt.type = Image.Type.Sliced;
+                slotArt.color = Color.white;
+                SetRect(slotArt.rectTransform, Vector2.zero, Vector2.one);
                 CreateText("SlotLabel", slot.transform, i == 0 ? "GEN" : i < 3 ? $"H{i}" : "·", UiTextRole.Label, TextAnchor.MiddleCenter);
                 SetRect(slot.transform.Find("SlotLabel") as RectTransform, Vector2.zero, Vector2.one);
             }

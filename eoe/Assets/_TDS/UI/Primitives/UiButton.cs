@@ -40,6 +40,7 @@ namespace _TDS.UI
             button ??= GetComponent<Button>();
             button.targetGraphic = image;
             button.transition = Selectable.Transition.ColorTint;
+            RefreshSprite();
 
             Color normal = NormalColor(nextTheme, nextTone);
             ColorBlock colors = button.colors;
@@ -50,6 +51,29 @@ namespace _TDS.UI
             colors.disabledColor = DisabledColor(nextTheme);
             button.colors = colors;
             image.color = normal;
+        }
+
+        public void SetInteractable(bool isInteractable)
+        {
+            Button.interactable = isInteractable;
+            RefreshSprite();
+        }
+
+        private void RefreshSprite()
+        {
+            image.sprite = Button.interactable ? SpriteFor(theme, tone) : theme.ButtonDisabledSprite;
+            image.type = image.sprite == null ? Image.Type.Simple : Image.Type.Sliced;
+        }
+
+        private static Sprite SpriteFor(UiTheme theme, UiButtonTone tone)
+        {
+            return tone switch
+            {
+                UiButtonTone.Primary => theme.ButtonPrimarySprite,
+                UiButtonTone.Secondary => theme.ButtonSecondarySprite,
+                UiButtonTone.Danger => theme.ButtonDangerSprite,
+                _ => null,
+            };
         }
 
         private static Color NormalColor(UiTheme theme, UiButtonTone tone)

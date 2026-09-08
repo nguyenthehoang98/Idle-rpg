@@ -21,6 +21,17 @@ namespace _TDS.UI
         [SerializeField] private Color danger = Hex("FB7185");
         [SerializeField] private Color textPrimary = Hex("F8FAFC");
         [SerializeField] private Color textSecondary = Hex("A8B5C7");
+        [SerializeField] private Sprite panelSprite;
+        [SerializeField] private Sprite panelSelectedSprite;
+        [SerializeField] private Sprite buttonPrimarySprite;
+        [SerializeField] private Sprite buttonSecondarySprite;
+        [SerializeField] private Sprite buttonDisabledSprite;
+        [SerializeField] private Sprite buttonDangerSprite;
+        [SerializeField] private Sprite badgeAccentSprite;
+        [SerializeField] private Sprite badgeWarningSprite;
+        [SerializeField] private Sprite dividerAccentSprite;
+        [SerializeField] private Sprite slotEmptySprite;
+        [SerializeField] private Sprite slotActiveSprite;
 
         public Vector2 ReferenceResolution => referenceResolution;
         public float SpacingUnit => spacingUnit;
@@ -38,6 +49,22 @@ namespace _TDS.UI
         public Color Danger => danger;
         public Color TextPrimary => textPrimary;
         public Color TextSecondary => textSecondary;
+        public Sprite PanelSprite => panelSprite != null ? panelSprite : Load("ui-panel");
+        public Sprite PanelSelectedSprite => panelSelectedSprite != null ? panelSelectedSprite : Load("ui-panel-selected");
+        public Sprite ButtonPrimarySprite => buttonPrimarySprite != null ? buttonPrimarySprite : Load("ui-button-primary");
+        public Sprite ButtonSecondarySprite => buttonSecondarySprite != null ? buttonSecondarySprite : Load("ui-button-secondary");
+        public Sprite ButtonDisabledSprite => buttonDisabledSprite != null ? buttonDisabledSprite : Load("ui-button-disabled");
+        public Sprite ButtonDangerSprite => buttonDangerSprite != null ? buttonDangerSprite : Load("ui-button-danger");
+        public Sprite BadgeAccentSprite => badgeAccentSprite != null ? badgeAccentSprite : Load("ui-badge-accent");
+        public Sprite BadgeWarningSprite => badgeWarningSprite != null ? badgeWarningSprite : Load("ui-badge-warning");
+        public Sprite DividerAccentSprite => dividerAccentSprite != null ? dividerAccentSprite : Load("ui-divider-accent");
+        public Sprite SlotEmptySprite => slotEmptySprite != null ? slotEmptySprite : Load("ui-slot-empty");
+        public Sprite SlotActiveSprite => slotActiveSprite != null ? slotActiveSprite : Load("ui-slot-active");
+
+        private static Sprite Load(string assetName)
+        {
+            return Resources.Load<Sprite>($"UI/Art/{assetName}");
+        }
 
         private static Color Hex(string value)
         {

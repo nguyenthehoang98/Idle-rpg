@@ -31,6 +31,8 @@ namespace _TDS.UI
             theme = nextTheme;
             tone = nextTone;
             image ??= GetComponent<Image>();
+            image.sprite = nextTone == UiDividerTone.Accent ? nextTheme.DividerAccentSprite : null;
+            image.type = image.sprite == null ? Image.Type.Simple : Image.Type.Tiled;
             image.color = nextTone == UiDividerTone.Accent
                 ? nextTheme.Accent
                 : new Color(nextTheme.TextSecondary.r, nextTheme.TextSecondary.g, nextTheme.TextSecondary.b, 0.45f);
