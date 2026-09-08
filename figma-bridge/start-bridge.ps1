@@ -13,7 +13,7 @@ if (-not $NoRestart) {
     $listeners = @(Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue)
     foreach ($listener in $listeners) {
         $process = Get-CimInstance Win32_Process -Filter "ProcessId=$($listener.OwningProcess)" -ErrorAction SilentlyContinue
-        if ($process -and $process.CommandLine -match "bridge\.py serve" -and $process.CommandLine -match "figma-bridge") {
+        if ($process -and $process.CommandLine -match "bridge\.py serve") {
             Stop-Process -Id $listener.OwningProcess -Force
             Write-Host "Stopped existing Figma bridge PID $($listener.OwningProcess)."
         }
