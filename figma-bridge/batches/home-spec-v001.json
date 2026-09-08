@@ -1,0 +1,584 @@
+[
+  {
+    "op": "create_frame",
+    "as": "home",
+    "args": {
+      "name": "Home / Spec v001",
+      "width": 1080,
+      "height": 2400,
+      "x": 0,
+      "y": 0
+    }
+  },
+  {
+    "op": "create_rectangle",
+    "as": "background",
+    "args": {
+      "name": "Home Background",
+      "parentId": "$home",
+      "x": 0,
+      "y": 0,
+      "width": 1080,
+      "height": 2400
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$background",
+      "color": {
+        "r": 0.027450980392156862,
+        "g": 0.06666666666666667,
+        "b": 0.12156862745098039
+      },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "create_rectangle",
+    "as": "header",
+    "args": {
+      "name": "Home Header",
+      "parentId": "$home",
+      "x": 56,
+      "y": 56,
+      "width": 968,
+      "height": 230
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$header",
+      "color": {
+        "r": 0.06274509803921569,
+        "g": 0.1411764705882353,
+        "b": 0.22745098039215686
+      },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "set_stroke",
+    "args": {
+      "nodeId": "$header",
+      "color": {
+        "r": 0.22745098039215686,
+        "g": 0.42745098039215684,
+        "b": 0.4745098039215686
+      },
+      "opacity": 0.7,
+      "weight": 2
+    }
+  },
+  {
+    "op": "set_corner_radius",
+    "args": {
+      "nodeId": "$header",
+      "radius": 20
+    }
+  },
+  {
+    "op": "create_text",
+    "as": "title",
+    "args": {
+      "name": "Home Title",
+      "parentId": "$home",
+      "text": "IDLE // CIRCUIT",
+      "fontSize": 46,
+      "x": 96,
+      "y": 104
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$title",
+      "color": {
+        "r": 0.9725490196078431,
+        "g": 0.9803921568627451,
+        "b": 0.9882352941176471
+      },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "create_text",
+    "as": "subtitle",
+    "args": {
+      "name": "Home Subtitle",
+      "parentId": "$home",
+      "text": "SELECT A LEVEL",
+      "fontSize": 24,
+      "x": 96,
+      "y": 176
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$subtitle",
+      "color": {
+        "r": 0.3686274509803922,
+        "g": 0.9176470588235294,
+        "b": 0.8313725490196079
+      },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "create_rectangle",
+    "as": "hero-panel",
+    "args": {
+      "name": "Home Hero Panel",
+      "parentId": "$home",
+      "x": 56,
+      "y": 334,
+      "width": 968,
+      "height": 410
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$hero-panel",
+      "color": {
+        "r": 0.09411764705882353,
+        "g": 0.16470588235294117,
+        "b": 0.2627450980392157
+      },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "set_stroke",
+    "args": {
+      "nodeId": "$hero-panel",
+      "color": {
+        "r": 0.22745098039215686,
+        "g": 0.42745098039215684,
+        "b": 0.4745098039215686
+      },
+      "opacity": 0.55,
+      "weight": 2
+    }
+  },
+  {
+    "op": "set_corner_radius",
+    "args": {
+      "nodeId": "$hero-panel",
+      "radius": 24
+    }
+  },
+  {
+    "op": "create_text",
+    "as": "hero-eyebrow",
+    "args": {
+      "name": "Hero Eyebrow",
+      "parentId": "$home",
+      "text": "RUN READY",
+      "fontSize": 22,
+      "x": 96,
+      "y": 382
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$hero-eyebrow",
+      "color": {
+        "r": 0.3686274509803922,
+        "g": 0.9176470588235294,
+        "b": 0.8313725490196079
+      },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "create_text",
+    "as": "hero-title",
+    "args": {
+      "name": "Hero Title",
+      "parentId": "$home",
+      "text": "CHOOSE YOUR DESCENT",
+      "fontSize": 38,
+      "x": 96,
+      "y": 446
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$hero-title",
+      "color": {
+        "r": 0.9725490196078431,
+        "g": 0.9803921568627451,
+        "b": 0.9882352941176471
+      },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "create_text",
+    "as": "hero-body",
+    "args": {
+      "name": "Hero Body",
+      "parentId": "$home",
+      "text": "Pick a level. Clear the waves. Build the run.",
+      "fontSize": 24,
+      "x": 96,
+      "y": 520
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$hero-body",
+      "color": {
+        "r": 0.6588235294117647,
+        "g": 0.7098039215686275,
+        "b": 0.7803921568627451
+      },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "create_text",
+    "as": "levels-heading",
+    "args": {
+      "name": "Levels Heading",
+      "parentId": "$home",
+      "text": "CAMPAIGN LEVELS",
+      "fontSize": 22,
+      "x": 56,
+      "y": 824
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$levels-heading",
+      "color": {
+        "r": 0.6588235294117647,
+        "g": 0.7098039215686275,
+        "b": 0.7803921568627451
+      },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "create_rectangle",
+    "as": "level-01-card",
+    "args": {
+      "name": "Level 01 Card",
+      "parentId": "$home",
+      "x": 56,
+      "y": 894,
+      "width": 304,
+      "height": 470
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$level-01-card",
+      "color": {
+        "r": 0.06274509803921569,
+        "g": 0.1411764705882353,
+        "b": 0.22745098039215686
+      },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "set_stroke",
+    "args": {
+      "nodeId": "$level-01-card",
+      "color": {
+        "r": 0.3686274509803922,
+        "g": 0.9176470588235294,
+        "b": 0.8313725490196079
+      },
+      "opacity": 0.9,
+      "weight": 3
+    }
+  },
+  {
+    "op": "set_corner_radius",
+    "args": {
+      "nodeId": "$level-01-card",
+      "radius": 20
+    }
+  },
+  {
+    "op": "create_rectangle",
+    "as": "level-02-card",
+    "args": {
+      "name": "Level 02 Card",
+      "parentId": "$home",
+      "x": 388,
+      "y": 894,
+      "width": 304,
+      "height": 470
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$level-02-card",
+      "color": {
+        "r": 0.08235294117647059,
+        "g": 0.13333333333333333,
+        "b": 0.2196078431372549
+      },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "create_rectangle",
+    "as": "level-03-card",
+    "args": {
+      "name": "Level 03 Card",
+      "parentId": "$home",
+      "x": 720,
+      "y": 894,
+      "width": 304,
+      "height": 470
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$level-03-card",
+      "color": {
+        "r": 0.08235294117647059,
+        "g": 0.13333333333333333,
+        "b": 0.2196078431372549
+      },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "create_text",
+    "as": "level-01-label",
+    "args": {
+      "name": "Level 01 Label",
+      "parentId": "$home",
+      "text": "LEVEL 01\nAVAILABLE",
+      "fontSize": 30,
+      "x": 88,
+      "y": 968
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$level-01-label",
+      "color": {
+        "r": 0.9725490196078431,
+        "g": 0.9803921568627451,
+        "b": 0.9882352941176471
+      },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "create_text",
+    "as": "level-02-label",
+    "args": {
+      "name": "Level 02 Label",
+      "parentId": "$home",
+      "text": "LEVEL 02\nLOCKED",
+      "fontSize": 30,
+      "x": 420,
+      "y": 968
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$level-02-label",
+      "color": {
+        "r": 0.44313725490196076,
+        "g": 0.5137254901960784,
+        "b": 0.611764705882353
+      },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "create_text",
+    "as": "level-03-label",
+    "args": {
+      "name": "Level 03 Label",
+      "parentId": "$home",
+      "text": "LEVEL 03\nLOCKED",
+      "fontSize": 30,
+      "x": 752,
+      "y": 968
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$level-03-label",
+      "color": {
+        "r": 0.44313725490196076,
+        "g": 0.5137254901960784,
+        "b": 0.611764705882353
+      },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "create_text",
+    "as": "level-01-detail",
+    "args": {
+      "name": "Level 01 Detail",
+      "parentId": "$home",
+      "text": "5 WAVES\nSTART RUN",
+      "fontSize": 22,
+      "x": 88,
+      "y": 1170
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$level-01-detail",
+      "color": {
+        "r": 0.3686274509803922,
+        "g": 0.9176470588235294,
+        "b": 0.8313725490196079
+      },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "create_text",
+    "as": "level-02-detail",
+    "args": {
+      "name": "Level 02 Detail",
+      "parentId": "$home",
+      "text": "CLEAR LEVEL 01\nTO UNLOCK",
+      "fontSize": 22,
+      "x": 420,
+      "y": 1170
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$level-02-detail",
+      "color": {
+        "r": 0.44313725490196076,
+        "g": 0.5137254901960784,
+        "b": 0.611764705882353
+      },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "create_text",
+    "as": "level-03-detail",
+    "args": {
+      "name": "Level 03 Detail",
+      "parentId": "$home",
+      "text": "CLEAR LEVEL 02\nTO UNLOCK",
+      "fontSize": 22,
+      "x": 752,
+      "y": 1170
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$level-03-detail",
+      "color": {
+        "r": 0.44313725490196076,
+        "g": 0.5137254901960784,
+        "b": 0.611764705882353
+      },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "create_rectangle",
+    "as": "continue-button",
+    "args": {
+      "name": "Continue Button",
+      "parentId": "$home",
+      "x": 300,
+      "y": 1880,
+      "width": 480,
+      "height": 120
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$continue-button",
+      "color": {
+        "r": 0.3686274509803922,
+        "g": 0.9176470588235294,
+        "b": 0.8313725490196079
+      },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "set_corner_radius",
+    "args": {
+      "nodeId": "$continue-button",
+      "radius": 20
+    }
+  },
+  {
+    "op": "create_text",
+    "as": "continue-label",
+    "args": {
+      "name": "Continue Label",
+      "parentId": "$home",
+      "text": "START LEVEL 01",
+      "fontSize": 30,
+      "x": 416,
+      "y": 1920
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$continue-label",
+      "color": {
+        "r": 0.027450980392156862,
+        "g": 0.06666666666666667,
+        "b": 0.12156862745098039
+      },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "create_text",
+    "as": "hint",
+    "args": {
+      "name": "Home Hint",
+      "parentId": "$home",
+      "text": "SELECT ONE AVAILABLE LEVEL TO BEGIN",
+      "fontSize": 20,
+      "x": 290,
+      "y": 2070
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$hint",
+      "color": {
+        "r": 0.6588235294117647,
+        "g": 0.7098039215686275,
+        "b": 0.7803921568627451
+      },
+      "opacity": 1
+    }
+  }
+]
