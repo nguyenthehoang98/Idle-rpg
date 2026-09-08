@@ -19,7 +19,13 @@ cd C:\Users\Hoang PC\Documents\Idle-rpg\figma-bridge
 python bridge.py serve
 ```
 
-Keep this terminal open. The first run creates `.bridge-token`; paste that token into the plugin UI only when instructed.
+Keep this terminal open. The first run creates `.bridge-token`. In another terminal, print the token with:
+
+```powershell
+python bridge.py token
+```
+
+Paste that one-line value into the plugin UI only when instructed.
 
 Health check from another terminal:
 

@@ -191,11 +191,16 @@ def main() -> int:
     subparsers = parser.add_subparsers(dest="mode", required=True)
     serve_parser = subparsers.add_parser("serve")
     serve_parser.set_defaults(mode="serve")
+    token_parser = subparsers.add_parser("token")
+    token_parser.set_defaults(mode="token")
     command_parser = subparsers.add_parser("command")
     command_parser.add_argument("operation", choices=sorted(ALLOWED_OPERATIONS))
     command_parser.add_argument("--args", default="{}", help="JSON object")
     args = parser.parse_args()
 
+    if args.mode == "token":
+        print(load_token())
+        return 0
     if args.mode == "command":
         return command(args)
 
@@ -203,6 +208,7 @@ def main() -> int:
     server = BridgeServer(token)
     print(f"Figma bridge listening on http://{HOST}:{PORT}")
     print(f"Token stored locally at {TOKEN_FILE}")
+    print("To print the token in another terminal: python bridge.py token")
     print("No external network interface is opened. Press Ctrl+C to stop.")
     try:
         server.serve_forever()
