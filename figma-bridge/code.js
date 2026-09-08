@@ -145,6 +145,48 @@ async function execute(command, depth = 0) {
       node.strokeWeight = number(args.weight, 1, 0, 100);
       return { ok: true, node: resultFor(node) };
     }
+    case "set_gradient": {
+      const node = getAnyNode(args.nodeId);
+      if (!node || !("fills" in node) || !Array.isArray(args.stops) || args.stops.length < 2) {
+        return fail("INVALID_GRADIENT", "Node or gradient stops are invalid");
+      }
+      const stops = args.stops.map((stop) => ({
+        position: number(stop.position, 0, 0, 1),
+        color: color(stop.color) || { r: 1, g: 1, b: 1 },
+        opacity: number(stop.opacity, 1, 0, 1),
+      }));
+      node.fills = [{
+        type: "GRADIENT_LINEAR",
+        gradientHandlePositions: [
+          { x: number(args.fromX, 0, -1, 2), y: number(args.fromY, 0, -1, 2) },
+          { x: number(args.toX, 0, -1, 2), y: number(args.toY, 1, -1, 2) },
+        ],
+        gradientStops: stops,
+      }];
+      return { ok: true, node: resultFor(node) };
+    }
+    case "set_effects": {
+      const node = getAnyNode(args.nodeId);
+      const shadow = args.shadow;
+      if (!node || !shadow || !("effects" in node)) return fail("INVALID_EFFECT", "Node or shadow is invalid");
+      const shadowColor = color(shadow.color) || { r: 0, g: 0, b: 0 };
+      node.effects = [{
+        type: "DROP_SHADOW",
+        color: { ...shadowColor, a: number(shadow.opacity, 0.45, 0, 1) },
+        offset: { x: number(shadow.x, 0, -500, 500), y: number(shadow.y, 16, -500, 500) },
+        radius: number(shadow.radius, 20, 0, 200),
+        spread: number(shadow.spread, 0, -100, 100),
+        visible: true,
+        blendMode: "NORMAL",
+      }];
+      return { ok: true, node: resultFor(node) };
+    }
+    case "set_rotation": {
+      const node = getAnyNode(args.nodeId);
+      if (!node) return fail("INVALID_NODE", "Node is not available");
+      node.rotation = number(args.degrees, 0, -360, 360);
+      return { ok: true, node: resultFor(node) };
+    }
     case "set_corner_radius": {
       const node = getAnyNode(args.nodeId);
       if (!node || !("cornerRadius" in node)) return fail("INVALID_NODE", "Node does not support corner radius");
