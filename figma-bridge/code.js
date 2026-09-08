@@ -67,11 +67,23 @@ function selectNode(node) {
   }
 }
 
-async function execute(command) {
+async function execute(command, depth = 0) {
   if (!command || typeof command.op !== "string") return fail("INVALID_COMMAND", "Missing operation");
+  if (depth > 1) return fail("BATCH_TOO_DEEP", "Nested batches are not allowed");
   const args = command.args && typeof command.args === "object" ? command.args : {};
 
   switch (command.op) {
+    case "batch": {
+      if (!Array.isArray(args.commands) || args.commands.length > 50) {
+        return fail("INVALID_BATCH", "Batch must contain 1-50 commands");
+      }
+      const results = [];
+      for (const child of args.commands) {
+        if (!child || child.op === "batch") return fail("INVALID_BATCH", "Nested batches are not allowed");
+        results.push({ id: child.id || null, result: await execute(child, depth + 1) });
+      }
+      return { ok: true, results };
+    }
     case "ping":
       return { ok: true, message: "Figma plugin connected", pageId: figma.currentPage.id };
     case "create_page": {

@@ -29,7 +29,9 @@
     const connectButton = document.getElementById('connect');
     const status = document.getElementById('status');
     let connected = false;
+    let connecting = false;
     let polling = false;
+    let reconnectTimer = null;
 
     function baseUrl() { return urlInput.value.trim().replace(/\/$/, ''); }
     function token() { return tokenInput.value.trim(); }
@@ -54,6 +56,32 @@
       return body;
     }
 
+    function scheduleReconnect() {
+      if (reconnectTimer || !token()) return;
+      reconnectTimer = setTimeout(() => {
+        reconnectTimer = null;
+        connect();
+      }, 1500);
+    }
+
+    async function connect() {
+      if (connecting || !token()) return;
+      connecting = true;
+      connectButton.disabled = true;
+      try {
+        await getJson('/next?token=' + encodeURIComponent(token()));
+        connected = true;
+        setStatus('Connected. Waiting for approved commands.');
+      } catch (error) {
+        connected = false;
+        setStatus(`Waiting for bridge: ${error.message}`);
+        scheduleReconnect();
+      } finally {
+        connecting = false;
+        connectButton.disabled = false;
+      }
+    }
+
     async function poll() {
       if (!connected || polling) return;
       polling = true;
@@ -65,27 +93,14 @@
         }
       } catch (error) {
         connected = false;
-        connectButton.disabled = false;
-        setStatus(`Disconnected: ${error.message}`);
+        setStatus(`Bridge reconnecting: ${error.message}`);
+        scheduleReconnect();
       } finally {
         polling = false;
       }
     }
 
-    connectButton.addEventListener('click', async () => {
-      if (!token()) { setStatus('Token is required.'); return; }
-      connectButton.disabled = true;
-      try {
-        await getJson('/next?token=' + encodeURIComponent(token()));
-        connected = true;
-        setStatus('Connected. Waiting for an approved command.');
-        poll();
-      } catch (error) {
-        connected = false;
-        connectButton.disabled = false;
-        setStatus(`Connection failed: ${error.message}`);
-      }
-    });
+    connectButton.addEventListener('click', connect);
 
     window.onmessage = async (event) => {
       const message = event.data.pluginMessage;

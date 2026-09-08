@@ -27,6 +27,7 @@ ALLOWED_OPERATIONS = {
     "set_name",
     "select",
     "ping",
+    "batch",
 }
 TOKEN_FILE = Path(__file__).with_name(".bridge-token")
 
