@@ -8,6 +8,7 @@
     "height": 2400,
     "safeArea": { "top": 56, "right": 56, "bottom": 56, "left": 56 }
   },
+  "figmaPosition": { "x": 1500, "y": 0 },
   "reference": "current-idle-rpg-figma",
   "tokens": {
     "background": "#07111F",

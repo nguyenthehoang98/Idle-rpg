@@ -25,6 +25,9 @@ def validate_spec(spec: dict[str, Any]) -> None:
         raise ValueError("Unsupported UI spec schema")
     if spec.get("screen") != "home":
         raise ValueError("This renderer only supports the Home screen")
+    position = spec.get("figmaPosition", {})
+    if not all(isinstance(position.get(axis), (int, float)) for axis in ("x", "y")):
+        raise ValueError("Home spec must define a numeric Figma preview position")
     canvas = spec.get("canvas", {})
     if canvas.get("width") != 1080 or canvas.get("height") != 2400:
         raise ValueError("Home spec must use the 1080x2400 portrait canvas")
@@ -57,8 +60,8 @@ def build_batch(spec: dict[str, Any]) -> list[dict[str, Any]]:
                 "name": f"Home / Spec {spec['version']}",
                 "width": spec["canvas"]["width"],
                 "height": spec["canvas"]["height"],
-                "x": 0,
-                "y": 0,
+                "x": spec["figmaPosition"]["x"],
+                "y": spec["figmaPosition"]["y"],
             },
         }
     ]
