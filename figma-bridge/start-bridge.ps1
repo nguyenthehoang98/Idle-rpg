@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [switch]$NoRestart
+    [switch]$Restart
 )
 
 $ErrorActionPreference = "Stop"
@@ -9,7 +9,14 @@ $python = Join-Path $env:LOCALAPPDATA "Programs\Python\Python311\python.exe"
 if (-not (Test-Path $python)) { $python = "python" }
 $port = 38471
 
-if (-not $NoRestart) {
+$existingHealth = $null
+try { $existingHealth = Invoke-RestMethod -Uri "http://127.0.0.1:$port/health" -TimeoutSec 2 } catch { }
+if ($existingHealth.ok -and -not $Restart) {
+    Write-Host "Figma bridge is already healthy on http://127.0.0.1:$port"
+    exit 0
+}
+
+if ($Restart -or -not $existingHealth.ok) {
     $listeners = @(Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue)
     foreach ($listener in $listeners) {
         $process = Get-CimInstance Win32_Process -Filter "ProcessId=$($listener.OwningProcess)" -ErrorAction SilentlyContinue
