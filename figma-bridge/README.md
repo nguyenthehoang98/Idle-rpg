@@ -64,4 +64,4 @@ python test_bridge.py
 5. Enter the bridge URL and local token in the plugin window.
 6. Click **Connect**.
 
-The plugin code is intentionally limited to creating and styling draft nodes. It does not delete nodes or touch files outside the currently open Figma file.
+The plugin code is intentionally limited to creating, styling and wiring prototype navigation for draft nodes. It does not delete nodes or touch files outside the currently open Figma file.

@@ -183,6 +183,22 @@ async function execute(command, depth = 0) {
       node.rotation = number(args.degrees, 0, -360, 360);
       return { ok: true, node: resultFor(node) };
     }
+    case "set_reactions": {
+      const source = getAnyNode(args.sourceId);
+      const destination = getAnyNode(args.destinationId);
+      if (!source || !destination || typeof source.setReactionsAsync !== "function") {
+        return fail("INVALID_NODE", "Source or destination does not support prototype navigation");
+      }
+      const trigger = name(args.trigger, "ON_CLICK");
+      if (!["ON_CLICK", "ON_HOVER", "ON_PRESS"].includes(trigger)) {
+        return fail("INVALID_TRIGGER", "Only click, hover and press triggers are allowed");
+      }
+      await source.setReactionsAsync([{
+        trigger: { type: trigger },
+        actions: [{ type: "NODE", destinationId: destination.id, navigation: "NAVIGATE" }],
+      }]);
+      return { ok: true, source: resultFor(source), destination: resultFor(destination) };
+    }
     case "set_corner_radius": {
       const node = getAnyNode(args.nodeId);
       if (!node || !("cornerRadius" in node)) return fail("INVALID_NODE", "Node does not support corner radius");

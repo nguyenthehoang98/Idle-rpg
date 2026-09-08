@@ -28,6 +28,7 @@ ALLOWED_OPERATIONS = {
     "set_gradient",
     "set_effects",
     "set_rotation",
+    "set_reactions",
     "select",
     "ping",
     "batch",

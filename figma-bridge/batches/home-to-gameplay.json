@@ -1,0 +1,276 @@
+[
+  {
+    "op": "create_frame",
+    "as": "gameplay",
+    "args": {
+      "name": "Gameplay / Level 01",
+      "width": 1080,
+      "height": 2400,
+      "x": 1500,
+      "y": 0
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$gameplay",
+      "color": { "r": 0.008, "g": 0.020, "b": 0.047 },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "create_rectangle",
+    "as": "header",
+    "args": {
+      "name": "Gameplay Header",
+      "parentId": "$gameplay",
+      "width": 980,
+      "height": 190,
+      "x": 50,
+      "y": 56
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$header",
+      "color": { "r": 0.031, "g": 0.078, "b": 0.149 },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "set_stroke",
+    "args": {
+      "nodeId": "$header",
+      "color": { "r": 0.369, "g": 0.918, "b": 0.831 },
+      "opacity": 0.55,
+      "weight": 2
+    }
+  },
+  {
+    "op": "set_corner_radius",
+    "args": {
+      "nodeId": "$header",
+      "radius": 18
+    }
+  },
+  {
+    "op": "create_text",
+    "as": "title",
+    "args": {
+      "name": "Gameplay Title",
+      "parentId": "$gameplay",
+      "text": "LEVEL 01  ·  THE FIRST DESCENT",
+      "fontSize": 34,
+      "x": 88,
+      "y": 105
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$title",
+      "color": { "r": 0.973, "g": 0.980, "b": 0.988 },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "create_text",
+    "as": "wave",
+    "args": {
+      "name": "Wave Status",
+      "parentId": "$gameplay",
+      "text": "WAVE 01  /  05     HERO HP  100%",
+      "fontSize": 24,
+      "x": 88,
+      "y": 158
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$wave",
+      "color": { "r": 0.369, "g": 0.918, "b": 0.831 },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "create_rectangle",
+    "as": "arena",
+    "args": {
+      "name": "Battle Arena",
+      "parentId": "$gameplay",
+      "width": 980,
+      "height": 1320,
+      "x": 50,
+      "y": 300
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$arena",
+      "color": { "r": 0.020, "g": 0.055, "b": 0.102 },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "set_stroke",
+    "args": {
+      "nodeId": "$arena",
+      "color": { "r": 0.227, "g": 0.333, "b": 0.475 },
+      "opacity": 0.8,
+      "weight": 3
+    }
+  },
+  {
+    "op": "set_corner_radius",
+    "args": {
+      "nodeId": "$arena",
+      "radius": 24
+    }
+  },
+  {
+    "op": "create_rectangle",
+    "as": "hero",
+    "args": {
+      "name": "Hero Marker",
+      "parentId": "$gameplay",
+      "width": 160,
+      "height": 160,
+      "x": 170,
+      "y": 860
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$hero",
+      "color": { "r": 0.369, "g": 0.918, "b": 0.831 },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "set_corner_radius",
+    "args": {
+      "nodeId": "$hero",
+      "radius": 80
+    }
+  },
+  {
+    "op": "create_rectangle",
+    "as": "enemy",
+    "args": {
+      "name": "Enemy Marker",
+      "parentId": "$gameplay",
+      "width": 180,
+      "height": 180,
+      "x": 730,
+      "y": 560
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$enemy",
+      "color": { "r": 0.82, "g": 0.24, "b": 0.28 },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "set_corner_radius",
+    "args": {
+      "nodeId": "$enemy",
+      "radius": 24
+    }
+  },
+  {
+    "op": "create_text",
+    "as": "hint",
+    "args": {
+      "name": "Gameplay Hint",
+      "parentId": "$gameplay",
+      "text": "AUTO BATTLE ACTIVE  ·  CLEAR THE WAVE TO CONTINUE",
+      "fontSize": 22,
+      "x": 92,
+      "y": 1690
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$hint",
+      "color": { "r": 0.659, "g": 0.710, "b": 0.780 },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "create_rectangle",
+    "as": "pause",
+    "args": {
+      "name": "Pause Battle",
+      "parentId": "$gameplay",
+      "width": 420,
+      "height": 100,
+      "x": 330,
+      "y": 1840
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$pause",
+      "color": { "r": 0.369, "g": 0.918, "b": 0.831 },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "set_corner_radius",
+    "args": {
+      "nodeId": "$pause",
+      "radius": 18
+    }
+  },
+  {
+    "op": "create_text",
+    "as": "pauseLabel",
+    "args": {
+      "name": "Pause Label",
+      "parentId": "$gameplay",
+      "text": "PAUSE BATTLE",
+      "fontSize": 28,
+      "x": 438,
+      "y": 1875
+    }
+  },
+  {
+    "op": "set_fill",
+    "args": {
+      "nodeId": "$pauseLabel",
+      "color": { "r": 0.008, "g": 0.020, "b": 0.047 },
+      "opacity": 1
+    }
+  },
+  {
+    "op": "set_reactions",
+    "args": {
+      "sourceId": "13:4",
+      "destinationId": "$gameplay",
+      "trigger": "ON_CLICK"
+    }
+  },
+  {
+    "op": "set_reactions",
+    "args": {
+      "sourceId": "13:14",
+      "destinationId": "$gameplay",
+      "trigger": "ON_CLICK"
+    }
+  },
+  {
+    "op": "select",
+    "args": {
+      "nodeId": "$gameplay"
+    }
+  }
+]
