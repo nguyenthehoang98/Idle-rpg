@@ -58,6 +58,15 @@ function resultFor(node) {
   return { nodeId: node.id, name: node.name, type: node.type };
 }
 
+function selectNode(node) {
+  let page = node;
+  while (page && page.type !== "PAGE") page = page.parent;
+  if (page && page.type === "PAGE") {
+    figma.currentPage = page;
+    figma.currentPage.selection = [node];
+  }
+}
+
 async function execute(command) {
   if (!command || typeof command.op !== "string") return fail("INVALID_COMMAND", "Missing operation");
   const args = command.args && typeof command.args === "object" ? command.args : {};
@@ -77,7 +86,7 @@ async function execute(command) {
       frame.name = name(args.name, "Draft Frame");
       resize(frame, args);
       attach(frame, args);
-      figma.currentPage.selection = [frame];
+      selectNode(frame);
       return { ok: true, node: resultFor(frame) };
     }
     case "create_rectangle": {
@@ -85,7 +94,7 @@ async function execute(command) {
       rectangle.name = name(args.name, "Rectangle");
       resize(rectangle, args, 240, 120);
       attach(rectangle, args);
-      figma.currentPage.selection = [rectangle];
+      selectNode(rectangle);
       return { ok: true, node: resultFor(rectangle) };
     }
     case "create_text": {
@@ -96,7 +105,7 @@ async function execute(command) {
       textNode.characters = text(args.text, "Draft text");
       textNode.fontSize = number(args.fontSize, 24, 8, 240);
       attach(textNode, args);
-      figma.currentPage.selection = [textNode];
+      selectNode(textNode);
       return { ok: true, node: resultFor(textNode) };
     }
     case "set_fill": {
@@ -129,7 +138,7 @@ async function execute(command) {
     case "select": {
       const node = getAnyNode(args.nodeId);
       if (!node) return fail("INVALID_NODE", "Node is not available");
-      figma.currentPage.selection = [node];
+      selectNode(node);
       figma.viewport.scrollAndZoomIntoView([node]);
       return { ok: true, node: resultFor(node) };
     }
