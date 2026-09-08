@@ -7,7 +7,7 @@
   "editorType": ["figma"],
   "networkAccess": {
     "allowedDomains": ["none"],
-    "devAllowedDomains": ["http://127.0.0.1:38471"],
+    "devAllowedDomains": ["http://localhost:38471"],
     "reasoning": "Development-only access to the local loopback bridge used by the owner for draft UI generation."
   }
 }
