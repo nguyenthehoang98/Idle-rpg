@@ -28,9 +28,13 @@ function color(value) {
   return result;
 }
 
-function getNode(id) {
+function getAnyNode(id) {
   if (typeof id !== "string" || !id) return null;
-  const node = figma.getNodeById(id);
+  return figma.getNodeById(id);
+}
+
+function getNode(id) {
+  const node = getAnyNode(id);
   return node && "appendChild" in node ? node : null;
 }
 
@@ -96,14 +100,14 @@ async function execute(command) {
       return { ok: true, node: resultFor(textNode) };
     }
     case "set_fill": {
-      const node = getNode(args.nodeId);
+      const node = getAnyNode(args.nodeId);
       const fill = color(args.color);
       if (!node || !fill || !("fills" in node)) return fail("INVALID_NODE", "Node or color is invalid");
       node.fills = [{ type: "SOLID", color: fill, opacity: number(args.opacity, 1, 0, 1) }];
       return { ok: true, node: resultFor(node) };
     }
     case "set_stroke": {
-      const node = getNode(args.nodeId);
+      const node = getAnyNode(args.nodeId);
       const stroke = color(args.color);
       if (!node || !stroke || !("strokes" in node)) return fail("INVALID_NODE", "Node or color is invalid");
       node.strokes = [{ type: "SOLID", color: stroke, opacity: number(args.opacity, 1, 0, 1) }];
@@ -111,19 +115,19 @@ async function execute(command) {
       return { ok: true, node: resultFor(node) };
     }
     case "set_corner_radius": {
-      const node = getNode(args.nodeId);
+      const node = getAnyNode(args.nodeId);
       if (!node || !("cornerRadius" in node)) return fail("INVALID_NODE", "Node does not support corner radius");
       node.cornerRadius = number(args.radius, 0, 0, 500);
       return { ok: true, node: resultFor(node) };
     }
     case "set_name": {
-      const node = getNode(args.nodeId);
+      const node = getAnyNode(args.nodeId);
       if (!node) return fail("INVALID_NODE", "Node is not available");
       node.name = name(args.name, node.name);
       return { ok: true, node: resultFor(node) };
     }
     case "select": {
-      const node = getNode(args.nodeId);
+      const node = getAnyNode(args.nodeId);
       if (!node) return fail("INVALID_NODE", "Node is not available");
       figma.currentPage.selection = [node];
       figma.viewport.scrollAndZoomIntoView([node]);
