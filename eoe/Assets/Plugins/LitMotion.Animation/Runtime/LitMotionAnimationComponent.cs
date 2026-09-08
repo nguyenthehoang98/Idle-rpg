@@ -40,9 +40,9 @@ namespace LitMotion.Animation
         {
         }
 
-        public virtual void OnStop()
+        /*public virtual void OnStop()
         {
-        }
+        }*/
 
         public MotionHandle TrackedHandle { get; set; }
     }

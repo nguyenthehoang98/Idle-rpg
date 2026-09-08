@@ -33,8 +33,6 @@ namespace LitMotion.Animation.Components
                 return MotionHandle.None;
             }
         }
-
-        public override void OnStop() { }
     }
 
     [Serializable]
@@ -56,10 +54,10 @@ namespace LitMotion.Animation.Components
             return LMotion.Create(0f, 1f, 0f).RunWithoutBinding();
         }
 
-        public override void OnStop()
+        /*public override void OnStop()
         {
             onStop.Invoke();
-        }
+        }*/
     }
 
     [Serializable]
@@ -74,8 +72,6 @@ namespace LitMotion.Animation.Components
         [SerializeField] LogType logTypeOnStop = LogType.Log;
         [SerializeField] bool breakOnStop = false;
 
-        private Stopwatch sw;
-
         public override float Duration()
         {
             return 0;
@@ -83,8 +79,6 @@ namespace LitMotion.Animation.Components
 
         public override MotionHandle Play()
         {
-            sw = Stopwatch.StartNew();
-
             if (!string.IsNullOrEmpty(messageOnPlay))
             {
                 switch (logTypeOnPlay)
@@ -108,33 +102,6 @@ namespace LitMotion.Animation.Components
 #endif
 
             return LMotion.Create(0f, 1f, 0f).RunWithoutBinding();
-        }
-
-        public override void OnStop()
-        {
-            sw.Stop();
-
-            if (!string.IsNullOrEmpty(messageOnStop))
-            {
-                switch (logTypeOnStop)
-                {
-                    case LogType.Log:
-                    case LogType.Assert:
-                        Debug.Log($"[{Math.Round(Time.time, 2)}] {messageOnStop} {sw.ElapsedMilliseconds}ms");
-                        break;
-                    case LogType.Warning:
-                        Debug.LogWarning($"[{Math.Round(Time.time, 2)}] {messageOnStop} {sw.ElapsedMilliseconds}ms");
-                        break;
-                    case LogType.Error:
-                    case LogType.Exception:
-                        Debug.LogError($"[{Math.Round(Time.time, 2)}] {messageOnStop} {sw.ElapsedMilliseconds}ms");
-                        break;
-                }
-            }
-
-#if UNITY_EDITOR
-            if (breakOnStop) Debug.Break();
-#endif
         }
     }
 
@@ -175,9 +142,9 @@ namespace LitMotion.Animation.Components
             target.Pause();
         }
 
-        public override void OnStop()
+        /*public override void OnStop()
         {
             target.Stop();
-        }
+        }*/
     }
 }

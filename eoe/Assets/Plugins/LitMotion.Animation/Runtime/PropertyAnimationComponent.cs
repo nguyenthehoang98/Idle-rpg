@@ -17,11 +17,11 @@ namespace LitMotion.Animation
 
         TValue startValue;
 
-        public override void OnStop()
+        /*public override void OnStop()
         {
             if (target == null) return;
             SetValue(target, startValue);
-        }
+        }*/
 
         public override MotionHandle Play()
         {

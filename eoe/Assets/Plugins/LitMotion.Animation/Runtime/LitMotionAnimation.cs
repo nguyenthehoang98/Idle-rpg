@@ -237,7 +237,7 @@ namespace LitMotion.Animation
             {
                 MotionHandle handle = component.TrackedHandle;
                 handle.TryCancel();
-                component.OnStop();
+                /*component.OnStop();*/
                 component.TrackedHandle = handle;
             }
 

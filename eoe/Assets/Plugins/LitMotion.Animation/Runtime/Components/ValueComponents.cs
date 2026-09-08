@@ -25,9 +25,9 @@ namespace LitMotion.Animation.Components
             return settings.Duration + settings.Delay;
         }
 
-        public override void OnStop()
+        /*public override void OnStop()
         {
-        }
+        }*/
     }
 
     [Serializable]
@@ -100,8 +100,8 @@ namespace LitMotion.Animation.Components
                 });
         }
 
-        public override void OnStop()
+        /*public override void OnStop()
         {
-        }
+        }*/
     }
 }
