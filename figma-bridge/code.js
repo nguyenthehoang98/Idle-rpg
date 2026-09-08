@@ -152,15 +152,11 @@ async function execute(command, depth = 0) {
       }
       const stops = args.stops.map((stop) => ({
         position: number(stop.position, 0, 0, 1),
-        color: color(stop.color) || { r: 1, g: 1, b: 1 },
-        opacity: number(stop.opacity, 1, 0, 1),
+        color: { ...(color(stop.color) || { r: 1, g: 1, b: 1 }), a: number(stop.opacity, 1, 0, 1) },
       }));
       node.fills = [{
         type: "GRADIENT_LINEAR",
-        gradientHandlePositions: [
-          { x: number(args.fromX, 0, -1, 2), y: number(args.fromY, 0, -1, 2) },
-          { x: number(args.toX, 0, -1, 2), y: number(args.toY, 1, -1, 2) },
-        ],
+        gradientTransform: args.gradientTransform || [[1, 0, 0], [0, 1, 0]],
         gradientStops: stops,
       }];
       return { ok: true, node: resultFor(node) };
