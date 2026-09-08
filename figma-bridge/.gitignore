@@ -1,5 +1,0 @@
-.bridge-token
-__pycache__/
-*.pyc
-bridge-runtime.log
-bridge-runtime-error.log

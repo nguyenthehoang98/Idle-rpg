@@ -1,12 +1,12 @@
 # Gameplay TODO implementation plan
 
 ## Overview
-Complete the highest-impact missing gameplay pieces without touching the held character-selection work or replacing the approved SVG UI concept.
+Complete the highest-impact missing gameplay pieces without touching the held character-selection work or replacing the approved UI asset package.
 
 ## Order
 1. Fix runtime/player build blockers so the battle code has a shippable assembly boundary.
 2. Add per-run EXP and gold reward accounting from monster death through win/defeat state.
-3. Add result-state data and minimal runtime feedback; keep the SVG as the visual source of truth until UI approval.
+3. Add result-state data and minimal runtime feedback; keep the approved UI asset package as the visual source of truth until UI approval.
 4. Add Normal/Elite/Boss monster ranks and reuse projectile skills for elite/boss attacks.
 5. Add status resistance and explicit stacking rules for Slow, Bleed, Silence and Stun.
 6. Add projectile/VFX coverage and status feedback only for configured assets.
