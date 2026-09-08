@@ -78,9 +78,19 @@ async function execute(command, depth = 0) {
         return fail("INVALID_BATCH", "Batch must contain 1-50 commands");
       }
       const results = [];
+      const refs = {};
+      const resolveRefs = (value) => {
+        if (typeof value === "string" && value.startsWith("$") && refs[value.slice(1)]) return refs[value.slice(1)];
+        if (Array.isArray(value)) return value.map(resolveRefs);
+        if (value && typeof value === "object") return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, resolveRefs(item)]));
+        return value;
+      };
       for (const child of args.commands) {
         if (!child || child.op === "batch") return fail("INVALID_BATCH", "Nested batches are not allowed");
-        results.push({ id: child.id || null, result: await execute(child, depth + 1) });
+        const result = await execute({ ...child, args: resolveRefs(child.args || {}) }, depth + 1);
+        results.push({ id: child.id || null, as: child.as || null, result });
+        if (child.as && result.ok && result.node && result.node.nodeId) refs[child.as] = result.node.nodeId;
+        if (!result.ok) return { ok: false, failed: results };
       }
       return { ok: true, results };
     }
