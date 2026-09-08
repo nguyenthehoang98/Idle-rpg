@@ -14,12 +14,14 @@ This is a local-only bridge for a Figma plugin. It is intentionally not a Figma 
 
 ## Start
 
+Preferred one-command startup:
+
 ```powershell
 cd C:\Users\Hoang PC\Documents\Idle-rpg\figma-bridge
-python bridge.py serve
+.\start-bridge.bat
 ```
 
-Keep this terminal open. The first run creates `.bridge-token`. In another terminal, print the token with:
+This safely replaces only an existing `figma-bridge\bridge.py serve` listener on port `38471`, starts the new version, and verifies health. The first run creates `.bridge-token`. In another terminal, print the token with:
 
 ```powershell
 python bridge.py token
@@ -38,6 +40,14 @@ Send a test command after the plugin is connected:
 ```powershell
 python bridge.py command create_frame --args '{"name":"AI Draft","width":1080,"height":2400,"x":0,"y":0}'
 ```
+
+Run a batch without manually checking every command:
+
+```powershell
+.\run-batch.bat .\smoke.batch.json
+```
+
+For production UI work, the agent writes one batch JSON and runs this command. The script waits for one final result and exits non-zero on timeout or plugin failure.
 
 Run the local protocol self-check without starting a server:
 
