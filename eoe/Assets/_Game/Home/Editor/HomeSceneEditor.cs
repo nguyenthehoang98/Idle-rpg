@@ -12,6 +12,7 @@ namespace _Game.Home.Editor
         private SerializedProperty tabs;
         private SerializedProperty initialTabIndex;
         private SerializedProperty activeScale;
+        private SerializedProperty tabClickCooldown;
 
         private void OnEnable()
         {
@@ -21,6 +22,7 @@ namespace _Game.Home.Editor
             tabs = serializedObject.FindProperty("tabs");
             initialTabIndex = serializedObject.FindProperty("initialTabIndex");
             activeScale = serializedObject.FindProperty("activeScale");
+            tabClickCooldown = serializedObject.FindProperty("tabClickCooldown");
         }
 
         public override void OnInspectorGUI()
@@ -36,7 +38,8 @@ namespace _Game.Home.Editor
             EditorGUILayout.LabelField("Tabs", EditorStyles.boldLabel);
             EditorGUILayout.HelpBox(
                 "Add one entry per page. Keep the list order identical to " +
-                "Tab Container children, then drag each Button, Content, and BaseTab here.",
+                "Tab Container children, then drag each ButtonHomeMenu, Content, and BaseTab here. " +
+                "ButtonHomeMenu finds and controls its own focus animations.",
                 MessageType.Info);
             EditorGUILayout.PropertyField(tabs, new GUIContent("Tab Entries"), true);
 
@@ -44,6 +47,7 @@ namespace _Game.Home.Editor
             EditorGUILayout.LabelField("Selection", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(initialTabIndex, new GUIContent("Initial Tab Index"));
             EditorGUILayout.PropertyField(activeScale);
+            EditorGUILayout.PropertyField(tabClickCooldown, new GUIContent("Click Cooldown"));
 
             serializedObject.ApplyModifiedProperties();
         }

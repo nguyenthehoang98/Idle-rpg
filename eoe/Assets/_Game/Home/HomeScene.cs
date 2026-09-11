@@ -24,12 +24,8 @@ namespace _Game.Home
         [Serializable]
         private sealed class TabView
         {
-            [Tooltip("Optional name used by CurrentTabName. The page GameObject name is used when empty.")]
-            public string id;
-            public Button button;
-            public GameObject content;
+            public ButtonHomeMenu button;
             public BaseTab tab;
-            public GameObject focus;
         }
 
         [Header("Home UI References")]
@@ -42,8 +38,10 @@ namespace _Game.Home
         [SerializeField] private List<TabView> tabs = new List<TabView>();
         [SerializeField, Min(0)] private int initialTabIndex = 1;
         [SerializeField] private float activeScale = 1.05f;
+        [SerializeField, Min(0f)] private float tabClickCooldown = 0.25f;
 
         private int currentPageIndex = -1;
+        private float nextTabSelectionTime;
 
         public int TabCount => tabs?.Count ?? 0;
         public string CurrentTabName => GetTabName(currentPageIndex);
@@ -95,8 +93,8 @@ namespace _Game.Home
                 TabView tab = tabs[i];
                 string tabName = GetTabName(tab, i);
                 if (!IsValidTab(tab, tabName) ||
-                    tab.content.transform.parent != tabContainer ||
-                    tab.content.transform.GetSiblingIndex() != i)
+                    tab.tab.transform.parent != tabContainer ||
+                    tab.tab.transform.GetSiblingIndex() != i)
                 {
                     Debug.LogError(
                         $"{nameof(HomeScene)}: tab '{tabName}' must reference tab container child {i}.",
@@ -110,9 +108,9 @@ namespace _Game.Home
 
         private static bool IsValidTab(TabView tab, string name)
         {
-            if (tab == null || tab.button == null || tab.content == null || tab.tab == null)
+            if (tab == null || tab.button == null || tab.tab == null)
             {
-                Debug.LogWarning($"HomeScene: {name} tab needs Button, Content, and BaseTab references.");
+                Debug.LogWarning($"HomeScene: {name} tab needs ButtonHomeMenu and BaseTab references.");
                 return false;
             }
 
@@ -127,18 +125,21 @@ namespace _Game.Home
 
         private void BindTab(TabView tab)
         {
-            tab.button.onClick.RemoveAllListeners();
+            tab.button.Button.onClick.RemoveAllListeners();
             TabView capturedTab = tab;
-            tab.button.onClick.AddListener(() => SelectTab(capturedTab));
+            tab.button.Button.onClick.AddListener(() => SelectTab(capturedTab));
         }
 
         private void SelectTab(TabView tab)
         {
             int pageIndex = GetPageIndex(tab);
-            if (pageIndex >= 0 && pageIndex != currentPageIndex)
+            if (pageIndex < 0 || pageIndex == currentPageIndex || Time.unscaledTime < nextTabSelectionTime)
             {
-                OpenTab(pageIndex);
+                return;
             }
+
+            OpenTab(pageIndex);
+            nextTabSelectionTime = Time.unscaledTime + tabClickCooldown;
         }
 
         private void OpenTab(int index)
@@ -148,15 +149,21 @@ namespace _Game.Home
                 return;
             }
 
+            int previousPageIndex = currentPageIndex;
             currentPageIndex = index;
             for (int i = 0; i < tabs.Count; i++)
             {
                 bool active = i == currentPageIndex;
-                tabs[i].content.SetActive(active);
+                tabs[i].tab.gameObject.SetActive(active);
                 SetTabVisuals(tabs[i], active);
                 if (active)
                 {
+                    tabs[i].button.Focus();
                     tabs[i].tab.Open();
+                }
+                else if (i == previousPageIndex)
+                {
+                    tabs[i].button.Unfocus();
                 }
             }
         }
@@ -168,17 +175,8 @@ namespace _Game.Home
                 return;
             }
 
-            SetFocus(tab, active);
-            SetButtonColor(tab.button, active);
-            tab.button.transform.localScale = active ? Vector3.one * activeScale : Vector3.one;
-        }
-
-        private static void SetFocus(TabView tab, bool active)
-        {
-            if (tab.focus != null)
-            {
-                tab.focus.SetActive(active);
-            }
+            SetButtonColor(tab.button.Button, active);
+            tab.button.Button.transform.localScale = active ? Vector3.one * activeScale : Vector3.one;
         }
 
         private static void SetButtonColor(Button button, bool active)
@@ -192,12 +190,12 @@ namespace _Game.Home
 
         private int GetPageIndex(TabView tab)
         {
-            if (tab?.content == null || tab.content.transform.parent != tabContainer)
+            if (tab?.tab == null || tab.tab.transform.parent != tabContainer)
             {
                 return -1;
             }
 
-            return tab.content.transform.GetSiblingIndex();
+            return tab.tab.transform.GetSiblingIndex();
         }
 
         private string GetTabName(int pageIndex)
@@ -212,17 +210,16 @@ namespace _Game.Home
 
         private static string GetTabName(TabView tab, int index)
         {
-            if (tab == null)
+            if (tab?.button == null)
             {
                 return $"Tab {index}";
             }
 
-            if (string.IsNullOrWhiteSpace(tab.id))
-            {
-                return tab.content != null ? tab.content.name : $"Tab {index}";
-            }
-
-            return tab.id;
+            const string buttonPrefix = "Button ";
+            string buttonName = tab.button.name;
+            return buttonName.StartsWith(buttonPrefix)
+                ? buttonName.Substring(buttonPrefix.Length)
+                : buttonName;
         }
 
         private void StartGameplay()

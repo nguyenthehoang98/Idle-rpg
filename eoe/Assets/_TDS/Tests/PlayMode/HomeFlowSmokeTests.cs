@@ -55,6 +55,10 @@ namespace _TDS.Tests.PlayMode
             Assert.That(battle, Is.Not.Null);
             Assert.That(talent, Is.Not.Null);
             Assert.That(pet, Is.Not.Null);
+            foreach (Button button in new[] { shop, equipment, battle, talent, pet })
+            {
+                Assert.That(button.GetComponent("ButtonHomeMenu"), Is.Not.Null);
+            }
 
             Component equipmentTab = content.GetChild(1).GetComponent("BaseTab");
             Assert.That(equipmentTab, Is.Not.Null);
@@ -66,25 +70,32 @@ namespace _TDS.Tests.PlayMode
             Assert.That(homeScene.GetType().GetProperty("CurrentTabName").GetValue(homeScene), Is.EqualTo("BATTLE"));
 
             shop.onClick.Invoke();
+            equipment.onClick.Invoke();
             yield return null;
-            AssertOnlyTabActive(content, 0);
+            AssertOnlyTabActive(content, 2);
+            yield return new WaitForSecondsRealtime(0.26f);
+            AssertOnlyTabActive(content, 2);
 
             equipment.onClick.Invoke();
             yield return null;
             AssertOnlyTabActive(content, 1);
             Assert.That(openedCount, Is.EqualTo(1));
+            yield return new WaitForSecondsRealtime(0.26f);
 
             battle.onClick.Invoke();
             yield return null;
             AssertOnlyTabActive(content, 2);
+            yield return new WaitForSecondsRealtime(0.26f);
 
             talent.onClick.Invoke();
             yield return null;
             AssertOnlyTabActive(content, 3);
+            yield return new WaitForSecondsRealtime(0.26f);
 
             pet.onClick.Invoke();
             yield return null;
             AssertOnlyTabActive(content, 4);
+            yield return new WaitForSecondsRealtime(0.26f);
 
             battle.onClick.Invoke();
             yield return null;
