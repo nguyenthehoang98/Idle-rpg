@@ -1,7 +1,7 @@
 using System.Collections;
 using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 using UnityEngine.UI;
@@ -11,7 +11,7 @@ namespace _TDS.Tests.PlayMode
     public sealed class HomeFlowSmokeTests
     {
         [UnityTest]
-        public IEnumerator HomeSceneHasThreeWorkingTabs()
+        public IEnumerator HomeSceneHasFiveWorkingTabs()
         {
             yield return SceneManager.LoadSceneAsync("HomeScene");
             yield return null;
@@ -20,7 +20,7 @@ namespace _TDS.Tests.PlayMode
             GameObject homeObject = GameObject.Find("HomeScene");
             Component homeScene = homeObject?.GetComponent("HomeScene");
             Assert.That(homeScene, Is.Not.Null);
-            Assert.That((int)homeScene.GetType().GetProperty("TabCount").GetValue(homeScene), Is.EqualTo(3));
+            Assert.That((int)homeScene.GetType().GetProperty("TabCount").GetValue(homeScene), Is.EqualTo(5));
 
             GameObject canvasObject = GameObject.Find("HomeCanvas");
             Assert.That(canvasObject, Is.Not.Null);
@@ -30,95 +30,73 @@ namespace _TDS.Tests.PlayMode
                 Assert.That(component, Is.Not.Null, "HomeCanvas contains a missing script.");
             }
 
-            Transform content = canvasObject.transform.Find("TabScrollRect/Viewport/Content");
+            Transform content = canvasObject.transform.Find("TabContainer/Viewport/Content");
             Assert.That(content, Is.Not.Null);
-            Assert.That(content.childCount, Is.EqualTo(3));
+            Assert.That(content.childCount, Is.EqualTo(5));
             Assert.That(content.GetChild(0).name, Is.EqualTo("ShopTab"));
-            Assert.That(content.GetChild(1).name, Is.EqualTo("Main"));
-            Assert.That(content.GetChild(2).name, Is.EqualTo("UpgradeTab"));
-
-            RectTransform background = content.Find("Main/Background")?.GetComponent<RectTransform>();
-            Assert.That(background, Is.Not.Null);
-            Assert.That(background.rect.width, Is.EqualTo(3240f).Within(1f));
-
-            Button play = content.Find("Main/Button Play")?.GetComponent<Button>();
-            Assert.That(play, Is.Not.Null);
-            Assert.That(play.interactable, Is.True);
-
-            Button home = canvasObject.transform.Find("Bottom Menu/Button Home")?.GetComponent<Button>();
-            Button shop = canvasObject.transform.Find("Bottom Menu/Button Shop")?.GetComponent<Button>();
-            Button upgrade = canvasObject.transform.Find("Bottom Menu/Button Upgrade")?.GetComponent<Button>();
-            Assert.That(home, Is.Not.Null);
-            Assert.That(shop, Is.Not.Null);
-            Assert.That(upgrade, Is.Not.Null);
-
-            Transform tabScrollRect = canvasObject.transform.Find("TabScrollRect");
-            Assert.That(tabScrollRect, Is.Not.Null);
-            ScrollRect scrollRect = tabScrollRect.GetComponent<ScrollRect>();
-            Assert.That(scrollRect, Is.Not.Null);
-            Assert.That(scrollRect.horizontal, Is.True);
-            Assert.That(scrollRect.vertical, Is.False);
-            Assert.That(scrollRect.horizontalScrollbar, Is.Not.Null);
-            Assert.That(scrollRect.content, Is.EqualTo(content.GetComponent<RectTransform>()));
-            Assert.That(((RectTransform)content.GetChild(0)).rect.width, Is.EqualTo(scrollRect.viewport.rect.width).Within(1f));
-            Assert.That(((RectTransform)content.GetChild(1)).rect.width, Is.EqualTo(scrollRect.viewport.rect.width).Within(1f));
-            Assert.That(((RectTransform)content.GetChild(2)).rect.width, Is.EqualTo(scrollRect.viewport.rect.width).Within(1f));
-
-            Component scrollSnap = tabScrollRect.GetComponent("ScrollSnap");
-            Assert.That(scrollSnap, Is.Not.Null);
-            float elapsed = 0f;
-            while (GetSelectedIndex(scrollSnap) != 1 && elapsed < 1f)
+            Assert.That(content.GetChild(1).name, Is.EqualTo("EquipmentTab"));
+            Assert.That(content.GetChild(2).name, Is.EqualTo("Main"));
+            Assert.That(content.GetChild(3).name, Is.EqualTo("UpgradeTab"));
+            Assert.That(content.GetChild(4).name, Is.EqualTo("PetTab"));
+            foreach (Transform tab in content)
             {
-                elapsed += Time.unscaledDeltaTime;
-                yield return null;
+                Image placeholder = tab.GetComponent<Image>();
+                Assert.That(placeholder, Is.Not.Null);
+                Assert.That(placeholder.sprite, Is.Null);
             }
 
-            Assert.That(GetSelectedIndex(scrollSnap), Is.EqualTo(1));
-            Assert.That(homeScene.GetType().GetProperty("CurrentTabName").GetValue(homeScene), Is.EqualTo("HOME"));
+            Button shop = canvasObject.transform.Find("Bottom Menu/Button Shop")?.GetComponent<Button>();
+            Button equipment = canvasObject.transform.Find("Bottom Menu/Button Equipment")?.GetComponent<Button>();
+            Button battle = canvasObject.transform.Find("Bottom Menu/Button Battle")?.GetComponent<Button>();
+            Button talent = canvasObject.transform.Find("Bottom Menu/Button Talent")?.GetComponent<Button>();
+            Button pet = canvasObject.transform.Find("Bottom Menu/Button Pet")?.GetComponent<Button>();
+            Assert.That(shop, Is.Not.Null);
+            Assert.That(equipment, Is.Not.Null);
+            Assert.That(battle, Is.Not.Null);
+            Assert.That(talent, Is.Not.Null);
+            Assert.That(pet, Is.Not.Null);
+
+            Component equipmentTab = content.GetChild(1).GetComponent("BaseTab");
+            Assert.That(equipmentTab, Is.Not.Null);
+            UnityEvent onOpened = (UnityEvent)equipmentTab.GetType().GetProperty("OnOpened").GetValue(equipmentTab);
+            int openedCount = 0;
+            onOpened.AddListener(() => openedCount++);
+
+            AssertOnlyTabActive(content, 2);
+            Assert.That(homeScene.GetType().GetProperty("CurrentTabName").GetValue(homeScene), Is.EqualTo("BATTLE"));
 
             shop.onClick.Invoke();
-            yield return new WaitForSecondsRealtime(0.4f);
-            Assert.That(GetSelectedIndex(scrollSnap), Is.EqualTo(0));
+            yield return null;
+            AssertOnlyTabActive(content, 0);
 
-            upgrade.onClick.Invoke();
-            yield return new WaitForSecondsRealtime(0.4f);
-            Assert.That(GetSelectedIndex(scrollSnap), Is.EqualTo(2));
+            equipment.onClick.Invoke();
+            yield return null;
+            AssertOnlyTabActive(content, 1);
+            Assert.That(openedCount, Is.EqualTo(1));
 
-            home.onClick.Invoke();
-            yield return new WaitForSecondsRealtime(0.4f);
-            Assert.That(GetSelectedIndex(scrollSnap), Is.EqualTo(1));
+            battle.onClick.Invoke();
+            yield return null;
+            AssertOnlyTabActive(content, 2);
 
-            SimulateSwipe(scrollRect, new Vector2(Screen.width * 0.75f, Screen.height * 0.5f),
-                new Vector2(Screen.width * 0.25f, Screen.height * 0.5f));
-            yield return new WaitForSecondsRealtime(0.7f);
-            Assert.That(GetSelectedIndex(scrollSnap), Is.EqualTo(2));
-            Assert.That(scrollRect.horizontalNormalizedPosition, Is.EqualTo(1f).Within(0.01f));
+            talent.onClick.Invoke();
+            yield return null;
+            AssertOnlyTabActive(content, 3);
 
-            SimulateSwipe(scrollRect, new Vector2(Screen.width * 0.25f, Screen.height * 0.5f),
-                new Vector2(Screen.width * 0.75f, Screen.height * 0.5f));
-            yield return new WaitForSecondsRealtime(0.7f);
-            Assert.That(GetSelectedIndex(scrollSnap), Is.EqualTo(1));
-            Assert.That(scrollRect.horizontalNormalizedPosition, Is.EqualTo(0.5f).Within(0.01f));
+            pet.onClick.Invoke();
+            yield return null;
+            AssertOnlyTabActive(content, 4);
+
+            battle.onClick.Invoke();
+            yield return null;
+            AssertOnlyTabActive(content, 2);
         }
 
-        private static void SimulateSwipe(ScrollRect scrollRect, Vector2 start, Vector2 end)
+        private static void AssertOnlyTabActive(Transform content, int selectedIndex)
         {
-            PointerEventData eventData = new PointerEventData(EventSystem.current)
+            for (int i = 0; i < content.childCount; i++)
             {
-                button = PointerEventData.InputButton.Left,
-                position = start,
-                pressPosition = start
-            };
-
-            ExecuteEvents.Execute(scrollRect.gameObject, eventData, ExecuteEvents.beginDragHandler);
-            eventData.position = end;
-            ExecuteEvents.Execute(scrollRect.gameObject, eventData, ExecuteEvents.dragHandler);
-            ExecuteEvents.Execute(scrollRect.gameObject, eventData, ExecuteEvents.endDragHandler);
-        }
-
-        private static int GetSelectedIndex(Component scrollSnap)
-        {
-            return (int)scrollSnap.GetType().GetProperty("SelectedItemIndex").GetValue(scrollSnap);
+                Assert.That(content.GetChild(i).gameObject.activeSelf, Is.EqualTo(i == selectedIndex));
+            }
         }
     }
 }

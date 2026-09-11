@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using _GameToolkit.Startup;
 using _TDS.Gameplay;
-using LightScrollSnap;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -12,8 +10,8 @@ using UnityEngine.UI;
 namespace _Game.Home
 {
     /// <summary>
-    /// Binds Home tab buttons to the horizontal ScrollSnap page controller.
-    /// Add a Tab entry and a matching child under ScrollSnap/Viewport/Content to extend the Home UI.
+    /// Binds Home tab buttons to stacked tab pages.
+    /// Each page receives a BaseTab open event when selected.
     /// </summary>
     [DefaultExecutionOrder(1000)]
     public sealed class HomeScene : MonoBehaviour
@@ -30,29 +28,25 @@ namespace _Game.Home
             public string id;
             public Button button;
             public GameObject content;
+            public BaseTab tab;
             public GameObject focus;
         }
 
         [Header("Home UI References")]
         [SerializeField] private Canvas homeCanvas;
         [SerializeField] private Button playButton;
-        [SerializeField] private ScrollRect tabScrollRect;
-        [SerializeField] private ScrollSnap tabScrollSnap;
+        [SerializeField] private RectTransform tabContainer;
 
         [Header("Tabs")]
-        [Tooltip("Keep the same order as the direct children of ScrollSnap/Viewport/Content.")]
+        [Tooltip("Keep the same order as the direct children of the tab container.")]
         [SerializeField] private List<TabView> tabs = new List<TabView>();
         [SerializeField, Min(0)] private int initialTabIndex = 1;
         [SerializeField] private float activeScale = 1.05f;
-        [SerializeField] private float tabTransitionDuration = 0.3f;
 
-        private int currentPageIndex;
-        private bool initialTabPositionPending;
+        private int currentPageIndex = -1;
 
         public int TabCount => tabs?.Count ?? 0;
         public string CurrentTabName => GetTabName(currentPageIndex);
-        public bool IsTransitioning => tabScrollSnap != null &&
-            tabScrollSnap.SelectedItemIndex != currentPageIndex;
 
         private void Awake()
         {
@@ -63,11 +57,6 @@ namespace _Game.Home
 
             if (!Application.isPlaying || !HasRequiredReferences())
             {
-                if (Application.isPlaying && tabScrollSnap != null)
-                {
-                    tabScrollSnap.enabled = false;
-                }
-
                 return;
             }
 
@@ -79,108 +68,25 @@ namespace _Game.Home
                 BindTab(tabs[i]);
             }
 
-            currentPageIndex = GetPageIndex(tabs[Mathf.Clamp(initialTabIndex, 0, tabs.Count - 1)]);
-            SetAllContentActive();
-            SetTabVisuals(currentPageIndex);
-        }
-
-        private void Start()
-        {
-            if (!Application.isPlaying || tabScrollSnap == null || !tabScrollSnap.enabled ||
-                tabs == null || tabs.Count == 0)
-            {
-                return;
-            }
-
-            StartCoroutine(InitializeTabs());
-        }
-
-        private IEnumerator InitializeTabs()
-        {
-            yield return null;
-
-            Canvas.ForceUpdateCanvases();
-            ConfigurePageWidths();
-            Canvas.ForceUpdateCanvases();
-            tabScrollSnap.OnItemSelected.RemoveListener(HandleTabSelected);
-            tabScrollSnap.OnItemSelected.AddListener(HandleTabSelected);
-            currentPageIndex = GetPageIndex(tabs[Mathf.Clamp(initialTabIndex, 0, tabs.Count - 1)]);
-            initialTabPositionPending = currentPageIndex >= 0;
-        }
-
-        private void LateUpdate()
-        {
-            if (!initialTabPositionPending || tabScrollSnap == null ||
-                !TryGetScrollRect(out ScrollRect scrollRect))
-            {
-                return;
-            }
-
-            RectTransform content = scrollRect.content;
-            RectTransform viewport = scrollRect.viewport;
-            if (content == null || viewport == null || viewport.rect.width <= 0f)
-            {
-                return;
-            }
-
-            float initialPosition = tabScrollSnap.GetScrollPositionOfItem(currentPageIndex);
-            float maxOffset = Mathf.Max(0f, content.rect.width - viewport.rect.width);
-
-            tabScrollSnap.ScrollToItem(currentPageIndex);
-            content.anchoredPosition = new Vector2(-maxOffset * initialPosition, content.anchoredPosition.y);
-            scrollRect.horizontalNormalizedPosition = initialPosition;
-            initialTabPositionPending = false;
-        }
-
-        private void ConfigurePageWidths()
-        {
-            if (!TryGetScrollRect(out ScrollRect scrollRect))
-            {
-                return;
-            }
-
-            RectTransform viewport = scrollRect.viewport;
-            RectTransform content = scrollRect.content;
-            if (viewport == null || content == null || viewport.rect.width <= 0f)
-            {
-                return;
-            }
-
-            float pageWidth = viewport.rect.width;
-            for (int i = 0; i < content.childCount; i++)
-            {
-                RectTransform page = content.GetChild(i) as RectTransform;
-                page?.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, pageWidth);
-            }
-
-            LayoutRebuilder.ForceRebuildLayoutImmediate(content);
+            OpenTab(Mathf.Clamp(initialTabIndex, 0, tabs.Count - 1));
         }
 
         private bool HasRequiredReferences()
         {
-            bool valid = homeCanvas != null && playButton != null && tabScrollSnap != null && tabs.Count > 0;
+            bool valid = homeCanvas != null && playButton != null && tabContainer != null && tabs.Count > 0;
             if (!valid)
             {
                 Debug.LogError(
-                    $"{nameof(HomeScene)}: assign Canvas, Play button, ScrollSnap, and at least one tab.",
+                    $"{nameof(HomeScene)}: assign Canvas, Play Button, tab container, and at least one tab.",
                     this);
                 return false;
             }
 
-            if (!TryGetScrollRect(out ScrollRect scrollRect) || scrollRect.content == null ||
-                scrollRect.viewport == null || scrollRect.horizontalScrollbar == null)
+            if (tabContainer.childCount != tabs.Count)
             {
                 Debug.LogError(
-                    $"{nameof(HomeScene)}: ScrollSnap needs a ScrollRect with Content, Viewport, and " +
-                    "Horizontal Scrollbar.", this);
-                return false;
-            }
-
-            if (scrollRect.content.childCount != tabs.Count)
-            {
-                Debug.LogError(
-                    $"{nameof(HomeScene)}: configured {tabs.Count} tabs but Content has " +
-                    $"{scrollRect.content.childCount} pages.", this);
+                    $"{nameof(HomeScene)}: configured {tabs.Count} tabs but the container has " +
+                    $"{tabContainer.childCount} pages.", this);
                 return false;
             }
 
@@ -189,11 +95,11 @@ namespace _Game.Home
                 TabView tab = tabs[i];
                 string tabName = GetTabName(tab, i);
                 if (!IsValidTab(tab, tabName) ||
-                    tab.content.transform.parent != scrollRect.content ||
+                    tab.content.transform.parent != tabContainer ||
                     tab.content.transform.GetSiblingIndex() != i)
                 {
                     Debug.LogError(
-                        $"{nameof(HomeScene)}: tab '{tabName}' must reference Content child {i}.",
+                        $"{nameof(HomeScene)}: tab '{tabName}' must reference tab container child {i}.",
                         this);
                     valid = false;
                 }
@@ -202,17 +108,11 @@ namespace _Game.Home
             return valid;
         }
 
-        private bool TryGetScrollRect(out ScrollRect scrollRect)
-        {
-            scrollRect = tabScrollRect;
-            return scrollRect != null;
-        }
-
         private static bool IsValidTab(TabView tab, string name)
         {
-            if (tab == null || tab.button == null || tab.content == null)
+            if (tab == null || tab.button == null || tab.content == null || tab.tab == null)
             {
-                Debug.LogWarning($"HomeScene: {name} tab needs Button and Content references.");
+                Debug.LogWarning($"HomeScene: {name} tab needs Button, Content, and BaseTab references.");
                 return false;
             }
 
@@ -235,15 +135,13 @@ namespace _Game.Home
         private void SelectTab(TabView tab)
         {
             int pageIndex = GetPageIndex(tab);
-            if (tabScrollSnap == null || pageIndex < 0)
+            if (pageIndex >= 0 && pageIndex != currentPageIndex)
             {
-                return;
+                OpenTab(pageIndex);
             }
-
-            tabScrollSnap.SmoothScrollToItem(pageIndex, Mathf.Max(0.01f, tabTransitionDuration));
         }
 
-        private void HandleTabSelected(RectTransform _, int index)
+        private void OpenTab(int index)
         {
             if (index < 0 || index >= tabs.Count)
             {
@@ -251,26 +149,15 @@ namespace _Game.Home
             }
 
             currentPageIndex = index;
-            SetAllContentActive();
-            SetTabVisuals(currentPageIndex);
-        }
-
-        private void SetAllContentActive()
-        {
             for (int i = 0; i < tabs.Count; i++)
             {
-                if (tabs[i]?.content != null)
+                bool active = i == currentPageIndex;
+                tabs[i].content.SetActive(active);
+                SetTabVisuals(tabs[i], active);
+                if (active)
                 {
-                    tabs[i].content.SetActive(true);
+                    tabs[i].tab.Open();
                 }
-            }
-        }
-
-        private void SetTabVisuals(int activePageIndex)
-        {
-            for (int i = 0; i < tabs.Count; i++)
-            {
-                SetTabVisuals(tabs[i], i == activePageIndex);
             }
         }
 
@@ -305,8 +192,7 @@ namespace _Game.Home
 
         private int GetPageIndex(TabView tab)
         {
-            if (tab?.content == null || !TryGetScrollRect(out ScrollRect scrollRect) ||
-                scrollRect.content == null || tab.content.transform.parent != scrollRect.content)
+            if (tab?.content == null || tab.content.transform.parent != tabContainer)
             {
                 return -1;
             }

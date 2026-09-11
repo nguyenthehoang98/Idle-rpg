@@ -7,26 +7,34 @@ public static class TextureResize4
 {
     private const int Multiple = 4;
 
-    [MenuItem("Assets/Texture Resize 4/Up", false, 2000)]
-    private static void ResizeUp()
+    [MenuItem("Assets/Texture Resize 4: Nearest", false, 2000)]
+    private static void ResizeNearest()
     {
-        ResizeSelectedTexture(true);
+        Texture2D source = Selection.activeObject as Texture2D;
+        if (source == null) return;
+
+        ResizeSelectedTexture(
+            NearestMultipleOfFour(source.width),
+            NearestMultipleOfFour(source.height));
     }
 
-    [MenuItem("Assets/Texture Resize 4/Down", false, 2010)]
-    private static void ResizeDown()
+    [MenuItem("Assets/Texture Resize 4: User Input", false, 2010)]
+    private static void ResizeWithUserInput()
     {
-        ResizeSelectedTexture(false);
+        Texture2D source = Selection.activeObject as Texture2D;
+        if (source == null) return;
+
+        TextureResize4InputWindow.Show(source.width, source.height, (width, height) =>
+        {
+            ResizeSelectedTexture(width, height);
+        });
     }
 
-    private static void ResizeSelectedTexture(bool roundUp)
+    private static void ResizeSelectedTexture(int targetWidth, int targetHeight)
     {
         Texture2D source = Selection.activeObject as Texture2D;
         string assetPath = source == null ? string.Empty : AssetDatabase.GetAssetPath(source);
         if (source == null || string.IsNullOrEmpty(assetPath)) return;
-
-        int targetWidth = MultipleOfFour(source.width, roundUp);
-        int targetHeight = MultipleOfFour(source.height, roundUp);
         if (targetWidth == source.width && targetHeight == source.height)
         {
             EditorUtility.DisplayDialog("Texture Resize 4", $"Already {source.width} x {source.height}.", "OK");
@@ -73,29 +81,17 @@ public static class TextureResize4
         }
     }
 
-    [MenuItem("Assets/Texture Resize 4/Up", true)]
-    private static bool ValidateResizeUp()
-    {
-        return CanResizeSelectedTexture();
-    }
-
-    [MenuItem("Assets/Texture Resize 4/Down", true)]
-    private static bool ValidateResizeDown()
-    {
-        return CanResizeSelectedTexture();
-    }
-
+    [MenuItem("Assets/Texture Resize 4: Nearest", true)]
+    [MenuItem("Assets/Texture Resize 4: User Input", true)]
     private static bool CanResizeSelectedTexture()
     {
         Texture2D texture = Selection.activeObject as Texture2D;
         return texture != null && !string.IsNullOrEmpty(AssetDatabase.GetAssetPath(texture));
     }
 
-    internal static int MultipleOfFour(int value, bool roundUp)
+    internal static int NearestMultipleOfFour(int value)
     {
-        int quotient = value / Multiple;
-        if (roundUp && value % Multiple != 0) quotient++;
-        return Mathf.Max(Multiple, quotient * Multiple);
+        return Mathf.Max(Multiple, Mathf.RoundToInt(value / (float)Multiple) * Multiple);
     }
 
     private static Texture2D Resize(Texture2D source, int width, int height)
@@ -142,5 +138,65 @@ public static class TextureResize4
             default:
                 return ImageConversion.EncodeToPNG(texture);
         }
+    }
+}
+
+internal sealed class TextureResize4InputWindow : EditorWindow
+{
+    string dimensions;
+    string error;
+    Action<int, int> onConfirm;
+
+    public static void Show(int width, int height, Action<int, int> confirmed)
+    {
+        var window = CreateInstance<TextureResize4InputWindow>();
+        window.titleContent = new GUIContent("Texture Resize 4");
+        window.minSize = new Vector2(320f, 120f);
+        window.maxSize = new Vector2(320f, 120f);
+        window.dimensions = $"{width}:{height}";
+        window.onConfirm = confirmed;
+        window.ShowModalUtility();
+    }
+
+    void OnGUI()
+    {
+        EditorGUILayout.LabelField("Enter size as width:height", EditorStyles.wordWrappedLabel);
+        dimensions = EditorGUILayout.TextField("Size", dimensions);
+
+        if (!string.IsNullOrEmpty(error))
+            EditorGUILayout.HelpBox(error, MessageType.Error);
+
+        GUILayout.FlexibleSpace();
+        using (new GUILayout.HorizontalScope())
+        {
+            if (GUILayout.Button("Resize"))
+            {
+                if (TryParse(dimensions, out int width, out int height))
+                {
+                    var callback = onConfirm;
+                    Close();
+                    callback(width, height);
+                }
+                else
+                {
+                    error = "Use two positive integers, for example 512:256.";
+                }
+            }
+
+            if (GUILayout.Button("Cancel"))
+                Close();
+        }
+    }
+
+    static bool TryParse(string value, out int width, out int height)
+    {
+        width = 0;
+        height = 0;
+        string[] parts = value.Split(':');
+        return parts.Length == 2
+            && int.TryParse(parts[0].Trim(), out width)
+            && int.TryParse(parts[1].Trim(), out height)
+            && width > 0
+            && height > 0;
     }
 }
