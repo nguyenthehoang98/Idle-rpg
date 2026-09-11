@@ -8,6 +8,7 @@
     "com.unity.burst": "1.8.30",
     "com.unity.collab-proxy": "2.12.4",
     "com.unity.collections": "2.6.8",
+    "com.emrecelik95.lightscrollsnap": "https://github.com/emrecelik95/LightScrollSnap.git",
     "com.unity.ide.rider": "3.0.40",
     "com.unity.nuget.newtonsoft-json": "3.2.2",
     "com.unity.render-pipelines.universal": "17.3.0",

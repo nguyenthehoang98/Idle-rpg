@@ -13,25 +13,26 @@ namespace LitMotion.Animation
         where TAdapter : unmanaged, IMotionAdapter<TValue, TOptions>
     {
         [SerializeField] TObject target;
-        [SerializeField] protected SerializableMotionSettings<TValue, TOptions> settings;
+        [SerializeField] SerializableMotionSettings<TValue, TOptions> settings;
+        [SerializeField] bool relative;
 
         TValue startValue;
 
-        /*public override void OnStop()
+        public override void OnStop()
         {
             if (target == null) return;
             SetValue(target, startValue);
-        }*/
+        }
 
         public override MotionHandle Play()
         {
             startValue = GetValue(target);
-            
+
             MotionHandle handle;
 
-            if (settings.Relative)
+            if (relative)
             {
-                handle = LMotion.Create<TValue, TOptions, TAdapter>(settings, startValue)
+                handle = LMotion.Create<TValue, TOptions, TAdapter>(settings)
                     .Bind(this, (x, state) =>
                     {
                         state.SetValue(target, state.GetRelativeValue(state.startValue, x));
@@ -49,11 +50,6 @@ namespace LitMotion.Animation
             return handle;
         }
 
-        public override float Duration()
-        {
-            return settings.Duration + settings.Delay;
-        }
-
         protected abstract TValue GetValue(TObject target);
         protected abstract void SetValue(TObject target, in TValue value);
         protected abstract TValue GetRelativeValue(in TValue startValue, in TValue relativeValue);
@@ -67,15 +63,6 @@ namespace LitMotion.Animation
         protected sealed override float GetRelativeValue(in float startValue, in float relativeValue)
         {
             return startValue + relativeValue;
-        }
-    }
-
-    public abstract class BooleanPropertyAnimationComponent<TObject> : PropertyAnimationComponent<TObject, bool, NoOptions,
-        BooleanMotionAdapter> where TObject : UnityEngine.Object
-    {
-        protected override bool GetRelativeValue(in bool startValue, in bool relativeValue)
-        {
-            return relativeValue;
         }
     }
 
@@ -138,7 +125,6 @@ namespace LitMotion.Animation
     {
         protected sealed override Color GetRelativeValue(in Color startValue, in Color relativeValue)
         {
-            if (settings.Relative) return relativeValue;
             return startValue + relativeValue;
         }
     }

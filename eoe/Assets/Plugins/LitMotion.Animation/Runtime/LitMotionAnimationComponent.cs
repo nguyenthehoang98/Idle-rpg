@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace LitMotion.Animation
 {
@@ -25,24 +24,13 @@ namespace LitMotion.Animation
         [SerializeField] bool enabled = true;
 
         public bool Enabled => enabled;
-
         public string DisplayName => displayName;
-
-        public abstract float Duration();
 
         public abstract MotionHandle Play();
 
-        public virtual void OnResume()
-        {
-        }
-
-        public virtual void OnPause()
-        {
-        }
-
-        /*public virtual void OnStop()
-        {
-        }*/
+        public virtual void OnResume() { }
+        public virtual void OnPause() { }
+        public virtual void OnStop() { }
 
         public MotionHandle TrackedHandle { get; set; }
     }

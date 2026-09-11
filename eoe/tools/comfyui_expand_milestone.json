@@ -1,0 +1,74 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {"ckpt_name": "dreamshaper_8.safetensors"}
+  },
+  "2": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["1", 1],
+      "text": "stylized hand-painted 2D fantasy RPG mobile game background, grassland frontier, rolling green meadow, distant blue-gray hills, soft atmospheric perspective, warm daylight, painterly game concept art, wide open scenery, edge-friendly composition, no central landmark, no text, no UI"
+    }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["1", 1],
+      "text": "text, letters, logo, UI, frame, border, giant landmark, castle, character, close-up, photorealism, hard gradient, blurry, empty gray canvas"
+    }
+  },
+  "4": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {"width": 360, "height": 720, "batch_size": 1}
+  },
+  "5": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": ["1", 0],
+      "seed": 410011,
+      "steps": 16,
+      "cfg": 7.0,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "positive": ["2", 0],
+      "negative": ["3", 0],
+      "latent_image": ["4", 0],
+      "denoise": 1.0
+    }
+  },
+  "6": {
+    "class_type": "VAEDecode",
+    "inputs": {"samples": ["5", 0], "vae": ["1", 2]}
+  },
+  "7": {
+    "class_type": "SaveImage",
+    "inputs": {"images": ["6", 0], "filename_prefix": "idle_rpg/milestone_01_01_transition_left"}
+  },
+  "8": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {"width": 360, "height": 720, "batch_size": 1}
+  },
+  "9": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": ["1", 0],
+      "seed": 410012,
+      "steps": 16,
+      "cfg": 7.0,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "positive": ["2", 0],
+      "negative": ["3", 0],
+      "latent_image": ["8", 0],
+      "denoise": 1.0
+    }
+  },
+  "10": {
+    "class_type": "VAEDecode",
+    "inputs": {"samples": ["9", 0], "vae": ["1", 2]}
+  },
+  "11": {
+    "class_type": "SaveImage",
+    "inputs": {"images": ["10", 0], "filename_prefix": "idle_rpg/milestone_01_01_transition_right"}
+  }
+}

@@ -10,7 +10,7 @@ namespace LitMotion.Animation.Components
     [LitMotionAnimationComponentMenu("Rendering/Material/Property (Float)")]
     public sealed class MaterialFloatAnimation : FloatPropertyAnimationComponent<Material>
     {
-        [SerializeField] private string propertyName = "";
+        [SerializeField] string propertyName = "";
 
         protected override float GetValue(Material target)
         {
@@ -86,60 +86,6 @@ namespace LitMotion.Animation.Components
         protected override void SetValue(SpriteRenderer target, in Color value)
         {
             target.color = value;
-        }
-    }
-
-    [Serializable]
-    [LitMotionAnimationComponentMenu("Rendering/Sprite Renderer/Material Float Property")]
-    public sealed class SpriteRendererMaterialAnimation : FloatPropertyAnimationComponent<SpriteRenderer>
-    {
-        [SerializeField] private string propertyName = "";
-        
-        private MaterialPropertyBlock propertyBlock;
-
-        protected override float GetValue(SpriteRenderer target)
-        {
-            propertyBlock = new MaterialPropertyBlock();
-            target.GetPropertyBlock(propertyBlock);
-            float f = propertyBlock.GetFloat(propertyName);
-            return f;
-        }
-
-        protected override void SetValue(SpriteRenderer target, in float value)
-        {
-            propertyBlock.SetFloat(propertyName, value);
-            target.SetPropertyBlock(propertyBlock);
-        }
-    }
-
-    [Serializable]
-    [LitMotionAnimationComponentMenu("Rendering/Skinned Mesh Renderer/Material Float Property")]
-    public sealed class SkinnedMeshRendererMaterialAnimation : FloatPropertyAnimationComponent<SkinnedMeshRenderer>
-    {
-        [SerializeField] private string propertyName = "";
-        
-        private MaterialPropertyBlock propertyBlock;
-
-        private int propertyId;
-        
-        public override MotionHandle Play()
-        {
-            propertyBlock = new MaterialPropertyBlock();
-            propertyId = Shader.PropertyToID(propertyName);
-            return base.Play();
-        }
-
-        protected override float GetValue(SkinnedMeshRenderer target)
-        {
-            target.GetPropertyBlock(propertyBlock);
-            return propertyBlock.GetFloat(propertyId);
-        }
-
-        protected override void SetValue(SkinnedMeshRenderer target, in float value)
-        {
-            target.GetPropertyBlock(propertyBlock);
-            propertyBlock.SetFloat(propertyId, value);
-            target.SetPropertyBlock(propertyBlock);
         }
     }
 

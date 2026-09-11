@@ -1,7 +1,7 @@
-using System;
 using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor.SceneManagement;
@@ -96,20 +96,7 @@ namespace LitMotion.Animation.Editor
         {
             var box = CreateBox("Settings");
             box.Add(new PropertyField(serializedObject.FindProperty("autoPlayMode")));
-            box.Add(new PropertyField(serializedObject.FindProperty("autoStopMode")));
             box.Add(new PropertyField(serializedObject.FindProperty("animationMode")));
-            box.Add(new PropertyField(serializedObject.FindProperty("isReverseWhenStop")));
-
-            var durationField = new FloatField("Total Duration") { isReadOnly = true };
-            durationField.SetEnabled(false);
-            box.Add(durationField);
-
-            box.schedule.Execute(() =>
-            {
-                if (target == null) return;
-                durationField.SetValueWithoutNotify(((LitMotionAnimation)target).Duration());
-            }).Every(100);
-
             return box;
         }
 
@@ -306,40 +293,38 @@ namespace LitMotion.Animation.Editor
             }
             else
             {
-                string settingPrex = "";
-
+                string settingPrefix = "";
                 try
                 {
                     SerializedProperty settingProperty = property.FindPropertyRelative("settings");
-                    if(settingProperty != null)
+                    if (settingProperty != null)
                     {
                         float duration = settingProperty.FindPropertyRelative("duration").floatValue;
-                        settingPrex = $" ({duration}s)";
+                        settingPrefix = $" ({duration}s)";
                         float delay = settingProperty.FindPropertyRelative("delay").floatValue;
-                        settingPrex += $" ({delay}s)";
+                        settingPrefix += $" ({delay}s)";
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    settingPrex = "";
+                    settingPrefix = "";
                 }
 
-                string t = property.FindPropertyRelative("type").stringValue;
+                string type = property.FindPropertyRelative("type").stringValue;
+                type = !string.IsNullOrEmpty(type)
+                    ? $"{type} - "
+                    : $"{property.managedReferenceValue.GetType().Name} - ";
 
-                if (!string.IsNullOrEmpty(t)) t = $"{t} - ";
-                else t = $"{property.managedReferenceValue.GetType().Name} - ";
-                
-                view.Text = t + property.FindPropertyRelative("displayName").stringValue + settingPrex;
-           
                 var targetProperty = property.FindPropertyRelative("target");
                 if (targetProperty != null)
                 {
                     view.Icon = GUIHelper.GetComponentIcon(targetProperty.GetPropertyType());
                 }
 
+                view.Text = type + property.FindPropertyRelative("displayName").stringValue + settingPrefix;
                 view.TrackPropertyValue(property.FindPropertyRelative("displayName"), x =>
                 {
-                    view.Text = t + x.stringValue + settingPrex;
+                    view.Text = type + x.stringValue + settingPrefix;
                 });
 
                 view.Foldout.BindProperty(property);

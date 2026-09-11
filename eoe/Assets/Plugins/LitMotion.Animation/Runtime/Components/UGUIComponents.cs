@@ -43,24 +43,8 @@ namespace LitMotion.Animation.Components
     [LitMotionAnimationComponentMenu("UI/Image/Color")]
     public sealed class ImageColorAnimation : ColorPropertyAnimationComponent<Image>
     {
-        protected override Color GetValue(Image target)
-        {
-            var c = target.color;
-            c.r = Mathf.Clamp01(c.r);
-            c.g = Mathf.Clamp01(c.g);
-            c.b = Mathf.Clamp01(c.b);
-            c.a = Mathf.Clamp01(c.a);
-            return c;
-        }
-        protected override void SetValue(Image target, in Color value)
-        { 
-            var c = value;
-            c.r = Mathf.Clamp01(c.r);
-            c.g = Mathf.Clamp01(c.g);
-            c.b = Mathf.Clamp01(c.b);
-            c.a = Mathf.Clamp01(c.a);
-            target.color = c;
-        }
+        protected override Color GetValue(Image target) => target.color;
+        protected override void SetValue(Image target, in Color value) => target.color = value;
     }
 
     [Serializable]
@@ -71,18 +55,9 @@ namespace LitMotion.Animation.Components
         protected override void SetValue(Image target, in float value)
         {
             var c = target.color;
-            c.a = Mathf.Clamp01(c.a);
+            c.a = value;
             target.color = c;
         }
-    }
-
-    [Serializable]
-    [LitMotionAnimationComponentMenu("UI/Image/Image Enable")]
-    public sealed class ImageEnableAnimation : BooleanPropertyAnimationComponent<Image>
-    {
-        protected override bool GetValue(Image target) => target.enabled;
-
-        protected override void SetValue(Image target, in bool value) => target.enabled = value;
     }
 
     [Serializable]

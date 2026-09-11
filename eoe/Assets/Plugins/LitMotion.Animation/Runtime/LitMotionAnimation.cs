@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using LitMotion.Collections;
 using UnityEngine;
 
@@ -16,24 +15,17 @@ namespace LitMotion.Animation
             OnEnable
         }
 
-        enum AutoStopMode
-        {
-            None,
-            OnDisable,
-        }
-
         enum AnimationMode
         {
             Parallel,
             Sequential
         }
 
-        [SerializeField] private bool debug;
-        [SerializeField] AutoStopMode autoStopMode = AutoStopMode.OnDisable;
         [SerializeField] AutoPlayMode autoPlayMode = AutoPlayMode.OnStart;
         [SerializeField] AnimationMode animationMode;
 
-        [SerializeReference] LitMotionAnimationComponent[] components;
+        [SerializeReference]
+        LitMotionAnimationComponent[] components;
 
         readonly Queue<LitMotionAnimationComponent> queue = new();
         FastListCore<LitMotionAnimationComponent> playingComponents;
@@ -42,8 +34,6 @@ namespace LitMotion.Animation
         [HideInInspector, SerializeField] int version;
 
         public IReadOnlyList<LitMotionAnimationComponent> Components => components;
-
-        private HashSet<int> handlesParallel = new HashSet<int>();
 
         void OnEnable()
         {
@@ -59,21 +49,17 @@ namespace LitMotion.Animation
 
         void MoveNextMotion()
         {
-            if (queue.TryDequeue(out LitMotionAnimationComponent queuedComponent))
+            if (queue.TryDequeue(out var queuedComponent))
             {
                 try
                 {
-                    MotionHandle handle = queuedComponent.Play();
-                    bool isActive = handle.IsActive();
+                    var handle = queuedComponent.Play();
+                    var isActive = handle.IsActive();
 
                     if (isActive)
                     {
                         handle.Preserve();
-                        MotionManager.GetManagedDataRef(handle).OnCompleteAction += () =>
-                        {
-                            MoveNextMotion();
-                            CheckStop();
-                        };
+                        MotionManager.GetManagedDataRef(handle, false).OnCompleteAction += MoveNextMotion;
                     }
 
                     queuedComponent.TrackedHandle = handle;
@@ -91,49 +77,16 @@ namespace LitMotion.Animation
             }
         }
 
-        public float Duration()
-        {
-            if (components == null) return 0;
-             
-            float duration = 0;
-            switch (animationMode)
-            {
-                case AnimationMode.Sequential:
-                    foreach (LitMotionAnimationComponent component in components)
-                    {
-                        if (component == null) continue;
-                        if (!component.Enabled) continue;
-
-                        duration += component.Duration();
-                    }
-
-                    break;
-                case AnimationMode.Parallel:
-                    foreach (LitMotionAnimationComponent component in components)
-                    {
-                        if (component == null) continue;
-                        if (!component.Enabled) continue;
-
-                        duration = Mathf.Max(duration, component.Duration());
-                    }
-
-                    break;
-            }
-
-            return duration;
-        }
-
         public void Play()
         {
-            bool isPlaying = false;
+            var isPlaying = false;
 
-            foreach (LitMotionAnimationComponent component in playingComponents.AsSpan())
+            foreach (var component in playingComponents.AsSpan())
             {
-                MotionHandle handle = component.TrackedHandle;
+                var handle = component.TrackedHandle;
                 if (handle.IsActive())
                 {
                     handle.PlaybackSpeed = 1f;
-
                     isPlaying = true;
 
                     component.OnResume();
@@ -141,76 +94,53 @@ namespace LitMotion.Animation
             }
 
             if (isPlaying) return;
-            
-            if(debug) Debug.LogError($"play LitMotionAnimation '{name}'");
 
             playingComponents.Clear();
 
             switch (animationMode)
             {
                 case AnimationMode.Sequential:
-                    foreach (LitMotionAnimationComponent component in components)
+                    foreach (var component in components)
                     {
                         if (component == null) continue;
-
                         if (!component.Enabled) continue;
-
                         queue.Enqueue(component);
                     }
 
                     MoveNextMotion();
-                    
                     break;
                 case AnimationMode.Parallel:
-
-                    handlesParallel.Clear();
-                    
-                    foreach (LitMotionAnimationComponent component in components)
+                    foreach (var component in components)
                     {
                         if (component == null) continue;
                         if (!component.Enabled) continue;
 
                         try
                         {
-                            MotionHandle handle = component.Play();
+                            var handle = component.Play();
                             component.TrackedHandle = handle;
 
-                            // Giống guard của nhánh Sequential (MoveNextMotion): chỉ đăng ký
-                            // OnCompleteAction khi handle còn sống. Nếu Play() trả về handle đã chết
-                            // (motion bị dispose ngay trong frame — vd delay=0 + duration ngắn, hoặc
-                            // play chồng), GetManagedDataRef bên dưới sẽ throw
-                            // "Motion has been destroyed" → gãy cả loop parallel.
                             if (handle.IsActive())
                             {
                                 handle.Preserve();
-
-                                MotionManager.GetManagedDataRef(handle).OnCompleteAction += () =>
-                                {
-                                    handlesParallel.Remove(handle.GetHashCode());
-
-                                    if (handlesParallel.Count == 0) CheckStop();
-                                };
-
-                                playingComponents.Add(component);
-
-                                handlesParallel.Add(handle.GetHashCode());
                             }
+
+                            playingComponents.Add(component);
                         }
                         catch (Exception ex)
                         {
-                            Debug.LogError($"Error at object {GetPath(transform)} \n\n DisplayName: {component.DisplayName} \n\n Exception: {ex}");
+                            Debug.LogException(ex);
                         }
                     }
-
                     break;
             }
         }
 
         public void Pause()
         {
-            foreach (LitMotionAnimationComponent component in playingComponents.AsSpan())
+            foreach (var component in playingComponents.AsSpan())
             {
-                MotionHandle handle = component.TrackedHandle;
+                var handle = component.TrackedHandle;
                 if (handle.IsActive())
                 {
                     handle.PlaybackSpeed = 0f;
@@ -219,25 +149,15 @@ namespace LitMotion.Animation
             }
         }
 
-        private void CheckStop()
-        {
-            if (animationMode == AnimationMode.Sequential && IsPlaying) return;
-
-            if (animationMode == AnimationMode.Parallel && handlesParallel.Count > 0) return;
-            
-            if (Application.isPlaying && isActiveAndEnabled) Stop();
-        }
-
         public void Stop()
         {
-            if (debug) Debug.LogError($"stop LitMotionAnimation '{name}'");
-            Span<LitMotionAnimationComponent> span = playingComponents.AsSpan();
+            var span = playingComponents.AsSpan();
             span.Reverse();
-            foreach (LitMotionAnimationComponent component in span)
+            foreach (var component in span)
             {
-                MotionHandle handle = component.TrackedHandle;
+                var handle = component.TrackedHandle;
                 handle.TryCancel();
-                /*component.OnStop();*/
+                component.OnStop();
                 component.TrackedHandle = handle;
             }
 
@@ -257,9 +177,9 @@ namespace LitMotion.Animation
             {
                 if (queue.Count > 0) return true;
 
-                foreach (LitMotionAnimationComponent component in playingComponents.AsSpan())
+                foreach (var component in playingComponents.AsSpan())
                 {
-                    MotionHandle handle = component.TrackedHandle;
+                    var handle = component.TrackedHandle;
                     if (handle.IsActive()) return true;
                 }
 
@@ -273,9 +193,9 @@ namespace LitMotion.Animation
             {
                 if (queue.Count > 0) return true;
 
-                foreach (LitMotionAnimationComponent component in playingComponents.AsSpan())
+                foreach (var component in playingComponents.AsSpan())
                 {
-                    MotionHandle handle = component.TrackedHandle;
+                    var handle = component.TrackedHandle;
                     if (handle.IsPlaying()) return true;
                 }
 
@@ -285,13 +205,16 @@ namespace LitMotion.Animation
 
         void OnDisable()
         {
-            if (autoStopMode == AutoStopMode.OnDisable)
+            if (autoPlayMode == AutoPlayMode.OnEnable)
                 Stop();
         }
 
-        void ISerializationCallbackReceiver.OnBeforeSerialize()
+        void OnDestroy()
         {
+            Stop();
         }
+
+        void ISerializationCallbackReceiver.OnBeforeSerialize() { }
 
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
@@ -300,19 +223,6 @@ namespace LitMotion.Animation
                 autoPlayMode = playOnAwake ? AutoPlayMode.OnStart : AutoPlayMode.None;
                 version = 1;
             }
-        }
-        
-        private static string GetPath(Transform target)
-        {
-            string path = target.name;
-
-            while (target.parent != null)
-            {
-                target = target.parent;
-                path = target.name + "/" + path;
-            }
-
-            return path;
         }
     }
 }

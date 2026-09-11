@@ -33,7 +33,7 @@ namespace LitMotion.Animation.Components
     [LitMotionAnimationComponentMenu("Transform/Position")]
     public sealed class TransformPositionAnimation : TransformPositionAnimationBase<NoOptions, Vector3MotionAdapter>
     {
-        public TransformPositionAnimation() : base()
+        public TransformPositionAnimation()
         {
             type = "Position";
         }
@@ -41,9 +41,7 @@ namespace LitMotion.Animation.Components
 
     [Serializable]
     [LitMotionAnimationComponentMenu("Transform/Position (Punch)")]
-    public sealed class TransformPositionPunchAnimation : TransformPositionAnimationBase<PunchOptions, Vector3PunchMotionAdapter>
-    {
-    }
+    public sealed class TransformPositionPunchAnimation : TransformPositionAnimationBase<PunchOptions, Vector3PunchMotionAdapter> { }
 
     [Serializable]
     [LitMotionAnimationComponentMenu("Transform/Position (Shake)")]
@@ -77,7 +75,7 @@ namespace LitMotion.Animation.Components
     [LitMotionAnimationComponentMenu("Transform/Rotation")]
     public sealed class TransformRotationAnimation : TransformRotationAnimationBase<NoOptions, Vector3MotionAdapter>
     {
-        public TransformRotationAnimation() : base()
+        public TransformRotationAnimation()
         {
             type = "Rotation";
         }
@@ -103,11 +101,7 @@ namespace LitMotion.Animation.Components
 
         protected override void SetValue(Transform target, in Vector3 value)
         {
-            if(target != null) target.localScale = value;
-            else
-            {
-                Debug.LogWarning("Cannot set scale on a Transform");
-            }
+            target.localScale = value;
         }
 
         protected override Vector3 GetRelativeValue(in Vector3 startValue, in Vector3 relativeValue)
@@ -120,7 +114,7 @@ namespace LitMotion.Animation.Components
     [LitMotionAnimationComponentMenu("Transform/Scale")]
     public sealed class TransformScaleAnimation : TransformScaleAnimationBase<NoOptions, Vector3MotionAdapter>
     {
-        public TransformScaleAnimation() : base()
+        public TransformScaleAnimation()
         {
             type = "Scale";
         }

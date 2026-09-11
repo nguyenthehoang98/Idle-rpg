@@ -2,64 +2,10 @@
 
 using System;
 using LitMotion.Adapters;
-using UnityEditor.XR;
 using UnityEngine;
 
 namespace LitMotion.Animation.Components
 {
-    public abstract class RigidbodyToggleAnimationBase : LitMotionAnimationComponent
-    {
-        [SerializeField] protected Rigidbody rigidbody;
-        [SerializeField] bool startValue;
-        [SerializeField] bool endValue;
-        [SerializeField] float duration;
-
-        public override float Duration() => duration;
-
-        public override MotionHandle Play()
-        {
-            OnChangeValue(rigidbody, startValue);
-
-            return LMotion.Create(0f, 1f, duration)
-                .WithOnComplete(() =>
-                {
-                    OnChangeValue(rigidbody, endValue);
-                }).RunWithoutBinding();
-        }
-
-        protected abstract void OnChangeValue(Rigidbody rigidbody, in bool value);
-    }
-    
-    [Serializable]
-    [LitMotionAnimationComponentMenu("Rigidbody/Use Gravity")]
-    public sealed class RigidbodyUseGravityAnimation : RigidbodyToggleAnimationBase
-    {
-        public RigidbodyUseGravityAnimation() : base()
-        {
-            type = "Gravity";
-        }
-
-        protected override void OnChangeValue(Rigidbody rigidbody, in bool value)
-        {
-            rigidbody.useGravity = value;
-        }
-    }
-    
-    [Serializable]
-    [LitMotionAnimationComponentMenu("Rigidbody/Kinematic")]
-    public sealed class RigidbodyKinematicAnimation : RigidbodyToggleAnimationBase
-    {
-        public RigidbodyKinematicAnimation() : base()
-        {
-            type = "Kinematic";
-        }
-
-        protected override void OnChangeValue(Rigidbody rigidbody, in bool value)
-        {
-            rigidbody.isKinematic = value;
-        }
-    }
-    
     public abstract class RigidbodyPositionAnimationBase<TOptions, TAdapter> : PropertyAnimationComponent<Rigidbody, Vector3, TOptions, TAdapter>
         where TOptions : unmanaged, IMotionOptions
         where TAdapter : unmanaged, IMotionAdapter<Vector3, TOptions>

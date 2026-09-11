@@ -17,66 +17,76 @@ namespace LitMotion.Animation.Components
         public override MotionHandle Play()
         {
             return LMotion.Create<TValue, TOptions, TAdapter>(settings)
-                .Bind(this, (x, state) => { state.onValueChanged.Invoke(x); });
+                .Bind(this, (x, state) =>
+                {
+                    state.onValueChanged.Invoke(x);
+                });
         }
 
-        public override float Duration()
-        {
-            return settings.Duration + settings.Delay;
-        }
-
-        /*public override void OnStop()
-        {
-        }*/
+        public override void OnStop() { }
     }
 
     [Serializable]
     [LitMotionAnimationComponentMenu("Value/Float")]
     public sealed class FloatValueAnimation : ValueAnimationComponent<float, NoOptions, FloatMotionAdapter>
     {
+        public FloatValueAnimation()
+        {
+            type = "Float";
+        }
     }
 
     [Serializable]
     [LitMotionAnimationComponentMenu("Value/Double")]
     public sealed class DoubleValueAnimation : ValueAnimationComponent<double, NoOptions, DoubleMotionAdapter>
     {
+        public DoubleValueAnimation()
+        {
+            type = "Double";
+        }
     }
 
     [Serializable]
     [LitMotionAnimationComponentMenu("Value/Int")]
     public sealed class IntValueAnimation : ValueAnimationComponent<int, IntegerOptions, IntMotionAdapter>
     {
+        public IntValueAnimation()
+        {
+            type = "Int";
+        }
     }
 
     [Serializable]
     [LitMotionAnimationComponentMenu("Value/Long")]
-    public sealed class LongValueAnimation : ValueAnimationComponent<long, IntegerOptions, LongMotionAdapter>
-    {
-    }
+    public sealed class LongValueAnimation : ValueAnimationComponent<long, IntegerOptions, LongMotionAdapter> { }
 
     [Serializable]
     [LitMotionAnimationComponentMenu("Value/Vector2")]
     public sealed class Vector2ValueAnimation : ValueAnimationComponent<Vector2, NoOptions, Vector2MotionAdapter>
     {
+        public Vector2ValueAnimation()
+        {
+            type = "Vector2";
+        }
     }
 
     [Serializable]
     [LitMotionAnimationComponentMenu("Value/Vector3")]
     public sealed class Vector3ValueAnimation : ValueAnimationComponent<Vector3, NoOptions, Vector3MotionAdapter>
     {
+        public Vector3ValueAnimation()
+        {
+            type = "Vector3";
+        }
     }
 
     [Serializable]
     [LitMotionAnimationComponentMenu("Value/Vector4")]
-    public sealed class Vector4ValueAnimation : ValueAnimationComponent<Vector4, NoOptions, Vector4MotionAdapter>
-    {
-    }
+    public sealed class Vector4ValueAnimation : ValueAnimationComponent<Vector4, NoOptions, Vector4MotionAdapter> { }
 
     [Serializable]
     [LitMotionAnimationComponentMenu("Value/Color")]
-    public sealed class ColorValueAnimation : ValueAnimationComponent<Color, NoOptions, ColorMotionAdapter>
-    {
-    }
+    public sealed class ColorValueAnimation : ValueAnimationComponent<Color, NoOptions, ColorMotionAdapter> { }
 
     [Serializable]
     [LitMotionAnimationComponentMenu("Value/String")]
@@ -84,11 +94,6 @@ namespace LitMotion.Animation.Components
     {
         [SerializeField] SerializableMotionSettings<FixedString512Bytes, StringOptions> settings;
         [SerializeField] UnityEvent<string> onValueChanged;
-
-        public override float Duration()
-        {
-            return settings.Duration + settings.Delay;
-        }
 
         public override MotionHandle Play()
         {
@@ -100,8 +105,6 @@ namespace LitMotion.Animation.Components
                 });
         }
 
-        /*public override void OnStop()
-        {
-        }*/
+        public override void OnStop() { }
     }
 }

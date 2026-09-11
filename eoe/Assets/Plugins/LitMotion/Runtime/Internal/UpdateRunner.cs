@@ -77,12 +77,7 @@ namespace LitMotion
                     bool isPlaying   = status == MotionStatus.Playing;
                     bool isCompleted = status == MotionStatus.Completed;
                     bool isDelayed   = status == MotionStatus.Delayed;
-                    // Chỉ bind khi đang chơi, hoặc ĐÚNG frame vừa complete (để phát value cuối 1 lần).
-                    // Trước đây isCompleted luôn được bind tiếp → motion bị Preserve() (giữ handle cho
-                    // OnCompleteAction) vẫn bị gọi bind mỗi frame mãi với Time tăng vô hạn
-                    // (duration 0.5 nhưng chạy tới 2.5s) → mọi component bind đều dính lỗi này.
-                    bool justCompleted = isCompleted && state.WasStatusChanged;
-                    bool canUpdate = isPlaying || justCompleted || (isDelayed && !managedData.SkipValuesDuringDelay);
+                    bool canUpdate = isPlaying || isCompleted || (isDelayed && !managedData.SkipValuesDuringDelay);
                     bool loopComplete = (isPlaying || isCompleted || isDelayed) && state.WasLoopCompleted;
                     if (canUpdate)
                     {
