@@ -29,11 +29,36 @@ namespace LitMotion.Animation
 
         readonly Queue<LitMotionAnimationComponent> queue = new();
         FastListCore<LitMotionAnimationComponent> playingComponents;
+        readonly HashSet<MotionHandle> parallelHandles = new();
 
         [HideInInspector, SerializeField] bool playOnAwake = true;
         [HideInInspector, SerializeField] int version;
 
         public IReadOnlyList<LitMotionAnimationComponent> Components => components;
+
+        public float Duration()
+        {
+            if (components == null) return 0f;
+
+            if (animationMode == AnimationMode.Parallel)
+            {
+                var duration = 0f;
+                foreach (var component in components)
+                {
+                    if (component != null && component.Enabled)
+                        duration = Mathf.Max(duration, component.Duration());
+                }
+                return duration;
+            }
+
+            var total = 0f;
+            foreach (var component in components)
+            {
+                if (component != null && component.Enabled)
+                    total += component.Duration();
+            }
+            return total;
+        }
 
         void OnEnable()
         {
@@ -59,7 +84,11 @@ namespace LitMotion.Animation
                     if (isActive)
                     {
                         handle.Preserve();
-                        MotionManager.GetManagedDataRef(handle, false).OnCompleteAction += MoveNextMotion;
+                        MotionManager.GetManagedDataRef(handle, false).OnCompleteAction += () =>
+                        {
+                            MoveNextMotion();
+                            CheckStop();
+                        };
                     }
 
                     queuedComponent.TrackedHandle = handle;
@@ -110,6 +139,8 @@ namespace LitMotion.Animation
                     MoveNextMotion();
                     break;
                 case AnimationMode.Parallel:
+                    parallelHandles.Clear();
+
                     foreach (var component in components)
                     {
                         if (component == null) continue;
@@ -123,9 +154,15 @@ namespace LitMotion.Animation
                             if (handle.IsActive())
                             {
                                 handle.Preserve();
-                            }
+                                MotionManager.GetManagedDataRef(handle, false).OnCompleteAction += () =>
+                                {
+                                    parallelHandles.Remove(handle);
+                                    CheckStop();
+                                };
 
-                            playingComponents.Add(component);
+                                parallelHandles.Add(handle);
+                                playingComponents.Add(component);
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -134,6 +171,15 @@ namespace LitMotion.Animation
                     }
                     break;
             }
+        }
+
+        void CheckStop()
+        {
+            if (animationMode == AnimationMode.Sequential && (queue.Count > 0 || IsPlaying)) return;
+            if (animationMode == AnimationMode.Parallel && parallelHandles.Count > 0) return;
+
+            if (Application.isPlaying && isActiveAndEnabled)
+                Stop();
         }
 
         public void Pause()
@@ -157,12 +203,12 @@ namespace LitMotion.Animation
             {
                 var handle = component.TrackedHandle;
                 handle.TryCancel();
-                component.OnStop();
                 component.TrackedHandle = handle;
             }
 
             playingComponents.Clear();
             queue.Clear();
+            parallelHandles.Clear();
         }
 
         public void Restart()

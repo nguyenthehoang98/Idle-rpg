@@ -14,6 +14,11 @@ namespace LitMotion.Animation.Components
         [SerializeField] SerializableMotionSettings<TValue, TOptions> settings;
         [SerializeField] UnityEvent<TValue> onValueChanged;
 
+        public override float Duration()
+        {
+            return settings.Duration + settings.Delay;
+        }
+
         public override MotionHandle Play()
         {
             return LMotion.Create<TValue, TOptions, TAdapter>(settings)
@@ -94,6 +99,8 @@ namespace LitMotion.Animation.Components
     {
         [SerializeField] SerializableMotionSettings<FixedString512Bytes, StringOptions> settings;
         [SerializeField] UnityEvent<string> onValueChanged;
+
+        public override float Duration() => settings.Duration + settings.Delay;
 
         public override MotionHandle Play()
         {

@@ -13,6 +13,14 @@ using LitMotion.Adapters;
 
 namespace LitMotion.Adapters
 {
+    public readonly struct BooleanMotionAdapter : IMotionAdapter<bool, NoOptions>
+    {
+        public bool Evaluate(ref bool startValue, ref bool endValue, ref NoOptions options, in MotionEvaluationContext context)
+        {
+            return context.Progress < 1f ? startValue : endValue;
+        }
+    }
+
     public readonly struct Vector2MotionAdapter : IMotionAdapter<Vector2, NoOptions>
     {
         public Vector2 Evaluate(ref Vector2 startValue, ref Vector2 endValue, ref NoOptions options, in MotionEvaluationContext context)

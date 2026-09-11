@@ -226,39 +226,40 @@ namespace LitMotion.Animation.Editor
                     flexGrow = 1f,
                 }
             };
-            var restartButton = new Button(() => ((LitMotionAnimation)target).Restart())
+            var startButton = new Button(() => SetPreviewFrame(false))
             {
-                text = "Restart",
+                text = "Start",
                 style = {
                     flexGrow = 1f,
                 }
             };
-            var stopButton = new Button(() => ((LitMotionAnimation)target).Pause())
-            {
-                text = "Pause",
-                style = {
-                    flexGrow = 1f,
-                }
-            };
-            var resetButton = new Button(() => ((LitMotionAnimation)target).Stop())
+            var stopButton = new Button(() => ((LitMotionAnimation)target).Stop())
             {
                 text = "Stop",
                 style = {
                     flexGrow = 1f,
                 }
             };
+            var endButton = new Button(() => SetPreviewFrame(true))
+            {
+                text = "End",
+                style = {
+                    flexGrow = 1f,
+                }
+            };
 
+            buttonGroup.Add(startButton);
             buttonGroup.Add(playButton);
-            buttonGroup.Add(restartButton);
             buttonGroup.Add(stopButton);
-            buttonGroup.Add(resetButton);
+            buttonGroup.Add(endButton);
 
             buttonGroup.schedule.Execute(() =>
             {
-                var enabled = !IsActive();
-                restartButton.SetEnabled(enabled);
+                var enabled = target != null;
+                startButton.SetEnabled(enabled);
+                playButton.SetEnabled(enabled);
                 stopButton.SetEnabled(enabled);
-                resetButton.SetEnabled(enabled);
+                endButton.SetEnabled(enabled);
             })
             .Every(10);
 
@@ -387,6 +388,31 @@ namespace LitMotion.Animation.Editor
             }
 
             return manipulator;
+        }
+
+        void SetPreviewFrame(bool end)
+        {
+            var animation = (LitMotionAnimation)target;
+            animation.Stop();
+            animation.Play();
+
+            if (animation.Components != null)
+            {
+                foreach (var component in animation.Components)
+                {
+                    if (component == null) continue;
+
+                    var handle = component.TrackedHandle;
+                    if (!handle.IsActive()) continue;
+                    if (end && double.IsInfinity(handle.TotalDuration)) continue;
+
+                    handle.Time = end ? handle.TotalDuration : 0d;
+                }
+            }
+
+            animation.Pause();
+            SceneView.RepaintAll();
+            Repaint();
         }
 
         bool IsActive()

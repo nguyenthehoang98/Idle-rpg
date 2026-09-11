@@ -75,6 +75,56 @@ namespace LitMotion.Animation.Components
     [Serializable]
     [LitMotionAnimationComponentMenu("Rigidbody/Rotation (Shake)")]
     public sealed class RigidbodyRotationShakeAnimation : RigidbodyRotationAnimationBase<ShakeOptions, Vector3ShakeMotionAdapter> { }
+
+    public abstract class RigidbodyToggleAnimationBase : LitMotionAnimationComponent
+    {
+        [SerializeField] protected Rigidbody rigidbody;
+        [SerializeField] bool startValue;
+        [SerializeField] bool endValue;
+        [SerializeField, Min(0)] float duration;
+
+        public override float Duration() => duration;
+
+        public override MotionHandle Play()
+        {
+            OnChangeValue(rigidbody, startValue);
+            return LMotion.Create(0f, 1f, duration)
+                .WithOnComplete(() => OnChangeValue(rigidbody, endValue))
+                .RunWithoutBinding();
+        }
+
+        protected abstract void OnChangeValue(Rigidbody target, in bool value);
+    }
+
+    [Serializable]
+    [LitMotionAnimationComponentMenu("Rigidbody/Use Gravity")]
+    public sealed class RigidbodyUseGravityAnimation : RigidbodyToggleAnimationBase
+    {
+        public RigidbodyUseGravityAnimation()
+        {
+            type = "Gravity";
+        }
+
+        protected override void OnChangeValue(Rigidbody target, in bool value)
+        {
+            target.useGravity = value;
+        }
+    }
+
+    [Serializable]
+    [LitMotionAnimationComponentMenu("Rigidbody/Kinematic")]
+    public sealed class RigidbodyKinematicAnimation : RigidbodyToggleAnimationBase
+    {
+        public RigidbodyKinematicAnimation()
+        {
+            type = "Kinematic";
+        }
+
+        protected override void OnChangeValue(Rigidbody target, in bool value)
+        {
+            target.isKinematic = value;
+        }
+    }
 }
 
 #endif

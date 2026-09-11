@@ -50,6 +50,11 @@ namespace LitMotion.Animation
             return handle;
         }
 
+        public override float Duration()
+        {
+            return settings.Duration + settings.Delay;
+        }
+
         protected abstract TValue GetValue(TObject target);
         protected abstract void SetValue(TObject target, in TValue value);
         protected abstract TValue GetRelativeValue(in TValue startValue, in TValue relativeValue);
@@ -63,6 +68,15 @@ namespace LitMotion.Animation
         protected sealed override float GetRelativeValue(in float startValue, in float relativeValue)
         {
             return startValue + relativeValue;
+        }
+    }
+
+    public abstract class BooleanPropertyAnimationComponent<TObject> : PropertyAnimationComponent<TObject, bool, NoOptions, BooleanMotionAdapter>
+        where TObject : UnityEngine.Object
+    {
+        protected override bool GetRelativeValue(in bool startValue, in bool relativeValue)
+        {
+            return relativeValue;
         }
     }
 

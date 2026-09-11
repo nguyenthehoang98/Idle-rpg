@@ -28,6 +28,8 @@ namespace LitMotion.Animation
 
         public abstract MotionHandle Play();
 
+        public virtual float Duration() => 0f;
+
         public virtual void OnResume() { }
         public virtual void OnPause() { }
         public virtual void OnStop() { }

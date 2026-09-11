@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: deb49f7fb9de2794a99aed6a6d41a405
+guid: 32eed584e570da34ba3eff3f3e46eb25
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Minecraft
+  - Cinzel
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

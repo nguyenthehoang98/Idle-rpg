@@ -89,6 +89,56 @@ namespace LitMotion.Animation.Components
         }
     }
 
+    [Serializable]
+    [LitMotionAnimationComponentMenu("Rendering/Sprite Renderer/Material Float Property")]
+    public sealed class SpriteRendererMaterialAnimation : FloatPropertyAnimationComponent<SpriteRenderer>
+    {
+        [SerializeField] string propertyName = "";
+        MaterialPropertyBlock propertyBlock;
+
+        protected override float GetValue(SpriteRenderer target)
+        {
+            propertyBlock = new MaterialPropertyBlock();
+            target.GetPropertyBlock(propertyBlock);
+            return propertyBlock.GetFloat(propertyName);
+        }
+
+        protected override void SetValue(SpriteRenderer target, in float value)
+        {
+            propertyBlock.SetFloat(propertyName, value);
+            target.SetPropertyBlock(propertyBlock);
+        }
+    }
+
+    [Serializable]
+    [LitMotionAnimationComponentMenu("Rendering/Skinned Mesh Renderer/Material Float Property")]
+    public sealed class SkinnedMeshRendererMaterialAnimation : FloatPropertyAnimationComponent<SkinnedMeshRenderer>
+    {
+        [SerializeField] string propertyName = "";
+        MaterialPropertyBlock propertyBlock;
+        int propertyId;
+
+        public override MotionHandle Play()
+        {
+            propertyBlock = new MaterialPropertyBlock();
+            propertyId = Shader.PropertyToID(propertyName);
+            return base.Play();
+        }
+
+        protected override float GetValue(SkinnedMeshRenderer target)
+        {
+            target.GetPropertyBlock(propertyBlock);
+            return propertyBlock.GetFloat(propertyId);
+        }
+
+        protected override void SetValue(SkinnedMeshRenderer target, in float value)
+        {
+            target.GetPropertyBlock(propertyBlock);
+            propertyBlock.SetFloat(propertyId, value);
+            target.SetPropertyBlock(propertyBlock);
+        }
+    }
+
 #if LITMOTION_ANIMATION_RENDER_PIPELINES
 
     [Serializable]
