@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -25,7 +24,7 @@ namespace _Game.Home
             
             flag01.gameObject.SetActive(true);
             
-            yield return new WaitForSeconds(d1);
+            yield return new WaitForSeconds(d1 * 0.5f);
 
             float d2 = flag02.PlayWithStatus(GetStatus(2, index));
             
@@ -33,15 +32,13 @@ namespace _Game.Home
             
             flag02.gameObject.SetActive(true);
             
-            yield return new WaitForSeconds(d2);
+            yield return new WaitForSeconds(d2 * 0.5f);
             
             float d3 = flag03.PlayWithStatus(GetStatus(3, index));    
         
             yield return null;
 
             flag03.gameObject.SetActive(true);
-            
-            yield return new WaitForSeconds(d3);
         }
 
         private static HomeFlagIcon.Status GetStatus(int i, int index)

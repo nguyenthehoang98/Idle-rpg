@@ -36,5 +36,15 @@ namespace _Game.Home
             
             return 0f;
         }
+
+        /*private void OnEnable()
+        {
+            Debug.LogError($"{name} enable [{Time.time:f2}]");
+        }
+
+        private void OnDisable()
+        {
+            Debug.LogError($"{name} disable [{Time.time:f2}]");
+        }*/
     }
 }
