@@ -21,6 +21,7 @@ namespace LitMotion.Animation
         public override void OnStop()
         {
             if (target == null) return;
+         
             SetValue(target, startValue);
         }
 

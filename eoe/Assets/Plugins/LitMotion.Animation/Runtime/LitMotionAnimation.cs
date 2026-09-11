@@ -12,7 +12,13 @@ namespace LitMotion.Animation
         {
             None,
             OnStart,
-            OnEnable
+            OnEnable,
+        }
+
+        enum AutoStopMode
+        {
+            None,
+            OnDisable,
         }
 
         enum AnimationMode
@@ -22,6 +28,7 @@ namespace LitMotion.Animation
         }
 
         [SerializeField] AutoPlayMode autoPlayMode = AutoPlayMode.OnStart;
+        [SerializeField] AutoStopMode autoStopMode = AutoStopMode.None;
         [SerializeField] AnimationMode animationMode;
 
         [SerializeReference]
@@ -197,7 +204,7 @@ namespace LitMotion.Animation
 
         public void Stop()
         {
-            var span = playingComponents.AsSpan();
+            Span<LitMotionAnimationComponent> span = playingComponents.AsSpan();
             span.Reverse();
             foreach (var component in span)
             {
@@ -251,7 +258,7 @@ namespace LitMotion.Animation
 
         void OnDisable()
         {
-            if (autoPlayMode == AutoPlayMode.OnEnable)
+            if(autoStopMode == AutoStopMode.OnDisable)
                 Stop();
         }
 

@@ -6,36 +6,22 @@ using Debug = UnityEngine.Debug;
 namespace LitMotion.Animation.Components
 {
     [Serializable]
-    [LitMotionAnimationComponentMenu("Control/Delay")]
-    public sealed class DelayComponent : LitMotionAnimationComponent
-    {
-        [SerializeField] float delay;
-
-        public override float Duration() => delay;
-
-        public override MotionHandle Play()
-        {
-            return LMotion.Create(0f, 1f, delay)
-                .RunWithoutBinding();
-        }
-
-        public override void OnStop() { }
-    }
-
-    [Serializable]
     [LitMotionAnimationComponentMenu("Control/Event")]
     public sealed class EventComponent : LitMotionAnimationComponent
     {
-        [Space(5f)]
-        [SerializeField] UnityEvent onPlay;
-        [SerializeField] UnityEvent onStop;
-
-        public override float Duration() => 0f;
-
+        [Header("Events")]
+        [SerializeField] private UnityEvent onStart;
+        [SerializeField] private UnityEvent onStop;
+        
+        public EventComponent() : base()
+        {
+            type = "Event";
+        }
+        
         public override MotionHandle Play()
         {
-            onPlay.Invoke();
-            return LMotion.Create(0f, 1f, 0f).RunWithoutBinding();
+            onStart.Invoke();
+            return MotionHandle.None;
         }
 
         public override void OnStop()
@@ -48,8 +34,10 @@ namespace LitMotion.Animation.Components
     [LitMotionAnimationComponentMenu("Control/Execute")]
     public sealed class ExecuteComponent : LitMotionAnimationComponent
     {
-        [SerializeField, Min(0)] float waitTime;
-        [SerializeField] UnityEvent onExecute;
+        [SerializeField, Min(0)] private float waitTime;
+
+        [Header("")]
+        [SerializeField] private UnityEvent onExecute;
 
         public ExecuteComponent()
         {

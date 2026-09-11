@@ -25,7 +25,7 @@ namespace _Game.Home
         private sealed class TabView
         {
             public ButtonHomeMenu button;
-            public BaseTab tab;
+            public GameObject tab;
         }
 
         [Header("Home UI References")]
@@ -159,7 +159,6 @@ namespace _Game.Home
                 if (active)
                 {
                     tabs[i].button.Focus();
-                    tabs[i].tab.Open();
                 }
                 else if (i == previousPageIndex)
                 {

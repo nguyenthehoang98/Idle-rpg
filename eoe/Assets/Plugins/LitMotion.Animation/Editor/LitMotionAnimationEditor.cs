@@ -96,7 +96,23 @@ namespace LitMotion.Animation.Editor
         {
             var box = CreateBox("Settings");
             box.Add(new PropertyField(serializedObject.FindProperty("autoPlayMode")));
+            box.Add(new PropertyField(serializedObject.FindProperty("autoStopMode")));
             box.Add(new PropertyField(serializedObject.FindProperty("animationMode")));
+
+            var totalDurationField = new FloatField("Total Duration (s)")
+            {
+                value = ((LitMotionAnimation)target).Duration()
+            };
+            totalDurationField.SetEnabled(false);
+            box.Add(totalDurationField);
+            box.schedule.Execute(() =>
+            {
+                if (target != null)
+                {
+                    totalDurationField.SetValueWithoutNotify(((LitMotionAnimation)target).Duration());
+                }
+            }).Every(10);
+
             return box;
         }
 
