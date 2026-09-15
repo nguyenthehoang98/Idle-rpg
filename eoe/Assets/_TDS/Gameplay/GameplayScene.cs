@@ -77,6 +77,7 @@ namespace _TDS.Gameplay
         private void Update()
         {
             hud?.RefreshCircuit(circuitRunner?.Circuit);
+            heroSlotManager?.RefreshHighlight(circuitRunner?.Circuit);
         }
 
         private CircuitBoard BuildBoard()

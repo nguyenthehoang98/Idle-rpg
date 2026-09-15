@@ -17,13 +17,63 @@ namespace _TDS.Gameplay
     {
         [SerializeField] private Transform[] slots;
 
+        private SpriteRenderer[] slotRenderers;
+        private static readonly Color NormalColor = Color.white;
+        private static readonly Color HighlightColor = ParseColor("FDE047");
+
         private void Awake()
         {
             if (slots == null || slots.Length == 0)
             {
                 Debug.LogError($"[{name}] No hero slots assigned", this);
             }
+            CacheRenderers();
+            SetAllNormal();
         }
+
+        private void CacheRenderers()
+        {
+            if (slots == null) return;
+            slotRenderers = new SpriteRenderer[slots.Length];
+            for (int i = 0; i < slots.Length; i++)
+                slotRenderers[i] = slots[i] != null ? slots[i].GetComponent<SpriteRenderer>() : null;
+        }
+
+        public void RefreshHighlight(EnergyCircuit circuit)
+        {
+            if (circuit == null || slotRenderers == null) return;
+            for (int i = 0; i < slotRenderers.Length; i++)
+            {
+                SpriteRenderer r = slotRenderers[i];
+                if (r == null) continue;
+                bool isHighlight = false;
+                if (i < circuit.SlotCount)
+                {
+                    CircuitSlotState s = circuit.GetSlot(i);
+                    isHighlight = s.IsActive || i == circuit.PulseIndex;
+                }
+                r.color = isHighlight ? HighlightColor : NormalColor;
+            }
+        }
+
+        public void HighlightSlot(int index)
+        {
+            if (slotRenderers == null) CacheRenderers();
+            for (int i = 0; i < slotRenderers.Length; i++)
+            {
+                SpriteRenderer r = slotRenderers[i];
+                if (r == null) continue;
+                r.color = i == index ? HighlightColor : NormalColor;
+            }
+        }
+
+        private void SetAllNormal()
+        {
+            if (slotRenderers == null) return;
+            foreach (SpriteRenderer r in slotRenderers) if (r != null) r.color = NormalColor;
+        }
+
+        private static Color ParseColor(string html) => ColorUtility.TryParseHtmlString($"#{html}", out Color c) ? c : Color.white;
 
         public async UniTask BuildHeroes(int[] heroIds)
         {
