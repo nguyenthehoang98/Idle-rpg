@@ -28,7 +28,6 @@ namespace LitMotion.Animation.Components
                 });
         }
 
-        public override void OnStop() { }
     }
 
     [Serializable]
@@ -112,6 +111,5 @@ namespace LitMotion.Animation.Components
                 });
         }
 
-        public override void OnStop() { }
     }
 }

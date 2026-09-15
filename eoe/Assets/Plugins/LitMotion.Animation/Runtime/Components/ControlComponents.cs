@@ -5,7 +5,7 @@ using Debug = UnityEngine.Debug;
 
 namespace LitMotion.Animation.Components
 {
-    [Serializable]
+    /*[Serializable]
     [LitMotionAnimationComponentMenu("Control/Event")]
     public sealed class EventComponent : LitMotionAnimationComponent
     {
@@ -28,7 +28,7 @@ namespace LitMotion.Animation.Components
         {
             onStop.Invoke();
         }
-    }
+    }*/
 
     [Serializable]
     [LitMotionAnimationComponentMenu("Control/Execute")]
@@ -126,11 +126,6 @@ namespace LitMotion.Animation.Components
         public override void OnPause()
         {
             target.Pause();
-        }
-
-        public override void OnStop()
-        {
-            target.Stop();
         }
     }
 }
