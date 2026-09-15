@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using _GameToolkit.GameConfig;
+using _GameToolkit.ResourceManagement;
 using _GameToolkit.Startup;
 using _GameToolkit.Updater;
 using _TDS.Battle;
@@ -12,9 +13,27 @@ using Debug = UnityEngine.Debug;
 
 namespace _TDS.Gameplay
 {
+    [Serializable]
+    public struct CircuitDesignerSlot
+    {
+        [Range(0, 7)] public int slotIndex;
+        public CircuitSlotContentType contentType;
+        [Tooltip("HeroId nếu là Hero, ItemId nếu là Item")] public int contentId;
+        public CircuitItemType itemType;
+        [Min(1)] public int itemPower;
+    }
+
     public class GameplayScene : MonoBehaviour
     {
         [SerializeField] private int[] heroIds = new int[4] { 101, 102, 0, 0 };
+        [Header("Circuit Designer (override heroIds nếu có phần tử)")]
+        [Tooltip("Designer kéo thả slot/index trực tiếp. Để trống = dùng heroIds + Generator mặc định")]
+        [SerializeField] private List<CircuitDesignerSlot> designerSlots = new List<CircuitDesignerSlot>();
+#if UNITY_EDITOR
+        [Header("Editor")]
+        [Tooltip("Load local assets and configs when entering this scene directly from the Editor.")]
+        [SerializeField] private bool loadDirectlyInEditor;
+#endif
         [SerializeField] private HeroSlotManager heroSlotManager;
         [SerializeField] private UpdateRunner runner;
         [SerializeField] private CircuitTickRunner circuitRunner;
@@ -41,7 +60,7 @@ namespace _TDS.Gameplay
         private void Awake()
         {
             level = RunSelection.SelectedLevel;
-            board = CircuitBoard.FromHeroesWithStarterGenerator(heroIds);
+            board = BuildBoard();
             hud = gameObject.GetComponent<GameplayHud>();
             if (hud == null)
             {
@@ -58,6 +77,41 @@ namespace _TDS.Gameplay
         private void Update()
         {
             hud?.RefreshCircuit(circuitRunner?.Circuit);
+        }
+
+        private CircuitBoard BuildBoard()
+        {
+            if (designerSlots != null && designerSlots.Count > 0)
+            {
+                CircuitBoard b = new CircuitBoard();
+                HashSet<int> used = new HashSet<int>();
+                foreach (CircuitDesignerSlot s in designerSlots)
+                {
+                    if (s.slotIndex < 0 || s.slotIndex >= b.SlotCount)
+                    {
+                        Debug.LogWarning($"[CircuitDesigner] slotIndex {s.slotIndex} ngoài 0..{b.SlotCount - 1}, bỏ qua");
+                        continue;
+                    }
+                    if (!used.Add(s.slotIndex))
+                    {
+                        Debug.LogWarning($"[CircuitDesigner] slotIndex {s.slotIndex} trùng, bỏ qua");
+                        continue;
+                    }
+                    if (s.contentType == CircuitSlotContentType.Empty) b.ClearSlot(s.slotIndex);
+                    else if (s.contentType == CircuitSlotContentType.Hero)
+                    {
+                        if (s.contentId <= 0) { Debug.LogWarning($"[CircuitDesigner] Hero slot {s.slotIndex} thiếu contentId"); continue; }
+                        b.SetContent(s.slotIndex, CircuitSlotContent.Hero(s.contentId));
+                    }
+                    else // Item
+                    {
+                        if (s.contentId <= 0 || s.itemType == CircuitItemType.None) { Debug.LogWarning($"[CircuitDesigner] Item slot {s.slotIndex} thiếu contentId/itemType"); continue; }
+                        b.SetItem(s.slotIndex, s.contentId, s.itemType, Mathf.Max(1, s.itemPower));
+                    }
+                }
+                return b;
+            }
+            return CircuitBoard.FromHeroesWithStarterGenerator(heroIds);
         }
 
         private void OnEnable()
@@ -86,6 +140,23 @@ namespace _TDS.Gameplay
         {
             Stopwatch sw = Stopwatch.StartNew();
 
+#if UNITY_EDITOR
+            if (loadDirectlyInEditor)
+            {
+                AssetLoader.SetAssetLocal();
+                GameProgress.Load();
+                await ConfigManager.Load(new[]
+                {
+                    nameof(MonsterConfig),
+                    nameof(SpawnConfig),
+                    nameof(SkillConfig),
+                    nameof(ExpConfig),
+                    nameof(HeroConfig),
+                    nameof(UpgradeConfig),
+                });
+            }
+#endif
+
             agentRunner.Initialize();
             circuitRunner.Initialize(board);
             hud.Initialize(board, level);
@@ -109,13 +180,22 @@ namespace _TDS.Gameplay
 
             await spawnRunner.LoadLevelAsync(agentRunner, level);
 
-            await heroSlotManager.BuildHeroes(heroIds);
+            int[] spawnIds = heroIds;
+            if (designerSlots != null && designerSlots.Count > 0)
+            {
+                List<int> ids = new List<int>();
+                for (int i = 0; i < board.SlotCount; i++)
+                    if (board.GetContent(i).Type == CircuitSlotContentType.Hero)
+                        ids.Add(board.GetContent(i).Id);
+                if (ids.Count > 0) spawnIds = ids.ToArray();
+            }
+            await heroSlotManager.BuildHeroes(spawnIds);
             
             sw.Stop();
             
             Debug.Log($"Gameplay init in {sw.ElapsedMilliseconds}ms");
             
-            BootScene.Instance.CloseLoadingScene();
+            BootScene.Instance?.CloseLoadingScene();
 
             runner.IsPaused = false;
         }
