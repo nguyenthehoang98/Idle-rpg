@@ -28,6 +28,7 @@ namespace _TDS.Gameplay
 
         private Font font;
         private RectTransform safeArea;
+        private GameObject bottomPanel;
         private Text waveText;
         private Text statusText;
         private Text goldText;
@@ -190,6 +191,11 @@ namespace _TDS.Gameplay
             modifierFeedbackRemaining = 1f;
         }
 
+        public void SetBottomVisible(bool visible)
+        {
+            if (bottomPanel != null) bottomPanel.SetActive(visible);
+        }
+
         public void ActivateSlot(int slotIndex)
         {
             if (slotIndex < 0 || slotIndex >= slotImages.Length)
@@ -243,6 +249,7 @@ namespace _TDS.Gameplay
             BuildSpeedControls(topBar.transform);
 
             Image circuitPanel = CreatePanel("CircuitPanel", root, PanelColor);
+            bottomPanel = circuitPanel.gameObject;
             SetRect(circuitPanel.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f),
                 new Vector2(24f, 36f), new Vector2(-24f, 390f));
 

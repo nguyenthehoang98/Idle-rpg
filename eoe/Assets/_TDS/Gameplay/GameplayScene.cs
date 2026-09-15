@@ -25,9 +25,8 @@ namespace _TDS.Gameplay
 
     public class GameplayScene : MonoBehaviour
     {
-        [SerializeField] private int[] heroIds = new int[4] { 101, 102, 0, 0 };
-        [Header("Circuit Designer (override heroIds nếu có phần tử)")]
-        [Tooltip("Designer kéo thả slot/index trực tiếp. Để trống = dùng heroIds + Generator mặc định")]
+        [Header("Circuit Designer")]
+        [Tooltip("Designer kéo thả slot/index trực tiếp")]
         [SerializeField] private List<CircuitDesignerSlot> designerSlots = new List<CircuitDesignerSlot>();
 #if UNITY_EDITOR
         [Header("Editor")]
@@ -82,41 +81,41 @@ namespace _TDS.Gameplay
 
         private CircuitBoard BuildBoard()
         {
-            if (designerSlots != null && designerSlots.Count > 0)
+            if (designerSlots == null || designerSlots.Count == 0)
             {
-                int maxIndex = 0;
-                foreach (var s in designerSlots) maxIndex = Math.Max(maxIndex, s.slotIndex);
-                int boardSize = Mathf.Clamp(maxIndex + 1, 1, EnergyCircuit.DefaultSlotCount);
-                // tạm 4 slot theo yêu cầu editor — nếu designer chỉ đặt 0..3 thì board = 4
-                CircuitBoard b = new CircuitBoard(boardSize);
-                HashSet<int> used = new HashSet<int>();
-                foreach (CircuitDesignerSlot s in designerSlots)
-                {
-                    if (s.slotIndex < 0 || s.slotIndex >= b.SlotCount)
-                    {
-                        Debug.LogWarning($"[CircuitDesigner] slotIndex {s.slotIndex} ngoài 0..{b.SlotCount - 1}, bỏ qua");
-                        continue;
-                    }
-                    if (!used.Add(s.slotIndex))
-                    {
-                        Debug.LogWarning($"[CircuitDesigner] slotIndex {s.slotIndex} trùng, bỏ qua");
-                        continue;
-                    }
-                    if (s.contentType == CircuitSlotContentType.Empty) b.ClearSlot(s.slotIndex);
-                    else if (s.contentType == CircuitSlotContentType.Hero)
-                    {
-                        if (s.contentId <= 0) { Debug.LogWarning($"[CircuitDesigner] Hero slot {s.slotIndex} thiếu contentId"); continue; }
-                        b.SetContent(s.slotIndex, CircuitSlotContent.Hero(s.contentId));
-                    }
-                    else // Item
-                    {
-                        if (s.contentId <= 0 || s.itemType == CircuitItemType.None) { Debug.LogWarning($"[CircuitDesigner] Item slot {s.slotIndex} thiếu contentId/itemType"); continue; }
-                        b.SetItem(s.slotIndex, s.contentId, s.itemType, Mathf.Max(1, s.itemPower));
-                    }
-                }
-                return b;
+                Debug.LogWarning("[CircuitDesigner] designerSlots trống - board rỗng");
+                return new CircuitBoard(4);
             }
-            return CircuitBoard.FromHeroesWithStarterGenerator(heroIds);
+            int maxIndex = 0;
+            foreach (var s in designerSlots) maxIndex = Math.Max(maxIndex, s.slotIndex);
+            int boardSize = Mathf.Clamp(maxIndex + 1, 1, EnergyCircuit.DefaultSlotCount);
+            CircuitBoard b = new CircuitBoard(boardSize);
+            HashSet<int> used = new HashSet<int>();
+            foreach (CircuitDesignerSlot s in designerSlots)
+            {
+                if (s.slotIndex < 0 || s.slotIndex >= b.SlotCount)
+                {
+                    Debug.LogWarning($"[CircuitDesigner] slotIndex {s.slotIndex} ngoài 0..{b.SlotCount - 1}, bỏ qua");
+                    continue;
+                }
+                if (!used.Add(s.slotIndex))
+                {
+                    Debug.LogWarning($"[CircuitDesigner] slotIndex {s.slotIndex} trùng, bỏ qua");
+                    continue;
+                }
+                if (s.contentType == CircuitSlotContentType.Empty) b.ClearSlot(s.slotIndex);
+                else if (s.contentType == CircuitSlotContentType.Hero)
+                {
+                    if (s.contentId <= 0) { Debug.LogWarning($"[CircuitDesigner] Hero slot {s.slotIndex} thiếu contentId"); continue; }
+                    b.SetContent(s.slotIndex, CircuitSlotContent.Hero(s.contentId));
+                }
+                else // Item
+                {
+                    if (s.contentId <= 0 || s.itemType == CircuitItemType.None) { Debug.LogWarning($"[CircuitDesigner] Item slot {s.slotIndex} thiếu contentId/itemType"); continue; }
+                    b.SetItem(s.slotIndex, s.contentId, s.itemType, Mathf.Max(1, s.itemPower));
+                }
+            }
+            return b;
         }
 
         private void OnEnable()
@@ -165,6 +164,7 @@ namespace _TDS.Gameplay
             agentRunner.Initialize();
             circuitRunner.Initialize(board);
             hud.Initialize(board, level);
+            hud.SetBottomVisible(false);
             hud.SetGold(rewards.Gold);
             hud.BindTimeScale(speed => runner.Loop = speed);
             hud.BindResultActions(ContinueAfterResult, ReturnHome);
@@ -185,16 +185,11 @@ namespace _TDS.Gameplay
 
             await spawnRunner.LoadLevelAsync(agentRunner, level);
 
-            int[] spawnIds = heroIds;
-            if (designerSlots != null && designerSlots.Count > 0)
-            {
-                List<int> ids = new List<int>();
-                for (int i = 0; i < board.SlotCount; i++)
-                    if (board.GetContent(i).Type == CircuitSlotContentType.Hero)
-                        ids.Add(board.GetContent(i).Id);
-                if (ids.Count > 0) spawnIds = ids.ToArray();
-            }
-            await heroSlotManager.BuildHeroes(spawnIds);
+            List<int> ids = new List<int>();
+            for (int i = 0; i < board.SlotCount; i++)
+                if (board.GetContent(i).Type == CircuitSlotContentType.Hero)
+                    ids.Add(board.GetContent(i).Id);
+            await heroSlotManager.BuildHeroes(ids.ToArray());
             
             sw.Stop();
             
@@ -391,7 +386,8 @@ namespace _TDS.Gameplay
             upgradePanel?.Hide();
             if (resultReported) return;
             resultReported = true;
-            GameProgress.SaveRun(level, heroIds, rewards, victory: true, expConfig: expConfig);
+            int[] saveIds = GetSaveIds();
+            GameProgress.SaveRun(level, saveIds, rewards, victory: true, expConfig: expConfig);
             hud.SetStatus($"VICTORY  +{rewards.Experience} EXP  +{rewards.Gold} GOLD");
             hud.ShowResult(true, rewards);
             Debug.Log($"[Gameplay] 🏆 WIN GAME! EXP={rewards.Experience}, GOLD={rewards.Gold}");
@@ -467,7 +463,8 @@ namespace _TDS.Gameplay
             {
                 upgradePanel?.Hide();
                 resultReported = true;
-                GameProgress.SaveRun(level, heroIds, rewards, victory: false, expConfig: expConfig);
+                int[] loseIds = GetSaveIds();
+                GameProgress.SaveRun(level, loseIds, rewards, victory: false, expConfig: expConfig);
                 hud.SetStatus($"DEFEAT  +{rewards.Experience} EXP  +{rewards.Gold} GOLD");
                 hud.ShowResult(false, rewards);
                 Debug.Log($"[Gameplay] 💀 THUA! EXP={rewards.Experience}, GOLD={rewards.Gold}");
@@ -481,6 +478,16 @@ namespace _TDS.Gameplay
 
         private void PauseChanged(bool paused)
         {
+        }
+
+        private int[] GetSaveIds()
+        {
+            List<int> ids = new List<int>();
+            if (board != null)
+                for (int i = 0; i < board.SlotCount; i++)
+                    if (board.GetContent(i).Type == CircuitSlotContentType.Hero)
+                        ids.Add(board.GetContent(i).Id);
+            return ids.ToArray();
         }
     }
 }

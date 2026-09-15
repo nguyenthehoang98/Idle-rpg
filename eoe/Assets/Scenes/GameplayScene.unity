@@ -1190,7 +1190,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb1d1eadee7263147970b18ee796a64b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_TDS.Gameplay.GameplayScene
-  heroIds: 65000000660000000000000000000000
   designerSlots:
   - slotIndex: 0
     contentType: 1
