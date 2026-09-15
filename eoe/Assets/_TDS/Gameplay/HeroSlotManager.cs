@@ -49,8 +49,7 @@ namespace _TDS.Gameplay
                 bool isHighlight = false;
                 if (i < circuit.SlotCount)
                 {
-                    CircuitSlotState s = circuit.GetSlot(i);
-                    isHighlight = s.IsActive || i == circuit.PulseIndex;
+                    isHighlight = i == circuit.PulseIndex;
                 }
                 r.color = isHighlight ? HighlightColor : NormalColor;
             }
