@@ -1223,7 +1223,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_TDS.Gameplay.GameplayScene
   heroIds: 65000000660000000000000000000000
-  designerSlots: []
+  designerSlots:
+  - slotIndex: 0
+    contentType: 1
+    contentId: 101
+    itemType: 0
+    itemPower: 1
+  - slotIndex: 1
+    contentType: 1
+    contentId: 102
+    itemType: 0
+    itemPower: 1
+  - slotIndex: 2
+    contentType: 0
+    contentId: 0
+    itemType: 0
+    itemPower: 1
+  - slotIndex: 3
+    contentType: 0
+    contentId: 0
+    itemType: 0
+    itemPower: 1
   loadDirectlyInEditor: 0
   heroSlotManager: {fileID: 1168235905}
   runner: {fileID: 1977149736}

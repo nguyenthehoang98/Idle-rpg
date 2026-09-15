@@ -9,11 +9,12 @@ namespace _TDS.Gameplay
     public sealed class GameplayHud : MonoBehaviour
     {
         private static readonly Color PanelColor = ParseColor("172238");
-        private static readonly Color SlotColor = ParseColor("243552");
-        private static readonly Color EmptyColor = ParseColor("334155");
+        private static readonly Color SlotColor = ParseColor("FFFFFF");
+        private static readonly Color EmptyColor = ParseColor("FFFFFF");
         private static readonly Color AccentColor = ParseColor("5EEAD4");
         private static readonly Color PulseColor = ParseColor("FDE047");
-        private static readonly Color OverdriveColor = ParseColor("FB7185");
+        private static readonly Color HighlightColor = ParseColor("FDE047");
+        private static readonly Color OverdriveColor = ParseColor("FDE047");
         private static readonly Color GoldColor = ParseColor("FDE047");
         private static readonly Color TextColor = ParseColor("F8FAFC");
         private static readonly Color MutedColor = ParseColor("A8B5C7");
@@ -112,8 +113,9 @@ namespace _TDS.Gameplay
                 };
                 slotIndexLabels[i].text = $"{i + 1:00}";
                 slotStackLabels[i].text = "0/3";
-                slotBaseColors[i] = content.Type == CircuitSlotContentType.Empty ? EmptyColor : SlotColor;
+                slotBaseColors[i] = ParseColor("FFFFFF");
                 slotImages[i].color = slotBaseColors[i];
+                slotImages[i].gameObject.SetActive(true);
             }
         }
 
@@ -136,8 +138,11 @@ namespace _TDS.Gameplay
         {
             if (circuit == null) return;
 
-            for (int i = 0; i < slotImages.Length && i < circuit.SlotCount; i++)
+            for (int i = 0; i < slotImages.Length; i++)
             {
+                bool visible = i < circuit.SlotCount;
+                slotImages[i].gameObject.SetActive(visible);
+                if (!visible) continue;
                 CircuitSlotState state = circuit.GetSlot(i);
                 slotStackLabels[i].text = state.IsActive
                     ? "OVERDRIVE"
@@ -145,9 +150,10 @@ namespace _TDS.Gameplay
                 slotStackLabels[i].color = state.IsActive ? TextColor : MutedColor;
 
                 if (slotFeedback[i] > 0f) continue;
-                slotImages[i].color = state.IsActive
-                    ? OverdriveColor
-                    : i == circuit.PulseIndex ? PulseColor : slotBaseColors[i];
+                // highlight = vàng, không = trắng
+                slotImages[i].color = (state.IsActive || i == circuit.PulseIndex)
+                    ? HighlightColor
+                    : ParseColor("FFFFFF");
             }
         }
 
@@ -191,7 +197,7 @@ namespace _TDS.Gameplay
                 return;
             }
 
-            slotImages[slotIndex].color = AccentColor;
+            slotImages[slotIndex].color = HighlightColor;
             slotFeedback[slotIndex] = 0.65f;
         }
 
@@ -268,10 +274,10 @@ namespace _TDS.Gameplay
                 GameObject slotObject = new GameObject($"Slot{i}", typeof(RectTransform));
                 slotObject.transform.SetParent(slotRowObject.transform, false);
                 Image image = slotObject.AddComponent<Image>();
-                image.color = EmptyColor;
+                image.color = ParseColor("FFFFFF");
                 AddOutline(image, new Color(0.37f, 0.91f, 0.83f, 0.22f), 2f);
                 slotImages[i] = image;
-                slotBaseColors[i] = EmptyColor;
+                slotBaseColors[i] = ParseColor("FFFFFF");
                 slotIndexLabels[i] = CreateText("Index", slotObject.transform, $"{i + 1:00}", 13, MutedColor,
                     new Vector2(0.08f, 0.72f), new Vector2(0.92f, 0.98f), TextAnchor.MiddleCenter);
                 slotLabels[i] = CreateText("Label", slotObject.transform, "EMPTY", 16, TextColor,

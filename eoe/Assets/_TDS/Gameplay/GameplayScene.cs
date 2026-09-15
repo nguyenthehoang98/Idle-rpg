@@ -83,7 +83,11 @@ namespace _TDS.Gameplay
         {
             if (designerSlots != null && designerSlots.Count > 0)
             {
-                CircuitBoard b = new CircuitBoard();
+                int maxIndex = 0;
+                foreach (var s in designerSlots) maxIndex = Math.Max(maxIndex, s.slotIndex);
+                int boardSize = Mathf.Clamp(maxIndex + 1, 1, EnergyCircuit.DefaultSlotCount);
+                // tạm 4 slot theo yêu cầu editor — nếu designer chỉ đặt 0..3 thì board = 4
+                CircuitBoard b = new CircuitBoard(boardSize);
                 HashSet<int> used = new HashSet<int>();
                 foreach (CircuitDesignerSlot s in designerSlots)
                 {
