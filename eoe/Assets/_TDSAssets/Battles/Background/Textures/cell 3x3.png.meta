@@ -1,61 +1,10 @@
 fileFormatVersion: 2
-guid: cc98c77de915dfe4fbad47fd5b32f43e
+guid: 8e20c93eb933415409460255b5928555
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8723535997400193016
-    second: T_Diamond_0
-  - first:
-      213: -6370599904624111977
-    second: T_Diamond_1
-  - first:
-      213: 3280291165745033837
-    second: T_Diamond_2
-  - first:
-      213: -2393376558704761772
-    second: T_Diamond_3
-  - first:
-      213: 1175959255078539629
-    second: T_Diamond_4
-  - first:
-      213: -5184463321019669828
-    second: T_Diamond_5
-  - first:
-      213: 5792355570410995548
-    second: T_Diamond_6
-  - first:
-      213: -3684963576051238115
-    second: T_Diamond_7
-  - first:
-      213: 8859022597597050013
-    second: T_Diamond_8
-  - first:
-      213: 8616335640186199863
-    second: T_Diamond_9
-  - first:
-      213: 598610935042713428
-    second: T_Diamond_10
-  - first:
-      213: 5606918849135582921
-    second: T_Diamond_11
-  - first:
-      213: -1737257724726859519
-    second: T_Diamond_12
-  - first:
-      213: 9119835374853566164
-    second: T_Diamond_13
-  - first:
-      213: 875328227082688078
-    second: T_Diamond_14
-  - first:
-      213: 4331023562506929433
-    second: T_Diamond_15
-  - first:
-      213: -3490953246503939883
-    second: T_Diamond_16
-  - first:
-      213: 4888699985549718040
-    second: T_Diamond_17
+      213: 3110993647397876900
+    second: cell 3x3 (1) 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -88,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -97,12 +46,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -128,7 +77,7 @@ TextureImporter:
     textureFormat: -1
     textureCompression: 2
     compressionQuality: 50
-    crunchedCompression: 0
+    crunchedCompression: 1
     allowsAlphaSplitting: 0
     overridden: 0
     ignorePlatformSupport: 0
@@ -147,30 +96,149 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: hero.101_0
+      name: cell 3x3 (1) 1_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 200
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a4b5a35d387c2b20800000000000000
+      internalID: 3110993647397876900
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cell 3x3 (1) 1_1
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 200
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1d3096113b17d34e963a10fa94cd262
+      internalID: -366339932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cell 3x3 (1) 1_2
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 200
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80583ed727580ce47915549108e918ed
+      internalID: -1541595135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cell 3x3 (1) 1_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f313157be7d9b0e4eb24de1f6fafff5b
+      internalID: -1557737955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cell 3x3 (1) 1_4
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32521022b5b3c3d4a958920855ca7b6d
+      internalID: 1461574443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cell 3x3 (1) 1_5
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86a8c6a4745c4764a8ed62b5e957667e
+      internalID: -1544166613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cell 3x3 (1) 1_6
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
-        height: 32
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -179,20 +247,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 60f9d2b9434d5354fb9567765d792aee
-      internalID: 1295217020
+      spriteID: 7f098f99b0176f44ca58f9b7ba961795
+      internalID: -1813039081
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: hero.101_1
+      name: cell 3x3 (1) 1_7
       rect:
         serializedVersion: 2
-        x: 32
+        x: 100
         y: 0
-        width: 32
-        height: 32
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -201,20 +269,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4fb4fd0a122016049a0aec112b655f0d
-      internalID: -1501528006
+      spriteID: eaa63f595c6c5bc47b801941e4a89382
+      internalID: 1128567182
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: hero.101_2
+      name: cell 3x3 (1) 1_8
       rect:
         serializedVersion: 2
-        x: 64
+        x: 200
         y: 0
-        width: 32
-        height: 32
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -223,74 +291,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e021acded37dbc94aade97a7132248ad
-      internalID: -206905008
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: hero.101_3
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 11426e41f0cb0134abaf66823e12ae00
-      internalID: -915032141
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: hero.101_4
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 81bedc6dc9dd78249bbebe77355c9639
-      internalID: 87204570
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: hero.101_5
-      rect:
-        serializedVersion: 2
-        x: 160
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 924939113805a5243a7d8c8be2940965
-      internalID: -1746742729
+      spriteID: d10d75594a0a3cb4e8594df5ac1c650b
+      internalID: -337497855
       vertices: []
       indices: 
       edges: []
@@ -299,7 +301,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 4b0b789c8f5e38746a93681aa11b3eb2
+    spriteID: 087a90be6e897a847b6099f04b6c598f
     internalID: 0
     vertices: []
     indices: 
@@ -309,14 +311,17 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":6.0,"y":1.0},"gridSpriteSize":{"x":32.0,"y":32.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":3.0,"y":3.0},"gridSpriteSize":{"x":100.0,"y":100.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      hero.101_0: 1295217020
-      hero.101_1: -1501528006
-      hero.101_2: -206905008
-      hero.101_3: -915032141
-      hero.101_4: 87204570
-      hero.101_5: -1746742729
+      cell 3x3 (1) 1_0: 3110993647397876900
+      cell 3x3 (1) 1_1: -366339932
+      cell 3x3 (1) 1_2: -1541595135
+      cell 3x3 (1) 1_3: -1557737955
+      cell 3x3 (1) 1_4: 1461574443
+      cell 3x3 (1) 1_5: -1544166613
+      cell 3x3 (1) 1_6: -1813039081
+      cell 3x3 (1) 1_7: 1128567182
+      cell 3x3 (1) 1_8: -337497855
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
