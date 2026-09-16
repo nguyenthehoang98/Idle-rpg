@@ -99,7 +99,12 @@ namespace _TDS.Gameplay
                     continue;
                 }
 
-                Hero hero = Instantiate(prefab, slots[i]).GetComponent<Hero>();
+                var go = Instantiate(prefab, slots[i]);
+                if (!go.TryGetComponent<Hero>(out var hero))
+                {
+                    Debug.LogError($"[{name}] Prefab '{heroData.prefabName}' thiếu component Hero trên root");
+                    Destroy(go); continue;
+                }
                 hero.transform.localPosition = Vector3.zero;
 
                 // skill cấu hình theo attackId

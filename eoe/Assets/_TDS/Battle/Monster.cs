@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using _GameToolkit.Colliders;
 using _GameToolkit.Skills;
 using _GameToolkit.ResourceManagement;
 using _GameToolkit.Share;
@@ -14,7 +13,8 @@ namespace _TDS.Battle
     [RequireComponent(typeof(MonsterSortingLayer))]
     public class Monster : Unique
     {
-        [SerializeField] private Transform scale;
+        [SerializeField] private Transform scaleTransform;
+        [Header("Events")]
         [SerializeField] private UnityEvent OnBeHit;
         [SerializeField] private UnityEvent OnDeath;
         [SerializeField] private GameObject deathVfx;
@@ -313,7 +313,9 @@ namespace _TDS.Battle
         public void Initialize(SpawnScaleDefinition scaleDefinition)
         {
             rewardGranted = false;
-            scale.localScale = scaleDefinition.sizeMultiplier * Vector3.one;
+          
+            scaleTransform.localScale = scaleDefinition.sizeMultiplier * Vector3.one;
+          
             RefreshModifierVisual();
 
             OnMonsterEnable?.Invoke(this);

@@ -2,7 +2,7 @@
   "monsters": [
     {
       "id": 1001,
-      "prefabName": "monster.1001",
+      "prefabName": "Slime 01",
       "rank": 0,
       "health": 10,
       "attack": 2,
@@ -26,7 +26,7 @@
           "resistance": 0.0
         }
       ],
-      "moveSpeed": 0.7,
+      "moveSpeed": 0.3,
       "stopDistance": 0.5,
       "damageCooldown": 1.0,
       "attackRange": 2.0,
@@ -35,7 +35,7 @@
     },
     {
       "id": 1002,
-      "prefabName": "monster.1002",
+      "prefabName": "Slime 01",
       "rank": 1,
       "health": 14,
       "attack": 3,
@@ -65,7 +65,7 @@
           "resistance": 0.25
         }
       ],
-      "moveSpeed": 0.9,
+      "moveSpeed": 0.3,
       "stopDistance": 0.5,
       "damageCooldown": 1.0,
       "attackRange": 2.0,
@@ -74,7 +74,7 @@
     },
     {
       "id": 1003,
-      "prefabName": "monster.1003",
+      "prefabName": "Slime 01",
       "rank": 2,
       "health": 28,
       "attack": 4,
@@ -114,7 +114,7 @@
           "resistance": 0.5
         }
       ],
-      "moveSpeed": 0.5,
+      "moveSpeed": 0.3,
       "stopDistance": 0.7,
       "damageCooldown": 1.0,
       "attackRange": 2.0,

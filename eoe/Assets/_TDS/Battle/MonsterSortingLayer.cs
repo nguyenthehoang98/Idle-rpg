@@ -5,14 +5,16 @@ namespace _TDS.Battle
 {
     public class MonsterSortingLayer : MonoBehaviour
     {
-        [SerializeField] private Transform rendererTransform;
+        [SerializeField] private Transform scaleTransform;
+        
+        [Header("Renderers")]
         [SerializeField] private SpriteRenderer[] renderers;
 
         private Vector3 localScale;
 
         private void Awake()
         {
-            localScale = rendererTransform.localScale;
+            localScale = scaleTransform.localScale;
         }
 
         private void OnEnable()
@@ -33,7 +35,7 @@ namespace _TDS.Battle
 
                 int flip = transform.position.x < 0 ? 1 : -1;
                 
-                rendererTransform.localScale = new Vector3(Mathf.Abs(localScale.x) * flip, localScale.y, localScale.z);
+                scaleTransform.localScale = new Vector3(Mathf.Abs(localScale.x) * flip, localScale.y, localScale.z);
                 
                 yield return new WaitForSeconds(1f);
             }
