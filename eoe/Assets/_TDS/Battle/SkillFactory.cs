@@ -24,6 +24,8 @@ namespace _TDS.Battle
     /// - spreadProjectileCount + projectileAngleStep: count viên phụ xoay 2 bên quanh viên chính,
     ///   viên phụ thứ i lệch (i+1)/2*(angleStep/2)*±1; thường chỉ 1 trong 2 loại > 0
     /// - spread/parallelDamageScale: hệ số damage viên phụ (viên chính luôn = 1)
+    /// - projectileSpawnOffset: offset theo hướng bắn (x tiến, y ngang, z depth)
+    /// - prefab có SplineProjectile: arcHeightMin/max là độ cao control point, speed tính thời gian bay
     /// </summary>
     public static class SkillFactory
     {
@@ -115,10 +117,11 @@ namespace _TDS.Battle
                 return;
             }
 
-            // hướng gốc: từ hero tới target (hoặc hướng mặt nếu không có target)
+            // hướng gốc: từ caster tới target (hoặc hướng mặt nếu không có target)
             Vector3 baseDir = target != null
-                ? (target.transform.position - from).normalized
+                ? GetDirection(from, target.transform.position)
                 : Vector3.right;
+            Vector3 spawn = GetSpawnPosition(from, baseDir, skillConfig.projectileSpawnOffset);
 
             // ===== xây danh sách viên đạn =====
             // Ngữ nghĩa count = SỐ VIÊN PHỤ (mỗi viên +1 đối xứng quanh viên chính). Viên chính luôn bắn scale 1.
@@ -126,13 +129,13 @@ namespace _TDS.Battle
             int parallelCount = Mathf.Max(0, skillConfig.parallelProjectileCount);
             int spreadCount = Mathf.Max(0, skillConfig.spreadProjectileCount);
 
-            // viên chính scale 1, thẳng baseDir, spawn tại `from`
-            SpawnProjectile(skillConfig, prefab, target, from, baseDir, 1f,
+            // viên chính scale 1, thẳng baseDir, spawn tại offset của caster
+            SpawnProjectile(skillConfig, prefab, target, spawn, baseDir, 1f,
                 totalDuration, hitCount, onDamage);
 
             // debug: 1 ray / viên, đúng vị trí spawn + hướng, dài = quãng đường bay được
             float flyDist = skillConfig.projectileSpeed * totalDuration;
-            if (DebugRays) Debug.DrawRay(from, baseDir * flyDist, Color.green, DebugRayDuration);
+            if (DebugRays) Debug.DrawRay(spawn, baseDir * flyDist, Color.green, DebugRayDuration);
 
             // viên phụ: (offset tương đối so với `from`, hướng, damageScale)
             var shots = new List<(Vector3 offset, Vector3 dir, float scale)>();
@@ -150,7 +153,7 @@ namespace _TDS.Battle
                     float side = (i % 2 == 1) ? 1f : -1f;
                     int level = (i + 1) / 2;
                     float off = side * level * space;
-                    if (DebugRays) Debug.DrawRay(from + perp * off, baseDir * flyDist, Color.cyan, DebugRayDuration);
+                    if (DebugRays) Debug.DrawRay(spawn + perp * off, baseDir * flyDist, Color.cyan, DebugRayDuration);
                     shots.Add((perp * off, baseDir, scale));
                 }
             }
@@ -168,16 +171,28 @@ namespace _TDS.Battle
                     int level = (i + 1) / 2;
                     float angle = side * level * halfStep;
                     Vector3 dir = Quaternion.Euler(0, 0, angle) * baseDir;
-                    if (DebugRays) Debug.DrawRay(from, dir * flyDist, Color.magenta, DebugRayDuration);
+                    if (DebugRays) Debug.DrawRay(spawn, dir * flyDist, Color.magenta, DebugRayDuration);
                     shots.Add((Vector3.zero, dir, scale));
                 }
             }
 
             foreach (var shot in shots)
             {
-                SpawnProjectile(skillConfig, prefab, target, from + shot.offset, shot.dir, shot.scale,
+                SpawnProjectile(skillConfig, prefab, target, spawn + shot.offset, shot.dir, shot.scale,
                     totalDuration, hitCount, onDamage);
             }
+        }
+
+        private static Vector3 GetDirection(Vector3 from, Vector3 to)
+        {
+            Vector3 direction = to - from;
+            return direction.sqrMagnitude > 1e-6f ? direction.normalized : Vector3.right;
+        }
+
+        private static Vector3 GetSpawnPosition(Vector3 from, Vector3 direction, Vector3 offset)
+        {
+            Vector3 perpendicular = new Vector3(-direction.y, direction.x, 0f);
+            return from + direction * offset.x + perpendicular * offset.y + Vector3.forward * offset.z;
         }
 
         private static void SpawnProjectile(SkillConfigData skillConfig, GameObject prefab, Unique target,
@@ -201,11 +216,24 @@ namespace _TDS.Battle
                 // sinh thẳng tại chỗ (đích = vị trí spawn), không bay
                 projectile.SetupAt(origin, dir, totalDuration);
             }
+            else if (projectile is SplineProjectile spline)
+            {
+                Vector3 end = target != null
+                    ? target.transform.position
+                    : origin + dir * (skillConfig.projectileSpeed * totalDuration);
+                spline.SetupSpline(
+                    origin,
+                    end,
+                    skillConfig.projectileSpeed,
+                    skillConfig.arcHeightMin,
+                    skillConfig.arcHeightMax);
+            }
             else
             {
                 projectile.Setup(origin, dir, skillConfig.projectileSpeed, totalDuration);
             }
 
+            float actualDuration = projectile.TotalDuration;
             CollisionDetector[] detectors = go.GetComponentsInChildren<CollisionDetector>();
             if (detectors.Length == 0)
             {
@@ -224,7 +252,7 @@ namespace _TDS.Battle
                 : skillConfig.damageTickInterval;
 
             ProjectileSkillAction action = new ProjectileSkillAction(
-                totalDuration, detectors,
+                actualDuration, detectors,
                 dotInterval, skillConfig.hitInterval, hitCount,
                 collisionDelayInit, collisionDuration
             );

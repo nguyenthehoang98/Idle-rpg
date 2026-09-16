@@ -258,6 +258,34 @@
       "explosiveDamageScale": 0.8,
       "instantKillTargetBelowHealthPercent": 0.0,
       "modifiers": []
+    },
+    {
+      "skillId": 2011,
+      "prefabName": "skill.parabolic_bolt",
+      "damageTickInterval": 0.0,
+      "findTarget": 1,
+      "projectileSpeed": 14.0,
+      "projectileDuration": 0.5,
+      "projectileSpawnOffset": { "x": 0.35, "y": 0.0, "z": 0.0 },
+      "arcHeightMin": 0.75,
+      "arcHeightMax": 1.5,
+      "spawnAtTarget": false,
+      "sizeMultiplier": 1.0,
+      "collisionDelayInit": 0.0,
+      "collisionDuration": 0.0,
+      "hitCount": 1,
+      "hitInterval": 0.0,
+      "projectileDistanceStep": 0.0,
+      "projectileAngleStep": 0.0,
+      "spreadProjectileCount": 0,
+      "spreadDamageScale": 1.0,
+      "parallelProjectileCount": 0,
+      "parallelDamageScale": 1.0,
+      "explosivePrefabName": null,
+      "explosiveRadius": 0.0,
+      "explosiveDamageScale": 0.0,
+      "instantKillTargetBelowHealthPercent": 0.0,
+      "modifiers": []
     }
   ]
 }

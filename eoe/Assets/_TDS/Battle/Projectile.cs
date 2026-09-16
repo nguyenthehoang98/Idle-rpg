@@ -29,6 +29,9 @@ namespace _TDS.Battle
         protected bool destroyed;
         private bool registered;
 
+        /// <summary>Thời gian sống thực tế của projectile sau khi Setup.</summary>
+        public float TotalDuration => totalDuration;
+
         /// <summary>Đạn hết duration (hoặc bị DestroySelf) -> skill có thể dọn action nếu cần.</summary>
         public event Action OnFinished;
 

@@ -31,6 +31,11 @@ namespace _TDS.GameConfig
         public TargetSelectionType findTarget;
         public float projectileSpeed;
         public float projectileDuration;
+        /// <summary>Offset local theo hướng bắn: x = tiến, y = ngang, z = depth.</summary>
+        public UnityEngine.Vector3 projectileSpawnOffset;
+        /// <summary>Độ cao control point của spline, random trong khoảng [min, max].</summary>
+        public float arcHeightMin;
+        public float arcHeightMax;
         /// <summary>true: spawn thẳng tại target (PlaceProjectile), không bay. false: bắn từ hero.</summary>
         public bool spawnAtTarget;
         public float sizeMultiplier;
