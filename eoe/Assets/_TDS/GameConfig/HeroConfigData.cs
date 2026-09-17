@@ -20,6 +20,5 @@ namespace _TDS.GameConfig
         
         public int attackId;
         public int skillId;
-        public int ultimateId;
     }
 }
