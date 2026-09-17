@@ -48,7 +48,7 @@ namespace _TDS.Battle
         }
 
         public static UniTask CastSkillAsync(SkillConfigData skillConfig, Vector3 from, Monster target,
-            Action<Monster, float> onDamage)
+            Action<Monster, float> onDamage, Action<Vector3> onHit = null)
         {
             return CastSkillAsync(skillConfig, from, (Unique)target, (unique, damage) =>
             {
@@ -56,11 +56,11 @@ namespace _TDS.Battle
                 {
                     onDamage?.Invoke(monster, damage);
                 }
-            });
+            }, onHit);
         }
 
         public static UniTask CastSkillAsync(SkillConfigData skillConfig, Vector3 from, Hero target,
-            Action<Hero, float> onDamage)
+            Action<Hero, float> onDamage, Action<Vector3> onHit = null)
         {
             return CastSkillAsync(skillConfig, from, (Unique)target, (unique, damage) =>
             {
@@ -68,11 +68,11 @@ namespace _TDS.Battle
                 {
                     onDamage?.Invoke(hero, damage);
                 }
-            });
+            }, onHit);
         }
 
         private static async UniTask CastSkillAsync(SkillConfigData skillConfig, Vector3 from, Unique target,
-            Action<Unique, float> onDamage)
+            Action<Unique, float> onDamage, Action<Vector3> onHit)
         {
             if (unit == null)
             {
@@ -113,7 +113,7 @@ namespace _TDS.Battle
                 }
 
                 SpawnProjectile(skillConfig, prefab, target, target.transform.position, target.transform.position,
-                    1f, totalDuration, hitCount, onDamage, spawnAtTarget: true);
+                    1f, totalDuration, hitCount, onDamage, onHit, spawnAtTarget: true);
                 return;
             }
 
@@ -131,7 +131,7 @@ namespace _TDS.Battle
 
             // viên chính scale 1, thẳng baseDir, spawn tại offset của caster
             SpawnProjectile(skillConfig, prefab, target, spawn, baseDir, 1f,
-                totalDuration, hitCount, onDamage);
+                totalDuration, hitCount, onDamage, onHit);
 
             // debug: 1 ray / viên, đúng vị trí spawn + hướng, dài = quãng đường bay được
             float flyDist = skillConfig.projectileSpeed * totalDuration;
@@ -179,7 +179,7 @@ namespace _TDS.Battle
             foreach (var shot in shots)
             {
                 SpawnProjectile(skillConfig, prefab, target, spawn + shot.offset, shot.dir, shot.scale,
-                    totalDuration, hitCount, onDamage);
+                    totalDuration, hitCount, onDamage, onHit);
             }
         }
 
@@ -198,7 +198,7 @@ namespace _TDS.Battle
         private static void SpawnProjectile(SkillConfigData skillConfig, GameObject prefab, Unique target,
             Vector3 origin, Vector3 dir, float damageScale,
             float totalDuration, int hitCount,
-            Action<Unique, float> onDamage, bool spawnAtTarget = false)
+            Action<Unique, float> onDamage, Action<Vector3> onHit, bool spawnAtTarget = false)
         {
             GameObject go = Pool.Instantiate(prefab, origin, true);
             go.transform.rotation = Quaternion.identity;
@@ -272,7 +272,7 @@ namespace _TDS.Battle
 
                 if (!isDot)
                 {
-                    projectile.SpawnHitFx(info.Unique.transform.position);
+                    onHit?.Invoke(info.Unique.transform.position);
                 }
 
                 onDamage?.Invoke(info.Unique, dmg);

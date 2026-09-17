@@ -1419,7 +1419,7 @@ MonoBehaviour:
     contentId: 0
     itemType: 0
     itemPower: 1
-  loadDirectlyInEditor: 1
+  loadDirectlyInEditor: 0
   heroSlotManager: {fileID: 1168235905}
   runner: {fileID: 1977149736}
   circuitRunner: {fileID: 2100000002}

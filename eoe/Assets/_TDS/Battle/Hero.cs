@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _GameToolkit.ResourceManagement;
 using _GameToolkit.Skills;
 using _GameToolkit.Share;
 using _GameToolkit.Statistics;
@@ -22,6 +23,9 @@ namespace _TDS.Battle
         [SerializeField] private Transform muzzle;
         [Tooltip("Pivot hình ảnh để flip mặt theo phía của mục tiêu.")]
         [SerializeField] private Transform rootPivot;
+        [Header("Attack Hit Feedback")]
+        [SerializeField] private GameObject hitFxPrefab;
+        [SerializeField] private AudioClip hitAudio;
         [Tooltip("Được gọi một lần mỗi đòn đánh, sau khi hero đã tìm thấy mục tiêu.")]
         [SerializeField] private UnityEvent onAttack = new UnityEvent();
 
@@ -336,6 +340,20 @@ namespace _TDS.Battle
             CastSkillAtTarget(target);
         }
 
+        private void PlayHitFeedback(Vector3 position)
+        {
+            if (hitFxPrefab != null)
+            {
+                GameObject fx = Pool.Instantiate(hitFxPrefab, position, true);
+                fx.transform.rotation = Quaternion.identity;
+            }
+
+            if (hitAudio != null)
+            {
+                SoundUtils.Instance?.PlayOneShot(hitAudio, interval: 0f);
+            }
+        }
+
         private void CastSkillAtTarget(Monster target)
         {
             float attack = GetStat(StatId.Attack).Value;
@@ -354,7 +372,7 @@ namespace _TDS.Battle
 
                 TotalDamageDealt += dealt;
                 Heal(CombatDamage.CalculateLifeSteal(dealt, lifesteal));
-            }).Forget();
+            }, PlayHitFeedback).Forget();
         }
 
         public bool TryStartOverdrive(float duration)

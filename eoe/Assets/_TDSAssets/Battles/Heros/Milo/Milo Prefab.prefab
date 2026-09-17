@@ -656,6 +656,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_TDS.Battle.Hero
   muzzle: {fileID: 5898739209790194075}
   rootPivot: {fileID: 5850675720121188770}
+  hitFxPrefab: {fileID: 6713035276591043691, guid: accef3d4e33613f458a09538984b5625, type: 3}
+  hitAudio: {fileID: 8300000, guid: f0b02e1b64e1f1049bc8fd3dd512f016, type: 3}
   onAttack:
     m_PersistentCalls:
       m_Calls:

@@ -99,7 +99,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0cd6d8539814141b5b261ce4c501623, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_TDS.Battle.SplineProjectile
-  hitFxPrefab: {fileID: 6713035276591043691, guid: accef3d4e33613f458a09538984b5625, type: 3}
   defaultArcHeight: {x: 2, y: 2.5}
   lengthSamples: 10
   gizmoTestStart: {x: 0, y: 0, z: 0}
