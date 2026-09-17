@@ -99,9 +99,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0cd6d8539814141b5b261ce4c501623, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_TDS.Battle.SplineProjectile
-  defaultArcHeightMin: 0.75
-  defaultArcHeightMax: 1.5
-  lengthSamples: 20
+  defaultArcHeight: {x: 2, y: 2.5}
+  lengthSamples: 10
+  gizmoTestStart: {x: 0, y: 0, z: 0}
+  gizmoTestEnd: {x: 3, y: 2, z: 0}
 --- !u!1 &7205557598562475082
 GameObject:
   m_ObjectHideFlags: 0

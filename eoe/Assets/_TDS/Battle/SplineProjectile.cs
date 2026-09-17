@@ -1,4 +1,7 @@
+using System;
+using Unity.Cinemachine;
 using UnityEngine;
+using Random = Unity.Mathematics.Random;
 
 namespace _TDS.Battle
 {
@@ -9,14 +12,12 @@ namespace _TDS.Battle
     public sealed class SplineProjectile : Projectile
     {
         [Header("Spline")]
-        [SerializeField, Min(0f)] private float defaultArcHeightMin = 0.75f;
-        [SerializeField, Min(0f)] private float defaultArcHeightMax = 1.5f;
+        [SerializeField, MinMaxRangeSlider(0f, 10f)] private Vector2 defaultArcHeight = new Vector2(0.75f, 1.5f);
         [SerializeField, Range(4, 64)] private int lengthSamples = 20;
 
         [Header("Gizmo Preview")]
         [SerializeField] private Vector3 gizmoTestStart = new Vector3(-2f, 0f, 0f);
         [SerializeField] private Vector3 gizmoTestEnd = new Vector3(3f, 0f, 0f);
-        [SerializeField, Min(0f)] private float gizmoTestArcHeight = 1.25f;
 
         private const float CollisionGraceDuration = 1f / 30f;
 
@@ -40,7 +41,7 @@ namespace _TDS.Battle
 
         public float SetupSpline(Vector3 from, Vector3 to, float projectileSpeed)
         {
-            return SetupSpline(from, to, projectileSpeed, defaultArcHeightMin, defaultArcHeightMax);
+            return SetupSpline(from, to, projectileSpeed, defaultArcHeight.x, defaultArcHeight.y);
         }
 
         public float SetupSpline(
@@ -55,16 +56,16 @@ namespace _TDS.Battle
 
             float minHeight = Mathf.Max(0f, arcHeightMin);
             float maxHeight = Mathf.Max(minHeight, arcHeightMax);
-            float arcHeight = Random.Range(minHeight, maxHeight);
+            float arcHeight = UnityEngine.Random.Range(minHeight, maxHeight);
             control = ControlPoint(start, end, arcHeight);
             splineInitialized = true;
 
             float pathLength = ApproximateLength(start, control, end, lengthSamples);
-            float speed = Mathf.Max(0.01f, projectileSpeed);
-            travelDuration = Mathf.Max(0.01f, pathLength / speed);
+            float f = Mathf.Max(0.01f, projectileSpeed);
+            travelDuration = Mathf.Max(0.01f, pathLength / f);
 
             // Giữ đạn ở đích thêm 1 tick để collision runner kịp quét overlap.
-            base.Setup(from, to - from, speed, travelDuration + CollisionGraceDuration);
+            base.Setup(from, to - from, f, travelDuration + CollisionGraceDuration);
             return TotalDuration;
         }
 
@@ -88,32 +89,52 @@ namespace _TDS.Battle
         {
             Vector3 gizmoStart = splineInitialized ? start : transform.TransformPoint(gizmoTestStart);
             Vector3 gizmoEnd = splineInitialized ? end : transform.TransformPoint(gizmoTestEnd);
-            Vector3 gizmoControl = splineInitialized
-                ? control
-                : ControlPoint(gizmoStart, gizmoEnd, gizmoTestArcHeight);
             int samples = Mathf.Max(4, lengthSamples);
 
             // Đường thẳng tham chiếu để thấy rõ start -> end.
             Gizmos.color = Color.gray;
             Gizmos.DrawLine(gizmoStart, gizmoEnd);
-
-            // Hai tiếp tuyến tới control point và đường cong Bézier.
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawLine(gizmoStart, gizmoControl);
-            Gizmos.DrawLine(gizmoControl, gizmoEnd);
-
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(gizmoStart, 0.12f);
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(gizmoEnd, 0.12f);
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawSphere(gizmoControl, 0.12f);
 
-            Gizmos.color = Color.yellow;
-            Vector3 previous = gizmoStart;
+            if (splineInitialized)
+            {
+                DrawGizmoCurve(gizmoStart, control, gizmoEnd, samples, Color.yellow);
+                DrawGizmoControl(gizmoStart, control, gizmoEnd);
+                return;
+            }
+
+            // Preview cả hai biên của khoảng random Min/Max.
+            Vector3 minControl = ControlPoint(gizmoStart, gizmoEnd, defaultArcHeight.x);
+            Vector3 maxControl = ControlPoint(gizmoStart, gizmoEnd, defaultArcHeight.y);
+            DrawGizmoCurve(gizmoStart, minControl, gizmoEnd, samples, Color.cyan);
+            DrawGizmoCurve(gizmoStart, maxControl, gizmoEnd, samples, Color.yellow);
+            DrawGizmoControl(gizmoStart, minControl, gizmoEnd);
+            DrawGizmoControl(gizmoStart, maxControl, gizmoEnd);
+        }
+
+        private static void DrawGizmoControl(Vector3 from, Vector3 controlPoint, Vector3 to)
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawLine(from, controlPoint);
+            Gizmos.DrawLine(controlPoint, to);
+            Gizmos.DrawSphere(controlPoint, 0.12f);
+        }
+
+        private static void DrawGizmoCurve(
+            Vector3 from,
+            Vector3 controlPoint,
+            Vector3 to,
+            int samples,
+            Color color)
+        {
+            Gizmos.color = color;
+            Vector3 previous = from;
             for (int i = 1; i <= samples; i++)
             {
-                Vector3 current = Evaluate(gizmoStart, gizmoControl, gizmoEnd, i / (float)samples);
+                Vector3 current = Evaluate(from, controlPoint, to, i / (float)samples);
                 Gizmos.DrawLine(previous, current);
                 previous = current;
             }
