@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1072777720424983146}
   - component: {fileID: 8898933039671244003}
   m_Layer: 0
-  m_Name: skill.hero.milo
+  m_Name: Milo Projectile Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

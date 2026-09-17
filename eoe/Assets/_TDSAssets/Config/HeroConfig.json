@@ -2,7 +2,7 @@
   "heros": [
     {
       "id": 1001,
-      "prefabName": "Milo",
+      "prefabName": "Milo Prefab",
       "health": 20,
       "attack": 5,
       "attackRange": 6.0,

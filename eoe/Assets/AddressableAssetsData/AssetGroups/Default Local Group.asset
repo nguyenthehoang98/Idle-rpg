@@ -20,98 +20,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 10ad1e5c3a0e40e19dee0e173177cfc1
-    m_Address: skill.chain_lightning
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 16060bc016f979d45892b8b8dfae864a
-    m_Address: T_Powerup.Skill.1002.3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1662e170fdf742b1b154e574ee0667b6
-    m_Address: skill.rifle
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 173592d2efd4ada4b95c99bd1cd5da43
-    m_Address: hammer.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 176c58b5182246a47a79c3df2d6e60d3
-    m_Address: Milo
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1bf29c8a77572a540a5b2c1f57dab99d
-    m_Address: entergy_full.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2470093582212de4faaaae7812f327f4
-    m_Address: Katana.Equipment
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 26b3759bdbb1e9640aae244fc0fa5cfe
-    m_Address: FlameThrower.Equipment
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2718e4b9e23de464fae92bc91e2c3232
-    m_Address: FlameThrower.Projectile
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2915d59e1c9ef6447b8b27b0defe1c7b
-    m_Address: T_Powerup.Skill.1002.2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2a08992f67d80714784d77c50b25709c
-    m_Address: Rapier.Equipment
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2bacccd9ef9a3284495cb63d35d408c7
-    m_Address: T_Powerup.Skill.1002.1
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 344d5a408eadd114896497935cbfb1f9
-    m_Address: Blaster.Equipment
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 348f3f75697aebe4c8b8108c2e1f3262
-    m_Address: T_Powerup.Skill.1001.4
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 3900d2897eb8ca14ba96c8ba92fdd4e0
-    m_Address: TextDamageCritical
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4b00cb7a40147f34f8c41c24b19f96d7
-    m_Address: T_Powerup.Skill.1001.5
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4ba1bce767624017ad962146e9dd240d
-    m_Address: skill.heal
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5618a52475de26c4da527a62ef7a7417
-    m_Address: Laze.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 567ac04a2fbf48f4cb76b90f8ad60558
-    m_Address: T_Powerup.Skill.1001.6
+    m_Address: Milo Prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -120,108 +30,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5bcf72add4354fe193fecbe5845deb66
-    m_Address: skill.shotgun
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5ca95fea7e18dc143aa411d80b171ea9
-    m_Address: Gun.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 658ee2c93cf0e1241bea7ab74430148e
-    m_Address: Knife.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6f23dde9217e4c0a9eaa780e3a0a06b8
-    m_Address: skill.aoe_blast
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 70626c24713cba34e9cb4230fbfd2270
-    m_Address: T_Powerup.Skill.1002.4
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 73762136d49bf3541bfd3470211f6cf4
     m_Address: MonsterConfig
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7865e4f6b379479499429aa13c7ac812
-    m_Address: T_Powerup.Skill.1002.9
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7fa4164f9c1747a198571e4cc374da27
-    m_Address: skill.fireball
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 80ab78efd07a83e41a287e5eed364747
-    m_Address: Famas.Projectile
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 828387ba02e13fa4da54517e5bfe4659
-    m_Address: T_Powerup.Skill.1001.7
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 82cf2971d0233bc408a01a169398e8d5
-    m_Address: T_Powerup.Skill.1001.2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8553b0619bc803747a89734c2ed29b0c
-    m_Address: Blaster.Projectile
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8bf8702efce94324483f60536c56ebcd
-    m_Address: T_Powerup.Skill.1001.9
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8d088fce81fddef4c85eebe6714237c4
-    m_Address: Famas.Equipment
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9b4dccefa4453f04e89cbbc56fb02dce
-    m_Address: T_Powerup.Skill.1002.7
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9ff74c0eb4ac47c789bac34f08589483
-    m_Address: skill.poison_cloud
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a03f9cc7a4b8e1541938e12b1245283c
-    m_Address: TextDamageNormal
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a36ee78671a6d1641873ecde0e088b65
-    m_Address: energy.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: aae5f0eb474b679429faa2c2f01b4320
-    m_Address: T_Powerup.Skill.1001.10
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ab8711b48e4d75147a20c016c30904f6
-    m_Address: T_Powerup.Skill.1002.5
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b041ac6ff62a5bf45aa32fcdc04658d8
-    m_Address: 9.wing
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -230,43 +40,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: be19bdcd2141ff2448e76c6cebad5d44
-    m_Address: HammerThunder.Projectile
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bef1ed22c8ec43188c68456377ccb5d8
-    m_Address: skill.sniper
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c0b525615fa2ab04c931f3303d833f13
-    m_Address: impact_wood_01.wav
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c25efc4630585b44aa4f13f9ea41e125
-    m_Address: HammerThunder.Equipment
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c72859f779940e44ea76cde5e52c29f8
-    m_Address: T_Powerup.Skill.1002.10
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c7f6a076a012aaa47b5ecc90fbdc532c
-    m_Address: skill.autopistol
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c8489f391e4e4b3aa29d64b4586d84ab
-    m_Address: skill.hero.milo
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ca443e74b1d53c94090f02bc03354fa6
-    m_Address: Nunchaku.Equipment
+    m_Address: Milo Projectile Prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -280,58 +55,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d4e05df0a033f2849a09f73d90249352
-    m_Address: fx.death
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: daaf644f5837cd841b39d8bab8b778ee
-    m_Address: T_Powerup.Skill.1001.1
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: dcd2119041cb5b84c8eb690c9ce25857
-    m_Address: T_Powerup.Skill.1001.3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e2610a4b8e71c7e449756965d4f888ed
-    m_Address: T_Powerup.Skill.1002.8
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ec50cf74d1299bb42aec2d114d0235c3
     m_Address: ExpConfig
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ef1a412728c5a68478aef282561ec5dc
-    m_Address: level_up.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f1f8e97a3411c6d4cb992f88d760301c
     m_Address: SkillConfig
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f3ce7b747fcf1234fb48e0fcf154b1c2
-    m_Address: T_Powerup.Skill.1002.6
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f970645e1dd1d714089b9ce7b7c8f8d8
-    m_Address: T_Powerup.Skill.1001.8
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fb58b465aec5415b99554a5964f798d2
-    m_Address: skill.magic_bolt
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fc43f714122eba84a846a67ff8769b58
-    m_Address: power_select.ogg
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

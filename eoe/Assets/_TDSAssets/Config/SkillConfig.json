@@ -2,7 +2,7 @@
   "skills": [
     {
       "skillId": 1101,
-      "prefabName": "skill.hero.milo",
+      "prefabName": "Milo Projectile Prefab",
       "damageTickInterval": 0.0,
       "findTarget": 1,
       "projectileSpeed": 8.0,
