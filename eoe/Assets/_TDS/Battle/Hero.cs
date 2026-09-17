@@ -312,7 +312,7 @@ namespace _TDS.Battle
             if (Mathf.Abs(deltaX) < 0.001f) return;
 
             Vector3 scale = rootPivot.localScale;
-            scale.x = Mathf.Abs(scale.x) * (deltaX < 0f ? -1f : 1f);
+            scale.x = Mathf.Abs(scale.x) * (deltaX < 0f ? 1f : -1f);
             rootPivot.localScale = scale;
         }
 
