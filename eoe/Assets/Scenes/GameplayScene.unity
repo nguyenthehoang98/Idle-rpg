@@ -1405,8 +1405,8 @@ MonoBehaviour:
     itemType: 0
     itemPower: 1
   - slotIndex: 1
-    contentType: 0
-    contentId: 0
+    contentType: 1
+    contentId: 1001
     itemType: 0
     itemPower: 1
   - slotIndex: 2
@@ -1419,7 +1419,7 @@ MonoBehaviour:
     contentId: 0
     itemType: 0
     itemPower: 1
-  loadDirectlyInEditor: 0
+  loadDirectlyInEditor: 1
   heroSlotManager: {fileID: 1168235905}
   runner: {fileID: 1977149736}
   circuitRunner: {fileID: 2100000002}

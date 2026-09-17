@@ -29,6 +29,24 @@ namespace _TDS.Battle
         [Tooltip("Được gọi một lần mỗi đòn đánh, sau khi hero đã tìm thấy mục tiêu.")]
         [SerializeField] private UnityEvent onAttack = new UnityEvent();
 
+        private static readonly HashSet<string> hitFxPoolNames = new HashSet<string>();
+
+        private void Awake()
+        {
+            if (hitFxPrefab != null && hitFxPoolNames.Add(hitFxPrefab.name))
+            {
+                Pool.RegisterPool(hitFxPrefab, true);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (hitFxPrefab != null && hitFxPoolNames.Remove(hitFxPrefab.name))
+            {
+                Pool.UnRegisterPool(hitFxPrefab);
+            }
+        }
+
         public Transform Muzzle => muzzle;
         public UnityEvent OnAttack => onAttack;
 

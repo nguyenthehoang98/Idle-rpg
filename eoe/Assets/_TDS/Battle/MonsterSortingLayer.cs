@@ -26,7 +26,7 @@ namespace _TDS.Battle
         {
             while (true)
             {
-                int idy = Mathf.RoundToInt(-transform.position.y * 1000);
+                int idy = Mathf.RoundToInt(-transform.position.y * 10);
                 
                 for (int i = 0; i < renderers.Length; i++)
                 {
