@@ -1,8 +1,0 @@
-{
-  "model": "Hunyuan3D-2mini",
-  "rig": "blender-auto-tpose",
-  "bones": 7,
-  "verts": 3096,
-  "tpose": true,
-  "pipeline": "ref.png -> Hunyuan-mini -> decimate 3k -> auto-bone T-pose -> idle/slash"
-}
