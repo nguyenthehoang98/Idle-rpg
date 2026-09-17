@@ -91,6 +91,105 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &1259408397639145973
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1191039410703655221}
+  - component: {fileID: 6865961592481452765}
+  m_Layer: 0
+  m_Name: attack event
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1191039410703655221
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1259408397639145973}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 691834576753182658}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6865961592481452765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1259408397639145973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cc6819e64e4c44beb63ea2ef45e1a6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LitMotion.Animation::LitMotion.Animation.LitMotionAnimation
+  autoPlayMode: 0
+  autoStopMode: 0
+  animationMode: 0
+  components:
+  - rid: 2118814273899855941
+  - rid: 2118814273899855942
+  playOnAwake: 1
+  version: 1
+  references:
+    version: 2
+    RefIds:
+    - rid: 2118814273899855941
+      type: {class: ExecuteComponent, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
+      data:
+        type: Execute
+        displayName: Play Attack
+        enabled: 1
+        waitTime: 0
+        onExecute:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 1144332369605204445}
+              m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+              m_MethodName: Play
+              m_Mode: 5
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: Attack
+                m_BoolArgument: 0
+              m_CallState: 2
+    - rid: 2118814273899855942
+      type: {class: ExecuteComponent, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
+      data:
+        type: Execute
+        displayName: Play Skill
+        enabled: 1
+        waitTime: 0.23333333
+        onExecute:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 8091773884637982967}
+              m_TargetAssemblyTypeName: _TDS.Battle.Hero, Assembly-CSharp
+              m_MethodName: SpawnSkill
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
 --- !u!1 &1300792208636697974
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,6 +607,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5850675720121188770}
+  - {fileID: 1191039410703655221}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8091773884637982967
@@ -522,18 +622,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5089bfaecdebf7944bf2483d18440e4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_TDS.Battle.Hero
+  muzzle: {fileID: 5580853221312634055}
   onAttack:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1144332369605204445}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+      - m_Target: {fileID: 6865961592481452765}
+        m_TargetAssemblyTypeName: LitMotion.Animation.LitMotionAnimation, LitMotion.Animation
         m_MethodName: Play
-        m_Mode: 5
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Attack
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2

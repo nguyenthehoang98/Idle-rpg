@@ -16,9 +16,14 @@ namespace _TDS.Battle
         private Dictionary<StatId, Stat> stats;
         private readonly HashSet<Monster> monsters = new HashSet<Monster>();
         private Coroutine attackCoroutine;
+        private Monster pendingAttackTarget;
+
+        [Tooltip("Transform làm gốc spawn projectile.")]
+        [SerializeField] private Transform muzzle;
         [Tooltip("Được gọi một lần mỗi đòn đánh, sau khi hero đã tìm thấy mục tiêu.")]
         [SerializeField] private UnityEvent onAttack = new UnityEvent();
 
+        public Transform Muzzle => muzzle;
         public UnityEvent OnAttack => onAttack;
 
         protected int AttackId { get; private set; }
@@ -70,6 +75,8 @@ namespace _TDS.Battle
                 StopCoroutine(attackCoroutine);
                 attackCoroutine = null;
             }
+
+            pendingAttackTarget = null;
         }
 
         public void TakeDamage(int damage)
@@ -92,6 +99,7 @@ namespace _TDS.Battle
                     attackCoroutine = null;
                 }
 
+                pendingAttackTarget = null;
                 OnDied?.Invoke();
                 OnHeroDisable?.Invoke(this);
             }
@@ -289,7 +297,26 @@ namespace _TDS.Battle
         {
             if (target == null) return;
 
+            pendingAttackTarget = target;
             onAttack?.Invoke();
+        }
+
+        /// <summary>
+        /// Spawns the pending attack skill. Call this from the delayed LitMotion attack animation event.
+        /// </summary>
+        public void SpawnSkill()
+        {
+            Monster target = pendingAttackTarget;
+            pendingAttackTarget = null;
+
+            if (target == null || !target.isActiveAndEnabled || target.CurrentHealth <= 0)
+                return;
+
+            if (muzzle == null)
+            {
+                Debug.LogError($"[Hero:{name}] Cannot spawn skill because Muzzle is not assigned.");
+                return;
+            }
 
             CastSkillAtTarget(target);
         }
@@ -301,7 +328,7 @@ namespace _TDS.Battle
             float critDamage = GetStat(StatId.CritDamage).Value;
             float lifesteal = GetStat(StatId.Lifesteal).Value;
 
-            SkillFactory.CastSkillAsync(SkillConfig, transform.position, target, (monster, damage) =>
+            SkillFactory.CastSkillAsync(SkillConfig, muzzle.position, target, (monster, damage) =>
             {
                 CombatDamage.DamageResult result = CombatDamage.Calculate(
                     damage, attack, critChance, critDamage, UnityEngine.Random.value);
