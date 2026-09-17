@@ -24,7 +24,7 @@ namespace _TDS.Tests.Editor
 
             Assert.That(levelTwoHealth, Is.LessThanOrEqualTo(0.9f));
             Assert.That(boss, Is.Not.Null);
-            Assert.That(boss.monsterId, Is.EqualTo(1003));
+            Assert.That(boss.monsterId, Is.EqualTo(2001));
             Assert.That(boss.scale.healthMultiplier, Is.GreaterThanOrEqualTo(1.8f));
             Assert.That(boss.scale.attackMultiplier, Is.GreaterThanOrEqualTo(1.5f));
         }
@@ -37,7 +37,7 @@ namespace _TDS.Tests.Editor
             Assert.That(file, Is.Not.Null);
             Assert.That(file.spawns, Is.Not.Null);
 
-            HashSet<int> monsterIds = new HashSet<int> { 1001, 1002, 1003 };
+            HashSet<int> monsterIds = new HashSet<int> { 2001 };
             for (int level = RunSelection.DefaultLevel; level <= RunSelection.MaxCampaignLevel; level++)
             {
                 HashSet<int> waves = new HashSet<int>();

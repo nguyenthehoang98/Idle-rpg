@@ -1,7 +1,7 @@
 {
   "monsters": [
     {
-      "id": 1001,
+      "id": 2001,
       "prefabName": "Slime 01",
       "rank": 0,
       "health": 10,
@@ -32,94 +32,6 @@
       "attackRange": 2.0,
       "knockbackResistance": 1.0,
       "gold": 5
-    },
-    {
-      "id": 1002,
-      "prefabName": "Slime 01",
-      "rank": 1,
-      "health": 14,
-      "attack": 3,
-      "exp": 7,
-      "skills": [
-        {
-          "skillId": 2002,
-          "cooldown": 4.0,
-          "damageMultiplier": 1.5
-        }
-      ],
-      "statusResistances": [
-        {
-          "type": 1,
-          "resistance": 0.25
-        },
-        {
-          "type": 2,
-          "resistance": 0.2
-        },
-        {
-          "type": 3,
-          "resistance": 0.35
-        },
-        {
-          "type": 4,
-          "resistance": 0.25
-        }
-      ],
-      "moveSpeed": 0.3,
-      "stopDistance": 0.5,
-      "damageCooldown": 1.0,
-      "attackRange": 2.0,
-      "knockbackResistance": 0.8,
-      "gold": 7
-    },
-    {
-      "id": 1003,
-      "prefabName": "Slime 01",
-      "rank": 2,
-      "health": 28,
-      "attack": 4,
-      "exp": 10,
-      "skills": [
-        {
-          "skillId": 2005,
-          "cooldown": 5.0,
-          "damageMultiplier": 2.0
-        },
-        {
-          "skillId": 2006,
-          "cooldown": 7.0,
-          "damageMultiplier": 1.25
-        },
-        {
-          "skillId": 2007,
-          "cooldown": 6.0,
-          "damageMultiplier": 1.0
-        }
-      ],
-      "statusResistances": [
-        {
-          "type": 1,
-          "resistance": 0.5
-        },
-        {
-          "type": 2,
-          "resistance": 0.4
-        },
-        {
-          "type": 3,
-          "resistance": 0.6
-        },
-        {
-          "type": 4,
-          "resistance": 0.5
-        }
-      ],
-      "moveSpeed": 0.3,
-      "stopDistance": 0.7,
-      "damageCooldown": 1.0,
-      "attackRange": 2.0,
-      "knockbackResistance": 1.0,
-      "gold": 10
     }
   ]
 }

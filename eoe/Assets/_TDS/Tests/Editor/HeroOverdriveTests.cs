@@ -17,12 +17,12 @@ namespace _TDS.Tests.Editor
             hero = gameObject.AddComponent<Hero>();
             hero.Initialize(new HeroConfigData
             {
-                id = 101,
+                id = 1001,
                 health = 10,
                 attack = 1,
                 attackRange = 1,
                 attackSpeed = 1,
-                attackId = 2011,
+                attackId = 1101,
             }, new SkillConfigData());
         }
 
@@ -35,8 +35,8 @@ namespace _TDS.Tests.Editor
         [Test]
         public void OverdriveStartsWithExplicitState()
         {
-            Assert.That(hero.HeroId, Is.EqualTo(101));
-            Assert.That(hero.SkillId, Is.EqualTo(2011));
+            Assert.That(hero.HeroId, Is.EqualTo(1001));
+            Assert.That(hero.SkillId, Is.EqualTo(1101));
             Assert.That(hero.TryStartOverdrive(5f), Is.True);
             Assert.That(hero.IsOverdriveActive, Is.True);
             Assert.That(hero.OverdriveRemaining, Is.EqualTo(5f));

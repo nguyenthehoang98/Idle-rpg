@@ -27,7 +27,7 @@ namespace _TDS.Tests.Editor
         [Test]
         public void RunnerOwnsOneCircuitAndEmitsActivationOnce()
         {
-            CircuitBoard board = CircuitBoard.FromHeroes(new[] { 101 });
+            CircuitBoard board = CircuitBoard.FromHeroes(new[] { 1001 });
             int activationCount = 0;
             runner.OnActivation += _ => activationCount++;
 
@@ -44,7 +44,7 @@ namespace _TDS.Tests.Editor
         [Test]
         public void ResetRestartsCircuitAndTickCount()
         {
-            runner.Initialize(CircuitBoard.FromHeroes(new[] { 101 }));
+            runner.Initialize(CircuitBoard.FromHeroes(new[] { 1001 }));
             runner.Tick(0.5f);
             runner.ResetCircuit();
 
@@ -60,7 +60,7 @@ namespace _TDS.Tests.Editor
             Hero hero = heroObject.AddComponent<Hero>();
             hero.Initialize(new HeroConfigData
             {
-                id = 101,
+                id = 1001,
                 health = 10,
                 attack = 1,
                 attackRange = 1,
@@ -68,7 +68,7 @@ namespace _TDS.Tests.Editor
             }, new SkillConfigData());
             CircuitBoard board = new CircuitBoard();
             board.SetItem(0, 201, CircuitItemType.Generator);
-            board.SetContent(1, CircuitSlotContent.Hero(101));
+            board.SetContent(1, CircuitSlotContent.Hero(1001));
             runner.OnActivation += activation =>
             {
                 if (activation.Content.Type == CircuitSlotContentType.Hero && activation.Content.Id == hero.HeroId)

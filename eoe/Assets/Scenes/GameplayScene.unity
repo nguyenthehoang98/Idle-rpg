@@ -1401,7 +1401,7 @@ MonoBehaviour:
   designerSlots:
   - slotIndex: 0
     contentType: 1
-    contentId: 101
+    contentId: 1001
     itemType: 0
     itemPower: 1
   - slotIndex: 1
