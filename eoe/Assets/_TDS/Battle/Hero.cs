@@ -7,26 +7,19 @@ using _GameToolkit.Statistics;
 using _TDS.GameConfig;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace _TDS.Battle
 {
-    public enum OverdriveIdentity
-    {
-        None,
-        Dps,
-        Aoe,
-        Defense,
-    }
-
     public class Hero : Unique
     {
         private Dictionary<StatId, Stat> stats;
         private readonly HashSet<Monster> monsters = new HashSet<Monster>();
         private Coroutine attackCoroutine;
-        private StatModifier overdriveAttackSpeedModifier;
-        private bool hasOverdriveAttackSpeedModifier;
+        [Tooltip("Được gọi một lần mỗi đòn đánh, sau khi hero đã tìm thấy mục tiêu.")]
+        [SerializeField] private UnityEvent onAttack = new UnityEvent();
 
-        [SerializeField] private OverdriveIdentity overdriveIdentity = OverdriveIdentity.Dps;
+        public UnityEvent OnAttack => onAttack;
 
         protected int AttackId { get; private set; }
         protected SkillConfigData SkillConfig { get; private set; }
@@ -46,9 +39,6 @@ namespace _TDS.Battle
         public bool IsOverdriveActive { get; private set; }
         public float OverdriveRemaining { get; private set; }
         public int OverdriveActivations { get; private set; }
-        public OverdriveIdentity OverdriveIdentity => overdriveIdentity;
-        public int OverdriveShield { get; private set; }
-        public bool IsAreaOverdriveActive => IsOverdriveActive && overdriveIdentity == OverdriveIdentity.Aoe;
 
         public int CurrentHealth { get; private set; }
         public int MaxHealth { get; private set; }
@@ -87,19 +77,6 @@ namespace _TDS.Battle
             if (damage <= 0 || IsDead) return;
 
             int healthBefore = CurrentHealth;
-            if (OverdriveShield > 0)
-            {
-                int absorbed = Mathf.Min(OverdriveShield, damage);
-                OverdriveShield -= absorbed;
-                damage -= absorbed;
-            }
-
-            if (damage <= 0)
-            {
-                Debug.Log($"[Hero:{name}] TakeDamage absorbed by Overdrive shield");
-                return;
-            }
-
             CurrentHealth = Mathf.Max(0, CurrentHealth - damage);
 
             Debug.Log($"[Hero:{name}] TakeDamage({healthBefore - CurrentHealth}) hp {healthBefore} -> {CurrentHealth}");
@@ -131,8 +108,6 @@ namespace _TDS.Battle
             IsOverdriveActive = false;
             OverdriveRemaining = 0f;
             OverdriveActivations = 0;
-            OverdriveShield = 0;
-            hasOverdriveAttackSpeedModifier = false;
 
             MaxHealth = Mathf.Max(1, heroConfigData.health);
             CurrentHealth = MaxHealth;
@@ -312,26 +287,9 @@ namespace _TDS.Battle
 
         protected virtual void CastSkill(Monster target)
         {
-            if (IsAreaOverdriveActive)
-            {
-                float sqrRange = GetStat(StatId.AttackRange).Value;
-                sqrRange *= sqrRange;
+            if (target == null) return;
 
-                foreach (Monster monster in monsters)
-                {
-                    if (monster == null || !monster.isActiveAndEnabled)
-                    {
-                        continue;
-                    }
-
-                    if ((monster.transform.position - transform.position).sqrMagnitude <= sqrRange)
-                    {
-                        CastSkillAtTarget(monster);
-                    }
-                }
-
-                return;
-            }
+            onAttack?.Invoke();
 
             CastSkillAtTarget(target);
         }
@@ -357,21 +315,6 @@ namespace _TDS.Battle
             }).Forget();
         }
 
-        public void SetOverdriveIdentity(OverdriveIdentity identity)
-        {
-            if (identity == OverdriveIdentity.None)
-            {
-                throw new ArgumentException("An active hero needs an Overdrive identity.", nameof(identity));
-            }
-
-            if (IsOverdriveActive)
-            {
-                throw new InvalidOperationException("Overdrive identity cannot change while active.");
-            }
-
-            overdriveIdentity = identity;
-        }
-
         public bool TryStartOverdrive(float duration)
         {
             if (duration <= 0f)
@@ -387,18 +330,6 @@ namespace _TDS.Battle
             IsOverdriveActive = true;
             OverdriveRemaining = duration;
             OverdriveActivations++;
-
-            switch (overdriveIdentity)
-            {
-                case OverdriveIdentity.Dps:
-                    overdriveAttackSpeedModifier = new StatModifier(0.5f, StatModType.PercentAdd, this);
-                    GetStat(StatId.AttackSpeed).AddModifier(overdriveAttackSpeedModifier);
-                    hasOverdriveAttackSpeedModifier = true;
-                    break;
-                case OverdriveIdentity.Defense:
-                    OverdriveShield = Mathf.CeilToInt(MaxHealth * 0.25f);
-                    break;
-            }
 
             OnOverdriveStarted?.Invoke(this);
             return true;
@@ -423,13 +354,6 @@ namespace _TDS.Battle
             }
 
             IsOverdriveActive = false;
-            if (hasOverdriveAttackSpeedModifier)
-            {
-                GetStat(StatId.AttackSpeed).RemoveModifier(overdriveAttackSpeedModifier);
-                hasOverdriveAttackSpeedModifier = false;
-            }
-
-            OverdriveShield = 0;
             OnOverdriveEnded?.Invoke(this);
         }
 

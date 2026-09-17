@@ -160,11 +160,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c8489f391e4e4b3aa29d64b4586d84ab
-    m_Address: skill.parabolic_bolt
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 80ab78efd07a83e41a287e5eed364747
     m_Address: Famas.Projectile
     m_ReadOnly: 0
@@ -262,6 +257,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c7f6a076a012aaa47b5ecc90fbdc532c
     m_Address: skill.autopistol
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c8489f391e4e4b3aa29d64b4586d84ab
+    m_Address: skill.hero.milo
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1072777720424983146}
   - component: {fileID: 8898933039671244003}
   m_Layer: 0
-  m_Name: skill.parabolic_bolt
+  m_Name: skill.hero.milo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -81,7 +81,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d88ab52cbf5b40adaddbc62750c93f9f, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Toolkit.Collider::_GameToolkit.Colliders.CircleCollision2DDetector
   maxResults: 10
   layerMask:
@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f0cd6d8539814141b5b261ce4c501623, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_TDS.Battle.SplineProjectile
   defaultArcHeightMin: 0.75
   defaultArcHeightMax: 1.5
@@ -179,15 +179,15 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1228164997
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
-  m_Color: {r: 1.0, g: 0.35, b: 0.15, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 03c4048cbad70de4bb214c1a6685158d, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
+  m_DrawMode: 1
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0

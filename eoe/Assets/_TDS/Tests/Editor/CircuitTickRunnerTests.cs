@@ -1,6 +1,5 @@
 using NUnit.Framework;
 using UnityEngine;
-using _GameToolkit.Statistics;
 using _TDS.Battle;
 using _TDS.GameConfig;
 using _TDS.Gameplay;
@@ -67,8 +66,6 @@ namespace _TDS.Tests.Editor
                 attackRange = 1,
                 attackSpeed = 1,
             }, new SkillConfigData());
-            hero.SetOverdriveIdentity(OverdriveIdentity.Dps);
-
             CircuitBoard board = new CircuitBoard();
             board.SetItem(0, 201, CircuitItemType.Generator);
             board.SetContent(1, CircuitSlotContent.Hero(101));
@@ -86,7 +83,6 @@ namespace _TDS.Tests.Editor
             Assert.That(runner.Circuit.GetSlot(0).Content.Type, Is.EqualTo(CircuitSlotContentType.Item));
             Assert.That(runner.Circuit.GetSlot(1).IsActive, Is.True);
             Assert.That(hero.IsOverdriveActive, Is.True);
-            Assert.That(hero.GetStat(StatId.AttackSpeed).Value, Is.EqualTo(1.5f));
 
             Assert.That(hero.OverdriveActivations, Is.EqualTo(1));
 

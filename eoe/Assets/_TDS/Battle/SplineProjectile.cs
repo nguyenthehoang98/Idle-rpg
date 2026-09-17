@@ -13,12 +13,18 @@ namespace _TDS.Battle
         [SerializeField, Min(0f)] private float defaultArcHeightMax = 1.5f;
         [SerializeField, Range(4, 64)] private int lengthSamples = 20;
 
+        [Header("Gizmo Preview")]
+        [SerializeField] private Vector3 gizmoTestStart = new Vector3(-2f, 0f, 0f);
+        [SerializeField] private Vector3 gizmoTestEnd = new Vector3(3f, 0f, 0f);
+        [SerializeField, Min(0f)] private float gizmoTestArcHeight = 1.25f;
+
         private const float CollisionGraceDuration = 1f / 30f;
 
         private Vector3 start;
         private Vector3 control;
         private Vector3 end;
         private float travelDuration;
+        private bool splineInitialized;
 
         public static Vector3 ControlPoint(Vector3 start, Vector3 end, float arcHeight)
         {
@@ -51,6 +57,7 @@ namespace _TDS.Battle
             float maxHeight = Mathf.Max(minHeight, arcHeightMax);
             float arcHeight = Random.Range(minHeight, maxHeight);
             control = ControlPoint(start, end, arcHeight);
+            splineInitialized = true;
 
             float pathLength = ApproximateLength(start, control, end, lengthSamples);
             float speed = Mathf.Max(0.01f, projectileSpeed);
@@ -75,6 +82,47 @@ namespace _TDS.Battle
                 direction = delta.normalized;
                 RotateToDirection();
             }
+        }
+
+        private void OnDrawGizmos()
+        {
+            Vector3 gizmoStart = splineInitialized ? start : transform.TransformPoint(gizmoTestStart);
+            Vector3 gizmoEnd = splineInitialized ? end : transform.TransformPoint(gizmoTestEnd);
+            Vector3 gizmoControl = splineInitialized
+                ? control
+                : ControlPoint(gizmoStart, gizmoEnd, gizmoTestArcHeight);
+            int samples = Mathf.Max(4, lengthSamples);
+
+            // Đường thẳng tham chiếu để thấy rõ start -> end.
+            Gizmos.color = Color.gray;
+            Gizmos.DrawLine(gizmoStart, gizmoEnd);
+
+            // Hai tiếp tuyến tới control point và đường cong Bézier.
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawLine(gizmoStart, gizmoControl);
+            Gizmos.DrawLine(gizmoControl, gizmoEnd);
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(gizmoStart, 0.12f);
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(gizmoEnd, 0.12f);
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawSphere(gizmoControl, 0.12f);
+
+            Gizmos.color = Color.yellow;
+            Vector3 previous = gizmoStart;
+            for (int i = 1; i <= samples; i++)
+            {
+                Vector3 current = Evaluate(gizmoStart, gizmoControl, gizmoEnd, i / (float)samples);
+                Gizmos.DrawLine(previous, current);
+                previous = current;
+            }
+        }
+
+        protected override void OnDisable()
+        {
+            splineInitialized = false;
+            base.OnDisable();
         }
 
         private static float ApproximateLength(Vector3 start, Vector3 control, Vector3 end, int samples)

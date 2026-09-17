@@ -22,6 +22,41 @@ public class ExcelImporter : AssetPostprocessor
 	}
 
 	static List<ExcelAssetInfo> cachedInfos = null; // Clear on compile.
+	static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings
+	{
+		Converters = { new Vector3JsonConverter() }
+	};
+
+	private sealed class Vector3JsonConverter : JsonConverter
+	{
+		private struct Vector3Data
+		{
+			public float x;
+			public float y;
+			public float z;
+		}
+
+		public override bool CanConvert(Type objectType) => objectType == typeof(Vector3);
+
+		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+		{
+			Vector3Data data = serializer.Deserialize<Vector3Data>(reader);
+			return new Vector3(data.x, data.y, data.z);
+		}
+
+		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+		{
+			Vector3 vector = (Vector3)value;
+			writer.WriteStartObject();
+			writer.WritePropertyName("x");
+			writer.WriteValue(vector.x);
+			writer.WritePropertyName("y");
+			writer.WriteValue(vector.y);
+			writer.WritePropertyName("z");
+			writer.WriteValue(vector.z);
+			writer.WriteEndObject();
+		}
+	}
 
 	static void OnPostprocessAllAssets (string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
 	{
@@ -56,7 +91,7 @@ public class ExcelImporter : AssetPostprocessor
 				if (File.Exists(fullPath))
 				{
 					string json = File.ReadAllText(fullPath);
-					object asset = JsonConvert.DeserializeObject(json, cachedInfo.AssetType);
+					object asset = JsonConvert.DeserializeObject(json, cachedInfo.AssetType, JsonSettings);
 					
 					try
 					{
@@ -67,7 +102,7 @@ public class ExcelImporter : AssetPostprocessor
 						Debug.LogError(e);
 					}
 					
-					json = JsonConvert.SerializeObject(asset, Formatting.Indented);
+					json = JsonConvert.SerializeObject(asset, Formatting.Indented, JsonSettings);
 					
 					File.WriteAllText(ConvertCShapePath(fullPath), json);
 				}
@@ -140,17 +175,60 @@ public class ExcelImporter : AssetPostprocessor
 		}
 	}
 
+	static int GetHeaderRowCount(ISheet sheet)
+	{
+		for (int i = 0; i < sheet.NumMergedRegions; i++)
+		{
+			var region = sheet.GetMergedRegion(i);
+			if (region.FirstRow == 0 && region.LastRow == 1) return 2;
+		}
+
+		return 1;
+	}
+
+	static string GetHeaderCellText(ISheet sheet, int rowIndex, int columnIndex)
+	{
+		IRow row = sheet.GetRow(rowIndex);
+		ICell cell = row?.GetCell(columnIndex);
+		if (cell != null && cell.CellType == CellType.String && !string.IsNullOrWhiteSpace(cell.StringCellValue))
+			return cell.StringCellValue.Trim();
+
+		// A horizontally merged group header only stores its value in the first cell.
+		if (rowIndex == 0)
+		{
+			for (int i = 0; i < sheet.NumMergedRegions; i++)
+			{
+				var region = sheet.GetMergedRegion(i);
+				if (region.FirstRow != 0 || region.LastRow != 0 ||
+				    columnIndex < region.FirstColumn || columnIndex > region.LastColumn)
+					continue;
+
+				return sheet.GetRow(region.FirstRow)?.GetCell(region.FirstColumn)?.StringCellValue?.Trim();
+			}
+		}
+
+		return null;
+	}
+
 	static List<string> GetFieldNamesFromSheetHeader(ISheet sheet)
 	{
-		IRow headerRow = sheet.GetRow(0);
+		int headerRowCount = GetHeaderRowCount(sheet);
+		int lastCellNum = sheet.GetRow(0)?.LastCellNum ?? 0;
+		if (headerRowCount == 2)
+			lastCellNum = Math.Max(lastCellNum, sheet.GetRow(1)?.LastCellNum ?? 0);
 
-		var fieldNames = new List<string>();
-		for (int i = 0; i < headerRow.LastCellNum; i++)
+		var fieldNames = new List<string>(lastCellNum);
+		for (int i = 0; i < lastCellNum; i++)
 		{
-			var cell = headerRow.GetCell(i);
-			if(cell == null || cell.CellType == CellType.Blank) break;
-			fieldNames.Add(cell.StringCellValue);
+			string parentName = GetHeaderCellText(sheet, 0, i);
+			string childName = headerRowCount == 2 ? GetHeaderCellText(sheet, 1, i) : null;
+			string fieldName = string.IsNullOrEmpty(childName)
+				? parentName
+				: string.IsNullOrEmpty(parentName) ? childName : $"{parentName}.{childName}";
+
+			fieldNames.Add(fieldName);
 		}
+
 		return fieldNames;
 	}
 
@@ -160,6 +238,15 @@ public class ExcelImporter : AssetPostprocessor
 		{
 			case CellType.Formula:
 			case CellType.String:
+				if (fieldInfo.FieldType == typeof(bool))
+				{
+					string value = cell.CellType == CellType.Formula
+						? cell.CellFormula.Trim().TrimStart('=').Trim()
+						: cell.StringCellValue.Trim();
+					if (value.EndsWith("()")) value = value.Substring(0, value.Length - 2);
+					return bool.Parse(value);
+				}
+
 				if (fieldInfo.FieldType.IsEnum)
 				{
 					return Enum.Parse(fieldInfo.FieldType, cell.StringCellValue);
@@ -200,7 +287,7 @@ public class ExcelImporter : AssetPostprocessor
 						: fieldInfo.FieldType.GetGenericArguments()[0];
 
 					if (!elementType.IsPrimitive && raw.TrimStart().StartsWith("["))
-						return JsonConvert.DeserializeObject(raw, fieldInfo.FieldType);
+						return JsonConvert.DeserializeObject(raw, fieldInfo.FieldType, JsonSettings);
 
 					string[] elements = raw
 						.Trim('[', ']')
@@ -239,7 +326,7 @@ public class ExcelImporter : AssetPostprocessor
 
 					for (int i = 0; i < elements.Length; i++)
 					{
-						array.SetValue(JsonConvert.DeserializeObject(elements[i], elementType), i);
+						array.SetValue(JsonConvert.DeserializeObject(elements[i], elementType, JsonSettings), i);
 					}
 
 					return CreateCollection(fieldInfo.FieldType, array);
@@ -249,7 +336,7 @@ public class ExcelImporter : AssetPostprocessor
 				{
 					try
 					{
-						return JsonConvert.DeserializeObject(cell.CellFormula, fieldInfo.FieldType);
+						return JsonConvert.DeserializeObject(cell.CellFormula, fieldInfo.FieldType, JsonSettings);
 					}
 					catch (ArgumentException e)
 					{
@@ -258,11 +345,14 @@ public class ExcelImporter : AssetPostprocessor
 					}
 				}
 				
-				return JsonConvert.DeserializeObject(cell.StringCellValue, fieldInfo.FieldType);
+				return JsonConvert.DeserializeObject(cell.StringCellValue, fieldInfo.FieldType, JsonSettings);
 				
 			case CellType.Boolean:
 				return cell.BooleanCellValue;
 			case CellType.Numeric:
+				if (fieldInfo.FieldType.IsEnum)
+					return Enum.ToObject(fieldInfo.FieldType, Convert.ToInt32(cell.NumericCellValue));
+
 				return Convert.ChangeType(cell.NumericCellValue, fieldInfo.FieldType);
 			default:
 				if (fieldInfo.FieldType.IsValueType)
@@ -291,21 +381,125 @@ public class ExcelImporter : AssetPostprocessor
 		throw new NotSupportedException($"Unsupported collection type: {collectionType}");
 	}
 
+	static bool HasCellValue(ICell cell)
+	{
+		return cell != null && cell.CellType != CellType.Blank &&
+		       (cell.CellType != CellType.String || !string.IsNullOrWhiteSpace(cell.StringCellValue));
+	}
+
+	static bool HasNestedColumns(List<string> columnNames)
+	{
+		return columnNames.Any(name => !string.IsNullOrEmpty(name) && name.Contains('.'));
+	}
+
+	static bool RowHasNestedValues(IRow row, List<string> columnNames)
+	{
+		for (int i = 0; i < columnNames.Count; i++)
+		{
+			if (columnNames[i] != null && columnNames[i].Contains('.') && HasCellValue(row.GetCell(i)))
+				return true;
+		}
+
+		return false;
+	}
+
+	static Type GetCollectionElementType(Type fieldType)
+	{
+		if (fieldType.IsArray) return fieldType.GetElementType();
+		if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(List<>))
+			return fieldType.GetGenericArguments()[0];
+		return null;
+	}
+
+	static void AppendNestedFields(object entity, IRow row, List<string> columnNames, Type entityType, string sheetName)
+	{
+		foreach (var group in columnNames
+			.Select((name, index) => new { name, index })
+			.Where(item => item.name != null && item.name.Contains('.'))
+			.GroupBy(item => item.name.Substring(0, item.name.IndexOf('.'))))
+		{
+			FieldInfo collectionField = entityType.GetField(
+				group.Key,
+				BindingFlags.Instance | BindingFlags.Default | BindingFlags.Public | BindingFlags.NonPublic);
+			if (collectionField == null) continue;
+
+			Type collectionType = collectionField.FieldType;
+			Type nestedType = GetCollectionElementType(collectionType) ?? collectionType;
+			object nestedValue = Activator.CreateInstance(nestedType);
+			bool hasValue = false;
+
+			foreach (var item in group)
+			{
+				ICell cell = row.GetCell(item.index);
+				if (!HasCellValue(cell)) continue;
+
+				string nestedFieldName = item.name.Substring(item.name.IndexOf('.') + 1);
+				FieldInfo nestedField = nestedType.GetField(
+					nestedFieldName,
+					BindingFlags.Instance | BindingFlags.Default | BindingFlags.Public | BindingFlags.NonPublic);
+				if (nestedField == null) continue;
+
+				try
+				{
+					nestedField.SetValue(nestedValue, CellToFieldObject(cell, nestedField));
+					hasValue = true;
+				}
+				catch (Exception e)
+				{
+					Debug.LogError(e.StackTrace);
+					throw new Exception($"Invalid nested field '{item.name}' at row {row.RowNum}, column {cell.ColumnIndex}, {sheetName}");
+				}
+			}
+
+			if (collectionType.IsArray)
+			{
+				Array existing = collectionField.GetValue(entity) as Array;
+				if (existing == null)
+					collectionField.SetValue(entity, Array.CreateInstance(nestedType, 0));
+
+				if (!hasValue) continue;
+
+				existing = collectionField.GetValue(entity) as Array;
+				Array values = Array.CreateInstance(nestedType, existing.Length + 1);
+				Array.Copy(existing, values, existing.Length);
+				values.SetValue(nestedValue, existing.Length);
+				collectionField.SetValue(entity, values);
+			}
+			else if (collectionType.IsGenericType && collectionType.GetGenericTypeDefinition() == typeof(List<>))
+			{
+				IList values = collectionField.GetValue(entity) as IList;
+				if (values == null)
+				{
+					values = (IList)Activator.CreateInstance(collectionType);
+					collectionField.SetValue(entity, values);
+				}
+
+				if (hasValue) values.Add(nestedValue);
+			}
+			else if (hasValue)
+			{
+				collectionField.SetValue(entity, nestedValue);
+			}
+		}
+	}
+
 	static object CreateEntityFromRow(IRow row, List<string> columnNames, Type entityType, string sheetName)
 	{
 		var entity = Activator.CreateInstance(entityType);
 
 		for (int i = 0; i < columnNames.Count; i++)
 		{
+			if (string.IsNullOrEmpty(columnNames[i]) || columnNames[i].Contains('.')) continue;
+
 			FieldInfo entityField = entityType.GetField(
 				columnNames[i],
-				BindingFlags.Instance | BindingFlags.Default | BindingFlags.Public | BindingFlags.NonPublic 
+				BindingFlags.Instance | BindingFlags.Default | BindingFlags.Public | BindingFlags.NonPublic
 			);
 			if (entityField == null) continue;
 
 			ICell cell = row.GetCell(i);
-			if (cell == null) continue;
-			
+			if (!HasCellValue(cell)) continue;
+
 			object fieldValue = CellToFieldObject(cell, entityField);
 			try
 			{
@@ -320,31 +514,46 @@ public class ExcelImporter : AssetPostprocessor
 		}
 		return entity;
 	}
-	
+
 	static object GetEntityListFromSheet(ISheet sheet, Type entityType)
 	{
 		List<string> excelColumnNames = GetFieldNamesFromSheetHeader(sheet);
+		int headerRowCount = GetHeaderRowCount(sheet);
+		bool hasNestedColumns = HasNestedColumns(excelColumnNames);
 
 		Type listType = typeof(List<>).MakeGenericType(entityType);
-		MethodInfo listAddMethod = listType.GetMethod("Add", new Type[]{entityType});
-		object list = Activator.CreateInstance(listType);
+		MethodInfo listAddMethod = listType.GetMethod("Add", new Type[] { entityType });
+		IList list = (IList)Activator.CreateInstance(listType);
+		object currentEntity = null;
+		int currentEntityIndex = -1;
 
-		// row of index 0 is header
-		for (int i = 1; i <= sheet.LastRowNum; i++)
+		for (int i = headerRowCount; i <= sheet.LastRowNum; i++)
 		{
 			IRow row = sheet.GetRow(i);
-			if(row == null) break;
+			if (row == null) continue;
 
-			ICell entryCell = row.GetCell(0); 
-			if(entryCell == null || entryCell.CellType == CellType.Blank) break;
+			ICell entryCell = row.GetCell(0);
+			bool hasEntry = HasCellValue(entryCell);
+			if (!hasEntry)
+			{
+				if (!hasNestedColumns || currentEntity == null || !RowHasNestedValues(row, excelColumnNames)) break;
+
+				AppendNestedFields(currentEntity, row, excelColumnNames, entityType, sheet.SheetName);
+				list[currentEntityIndex] = currentEntity;
+				continue;
+			}
 
 			// skip comment row
-			if(entryCell.CellType == CellType.String && entryCell.StringCellValue.StartsWith("#")) continue;
+			if (entryCell.CellType == CellType.String && entryCell.StringCellValue.StartsWith("#")) continue;
 
-			object entity = CreateEntityFromRow(row, excelColumnNames, entityType, sheet.SheetName);
-			listAddMethod.Invoke(list, new object[] { entity });
+			currentEntity = CreateEntityFromRow(row, excelColumnNames, entityType, sheet.SheetName);
+			if (hasNestedColumns)
+				AppendNestedFields(currentEntity, row, excelColumnNames, entityType, sheet.SheetName);
+
+			listAddMethod.Invoke(list, new[] { currentEntity });
+			currentEntityIndex = list.Count - 1;
 		}
-	
+
 		return list;
 	}
 
@@ -382,7 +591,7 @@ public class ExcelImporter : AssetPostprocessor
 			Debug.LogError(e);
 		}
 
-		string json = JsonConvert.SerializeObject(asset, Formatting.Indented);// JsonUtility.ToJson(asset, true);
+		string json = JsonConvert.SerializeObject(asset, Formatting.Indented, JsonSettings);
 
 		File.WriteAllText(ConvertCShapePath(path), json);
 	}

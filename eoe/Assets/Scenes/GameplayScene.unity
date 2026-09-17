@@ -1405,8 +1405,8 @@ MonoBehaviour:
     itemType: 0
     itemPower: 1
   - slotIndex: 1
-    contentType: 1
-    contentId: 102
+    contentType: 0
+    contentId: 0
     itemType: 0
     itemPower: 1
   - slotIndex: 2
