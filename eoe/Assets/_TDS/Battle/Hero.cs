@@ -20,6 +20,8 @@ namespace _TDS.Battle
 
         [Tooltip("Transform làm gốc spawn projectile.")]
         [SerializeField] private Transform muzzle;
+        [Tooltip("Pivot hình ảnh để flip mặt theo phía của mục tiêu.")]
+        [SerializeField] private Transform rootPivot;
         [Tooltip("Được gọi một lần mỗi đòn đánh, sau khi hero đã tìm thấy mục tiêu.")]
         [SerializeField] private UnityEvent onAttack = new UnityEvent();
 
@@ -297,8 +299,21 @@ namespace _TDS.Battle
         {
             if (target == null) return;
 
+            FaceTarget(target);
             pendingAttackTarget = target;
             onAttack?.Invoke();
+        }
+
+        private void FaceTarget(Monster target)
+        {
+            if (rootPivot == null) return;
+
+            float deltaX = target.transform.position.x - rootPivot.position.x;
+            if (Mathf.Abs(deltaX) < 0.001f) return;
+
+            Vector3 scale = rootPivot.localScale;
+            scale.x = Mathf.Abs(scale.x) * (deltaX < 0f ? -1f : 1f);
+            rootPivot.localScale = scale;
         }
 
         /// <summary>

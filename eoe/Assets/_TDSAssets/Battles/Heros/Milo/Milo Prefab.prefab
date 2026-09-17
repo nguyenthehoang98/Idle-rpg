@@ -655,6 +655,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_TDS.Battle.Hero
   muzzle: {fileID: 5898739209790194075}
+  rootPivot: {fileID: 5850675720121188770}
   onAttack:
     m_PersistentCalls:
       m_Calls:
