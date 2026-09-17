@@ -270,6 +270,11 @@ namespace _TDS.Battle
 
                 float dmg = damageScale; // base damage; caller applies its attack stat
 
+                if (!isDot)
+                {
+                    projectile.SpawnHitFx(info.Unique.transform.position);
+                }
+
                 onDamage?.Invoke(info.Unique, dmg);
                 Monster m = info.Unique as Monster;
                 if (m != null && modifierTargets.Add(m)) ApplyModifier(skillConfig, m);

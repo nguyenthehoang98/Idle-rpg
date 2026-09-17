@@ -29,6 +29,10 @@ namespace _TDS.Battle
         protected bool destroyed;
         private bool registered;
 
+        [Header("Hit FX")]
+        [Tooltip("Prefab FX impact, spawn tại vị trí target khi projectile hit.")]
+        [SerializeField] private GameObject hitFxPrefab;
+
         /// <summary>Thời gian sống thực tế của projectile sau khi Setup.</summary>
         public float TotalDuration => totalDuration;
 
@@ -107,6 +111,14 @@ namespace _TDS.Battle
         public void StopMotion()
         {
             moving = false;
+        }
+
+        public void SpawnHitFx(Vector3 position)
+        {
+            if (hitFxPrefab == null) return;
+
+            GameObject fx = Pool.Instantiate(hitFxPrefab, position, true);
+            fx.transform.rotation = transform.rotation;
         }
 
         public void DestroySelf()
