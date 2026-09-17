@@ -13,6 +13,7 @@ namespace _GameToolkit.Colliders
 
         protected Collider2D[] Results;
         protected ContactFilter2D ContactFilter;
+        private bool registered;
 
         public event Action<Unique> OnOverlapped;
 
@@ -40,12 +41,18 @@ namespace _GameToolkit.Colliders
 
         public void Startup()
         {
+            if (registered) return;
+
+            registered = true;
             ColliderTickRunner.Instance.Add(this);
             OnStartup();
         }
 
         public void Shutdown()
         {
+            if (!registered) return;
+
+            registered = false;
             OnShutdown();
             ColliderTickRunner.Instance.Remove(this);
         }

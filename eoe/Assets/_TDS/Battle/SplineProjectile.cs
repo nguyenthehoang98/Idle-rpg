@@ -26,6 +26,24 @@ namespace _TDS.Battle
         private Vector3 end;
         private float travelDuration;
         private bool splineInitialized;
+        private TrailRenderer trail;
+
+        private void Awake()
+        {
+            trail = GetComponentInChildren<TrailRenderer>();
+            if (trail != null)
+            {
+                // Projectile là 2D: ribbon nằm trong mặt phẳng XY và xoay theo local Z.
+                trail.alignment = LineAlignment.TransformZ;
+                trail.textureMode = LineTextureMode.Stretch;
+                trail.minVertexDistance = 0.01f;
+                trail.numCornerVertices = 2;
+                trail.numCapVertices = 2;
+                trail.emitting = false;
+            }
+
+            OnFinished += StopTrail;
+        }
 
         public static Vector3 ControlPoint(Vector3 start, Vector3 end, float arcHeight)
         {
@@ -67,6 +85,15 @@ namespace _TDS.Battle
             // Giữ đạn ở đích thêm 1 tick để collision runner kịp quét overlap.
             base.Setup(from, to - from, f, travelDuration + CollisionGraceDuration);
             return TotalDuration;
+        }
+
+        protected override void OnSetup(Vector3 from)
+        {
+            if (trail == null) trail = GetComponentInChildren<TrailRenderer>();
+            if (trail == null) return;
+
+            trail.Clear();
+            trail.emitting = true;
         }
 
         protected override void Move(float dt)
@@ -140,9 +167,18 @@ namespace _TDS.Battle
             }
         }
 
+        private void StopTrail()
+        {
+            if (trail == null) return;
+
+            trail.emitting = false;
+            trail.Clear();
+        }
+
         protected override void OnDisable()
         {
             splineInitialized = false;
+            StopTrail();
             base.OnDisable();
         }
 
