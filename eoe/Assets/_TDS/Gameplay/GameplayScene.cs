@@ -240,7 +240,6 @@ namespace _TDS.Gameplay
                 if (!hero.TryStartOverdrive(activation.PowerDuration)) continue;
 
                 hud.SetStatus("OVERDRIVE ACTIVE");
-                hero.ForceCastSkill();
             }
         }
 

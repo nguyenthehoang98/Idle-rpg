@@ -20,6 +20,8 @@ namespace _TDS.Battle
         private Monster pendingAttackTarget;
         private SkillConfigData pendingAttackSkill;
         private bool hasPendingAttackSkill;
+        private readonly object powerUpgradeSource = new object();
+        private IReadOnlyList<StatUpgradeConfigData> powerUpgrades = Array.Empty<StatUpgradeConfigData>();
 
         [Tooltip("Transform làm gốc spawn projectile.")]
         [SerializeField] private Transform muzzle;
@@ -60,8 +62,6 @@ namespace _TDS.Battle
 
         protected int AttackId { get; private set; }
         protected SkillConfigData SkillConfig { get; private set; }
-        private SkillConfigData powerSkill;
-        private bool hasPowerSkill;
 
         /// <summary>Hero sống trên sân (đăng ký khi enable, gỡ khi disable/dead).</summary>
         public static event Action<Hero> OnHeroEnable;
@@ -78,7 +78,6 @@ namespace _TDS.Battle
         public int SkillId => AttackId;
         public bool IsOverdriveActive { get; private set; }
         public float PowerDuration { get; private set; }
-        public bool HasPowerSkill => hasPowerSkill;
         public float OverdriveRemaining { get; private set; }
         public int OverdriveActivations { get; private set; }
 
@@ -120,6 +119,7 @@ namespace _TDS.Battle
 
             pendingAttackTarget = null;
             hasPendingAttackSkill = false;
+            RemovePowerUpgrade();
             StopPowerEffect();
         }
 
@@ -145,6 +145,7 @@ namespace _TDS.Battle
 
                 pendingAttackTarget = null;
                 hasPendingAttackSkill = false;
+                RemovePowerUpgrade();
                 StopPowerEffect();
                 OnDied?.Invoke();
                 OnHeroDisable?.Invoke(this);
@@ -157,6 +158,8 @@ namespace _TDS.Battle
 
         public void Initialize(HeroConfigData heroConfigData, SkillConfigData skillConfigData)
         {
+            RemovePowerUpgrade();
+            powerUpgrades = Array.Empty<StatUpgradeConfigData>();
             HeroId = heroConfigData.id;
             SkillConfig = skillConfigData;
             IsOverdriveActive = false;
@@ -184,12 +187,63 @@ namespace _TDS.Battle
             };
 
             AttackId = heroConfigData.attackId;
-            hasPowerSkill = false;
 
             if (attackCoroutine == null && Application.isPlaying)
             {
                 attackCoroutine = StartCoroutine(AutoAttackEnumerator());
             }
+        }
+
+        public void SetPowerUpgrades(IReadOnlyList<StatUpgradeConfigData> upgrades)
+        {
+            RemovePowerUpgrade();
+            powerUpgrades = upgrades ?? Array.Empty<StatUpgradeConfigData>();
+        }
+
+        private void ApplyPowerUpgrade()
+        {
+            foreach (StatUpgradeConfigData upgrade in powerUpgrades)
+            {
+                if (upgrade.stat == StatId.None || Mathf.Approximately(upgrade.value, 0f))
+                {
+                    continue;
+                }
+
+                Stat stat = GetStat(upgrade.stat);
+                if (stat == null) continue;
+
+                stat.AddModifier(new StatModifier(
+                    upgrade.value,
+                    upgrade.percent ? StatModType.PercentAdd : StatModType.Flat,
+                    powerUpgradeSource));
+            }
+
+            RefreshMaxHealth();
+        }
+
+        private void RemovePowerUpgrade()
+        {
+            if (stats == null) return;
+
+            foreach (Stat stat in stats.Values)
+            {
+                stat.RemoveAllModifiersFromSource(powerUpgradeSource);
+            }
+
+            RefreshMaxHealth();
+        }
+
+        private void RefreshMaxHealth()
+        {
+            Stat maxHealth = GetStat(StatId.MaxHealth);
+            if (maxHealth == null) return;
+
+            int previousMaxHealth = MaxHealth;
+            MaxHealth = Mathf.Max(1, Mathf.RoundToInt(maxHealth.Value));
+            CurrentHealth = Mathf.Clamp(
+                CurrentHealth + MaxHealth - previousMaxHealth,
+                0,
+                MaxHealth);
         }
 
         public bool ApplyHeroUpgrade(StatId statId, float value, bool percent)
@@ -290,28 +344,13 @@ namespace _TDS.Battle
             Debug.Log("Start AutoAttackEnumerator");
             while (true)
             {
-                bool usePowerSkill = IsOverdriveActive && hasPowerSkill;
-                float interval = usePowerSkill
-                    ? Mathf.Max(0.01f, GetStat(StatId.SkillCooldown).Value)
-                    : Mathf.Max(0.01f, 1f / GetStat(StatId.AttackSpeed).Value);
-                SkillConfigData skill = usePowerSkill ? powerSkill : SkillConfig;
-
+                float interval = Mathf.Max(0.01f, 1f / GetStat(StatId.AttackSpeed).Value);
                 yield return new WaitForSeconds(interval);
 
-                // Do not let a power cast leak past the configured duration.
-                if (usePowerSkill && !IsOverdriveActive) continue;
-
-                Monster target = FindTarget(skill.findTarget);
+                Monster target = FindTarget(SkillConfig.findTarget);
                 if (target == null) continue;
 
-                if (usePowerSkill)
-                {
-                    CastSkill(target, skill);
-                }
-                else
-                {
-                    CastSkill(target);
-                }
+                CastSkill(target);
             }
         }
 
@@ -369,25 +408,6 @@ namespace _TDS.Battle
             pendingAttackSkill = skill;
             hasPendingAttackSkill = true;
             onAttack?.Invoke();
-        }
-
-        /// <summary>Gán skill dùng khi đầy stack (skillId). Không gọi = cast lại attackId.</summary>
-        public void SetPowerSkill(SkillConfigData skill)
-        {
-            powerSkill = skill;
-            hasPowerSkill = true;
-        }
-
-        /// <summary>Stack đầy: cast skillId ngay; subsequent casts use its cooldown until power expires.</summary>
-        public void ForceCastSkill()
-        {
-            if (IsDead || !hasPowerSkill) return;
-
-            Monster target = FindTarget(powerSkill.findTarget);
-            if (target == null) return;
-
-            FaceTarget(target);
-            CastSkillAtTarget(target, powerSkill);
         }
 
         private void FaceTarget(Monster target)
@@ -497,7 +517,10 @@ namespace _TDS.Battle
 
             ParticleSystem.VelocityOverLifetimeModule velocity = particles.velocityOverLifetime;
             velocity.enabled = true;
+            // Unity requires x/y/z velocity curves to use the same mode.
+            velocity.x = new ParticleSystem.MinMaxCurve(0f, 0f);
             velocity.y = new ParticleSystem.MinMaxCurve(0.35f, 0.8f);
+            velocity.z = new ParticleSystem.MinMaxCurve(0f, 0f);
 
             ParticleSystem.ColorOverLifetimeModule color = particles.colorOverLifetime;
             color.enabled = true;
@@ -566,6 +589,7 @@ namespace _TDS.Battle
 
             pendingAttackTarget = null;
             hasPendingAttackSkill = false;
+            ApplyPowerUpgrade();
             if (Application.isPlaying)
             {
                 attackCoroutine = StartCoroutine(AutoAttackEnumerator());
@@ -594,6 +618,7 @@ namespace _TDS.Battle
             }
 
             IsOverdriveActive = false;
+            RemovePowerUpgrade();
             StopPowerEffect();
             OnOverdriveEnded?.Invoke(this);
         }

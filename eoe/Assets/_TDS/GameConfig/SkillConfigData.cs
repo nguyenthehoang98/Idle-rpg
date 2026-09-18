@@ -1,5 +1,6 @@
 ﻿using System;
 using _GameToolkit.Skills;
+using _TDS.Battle;
 
 namespace _TDS.GameConfig
 {
@@ -20,6 +21,15 @@ namespace _TDS.GameConfig
         public float duration;
         public float value;
         public float tickInterval;
+    }
+
+    [Serializable]
+    public struct StatUpgradeConfigData
+    {
+        public int id;
+        public StatId stat;
+        public float value;
+        public bool percent;
     }
 
     [Serializable]

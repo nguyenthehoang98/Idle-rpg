@@ -242,14 +242,7 @@ namespace _TDS.Gameplay
                 Debug.Log($"Hero added {heroData.id}");
 
                 hero.Initialize(heroData, skillData);
-
-                // skillId: cast khi đầy stack, xong về đánh attackId thường
-                if (heroData.skillId > 0
-                    && heroData.skillId != heroData.attackId
-                    && skillConfig.TryGetSkill(heroData.skillId, out SkillConfigData powerSkillData))
-                {
-                    hero.SetPowerSkill(powerSkillData);
-                }
+                hero.SetPowerUpgrades(skillConfig.GetStatUpgrades(heroData.listStatUpgrade));
             }
         }
     }

@@ -44,6 +44,48 @@ namespace _TDS.Tests.Editor
         }
 
         [Test]
+        public void OverdriveAppliesConfiguredStatUpgradeUntilDurationEnds()
+        {
+            hero.Initialize(new HeroConfigData
+            {
+                id = 1001,
+                health = 10,
+                attack = 1,
+                attackRange = 1,
+                attackSpeed = 1,
+                attackId = 1101,
+            }, new SkillConfigData());
+            hero.SetPowerUpgrades(new[]
+            {
+                new StatUpgradeConfigData
+                {
+                    id = 1001,
+                    stat = StatId.Attack,
+                    value = 2f,
+                },
+                new StatUpgradeConfigData
+                {
+                    id = 1002,
+                    stat = StatId.AttackSpeed,
+                    value = 0.5f,
+                    percent = true,
+                },
+            });
+
+            Assert.That(hero.GetStat(StatId.Attack).Value, Is.EqualTo(1f));
+            Assert.That(hero.GetStat(StatId.AttackSpeed).Value, Is.EqualTo(1f));
+            Assert.That(hero.TryStartOverdrive(5f), Is.True);
+            Assert.That(hero.GetStat(StatId.Attack).Value, Is.EqualTo(3f));
+            Assert.That(hero.GetStat(StatId.AttackSpeed).Value, Is.EqualTo(1.5f));
+
+            hero.TickOverdrive(5f);
+
+            Assert.That(hero.IsOverdriveActive, Is.False);
+            Assert.That(hero.GetStat(StatId.Attack).Value, Is.EqualTo(1f));
+            Assert.That(hero.GetStat(StatId.AttackSpeed).Value, Is.EqualTo(1f));
+        }
+
+        [Test]
         public void OverdriveDoesNotOverlapAndEndsAfterDuration()
         {
             hero.TryStartOverdrive(5f);

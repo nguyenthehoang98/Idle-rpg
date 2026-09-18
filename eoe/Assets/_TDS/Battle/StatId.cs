@@ -2,6 +2,7 @@ namespace _TDS.Battle
 {
     public enum StatId
     {
+        None = 0,
         Attack = 1,
         Heal = 2,
         MaxHealth = 3,
