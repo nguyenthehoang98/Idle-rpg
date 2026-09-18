@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using _GameToolkit.GameConfig;
 using _GameToolkit.ResourceManagement;
@@ -10,14 +11,25 @@ using UnityEngine;
 namespace _TDS.Gameplay
 {
     /// <summary>
-    /// Quản lý các slot đặt hero. Mỗi slot = 1 Transform.
+    /// Quản lý các slot đặt hero. Mỗi slot có một arrow effect để báo slot đang được pulse.
     /// Nhận danh sách heroId từ GameplayScene.heroIds, id thoả config mới tạo.
     /// </summary>
     public class HeroSlotManager : MonoBehaviour
     {
         [SerializeField] private Transform[] slots;
+        [Tooltip("Kéo thả Transform của Arrow Effect theo đúng thứ tự slot.")]
+        [SerializeField] private Transform[] arrows;
+        [SerializeField] private bool enableArrow = true;
+        [SerializeField, Min(0.01f)] private float arrowPlayTime = 0.5f;
+        [Header("Highlight Cell")]
+        [Tooltip("Một cell highlight duy nhất, tự di chuyển qua các slot theo vòng lặp.")]
+        [SerializeField] private bool enableHighlightCell = true;
+        [SerializeField] private Transform highlightCell;
+        [SerializeField, Min(0.01f)] private float highlightPlayTime = 0.5f;
 
         private SpriteRenderer[] slotRenderers;
+        private Coroutine arrowSequenceCoroutine;
+        private Coroutine highlightCellCoroutine;
         private static readonly Color NormalColor = Color.white;
         private static readonly Color HighlightColor = ParseColor("FDE047");
 
@@ -28,7 +40,41 @@ namespace _TDS.Gameplay
                 Debug.LogError($"[{name}] No hero slots assigned", this);
             }
             CacheRenderers();
+            CacheArrows();
+            if (highlightCell == null) highlightCell = transform.Find("Highlight Cell") ?? transform.Find("highlight");
             SetAllNormal();
+            SetAllArrows(false);
+            SetHighlightCellActive(false);
+        }
+
+        private void OnEnable()
+        {
+            if (!Application.isPlaying) return;
+
+            if (enableArrow && arrowSequenceCoroutine == null)
+            {
+                CacheArrows();
+                arrowSequenceCoroutine = StartCoroutine(PlayArrowSequence());
+            }
+
+            if (enableHighlightCell && highlightCellCoroutine == null)
+                highlightCellCoroutine = StartCoroutine(PlayHighlightCellSequence());
+        }
+
+        private void OnDisable()
+        {
+            if (arrowSequenceCoroutine != null)
+            {
+                StopCoroutine(arrowSequenceCoroutine);
+                arrowSequenceCoroutine = null;
+            }
+            if (highlightCellCoroutine != null)
+            {
+                StopCoroutine(highlightCellCoroutine);
+                highlightCellCoroutine = null;
+            }
+            SetAllArrows(false);
+            SetHighlightCellActive(false);
         }
 
         private void CacheRenderers()
@@ -37,6 +83,18 @@ namespace _TDS.Gameplay
             slotRenderers = new SpriteRenderer[slots.Length];
             for (int i = 0; i < slots.Length; i++)
                 slotRenderers[i] = slots[i] != null ? slots[i].GetComponent<SpriteRenderer>() : null;
+        }
+
+        private void CacheArrows()
+        {
+            if (slots == null) return;
+            if (arrows == null || arrows.Length != slots.Length) arrows = new Transform[slots.Length];
+
+            for (int i = 0; i < slots.Length; i++)
+            {
+                if (arrows[i] == null && slots[i] != null)
+                    arrows[i] = slots[i].Find("Arrow Effect");
+            }
         }
 
         public void RefreshHighlight(EnergyCircuit circuit)
@@ -53,6 +111,64 @@ namespace _TDS.Gameplay
                 }
                 r.color = isHighlight ? HighlightColor : NormalColor;
             }
+        }
+
+        private IEnumerator PlayArrowSequence()
+        {
+            if (arrows == null || arrows.Length == 0) yield break;
+
+            WaitForSeconds playDelay = new WaitForSeconds(Mathf.Max(0.01f, arrowPlayTime));
+            while (true)
+            {
+                for (int i = 0; i < arrows.Length; i++)
+                {
+                    SetAllArrows(false);
+                    Transform arrow = arrows[i];
+                    if (arrow != null)
+                    {
+                        arrow.gameObject.SetActive(true);
+                        Animator animator = arrow.GetComponent<Animator>();
+                        if (animator != null) animator.Play("Play", 0, 0f);
+                    }
+
+                    yield return playDelay;
+                }
+            }
+        }
+
+        private IEnumerator PlayHighlightCellSequence()
+        {
+            if (highlightCell == null || slots == null || slots.Length == 0) yield break;
+
+            WaitForSeconds moveDelay = new WaitForSeconds(Mathf.Max(0.01f, highlightPlayTime));
+            SetHighlightCellActive(true);
+            while (true)
+            {
+                bool moved = false;
+                for (int i = 0; i < slots.Length; i++)
+                {
+                    if (slots[i] == null) continue;
+                    highlightCell.position = slots[i].position;
+                    moved = true;
+                    yield return moveDelay;
+                }
+
+                if (!moved) yield return null;
+            }
+        }
+
+        private void SetAllArrows(bool active)
+        {
+            if (arrows == null) return;
+            for (int i = 0; i < arrows.Length; i++)
+            {
+                if (arrows[i] != null) arrows[i].gameObject.SetActive(active);
+            }
+        }
+
+        private void SetHighlightCellActive(bool active)
+        {
+            if (highlightCell != null) highlightCell.gameObject.SetActive(active);
         }
 
         public void HighlightSlot(int index)
