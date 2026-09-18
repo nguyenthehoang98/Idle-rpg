@@ -190,7 +190,7 @@ namespace _TDS.Gameplay
 
         private static Color ParseColor(string html) => ColorUtility.TryParseHtmlString($"#{html}", out Color c) ? c : Color.white;
 
-        public async UniTask BuildHeroes(int[] heroIds)
+        public async UniTask BuildHeroes(int[] heroIds, int[] slotIndexes = null)
         {
             HeroConfig heroConfig = ConfigManager.Get<HeroConfig>();
             SkillConfig skillConfig = ConfigManager.Get<SkillConfig>();
@@ -200,6 +200,13 @@ namespace _TDS.Gameplay
             for (int i = 0; i < count; i++)
             {
                 int heroId = heroIds[i];
+                int slotIndex = slotIndexes != null && i < slotIndexes.Length ? slotIndexes[i] : i;
+                if (slotIndex < 0 || slotIndex >= slots.Length)
+                {
+                    Debug.LogWarning($"[{name}] Hero slot '{slotIndex}' is outside the configured slots");
+                    continue;
+                }
+
                 if (heroId <= 0) continue; // ô trống
 
                 if (!heroConfig.TryGetHero(heroId, out HeroConfigData heroData))
@@ -215,13 +222,14 @@ namespace _TDS.Gameplay
                     continue;
                 }
 
-                var go = Instantiate(prefab, slots[i]);
+                var go = Instantiate(prefab, slots[slotIndex]);
                 if (!go.TryGetComponent<Hero>(out var hero))
                 {
                     Debug.LogError($"[{name}] Prefab '{heroData.prefabName}' thiếu component Hero trên root");
                     Destroy(go); continue;
                 }
                 hero.transform.localPosition = Vector3.zero;
+                hero.SetCircuitSlotIndex(slotIndex);
 
                 // skill cấu hình theo attackId
                 if (!skillConfig.TryGetSkill(heroData.attackId, out SkillConfigData skillData))
@@ -234,6 +242,14 @@ namespace _TDS.Gameplay
                 Debug.Log($"Hero added {heroData.id}");
 
                 hero.Initialize(heroData, skillData);
+
+                // skillId: cast khi đầy stack, xong về đánh attackId thường
+                if (heroData.skillId > 0
+                    && heroData.skillId != heroData.attackId
+                    && skillConfig.TryGetSkill(heroData.skillId, out SkillConfigData powerSkillData))
+                {
+                    hero.SetPowerSkill(powerSkillData);
+                }
             }
         }
     }

@@ -65,6 +65,17 @@ namespace _TDS.Tests.Editor
         }
 
         [Test]
+        public void BoardStoresPowerDurationPerSlot()
+        {
+            CircuitBoard board = new CircuitBoard();
+
+            board.SetItem(0, 201, CircuitItemType.Generator);
+            board.SetPowerDuration(0, 10f);
+
+            Assert.That(board.GetPowerDuration(0), Is.EqualTo(10f));
+        }
+
+        [Test]
         public void BoardRejectsInvalidSlotAndContentIds()
         {
             CircuitBoard board = new CircuitBoard();

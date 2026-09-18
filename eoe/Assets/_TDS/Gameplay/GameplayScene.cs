@@ -21,6 +21,7 @@ namespace _TDS.Gameplay
         [Tooltip("HeroId nếu là Hero, ItemId nếu là Item")] public int contentId;
         public CircuitItemType itemType;
         [Min(1)] public int itemPower;
+        [Min(0f)] public float powerDuration;
     }
 
     public class GameplayScene : MonoBehaviour
@@ -113,6 +114,7 @@ namespace _TDS.Gameplay
                 {
                     if (s.contentId <= 0 || s.itemType == CircuitItemType.None) { Debug.LogWarning($"[CircuitDesigner] Item slot {s.slotIndex} thiếu contentId/itemType"); continue; }
                     b.SetItem(s.slotIndex, s.contentId, s.itemType, Mathf.Max(1, s.itemPower));
+                    if (s.powerDuration > 0f) b.SetPowerDuration(s.slotIndex, s.powerDuration);
                 }
             }
             return b;
@@ -164,7 +166,7 @@ namespace _TDS.Gameplay
             agentRunner.Initialize();
             circuitRunner.Initialize(board);
             hud.Initialize(board, level);
-            hud.SetBottomVisible(false);
+            hud.SetBottomVisible(true);
             hud.SetGold(rewards.Gold);
             hud.BindTimeScale(speed => runner.Loop = speed);
             hud.BindResultActions(ContinueAfterResult, ReturnHome);
@@ -186,10 +188,15 @@ namespace _TDS.Gameplay
             await spawnRunner.LoadLevelAsync(agentRunner, level);
 
             List<int> ids = new List<int>();
+            List<int> slotIndexes = new List<int>();
             for (int i = 0; i < board.SlotCount; i++)
-                if (board.GetContent(i).Type == CircuitSlotContentType.Hero)
-                    ids.Add(board.GetContent(i).Id);
-            await heroSlotManager.BuildHeroes(ids.ToArray());
+            {
+                if (board.GetContent(i).Type != CircuitSlotContentType.Hero) continue;
+                ids.Add(board.GetContent(i).Id);
+                slotIndexes.Add(i);
+            }
+
+            await heroSlotManager.BuildHeroes(ids.ToArray(), slotIndexes.ToArray());
             
             sw.Stop();
             
@@ -228,10 +235,12 @@ namespace _TDS.Gameplay
 
             foreach (Hero hero in Hero.AliveHeroes)
             {
-                if (hero.HeroId == activation.Content.Id && hero.TryStartOverdrive(EnergyCircuit.DefaultOverdriveDuration))
-                {
-                    hud.SetStatus("OVERDRIVE ACTIVE");
-                }
+                if (hero.CircuitSlotIndex != activation.SlotIndex) continue;
+                if (hero.HeroId != activation.Content.Id) continue;
+                if (!hero.TryStartOverdrive(activation.PowerDuration)) continue;
+
+                hud.SetStatus("OVERDRIVE ACTIVE");
+                hero.ForceCastSkill();
             }
         }
 

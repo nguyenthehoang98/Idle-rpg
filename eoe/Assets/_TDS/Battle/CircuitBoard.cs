@@ -10,6 +10,7 @@ namespace _TDS.Battle
         private readonly CircuitSlotContent[] contents;
         private readonly CircuitItemType[] itemTypes;
         private readonly int[] itemPowers;
+        private readonly float[] powerDurations;
 
         public int SlotCount => contents.Length;
 
@@ -23,6 +24,7 @@ namespace _TDS.Battle
             contents = new CircuitSlotContent[slotCount];
             itemTypes = new CircuitItemType[slotCount];
             itemPowers = new int[slotCount];
+            powerDurations = new float[slotCount];
             Reset();
         }
 
@@ -84,6 +86,24 @@ namespace _TDS.Battle
             contents[index] = content;
             itemTypes[index] = CircuitItemType.None;
             itemPowers[index] = 1;
+            powerDurations[index] = EnergyCircuit.DefaultOverdriveDuration;
+        }
+
+        public float GetPowerDuration(int index)
+        {
+            ValidateSlotIndex(index);
+            return powerDurations[index];
+        }
+
+        public void SetPowerDuration(int index, float duration)
+        {
+            ValidateSlotIndex(index);
+            if (duration <= 0f)
+            {
+                throw new ArgumentOutOfRangeException(nameof(duration), duration, "Power duration must be positive.");
+            }
+
+            powerDurations[index] = duration;
         }
 
         public void SetItem(int index, int id, CircuitItemType type, int power = 1)
@@ -102,6 +122,7 @@ namespace _TDS.Battle
             contents[index] = CircuitSlotContent.Item(id);
             itemTypes[index] = type;
             itemPowers[index] = power;
+            powerDurations[index] = EnergyCircuit.DefaultOverdriveDuration;
         }
 
         public CircuitItemType GetItemType(int index)
@@ -130,6 +151,8 @@ namespace _TDS.Battle
             (contents[firstIndex], contents[secondIndex]) = (contents[secondIndex], contents[firstIndex]);
             (itemTypes[firstIndex], itemTypes[secondIndex]) = (itemTypes[secondIndex], itemTypes[firstIndex]);
             (itemPowers[firstIndex], itemPowers[secondIndex]) = (itemPowers[secondIndex], itemPowers[firstIndex]);
+            (powerDurations[firstIndex], powerDurations[secondIndex]) =
+                (powerDurations[secondIndex], powerDurations[firstIndex]);
         }
 
         public void Reset()
@@ -139,6 +162,7 @@ namespace _TDS.Battle
                 contents[i] = CircuitSlotContent.Empty;
                 itemTypes[i] = CircuitItemType.None;
                 itemPowers[i] = 1;
+                powerDurations[i] = EnergyCircuit.DefaultOverdriveDuration;
             }
         }
 

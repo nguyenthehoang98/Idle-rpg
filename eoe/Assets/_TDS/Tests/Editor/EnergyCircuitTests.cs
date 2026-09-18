@@ -99,6 +99,22 @@ namespace _TDS.Tests.Editor
         }
 
         [Test]
+        public void ActivationUsesTheDurationConfiguredForItsSlot()
+        {
+            EnergyCircuit circuit = new EnergyCircuit();
+            circuit.SetContent(0, CircuitSlotContent.Hero(101));
+            circuit.SetThreshold(0, 1);
+            circuit.SetPowerDuration(0, 10f);
+            List<CircuitActivationEvent> activations = new List<CircuitActivationEvent>();
+
+            circuit.Tick(circuit.PulseInterval, activations);
+
+            Assert.That(activations, Has.Count.EqualTo(1));
+            Assert.That(activations[0].PowerDuration, Is.EqualTo(10f));
+            Assert.That(circuit.GetSlot(0).ActiveRemaining, Is.EqualTo(10f));
+        }
+
+        [Test]
         public void PulseDoesNotAdvanceBeforeInterval()
         {
             EnergyCircuit circuit = new EnergyCircuit();

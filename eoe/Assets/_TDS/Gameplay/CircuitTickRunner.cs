@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using _GameToolkit.GameConfig;
 using _GameToolkit.Updater;
 using _TDS.Battle;
+using _TDS.GameConfig;
 
 namespace _TDS.Gameplay
 {
@@ -21,6 +23,9 @@ namespace _TDS.Gameplay
             }
 
             Circuit = new EnergyCircuit(board.SlotCount);
+            // ponytail: try/catch vì test/editor có thể Initialize khi chưa load config.
+            HeroConfig heroConfig = null;
+            try { heroConfig = ConfigManager.Get<HeroConfig>(); } catch { heroConfig = null; }
             for (int i = 0; i < board.SlotCount; i++)
             {
                 CircuitSlotContent content = board.GetContent(i);
@@ -31,6 +36,23 @@ namespace _TDS.Gameplay
                 else
                 {
                     Circuit.SetContent(i, content);
+                }
+
+                Circuit.SetPowerDuration(i, board.GetPowerDuration(i));
+
+                if (content.Type == CircuitSlotContentType.Hero
+                    && heroConfig != null
+                    && heroConfig.TryGetHero(content.Id, out HeroConfigData heroData))
+                {
+                    if (heroData.stackThreshold > 0)
+                    {
+                        Circuit.SetThreshold(i, heroData.stackThreshold);
+                    }
+
+                    if (heroData.powerDuration > 0f)
+                    {
+                        Circuit.SetPowerDuration(i, heroData.powerDuration);
+                    }
                 }
             }
 

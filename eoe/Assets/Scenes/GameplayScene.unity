@@ -260,7 +260,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 8e20c93eb933415409460255b5928555, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1291,8 +1291,8 @@ MonoBehaviour:
   - {fileID: 506316909}
   enableArrow: 0
   arrowPlayTime: 0.5
-  highlightCell: {fileID: 883422454}
   enableHighlightCell: 1
+  highlightCell: {fileID: 883422454}
   highlightPlayTime: 0.5
 --- !u!1 &1219510551
 GameObject:
@@ -1768,7 +1768,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 17ab6c2da8584d54d9f5f4a55440746f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

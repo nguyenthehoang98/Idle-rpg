@@ -18,6 +18,8 @@ namespace _TDS.Battle
         private readonly HashSet<Monster> monsters = new HashSet<Monster>();
         private Coroutine attackCoroutine;
         private Monster pendingAttackTarget;
+        private SkillConfigData pendingAttackSkill;
+        private bool hasPendingAttackSkill;
 
         [Tooltip("Transform làm gốc spawn projectile.")]
         [SerializeField] private Transform muzzle;
@@ -26,8 +28,14 @@ namespace _TDS.Battle
         [Header("Attack Hit Feedback")]
         [SerializeField] private GameObject hitFxPrefab;
         [SerializeField] private AudioClip hitAudio;
+        [Header("Power Feedback")]
+        [Tooltip("Optional prefab. If empty, Hero creates a simple fire ring at runtime.")]
+        [SerializeField] private GameObject powerEffectPrefab;
         [Tooltip("Được gọi một lần mỗi đòn đánh, sau khi hero đã tìm thấy mục tiêu.")]
         [SerializeField] private UnityEvent onAttack = new UnityEvent();
+
+        private GameObject powerEffectInstance;
+        private ParticleSystem[] powerEffectParticles;
 
         private static readonly HashSet<string> hitFxPoolNames = new HashSet<string>();
 
@@ -52,6 +60,8 @@ namespace _TDS.Battle
 
         protected int AttackId { get; private set; }
         protected SkillConfigData SkillConfig { get; private set; }
+        private SkillConfigData powerSkill;
+        private bool hasPowerSkill;
 
         /// <summary>Hero sống trên sân (đăng ký khi enable, gỡ khi disable/dead).</summary>
         public static event Action<Hero> OnHeroEnable;
@@ -64,8 +74,11 @@ namespace _TDS.Battle
         public event Action<Hero> OnOverdriveEnded;
 
         public int HeroId { get; private set; }
+        public int CircuitSlotIndex { get; private set; } = -1;
         public int SkillId => AttackId;
         public bool IsOverdriveActive { get; private set; }
+        public float PowerDuration { get; private set; }
+        public bool HasPowerSkill => hasPowerSkill;
         public float OverdriveRemaining { get; private set; }
         public int OverdriveActivations { get; private set; }
 
@@ -77,6 +90,11 @@ namespace _TDS.Battle
         public Stat GetStat(StatId id)
         {
             return stats != null && stats.TryGetValue(id, out Stat stat) ? stat : null;
+        }
+
+        public void SetCircuitSlotIndex(int slotIndex)
+        {
+            CircuitSlotIndex = slotIndex;
         }
 
         private void OnEnable()
@@ -101,6 +119,8 @@ namespace _TDS.Battle
             }
 
             pendingAttackTarget = null;
+            hasPendingAttackSkill = false;
+            StopPowerEffect();
         }
 
         public void TakeDamage(int damage)
@@ -124,6 +144,8 @@ namespace _TDS.Battle
                 }
 
                 pendingAttackTarget = null;
+                hasPendingAttackSkill = false;
+                StopPowerEffect();
                 OnDied?.Invoke();
                 OnHeroDisable?.Invoke(this);
             }
@@ -140,6 +162,9 @@ namespace _TDS.Battle
             IsOverdriveActive = false;
             OverdriveRemaining = 0f;
             OverdriveActivations = 0;
+            PowerDuration = heroConfigData.powerDuration > 0f
+                ? heroConfigData.powerDuration
+                : EnergyCircuit.DefaultOverdriveDuration;
 
             MaxHealth = Mathf.Max(1, heroConfigData.health);
             CurrentHealth = MaxHealth;
@@ -159,8 +184,9 @@ namespace _TDS.Battle
             };
 
             AttackId = heroConfigData.attackId;
+            hasPowerSkill = false;
 
-            if (attackCoroutine == null)
+            if (attackCoroutine == null && Application.isPlaying)
             {
                 attackCoroutine = StartCoroutine(AutoAttackEnumerator());
             }
@@ -264,16 +290,28 @@ namespace _TDS.Battle
             Debug.Log("Start AutoAttackEnumerator");
             while (true)
             {
-                // AttackSpeed = số đòn / giây -> chờ 1/value
-                float interval = Mathf.Max(0.01f, 1f / GetStat(StatId.AttackSpeed).Value);
+                bool usePowerSkill = IsOverdriveActive && hasPowerSkill;
+                float interval = usePowerSkill
+                    ? Mathf.Max(0.01f, GetStat(StatId.SkillCooldown).Value)
+                    : Mathf.Max(0.01f, 1f / GetStat(StatId.AttackSpeed).Value);
+                SkillConfigData skill = usePowerSkill ? powerSkill : SkillConfig;
 
                 yield return new WaitForSeconds(interval);
 
-                Monster target = FindTarget(SkillConfig.findTarget);
+                // Do not let a power cast leak past the configured duration.
+                if (usePowerSkill && !IsOverdriveActive) continue;
 
+                Monster target = FindTarget(skill.findTarget);
                 if (target == null) continue;
 
-                CastSkill(target);
+                if (usePowerSkill)
+                {
+                    CastSkill(target, skill);
+                }
+                else
+                {
+                    CastSkill(target);
+                }
             }
         }
 
@@ -319,11 +357,37 @@ namespace _TDS.Battle
 
         protected virtual void CastSkill(Monster target)
         {
+            CastSkill(target, SkillConfig);
+        }
+
+        private void CastSkill(Monster target, SkillConfigData skill)
+        {
             if (target == null) return;
 
             FaceTarget(target);
             pendingAttackTarget = target;
+            pendingAttackSkill = skill;
+            hasPendingAttackSkill = true;
             onAttack?.Invoke();
+        }
+
+        /// <summary>Gán skill dùng khi đầy stack (skillId). Không gọi = cast lại attackId.</summary>
+        public void SetPowerSkill(SkillConfigData skill)
+        {
+            powerSkill = skill;
+            hasPowerSkill = true;
+        }
+
+        /// <summary>Stack đầy: cast skillId ngay; subsequent casts use its cooldown until power expires.</summary>
+        public void ForceCastSkill()
+        {
+            if (IsDead || !hasPowerSkill) return;
+
+            Monster target = FindTarget(powerSkill.findTarget);
+            if (target == null) return;
+
+            FaceTarget(target);
+            CastSkillAtTarget(target, powerSkill);
         }
 
         private void FaceTarget(Monster target)
@@ -345,6 +409,8 @@ namespace _TDS.Battle
         {
             Monster target = pendingAttackTarget;
             pendingAttackTarget = null;
+            SkillConfigData skill = hasPendingAttackSkill ? pendingAttackSkill : SkillConfig;
+            hasPendingAttackSkill = false;
 
             if (target == null || !target.isActiveAndEnabled || target.CurrentHealth <= 0)
                 return;
@@ -355,7 +421,7 @@ namespace _TDS.Battle
                 return;
             }
 
-            CastSkillAtTarget(target);
+            CastSkillAtTarget(target, skill);
         }
 
         private void PlayHitFeedback(Vector3 position)
@@ -372,14 +438,97 @@ namespace _TDS.Battle
             }
         }
 
-        private void CastSkillAtTarget(Monster target)
+        private void StartPowerEffect()
         {
-            float attack = GetStat(StatId.Attack).Value;
+            if (!Application.isPlaying) return;
+
+            if (powerEffectInstance == null)
+            {
+                powerEffectInstance = powerEffectPrefab != null
+                    ? Instantiate(powerEffectPrefab, transform)
+                    : CreateDefaultPowerEffect();
+                powerEffectInstance.transform.localPosition = Vector3.zero;
+                powerEffectParticles = powerEffectInstance.GetComponentsInChildren<ParticleSystem>(true);
+            }
+
+            powerEffectInstance.SetActive(true);
+            foreach (ParticleSystem particles in powerEffectParticles)
+            {
+                particles.Play(true);
+            }
+        }
+
+        private void StopPowerEffect()
+        {
+            if (powerEffectInstance == null) return;
+
+            foreach (ParticleSystem particles in powerEffectParticles ?? Array.Empty<ParticleSystem>())
+            {
+                particles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            }
+
+            powerEffectInstance.SetActive(false);
+        }
+
+        private GameObject CreateDefaultPowerEffect()
+        {
+            GameObject effect = new GameObject("Power Fire Effect");
+            effect.transform.SetParent(transform, false);
+
+            ParticleSystem particles = effect.AddComponent<ParticleSystem>();
+            ParticleSystem.MainModule main = particles.main;
+            main.loop = true;
+            main.duration = 1f;
+            main.startLifetime = new ParticleSystem.MinMaxCurve(0.35f, 0.75f);
+            main.startSpeed = new ParticleSystem.MinMaxCurve(0.3f, 0.9f);
+            main.startSize = new ParticleSystem.MinMaxCurve(0.12f, 0.28f);
+            main.startColor = new ParticleSystem.MinMaxGradient(new Color(1f, 0.22f, 0.02f, 1f));
+            main.gravityModifier = -0.15f;
+            main.simulationSpace = ParticleSystemSimulationSpace.Local;
+            main.maxParticles = 40;
+
+            ParticleSystem.EmissionModule emission = particles.emission;
+            emission.rateOverTime = 24f;
+
+            ParticleSystem.ShapeModule shape = particles.shape;
+            shape.shapeType = ParticleSystemShapeType.Circle;
+            shape.radius = 0.4f;
+            shape.radiusThickness = 0.15f;
+
+            ParticleSystem.VelocityOverLifetimeModule velocity = particles.velocityOverLifetime;
+            velocity.enabled = true;
+            velocity.y = new ParticleSystem.MinMaxCurve(0.35f, 0.8f);
+
+            ParticleSystem.ColorOverLifetimeModule color = particles.colorOverLifetime;
+            color.enabled = true;
+            Gradient gradient = new Gradient();
+            gradient.SetKeys(
+                new[]
+                {
+                    new GradientColorKey(new Color(1f, 0.95f, 0.2f), 0f),
+                    new GradientColorKey(new Color(1f, 0.1f, 0.01f), 1f),
+                },
+                new[]
+                {
+                    new GradientAlphaKey(0.95f, 0f),
+                    new GradientAlphaKey(0f, 1f),
+                });
+            color.color = new ParticleSystem.MinMaxGradient(gradient);
+
+            ParticleSystemRenderer renderer = effect.GetComponent<ParticleSystemRenderer>();
+            renderer.renderMode = ParticleSystemRenderMode.Billboard;
+            renderer.sortMode = ParticleSystemSortMode.Distance;
+            return effect;
+        }
+
+        private void CastSkillAtTarget(Monster target, SkillConfigData skill, float powerMultiplier = 1f)
+        {
+            float attack = GetStat(StatId.Attack).Value * Mathf.Max(1f, powerMultiplier);
             float critChance = GetStat(StatId.CritChance).Value;
             float critDamage = GetStat(StatId.CritDamage).Value;
             float lifesteal = GetStat(StatId.Lifesteal).Value;
 
-            SkillFactory.CastSkillAsync(SkillConfig, muzzle.position, target, (monster, damage) =>
+            SkillFactory.CastSkillAsync(skill, muzzle.position, target, (monster, damage) =>
             {
                 CombatDamage.DamageResult result = CombatDamage.Calculate(
                     damage, attack, critChance, critDamage, UnityEngine.Random.value);
@@ -407,8 +556,21 @@ namespace _TDS.Battle
 
             IsOverdriveActive = true;
             OverdriveRemaining = duration;
+            PowerDuration = duration;
             OverdriveActivations++;
 
+            if (attackCoroutine != null)
+            {
+                StopCoroutine(attackCoroutine);
+            }
+
+            pendingAttackTarget = null;
+            hasPendingAttackSkill = false;
+            if (Application.isPlaying)
+            {
+                attackCoroutine = StartCoroutine(AutoAttackEnumerator());
+            }
+            StartPowerEffect();
             OnOverdriveStarted?.Invoke(this);
             return true;
         }
@@ -432,6 +594,7 @@ namespace _TDS.Battle
             }
 
             IsOverdriveActive = false;
+            StopPowerEffect();
             OnOverdriveEnded?.Invoke(this);
         }
 

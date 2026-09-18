@@ -84,7 +84,12 @@ namespace _TDS.Gameplay
             return true;
         }
 
-        public bool TryPlaceItem(int itemId, int slotIndex, CircuitItemType itemType, int power = 1)
+        public bool TryPlaceItem(
+            int itemId,
+            int slotIndex,
+            CircuitItemType itemType,
+            int power = 1,
+            float powerDuration = 0f)
         {
             if (!IsValidSlot(slotIndex) || !ownedItemIds.Contains(itemId) || itemType == CircuitItemType.None || power <= 0)
             {
@@ -92,6 +97,7 @@ namespace _TDS.Gameplay
             }
 
             Board.SetItem(slotIndex, itemId, itemType, power);
+            if (powerDuration > 0f) Board.SetPowerDuration(slotIndex, powerDuration);
             return true;
         }
 

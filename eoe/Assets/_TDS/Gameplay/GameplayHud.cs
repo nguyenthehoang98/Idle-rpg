@@ -147,7 +147,7 @@ namespace _TDS.Gameplay
                 CircuitSlotState state = circuit.GetSlot(i);
                 slotStackLabels[i].text = state.IsActive
                     ? "OVERDRIVE"
-                    : $"{state.Stack}/{circuit.ActivationThreshold}";
+                    : $"{state.Stack}/{circuit.GetThreshold(i)}";
                 slotStackLabels[i].color = state.IsActive ? TextColor : MutedColor;
 
                 if (slotFeedback[i] > 0f) continue;

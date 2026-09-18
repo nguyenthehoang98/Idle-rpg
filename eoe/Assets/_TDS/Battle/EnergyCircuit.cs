@@ -79,12 +79,23 @@ namespace _TDS.Battle
         public int SlotIndex { get; }
         public CircuitSlotContent Content { get; }
         public int StackAtActivation { get; }
+        public float PowerDuration { get; }
 
         public CircuitActivationEvent(int slotIndex, CircuitSlotContent content, int stackAtActivation)
+            : this(slotIndex, content, stackAtActivation, EnergyCircuit.DefaultOverdriveDuration)
+        {
+        }
+
+        public CircuitActivationEvent(
+            int slotIndex,
+            CircuitSlotContent content,
+            int stackAtActivation,
+            float powerDuration)
         {
             SlotIndex = slotIndex;
             Content = content;
             StackAtActivation = stackAtActivation;
+            PowerDuration = powerDuration;
         }
     }
 
@@ -98,6 +109,8 @@ namespace _TDS.Battle
         private readonly CircuitSlotState[] slots;
         private readonly CircuitItemType[] itemTypes;
         private readonly int[] itemPowers;
+        private readonly int[] thresholds;
+        private readonly float[] powerDurations;
 
         public int SlotCount => slots.Length;
         public float PulseInterval { get; }
@@ -122,6 +135,8 @@ namespace _TDS.Battle
             slots = new CircuitSlotState[slotCount];
             itemTypes = new CircuitItemType[slotCount];
             itemPowers = new int[slotCount];
+            thresholds = new int[slotCount];
+            powerDurations = new float[slotCount];
             PulseInterval = pulseInterval;
             ActivationThreshold = activationThreshold;
             OverdriveDuration = overdriveDuration;
@@ -134,11 +149,41 @@ namespace _TDS.Battle
             return slots[index];
         }
 
+        public int GetThreshold(int index)
+        {
+            ValidateSlotIndex(index);
+            return thresholds[index];
+        }
+
+        public void SetThreshold(int index, int threshold)
+        {
+            ValidateSlotIndex(index);
+            thresholds[index] = Math.Max(1, threshold);
+        }
+
+        public float GetPowerDuration(int index)
+        {
+            ValidateSlotIndex(index);
+            return powerDurations[index];
+        }
+
+        public void SetPowerDuration(int index, float duration)
+        {
+            ValidateSlotIndex(index);
+            if (duration <= 0f)
+            {
+                throw new ArgumentOutOfRangeException(nameof(duration), duration, "Power duration must be positive.");
+            }
+
+            powerDurations[index] = duration;
+        }
+
         public void SetContent(int index, CircuitSlotContent content)
         {
             ValidateSlotIndex(index);
             itemTypes[index] = CircuitItemType.None;
             itemPowers[index] = 1;
+            powerDurations[index] = OverdriveDuration;
             slots[index] = new CircuitSlotState(content, 0, 0f);
         }
 
@@ -157,6 +202,7 @@ namespace _TDS.Battle
 
             itemTypes[index] = type;
             itemPowers[index] = power;
+            powerDurations[index] = OverdriveDuration;
             slots[index] = new CircuitSlotState(CircuitSlotContent.Item(id), 0, 0f);
         }
 
@@ -205,7 +251,7 @@ namespace _TDS.Battle
                 int storedEnergy = slot.StoredEnergy;
                 if (activeRemaining <= 0f && storedEnergy > 0)
                 {
-                    int restored = Math.Min(storedEnergy, ActivationThreshold - 1);
+                    int restored = Math.Min(storedEnergy, thresholds[i] - 1);
                     stack = restored;
                     storedEnergy -= restored;
                 }
@@ -258,7 +304,7 @@ namespace _TDS.Battle
             }
 
             int stack = slot.Stack + amount;
-            if (stack < ActivationThreshold)
+            if (stack < thresholds[index])
             {
                 slots[index] = new CircuitSlotState(slot.Content, stack, 0f, slot.StoredEnergy);
                 return;
@@ -267,11 +313,11 @@ namespace _TDS.Battle
             int storedEnergy = slot.StoredEnergy;
             if (itemTypes[index] == CircuitItemType.Battery)
             {
-                storedEnergy += stack - ActivationThreshold;
+                storedEnergy += stack - thresholds[index];
             }
 
-            activations.Add(new CircuitActivationEvent(index, slot.Content, stack));
-            slots[index] = new CircuitSlotState(slot.Content, 0, OverdriveDuration, storedEnergy);
+            activations.Add(new CircuitActivationEvent(index, slot.Content, stack, powerDurations[index]));
+            slots[index] = new CircuitSlotState(slot.Content, 0, powerDurations[index], storedEnergy);
         }
 
         public void Reset()
@@ -283,6 +329,8 @@ namespace _TDS.Battle
             {
                 itemTypes[i] = CircuitItemType.None;
                 itemPowers[i] = 1;
+                thresholds[i] = ActivationThreshold;
+                powerDurations[i] = OverdriveDuration;
                 slots[i] = new CircuitSlotState(CircuitSlotContent.Empty, 0, 0f);
             }
         }
