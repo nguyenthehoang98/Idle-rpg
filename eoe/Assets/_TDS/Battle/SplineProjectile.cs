@@ -1,5 +1,5 @@
 using System;
-using Unity.Cinemachine;
+using Chidwi.MinMaxSliderAttribute;
 using UnityEngine;
 using Random = Unity.Mathematics.Random;
 
@@ -12,7 +12,7 @@ namespace _TDS.Battle
     public sealed class SplineProjectile : Projectile
     {
         [Header("Spline")]
-        [SerializeField, MinMaxRangeSlider(0f, 10f)] private Vector2 defaultArcHeight = new Vector2(0.75f, 1.5f);
+        [SerializeField, MinMaxSlider(0f, 10f)] private Vector2 defaultArcHeight = new Vector2(0.75f, 1.5f);
         [SerializeField, Range(4, 64)] private int lengthSamples = 20;
 
         [Header("Gizmo Preview")]

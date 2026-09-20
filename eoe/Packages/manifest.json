@@ -4,7 +4,7 @@
     "com.unity.addressables": "2.9.1",
     "com.unity.addressables.android": "1.1.0",
     "com.unity.burst": "1.8.30",
-    "com.unity.cinemachine": "3.1.7",
+    "com.chidwi.minmaxslideratt": "https://github.com/Chidwi-commits/Unity-Attribute-MinMax-Slider.git#82db37e7c3814d1dc05f30f2d968b8d4b29ea7ac",
     "com.unity.collections": "2.6.8",
     "com.unity.ide.rider": "3.0.40",
     "com.unity.nuget.newtonsoft-json": "3.2.2",
