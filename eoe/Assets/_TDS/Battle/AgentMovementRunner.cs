@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using _GameToolkit.Avoidance;
-using _GameToolkit.Entities;
 using _GameToolkit.Updater;
 using _TDS.GameConfig;
 using Cysharp.Threading.Tasks;
@@ -247,8 +246,6 @@ namespace _TDS.Battle
             additional.Enqueue(temp);
             
             container.Add(agent, temp);
-
-            ComponentManager<HealthData>.Add(agent, new HealthData(health));
         }
 
         public bool TryGet_AgentPosition(int agent, out Vector3 position)

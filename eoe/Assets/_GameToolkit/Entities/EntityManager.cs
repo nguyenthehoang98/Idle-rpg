@@ -1,4 +1,0 @@
-﻿namespace _GameToolkit.Entities
-{
-    
-}
