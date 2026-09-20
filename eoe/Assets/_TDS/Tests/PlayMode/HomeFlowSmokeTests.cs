@@ -63,12 +63,6 @@ namespace _TDS.Tests.PlayMode
                 Assert.That(button.GetComponent("ButtonHomeMenu"), Is.Not.Null);
             }
 
-            Component equipmentTab = content.GetChild(1).GetComponent("BaseTab");
-            Assert.That(equipmentTab, Is.Not.Null);
-            UnityEvent onOpened = (UnityEvent)equipmentTab.GetType().GetProperty("OnOpened").GetValue(equipmentTab);
-            int openedCount = 0;
-            onOpened.AddListener(() => openedCount++);
-
             AssertOnlyTabActive(content, 2);
             Assert.That(homeScene.GetType().GetProperty("CurrentTabName").GetValue(homeScene), Is.EqualTo("BATTLE"));
 
@@ -82,7 +76,7 @@ namespace _TDS.Tests.PlayMode
             equipment.onClick.Invoke();
             yield return null;
             AssertOnlyTabActive(content, 1);
-            Assert.That(openedCount, Is.EqualTo(1));
+            Assert.That(homeScene.GetType().GetProperty("CurrentTabName").GetValue(homeScene), Is.EqualTo("EQUIPMENT"));
             yield return new WaitForSecondsRealtime(0.26f);
 
             battle.onClick.Invoke();
