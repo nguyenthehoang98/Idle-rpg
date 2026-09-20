@@ -5,6 +5,7 @@ using _TDS.GameConfig;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using UnityEditor;
+using UnityEditor.AddressableAssets;
 using UnityEngine;
 
 namespace _TDS.Tests.Editor
@@ -36,17 +37,21 @@ namespace _TDS.Tests.Editor
 
         private static GameObject FindPrefab(string prefabName)
         {
-            string[] guids = AssetDatabase.FindAssets($"{prefabName} t:Prefab");
+            var settings = AddressableAssetSettingsDefaultObject.Settings;
+            Assert.That(settings, Is.Not.Null, "Addressable settings missing");
             string match = null;
             int count = 0;
-            foreach (string guid in guids)
+            foreach (var group in settings.groups)
             {
-                string path = AssetDatabase.GUIDToAssetPath(guid);
-                if (!Path.GetFileNameWithoutExtension(path).Equals(prefabName)) continue;
-                match = path;
-                count++;
+                if (group == null) continue;
+                foreach (var entry in group.entries)
+                {
+                    if (!entry.address.Equals(prefabName)) continue;
+                    match = entry.AssetPath;
+                    count++;
+                }
             }
-            Assert.That(count, Is.EqualTo(1), $"Expected exactly one prefab named {prefabName}");
+            Assert.That(count, Is.EqualTo(1), $"Expected exactly one addressable named {prefabName}");
             return AssetDatabase.LoadAssetAtPath<GameObject>(match);
         }
 
