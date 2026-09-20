@@ -52,9 +52,17 @@ namespace _TDS.Tests.Editor
         private static GameObject FindPrefab(string prefabName)
         {
             string[] guids = AssetDatabase.FindAssets($"{prefabName} t:Prefab");
-            Assert.That(guids.Length, Is.EqualTo(1), $"Expected exactly one prefab named {prefabName}");
-            string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-            return AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            string match = null;
+            int count = 0;
+            foreach (string guid in guids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                if (!Path.GetFileNameWithoutExtension(path).Equals(prefabName)) continue;
+                match = path;
+                count++;
+            }
+            Assert.That(count, Is.EqualTo(1), $"Expected exactly one prefab named {prefabName}");
+            return AssetDatabase.LoadAssetAtPath<GameObject>(match);
         }
 
         private static bool ArrayContainsSkill(SkillConfigData[] skills, int skillId)
