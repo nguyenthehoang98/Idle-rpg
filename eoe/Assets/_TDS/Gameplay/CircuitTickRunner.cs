@@ -4,6 +4,7 @@ using _GameToolkit.Updater;
 using _TDS.Battle;
 using _TDS.GameConfig;
 using UnityEngine;
+using _TDS.Utils;
 
 namespace _TDS.Gameplay
 {
@@ -95,7 +96,7 @@ namespace _TDS.Gameplay
                 return false;
             }
 
-            int steps = UnityEngine.Random.Range(1, Math.Max(2, Circuit.SlotCount));
+            int steps = GameRng.Range(1, Math.Max(2, Circuit.SlotCount));
             return TryRoll(steps);
         }
 

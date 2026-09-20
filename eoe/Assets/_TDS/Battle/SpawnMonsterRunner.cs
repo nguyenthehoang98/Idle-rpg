@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using _GameToolkit.GameConfig;
 using _GameToolkit.ResourceManagement;
-using _GameToolkit.Share;
 using _GameToolkit.Updater;
 using _TDS.GameConfig;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using _TDS.Utils;
 
 namespace _TDS.Battle
 {
@@ -196,8 +196,8 @@ namespace _TDS.Battle
         private void SpawnMonster(SpawnConfigData data)
         {
             Vector3 position = portals[data.RandomPortal].position + new Vector3(
-                RandomUtils.Range(-data.spawnRadius, data.spawnRadius),
-                RandomUtils.Range(-data.spawnRadius, data.spawnRadius)
+                GameRng.Range(-data.spawnRadius, data.spawnRadius),
+                GameRng.Range(-data.spawnRadius, data.spawnRadius)
             );
 
             GameObject instance = Pool.Instantiate(cachedMonster[data.monsterId], position, false);

@@ -2,6 +2,7 @@ using System;
 using Chidwi.MinMaxSliderAttribute;
 using UnityEngine;
 using Random = Unity.Mathematics.Random;
+using _TDS.Utils;
 
 namespace _TDS.Battle
 {
@@ -74,7 +75,7 @@ namespace _TDS.Battle
 
             float minHeight = Mathf.Max(0f, arcHeightMin);
             float maxHeight = Mathf.Max(minHeight, arcHeightMax);
-            float arcHeight = UnityEngine.Random.Range(minHeight, maxHeight);
+            float arcHeight = GameRng.Range(minHeight, maxHeight);
             control = ControlPoint(start, end, arcHeight);
             splineInitialized = true;
 

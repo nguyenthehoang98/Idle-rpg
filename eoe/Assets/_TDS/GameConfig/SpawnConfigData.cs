@@ -1,7 +1,7 @@
 ﻿using System;
-using _GameToolkit.Share;
 using Newtonsoft.Json;
 using UnityEngine;
+using _TDS.Utils;
 
 namespace _TDS.GameConfig
 {
@@ -25,7 +25,7 @@ namespace _TDS.GameConfig
             {
                 if (portals.Length > 1)
                 {
-                    int index = RandomUtils.Range(0, portals.Length);
+                    int index = GameRng.Range(0, portals.Length);
                     return portals[index];
                 }
 

@@ -9,6 +9,7 @@ using _TDS.GameConfig;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
+using _TDS.Utils;
 
 namespace _TDS.Battle
 {
@@ -557,7 +558,7 @@ namespace _TDS.Battle
             SkillFactory.CastSkillAsync(skill, muzzle.position, target, (monster, damage) =>
             {
                 CombatDamage.DamageResult result = CombatDamage.Calculate(
-                    damage, attack, critChance, critDamage, UnityEngine.Random.value);
+                    damage, attack, critChance, critDamage, GameRng.Value);
                 monster.BeHit();
                 int dealt = monster.TakeDamage(result.Amount);
 

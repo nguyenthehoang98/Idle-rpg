@@ -10,6 +10,7 @@ using _TDS.GameConfig;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
+using _TDS.Utils;
 
 namespace _TDS.Gameplay
 {
@@ -368,7 +369,7 @@ namespace _TDS.Gameplay
             int amount = Mathf.Min(count, pool.Count);
             for (int i = 0; i < amount; i++)
             {
-                int index = UnityEngine.Random.Range(0, pool.Count);
+                int index = GameRng.Range(0, pool.Count);
                 result.Add(pool[index]);
                 pool.RemoveAt(index);
             }

@@ -7,6 +7,7 @@ using _GameToolkit.Skills;
 using _TDS.GameConfig;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using _TDS.Utils;
 
 namespace _TDS.Battle
 {
@@ -301,14 +302,14 @@ namespace _TDS.Battle
             if (target == null || target.CurrentHealth <= 0) return;
             if (!SkillModifierSelector.TrySelect(
                     skillConfig.modifiers,
-                    UnityEngine.Random.value,
-                    UnityEngine.Random.value,
+                    GameRng.Value,
+                    GameRng.Value,
                     out SkillModifierData modifier)) return;
 
             float lifeTime = Mathf.Max(0.01f, modifier.duration);
             float tickInterval = Mathf.Max(0.01f, modifier.tickInterval);
             float tickElapsed = 0f;
-            float resistanceRoll = UnityEngine.Random.value;
+            float resistanceRoll = GameRng.Value;
             bool applied = false;
 
             ModifierSkillAction action = new ModifierSkillAction(
