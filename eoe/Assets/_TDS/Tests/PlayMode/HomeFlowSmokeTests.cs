@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.Events;
@@ -45,11 +46,13 @@ namespace _TDS.Tests.PlayMode
                 Assert.That(placeholder.sprite, Is.Null);
             }
 
-            Button shop = canvasObject.transform.Find("Bottom Menu/Button Shop")?.GetComponent<Button>();
-            Button equipment = canvasObject.transform.Find("Bottom Menu/Button Equipment")?.GetComponent<Button>();
-            Button battle = canvasObject.transform.Find("Bottom Menu/Button Battle")?.GetComponent<Button>();
-            Button talent = canvasObject.transform.Find("Bottom Menu/Button Talent")?.GetComponent<Button>();
-            Button pet = canvasObject.transform.Find("Bottom Menu/Button Pet")?.GetComponent<Button>();
+            Button[] tabButtons = FindTabButtons(homeScene);
+            Assert.That(tabButtons.Length, Is.EqualTo(5));
+            Button shop = tabButtons[0];
+            Button equipment = tabButtons[1];
+            Button battle = tabButtons[2];
+            Button talent = tabButtons[3];
+            Button pet = tabButtons[4];
             Assert.That(shop, Is.Not.Null);
             Assert.That(equipment, Is.Not.Null);
             Assert.That(battle, Is.Not.Null);
@@ -100,6 +103,22 @@ namespace _TDS.Tests.PlayMode
             battle.onClick.Invoke();
             yield return null;
             AssertOnlyTabActive(content, 2);
+        }
+
+        private static Button[] FindTabButtons(Component homeScene)
+        {
+            FieldInfo tabsField = homeScene.GetType().GetField("tabs", BindingFlags.NonPublic | BindingFlags.Instance);
+            Assert.That(tabsField, Is.Not.Null);
+            IList tabs = (IList)tabsField.GetValue(homeScene);
+            Button[] buttons = new Button[tabs.Count];
+            for (int i = 0; i < tabs.Count; i++)
+            {
+                object tabView = tabs[i];
+                Component menu = (Component)tabView.GetType().GetField("button").GetValue(tabView);
+                Assert.That(menu, Is.Not.Null);
+                buttons[i] = (Button)menu.GetType().GetProperty("Button").GetValue(menu);
+            }
+            return buttons;
         }
 
         private static void AssertOnlyTabActive(Transform content, int selectedIndex)

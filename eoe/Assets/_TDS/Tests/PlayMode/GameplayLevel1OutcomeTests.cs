@@ -34,7 +34,7 @@ namespace _TDS.Tests.PlayMode
 
             Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo("HomeScene"));
 
-            yield return SceneManager.LoadSceneAsync("GamePlayScene");
+            yield return SceneManager.LoadSceneAsync("GameplayScene");
 
             elapsed = 0f;
             string outcome = null;
@@ -93,13 +93,13 @@ namespace _TDS.Tests.PlayMode
             Assert.That(continueButton, Is.Not.Null, "The result loop button was not shown");
             continueButton.onClick.Invoke();
             elapsed = 0f;
-            while (SceneManager.GetActiveScene().name != "GamePlayScene" && elapsed < 20f)
+            while (SceneManager.GetActiveScene().name != "GameplayScene" && elapsed < 20f)
             {
                 elapsed += Time.unscaledDeltaTime;
                 yield return null;
             }
 
-            Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo("GamePlayScene"));
+            Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo("GameplayScene"));
             elapsed = 0f;
             while (elapsed < 40f)
             {
