@@ -21,8 +21,7 @@ namespace _TDS.Tests.Editor
             foreach (HeroConfigData hero in config.heros)
             {
                 Assert.That(hero.prefabName, Is.Not.Null.And.Not.Empty, $"Hero {hero.id} has no prefab");
-                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(
-                    $"Assets/_TDSAssets/Battles/Heros/{hero.prefabName}.prefab");
+                GameObject prefab = FindPrefab(hero.prefabName);
                 Assert.That(prefab, Is.Not.Null, $"Missing hero prefab {hero.prefabName}");
                 Assert.That(prefab.GetComponent<Hero>(), Is.Not.Null, $"Hero prefab {hero.prefabName} needs Hero");
                 Assert.That(ArrayContainsSkill(skills.skills, hero.attackId), Is.True,
@@ -38,8 +37,7 @@ namespace _TDS.Tests.Editor
 
             foreach (MonsterConfigData monster in config.monsters)
             {
-                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(
-                    $"Assets/_TDSAssets/Battles/Monsters/{monster.prefabName}.prefab");
+                GameObject prefab = FindPrefab(monster.prefabName);
                 Assert.That(prefab, Is.Not.Null, $"Missing monster prefab {monster.id}");
                 Assert.That(prefab.GetComponent<Monster>(), Is.Not.Null,
                     $"Monster prefab {monster.prefabName} needs Monster");
@@ -49,6 +47,14 @@ namespace _TDS.Tests.Editor
         private static T Load<T>(string path)
         {
             return JsonConvert.DeserializeObject<T>(File.ReadAllText(path));
+        }
+
+        private static GameObject FindPrefab(string prefabName)
+        {
+            string[] guids = AssetDatabase.FindAssets($"{prefabName} t:Prefab");
+            Assert.That(guids.Length, Is.EqualTo(1), $"Expected exactly one prefab named {prefabName}");
+            string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+            return AssetDatabase.LoadAssetAtPath<GameObject>(path);
         }
 
         private static bool ArrayContainsSkill(SkillConfigData[] skills, int skillId)

@@ -12,7 +12,6 @@ namespace _TDS.Tests.Editor
     public sealed class SkillPrefabCoverageTests
     {
         private const string ConfigPath = "Assets/_TDSAssets/Config/SkillConfig.json";
-        private const string PrefabFolder = "Assets/_TDSAssets/Battles/Projectiles";
 
         [Test]
         public void EveryConfiguredSkillHasRequiredProjectileComponents()
@@ -26,14 +25,21 @@ namespace _TDS.Tests.Editor
             {
                 Assert.That(skill.prefabName, Is.Not.Null.And.Not.Empty, $"Skill {skill.skillId} has no prefab");
 
-                string path = $"{PrefabFolder}/{skill.prefabName}.prefab";
-                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-                Assert.That(prefab, Is.Not.Null, $"Missing prefab for skill {skill.skillId}: {path}");
+                GameObject prefab = FindPrefab(skill.prefabName);
+                Assert.That(prefab, Is.Not.Null, $"Missing prefab for skill {skill.skillId}: {skill.prefabName}");
                 Assert.That(prefab.GetComponent<Projectile>(), Is.Not.Null,
                     $"Prefab {skill.prefabName} needs a Projectile component");
                 Assert.That(prefab.GetComponentsInChildren<CollisionDetector>(true), Is.Not.Empty,
                     $"Prefab {skill.prefabName} needs a CollisionDetector");
             }
+        }
+
+        private static GameObject FindPrefab(string prefabName)
+        {
+            string[] guids = AssetDatabase.FindAssets($"{prefabName} t:Prefab");
+            Assert.That(guids.Length, Is.EqualTo(1), $"Expected exactly one prefab named {prefabName}");
+            string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+            return AssetDatabase.LoadAssetAtPath<GameObject>(path);
         }
 
         private sealed class SkillConfigFile
