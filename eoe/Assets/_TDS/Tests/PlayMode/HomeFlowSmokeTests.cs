@@ -35,7 +35,7 @@ namespace _TDS.Tests.PlayMode
             Assert.That(content.childCount, Is.EqualTo(5));
             Assert.That(content.GetChild(0).name, Is.EqualTo("ShopTab"));
             Assert.That(content.GetChild(1).name, Is.EqualTo("EquipmentTab"));
-            Assert.That(content.GetChild(2).name, Is.EqualTo("Main"));
+            Assert.That(content.GetChild(2).name, Is.EqualTo("MainTab"));
             Assert.That(content.GetChild(3).name, Is.EqualTo("UpgradeTab"));
             Assert.That(content.GetChild(4).name, Is.EqualTo("PetTab"));
             foreach (Transform tab in content)

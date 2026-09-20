@@ -15,6 +15,7 @@ namespace _TDS.Tests.PlayMode
         public IEnumerator Level1ReachesWinOrLose()
         {
             UnityEngine.Random.InitState(1);
+            _TDS.Utils.GameRng.Seed(1);
             Type runSelection = Type.GetType("_TDS.Gameplay.RunSelection, Assembly-CSharp");
             Assert.That(runSelection, Is.Not.Null);
             runSelection.GetMethod("SelectLevel", BindingFlags.Public | BindingFlags.Static)
@@ -97,6 +98,7 @@ namespace _TDS.Tests.PlayMode
             }
 
             Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo("GamePlayScene"));
+            elapsed = 0f;
             while (elapsed < 40f)
             {
                 Text restartedStatus = GameObject.Find("Status")?.GetComponent<Text>();
