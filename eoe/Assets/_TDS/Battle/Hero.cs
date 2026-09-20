@@ -496,7 +496,10 @@ namespace _TDS.Battle
             effect.transform.SetParent(transform, false);
 
             ParticleSystem particles = effect.AddComponent<ParticleSystem>();
+            particles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
             ParticleSystem.MainModule main = particles.main;
+            main.playOnAwake = false;
             main.loop = true;
             main.duration = 1f;
             main.startLifetime = new ParticleSystem.MinMaxCurve(0.35f, 0.75f);
