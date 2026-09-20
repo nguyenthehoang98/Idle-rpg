@@ -1,168 +1,169 @@
-# Energy Circuit
+# Energy Circuit — Energy Roll MVP
 
 ## Trạng thái
 
-**MVP contract v1 - đã chốt để implement.**
+**MVP contract v2 — Energy Roll.** Contract này thay thế pulse/stack loop cũ.
 
 ## Mục đích
 
-Energy Circuit là hệ thống tạo quyết định chiến thuật chính của game. Hero và item được đặt trên slot cố định; một pulse năng lượng đi qua từng slot theo thứ tự.
-
-## Khái niệm
+Energy Circuit tạo ra một lượt Power duy nhất sau khi người chơi tích đủ Energy từ combat. Highlight không tự chạy trong lúc chờ; nó chỉ di chuyển sau khi một lượt Roll được xử lý.
 
 ```text
-[Hero] → [Generator] → [Item] → [Hero] → [Amplifier] → ...
-                                      ↑
-                               Energy pulse
+Quái chết + thời gian chậm
+        ↓
+Energy 0..100
+        ↓
+Auto Roll hoặc Manual READY
+        ↓
+Random số bước
+        ↓
+Highlight nhảy đúng số bước
+        ↓
+Slot đích được xử lý
+        ↓
+Power kết thúc mới tích Energy lại
 ```
 
-Mỗi slot có:
-
-- Nội dung hiện tại: hero, item hoặc trống.
-- Số stack năng lượng.
-- Ngưỡng kích hoạt.
-- Trạng thái active/Overdrive.
-- Hiệu ứng khi pulse đi qua.
-
-## Luật MVP đã chốt
-
-- Circuit là một vòng logic 8 slot, thứ tự `0 → 1 → ... → 7 → 0`.
-- Pulse chỉ đi một chiều; không đổi chiều trong MVP.
-- Pulse chạy mỗi `0.5s`; `deltaTime` lớn có thể tạo nhiều pulse nhưng không bỏ qua slot.
-- Slot trống không nhận stack nhưng không chặn pulse.
-- Slot có hero hoặc item nhận một stack khi pulse đi qua.
-- Ngưỡng kích hoạt là 3 stack.
-- Khi đủ ngưỡng, slot phát một activation event và stack reset về 0.
-- Slot đang active không tích stack và không kích hoạt lại; pulse tiếp tục chạy.
-- Hero kích hoạt Overdrive trong 5 giây; Overdrive không cộng dồn.
-- Khi Overdrive hết thời gian, slot trở về trạng thái chờ stack mới.
-
-### Bảng hành vi
-
-| Slot | Pulse đi qua | Stack | Activation |
-|---|---|---:|---|
-| Empty | Có | Không đổi | Không |
-| Hero inactive | Có | +1 | Khi đạt 3 |
-| Item inactive | Có | +1 | Khi đạt 3 |
-| Hero/item active | Có | Không đổi | Không |
-
-Các giá trị trên là giá trị tuning ban đầu, không phải hằng số thiết kế:
+## State machine
 
 ```text
-slotCount = 8
-pulseInterval = 0.5s
-activationThreshold = 3
-baseOverdriveDuration = 5s
+CHARGING → READY → RESOLVING → POWER ACTIVE → CHARGING
+                 └────────────→ CHARGING (nếu slot Empty)
 ```
 
-Mục tiêu tuning: một hero thông thường có cơ hội kích hoạt Overdrive khoảng mỗi 8-15 giây, tùy vị trí và item hỗ trợ.
+### CHARGING
 
-## Hero slot
+- Energy tăng từ kill và passive time.
+- Highlight giữ nguyên ở slot hiện tại.
+- Không có Roll đang chờ.
 
-Hero hoạt động bình thường khi chưa đủ stack. Khi Overdrive:
+### READY
 
-- Tăng tốc đánh hoặc damage.
-- Có thể thêm projectile/AOE.
-- Có thể thay đổi hành vi skill.
-- Có hiệu ứng hình ảnh và âm thanh riêng.
+- Energy đạt 100 và giữ ở 100.
+- Không tích thêm Energy.
+- Auto mode chuyển ngay sang `RESOLVING`.
+- Manual mode chờ người chơi bấm Roll.
+- Không thể tạo thêm lượt Power.
 
-Mỗi hero nên có một Overdrive identity rõ ràng:
+### RESOLVING
 
-- DPS hero: bắn nhanh hoặc nhiều projectile.
-- AOE hero: explosion hoặc chain.
-- Tank hero: shield, heal, damage reduction.
-- Control hero: freeze, slow, knockback.
-
-## Item slot
-
-### Generator
-
-Khi pulse đi qua, Generator nhận stack cơ bản và tạo thêm `power` stack cho slot kế tiếp.
-
-### Amplifier
-
-Khi pulse đi qua, slot kế tiếp nhận `1 + power` stack; `power = 1` là tuning mặc định.
-
-### Battery
-
-Khi số stack nhận vào vượt activation threshold, Battery lưu phần dư. Khi Overdrive kết thúc, phần dư được hoàn trả vào stack, tối đa `threshold - 1`.
-
-### Relay
-
-Khi pulse đi qua, Relay nhận stack cơ bản và chuyển stack đã có trước pulse sang slot kế tiếp. Relay không làm thay đổi thứ tự pulse.
-
-### Converter
-
-Đổi năng lượng thành một loại hiệu ứng khác:
-
-- Damage.
-- Shield.
-- Heal.
-- Cooldown reduction.
-
-### Risk item
-
-Đổi sức mạnh lấy rủi ro:
-
-- Pulse nhanh hơn nhưng monster mạnh hơn.
-- Overdrive mạnh hơn nhưng kéo dài ngắn hơn.
-- Tăng reward nhưng spawn thêm elite.
-
-## Combo
-
-Combo nên dựa trên tag và thứ tự, không dựa trên hàng trăm điều kiện đặc biệt.
-
-### Ví dụ
+- Roll tiêu thụ 100 Energy.
+- Runtime chọn số bước trong `1..SlotCount - 1`.
+- Highlight cập nhật theo modulo:
 
 ```text
-[Mark] → [Lightning Hero] → [Chain Amplifier]
+newIndex = (oldIndex + steps) % slotCount
 ```
 
-Mục tiêu bị Mark giúp chain ưu tiên hoặc gây thêm damage.
+- UI hiện text tạm, ví dụ `ROLL +5`.
+- Mỗi Roll chỉ có một slot đích.
+
+### POWER ACTIVE
+
+- Slot đích có nội dung sẽ phát một activation event.
+- Circuit chỉ cho phép một Power active tại một thời điểm.
+- Energy không tăng.
+- Roll mới bị từ chối.
+- Khi duration kết thúc, Energy vẫn là 0 và circuit quay lại `CHARGING`.
+
+### Empty landing
+
+- Highlight vẫn đổi vị trí.
+- Không phát activation event.
+- Không tự Roll lại.
+- Energy reset về 0 và bắt đầu tích lại ở tick kế tiếp.
+
+## Nguồn Energy
+
+Energy là một cooldown progress, không phải kho chứa nhiều lượt.
+
+- Kill là nguồn chính.
+- Passive time là nguồn phụ và chậm.
+- Energy bị clamp trong `0..100`.
+- Khi `READY` hoặc `POWER ACTIVE`, mọi nguồn Energy đều bị bỏ qua.
+- Khi Roll xảy ra, Energy về 0.
+
+Giá trị tuning ban đầu nằm trong code để prototype nhanh; chỉ đưa sang config asset sau khi playtest có dữ liệu:
 
 ```text
-[Oil] → [Fire Hero] → [Explosion]
+Energy capacity: 100
+Kill energy: 20 mỗi monster reward
+Passive energy: 1 mỗi giây khi CHARGING
+Overdrive duration: 5 giây mặc định
 ```
 
-Quái bị Oil và Fire có thể phát nổ khi chết.
+## Roll mode
 
-```text
-[Generator] → [Hero DPS] → [Relay] → [Hero AOE]
-```
+### Auto
 
-Hai hero nhận năng lượng theo các thời điểm khác nhau, tạo hai power window nối tiếp.
+- Khi Energy đạt 100, circuit tự Roll.
+- Player không cần thao tác.
+- Step vẫn random.
 
-## UX bắt buộc
+### Manual
 
-Người chơi phải đọc được hệ thống mà không cần mở menu:
+- Khi Energy đạt 100, circuit dừng ở `READY`.
+- Player bấm nút `ROLL` để tiêu lượt.
+- Trong MVP không thêm Focus/Critical; trước tiên kiểm tra core loop và feeling của việc chọn thời điểm Roll.
+- Có timeout an toàn tùy UI tuning sau playtest; không cho Energy tích thêm trong lúc chờ.
 
-- Pulse có màu và chuyển động rõ ràng.
-- Stack hiển thị ngay trên slot.
-- Slot sắp đầy có trạng thái báo trước.
-- Overdrive có VFX, SFX và icon thời gian còn lại.
-- Khi combo xảy ra, hiển thị tên combo ngắn.
-- Không dùng quá nhiều màu cho các trạng thái khác nhau.
+## Slot behavior
 
-## Các rủi ro cần kiểm tra
+| Slot đích | Kết quả |
+|---|---|
+| Hero | Phát activation; GameplayScene gọi `Hero.TryStartOverdrive` |
+| Item | Phát activation/feedback theo item layer hiện có |
+| Empty | Không activation, không Roll lại, recharge lại |
+| Slot đang active | Không activation lại, Roll vẫn bị tiêu thụ, recharge lại |
 
-### Chờ quá lâu mới có power
+Không tạo generic effect framework cho MVP. Item effect nâng cao là task riêng sau khi Energy Roll core ổn định.
 
-Nếu pulse quá chậm hoặc circuit quá dài, người chơi sẽ không cảm nhận được tác dụng của slot.
+## Highlight và UI
 
-### Một build luôn tối ưu
+- `HeroSlotManager` không chạy coroutine tự di chuyển highlight.
+- Highlight cell và slot tint chỉ cập nhật khi `HighlightIndex` thay đổi sau Roll.
+- `GameplayHud` dùng uGUI runtime-generated hiện có:
+  - `ENERGY 0/100`
+  - `AUTO` / `MANUAL`
+  - Nút `ROLL` khi Manual + READY
+  - Text tạm `ROLL +N`
+- Không tạo prefab/asset UI mới cho prototype; dùng `LegacyRuntime.ttf` và pattern BuildUi hiện có.
 
-Nếu Generator + Amplifier luôn tốt hơn mọi lựa chọn, Shop sẽ mất ý nghĩa. Cần có build boss, build dọn quái và build sống sót.
+## Code boundaries
 
-### Vị trí chỉ là hình thức
+- `EnergyCircuit`: state machine thuần C#, không biết Unity random/UI.
+- `CircuitTickRunner`: tick thời gian, chọn random step, Auto/Manual và phát event.
+- `GameplayScene`: nhận kill reward, bơm kill Energy, map activation Hero.
+- `GameplayHud`: hiển thị Energy/mode/Roll feedback và gửi input Manual.
+- `HeroSlotManager`: hiển thị highlight tĩnh theo `PulseIndex`/highlight index.
 
-Nếu đổi vị trí không làm thay đổi thời điểm hoặc hiệu ứng, slot không tạo ra quyết định thực sự.
+## Testing contract
 
-### Overdrive không nhìn thấy
+### EditMode
 
-Nếu buff chỉ là tăng stat ẩn, game sẽ mất feeling. Mỗi hero cần một thay đổi dễ quan sát.
+- Energy tăng theo thời gian khi `CHARGING`.
+- Kill Energy bị clamp ở 100.
+- READY không tăng Energy.
+- Roll dưới 100 bị từ chối.
+- Roll đúng số bước cập nhật highlight theo modulo.
+- Empty không tạo activation.
+- Hero/Item tạo tối đa một activation.
+- POWER ACTIVE chặn Energy và Roll.
+- Power hết thì recharge mới hoạt động.
+- Reset trả Energy/highlight/active về trạng thái ban đầu.
 
-## Giới hạn contract v1
+### PlayMode
 
-- Item chỉ tác động slot kế bên hoặc slot được chỉ rõ bởi behavior của item; không có generic effect framework.
-- Không giới hạn loại item trong circuit ở tầng simulation; Shop/tuning chịu trách nhiệm giới hạn offer.
-- Augment có thể thay đổi luật stack/pulse bằng modifier rõ ràng, nhưng base circuit giữ nguyên contract trên.
+- HUD tạo Energy/mode/Roll/RollResult.
+- Manual chỉ enable Roll khi READY.
+- Roll feedback hiển thị số bước.
+- Highlight không tự chạy trước Roll.
+- Flow `kill/time → 100 → roll → landing → power/empty → recharge` chạy được.
+
+## Ngoài MVP
+
+- Focus/Critical khi chờ Manual.
+- Player chọn giữa nhiều step preview.
+- Item effect nâng cao.
+- Config asset cho Energy tuning.
+- Animation highlight chạy theo từng ô trong lúc Resolving.

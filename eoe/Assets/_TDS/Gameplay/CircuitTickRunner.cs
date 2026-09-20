@@ -1,18 +1,19 @@
 using System;
-using System.Collections.Generic;
 using _GameToolkit.GameConfig;
 using _GameToolkit.Updater;
 using _TDS.Battle;
 using _TDS.GameConfig;
+using UnityEngine;
 
 namespace _TDS.Gameplay
 {
     public sealed class CircuitTickRunner : TickRunner
     {
-        private readonly List<CircuitActivationEvent> activations = new List<CircuitActivationEvent>();
-
         public EnergyCircuit Circuit { get; private set; }
         public int TickCount { get; private set; }
+        public bool IsManualMode { get; private set; }
+        public bool CanRoll => Circuit != null && Circuit.IsReady;
+        public event Action<CircuitRollEvent> OnRoll;
         public event Action<CircuitActivationEvent> OnActivation;
 
         public void Initialize(CircuitBoard board)
@@ -23,7 +24,6 @@ namespace _TDS.Gameplay
             }
 
             Circuit = new EnergyCircuit(board.SlotCount);
-            // ponytail: try/catch vì test/editor có thể Initialize khi chưa load config.
             HeroConfig heroConfig = null;
             try { heroConfig = ConfigManager.Get<HeroConfig>(); } catch { heroConfig = null; }
             for (int i = 0; i < board.SlotCount; i++)
@@ -42,22 +42,15 @@ namespace _TDS.Gameplay
 
                 if (content.Type == CircuitSlotContentType.Hero
                     && heroConfig != null
-                    && heroConfig.TryGetHero(content.Id, out HeroConfigData heroData))
+                    && heroConfig.TryGetHero(content.Id, out HeroConfigData heroData)
+                    && heroData.powerDuration > 0f)
                 {
-                    if (heroData.stackThreshold > 0)
-                    {
-                        Circuit.SetThreshold(i, heroData.stackThreshold);
-                    }
-
-                    if (heroData.powerDuration > 0f)
-                    {
-                        Circuit.SetPowerDuration(i, heroData.powerDuration);
-                    }
+                    Circuit.SetPowerDuration(i, heroData.powerDuration);
                 }
             }
 
             TickCount = 0;
-            activations.Clear();
+            IsManualMode = false;
         }
 
         public override void Tick(float deltaTime)
@@ -68,18 +61,63 @@ namespace _TDS.Gameplay
             }
 
             TickCount++;
-            activations.Clear();
-            Circuit.Tick(deltaTime, activations);
-
-            for (int i = 0; i < activations.Count; i++)
-            {
-                OnActivation?.Invoke(activations[i]);
-            }
+            Circuit.Tick(deltaTime);
 
             foreach (Hero hero in Hero.AliveHeroes)
             {
                 hero.TickOverdrive(deltaTime);
             }
+
+            TryAutoRoll();
+        }
+
+        public void AddKillEnergy(float amount = EnergyCircuit.DefaultKillEnergy)
+        {
+            if (Circuit == null)
+            {
+                return;
+            }
+
+            Circuit.AddEnergy(amount);
+            TryAutoRoll();
+        }
+
+        public void SetManualMode(bool manual)
+        {
+            IsManualMode = manual;
+            TryAutoRoll();
+        }
+
+        public bool TryRoll()
+        {
+            if (Circuit == null || !Circuit.IsReady)
+            {
+                return false;
+            }
+
+            int steps = UnityEngine.Random.Range(1, Math.Max(2, Circuit.SlotCount));
+            return TryRoll(steps);
+        }
+
+        public bool TryRoll(int steps)
+        {
+            if (Circuit == null)
+            {
+                return false;
+            }
+
+            if (!Circuit.TryRoll(steps, out CircuitRollEvent roll, out CircuitActivationEvent activation))
+            {
+                return false;
+            }
+
+            OnRoll?.Invoke(roll);
+            if (roll.Content.Type != CircuitSlotContentType.Empty)
+            {
+                OnActivation?.Invoke(activation);
+            }
+
+            return true;
         }
 
         public void ResetCircuit()
@@ -91,7 +129,16 @@ namespace _TDS.Gameplay
 
             Circuit.Reset();
             TickCount = 0;
-            activations.Clear();
+        }
+
+        private void TryAutoRoll()
+        {
+            if (IsManualMode || Circuit == null || !Circuit.IsReady)
+            {
+                return;
+            }
+
+            TryRoll();
         }
     }
 }

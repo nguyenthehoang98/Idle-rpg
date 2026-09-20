@@ -11,7 +11,7 @@ using UnityEngine;
 namespace _TDS.Gameplay
 {
     /// <summary>
-    /// Quản lý các slot đặt hero. Mỗi slot có một arrow effect để báo slot đang được pulse.
+    /// Quản lý các slot đặt hero và hiển thị highlight tĩnh theo vị trí Energy Roll.
     /// Nhận danh sách heroId từ GameplayScene.heroIds, id thoả config mới tạo.
     /// </summary>
     public class HeroSlotManager : MonoBehaviour
@@ -22,14 +22,11 @@ namespace _TDS.Gameplay
         [SerializeField] private bool enableArrow = true;
         [SerializeField, Min(0.01f)] private float arrowPlayTime = 0.5f;
         [Header("Highlight Cell")]
-        [Tooltip("Một cell highlight duy nhất, tự di chuyển qua các slot theo vòng lặp.")]
-        [SerializeField] private bool enableHighlightCell = true;
+        [Tooltip("Một cell highlight duy nhất, được đặt tại slot đích sau mỗi Roll.")]
         [SerializeField] private Transform highlightCell;
-        [SerializeField, Min(0.01f)] private float highlightPlayTime = 0.5f;
 
         private SpriteRenderer[] slotRenderers;
         private Coroutine arrowSequenceCoroutine;
-        private Coroutine highlightCellCoroutine;
         private static readonly Color NormalColor = Color.white;
         private static readonly Color HighlightColor = ParseColor("FDE047");
 
@@ -57,8 +54,7 @@ namespace _TDS.Gameplay
                 arrowSequenceCoroutine = StartCoroutine(PlayArrowSequence());
             }
 
-            if (enableHighlightCell && highlightCellCoroutine == null)
-                highlightCellCoroutine = StartCoroutine(PlayHighlightCellSequence());
+            // Highlight is static while charging and moves only after a circuit roll.
         }
 
         private void OnDisable()
@@ -67,11 +63,6 @@ namespace _TDS.Gameplay
             {
                 StopCoroutine(arrowSequenceCoroutine);
                 arrowSequenceCoroutine = null;
-            }
-            if (highlightCellCoroutine != null)
-            {
-                StopCoroutine(highlightCellCoroutine);
-                highlightCellCoroutine = null;
             }
             SetAllArrows(false);
             SetHighlightCellActive(false);
@@ -107,9 +98,19 @@ namespace _TDS.Gameplay
                 bool isHighlight = false;
                 if (i < circuit.SlotCount)
                 {
-                    isHighlight = i == circuit.PulseIndex;
+                    isHighlight = i == circuit.HighlightIndex;
                 }
                 r.color = isHighlight ? HighlightColor : NormalColor;
+            }
+
+            if (highlightCell != null && slots != null && circuit.HighlightIndex >= 0 && circuit.HighlightIndex < slots.Length)
+            {
+                Transform slot = slots[circuit.HighlightIndex];
+                if (slot != null)
+                {
+                    highlightCell.position = slot.position;
+                    SetHighlightCellActive(true);
+                }
             }
         }
 
@@ -133,27 +134,6 @@ namespace _TDS.Gameplay
 
                     yield return playDelay;
                 }
-            }
-        }
-
-        private IEnumerator PlayHighlightCellSequence()
-        {
-            if (highlightCell == null || slots == null || slots.Length == 0) yield break;
-
-            WaitForSeconds moveDelay = new WaitForSeconds(Mathf.Max(0.01f, highlightPlayTime));
-            SetHighlightCellActive(true);
-            while (true)
-            {
-                bool moved = false;
-                for (int i = 0; i < slots.Length; i++)
-                {
-                    if (slots[i] == null) continue;
-                    highlightCell.position = slots[i].position;
-                    moved = true;
-                    yield return moveDelay;
-                }
-
-                if (!moved) yield return null;
             }
         }
 

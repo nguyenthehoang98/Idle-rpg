@@ -124,6 +124,7 @@ namespace _TDS.Gameplay
         {
             runner.OnPauseChanged += PauseChanged;
             runner.OnTimeScaleChanged += TimeScaleChanged;
+            circuitRunner.OnRoll += OnCircuitRoll;
             circuitRunner.OnActivation += OnCircuitActivation;
             Monster.OnMonsterRewarded += OnMonsterRewarded;
             Hero.OnHeroEnable += TrackHero;
@@ -135,6 +136,7 @@ namespace _TDS.Gameplay
         {
             runner.OnPauseChanged -= PauseChanged;
             runner.OnTimeScaleChanged -= TimeScaleChanged;
+            circuitRunner.OnRoll -= OnCircuitRoll;
             circuitRunner.OnActivation -= OnCircuitActivation;
             Monster.OnMonsterRewarded -= OnMonsterRewarded;
             Hero.OnHeroEnable -= TrackHero;
@@ -168,6 +170,9 @@ namespace _TDS.Gameplay
             hud.SetBottomVisible(true);
             hud.SetGold(rewards.Gold);
             hud.BindTimeScale(speed => runner.Loop = speed);
+            hud.BindCircuitControls(
+                () => circuitRunner.TryRoll(),
+                manual => circuitRunner.SetManualMode(manual));
             hud.BindResultActions(ContinueAfterResult, ReturnHome);
             hud.SetStatus("LOADING BATTLE");
 
@@ -221,6 +226,14 @@ namespace _TDS.Gameplay
             spawnRunner?.Dispose();
             agentRunner?.Dispose();
             SkillFactory.Dispose();
+        }
+
+        private void OnCircuitRoll(CircuitRollEvent roll)
+        {
+            hud.ShowRoll(roll);
+            hud.SetStatus(roll.Content.Type == CircuitSlotContentType.Empty
+                ? $"ROLL +{roll.StepsMoved} · EMPTY"
+                : $"ROLL +{roll.StepsMoved}");
         }
 
         private void OnCircuitActivation(CircuitActivationEvent activation)
@@ -404,6 +417,7 @@ namespace _TDS.Gameplay
         private void OnMonsterRewarded(Monster monster, int experience, int gold)
         {
             rewards.Add(experience, gold);
+            circuitRunner?.AddKillEnergy();
             hud?.SetGold(rewards.Gold);
             switch (monster.Rank)
             {

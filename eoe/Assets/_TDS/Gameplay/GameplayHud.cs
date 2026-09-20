@@ -32,6 +32,17 @@ namespace _TDS.Gameplay
         private Text waveText;
         private Text statusText;
         private Text goldText;
+        private Text energyText;
+        private Text rollResultText;
+        private GameObject rollPopup;
+        private Text rollPopupText;
+        private float rollPopupRemaining;
+        private Text modeButtonLabel;
+        private Button rollButton;
+        private Action<bool> setManualMode;
+        private Func<bool> rollRequested;
+        private bool manualMode;
+        private float rollResultRemaining;
         private Text resultTitle;
         private Text resultRewards;
         private GameObject resultOverlay;
@@ -65,6 +76,24 @@ namespace _TDS.Gameplay
                     {
                         statusText.color = statusBeforeModifierColor;
                     }
+                }
+            }
+
+            if (rollResultRemaining > 0f)
+            {
+                rollResultRemaining -= Time.unscaledDeltaTime;
+                if (rollResultRemaining <= 0f)
+                {
+                    SetText(string.Empty, rollResultText);
+                }
+            }
+
+            if (rollPopupRemaining > 0f)
+            {
+                rollPopupRemaining -= Time.unscaledDeltaTime;
+                if (rollPopupRemaining <= 0f && rollPopup != null)
+                {
+                    rollPopup.SetActive(false);
                 }
             }
 
@@ -113,7 +142,7 @@ namespace _TDS.Gameplay
                     _ => "EMPTY"
                 };
                 slotIndexLabels[i].text = $"{i + 1:00}";
-                slotStackLabels[i].text = "0/3";
+                slotStackLabels[i].text = string.Empty;
                 slotBaseColors[i] = ParseColor("FFFFFF");
                 slotImages[i].color = slotBaseColors[i];
                 slotImages[i].gameObject.SetActive(true);
@@ -135,9 +164,34 @@ namespace _TDS.Gameplay
             SetText($"GOLD  {Mathf.Max(0, gold)}", goldText);
         }
 
+        public void BindCircuitControls(Func<bool> roll, Action<bool> manualModeSetter)
+        {
+            rollRequested = roll;
+            setManualMode = manualModeSetter;
+            SetManualMode(false, notify: false);
+        }
+
+        public void ShowRoll(CircuitRollEvent roll)
+        {
+            SetText($"ROLL +{roll.StepsMoved}  →  {roll.SlotIndex + 1:00}", rollResultText);
+            rollResultRemaining = 1.5f;
+            if (rollPopup != null)
+            {
+                SetText($"+{roll.StepsMoved}", rollPopupText);
+                rollPopup.SetActive(true);
+                rollPopupRemaining = 1f;
+            }
+        }
+
         public void RefreshCircuit(EnergyCircuit circuit)
         {
             if (circuit == null) return;
+
+            SetText($"ENERGY  {Mathf.FloorToInt(circuit.Energy)}/{Mathf.FloorToInt(circuit.EnergyCapacity)}", energyText);
+            if (rollButton != null)
+            {
+                rollButton.interactable = manualMode && circuit.IsReady;
+            }
 
             for (int i = 0; i < slotImages.Length; i++)
             {
@@ -145,14 +199,11 @@ namespace _TDS.Gameplay
                 slotImages[i].gameObject.SetActive(visible);
                 if (!visible) continue;
                 CircuitSlotState state = circuit.GetSlot(i);
-                slotStackLabels[i].text = state.IsActive
-                    ? "OVERDRIVE"
-                    : $"{state.Stack}/{circuit.GetThreshold(i)}";
+                slotStackLabels[i].text = state.IsActive ? "POWER" : string.Empty;
                 slotStackLabels[i].color = state.IsActive ? TextColor : MutedColor;
 
                 if (slotFeedback[i] > 0f) continue;
-                // highlight = vàng, không = trắng
-                slotImages[i].color = (state.IsActive || i == circuit.PulseIndex)
+                slotImages[i].color = (state.IsActive || i == circuit.HighlightIndex)
                     ? HighlightColor
                     : ParseColor("FFFFFF");
             }
@@ -254,9 +305,12 @@ namespace _TDS.Gameplay
                 new Vector2(24f, 36f), new Vector2(-24f, 390f));
 
             CreateText("CircuitTitle", circuitPanel.transform, "ENERGY CIRCUIT", 24, TextColor,
-                new Vector2(0.04f, 0.79f), new Vector2(0.5f, 0.98f), TextAnchor.MiddleLeft);
-            CreateText("CircuitHint", circuitPanel.transform, "PULSE  ·  3 STACKS TO OVERDRIVE", 16, MutedColor,
+                new Vector2(0.04f, 0.79f), new Vector2(0.32f, 0.98f), TextAnchor.MiddleLeft);
+            energyText = CreateText("Energy", circuitPanel.transform, "ENERGY  0/100", 18, AccentColor,
+                new Vector2(0.33f, 0.79f), new Vector2(0.62f, 0.98f), TextAnchor.MiddleCenter);
+            CreateText("CircuitHint", circuitPanel.transform, "KILL + TIME  ·  ROLL TO POWER", 16, MutedColor,
                 new Vector2(0.04f, 0.64f), new Vector2(0.65f, 0.81f), TextAnchor.MiddleLeft);
+            BuildCircuitControls(circuitPanel.transform);
 
             Image circuitRule = CreateImage("Rule", circuitPanel.transform, AccentColor);
             circuitRule.color = new Color(AccentColor.r, AccentColor.g, AccentColor.b, 0.35f);
@@ -296,7 +350,76 @@ namespace _TDS.Gameplay
                 slotStackLabels[i].raycastTarget = false;
             }
 
+            rollResultText = CreateText("RollResult", circuitPanel.transform, string.Empty, 18, HighlightColor,
+                new Vector2(0.64f, 0.64f), new Vector2(0.96f, 0.81f), TextAnchor.MiddleRight);
+            rollResultText.raycastTarget = false;
+
+            rollPopup = new GameObject("RollPopup", typeof(RectTransform));
+            rollPopup.transform.SetParent(root, false);
+            SetRect(rollPopup.GetComponent<RectTransform>(), new Vector2(0.2f, 0.35f), new Vector2(0.8f, 0.65f), Vector2.zero, Vector2.zero);
+            rollPopupText = CreateText("RollPopupText", rollPopup.transform, string.Empty, 120, HighlightColor,
+                Vector2.zero, Vector2.one, TextAnchor.MiddleCenter);
+            rollPopupText.raycastTarget = false;
+            rollPopupText.fontStyle = FontStyle.Bold;
+            Outline popupOutline = rollPopupText.gameObject.AddComponent<Outline>();
+            popupOutline.effectColor = new Color(0f, 0f, 0f, 0.8f);
+            popupOutline.effectDistance = new Vector2(4f, 4f);
+            rollPopup.SetActive(false);
+
             BuildResultOverlay(root);
+        }
+
+        private void BuildCircuitControls(Transform parent)
+        {
+            GameObject controls = new GameObject("CircuitControls", typeof(RectTransform));
+            controls.transform.SetParent(parent, false);
+            RectTransform controlsRect = controls.GetComponent<RectTransform>();
+            SetRect(controlsRect, new Vector2(0.68f, 0.79f), new Vector2(0.96f, 0.98f), Vector2.zero, Vector2.zero);
+            HorizontalLayoutGroup layout = controls.AddComponent<HorizontalLayoutGroup>();
+            layout.spacing = 6f;
+            layout.padding = new RectOffset(2, 2, 2, 2);
+            layout.childControlWidth = true;
+            layout.childControlHeight = true;
+            layout.childForceExpandWidth = true;
+            layout.childForceExpandHeight = true;
+
+            Button modeButton = CreateHudButton("ModeButton", controls.transform, "AUTO", AccentColor);
+            modeButtonLabel = modeButton.GetComponentInChildren<Text>();
+            modeButton.onClick.AddListener(() => SetManualMode(!manualMode));
+
+            rollButton = CreateHudButton("RollButton", controls.transform, "ROLL", SlotColor);
+            rollButton.onClick.AddListener(() => rollRequested?.Invoke());
+            rollButton.interactable = false;
+        }
+
+        private Button CreateHudButton(string objectName, Transform parent, string label, Color color)
+        {
+            GameObject buttonObject = new GameObject(objectName, typeof(RectTransform));
+            buttonObject.transform.SetParent(parent, false);
+            Image image = buttonObject.AddComponent<Image>();
+            image.color = color;
+            Button button = buttonObject.AddComponent<Button>();
+            button.targetGraphic = image;
+            ColorBlock colors = button.colors;
+            colors.normalColor = color;
+            colors.highlightedColor = ParseColor("7DD3FC");
+            colors.pressedColor = ParseColor("2DD4BF");
+            colors.disabledColor = new Color(color.r, color.g, color.b, 0.35f);
+            button.colors = colors;
+            Text text = CreateText("Label", buttonObject.transform, label, 14, TextColor,
+                Vector2.zero, Vector2.one, TextAnchor.MiddleCenter);
+            text.raycastTarget = false;
+            return button;
+        }
+
+        private void SetManualMode(bool manual, bool notify = true)
+        {
+            manualMode = manual;
+            SetText(manual ? "MANUAL" : "AUTO", modeButtonLabel);
+            if (notify)
+            {
+                setManualMode?.Invoke(manual);
+            }
         }
 
         private void BuildSpeedControls(Transform parent)

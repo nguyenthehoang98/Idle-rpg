@@ -25,68 +25,98 @@ namespace _TDS.Tests.Editor
         }
 
         [Test]
-        public void RunnerOwnsOneCircuitAndEmitsActivationOnce()
+        public void RunnerOwnsOneCircuitAndStartsAtZeroEnergy()
         {
             CircuitBoard board = CircuitBoard.FromHeroes(new[] { 1001 });
+
+            runner.Initialize(board);
+
+            Assert.That(runner.Circuit, Is.Not.Null);
+            Assert.That(runner.Circuit.Energy, Is.EqualTo(0f));
+            Assert.That(runner.Circuit.HighlightIndex, Is.EqualTo(0));
+            Assert.That(runner.IsManualMode, Is.False);
+        }
+
+        [Test]
+        public void KillEnergyTriggersAutoRollWhenEnergyReachesCapacity()
+        {
+            CircuitBoard board = CircuitBoard.FromHeroes(new[] { 1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008 });
+            runner.Initialize(board);
+            int rollCount = 0;
+            runner.OnRoll += _ => rollCount++;
+
+            runner.AddKillEnergy(EnergyCircuit.DefaultEnergyCapacity);
+
+            Assert.That(rollCount, Is.EqualTo(1));
+            Assert.That(runner.Circuit.Energy, Is.EqualTo(0f));
+            Assert.That(runner.Circuit.IsPowerActive, Is.True);
+        }
+
+        [Test]
+        public void ManualModeHoldsReadyUntilRollIsRequested()
+        {
+            runner.Initialize(CircuitBoard.FromHeroes(new[] { 1001 }));
+            runner.SetManualMode(true);
+            runner.AddKillEnergy(EnergyCircuit.DefaultEnergyCapacity);
+
+            Assert.That(runner.Circuit.IsReady, Is.True);
+            Assert.That(runner.Circuit.HighlightIndex, Is.EqualTo(0));
+
+            Assert.That(runner.TryRoll(1), Is.True);
+            Assert.That(runner.Circuit.Energy, Is.EqualTo(0f));
+            Assert.That(runner.Circuit.HighlightIndex, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void ManualModeDoesNotCreateTwoPowerActivations()
+        {
+            CircuitBoard board = new CircuitBoard();
+            board.SetContent(1, CircuitSlotContent.Hero(1001));
+            runner.Initialize(board);
+            runner.SetManualMode(true);
             int activationCount = 0;
             runner.OnActivation += _ => activationCount++;
 
-            runner.Initialize(board);
-            runner.Tick(4.01f);
-            runner.Tick(4.01f);
-            runner.Tick(4.01f);
+            runner.AddKillEnergy(EnergyCircuit.DefaultEnergyCapacity);
+            Assert.That(runner.TryRoll(1), Is.True);
+            runner.AddKillEnergy(EnergyCircuit.DefaultEnergyCapacity);
+            Assert.That(runner.TryRoll(1), Is.False);
 
-            Assert.That(runner.TickCount, Is.EqualTo(3));
-            Assert.That(runner.Circuit, Is.Not.Null);
             Assert.That(activationCount, Is.EqualTo(1));
         }
 
         [Test]
-        public void ResetRestartsCircuitAndTickCount()
+        public void PassiveEnergyStartsAfterPowerEnds()
         {
-            runner.Initialize(CircuitBoard.FromHeroes(new[] { 1001 }));
-            runner.Tick(0.5f);
-            runner.ResetCircuit();
+            CircuitBoard board = new CircuitBoard();
+            board.SetContent(1, CircuitSlotContent.Hero(1001));
+            runner.Initialize(board);
+            runner.SetManualMode(true);
+            runner.AddKillEnergy(EnergyCircuit.DefaultEnergyCapacity);
+            runner.TryRoll(1);
 
-            Assert.That(runner.TickCount, Is.EqualTo(0));
-            Assert.That(runner.Circuit.PulseIndex, Is.EqualTo(0));
-            Assert.That(runner.Circuit.GetSlot(0).Stack, Is.EqualTo(0));
+            runner.Tick(EnergyCircuit.DefaultOverdriveDuration);
+
+            Assert.That(runner.Circuit.IsPowerActive, Is.False);
+            Assert.That(runner.Circuit.Energy, Is.EqualTo(0f));
+            runner.Tick(1f);
+            Assert.That(runner.Circuit.Energy, Is.EqualTo(EnergyCircuit.DefaultPassiveEnergyPerSecond));
         }
 
         [Test]
-        public void ItemPulseActivatesHeroOverdriveThroughRunner()
+        public void RunnerReportsRollEvenWhenLandingOnEmptySlot()
         {
-            GameObject heroObject = new GameObject("CircuitCombatHero");
-            Hero hero = heroObject.AddComponent<Hero>();
-            hero.Initialize(new HeroConfigData
-            {
-                id = 1001,
-                health = 10,
-                attack = 1,
-                attackRange = 1,
-                attackSpeed = 1,
-            }, new SkillConfigData());
-            CircuitBoard board = new CircuitBoard();
-            board.SetItem(0, 201, CircuitItemType.Generator);
-            board.SetContent(1, CircuitSlotContent.Hero(1001));
-            runner.OnActivation += activation =>
-            {
-                if (activation.Content.Type == CircuitSlotContentType.Hero && activation.Content.Id == hero.HeroId)
-                {
-                    hero.TryStartOverdrive(EnergyCircuit.DefaultOverdriveDuration);
-                }
-            };
+            runner.Initialize(new CircuitBoard());
+            runner.SetManualMode(true);
+            runner.AddKillEnergy(EnergyCircuit.DefaultEnergyCapacity);
+            CircuitRollEvent received = default;
+            runner.OnRoll += roll => received = roll;
 
-            runner.Initialize(board);
-            runner.Tick(4.5f);
+            Assert.That(runner.TryRoll(2), Is.True);
 
-            Assert.That(runner.Circuit.GetSlot(0).Content.Type, Is.EqualTo(CircuitSlotContentType.Item));
-            Assert.That(runner.Circuit.GetSlot(1).IsActive, Is.True);
-            Assert.That(hero.IsOverdriveActive, Is.True);
-
-            Assert.That(hero.OverdriveActivations, Is.EqualTo(1));
-
-            Object.DestroyImmediate(heroObject);
+            Assert.That(received.StepsMoved, Is.EqualTo(2));
+            Assert.That(received.SlotIndex, Is.EqualTo(2));
+            Assert.That(runner.Circuit.IsPowerActive, Is.False);
         }
     }
 }

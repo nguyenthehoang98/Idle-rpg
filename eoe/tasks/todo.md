@@ -576,6 +576,133 @@ Một Big Todo chỉ được đánh dấu `[x]` khi:
 
 ---
 
+# Big Todo 8 - Energy Roll Power Loop
+
+**Dependency:** Chốt plan này trước khi implementation. Big Todo 8 thay thế luật pulse/stack kích hoạt cũ trong gameplay.
+
+## ER-01 - Chốt contract và cập nhật design `[P0]` `[x]`
+
+- [x] Xác nhận Energy là một cooldown duy nhất, không bank hai lượt Power.
+- [x] Chốt Energy cost `100`, điều kiện `CHARGING / READY / POWER ACTIVE`.
+- [x] Chốt landing Empty: bỏ qua, không activation, recharge lại.
+- [x] Chốt step random `1..slotCount - 1` và highlight chỉ di chuyển sau Roll.
+- [x] Cập nhật `docs/game-design/energy-circuit.md` để không còn mô tả stack/pulse cũ.
+
+**Acceptance:** Contract mô tả được toàn bộ state transition và không còn mâu thuẫn với feature plan.
+
+**Verify:** Review `tasks/plan.md`, `docs/game-design/energy-circuit.md` trước khi sửa code.
+
+## ER-02 - EnergyCircuit state machine `[P0]` `[~]`
+
+- [x] Thay stack/threshold activation bằng Energy 0..100.
+- [ ] Thêm trạng thái READY và Power active; highlight index đứng yên khi chưa Roll.
+- [ ] Thêm API deterministic để Roll với số bước được truyền vào.
+- [ ] Roll chỉ thành công khi Energy đủ và circuit không ACTIVE.
+- [ ] Chặn tích Energy trong READY/ACTIVE và chặn Power chồng nhau.
+- [ ] Empty/active landing không phát activation và không làm Roll chạy lại.
+
+**Acceptance:** Một circuit chỉ có tối đa một Power active; test core không cần scene/UI.
+
+**Verify:** EditMode tests mới cho energy cap, ready gate, modulo step, Empty, active lock và recharge.
+
+**Files dự kiến:** `Assets/_TDS/Battle/EnergyCircuit.cs`, `Assets/_TDS/Tests/Editor/EnergyCircuitTests.cs`.
+
+## ER-03 - CircuitTickRunner và nguồn Energy `[P0]` `[~]`
+
+- [x] Tick passive Energy chậm trong lúc CHARGING.
+- [ ] Thêm API nhận kill Energy từ GameplayScene.
+- [ ] Chọn random step ở runner; core không dùng random global.
+- [ ] Phát Roll event gồm số bước và slot đích.
+- [ ] Auto mode tự Roll khi đạt 100.
+- [ ] Manual mode giữ READY và chỉ Roll khi được gọi.
+
+**Acceptance:** Kill/time đạt 100 đúng một lượt; Auto và Manual có hành vi khác nhau; Empty vẫn kết thúc lượt.
+
+**Verify:** EditMode tests cho time/kill energy, Auto/Manual, Roll event và không tích khi Power active.
+
+**Files dự kiến:** `Assets/_TDS/Gameplay/CircuitTickRunner.cs`, `Assets/_TDS/Tests/Editor/CircuitTickRunnerTests.cs`.
+
+## ER-04 - GameplayScene và Hero activation `[P0]` `[~]`
+
+- [x] Feed kill Energy trong `OnMonsterRewarded`.
+- [ ] Map Hero activation hiện tại sang Overdrive, không tạo activation thứ hai.
+- [ ] Giữ duration theo slot và reset/recharge sau khi Power kết thúc.
+- [ ] Cập nhật status để phân biệt READY, ROLL và POWER ACTIVE.
+
+**Acceptance:** Flow kill → Energy 100 → Roll → Hero Power → Power end → tích lại chạy được.
+
+**Verify:** PlayMode smoke test hoặc manual PlayMode flow; không có Hero Overdrive overlap.
+
+**Files dự kiến:** `Assets/_TDS/Gameplay/GameplayScene.cs`, `Assets/_TDS/Gameplay/CircuitTickRunner.cs`.
+
+## ER-05 - HUD/runtime UI và asset setup `[P0]` `[~]`
+
+- [x] Hiển thị `ENERGY 0/100` trong HUD.
+- [ ] Thêm Auto/Manual toggle bằng UGUI runtime-generated hiện có.
+- [ ] Thêm nút Roll, chỉ enable khi Manual + READY.
+- [ ] Hiển thị text tạm `ROLL +N` sau Auto/Manual Roll.
+- [ ] Highlight chỉ trỏ vào `HighlightIndex`; `HeroSlotManager` không còn coroutine tự chạy highlight.
+- [ ] Bỏ text stack/`PULSE` cũ.
+- [ ] Không thêm package, prefab hoặc external UI asset mới nếu runtime HUD hiện tại đủ dùng.
+
+**Acceptance:** UI runtime có đủ Energy, mode, Roll button, kết quả random và slot đích; highlight chỉ di chuyển sau Roll; không có layout null/zero-size.
+
+**Verify:** `GameplayHudTests` kiểm tra hierarchy; manual kiểm tra Auto/Manual/Empty.
+
+**Files dự kiến:** `Assets/_TDS/Gameplay/GameplayHud.cs`, `Assets/_TDS/Gameplay/HeroSlotManager.cs`, `Assets/_TDS/Tests/PlayMode/GameplayHudTests.cs`.
+
+## ER-06 - Test coverage `[P0]`
+
+- [ ] Cập nhật toàn bộ EnergyCircuit tests đang kiểm tra stack/threshold cũ.
+- [ ] Thêm test không tạo hai Power cùng lúc.
+- [ ] Thêm test Energy chỉ bắt đầu lại sau Power end.
+- [ ] Thêm test highlight đứng yên khi không Roll và đổi đúng sau Roll.
+- [ ] Thêm test Empty không phát activation và không khóa circuit.
+- [ ] Thêm PlayMode test cho text Roll và nút Manual.
+
+**Acceptance:** Test phản ánh contract mới, không disable/xóa test để làm xanh build.
+
+**Verify:**
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tools/verify-unity.ps1 -Mode compile
+powershell -ExecutionPolicy Bypass -File tools/verify-unity.ps1 -Mode editmode
+powershell -ExecutionPolicy Bypass -File tools/verify-unity.ps1 -Mode playmode
+```
+
+## ER-07 - Tuning và review `[P1]`
+
+- [ ] Chạy manual với kill Energy và passive Energy ban đầu.
+- [ ] Kiểm tra Auto không Power quá dày.
+- [ ] Kiểm tra Manual không bị lợi tuyệt đối chỉ vì chờ.
+- [ ] Kiểm tra highlight nhảy đúng số random và không dừng ở Empty.
+- [ ] Chạy code review correctness/readability/architecture/performance.
+
+**Acceptance:** Có ghi nhận tuning ban đầu và quyết định rõ phần nào chưa làm (Focus/Critical, item effect nâng cao).
+
+**Verify:** Manual PlayMode + review diff; không commit file generated ngoài scope.
+
+## Checkpoint ER-A - Core ready
+
+- [ ] ER-01 đến ER-03 pass.
+- [ ] Core tests pass.
+- [ ] Không còn code path cũ tự chạy pulse/stack trong circuit mới.
+
+## Checkpoint ER-B - Playable loop ready
+
+- [ ] ER-04 đến ER-06 pass.
+- [ ] Chạy được `kill/time → 100 → roll → highlight landing → power/empty → recharge`.
+- [ ] Auto/Manual đều hoạt động.
+
+## Checkpoint ER-C - Feature ready
+
+- [ ] ER-07 pass.
+- [ ] Design docs và todo khớp implementation.
+- [ ] Existing user modifications ngoài feature không bị ghi đè.
+- [ ] Có commit nhỏ, mô tả đúng một logical increment.
+
+---
+
 # Big Todo 7 - UI, content và entry flow
 
 **Mục tiêu:** Tạo flow `Entry → Home → chọn level → Gameplay`, HUD shape native và content prototype mở rộng.

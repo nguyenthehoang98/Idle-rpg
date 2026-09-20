@@ -200,3 +200,123 @@ Tạo vertical slice người chơi có thể vào `Entry → Home → chọn le
 | Overdrive chỉ tăng số | Thiếu feeling | Thay đổi projectile/behavior + VFX/SFX |
 | Scope phình to | Không hoàn thành MVP | Chưa làm meta progression, PvP, crafting, deck đầy đủ |
 | Logic phụ thuộc UI | Khó test và sửa | Circuit/Shop/Run state tách khỏi MonoBehaviour khi có thể |
+
+---
+
+# Feature Plan: Energy Roll Power Loop
+
+## Trạng thái
+
+**Implementation in progress.** Phần này thay thế contract pulse/stack hiện tại của Energy Circuit trong gameplay; không triển khai song song hai luật kích hoạt. Core/UI code đã cập nhật; EditMode/PlayMode còn chờ Unity Editor đang mở được đóng.
+
+## Mục tiêu
+
+Đổi Energy Circuit sang một chu kỳ duy nhất:
+
+```text
+Quái chết + thời gian chậm → Energy 0..100
+Đủ 100 → Auto Roll hoặc chờ Manual Roll
+Roll → random số bước → highlight nhảy đúng số bước
+Ô đích có nội dung → phát Power cho đúng slot đó
+Ô đích Empty → bỏ qua, không phát Power
+Power kết thúc → mới bắt đầu tích Energy lại
+```
+
+Không có tích trữ hai lượt Power cùng lúc. Khi đang `READY` hoặc `POWER ACTIVE`, Energy không tăng.
+
+## Quyết định kiến trúc
+
+1. `EnergyCircuit` tiếp tục là state machine thuần C#, nhưng bỏ việc tự chạy pulse theo interval và stack threshold. Nó sở hữu Energy, highlight index, trạng thái Power và xử lý một lượt Roll.
+2. `CircuitTickRunner` là owner của thời gian gameplay, chọn số bước random ở runtime và phát event Roll/Activation. Core nhận số bước đã chọn để test deterministic.
+3. `GameplayScene` chỉ bơm kill energy từ `Monster.OnMonsterRewarded` và tiếp tục map activation Hero → `Hero.TryStartOverdrive`.
+4. `GameplayHud` dùng uGUI runtime-generated hiện có. Thêm Energy, mode Auto/Manual, nút Roll và text tạm `ROLL +N`; không tạo prefab/asset UI mới khi code hiện tại đã có canonical runtime HUD.
+5. `HeroSlotManager` không còn coroutine tự chạy highlight; chỉ cập nhật cell highlight khi `HighlightIndex` đổi sau Roll.
+6. Item/hero là slot có nội dung hợp lệ để landing. Empty không phát activation và không làm highlight bị dừng. Behavior item cụ thể giữ ở activation layer hiện có; không tạo generic effect framework cho MVP.
+
+## Luật gameplay MVP
+
+- `EnergyCost = 100`.
+- Kill và thời gian chỉ tăng Energy khi circuit đang `CHARGING`.
+- Khi Energy đạt 100, chuyển sang `READY` và giữ ở 100.
+- Auto mode tự Roll ngay khi vào `READY`.
+- Manual mode giữ `READY` cho tới khi player bấm Roll.
+- Một Roll trừ 100 Energy, chọn step trong `1..SlotCount - 1`, rồi cập nhật highlight theo modulo slot count.
+- Roll phát đúng một event kết quả, bao gồm số bước và slot đích.
+- Slot Hero/Item phát activation một lần; slot Empty chỉ kết thúc Roll và quay về `CHARGING`.
+- Khi slot đang Power, Energy không tăng và Roll mới bị từ chối.
+- Khi Power hết, circuit quay về `CHARGING` với Energy bằng 0.
+- Nếu landing vào slot đang active, không kích hoạt lại; Roll vẫn bị tiêu thụ và circuit quay về `CHARGING`.
+
+Giá trị tuning ban đầu cần để riêng và dễ sửa: kill energy, passive energy/second, power duration và giới hạn thời gian Manual. Không thêm config asset cho đến khi gameplay loop được playtest.
+
+## Dependency graph
+
+```text
+ER-01 contract + design docs
+        ↓
+ER-02 EnergyCircuit state/roll
+        ↓
+ER-03 CircuitTickRunner + kill/time energy
+        ↓
+ER-04 GameplayScene + Hero activation
+        ↓
+ER-05 GameplayHud Auto/Manual/Roll feedback
+        ↓
+ER-06 EditMode + PlayMode tests
+        ↓
+ER-07 manual tuning + review
+```
+
+## Implementation slices
+
+### Slice 1 - Core simulation
+
+- Thay stack/interval bằng Energy, `READY`, `POWER ACTIVE` và highlight index đứng yên khi chưa Roll.
+- Thêm API deterministic `TryRoll(int steps, ...)` để test số bước, modulo và Empty.
+- Giữ event activation tương thích tối thiểu để GameplayScene vẫn gọi Hero.
+
+**Exit criteria:** Core test chứng minh không tích Energy khi READY/ACTIVE, không có hai Power cùng lúc, Empty không activation.
+
+### Slice 2 - Gameplay integration
+
+- Tick passive Energy trong `CircuitTickRunner`.
+- Feed kill Energy từ `GameplayScene.OnMonsterRewarded`.
+- Chọn random step ở runner, không ở UI.
+- Auto Roll mặc định; Manual Roll là mode có thể bật.
+
+**Exit criteria:** kill/time đưa Energy tới 100; Auto tự Roll; Manual chỉ Roll khi được gọi; highlight nhảy đúng step.
+
+### Slice 3 - HUD/runtime asset setup
+
+- Dùng `GameplayHud.BuildUi()` hiện có để tạo Energy text, mode button, Roll button và text Roll tạm.
+- Nút Manual chỉ enabled khi READY; Auto không cần thao tác.
+- Text `ROLL +N` hiển thị sau cả Auto và Manual trong thời gian ngắn.
+- Cập nhật slot highlight theo index mới; `HeroSlotManager` không còn coroutine tự chạy highlight.
+- Không còn hiển thị stack/`PULSE` cũ.
+
+**Exit criteria:** Không cần sửa prefab/scene YAML; UI test tìm thấy các node và manual test đọc được Energy, mode, số step và slot đích.
+
+### Slice 4 - Verification/tuning
+
+- Chạy EditMode core/integration tests.
+- Chạy PlayMode HUD + một flow Energy → Roll → Power → recharge.
+- Manual playtest Auto/Manual, Empty landing và Power duration.
+- Code review kiểm tra state transition, event ordering và không đụng file user đang sửa.
+
+## Rủi ro và giảm thiểu
+
+| Rủi ro | Tác động | Giảm thiểu |
+|---|---|---|
+| Roll rơi vào Empty quá thường xuyên | Player thấy không có Power | Hiển thị landing rõ; tuning step/board sau playtest, không tự roll lại |
+| Manual luôn tốt hơn Auto | Auto trở nên vô nghĩa | Manual chỉ đổi thời điểm; nếu thêm Focus thì giới hạn thời gian và không tăng thêm lượt |
+| Random khó test | Test flaky | Random ở runner, core nhận step cụ thể |
+| UI còn hiển thị stack cũ | Người chơi đọc sai luật | Xóa binding stack khỏi HUD trong cùng slice UI |
+| Activation event cũ bị gọi nhiều lần | Power chồng hoặc sai duration | Circuit state chặn Roll khi ACTIVE/READY và test invariant một Power |
+
+## Open questions cần chốt khi bắt đầu implementation
+
+- Kill Energy ban đầu là bao nhiêu cho Normal/Elite/Boss?
+- Passive Energy/second ban đầu là bao nhiêu?
+- Manual có Focus/Critical ngay MVP không, hay chỉ làm Auto/Manual + Roll trước?
+- Landing vào Item trong MVP sẽ có effect riêng hay chỉ phát activation feedback trước?
+- Nếu landing Empty, Energy reset về 0 và recharge ngay — xác nhận đây là hành vi mong muốn?
