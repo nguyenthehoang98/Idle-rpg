@@ -44,7 +44,7 @@ namespace _TDS.Gameplay
         private CircuitBoard board;
         private GameplayHud hud;
         private WaveUpgradePanel upgradePanel;
-        private UpgradeConfig upgradeConfig;
+        private SkillConfig skillConfig;
         private ExpConfig expConfig;
         private int level = 1;
         private readonly BattleRunRewards rewards = new BattleRunRewards();
@@ -158,7 +158,6 @@ namespace _TDS.Gameplay
                     nameof(SkillConfig),
                     nameof(ExpConfig),
                     nameof(HeroConfig),
-                    nameof(UpgradeConfig),
                 });
             }
 #endif
@@ -173,7 +172,7 @@ namespace _TDS.Gameplay
             hud.SetStatus("LOADING BATTLE");
 
             skillRunner.Initialize();
-            upgradeConfig = ConfigManager.Get<UpgradeConfig>();
+            skillConfig = ConfigManager.Get<SkillConfig>();
             expConfig = ConfigManager.Get<ExpConfig>();
             SkillFactory.Initialize(skillRunner.Unit);
 
@@ -266,7 +265,7 @@ namespace _TDS.Gameplay
                 "GOLD SHOP",
                 "BUY ONE ITEM WITH RUN GOLD",
                 rewards.Gold,
-                PickCards(upgradeConfig.ShopItems, 3),
+                PickCards(skillConfig.ShopItems, 3),
                 requiresGold: true,
                 ApplyUpgradeCard);
         }
@@ -275,7 +274,7 @@ namespace _TDS.Gameplay
         {
             PauseUpgradeFlow();
             List<UpgradeCardConfigData> candidates = new List<UpgradeCardConfigData>();
-            candidates.AddRange(upgradeConfig.HeroUpgrades);
+            candidates.AddRange(skillConfig.HeroUpgrades);
 
             HashSet<int> skillIds = new HashSet<int>();
             foreach (Hero hero in trackedHeroes)
@@ -285,7 +284,7 @@ namespace _TDS.Gameplay
 
             foreach (int skillId in skillIds)
             {
-                candidates.AddRange(upgradeConfig.GetSkillPool(skillId));
+                candidates.AddRange(skillConfig.GetSkillPool(skillId));
             }
 
             upgradePanel.ShowCards(

@@ -8,6 +8,7 @@ namespace _TDS.GameConfig
         ShopItem,
         HeroStat,
         SkillStat,
+        PowerStat,
     }
 
     public enum SkillUpgradeStat

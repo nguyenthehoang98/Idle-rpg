@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using _GameToolkit.GameConfig;
 using ExcelExtension;
 using Newtonsoft.Json;
@@ -14,15 +15,21 @@ namespace _TDS.GameConfig
     public class SkillConfig : Config
     {
         [SerializeField, JsonProperty] private List<SkillConfigData> skills = new List<SkillConfigData>();
-        [SerializeField, JsonProperty] private List<StatUpgradeConfigData> upgrade = new List<StatUpgradeConfigData>();
+        [SerializeField, JsonProperty] private List<UpgradeCardConfigData> upgrade = new List<UpgradeCardConfigData>();
 
         private Dictionary<int, SkillConfigData> cached;
-        private Dictionary<int, StatUpgradeConfigData> statUpgradePools;
+        private List<UpgradeCardConfigData> shopItems;
+        private List<UpgradeCardConfigData> heroUpgrades;
+        private Dictionary<int, List<UpgradeCardConfigData>> skillPools;
+        private Dictionary<int, UpgradeCardConfigData> statUpgradePools;
 
         public override void OnMappingValue()
         {
             cached = new Dictionary<int, SkillConfigData>();
-            statUpgradePools = new Dictionary<int, StatUpgradeConfigData>();
+            shopItems = upgrade.Where(card => card.kind == UpgradeCardKind.ShopItem).ToList();
+            heroUpgrades = upgrade.Where(card => card.kind == UpgradeCardKind.HeroStat).ToList();
+            skillPools = new Dictionary<int, List<UpgradeCardConfigData>>();
+            statUpgradePools = new Dictionary<int, UpgradeCardConfigData>();
 
             foreach (SkillConfigData skillData in skills)
             {
@@ -32,17 +39,31 @@ namespace _TDS.GameConfig
                 }
             }
 
-            foreach (StatUpgradeConfigData upgradeData in upgrade)
+            foreach (UpgradeCardConfigData card in upgrade)
             {
-                if (upgradeData.id <= 0 || upgradeData.stat == StatId.None || upgradeData.value == 0f)
+                if (card.kind == UpgradeCardKind.PowerStat)
                 {
+                    if (card.id <= 0 || card.heroStat == StatId.None || card.value == 0f)
+                    {
+                        continue;
+                    }
+
+                    if (!statUpgradePools.TryAdd(card.id, card))
+                    {
+                        Debug.LogError($"Duplicate stat upgrade id '{card.id}'");
+                    }
+
                     continue;
                 }
 
-                if (!statUpgradePools.TryAdd(upgradeData.id, upgradeData))
+                if (card.kind != UpgradeCardKind.SkillStat || card.skillId <= 0) continue;
+                if (!skillPools.TryGetValue(card.skillId, out List<UpgradeCardConfigData> pool))
                 {
-                    Debug.LogError($"Duplicate stat upgrade id '{upgradeData.id}'");
+                    pool = new List<UpgradeCardConfigData>();
+                    skillPools.Add(card.skillId, pool);
                 }
+
+                pool.Add(card);
             }
         }
 
@@ -61,13 +82,31 @@ namespace _TDS.GameConfig
             List<StatUpgradeConfigData> result = new List<StatUpgradeConfigData>(ids.Count);
             for (int i = 0; i < ids.Count; i++)
             {
-                if (statUpgradePools.TryGetValue(ids[i], out StatUpgradeConfigData upgradeData))
+                if (!statUpgradePools.TryGetValue(ids[i], out UpgradeCardConfigData upgradeData))
                 {
-                    result.Add(upgradeData);
+                    continue;
                 }
+
+                result.Add(new StatUpgradeConfigData
+                {
+                    id = upgradeData.id,
+                    stat = upgradeData.heroStat,
+                    value = upgradeData.value,
+                    percent = upgradeData.percent,
+                });
             }
 
             return result;
+        }
+
+        [JsonIgnore] public IReadOnlyList<UpgradeCardConfigData> ShopItems => shopItems;
+        [JsonIgnore] public IReadOnlyList<UpgradeCardConfigData> HeroUpgrades => heroUpgrades;
+
+        public IReadOnlyList<UpgradeCardConfigData> GetSkillPool(int skillId)
+        {
+            return skillPools.TryGetValue(skillId, out List<UpgradeCardConfigData> pool)
+                ? pool
+                : Array.Empty<UpgradeCardConfigData>();
         }
     }
 }
