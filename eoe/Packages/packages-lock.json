@@ -1,12 +1,5 @@
 {
   "dependencies": {
-    "com.chidwi.minmaxslideratt": {
-      "version": "https://github.com/Chidwi-commits/Unity-Attribute-MinMax-Slider.git#82db37e7c3814d1dc05f30f2d968b8d4b29ea7ac",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "82db37e7c3814d1dc05f30f2d968b8d4b29ea7ac"
-    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
