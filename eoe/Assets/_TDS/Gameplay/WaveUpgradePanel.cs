@@ -16,28 +16,76 @@ namespace _TDS.Gameplay
         private static readonly Color MutedColor = ParseColor("A8B5C7");
         private static readonly Color DisabledColor = ParseColor("475569");
 
-        private RectTransform safeArea;
-        private GameObject overlay;
-        private GameObject optionsRoot;
-        private GameObject cardsRoot;
-        private Text titleText;
-        private Text subtitleText;
-        private Text goldText;
-        private Button backButton;
-        private readonly Button[] cardButtons = new Button[3];
-        private readonly Text[] cardTitles = new Text[3];
-        private readonly Text[] cardDescriptions = new Text[3];
-        private readonly Text[] cardCosts = new Text[3];
+        [Header("Inspector UI")]
+        [SerializeField] private RectTransform safeArea;
+        [SerializeField] private GameObject overlay;
+        [SerializeField] private GameObject optionsRoot;
+        [SerializeField] private GameObject cardsRoot;
+        [SerializeField] private Text titleText;
+        [SerializeField] private Text subtitleText;
+        [SerializeField] private Text goldText;
+        [SerializeField] private Button shopButton;
+        [SerializeField] private Button rollButton;
+        [SerializeField] private Button backButton;
+        [SerializeField] private Button[] cardButtons = new Button[3];
+        [SerializeField] private Text[] cardTitles = new Text[3];
+        [SerializeField] private Text[] cardDescriptions = new Text[3];
+        [SerializeField] private Text[] cardCosts = new Text[3];
         private Action showShop;
         private Action showRoll;
         private Action showChoice;
         private Vector2Int lastScreenSize;
+#if UNITY_EDITOR
         private Font font;
+#endif
+
+        public bool IsConfigured
+        {
+            get
+            {
+                if (overlay == null || optionsRoot == null || cardsRoot == null ||
+                    titleText == null || subtitleText == null || goldText == null ||
+                    shopButton == null || rollButton == null || backButton == null ||
+                    cardButtons == null || cardButtons.Length != 3 ||
+                    cardTitles == null || cardTitles.Length != 3 ||
+                    cardDescriptions == null || cardDescriptions.Length != 3 ||
+                    cardCosts == null || cardCosts.Length != 3)
+                {
+                    return false;
+                }
+
+                for (int i = 0; i < 3; i++)
+                {
+                    if (cardButtons[i] == null || cardTitles[i] == null ||
+                        cardDescriptions[i] == null || cardCosts[i] == null)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        }
 
         private void Awake()
         {
-            BuildUi();
+            if (!IsConfigured)
+            {
+                Debug.LogError("[WaveUpgradePanel] UI references chưa được gán. Chạy TDS/Configure Gameplay UI.");
+            }
+
+            WireButtons();
         }
+
+#if UNITY_EDITOR
+        public void ConfigureInspectorUi()
+        {
+            if (overlay == null)
+            {
+                BuildUi();
+            }
+        }
+#endif
 
         private void Update()
         {
@@ -69,7 +117,7 @@ namespace _TDS.Gameplay
             overlay.SetActive(true);
             optionsRoot.SetActive(false);
             cardsRoot.SetActive(true);
-            backButton.gameObject.SetActive(true);
+            backButton.gameObject.SetActive(showChoice != null);
             titleText.text = title;
             subtitleText.text = subtitle;
             goldText.text = $"GOLD  {gold}";
@@ -102,9 +150,14 @@ namespace _TDS.Gameplay
             showChoice = null;
         }
 
+#if UNITY_EDITOR
         private void BuildUi()
         {
             font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            if (cardButtons == null || cardButtons.Length != 3) cardButtons = new Button[3];
+            if (cardTitles == null || cardTitles.Length != 3) cardTitles = new Text[3];
+            if (cardDescriptions == null || cardDescriptions.Length != 3) cardDescriptions = new Text[3];
+            if (cardCosts == null || cardCosts.Length != 3) cardCosts = new Text[3];
             Canvas canvas = CreateCanvas();
             safeArea = canvas.transform.Find("SafeArea") as RectTransform;
 
@@ -130,12 +183,10 @@ namespace _TDS.Gameplay
             optionsRoot.transform.SetParent(panel.transform, false);
             SetRect(optionsRoot.GetComponent<RectTransform>(), new Vector2(0.06f, 0.24f), new Vector2(0.94f, 0.64f), Vector2.zero, Vector2.zero);
 
-            Button shopButton = CreateButton("GoldShop", optionsRoot.transform, "GOLD SHOP\n3 ITEMS", AccentColor,
+            shopButton = CreateButton("GoldShop", optionsRoot.transform, "GOLD SHOP\n3 ITEMS", AccentColor,
                 new Vector2(0.02f, 0f), new Vector2(0.47f, 1f));
-            shopButton.onClick.AddListener(() => showShop?.Invoke());
-            Button rollButton = CreateButton("UpgradeRoll", optionsRoot.transform, "UPGRADE ROLL\n3 CARDS → 1", GoldColor,
+            rollButton = CreateButton("UpgradeRoll", optionsRoot.transform, "UPGRADE ROLL\n3 CARDS → 1", GoldColor,
                 new Vector2(0.53f, 0f), new Vector2(0.98f, 1f));
-            rollButton.onClick.AddListener(() => showRoll?.Invoke());
 
             cardsRoot = new GameObject("Cards", typeof(RectTransform));
             cardsRoot.transform.SetParent(panel.transform, false);
@@ -161,10 +212,26 @@ namespace _TDS.Gameplay
 
             backButton = CreateButton("Back", panel.transform, "BACK", MutedColor,
                 new Vector2(0.06f, 0.07f), new Vector2(0.22f, 0.16f));
-            backButton.onClick.AddListener(() => showChoice?.Invoke());
             overlay.SetActive(false);
         }
 
+#endif
+
+        private void WireButtons()
+        {
+            Wire(shopButton, () => showShop?.Invoke());
+            Wire(rollButton, () => showRoll?.Invoke());
+            Wire(backButton, () => showChoice?.Invoke());
+        }
+
+        private static void Wire(Button button, UnityEngine.Events.UnityAction action)
+        {
+            if (button == null) return;
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(action);
+        }
+
+#if UNITY_EDITOR
         private Canvas CreateCanvas()
         {
             GameObject canvasObject = new GameObject("WaveUpgradeCanvas", typeof(RectTransform));
@@ -186,6 +253,8 @@ namespace _TDS.Gameplay
             return canvas;
         }
 
+#endif
+
         private void ApplySafeArea()
         {
             if (safeArea == null || Screen.width <= 0 || Screen.height <= 0) return;
@@ -200,6 +269,7 @@ namespace _TDS.Gameplay
             safeArea.offsetMax = Vector2.zero;
         }
 
+#if UNITY_EDITOR
         private Button CreateButton(
             string objectName,
             Transform parent,
@@ -277,6 +347,8 @@ namespace _TDS.Gameplay
             outline.useGraphicAlpha = true;
         }
 
+#endif
+
         private static void SetButtonColor(Button button, Color color)
         {
             ColorBlock colors = button.colors;
@@ -285,6 +357,7 @@ namespace _TDS.Gameplay
             button.colors = colors;
         }
 
+#if UNITY_EDITOR
         private static void SetRect(RectTransform rect, Vector2 anchorMin, Vector2 anchorMax, Vector2 offsetMin, Vector2 offsetMax)
         {
             rect.anchorMin = anchorMin;
@@ -293,6 +366,8 @@ namespace _TDS.Gameplay
             rect.offsetMax = offsetMax;
             rect.localScale = Vector3.one;
         }
+
+#endif
 
         private static Color ParseColor(string html)
         {

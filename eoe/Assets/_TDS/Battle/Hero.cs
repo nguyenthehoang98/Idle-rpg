@@ -69,8 +69,6 @@ namespace _TDS.Battle
         public static event Action<Hero> OnHeroDisable;
         private static readonly HashSet<Hero> aliveHeroes = new HashSet<Hero>();
         public static IReadOnlyCollection<Hero> AliveHeroes => aliveHeroes;
-        /// <summary>Hero chết (hp <= 0). UI/gameplay lắng nghe để xử lý thua.</summary>
-        public event Action OnDied;
         public event Action<Hero> OnOverdriveStarted;
         public event Action<Hero> OnOverdriveEnded;
 
@@ -82,10 +80,11 @@ namespace _TDS.Battle
         public float OverdriveRemaining { get; private set; }
         public int OverdriveActivations { get; private set; }
 
-        public int CurrentHealth { get; private set; }
+        /// <summary>Phần đóng góp của hero vào HP chung của người chơi.</summary>
         public int MaxHealth { get; private set; }
         public int TotalDamageDealt { get; private set; }
-        public bool IsDead => CurrentHealth <= 0;
+        /// <summary>HP chung đã cạn (hero không còn tự chịu sát thương).</summary>
+        public bool IsDead => PlayerVitals.IsDead;
 
         public Stat GetStat(StatId id)
         {
@@ -102,6 +101,7 @@ namespace _TDS.Battle
             Monster.OnMonsterEnable += AddMonster;
             Monster.OnMonsterDisable += RemoveMonster;
             aliveHeroes.Add(this);
+            PlayerVitals.SyncMaxHealth();
             OnHeroEnable?.Invoke(this);
         }
 
@@ -110,6 +110,7 @@ namespace _TDS.Battle
             Monster.OnMonsterEnable -= AddMonster;
             Monster.OnMonsterDisable -= RemoveMonster;
             aliveHeroes.Remove(this);
+            PlayerVitals.SyncMaxHealth();
             OnHeroDisable?.Invoke(this);
 
             if (attackCoroutine != null)
@@ -122,32 +123,6 @@ namespace _TDS.Battle
             hasPendingAttackSkill = false;
             RemovePowerUpgrade();
             StopPowerEffect();
-        }
-
-        public void TakeDamage(int damage)
-        {
-            if (damage <= 0 || IsDead) return;
-
-            CurrentHealth = Mathf.Max(0, CurrentHealth - damage);
-
-            if (CurrentHealth <= 0)
-            {
-                aliveHeroes.Remove(this);
-                Debug.Log($"[Hero:{name}] DIE");
-
-                if (attackCoroutine != null)
-                {
-                    StopCoroutine(attackCoroutine);
-                    attackCoroutine = null;
-                }
-
-                pendingAttackTarget = null;
-                hasPendingAttackSkill = false;
-                RemovePowerUpgrade();
-                StopPowerEffect();
-                OnDied?.Invoke();
-                OnHeroDisable?.Invoke(this);
-            }
         }
 
         private void AddMonster(Monster monster) => monsters.Add(monster);
@@ -168,7 +143,6 @@ namespace _TDS.Battle
                 : EnergyCircuit.DefaultOverdriveDuration;
 
             MaxHealth = Mathf.Max(1, heroConfigData.health);
-            CurrentHealth = MaxHealth;
             TotalDamageDealt = 0;
 
             stats = new Dictionary<StatId, Stat>
@@ -190,6 +164,10 @@ namespace _TDS.Battle
             {
                 attackCoroutine = StartCoroutine(AutoAttackEnumerator());
             }
+
+            // AddComponent trong EditMode test không gọi OnEnable -> tự đăng ký vào pool chung
+            aliveHeroes.Add(this);
+            PlayerVitals.SyncMaxHealth();
         }
 
         public void SetPowerUpgrades(IReadOnlyList<StatUpgradeConfigData> upgrades)
@@ -236,12 +214,8 @@ namespace _TDS.Battle
             Stat maxHealth = GetStat(StatId.MaxHealth);
             if (maxHealth == null) return;
 
-            int previousMaxHealth = MaxHealth;
             MaxHealth = Mathf.Max(1, Mathf.RoundToInt(maxHealth.Value));
-            CurrentHealth = Mathf.Clamp(
-                CurrentHealth + MaxHealth - previousMaxHealth,
-                0,
-                MaxHealth);
+            PlayerVitals.SyncMaxHealth();
         }
 
         public bool ApplyHeroUpgrade(StatId statId, float value, bool percent)
@@ -249,7 +223,6 @@ namespace _TDS.Battle
             Stat stat = GetStat(statId);
             if (stat == null) return false;
 
-            float previousMaxHealth = MaxHealth;
             stat.AddModifier(new StatModifier(
                 value,
                 percent ? StatModType.PercentAdd : StatModType.Flat,
@@ -258,10 +231,7 @@ namespace _TDS.Battle
             if (statId == StatId.MaxHealth)
             {
                 MaxHealth = Mathf.Max(1, Mathf.RoundToInt(stat.Value));
-                CurrentHealth = Mathf.Clamp(
-                    CurrentHealth + Mathf.RoundToInt(MaxHealth - previousMaxHealth),
-                    0,
-                    MaxHealth);
+                PlayerVitals.SyncMaxHealth();
             }
 
             return true;
@@ -343,6 +313,8 @@ namespace _TDS.Battle
             {
                 float interval = Mathf.Max(0.01f, 1f / GetStat(StatId.AttackSpeed).Value);
                 yield return new WaitForSeconds(interval);
+
+                if (PlayerVitals.IsDead) continue; // hết máu chung -> ngừng đánh
 
                 Monster target = FindTarget(SkillConfig.findTarget);
                 if (target == null) continue;
@@ -561,7 +533,7 @@ namespace _TDS.Battle
                 if (dealt <= 0) return;
 
                 TotalDamageDealt += dealt;
-                Heal(CombatDamage.CalculateLifeSteal(dealt, lifesteal));
+                PlayerVitals.Heal(CombatDamage.CalculateLifeSteal(dealt, lifesteal));
             }, PlayHitFeedback).Forget();
         }
 
@@ -621,12 +593,6 @@ namespace _TDS.Battle
             RemovePowerUpgrade();
             StopPowerEffect();
             OnOverdriveEnded?.Invoke(this);
-        }
-
-        public void Heal(int amount)
-        {
-            if (amount <= 0 || IsDead) return;
-            CurrentHealth = Mathf.Min(MaxHealth, CurrentHealth + amount);
         }
 
         public override int Id()

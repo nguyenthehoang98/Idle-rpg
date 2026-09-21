@@ -39,12 +39,12 @@ namespace _TDS.Gameplay
         [SerializeField] private UpdateRunner runner;
         [SerializeField] private CircuitTickRunner circuitRunner;
         [SerializeField] private GameplayHud gameplayHud;
+        [SerializeField] private WaveUpgradePanel upgradePanel;
 
         private SpawnMonsterRunner spawnRunner;
         private AgentMovementRunner agentRunner;
         private SkillTickRunner skillRunner;
         private CircuitBoard board;
-        private WaveUpgradePanel upgradePanel;
         private SkillConfig skillConfig;
         private ExpConfig expConfig;
         private int level = 1;
@@ -70,7 +70,15 @@ namespace _TDS.Gameplay
             {
                 Debug.LogWarning("[Gameplay] GameplayHud chưa được gán trên Root - HUD bỏ qua");
             }
-            upgradePanel = gameObject.AddComponent<WaveUpgradePanel>();
+            if (upgradePanel == null)
+            {
+                upgradePanel = GetComponent<WaveUpgradePanel>();
+            }
+            if (upgradePanel == null || !upgradePanel.IsConfigured)
+            {
+                Debug.LogError("[Gameplay] WaveUpgradePanel chưa được cấu hình. Chạy TDS/Configure Gameplay UI.");
+            }
+
             runner.TryGetRunner(out spawnRunner);
             runner.TryGetRunner(out agentRunner);
             runner.TryGetRunner(out skillRunner);
@@ -152,6 +160,8 @@ namespace _TDS.Gameplay
         {
             Stopwatch sw = Stopwatch.StartNew();
 
+            PlayerVitals.Reset();
+
 #if UNITY_EDITOR
             if (loadDirectlyInEditor)
             {
@@ -193,8 +203,8 @@ namespace _TDS.Gameplay
             spawnRunner.OnWaveCleared += OnWaveCleared;
             spawnRunner.OnGameWin += OnGameWin;
 
-            // theo dõi hero chết -> hết hero = thua
-            Hero.OnHeroDisable += OnHeroDied;
+            // hp chung cạn -> thua
+            PlayerVitals.OnDied += OnPlayerDied;
 
             await spawnRunner.LoadLevelAsync(agentRunner, level);
 
@@ -220,7 +230,7 @@ namespace _TDS.Gameplay
 
         private void OnDestroy()
         {
-            Hero.OnHeroDisable -= OnHeroDied;
+            PlayerVitals.OnDied -= OnPlayerDied;
             trackedHeroes.Clear();
 
             if (spawnRunner != null)
@@ -273,17 +283,33 @@ namespace _TDS.Gameplay
         {
             gameplayHud?.SetWave(wave);
             gameplayHud?.SetStatus("CHOOSE UPGRADE");
+            if (upgradePanel == null || !upgradePanel.IsConfigured)
+            {
+                Debug.LogError("[Gameplay] Không thể mở upgrade popup vì WaveUpgradePanel chưa được cấu hình.");
+                ResumeUpgradeFlow();
+                return;
+            }
+
             PauseUpgradeFlow();
-            upgradePanel.ShowChoice(wave, rewards.Gold, ShowShop, ShowUpgradeRoll);
-            Debug.Log($"[Gameplay] Diệt hết quái wave {wave} -> mở upgrade choice");
+            bool statUpgradeWave = wave % 2 == 1;
+            if (statUpgradeWave)
+            {
+                ShowUpgradeRoll();
+            }
+            else
+            {
+                ShowShop();
+            }
+
+            Debug.Log($"[Gameplay] Diệt hết quái wave {wave} -> mở {(statUpgradeWave ? "stat upgrade" : "core shop")}");
         }
 
         private void ShowShop()
         {
             PauseUpgradeFlow();
             upgradePanel.ShowCards(
-                "GOLD SHOP",
-                "BUY ONE ITEM WITH RUN GOLD",
+                "CORE SHOP",
+                "BUY ONE CORE WITH RUN GOLD",
                 rewards.Gold,
                 PickCards(skillConfig.ShopItems, 3),
                 requiresGold: true,
@@ -473,31 +499,20 @@ namespace _TDS.Gameplay
             gameplayHud?.ShowModifierFeedback(type);
         }
 
-        private void OnHeroDied(Hero hero)
+        private void OnPlayerDied()
         {
-            // chỉ xử lý khi hero thực sự chết (OnHeroDisable cũng fire khi scene off/pool)
-            if (hero == null || !hero.IsDead) return;
+            Debug.Log("[Gameplay] Player hết máu!");
 
-            Debug.Log($"[Gameplay] Hero {hero.name} chết!");
+            if (resultReported) return;
 
-            // hết hero sống -> thua
-            int alive = 0;
-            foreach (Hero h in Hero.AliveHeroes)
-            {
-                if (h != null && !h.IsDead) alive++;
-            }
-
-            if (alive == 0 && !resultReported)
-            {
-                upgradePanel?.Hide();
-                resultReported = true;
-                int[] loseIds = GetSaveIds();
-                GameProgress.SaveRun(level, loseIds, rewards, victory: false, expConfig: expConfig);
-                gameplayHud?.SetStatus($"DEFEAT  +{rewards.Experience} EXP  +{rewards.Gold} GOLD");
-                gameplayHud?.ShowResult(false, rewards);
-                Debug.Log($"[Gameplay] 💀 THUA! EXP={rewards.Experience}, GOLD={rewards.Gold}");
-                LogBattleReport("LOSE");
-            }
+            resultReported = true;
+            upgradePanel?.Hide();
+            int[] loseIds = GetSaveIds();
+            GameProgress.SaveRun(level, loseIds, rewards, victory: false, expConfig: expConfig);
+            gameplayHud?.SetStatus($"DEFEAT  +{rewards.Experience} EXP  +{rewards.Gold} GOLD");
+            gameplayHud?.ShowResult(false, rewards);
+            Debug.Log($"[Gameplay] 💀 THUA! EXP={rewards.Experience}, GOLD={rewards.Gold}");
+            LogBattleReport("LOSE");
         }
 
         private void TimeScaleChanged(float deltaTime)

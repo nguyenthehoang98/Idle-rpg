@@ -577,6 +577,79 @@ Transform:
   m_Children: []
   m_Father: {fileID: 286812849}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &240276109
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1708898550}
+    m_Modifications:
+    - target: {fileID: 1134260045926279431, guid: adf36dc6bcd338341bd2e5d3f3f5746e, type: 3}
+      propertyPath: m_Name
+      value: WaveUpgradePanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 2877725641618675027, guid: adf36dc6bcd338341bd2e5d3f3f5746e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2877725641618675027, guid: adf36dc6bcd338341bd2e5d3f3f5746e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2877725641618675027, guid: adf36dc6bcd338341bd2e5d3f3f5746e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2877725641618675027, guid: adf36dc6bcd338341bd2e5d3f3f5746e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2877725641618675027, guid: adf36dc6bcd338341bd2e5d3f3f5746e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2877725641618675027, guid: adf36dc6bcd338341bd2e5d3f3f5746e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2877725641618675027, guid: adf36dc6bcd338341bd2e5d3f3f5746e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2877725641618675027, guid: adf36dc6bcd338341bd2e5d3f3f5746e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2877725641618675027, guid: adf36dc6bcd338341bd2e5d3f3f5746e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2877725641618675027, guid: adf36dc6bcd338341bd2e5d3f3f5746e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: adf36dc6bcd338341bd2e5d3f3f5746e, type: 3}
+--- !u!114 &240276110 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 573447911172655294, guid: adf36dc6bcd338341bd2e5d3f3f5746e, type: 3}
+  m_PrefabInstance: {fileID: 240276109}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aacd43a38c29d494e8e395a628654049, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_TDS.Gameplay.WaveUpgradePanel
+--- !u!4 &240276111 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2877725641618675027, guid: adf36dc6bcd338341bd2e5d3f3f5746e, type: 3}
+  m_PrefabInstance: {fileID: 240276109}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &283213692
 GameObject:
   m_ObjectHideFlags: 0
@@ -879,6 +952,7 @@ GameObject:
   - component: {fileID: 467080521}
   - component: {fileID: 467080520}
   - component: {fileID: 467080519}
+  - component: {fileID: 467080523}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -969,6 +1043,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &467080523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467080518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baf9177c2cb72ee4f8ebae3976e0b086, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_TDS.Gameplay.GameplayUiCommon
+  health: {fileID: 1954205618}
+  energy: {fileID: 1501777982}
 --- !u!1001 &506316908
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2373,8 +2461,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1708898550}
   - component: {fileID: 1708898554}
-  - component: {fileID: 1708898556}
   - component: {fileID: 1708898555}
+  - component: {fileID: 1708898556}
   m_Layer: 0
   m_Name: Root
   m_TagString: Untagged
@@ -2398,6 +2486,7 @@ Transform:
   - {fileID: 1168235904}
   - {fileID: 1977149735}
   - {fileID: 467080522}
+  - {fileID: 240276111}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1708898554
@@ -2442,6 +2531,7 @@ MonoBehaviour:
   runner: {fileID: 1977149736}
   circuitRunner: {fileID: 2100000002}
   gameplayHud: {fileID: 0}
+  upgradePanel: {fileID: 240276110}
 --- !u!114 &1708898555
 MonoBehaviour:
   m_ObjectHideFlags: 0

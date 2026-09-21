@@ -12,6 +12,15 @@ public static class ConfigureGameplayUi
 {
     private const string BuildScene = "Assets/Scenes/GamePlayScene.unity";
     private const string LegacyScene = "Assets/Scenes/GameplayScene.unity";
+    private const string UpgradeTemplateFolder = "Assets/_TDSAssets/Gameplay/Prefabs";
+    private const string UpgradeTemplatePath = UpgradeTemplateFolder + "/WaveUpgradePanel.prefab";
+
+    [MenuItem("TDS/Create Wave Upgrade UI Template")]
+    public static void CreateWaveUpgradeTemplate()
+    {
+        GameObject prefab = EnsureWaveUpgradeTemplate();
+        if (prefab != null) Selection.activeObject = prefab;
+    }
 
     [MenuItem("TDS/Configure Gameplay UI")]
     public static void Configure()
@@ -51,9 +60,59 @@ public static class ConfigureGameplayUi
         SetReference(control, "uiCommon", common);
         SetReference(control, "circuitRunner", circuitRunner);
 
+        WaveUpgradePanel upgradePanel = root.GetComponentInChildren<WaveUpgradePanel>(true);
+        if (upgradePanel == null)
+        {
+            GameObject template = EnsureWaveUpgradeTemplate();
+            if (template != null)
+            {
+                GameObject instance = PrefabUtility.InstantiatePrefab(template, root.transform) as GameObject;
+                if (instance != null)
+                {
+                    Undo.RegisterCreatedObjectUndo(instance, "Add Wave Upgrade UI");
+                    upgradePanel = instance.GetComponent<WaveUpgradePanel>();
+                }
+            }
+        }
+
+        if (upgradePanel == null)
+        {
+            upgradePanel = Undo.AddComponent<WaveUpgradePanel>(root);
+            upgradePanel.ConfigureInspectorUi();
+        }
+
+        GameplayScene gameplayScene = root.GetComponent<GameplayScene>();
+        if (gameplayScene != null) SetReference(gameplayScene, "upgradePanel", upgradePanel);
+        else Debug.LogError($"[Gameplay UI] GameplayScene component not found in {scenePath}");
+
+        EditorUtility.SetDirty(upgradePanel);
         EditorUtility.SetDirty(root);
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);
+    }
+
+    private static GameObject EnsureWaveUpgradeTemplate()
+    {
+        GameObject existing = AssetDatabase.LoadAssetAtPath<GameObject>(UpgradeTemplatePath);
+        if (existing != null) return existing;
+
+        EnsureFolder("Assets/_TDSAssets", "Gameplay");
+        EnsureFolder("Assets/_TDSAssets/Gameplay", "Prefabs");
+
+        GameObject templateRoot = new GameObject("WaveUpgradePanel");
+        WaveUpgradePanel panel = templateRoot.AddComponent<WaveUpgradePanel>();
+        panel.ConfigureInspectorUi();
+
+        GameObject prefab = PrefabUtility.SaveAsPrefabAsset(templateRoot, UpgradeTemplatePath);
+        UnityEngine.Object.DestroyImmediate(templateRoot);
+        AssetDatabase.SaveAssets();
+        return prefab;
+    }
+
+    private static void EnsureFolder(string parent, string child)
+    {
+        string path = $"{parent}/{child}";
+        if (!AssetDatabase.IsValidFolder(path)) AssetDatabase.CreateFolder(parent, child);
     }
 
     private static void ConfigureResource(GameObject resource, string resourceName)

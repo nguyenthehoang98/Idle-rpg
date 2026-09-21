@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 8034309053693890621}
   - component: {fileID: 1376855267525716363}
   - component: {fileID: 3773707840477182215}
+  - component: {fileID: 4468773323355874861}
   m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
@@ -146,6 +147,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4468773323355874861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2431780934376433730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6732813695685c047a20af7667549ec7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_TDS.Utils.MaterialPropertySetter
+  target: {fileID: 1376855267525716363}
+  propertyName: _HitEffectBlend
 --- !u!1 &4834536794472719122
 GameObject:
   m_ObjectHideFlags: 0
@@ -194,60 +209,13 @@ MonoBehaviour:
   autoStopMode: 1
   animationMode: 0
   components:
-  - rid: 607417095885946946
   - rid: 2118814282637377597
+  - rid: 2118814366757552193
   playOnAwake: 1
   version: 1
   references:
     version: 2
     RefIds:
-    - rid: 607417095885946946
-      type: {class: SpriteRendererMaterialAnimation, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
-      data:
-        type: 
-        displayName: -> float 0
-        enabled: 1
-        target: {fileID: 1376855267525716363}
-        settings:
-          startValue: 0
-          endValue: 0
-          duration: 0
-          ease: 31
-          customEaseCurve:
-            serializedVersion: 2
-            m_Curve:
-            - serializedVersion: 3
-              time: 0
-              value: 0
-              inSlope: 0
-              outSlope: 0
-              tangentMode: 0
-              weightedMode: 0
-              inWeight: 0
-              outWeight: 0
-            - serializedVersion: 3
-              time: 1
-              value: 1
-              inSlope: 2
-              outSlope: 2
-              tangentMode: 0
-              weightedMode: 0
-              inWeight: 0
-              outWeight: 0
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-          delay: 0.15
-          delayType: 0
-          loops: 1
-          loopType: 0
-          cancelOnError: 0
-          skipValuesDuringDelay: 0
-          immediateBind: 0
-          schedulerType: 0
-          additionalSettings: 0
-        relative: 0
-        propertyName: _HitEffectBlend
     - rid: 2118814282637377597
       type: {class: TransformScaleAnimation, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
       data:
@@ -258,7 +226,7 @@ MonoBehaviour:
         settings:
           startValue: {x: 0, y: 0, z: 0}
           endValue: {x: 1, y: 1, z: 1}
-          duration: 0.3
+          duration: 0.35
           ease: 2
           customEaseCurve:
             serializedVersion: 2
@@ -294,6 +262,28 @@ MonoBehaviour:
           schedulerType: 0
           additionalSettings: 0
         relative: 0
+    - rid: 2118814366757552193
+      type: {class: ExecuteComponent, ns: LitMotion.Animation.Components, asm: LitMotion.Animation}
+      data:
+        type: Execute
+        displayName: Reset _HitEffectBlend
+        enabled: 1
+        waitTime: 0
+        onExecute:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 4468773323355874861}
+              m_TargetAssemblyTypeName: _TDS.Utils.MaterialPropertySetter, Assembly-CSharp
+              m_MethodName: SetFloat
+              m_Mode: 4
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
 --- !u!1 &5214273238946055872
 GameObject:
   m_ObjectHideFlags: 0
@@ -600,6 +590,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_TDS.Battle.Monster
   scaleTransform: {fileID: 3314062729498180666}
+  spawnDelay: 0.35
   OnBeHit:
     m_PersistentCalls:
       m_Calls:

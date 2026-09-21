@@ -40,14 +40,21 @@ namespace _TDS.Tests.PlayMode
             string outcome = null;
             string status = null;
             bool selectedUpgrade = false;
-            bool shopTested = false;
+            bool firstChoiceWasStat = false;
+            bool firstChoiceObserved = false;
+            bool coreShopShown = false;
             while (elapsed < 180f)
             {
-                Button shopButton = GameObject.Find("GoldShop")?.GetComponent<Button>();
-                if (!shopTested && shopButton != null && shopButton.gameObject.activeInHierarchy)
+                Text title = GameObject.Find("Title")?.GetComponent<Text>();
+                if (title != null && title.gameObject.activeInHierarchy)
                 {
-                    shopButton.onClick.Invoke();
-                    shopTested = true;
+                    if (!firstChoiceObserved && (title.text == "UPGRADE ROLL" || title.text == "CORE SHOP"))
+                    {
+                        firstChoiceObserved = true;
+                        firstChoiceWasStat = title.text == "UPGRADE ROLL";
+                    }
+
+                    coreShopShown |= title.text == "CORE SHOP";
                 }
 
                 Button cardButton = GameObject.Find("Card0")?.GetComponent<Button>();
@@ -86,7 +93,8 @@ namespace _TDS.Tests.PlayMode
             Debug.Log($"[GameplayLevel1Outcome] outcome={outcome ?? "TIMEOUT"}, status={status ?? "<none>"}, elapsed={elapsed:0.0}s");
             Assert.That(outcome, Is.EqualTo("VICTORY"), "Level 1 must be clearable without a loss");
             Assert.That(selectedUpgrade, Is.True, "The post-wave upgrade choice was not applied");
-            Assert.That(shopTested, Is.True, "The Gold Shop path was not shown");
+            Assert.That(firstChoiceWasStat, Is.True, "The first post-wave choice was not a stat upgrade");
+            Assert.That(coreShopShown, Is.True, "The alternating core shop choice was not shown");
 
             yield return null;
             Button continueButton = GameObject.Find("Continue")?.GetComponent<Button>();

@@ -93,7 +93,12 @@ namespace _TDS.Battle
                 }
 
                 simulator.SetAgentMaxSpeed(temp.Agent,
-                    temp.Monster.IsStunned ? 0f : temp.MoveSpeed * temp.Monster.MoveSpeedMultiplier);
+                    temp.Monster.IsSpawning || temp.Monster.IsStunned
+                        ? 0f
+                        : temp.MoveSpeed * temp.Monster.MoveSpeedMultiplier);
+
+                temp.Monster.TickSpawnDelay(deltaTime);
+
 
                 if (simulator.TryGetAgent(temp.Agent, out var agent))
                 {
@@ -102,7 +107,8 @@ namespace _TDS.Battle
                     temp.Monster.SetPosition(position, deltaTime);
 
                     // monster tới đích (isStopped) -> tấn công hero gần nhất trong tầm
-                    if (agent.isStopped && !temp.Monster.IsStunned && !temp.Monster.IsSilenced)
+                    if (agent.isStopped && !temp.Monster.IsSpawning &&
+                        !temp.Monster.IsStunned && !temp.Monster.IsSilenced)
                     {
                         MonsterTickAttack(temp.Monster, deltaTime);
                     }
@@ -160,7 +166,7 @@ namespace _TDS.Battle
             if (monster.AttackTimer > 0f) return;
 
             monster.AttackTimer = monster.DamageCooldown > 0 ? monster.DamageCooldown : 1f; // missing cooldown defaults to 1 hit/s
-            target.TakeDamage(monster.Attack);
+            PlayerVitals.TakeDamage(monster.Attack);
         }
 
         private bool TryCastSkill(Monster monster, Hero target, float deltaTime)
@@ -179,11 +185,9 @@ namespace _TDS.Battle
 
             SkillFactory.CastSkillAsync(config, monster.transform.position, target, (hero, damage) =>
             {
-                if (hero == null || hero.IsDead) return;
-
                 int amount = Mathf.Max(1, Mathf.RoundToInt(
                     damage * monster.Attack * Mathf.Max(0f, skill.damageMultiplier)));
-                hero.TakeDamage(amount);
+                PlayerVitals.TakeDamage(amount);
             }).Forget();
 
             monster.CommitSkill(skill);
@@ -226,6 +230,9 @@ namespace _TDS.Battle
                 monsterConfigData.rank,
                 monsterConfigData.skills,
                 monsterConfigData.statusResistances);
+
+            // animation Init phải chạy xong trước khi monster di chuyển/nhận sát thương
+            monster.BeginSpawnDelay();
 
             // Dừng ở khoảng cách mà cả monster và hero đều có thể đánh nhau.
             float heroAttackRange = GetMaxHeroAttackRange(monsterConfigData.attackRange);

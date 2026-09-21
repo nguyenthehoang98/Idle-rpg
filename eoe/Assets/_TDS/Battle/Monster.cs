@@ -14,6 +14,8 @@ namespace _TDS.Battle
     public class Monster : Unique
     {
         [SerializeField] private Transform scaleTransform;
+        [Tooltip("Thời gian animation Init chạy trước khi monster di chuyển/tấn công/nhận sát thương.")]
+        [SerializeField, Min(0f)] private float spawnDelay = 0.35f;
         [Header("Events")]
         [SerializeField] private UnityEvent OnBeHit;
         [SerializeField] private UnityEvent OnDeath;
@@ -40,9 +42,19 @@ namespace _TDS.Battle
         private Color[] baseRendererColors;
         private int nextSkillIndex;
         private float skillTimer;
+        private float spawnDelayRemaining;
 
         public bool IsStunned => HasModifier(SkillModifierType.Stun);
         public bool IsSilenced => HasModifier(SkillModifierType.Silence);
+
+        /// <summary>Thời gian chạy animation Init sau khi spawn (giây). 0 = vào trận ngay.</summary>
+        public float SpawnDelay
+        {
+            get => spawnDelay;
+            set => spawnDelay = value;
+        }
+        /// <summary>Đang chạy animation Init: chưa di chuyển, chưa nhận sát thương/modifier.</summary>
+        public bool IsSpawning => spawnDelayRemaining > 0f;
 
         public float MoveSpeedMultiplier
         {
@@ -76,6 +88,20 @@ namespace _TDS.Battle
         public float AttackRange { get; private set; }
         public float DamageCooldown { get; private set; }
         public float AttackTimer { get; set; }
+
+        /// <summary>Cho animation Init chạy trước khi monster di chuyển/tấn công.</summary>
+        public void BeginSpawnDelay()
+        {
+            spawnDelayRemaining = Mathf.Max(0f, SpawnDelay);
+        }
+
+        /// <summary>Đếm ngược thời gian animation Init.</summary>
+        public void TickSpawnDelay(float deltaTime)
+        {
+            if (spawnDelayRemaining <= 0f) return;
+
+            spawnDelayRemaining = Mathf.Max(0f, spawnDelayRemaining - Mathf.Max(0f, deltaTime));
+        }
 
         public void SetCombatData(
             int maxHealth,
@@ -166,7 +192,7 @@ namespace _TDS.Battle
 
         public int TakeDamage(int damage)
         {
-            if (damage <= 0 || CurrentHealth <= 0) return 0;
+            if (damage <= 0 || CurrentHealth <= 0 || IsSpawning) return 0;
 
             int dealt = Mathf.Min(damage, CurrentHealth);
             CurrentHealth -= dealt;
@@ -177,7 +203,7 @@ namespace _TDS.Battle
 
         public bool ApplyModifier(ModifierSkillAction action, SkillModifierData modifier)
         {
-            if (action == null) return false;
+            if (action == null || IsSpawning) return false;
 
             if (modifier.type == SkillModifierType.Bleed &&
                 GetModifierStackCount(SkillModifierType.Bleed) >= MaxBleedStacks)
@@ -307,6 +333,8 @@ namespace _TDS.Battle
 
             float t = Mathf.Clamp01(elapsedTime / deltaTime);
 
+            if (IsSpawning) return; // animation Init còn chạy -> đứng yên
+
             transform.position = Vector3.Lerp(previousPosition, targetPosition, t);
         }
 
@@ -335,7 +363,6 @@ namespace _TDS.Battle
 
             elapsedTime = 0;
         }
-
         public void BeHit() => OnBeHit?.Invoke();
 
         public void Death()
