@@ -14,11 +14,8 @@
       "expMultiplier": 1.0,
       "stackThreshold": 3,
       "powerDuration": 10.0,
-      "powerUpgradeStat": 0,
-      "powerUpgradeValue": 0.0,
-      "powerUpgradePercent": false,
-      "attackId": 1101,
-      "skillId": 0
+      "listStatUpgrade": null,
+      "attackId": 1101
     }
   ]
 }

@@ -37,8 +37,8 @@
     {
       "id": 1001,
       "kind": 3,
-      "title": "",
-      "description": "",
+      "title": null,
+      "description": null,
       "cost": 0,
       "heroId": 0,
       "heroStat": 1,
@@ -50,8 +50,8 @@
     {
       "id": 1002,
       "kind": 3,
-      "title": "",
-      "description": "",
+      "title": null,
+      "description": null,
       "cost": 0,
       "heroId": 0,
       "heroStat": 10,

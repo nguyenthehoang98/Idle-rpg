@@ -219,8 +219,6 @@ namespace _TDS.Gameplay
                     continue;
                 }
 
-                Debug.Log($"Hero added {heroData.id}");
-
                 hero.Initialize(heroData, skillData);
                 hero.SetPowerUpgrades(skillConfig.GetStatUpgrades(heroData.listStatUpgrade));
             }

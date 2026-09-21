@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Cysharp.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -33,9 +32,6 @@ namespace _GameToolkit.ResourceManagement
                 Dictionary.Remove(assetName);
 
                 Addressables.Release(entry.Handle);
-#if UNITY_EDITOR
-                Debug.Log($"[Loaded] Uncached asset: {assetName}");
-#endif
             }
         }
 
@@ -48,11 +44,6 @@ namespace _GameToolkit.ResourceManagement
 
             AsyncOperationHandle<T> handle;
 
-#if UNITY_EDITOR
-            string stackTrace = UnityEngine.StackTraceUtility.ExtractStackTrace();
-            Stopwatch sw = Stopwatch.StartNew();
-#endif
-
             try
             {
                 handle = Addressables.LoadAssetAsync<T>(assetName);
@@ -64,7 +55,7 @@ namespace _GameToolkit.ResourceManagement
                 if (asset == null)
                 {
 #if UNITY_EDITOR
-                    Debug.LogError($"[Loaded] Asset at path '{assetName}' is null. \n\n{stackTrace}");
+                    Debug.LogError($"[Loaded] Asset at path '{assetName}' is null. \n\n{UnityEngine.StackTraceUtility.ExtractStackTrace()}");
 #else
                     Debug.LogError($"[Loaded] Asset at path '{assetName}' is null.");
 #endif
@@ -72,16 +63,9 @@ namespace _GameToolkit.ResourceManagement
                     return null;
                 }
 
-#if UNITY_EDITOR
-                sw.Stop();
-#endif
-                
                 if (cached)
                 {
                     Dictionary[assetName] = new CacheEntry(handle, asset);
-#if UNITY_EDITOR
-                    Debug.Log($"[Loaded] Cached asset: {assetName}, duration '{sw.ElapsedMilliseconds}'ms\n\n{stackTrace}");
-#endif
                 }
                 else
                 {
@@ -94,8 +78,7 @@ namespace _GameToolkit.ResourceManagement
             catch (Exception e)
             {
 #if UNITY_EDITOR
-                sw.Stop();
-                Debug.LogError($"[Loaded] Failed to load asset '{typeof(T)}' at path '{assetName}'\n\n{stackTrace}");
+                Debug.LogError($"[Loaded] Failed to load asset '{typeof(T)}' at path '{assetName}'\n\n{UnityEngine.StackTraceUtility.ExtractStackTrace()}");
                 Debug.LogError(e);
 #else
                 Debug.LogError($"[Loaded] Failed to load asset '{typeof(T)}' at path '{assetName}'");

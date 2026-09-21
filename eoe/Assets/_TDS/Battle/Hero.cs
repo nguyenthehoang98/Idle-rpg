@@ -128,10 +128,7 @@ namespace _TDS.Battle
         {
             if (damage <= 0 || IsDead) return;
 
-            int healthBefore = CurrentHealth;
             CurrentHealth = Mathf.Max(0, CurrentHealth - damage);
-
-            Debug.Log($"[Hero:{name}] TakeDamage({healthBefore - CurrentHealth}) hp {healthBefore} -> {CurrentHealth}");
 
             if (CurrentHealth <= 0)
             {
@@ -342,7 +339,6 @@ namespace _TDS.Battle
         // Loop tìm & đánh theo step, chạy bằng Coroutine thay vì Update
         protected virtual IEnumerator AutoAttackEnumerator()
         {
-            Debug.Log("Start AutoAttackEnumerator");
             while (true)
             {
                 float interval = Mathf.Max(0.01f, 1f / GetStat(StatId.AttackSpeed).Value);
