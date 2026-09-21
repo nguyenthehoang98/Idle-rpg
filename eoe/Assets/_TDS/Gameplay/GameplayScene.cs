@@ -38,12 +38,12 @@ namespace _TDS.Gameplay
         [SerializeField] private HeroSlotManager heroSlotManager;
         [SerializeField] private UpdateRunner runner;
         [SerializeField] private CircuitTickRunner circuitRunner;
+        [SerializeField] private GameplayHud gameplayHud;
 
         private SpawnMonsterRunner spawnRunner;
         private AgentMovementRunner agentRunner;
         private SkillTickRunner skillRunner;
         private CircuitBoard board;
-        private GameplayHud hud;
         private WaveUpgradePanel upgradePanel;
         private SkillConfig skillConfig;
         private ExpConfig expConfig;
@@ -62,12 +62,14 @@ namespace _TDS.Gameplay
         {
             level = RunSelection.SelectedLevel;
             board = BuildBoard();
-            hud = gameObject.GetComponent<GameplayHud>();
-            if (hud == null)
+            if (gameplayHud == null)
             {
-                hud = gameObject.AddComponent<GameplayHud>();
+                gameplayHud = gameObject.GetComponent<GameplayHud>();
             }
-
+            if (gameplayHud == null)
+            {
+                Debug.LogWarning("[Gameplay] GameplayHud chưa được gán trên Root - HUD bỏ qua");
+            }
             upgradePanel = gameObject.AddComponent<WaveUpgradePanel>();
             runner.TryGetRunner(out spawnRunner);
             runner.TryGetRunner(out agentRunner);
@@ -77,8 +79,9 @@ namespace _TDS.Gameplay
 
         private void Update()
         {
-            hud?.RefreshCircuit(circuitRunner?.Circuit);
-            heroSlotManager?.RefreshHighlight(circuitRunner?.Circuit);
+            EnergyCircuit circuit = circuitRunner?.Circuit;
+            gameplayHud?.RefreshCircuit(circuit);
+            heroSlotManager?.RefreshHighlight(circuit);
         }
 
         private CircuitBoard BuildBoard()
@@ -167,15 +170,18 @@ namespace _TDS.Gameplay
 
             agentRunner.Initialize();
             circuitRunner.Initialize(board);
-            hud.Initialize(board, level);
-            hud.SetBottomVisible(true);
-            hud.SetGold(rewards.Gold);
-            hud.BindTimeScale(speed => runner.Loop = speed);
-            hud.BindCircuitControls(
-                () => circuitRunner.TryRoll(),
-                manual => circuitRunner.SetManualMode(manual));
-            hud.BindResultActions(ContinueAfterResult, ReturnHome);
-            hud.SetStatus("LOADING BATTLE");
+            gameplayHud?.Initialize(board, level);
+            gameplayHud?.SetBottomVisible(true);
+            gameplayHud?.SetGold(rewards.Gold);
+            if (gameplayHud != null)
+            {
+                gameplayHud.BindTimeScale(speed => runner.Loop = speed);
+                gameplayHud.BindCircuitControls(
+                    () => circuitRunner.TryRoll(),
+                    manual => circuitRunner.SetManualMode(manual));
+                gameplayHud.BindResultActions(ContinueAfterResult, ReturnHome);
+                gameplayHud.SetStatus("LOADING BATTLE");
+            }
 
             skillRunner.Initialize();
             skillConfig = ConfigManager.Get<SkillConfig>();
@@ -231,15 +237,15 @@ namespace _TDS.Gameplay
 
         private void OnCircuitRoll(CircuitRollEvent roll)
         {
-            hud.ShowRoll(roll);
-            hud.SetStatus(roll.Content.Type == CircuitSlotContentType.Empty
+            gameplayHud?.ShowRoll(roll);
+            gameplayHud?.SetStatus(roll.Content.Type == CircuitSlotContentType.Empty
                 ? $"ROLL +{roll.StepsMoved} · EMPTY"
                 : $"ROLL +{roll.StepsMoved}");
         }
 
         private void OnCircuitActivation(CircuitActivationEvent activation)
         {
-            hud.ActivateSlot(activation.SlotIndex);
+            gameplayHud?.ActivateSlot(activation.SlotIndex);
 
             if (activation.Content.Type != CircuitSlotContentType.Hero)
             {
@@ -252,21 +258,21 @@ namespace _TDS.Gameplay
                 if (hero.HeroId != activation.Content.Id) continue;
                 if (!hero.TryStartOverdrive(activation.PowerDuration)) continue;
 
-                hud.SetStatus("OVERDRIVE ACTIVE");
+                gameplayHud?.SetStatus("OVERDRIVE ACTIVE");
             }
         }
 
         private void OnWaveSpawnCompleted(int wave)
         {
-            hud.SetWave(wave);
-            hud.SetStatus("FIGHTING");
+            gameplayHud?.SetWave(wave);
+            gameplayHud?.SetStatus("FIGHTING");
             Debug.Log($"[Gameplay] Wave {wave} spawn xong, chờ diệt hết quái...");
         }
 
         private void OnWaveCleared(int wave)
         {
-            hud.SetWave(wave);
-            hud.SetStatus("CHOOSE UPGRADE");
+            gameplayHud?.SetWave(wave);
+            gameplayHud?.SetStatus("CHOOSE UPGRADE");
             PauseUpgradeFlow();
             upgradePanel.ShowChoice(wave, rewards.Gold, ShowShop, ShowUpgradeRoll);
             Debug.Log($"[Gameplay] Diệt hết quái wave {wave} -> mở upgrade choice");
@@ -342,10 +348,10 @@ namespace _TDS.Gameplay
             }
 
             rewards.RecordUpgrade(card.id);
-            hud.SetGold(rewards.Gold);
+            gameplayHud?.SetGold(rewards.Gold);
             upgradePanel.Hide();
             ResumeUpgradeFlow();
-            hud.SetStatus($"UPGRADE: {card.title}");
+            gameplayHud?.SetStatus($"UPGRADE: {card.title}");
         }
 
         private void PauseUpgradeFlow()
@@ -409,8 +415,8 @@ namespace _TDS.Gameplay
             resultReported = true;
             int[] saveIds = GetSaveIds();
             GameProgress.SaveRun(level, saveIds, rewards, victory: true, expConfig: expConfig);
-            hud.SetStatus($"VICTORY  +{rewards.Experience} EXP  +{rewards.Gold} GOLD");
-            hud.ShowResult(true, rewards);
+            gameplayHud?.SetStatus($"VICTORY  +{rewards.Experience} EXP  +{rewards.Gold} GOLD");
+            gameplayHud?.ShowResult(true, rewards);
             Debug.Log($"[Gameplay] 🏆 WIN GAME! EXP={rewards.Experience}, GOLD={rewards.Gold}");
             LogBattleReport("WIN");
         }
@@ -419,7 +425,7 @@ namespace _TDS.Gameplay
         {
             rewards.Add(experience, gold);
             circuitRunner?.AddKillEnergy();
-            hud?.SetGold(rewards.Gold);
+            gameplayHud?.SetGold(rewards.Gold);
             switch (monster.Rank)
             {
                 case MonsterRank.Elite: eliteKills++; break;
@@ -464,7 +470,7 @@ namespace _TDS.Gameplay
 
         private void OnModifierApplied(SkillModifierType type)
         {
-            hud?.ShowModifierFeedback(type);
+            gameplayHud?.ShowModifierFeedback(type);
         }
 
         private void OnHeroDied(Hero hero)
@@ -487,8 +493,8 @@ namespace _TDS.Gameplay
                 resultReported = true;
                 int[] loseIds = GetSaveIds();
                 GameProgress.SaveRun(level, loseIds, rewards, victory: false, expConfig: expConfig);
-                hud.SetStatus($"DEFEAT  +{rewards.Experience} EXP  +{rewards.Gold} GOLD");
-                hud.ShowResult(false, rewards);
+                gameplayHud?.SetStatus($"DEFEAT  +{rewards.Experience} EXP  +{rewards.Gold} GOLD");
+                gameplayHud?.ShowResult(false, rewards);
                 Debug.Log($"[Gameplay] 💀 THUA! EXP={rewards.Experience}, GOLD={rewards.Gold}");
                 LogBattleReport("LOSE");
             }

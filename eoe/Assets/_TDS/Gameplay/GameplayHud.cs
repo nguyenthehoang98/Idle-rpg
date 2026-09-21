@@ -8,16 +8,13 @@ namespace _TDS.Gameplay
 {
     public sealed class GameplayHud : MonoBehaviour
     {
-        private static readonly Color PanelColor = ParseColor("172238");
         private static readonly Color SlotColor = ParseColor("FFFFFF");
-        private static readonly Color EmptyColor = ParseColor("FFFFFF");
         private static readonly Color AccentColor = ParseColor("5EEAD4");
-        private static readonly Color PulseColor = ParseColor("FDE047");
         private static readonly Color HighlightColor = ParseColor("FDE047");
-        private static readonly Color OverdriveColor = ParseColor("FDE047");
-        private static readonly Color GoldColor = ParseColor("FDE047");
         private static readonly Color TextColor = ParseColor("F8FAFC");
         private static readonly Color MutedColor = ParseColor("A8B5C7");
+
+        [SerializeField] private Canvas gameplayCanvas;
 
         private readonly Image[] slotImages = new Image[EnergyCircuit.DefaultSlotCount];
         private readonly Text[] slotLabels = new Text[EnergyCircuit.DefaultSlotCount];
@@ -26,7 +23,6 @@ namespace _TDS.Gameplay
         private readonly Color[] slotBaseColors = new Color[EnergyCircuit.DefaultSlotCount];
         private readonly float[] slotFeedback = new float[EnergyCircuit.DefaultSlotCount];
 
-        private Font font;
         private RectTransform safeArea;
         private GameObject bottomPanel;
         private Text waveText;
@@ -39,6 +35,7 @@ namespace _TDS.Gameplay
         private float rollPopupRemaining;
         private Text modeButtonLabel;
         private Button rollButton;
+        private Button modeButton;
         private Action<bool> setManualMode;
         private Func<bool> rollRequested;
         private bool manualMode;
@@ -55,60 +52,44 @@ namespace _TDS.Gameplay
         private float modifierFeedbackRemaining;
         private string statusBeforeModifier;
         private Color statusBeforeModifierColor;
-        private Vector2Int lastScreenSize;
 
         private void Awake()
         {
-            BuildUi();
+            if (!BindTemplate())
+            {
+                enabled = false;
+            }
         }
 
         private void Update()
         {
-            ApplySafeArea();
-
             if (modifierFeedbackRemaining > 0f)
             {
                 modifierFeedbackRemaining -= Time.unscaledDeltaTime;
                 if (modifierFeedbackRemaining <= 0f)
                 {
                     SetText(statusBeforeModifier, statusText);
-                    if (statusText != null)
-                    {
-                        statusText.color = statusBeforeModifierColor;
-                    }
+                    if (statusText != null) statusText.color = statusBeforeModifierColor;
                 }
             }
 
             if (rollResultRemaining > 0f)
             {
                 rollResultRemaining -= Time.unscaledDeltaTime;
-                if (rollResultRemaining <= 0f)
-                {
-                    SetText(string.Empty, rollResultText);
-                }
+                if (rollResultRemaining <= 0f) SetText(string.Empty, rollResultText);
             }
 
             if (rollPopupRemaining > 0f)
             {
                 rollPopupRemaining -= Time.unscaledDeltaTime;
-                if (rollPopupRemaining <= 0f && rollPopup != null)
-                {
-                    rollPopup.SetActive(false);
-                }
+                if (rollPopupRemaining <= 0f && rollPopup != null) rollPopup.SetActive(false);
             }
 
             for (int i = 0; i < slotFeedback.Length; i++)
             {
-                if (slotFeedback[i] <= 0f)
-                {
-                    continue;
-                }
-
+                if (slotFeedback[i] <= 0f) continue;
                 slotFeedback[i] -= Time.unscaledDeltaTime;
-                if (slotFeedback[i] <= 0f)
-                {
-                    slotImages[i].color = slotBaseColors[i];
-                }
+                if (slotFeedback[i] <= 0f && slotImages[i] != null) slotImages[i].color = slotBaseColors[i];
             }
         }
 
@@ -126,43 +107,34 @@ namespace _TDS.Gameplay
 
         public void Initialize(CircuitBoard board, int level)
         {
-            if (board == null)
-            {
-                return;
-            }
+            if (board == null) return;
 
             SetLevel(level);
             for (int i = 0; i < slotImages.Length && i < board.SlotCount; i++)
             {
                 CircuitSlotContent content = board.GetContent(i);
-                slotLabels[i].text = content.Type switch
+                SetText(content.Type switch
                 {
                     CircuitSlotContentType.Hero => $"HERO\n{content.Id}",
                     CircuitSlotContentType.Item => $"ITEM\n{content.Id}",
                     _ => "EMPTY"
-                };
-                slotIndexLabels[i].text = $"{i + 1:00}";
-                slotStackLabels[i].text = string.Empty;
-                slotBaseColors[i] = ParseColor("FFFFFF");
-                slotImages[i].color = slotBaseColors[i];
-                slotImages[i].gameObject.SetActive(true);
+                }, slotLabels[i]);
+                SetText($"{i + 1:00}", slotIndexLabels[i]);
+                SetText(string.Empty, slotStackLabels[i]);
+                slotBaseColors[i] = SlotColor;
+                if (slotImages[i] != null)
+                {
+                    slotImages[i].color = SlotColor;
+                    slotImages[i].gameObject.SetActive(true);
+                }
             }
         }
 
-        public void SetLevel(int level)
-        {
-            SetText("LEVEL " + level, waveText);
-        }
+        public void SetLevel(int level) => SetText("LEVEL " + level, waveText);
 
-        public void SetWave(int wave)
-        {
-            SetText("WAVE " + wave, waveText);
-        }
+        public void SetWave(int wave) => SetText("WAVE " + wave, waveText);
 
-        public void SetGold(int gold)
-        {
-            SetText($"GOLD  {Mathf.Max(0, gold)}", goldText);
-        }
+        public void SetGold(int gold) => SetText($"GOLD  {Mathf.Max(0, gold)}", goldText);
 
         public void BindCircuitControls(Func<bool> roll, Action<bool> manualModeSetter)
         {
@@ -188,24 +160,19 @@ namespace _TDS.Gameplay
             if (circuit == null) return;
 
             SetText($"ENERGY  {Mathf.FloorToInt(circuit.Energy)}/{Mathf.FloorToInt(circuit.EnergyCapacity)}", energyText);
-            if (rollButton != null)
-            {
-                rollButton.interactable = manualMode && circuit.IsReady;
-            }
+            if (rollButton != null) rollButton.interactable = manualMode && circuit.IsReady;
 
             for (int i = 0; i < slotImages.Length; i++)
             {
+                if (slotImages[i] == null) continue;
                 bool visible = i < circuit.SlotCount;
                 slotImages[i].gameObject.SetActive(visible);
                 if (!visible) continue;
                 CircuitSlotState state = circuit.GetSlot(i);
-                slotStackLabels[i].text = state.IsActive ? "POWER" : string.Empty;
-                slotStackLabels[i].color = state.IsActive ? TextColor : MutedColor;
-
+                SetText(state.IsActive ? "POWER" : string.Empty, slotStackLabels[i]);
+                if (slotStackLabels[i] != null) slotStackLabels[i].color = state.IsActive ? TextColor : MutedColor;
                 if (slotFeedback[i] > 0f) continue;
-                slotImages[i].color = (state.IsActive || i == circuit.HighlightIndex)
-                    ? HighlightColor
-                    : ParseColor("FFFFFF");
+                slotImages[i].color = state.IsActive || i == circuit.HighlightIndex ? HighlightColor : SlotColor;
             }
         }
 
@@ -218,19 +185,12 @@ namespace _TDS.Gameplay
             }
 
             SetText(status, statusText);
-            if (statusText != null)
-            {
-                statusText.color = MutedColor;
-            }
+            if (statusText != null) statusText.color = MutedColor;
         }
 
         public void ShowModifierFeedback(SkillModifierType type)
         {
-            if (statusText == null)
-            {
-                return;
-            }
-
+            if (statusText == null) return;
             if (modifierFeedbackRemaining <= 0f)
             {
                 statusBeforeModifier = statusText.text;
@@ -247,217 +207,115 @@ namespace _TDS.Gameplay
             if (bottomPanel != null) bottomPanel.SetActive(visible);
         }
 
-        public void ActivateSlot(int slotIndex)
+        private bool BindTemplate()
         {
-            if (slotIndex < 0 || slotIndex >= slotImages.Length)
+            if (gameplayCanvas == null) gameplayCanvas = GetComponentInChildren<Canvas>();
+            if (gameplayCanvas == null)
             {
-                return;
+                Debug.LogError($"{nameof(GameplayHud)} needs its Canvas assigned in the Inspector.");
+                return false;
             }
 
+            Transform root = gameplayCanvas.transform;
+            safeArea = root.Find("SafeArea") as RectTransform;
+            Transform content = safeArea != null ? safeArea : root;
+            Transform bottom = content.Find("bottom") ?? content.Find("CircuitPanel");
+            bottomPanel = bottom != null ? bottom.gameObject : null;
+            Transform energyPanel = content.Find("bottom/energy") ?? content.Find("CircuitPanel/EnergyPanel") ?? bottom;
+            waveText = FindDeep(content, "Wave")?.GetComponent<Text>();
+            statusText = FindDeep(content, "Status")?.GetComponent<Text>();
+            goldText = FindDeep(content, "Gold")?.GetComponent<Text>();
+            energyText = FindDeep(content, "Energy")?.GetComponent<Text>();
+            rollResultText = FindDeep(content, "RollResult")?.GetComponent<Text>();
+            rollPopup = FindDeep(content, "RollPopup")?.gameObject;
+            rollPopupText = rollPopup != null ? rollPopup.GetComponentInChildren<Text>() : null;
+            modeButton = FindDeep(energyPanel, "ModeButton")?.GetComponent<Button>();
+            rollButton = FindDeep(energyPanel, "RollButton")?.GetComponent<Button>();
+            modeButtonLabel = modeButton != null ? modeButton.GetComponentInChildren<Text>() : null;
+
+            Transform slots = FindDeep(energyPanel, "Slots");
+            for (int i = 0; i < slotImages.Length; i++)
+            {
+                Transform slot = slots != null ? slots.Find($"Slot{i}") : null;
+                if (slot == null) continue;
+                slotImages[i] = slot.GetComponent<Image>();
+                slotIndexLabels[i] = FindDeep(slot, "Index")?.GetComponent<Text>();
+                slotLabels[i] = FindDeep(slot, "Label")?.GetComponent<Text>();
+                slotStackLabels[i] = FindDeep(slot, "Stack")?.GetComponent<Text>();
+                slotBaseColors[i] = slotImages[i] != null ? slotImages[i].color : SlotColor;
+            }
+
+            string[] speedNames = { "Speed1", "Speed2", "Speed4" };
+            for (int i = 0; i < speedButtons.Length; i++)
+            {
+                speedButtons[i] = FindDeep(content, speedNames[i])?.GetComponent<Button>();
+            }
+
+            resultOverlay = FindDeep(root, "ResultOverlay")?.gameObject;
+            resultTitle = FindDeep(root, "ResultTitle")?.GetComponent<Text>();
+            resultRewards = FindDeep(root, "ResultRewards")?.GetComponent<Text>();
+            resultContinueButton = FindDeep(root, "Continue")?.GetComponent<Button>();
+            resultContinueLabel = resultContinueButton != null ? resultContinueButton.GetComponentInChildren<Text>() : null;
+            Button homeButton = FindDeep(root, "Home")?.GetComponent<Button>();
+
+            Wire(modeButton, () => SetManualMode(!manualMode));
+            Wire(rollButton, () => rollRequested?.Invoke());
+            for (int i = 0; i < speedButtons.Length; i++)
+            {
+                float speed = i == 0 ? 1f : i == 1 ? 2f : 4f;
+                Wire(speedButtons[i], () => SetSpeed(speed));
+            }
+            Wire(homeButton, () => returnHome?.Invoke());
+            return true;
+        }
+
+        private static void Wire(Button button, UnityEngine.Events.UnityAction action)
+        {
+            if (button == null) return;
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(action);
+        }
+
+        private static Transform FindDeep(Transform root, string name)
+        {
+            if (root == null) return null;
+            for (int i = 0; i < root.childCount; i++)
+            {
+                Transform child = root.GetChild(i);
+                if (child.name == name) return child;
+                Transform found = FindDeep(child, name);
+                if (found != null) return found;
+            }
+            return null;
+        }
+
+        public void ActivateSlot(int slotIndex)
+        {
+            if (slotIndex < 0 || slotIndex >= slotImages.Length || slotImages[slotIndex] == null) return;
             slotImages[slotIndex].color = HighlightColor;
             slotFeedback[slotIndex] = 0.65f;
         }
 
         public void ShowResult(bool victory, BattleRunRewards rewards)
         {
-            if (resultOverlay == null || rewards == null)
-            {
-                return;
-            }
-
+            if (resultOverlay == null || rewards == null) return;
             resultOverlay.SetActive(true);
-            resultTitle.text = victory ? "VICTORY" : "DEFEAT";
-            resultTitle.color = victory ? AccentColor : ParseColor("FB7185");
-            resultRewards.text = $"{rewards.DefeatedMonsters} MONSTERS DEFEATED\n+{rewards.Experience} EXP   +{rewards.Gold} GOLD";
-            resultContinueLabel.text = victory ? "NEXT LEVEL" : "RETRY";
-            resultContinueButton.onClick.RemoveAllListeners();
-            resultContinueButton.onClick.AddListener(() => continueRun?.Invoke(victory));
-        }
-
-        private void BuildUi()
-        {
-            font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-
-            Canvas canvas = CreateCanvas();
-            RectTransform root = safeArea;
-
-            Image topBar = CreatePanel("TopBar", root, PanelColor);
-            SetRect(topBar.rectTransform, new Vector2(0f, 1f), new Vector2(1f, 1f),
-                new Vector2(24f, -174f), new Vector2(-24f, -24f));
-
-            Image topAccent = CreateImage("Accent", topBar.transform, AccentColor);
-            SetRect(topAccent.rectTransform, new Vector2(0f, 0f), new Vector2(0f, 1f),
-                Vector2.zero, new Vector2(6f, 0f));
-
-            CreateText("Title", topBar.transform, "IDLE // CIRCUIT", 28, TextColor,
-                new Vector2(0.05f, 0f), new Vector2(0.29f, 1f), TextAnchor.MiddleLeft);
-            waveText = CreateText("Wave", topBar.transform, "LEVEL 1", 24, AccentColor,
-                new Vector2(0.3f, 0f), new Vector2(0.45f, 1f), TextAnchor.MiddleCenter);
-            statusText = CreateText("Status", topBar.transform, "AUTO COMBAT", 19, MutedColor,
-                new Vector2(0.46f, 0f), new Vector2(0.64f, 1f), TextAnchor.MiddleCenter);
-            goldText = CreateText("Gold", topBar.transform, "GOLD  0", 20, GoldColor,
-                new Vector2(0.65f, 0f), new Vector2(0.81f, 1f), TextAnchor.MiddleCenter);
-            BuildSpeedControls(topBar.transform);
-
-            Image circuitPanel = CreatePanel("CircuitPanel", root, PanelColor);
-            bottomPanel = circuitPanel.gameObject;
-            SetRect(circuitPanel.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f),
-                new Vector2(24f, 36f), new Vector2(-24f, 390f));
-
-            CreateText("CircuitTitle", circuitPanel.transform, "ENERGY CIRCUIT", 24, TextColor,
-                new Vector2(0.04f, 0.79f), new Vector2(0.32f, 0.98f), TextAnchor.MiddleLeft);
-            energyText = CreateText("Energy", circuitPanel.transform, "ENERGY  0/100", 18, AccentColor,
-                new Vector2(0.33f, 0.79f), new Vector2(0.62f, 0.98f), TextAnchor.MiddleCenter);
-            CreateText("CircuitHint", circuitPanel.transform, "KILL + TIME  ·  ROLL TO POWER", 16, MutedColor,
-                new Vector2(0.04f, 0.64f), new Vector2(0.65f, 0.81f), TextAnchor.MiddleLeft);
-            BuildCircuitControls(circuitPanel.transform);
-
-            Image circuitRule = CreateImage("Rule", circuitPanel.transform, AccentColor);
-            circuitRule.color = new Color(AccentColor.r, AccentColor.g, AccentColor.b, 0.35f);
-            SetRect(circuitRule.rectTransform, new Vector2(0.04f, 0.6f), new Vector2(0.96f, 0.6f),
-                Vector2.zero, new Vector2(0f, 2f));
-
-            GameObject slotRowObject = new GameObject("Slots", typeof(RectTransform));
-            slotRowObject.transform.SetParent(circuitPanel.transform, false);
-            RectTransform slotRowRect = slotRowObject.GetComponent<RectTransform>();
-            SetRect(slotRowRect, new Vector2(0.03f, 0.08f), new Vector2(0.97f, 0.57f),
-                Vector2.zero, Vector2.zero);
-            HorizontalLayoutGroup slotRow = slotRowObject.AddComponent<HorizontalLayoutGroup>();
-            slotRow.spacing = 12f;
-            slotRow.padding = new RectOffset(4, 4, 4, 4);
-            slotRow.childControlWidth = true;
-            slotRow.childControlHeight = true;
-            slotRow.childForceExpandWidth = true;
-            slotRow.childForceExpandHeight = true;
-
-            for (int i = 0; i < slotImages.Length; i++)
+            SetText(victory ? "VICTORY" : "DEFEAT", resultTitle);
+            if (resultTitle != null) resultTitle.color = victory ? AccentColor : ParseColor("FB7185");
+            SetText($"{rewards.DefeatedMonsters} MONSTERS DEFEATED\n+{rewards.Experience} EXP   +{rewards.Gold} GOLD", resultRewards);
+            SetText(victory ? "NEXT LEVEL" : "RETRY", resultContinueLabel);
+            if (resultContinueButton != null)
             {
-                GameObject slotObject = new GameObject($"Slot{i}", typeof(RectTransform));
-                slotObject.transform.SetParent(slotRowObject.transform, false);
-                Image image = slotObject.AddComponent<Image>();
-                image.color = ParseColor("FFFFFF");
-                AddOutline(image, new Color(0.37f, 0.91f, 0.83f, 0.22f), 2f);
-                slotImages[i] = image;
-                slotBaseColors[i] = ParseColor("FFFFFF");
-                slotIndexLabels[i] = CreateText("Index", slotObject.transform, $"{i + 1:00}", 13, MutedColor,
-                    new Vector2(0.08f, 0.72f), new Vector2(0.92f, 0.98f), TextAnchor.MiddleCenter);
-                slotLabels[i] = CreateText("Label", slotObject.transform, "EMPTY", 16, TextColor,
-                    new Vector2(0.06f, 0.22f), new Vector2(0.94f, 0.76f), TextAnchor.MiddleCenter);
-                slotStackLabels[i] = CreateText("Stack", slotObject.transform, "0/3", 12, MutedColor,
-                    new Vector2(0.08f, 0.02f), new Vector2(0.92f, 0.22f), TextAnchor.MiddleCenter);
-                slotIndexLabels[i].raycastTarget = false;
-                slotLabels[i].raycastTarget = false;
-                slotStackLabels[i].raycastTarget = false;
+                resultContinueButton.onClick.RemoveAllListeners();
+                resultContinueButton.onClick.AddListener(() => continueRun?.Invoke(victory));
             }
-
-            rollResultText = CreateText("RollResult", circuitPanel.transform, string.Empty, 18, HighlightColor,
-                new Vector2(0.64f, 0.64f), new Vector2(0.96f, 0.81f), TextAnchor.MiddleRight);
-            rollResultText.raycastTarget = false;
-
-            rollPopup = new GameObject("RollPopup", typeof(RectTransform));
-            rollPopup.transform.SetParent(root, false);
-            SetRect(rollPopup.GetComponent<RectTransform>(), new Vector2(0.2f, 0.35f), new Vector2(0.8f, 0.65f), Vector2.zero, Vector2.zero);
-            rollPopupText = CreateText("RollPopupText", rollPopup.transform, string.Empty, 120, HighlightColor,
-                Vector2.zero, Vector2.one, TextAnchor.MiddleCenter);
-            rollPopupText.raycastTarget = false;
-            rollPopupText.fontStyle = FontStyle.Bold;
-            Outline popupOutline = rollPopupText.gameObject.AddComponent<Outline>();
-            popupOutline.effectColor = new Color(0f, 0f, 0f, 0.8f);
-            popupOutline.effectDistance = new Vector2(4f, 4f);
-            rollPopup.SetActive(false);
-
-            BuildResultOverlay(root);
-        }
-
-        private void BuildCircuitControls(Transform parent)
-        {
-            GameObject controls = new GameObject("CircuitControls", typeof(RectTransform));
-            controls.transform.SetParent(parent, false);
-            RectTransform controlsRect = controls.GetComponent<RectTransform>();
-            SetRect(controlsRect, new Vector2(0.68f, 0.79f), new Vector2(0.96f, 0.98f), Vector2.zero, Vector2.zero);
-            HorizontalLayoutGroup layout = controls.AddComponent<HorizontalLayoutGroup>();
-            layout.spacing = 6f;
-            layout.padding = new RectOffset(2, 2, 2, 2);
-            layout.childControlWidth = true;
-            layout.childControlHeight = true;
-            layout.childForceExpandWidth = true;
-            layout.childForceExpandHeight = true;
-
-            Button modeButton = CreateHudButton("ModeButton", controls.transform, "AUTO", AccentColor);
-            modeButtonLabel = modeButton.GetComponentInChildren<Text>();
-            modeButton.onClick.AddListener(() => SetManualMode(!manualMode));
-
-            rollButton = CreateHudButton("RollButton", controls.transform, "ROLL", SlotColor);
-            rollButton.onClick.AddListener(() => rollRequested?.Invoke());
-            rollButton.interactable = false;
-        }
-
-        private Button CreateHudButton(string objectName, Transform parent, string label, Color color)
-        {
-            GameObject buttonObject = new GameObject(objectName, typeof(RectTransform));
-            buttonObject.transform.SetParent(parent, false);
-            Image image = buttonObject.AddComponent<Image>();
-            image.color = color;
-            Button button = buttonObject.AddComponent<Button>();
-            button.targetGraphic = image;
-            ColorBlock colors = button.colors;
-            colors.normalColor = color;
-            colors.highlightedColor = ParseColor("7DD3FC");
-            colors.pressedColor = ParseColor("2DD4BF");
-            colors.disabledColor = new Color(color.r, color.g, color.b, 0.35f);
-            button.colors = colors;
-            Text text = CreateText("Label", buttonObject.transform, label, 14, TextColor,
-                Vector2.zero, Vector2.one, TextAnchor.MiddleCenter);
-            text.raycastTarget = false;
-            return button;
         }
 
         private void SetManualMode(bool manual, bool notify = true)
         {
             manualMode = manual;
             SetText(manual ? "MANUAL" : "AUTO", modeButtonLabel);
-            if (notify)
-            {
-                setManualMode?.Invoke(manual);
-            }
-        }
-
-        private void BuildSpeedControls(Transform parent)
-        {
-            GameObject speedRoot = new GameObject("SpeedControls", typeof(RectTransform));
-            speedRoot.transform.SetParent(parent, false);
-            RectTransform speedRect = speedRoot.GetComponent<RectTransform>();
-            SetRect(speedRect, new Vector2(0.82f, 0.16f), new Vector2(0.97f, 0.84f), Vector2.zero, Vector2.zero);
-            HorizontalLayoutGroup layout = speedRoot.AddComponent<HorizontalLayoutGroup>();
-            layout.spacing = 4f;
-            layout.padding = new RectOffset(2, 2, 2, 2);
-            layout.childControlWidth = true;
-            layout.childControlHeight = true;
-            layout.childForceExpandWidth = true;
-            layout.childForceExpandHeight = true;
-
-            float[] speeds = { 1f, 2f, 4f };
-            for (int i = 0; i < speeds.Length; i++)
-            {
-                float speed = speeds[i];
-                GameObject buttonObject = new GameObject($"Speed{speed:0}", typeof(RectTransform));
-                buttonObject.transform.SetParent(speedRoot.transform, false);
-                Image image = buttonObject.AddComponent<Image>();
-                image.color = speed == 1f ? AccentColor : SlotColor;
-                Button button = buttonObject.AddComponent<Button>();
-                button.targetGraphic = image;
-                ColorBlock colors = button.colors;
-                colors.normalColor = image.color;
-                colors.highlightedColor = ParseColor("7DD3FC");
-                colors.pressedColor = ParseColor("2DD4BF");
-                colors.disabledColor = EmptyColor;
-                button.colors = colors;
-                Text label = CreateText("Label", buttonObject.transform, $"{speed:0}X", 15, TextColor,
-                    Vector2.zero, Vector2.one, TextAnchor.MiddleCenter);
-                label.raycastTarget = false;
-                button.onClick.AddListener(() => SetSpeed(speed));
-                speedButtons[i] = button;
-            }
+            if (notify) setManualMode?.Invoke(manual);
         }
 
         private void SetSpeed(float speed)
@@ -466,168 +324,14 @@ namespace _TDS.Gameplay
             for (int i = 0; i < speedButtons.Length; i++)
             {
                 if (speedButtons[i] == null) continue;
-                speedButtons[i].GetComponent<Image>().color = speedButtons[i].name == $"Speed{speed:0}"
-                    ? AccentColor
-                    : SlotColor;
+                Image image = speedButtons[i].GetComponent<Image>();
+                if (image != null) image.color = speedButtons[i].name == $"Speed{speed:0}" ? AccentColor : SlotColor;
             }
-        }
-
-        private void BuildResultOverlay(Transform root)
-        {
-            resultOverlay = new GameObject("ResultOverlay", typeof(RectTransform));
-            resultOverlay.transform.SetParent(root, false);
-            RectTransform overlayRect = resultOverlay.GetComponent<RectTransform>();
-            SetRect(overlayRect, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
-
-            Image scrim = CreateImage("Scrim", resultOverlay.transform, new Color(0.02f, 0.05f, 0.1f, 0.82f));
-            SetRect(scrim.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
-
-            Image card = CreatePanel("ResultCard", resultOverlay.transform, PanelColor);
-            SetRect(card.rectTransform, new Vector2(0.1f, 0.32f), new Vector2(0.9f, 0.68f),
-                Vector2.zero, Vector2.zero);
-
-            resultTitle = CreateText("ResultTitle", card.transform, "RESULT", 44, AccentColor,
-                new Vector2(0.08f, 0.7f), new Vector2(0.92f, 0.92f), TextAnchor.MiddleCenter);
-            resultRewards = CreateText("ResultRewards", card.transform, "", 22, TextColor,
-                new Vector2(0.08f, 0.43f), new Vector2(0.92f, 0.68f), TextAnchor.MiddleCenter);
-            resultContinueButton = CreateResultButton("Continue", card.transform, AccentColor,
-                new Vector2(0.08f, 0.2f), new Vector2(0.5f, 0.38f));
-            resultContinueLabel = resultContinueButton.GetComponentInChildren<Text>();
-            Button homeButton = CreateResultButton("Home", card.transform, SlotColor,
-                new Vector2(0.54f, 0.2f), new Vector2(0.92f, 0.38f));
-            homeButton.onClick.AddListener(() => returnHome?.Invoke());
-            resultOverlay.SetActive(false);
-        }
-
-        private Button CreateResultButton(
-            string objectName,
-            Transform parent,
-            Color color,
-            Vector2 anchorMin,
-            Vector2 anchorMax)
-        {
-            GameObject buttonObject = new GameObject(objectName, typeof(RectTransform));
-            buttonObject.transform.SetParent(parent, false);
-            RectTransform rect = buttonObject.GetComponent<RectTransform>();
-            SetRect(rect, anchorMin, anchorMax, Vector2.zero, Vector2.zero);
-            Image image = buttonObject.AddComponent<Image>();
-            image.color = color;
-            Button button = buttonObject.AddComponent<Button>();
-            button.targetGraphic = image;
-            Text label = CreateText("Label", buttonObject.transform, objectName.ToUpperInvariant(), 18,
-                TextColor, Vector2.zero, Vector2.one, TextAnchor.MiddleCenter);
-            label.raycastTarget = false;
-            return button;
-        }
-
-        private Canvas CreateCanvas()
-        {
-            GameObject canvasObject = new GameObject("GameplayCanvas", typeof(RectTransform));
-            canvasObject.transform.SetParent(transform, false);
-            Canvas canvas = canvasObject.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvas.sortingOrder = 50;
-
-            CanvasScaler scaler = canvasObject.AddComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1080f, 2160f);
-            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
-            scaler.matchWidthOrHeight = 0.5f;
-            canvasObject.AddComponent<GraphicRaycaster>();
-
-            GameObject safeAreaObject = new GameObject("SafeArea", typeof(RectTransform));
-            safeAreaObject.transform.SetParent(canvasObject.transform, false);
-            safeArea = safeAreaObject.GetComponent<RectTransform>();
-            ApplySafeArea();
-            return canvas;
-        }
-
-        private void ApplySafeArea()
-        {
-            if (safeArea == null || Screen.width <= 0 || Screen.height <= 0)
-            {
-                return;
-            }
-
-            Vector2Int screenSize = new Vector2Int(Screen.width, Screen.height);
-            if (screenSize == lastScreenSize)
-            {
-                return;
-            }
-
-            lastScreenSize = screenSize;
-            Rect area = Screen.safeArea;
-            safeArea.anchorMin = new Vector2(area.xMin / Screen.width, area.yMin / Screen.height);
-            safeArea.anchorMax = new Vector2(area.xMax / Screen.width, area.yMax / Screen.height);
-            safeArea.offsetMin = Vector2.zero;
-            safeArea.offsetMax = Vector2.zero;
-        }
-
-        private Text CreateText(
-            string objectName,
-            Transform parent,
-            string value,
-            int size,
-            Color color,
-            Vector2 anchorMin,
-            Vector2 anchorMax,
-            TextAnchor alignment)
-        {
-            GameObject textObject = new GameObject(objectName, typeof(RectTransform));
-            textObject.transform.SetParent(parent, false);
-            RectTransform rect = textObject.GetComponent<RectTransform>();
-            SetRect(rect, anchorMin, anchorMax, Vector2.zero, Vector2.zero);
-
-            Text text = textObject.AddComponent<Text>();
-            text.font = font;
-            text.text = value;
-            text.fontSize = size;
-            text.color = color;
-            text.alignment = alignment;
-            text.horizontalOverflow = HorizontalWrapMode.Wrap;
-            text.verticalOverflow = VerticalWrapMode.Overflow;
-            return text;
-        }
-
-        private static Image CreateImage(string objectName, Transform parent, Color color)
-        {
-            GameObject imageObject = new GameObject(objectName, typeof(RectTransform));
-            imageObject.transform.SetParent(parent, false);
-            Image image = imageObject.AddComponent<Image>();
-            image.color = color;
-            return image;
-        }
-
-        private static Image CreatePanel(string objectName, Transform parent, Color color)
-        {
-            Image panel = CreateImage(objectName, parent, color);
-            AddOutline(panel, new Color(0.37f, 0.91f, 0.83f, 0.16f), 2f);
-            return panel;
-        }
-
-        private static void AddOutline(Image image, Color color, float distance)
-        {
-            Outline outline = image.gameObject.AddComponent<Outline>();
-            outline.effectColor = color;
-            outline.effectDistance = new Vector2(distance, distance);
-            outline.useGraphicAlpha = true;
-        }
-
-        private static void SetRect(RectTransform rect, Vector2 anchorMin, Vector2 anchorMax, Vector2 offsetMin, Vector2 offsetMax)
-        {
-            rect.anchorMin = anchorMin;
-            rect.anchorMax = anchorMax;
-            rect.offsetMin = offsetMin;
-            rect.offsetMax = offsetMax;
-            rect.localScale = Vector3.one;
         }
 
         private static void SetText(string value, Text text)
         {
-            if (text != null)
-            {
-                text.text = value;
-            }
+            if (text != null) text.text = value;
         }
 
         private static Color ModifierColor(SkillModifierType type)

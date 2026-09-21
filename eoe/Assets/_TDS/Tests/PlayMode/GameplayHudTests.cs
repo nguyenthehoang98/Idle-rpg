@@ -9,32 +9,27 @@ namespace _TDS.Tests.PlayMode
     public sealed class GameplayHudTests
     {
         [UnityTest]
-        public IEnumerator HudShowsWaveStatusGoldAndCircuitSlotDetails()
+        public IEnumerator HudBindsWidgetsFromTheCanvasTemplate()
         {
             GameObject root = new GameObject("HudTestRoot");
+            GameObject canvasObject = new GameObject("Canvas", typeof(RectTransform));
+            canvasObject.transform.SetParent(root.transform, false);
+            canvasObject.AddComponent<Canvas>();
+            GameObject safeArea = new GameObject("SafeArea", typeof(RectTransform));
+            safeArea.transform.SetParent(canvasObject.transform, false);
+            GameObject wave = new GameObject("Wave", typeof(RectTransform));
+            wave.transform.SetParent(safeArea.transform, false);
+            Text waveText = wave.AddComponent<Text>();
+
             System.Type hudType = System.Type.GetType("_TDS.Gameplay.GameplayHud, Assembly-CSharp");
             Assert.That(hudType, Is.Not.Null);
-            root.AddComponent(hudType);
+            Component hud = root.AddComponent(hudType);
             yield return null;
 
-            Transform canvas = root.transform.GetChild(0);
-            Assert.That(canvas.Find("SafeArea/TopBar/Wave"), Is.Not.Null);
-            Assert.That(canvas.Find("SafeArea/TopBar/Status"), Is.Not.Null);
-            Assert.That(canvas.Find("SafeArea/TopBar/Gold"), Is.Not.Null);
-            Assert.That(canvas.Find("SafeArea/CircuitPanel/Energy"), Is.Not.Null);
-            Assert.That(canvas.Find("SafeArea/CircuitPanel/CircuitControls/ModeButton"), Is.Not.Null);
-            Assert.That(canvas.Find("SafeArea/CircuitPanel/CircuitControls/RollButton"), Is.Not.Null);
-            Assert.That(canvas.Find("SafeArea/CircuitPanel/RollResult"), Is.Not.Null);
-            Assert.That(canvas.Find("SafeArea/CircuitPanel/Slots/Slot0/Index"), Is.Not.Null);
-
-            Component hud = root.GetComponent(hudType);
-            System.Type contentType = System.Type.GetType("_TDS.Battle.CircuitSlotContent, Assembly-CSharp");
-            System.Type rollType = System.Type.GetType("_TDS.Battle.CircuitRollEvent, Assembly-CSharp");
-            object emptyContent = System.Activator.CreateInstance(contentType);
-            object roll = System.Activator.CreateInstance(rollType, 0, 3, 3, emptyContent);
-            hudType.GetMethod("ShowRoll").Invoke(hud, new[] { roll });
-            Assert.That(canvas.Find("SafeArea/CircuitPanel/RollResult").GetComponent<Text>().text,
-                Is.EqualTo("ROLL +3  →  04"));
+            Assert.That((bool)hudType.GetProperty("enabled").GetValue(hud), Is.True,
+                "HUD must stay enabled when the Canvas exposes its widgets");
+            hudType.GetMethod("SetWave").Invoke(hud, new object[] { 7 });
+            Assert.That(waveText.text, Is.EqualTo("WAVE 7"));
 
             Object.Destroy(root);
             yield return null;
