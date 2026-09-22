@@ -113,7 +113,7 @@ namespace _TDS.Battle
     public sealed class EnergyCircuit
     {
         public const int DefaultSlotCount = 8;
-        public const float DefaultEnergyCapacity = 100f;
+        public const int DefaultEnergyCapacity = 100;
         public const float DefaultPassiveEnergyPerSecond = 1f;
         public const float DefaultKillEnergy = 20f;
         public const float DefaultOverdriveDuration = 5f;
@@ -126,21 +126,23 @@ namespace _TDS.Battle
 
         private float activeRemaining;
         private int activeSlotIndex = -1;
+        // giữ phần lẻ của năng lượng để passive (1/s) không bị cắt về 0 mỗi tick
+        private float energy;
 
         public int SlotCount => contents.Length;
-        public float Energy { get; private set; }
-        public float EnergyCapacity { get; }
+        public int Energy => (int)energy;
+        public int EnergyCapacity { get; }
         public float PassiveEnergyPerSecond { get; }
         public int HighlightIndex { get; private set; }
         public int PulseIndex => HighlightIndex;
-        public bool IsReady => !IsPowerActive && Energy >= EnergyCapacity;
+        public bool IsReady => !IsPowerActive && energy >= EnergyCapacity;
         public bool IsPowerActive => activeRemaining > 0f;
         public int ActiveSlotIndex => activeSlotIndex;
 
         public EnergyCircuit(
             int slotCount = DefaultSlotCount,
             float passiveEnergyPerSecond = DefaultPassiveEnergyPerSecond,
-            float energyCapacity = DefaultEnergyCapacity,
+            int energyCapacity = DefaultEnergyCapacity,
             float overdriveDuration = DefaultOverdriveDuration)
         {
             if (slotCount <= 0) throw new ArgumentOutOfRangeException(nameof(slotCount));
@@ -149,7 +151,7 @@ namespace _TDS.Battle
                 throw new ArgumentOutOfRangeException(nameof(passiveEnergyPerSecond));
             }
 
-            if (energyCapacity <= 0f) throw new ArgumentOutOfRangeException(nameof(energyCapacity));
+            if (energyCapacity <= 0) throw new ArgumentOutOfRangeException(nameof(energyCapacity));
             if (overdriveDuration <= 0f) throw new ArgumentOutOfRangeException(nameof(overdriveDuration));
 
             contents = new CircuitSlotContent[slotCount];
@@ -239,9 +241,9 @@ namespace _TDS.Battle
                 return 0f;
             }
 
-            float previous = Energy;
-            Energy = Math.Min(EnergyCapacity, Energy + amount);
-            return Energy - previous;
+            float previous = energy;
+            energy = Math.Min(EnergyCapacity, energy + amount);
+            return energy - previous;
         }
 
         public void Tick(float deltaTime)
@@ -286,7 +288,7 @@ namespace _TDS.Battle
             }
 
             int previousIndex = HighlightIndex;
-            Energy = 0f;
+            energy = 0f;
             HighlightIndex = (HighlightIndex + steps) % SlotCount;
             CircuitSlotContent content = contents[HighlightIndex];
             roll = new CircuitRollEvent(previousIndex, steps, HighlightIndex, content);
@@ -308,7 +310,7 @@ namespace _TDS.Battle
 
         public void Reset()
         {
-            Energy = 0f;
+            energy = 0f;
             HighlightIndex = 0;
             activeRemaining = 0f;
             activeSlotIndex = -1;

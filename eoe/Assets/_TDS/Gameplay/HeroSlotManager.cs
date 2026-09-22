@@ -16,9 +16,7 @@ namespace _TDS.Gameplay
     /// </summary>
     public class HeroSlotManager : MonoBehaviour
     {
-        [SerializeField] private Transform[] slots;
-        [Tooltip("Kéo thả Transform của Arrow Effect theo đúng thứ tự slot.")]
-        [SerializeField] private Transform[] arrows;
+        [SerializeField] private HeroSlot[] slots;
         [SerializeField] private bool enableArrow = true;
         [SerializeField, Min(0.01f)] private float arrowPlayTime = 0.5f;
         [Header("Highlight Cell")]
@@ -36,11 +34,16 @@ namespace _TDS.Gameplay
             {
                 Debug.LogError($"[{name}] No hero slots assigned", this);
             }
+            
             CacheRenderers();
-            CacheArrows();
             if (highlightCell == null) highlightCell = transform.Find("Highlight Cell") ?? transform.Find("highlight");
             SetAllNormal();
-            SetAllArrows(false);
+            
+            for (int i = 0; i < slots.Length; i++)
+            {
+                if (slots[i] != null) slots[i].Deactivate();
+            }
+
             SetHighlightCellActive(false);
         }
 
@@ -50,7 +53,6 @@ namespace _TDS.Gameplay
 
             if (enableArrow && arrowSequenceCoroutine == null)
             {
-                CacheArrows();
                 arrowSequenceCoroutine = StartCoroutine(PlayArrowSequence());
             }
 
@@ -64,7 +66,12 @@ namespace _TDS.Gameplay
                 StopCoroutine(arrowSequenceCoroutine);
                 arrowSequenceCoroutine = null;
             }
-            SetAllArrows(false);
+
+            for (int i = 0; i < slots.Length; i++)
+            {
+                if (slots[i] != null) slots[i].Deactivate();
+            }
+
             SetHighlightCellActive(false);
         }
 
@@ -74,18 +81,6 @@ namespace _TDS.Gameplay
             slotRenderers = new SpriteRenderer[slots.Length];
             for (int i = 0; i < slots.Length; i++)
                 slotRenderers[i] = slots[i] != null ? slots[i].GetComponent<SpriteRenderer>() : null;
-        }
-
-        private void CacheArrows()
-        {
-            if (slots == null) return;
-            if (arrows == null || arrows.Length != slots.Length) arrows = new Transform[slots.Length];
-
-            for (int i = 0; i < slots.Length; i++)
-            {
-                if (arrows[i] == null && slots[i] != null)
-                    arrows[i] = slots[i].Find("Arrow Effect");
-            }
         }
 
         public void RefreshHighlight(EnergyCircuit circuit)
@@ -105,10 +100,10 @@ namespace _TDS.Gameplay
 
             if (highlightCell != null && slots != null && circuit.HighlightIndex >= 0 && circuit.HighlightIndex < slots.Length)
             {
-                Transform slot = slots[circuit.HighlightIndex];
+                HeroSlot slot = slots[circuit.HighlightIndex];
                 if (slot != null)
                 {
-                    highlightCell.position = slot.position;
+                    highlightCell.position = slot.transform.position;
                     SetHighlightCellActive(true);
                 }
             }
@@ -116,33 +111,16 @@ namespace _TDS.Gameplay
 
         private IEnumerator PlayArrowSequence()
         {
-            if (arrows == null || arrows.Length == 0) yield break;
+            if (slots == null || slots.Length == 0) yield break;
 
             WaitForSeconds playDelay = new WaitForSeconds(Mathf.Max(0.01f, arrowPlayTime));
             while (true)
             {
-                for (int i = 0; i < arrows.Length; i++)
+                for (int i = 0; i < slots.Length; i++)
                 {
-                    SetAllArrows(false);
-                    Transform arrow = arrows[i];
-                    if (arrow != null)
-                    {
-                        arrow.gameObject.SetActive(true);
-                        Animator animator = arrow.GetComponent<Animator>();
-                        if (animator != null) animator.Play("Play", 0, 0f);
-                    }
-
+                    if (slots[i] != null) slots[i].Deactivate();
                     yield return playDelay;
                 }
-            }
-        }
-
-        private void SetAllArrows(bool active)
-        {
-            if (arrows == null) return;
-            for (int i = 0; i < arrows.Length; i++)
-            {
-                if (arrows[i] != null) arrows[i].gameObject.SetActive(active);
             }
         }
 
@@ -202,7 +180,7 @@ namespace _TDS.Gameplay
                     continue;
                 }
 
-                var go = Instantiate(prefab, slots[slotIndex]);
+                var go = Instantiate(prefab, slots[slotIndex].transform);
                 if (!go.TryGetComponent<Hero>(out var hero))
                 {
                     Debug.LogError($"[{name}] Prefab '{heroData.prefabName}' thiếu component Hero trên root");
