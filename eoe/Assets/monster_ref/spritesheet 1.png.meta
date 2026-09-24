@@ -1,0 +1,1157 @@
+fileFormatVersion: 2
+guid: e4b4a770f4d57f4449115b04c5bc4563
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1832809658520785055
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_0"
+  - first:
+      213: 5966237392644235467
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_1"
+  - first:
+      213: -2041041428562107155
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_2"
+  - first:
+      213: -8665899891691692310
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_3"
+  - first:
+      213: -623897020884547369
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_4"
+  - first:
+      213: 5415266895016646137
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_5"
+  - first:
+      213: 4170308867798565498
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_6"
+  - first:
+      213: 22206136063879851
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_7"
+  - first:
+      213: 6164040364175404877
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_8"
+  - first:
+      213: -5853600758953290102
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_9"
+  - first:
+      213: -2537833229226844839
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_10"
+  - first:
+      213: 7991774913387793501
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_11"
+  - first:
+      213: -5654002807408283032
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_12"
+  - first:
+      213: -7411312304737246651
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_13"
+  - first:
+      213: 6355626147315483517
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_14"
+  - first:
+      213: 7131094609366517343
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_15"
+  - first:
+      213: 3429424772733416542
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_16"
+  - first:
+      213: 8798798284697944251
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_17"
+  - first:
+      213: 7418140769364708687
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_18"
+  - first:
+      213: -8234243050355987755
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_19"
+  - first:
+      213: 1650586982453063422
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_20"
+  - first:
+      213: -4226872487434085913
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_21"
+  - first:
+      213: 5849135394320665397
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_22"
+  - first:
+      213: 7064492966358049840
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_23"
+  - first:
+      213: -8577407056865543358
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_24"
+  - first:
+      213: 6474897956450473614
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_25"
+  - first:
+      213: -5878136987334512621
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_26"
+  - first:
+      213: -4826854766210612950
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_27"
+  - first:
+      213: 8105200997429307575
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_28"
+  - first:
+      213: 6352009937306124955
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_29"
+  - first:
+      213: 221003571956797523
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_30"
+  - first:
+      213: 6012676503829266748
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_31"
+  - first:
+      213: -2259140012158229272
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_32"
+  - first:
+      213: -3644278980488851474
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_33"
+  - first:
+      213: -2484145263375376480
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_34"
+  - first:
+      213: 8069209457815582395
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_35"
+  - first:
+      213: 7349602690458446767
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_36"
+  - first:
+      213: -4467231981113192808
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_37"
+  - first:
+      213: 5850743562650558169
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_38"
+  - first:
+      213: -8984501650443913917
+    second: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_39"
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_0"
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 630
+        width: 197
+        height: 151
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16fa6f2835d8096e0800000000000000
+      internalID: -1832809658520785055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_1"
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 634
+        width: 201
+        height: 135
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc066325c455cc250800000000000000
+      internalID: 5966237392644235467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_2"
+      rect:
+        serializedVersion: 2
+        x: 542
+        y: 634
+        width: 217
+        height: 141
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de423b672a3cca3e0800000000000000
+      internalID: -2041041428562107155
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_3"
+      rect:
+        serializedVersion: 2
+        x: 796
+        y: 636
+        width: 207
+        height: 143
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aeede9066f98cb780800000000000000
+      internalID: -8665899891691692310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_4"
+      rect:
+        serializedVersion: 2
+        x: 1034
+        y: 639
+        width: 206
+        height: 135
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d880cd07f87757f0800000000000000
+      internalID: -623897020884547369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_5"
+      rect:
+        serializedVersion: 2
+        x: 1279
+        y: 636
+        width: 203
+        height: 141
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f55669bc84e62b40800000000000000
+      internalID: 5415266895016646137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_6"
+      rect:
+        serializedVersion: 2
+        x: 1516
+        y: 642
+        width: 196
+        height: 138
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a728bcce1d9efd930800000000000000
+      internalID: 4170308867798565498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_7"
+      rect:
+        serializedVersion: 2
+        x: 1753
+        y: 644
+        width: 186
+        height: 139
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: baaebe3fc54ee4000800000000000000
+      internalID: 22206136063879851
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_8"
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 483
+        width: 199
+        height: 145
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4f28df7d021b8550800000000000000
+      internalID: 6164040364175404877
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_9"
+      rect:
+        serializedVersion: 2
+        x: 291
+        y: 482
+        width: 203
+        height: 134
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a86d1a99f15d3cea0800000000000000
+      internalID: -5853600758953290102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_10"
+      rect:
+        serializedVersion: 2
+        x: 542
+        y: 482
+        width: 217
+        height: 139
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95d50c0cf1ec7ccd0800000000000000
+      internalID: -2537833229226844839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_11"
+      rect:
+        serializedVersion: 2
+        x: 796
+        y: 482
+        width: 207
+        height: 145
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5c8b5501fc78ee60800000000000000
+      internalID: 7991774913387793501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_12"
+      rect:
+        serializedVersion: 2
+        x: 1036
+        y: 484
+        width: 204
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8623e512762f881b0800000000000000
+      internalID: -5654002807408283032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_13"
+      rect:
+        serializedVersion: 2
+        x: 1279
+        y: 483
+        width: 204
+        height: 139
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 542a7a4c9bab52990800000000000000
+      internalID: -7411312304737246651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_14"
+      rect:
+        serializedVersion: 2
+        x: 1516
+        y: 484
+        width: 195
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d738ce3be48b33850800000000000000
+      internalID: 6355626147315483517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_15"
+      rect:
+        serializedVersion: 2
+        x: 1753
+        y: 484
+        width: 186
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f568efad3ccb6f260800000000000000
+      internalID: 7131094609366517343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_16"
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 326
+        width: 197
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5433b239a3c79f20800000000000000
+      internalID: 3429424772733416542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_17"
+      rect:
+        serializedVersion: 2
+        x: 291
+        y: 323
+        width: 200
+        height: 136
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb0ccb10c6c9b1a70800000000000000
+      internalID: 8798798284697944251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_18"
+      rect:
+        serializedVersion: 2
+        x: 543
+        y: 323
+        width: 216
+        height: 142
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f4d83db0ab782f660800000000000000
+      internalID: 7418140769364708687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_19"
+      rect:
+        serializedVersion: 2
+        x: 795
+        y: 323
+        width: 208
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5da6d4592971abd80800000000000000
+      internalID: -8234243050355987755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_20"
+      rect:
+        serializedVersion: 2
+        x: 1035
+        y: 327
+        width: 205
+        height: 139
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: efeaff78d1018e610800000000000000
+      internalID: 1650586982453063422
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_21"
+      rect:
+        serializedVersion: 2
+        x: 1279
+        y: 325
+        width: 203
+        height: 141
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e99e9b1ed12755c0800000000000000
+      internalID: -4226872487434085913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_22"
+      rect:
+        serializedVersion: 2
+        x: 1516
+        y: 329
+        width: 195
+        height: 143
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53bc5ada6ad4c2150800000000000000
+      internalID: 5849135394320665397
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_23"
+      rect:
+        serializedVersion: 2
+        x: 1752
+        y: 330
+        width: 187
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03464027cee1a0260800000000000000
+      internalID: 7064492966358049840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_24"
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 171
+        width: 197
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24bb9911abde6f880800000000000000
+      internalID: -8577407056865543358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_25"
+      rect:
+        serializedVersion: 2
+        x: 291
+        y: 163
+        width: 200
+        height: 139
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e86122bc2657bd950800000000000000
+      internalID: 6474897956450473614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_26"
+      rect:
+        serializedVersion: 2
+        x: 542
+        y: 161
+        width: 217
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31077d0cd89ac6ea0800000000000000
+      internalID: -5878136987334512621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_27"
+      rect:
+        serializedVersion: 2
+        x: 796
+        y: 165
+        width: 207
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a218d95f921930db0800000000000000
+      internalID: -4826854766210612950
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_28"
+      rect:
+        serializedVersion: 2
+        x: 1034
+        y: 169
+        width: 206
+        height: 140
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b86aec2d557b7070800000000000000
+      internalID: 8105200997429307575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_29"
+      rect:
+        serializedVersion: 2
+        x: 1278
+        y: 167
+        width: 205
+        height: 142
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9202e2326fd62850800000000000000
+      internalID: 6352009937306124955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_30"
+      rect:
+        serializedVersion: 2
+        x: 1515
+        y: 171
+        width: 196
+        height: 143
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 350d398e399211300800000000000000
+      internalID: 221003571956797523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_31"
+      rect:
+        serializedVersion: 2
+        x: 1753
+        y: 174
+        width: 186
+        height: 142
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c31c4187c61517350800000000000000
+      internalID: 6012676503829266748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_32"
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 12
+        width: 198
+        height: 145
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e4ef6dd02ce5a0e0800000000000000
+      internalID: -2259140012158229272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_33"
+      rect:
+        serializedVersion: 2
+        x: 291
+        y: 9
+        width: 199
+        height: 135
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eef0a81539bec6dc0800000000000000
+      internalID: -3644278980488851474
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_34"
+      rect:
+        serializedVersion: 2
+        x: 542
+        y: 10
+        width: 217
+        height: 140
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0af9a066b0b868dd0800000000000000
+      internalID: -2484145263375376480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_35"
+      rect:
+        serializedVersion: 2
+        x: 796
+        y: 10
+        width: 207
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb6f157df379bff60800000000000000
+      internalID: 8069209457815582395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_36"
+      rect:
+        serializedVersion: 2
+        x: 1036
+        y: 11
+        width: 204
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fabe70505b80ff560800000000000000
+      internalID: 7349602690458446767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_37"
+      rect:
+        serializedVersion: 2
+        x: 1279
+        y: 10
+        width: 203
+        height: 139
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89ecb7c7e243102c0800000000000000
+      internalID: -4467231981113192808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_38"
+      rect:
+        serializedVersion: 2
+        x: 1516
+        y: 14
+        width: 195
+        height: 139
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9de90bb8544023150800000000000000
+      internalID: 5850743562650558169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_39"
+      rect:
+        serializedVersion: 2
+        x: 1752
+        y: 12
+        width: 187
+        height: 143
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3453161d953a05380800000000000000
+      internalID: -8984501650443913917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_0": -1832809658520785055
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_1": 5966237392644235467
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_10": -2537833229226844839
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_11": 7991774913387793501
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_12": -5654002807408283032
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_13": -7411312304737246651
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_14": 6355626147315483517
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_15": 7131094609366517343
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_16": 3429424772733416542
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_17": 8798798284697944251
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_18": 7418140769364708687
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_19": -8234243050355987755
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_2": -2041041428562107155
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_20": 1650586982453063422
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_21": -4226872487434085913
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_22": 5849135394320665397
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_23": 7064492966358049840
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_24": -8577407056865543358
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_25": 6474897956450473614
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_26": -5878136987334512621
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_27": -4826854766210612950
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_28": 8105200997429307575
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_29": 6352009937306124955
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_3": -8665899891691692310
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_30": 221003571956797523
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_31": 6012676503829266748
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_32": -2259140012158229272
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_33": -3644278980488851474
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_34": -2484145263375376480
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_35": 8069209457815582395
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_36": 7349602690458446767
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_37": -4467231981113192808
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_38": 5850743562650558169
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_39": -8984501650443913917
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_4": -623897020884547369
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_5": 5415266895016646137
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_6": 4170308867798565498
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_7": 22206136063879851
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_8": 6164040364175404877
+      "\u1EA2nh Codex 00_04_05 25 thg 9, 2026_9": -5853600758953290102
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -40,6 +40,7 @@ namespace _TDS.Gameplay
         [SerializeField] private CircuitTickRunner circuitRunner;
         [SerializeField] private WaveUpgradePanel upgradePanel;
 
+        private RoundTimeline roundTimeline;
         private SpawnMonsterRunner spawnRunner;
         private AgentMovementRunner agentRunner;
         private SkillTickRunner skillRunner;
@@ -56,9 +57,17 @@ namespace _TDS.Gameplay
 
         public CircuitBoard Board => board;
         public BattleRunRewards Rewards => rewards;
+        public RoundTimeline Timeline => roundTimeline;
         
         private void Awake()
         {
+            GameObject timelineRoot = GameObject.Find("Canvas/top/bg");
+            if (timelineRoot != null)
+            {
+                roundTimeline = timelineRoot.GetComponent<RoundTimeline>();
+                if (roundTimeline == null) roundTimeline = timelineRoot.AddComponent<RoundTimeline>();
+            }
+
             level = RunSelection.SelectedLevel;
             board = BuildBoard();
             if (upgradePanel == null)
