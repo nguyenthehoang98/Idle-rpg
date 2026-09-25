@@ -61,6 +61,7 @@ namespace _TDS.Gameplay
         
         private void Awake()
         {
+			Debug.LogError("Sửa lại thành game góc nhìn giống Plant vs Zombie. Reskin Plant luôn");
             GameObject timelineRoot = GameObject.Find("Canvas/top/bg");
             if (timelineRoot != null)
             {
